@@ -175,7 +175,7 @@ namespace CSBackend
         //------------------------------------------------------
         /// Set Target Textures
         //------------------------------------------------------
-        void RenderTarget::SetTargetTextures(const CSRendering::TextureSPtr& inpColourTexture, const CSRendering::TextureSPtr& inpDepthTexture)
+        void RenderTarget::SetTargetTextures(const ChilliSource::TextureSPtr& inpColourTexture, const ChilliSource::TextureSPtr& inpDepthTexture)
         {
             DeleteRenderBuffer(&mRenderBuffer);
             DeleteRenderBuffer(&mDepthBuffer);
@@ -237,13 +237,13 @@ namespace CSBackend
         }
         //------------------------------------------------------
         //------------------------------------------------------
-        const CSRendering::TextureSPtr& RenderTarget::GetColourTexture() const
+        const ChilliSource::TextureSPtr& RenderTarget::GetColourTexture() const
         {
             return m_colourTexture;
         }
         //------------------------------------------------------
         //------------------------------------------------------
-        const CSRendering::TextureSPtr& RenderTarget::GetDepthTexture() const
+        const ChilliSource::TextureSPtr& RenderTarget::GetDepthTexture() const
         {
             return m_depthTexture;
         }

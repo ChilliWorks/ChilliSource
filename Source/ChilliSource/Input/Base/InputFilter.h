@@ -28,7 +28,7 @@
 #ifndef _CHILLISOURCE_INPUT_BASE_INPUTFILTER_H_
 #define _CHILLISOURCE_INPUT_BASE_INPUTFILTER_H_
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------
     /// Simple class that holds whether something has been filtered

@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Base/Colour.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A struct containing the properties for a single particle.
@@ -48,11 +48,11 @@ namespace CS
         bool m_isActive = false;
         f32 m_lifetime = 0.0f;
         f32 m_energy = 0.0f;
-        Core::Vector3 m_position;
-        Core::Vector2 m_scale = Core::Vector2::k_one;
+        Vector3 m_position;
+        Vector2 m_scale = Vector2::k_one;
         f32 m_rotation = 0.0f;
-        Core::Colour m_colour = Core::Colour::k_white;
-        Core::Vector3 m_velocity;
+        Colour m_colour = Colour::k_white;
+        Vector3 m_velocity;
         f32 m_angularVelocity = 0.0f;
     };
 }

@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------
     /// A function object for deleting an array. This is

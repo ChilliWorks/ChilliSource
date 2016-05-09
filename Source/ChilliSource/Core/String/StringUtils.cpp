@@ -36,7 +36,7 @@
 #include <algorithm>
 #include <cctype>
 
-namespace CS
+namespace ChilliSource
 {
     namespace StringUtils
     {
@@ -63,7 +63,7 @@ namespace CS
             /// @param Out: Text string (UTF-8)
             /// @param Out: String iterator (UTF-8)
             //-------------------------------------------------------
-            void ReplaceVariableRecursive(const Core::ParamDictionary& insParams, std::string& outstrText, std::string::const_iterator& it)
+            void ReplaceVariableRecursive(const ParamDictionary& insParams, std::string& outstrText, std::string::const_iterator& it)
             {
                 //Found some mark-up. What type is it?
                 std::string strType;
@@ -661,7 +661,7 @@ namespace CS
     
         //-------------------------------------------------------
         //-------------------------------------------------------
-        std::string InsertVariables(const std::string& in_text, const Core::ParamDictionary& in_params)
+        std::string InsertVariables(const std::string& in_text, const ParamDictionary& in_params)
         {
             std::string output;
             
@@ -702,7 +702,7 @@ namespace CS
             if(in_values.empty())
                 return;
             
-            CS_ASSERT(in_values.size() < static_cast<std::size_t>(std::numeric_limits<u32>::max()), "Too many CSV items. It cannot exceed " + Core::ToString(std::numeric_limits<u32>::max()) + ".");
+            CS_ASSERT(in_values.size() < static_cast<std::size_t>(std::numeric_limits<u32>::max()), "Too many CSV items. It cannot exceed " + ToString(std::numeric_limits<u32>::max()) + ".");
             
             u32 numVals = static_cast<u32>(in_values.size()) - 1;
             for(u32 i=0; i<numVals; ++i)

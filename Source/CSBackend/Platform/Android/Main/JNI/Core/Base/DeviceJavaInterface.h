@@ -62,7 +62,7 @@ namespace CSBackend
 			///
 			/// @return Whether or not this object implements the given interface.
 			//--------------------------------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//--------------------------------------------------------------------------------------
 			/// @author S Downie
 			///

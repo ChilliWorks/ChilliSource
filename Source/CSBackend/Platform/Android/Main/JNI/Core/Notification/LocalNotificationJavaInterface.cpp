@@ -47,7 +47,7 @@ extern "C"
 
 void Java_com_chilliworks_chillisource_core_LocalNotificationNativeInterface_nativeOnNotificationReceived(JNIEnv* in_environment, jobject in_this, s32 in_id, jobjectArray in_keys, jobjectArray in_values, s32 in_priority)
 {
-	CSCore::ParamDictionary params;
+	ChilliSource::ParamDictionary params;
 
 	u32 numParams = in_environment->GetArrayLength(in_keys);
 	for(u32 keyIndex = 0; keyIndex < numParams; ++keyIndex)
@@ -64,12 +64,12 @@ void Java_com_chilliworks_chillisource_core_LocalNotificationNativeInterface_nat
 		in_environment->DeleteLocalRef(valueJava);
 	}
 
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 	{
-		CSBackend::Android::LocalNotificationSystem* localNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::LocalNotificationSystem>();
+		CSBackend::Android::LocalNotificationSystem* localNotificationSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::Android::LocalNotificationSystem>();
 		if (localNotificationSystem != nullptr)
 		{
-			localNotificationSystem->OnNotificationReceived(static_cast<CSCore::Notification::ID>(in_id), params, static_cast<CSCore::Notification::Priority>(in_priority));
+			localNotificationSystem->OnNotificationReceived(static_cast<ChilliSource::Notification::ID>(in_id), params, static_cast<ChilliSource::Notification::Priority>(in_priority));
 		}
 	});
 }
@@ -91,13 +91,13 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------
-		bool LocalNotificationJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool LocalNotificationJavaInterface::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == LocalNotificationJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------
-		void LocalNotificationJavaInterface::ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority)
+		void LocalNotificationJavaInterface::ScheduleNotificationForTime(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, TimeIntervalSecs in_time, ChilliSource::Notification::Priority in_priority)
 		{
 			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
@@ -135,7 +135,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------
-		void LocalNotificationJavaInterface::GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+		void LocalNotificationJavaInterface::GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
 		{
 			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jobjectArray notificationsJNI = static_cast<jobjectArray>(environment->CallObjectMethod(GetJavaObject(), GetMethodID("getNotifications")));
@@ -152,15 +152,15 @@ namespace CSBackend
 
 				if (time > in_time && time < in_time + in_period)
 				{
-					CSCore::NotificationSPtr notification(new CSCore::Notification());
+					ChilliSource::NotificationSPtr notification(new ChilliSource::Notification());
 
 					//Notification Id
 					jmethodID idMethodId = environment->GetMethodID(notificationClassJNI, "getNotificationId", "()I");
-					notification->m_id = static_cast<CSCore::Notification::ID>(environment->CallIntMethod(notificationJNI, idMethodId));
+					notification->m_id = static_cast<ChilliSource::Notification::ID>(environment->CallIntMethod(notificationJNI, idMethodId));
 
 					//Priority
 					jmethodID priorityMethodId = environment->GetMethodID(notificationClassJNI, "getPriority", "()I");
-					notification->m_priority = static_cast<CSCore::Notification::Priority>(environment->CallIntMethod(notificationJNI, priorityMethodId));
+					notification->m_priority = static_cast<ChilliSource::Notification::Priority>(environment->CallIntMethod(notificationJNI, priorityMethodId));
 
 					//params length
 					jmethodID paramsLengthMethodId = environment->GetMethodID(notificationClassJNI, "getNumParams", "()I");

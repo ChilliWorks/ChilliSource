@@ -56,7 +56,7 @@ namespace CSBackend
 		///
 		/// @author S Downie
 		//----------------------------------------------------------------------------------
-		class GooglePlayIAPSystem final : public CSNetworking::IAPSystem
+		class GooglePlayIAPSystem final : public ChilliSource::IAPSystem
 		{
 		public:
 
@@ -81,7 +81,7 @@ namespace CSBackend
             ///
             /// @return Whether the class is of the given type
             //---------------------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
@@ -188,7 +188,7 @@ namespace CSBackend
             const std::vector<GooglePlayIAPSystem::ExtraProductInfo>& GetExtraProductInfo() const { return m_extraProductsInfo; }
 
 		private:
-            friend CSNetworking::IAPSystemUPtr CSNetworking::IAPSystem::Create(const CSCore::ParamDictionary&);
+            friend ChilliSource::IAPSystemUPtr ChilliSource::IAPSystem::Create(const ChilliSource::ParamDictionary&);
             //---------------------------------------------------------------
             /// Private constructor to force the use of the factory method
             ///
@@ -200,7 +200,7 @@ namespace CSBackend
             /// 	GooglePlayPublicKey  	The public key used for connecting
             ///								to the Google Play store.
             //---------------------------------------------------------------
-			GooglePlayIAPSystem(const CSCore::ParamDictionary& in_params);
+			GooglePlayIAPSystem(const ChilliSource::ParamDictionary& in_params);
             //-------------------------------------------------------
             /// Called when the system is created. Initialises
             /// the Java backend

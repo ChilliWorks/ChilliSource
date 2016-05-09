@@ -32,7 +32,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Interface class for custom loading options for

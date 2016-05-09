@@ -34,7 +34,7 @@
 #include <ChilliSource/Input/Gesture/Gesture.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -49,7 +49,7 @@ namespace CS
         ///
         /// @return Whether or not it exists.
         //-------------------------------------------------------
-        bool GestureExists(Core::concurrent_vector<GestureSPtr>& in_gestureList, const Gesture* in_gesture)
+        bool GestureExists(concurrent_vector<GestureSPtr>& in_gestureList, const Gesture* in_gesture)
         {
             in_gestureList.lock();
             for (const auto& gesturePair : in_gestureList)
@@ -73,7 +73,7 @@ namespace CS
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
-    bool GestureSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool GestureSystem::IsA(InterfaceIDType in_interfaceId) const
     {
         return (GestureSystem::InterfaceID == in_interfaceId);
     }
@@ -175,13 +175,13 @@ namespace CS
     //--------------------------------------------------------
     void GestureSystem::OnResume()
     {
-        Input::PointerSystem* pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
+        PointerSystem* pointerSystem = Application::Get()->GetSystem<PointerSystem>();
         CS_ASSERT(pointerSystem != nullptr, "Gesture system missing required system: Pointer System");
         
-        m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerDown));
-        m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerMoved));
-        m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerUp));
-        m_pointerScrolledConnection = pointerSystem->GetPointerScrollEventInternal().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerScrolled));
+        m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(MakeDelegate(this, &GestureSystem::OnPointerDown));
+        m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(MakeDelegate(this, &GestureSystem::OnPointerMoved));
+        m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(MakeDelegate(this, &GestureSystem::OnPointerUp));
+        m_pointerScrolledConnection = pointerSystem->GetPointerScrollEventInternal().OpenConnection(MakeDelegate(this, &GestureSystem::OnPointerScrolled));
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
@@ -244,7 +244,7 @@ namespace CS
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
-    void GestureSystem::OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, InputFilter& in_filter)
+    void GestureSystem::OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Vector2& in_delta, InputFilter& in_filter)
     {
         if (in_filter.IsFiltered() == false)
         {

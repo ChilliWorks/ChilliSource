@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// A particle affector which will change the size of particles over
@@ -83,7 +83,7 @@ namespace CS
         /// @param The particle affector definition.
         /// @param The particle array.
         //----------------------------------------------------------------
-        ScaleOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+        ScaleOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, dynamic_array<Particle>* in_particleArray);
         //----------------------------------------------------------------
         /// A container for the initial scale and scale factor of a single 
         /// particle.
@@ -92,12 +92,12 @@ namespace CS
         //----------------------------------------------------------------
         struct ScaleData
         {
-            Core::Vector2 m_initialScale;
-            Core::Vector2 m_targetScale;
+            Vector2 m_initialScale;
+            Vector2 m_targetScale;
         };
 
         const ScaleOverLifetimeParticleAffectorDef* m_scaleOverLifetimeAffectorDef = nullptr;
-        Core::dynamic_array<ScaleData> m_particleScaleData;
+        dynamic_array<ScaleData> m_particleScaleData;
     };
 }
 

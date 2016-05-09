@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// List of play modes for tweening.

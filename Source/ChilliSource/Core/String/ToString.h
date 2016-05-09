@@ -34,7 +34,7 @@
 #include <string>
 #include <iostream>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------
     /// Converts a 32 bit float to a string.

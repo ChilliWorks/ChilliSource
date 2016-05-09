@@ -36,7 +36,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// The definition for a Scale Over Lifetime particle affector. This
@@ -61,7 +61,7 @@ namespace CS
         ///
         /// @param The property which describes the scale factor.
         //----------------------------------------------------------------
-        ScaleOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Core::Vector2> in_scaleProperty);
+        ScaleOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Vector2> in_scaleProperty);
         //----------------------------------------------------------------
         /// Constructor. Loads the params for the affector def from the 
         /// given param dictionary. If the async delegate is not null, then
@@ -88,7 +88,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// Creates an instance of the particle affector described by this.
         ///
@@ -98,13 +98,13 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+        ParticleAffectorUPtr CreateInstance(dynamic_array<Particle>* in_particleArray) const override;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A property describing the scale factor.
         //----------------------------------------------------------------
-        const ParticleProperty<Core::Vector2>* GetScaleProperty() const;
+        const ParticleProperty<Vector2>* GetScaleProperty() const;
         //----------------------------------------------------------------
         /// Destructor
         ///
@@ -113,7 +113,7 @@ namespace CS
         virtual ~ScaleOverLifetimeParticleAffectorDef() {}
     private:
 
-        ParticlePropertyUPtr<Core::Vector2> m_scaleProperty;
+        ParticlePropertyUPtr<Vector2> m_scaleProperty;
     };
 }
 

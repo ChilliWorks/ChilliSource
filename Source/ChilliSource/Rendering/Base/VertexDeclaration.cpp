@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 
-namespace CS
+namespace ChilliSource
 {
     VertexDeclaration::VertexDeclaration()
     {

@@ -34,7 +34,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookAuthenticationSystem.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
     

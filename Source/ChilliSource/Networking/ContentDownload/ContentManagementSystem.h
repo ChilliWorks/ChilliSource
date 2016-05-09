@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/XML/XMLUtils.h>
 #include <ChilliSource/Networking/ContentDownload/IContentDownloader.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A system for managing the downloading of content to the
@@ -43,7 +43,7 @@ namespace CS
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class ContentManagementSystem final : public Core::AppSystem
+    class ContentManagementSystem final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(ContentManagementSystem);
@@ -109,7 +109,7 @@ namespace CS
         /// @param File path
         /// @return Checksum string
         //-----------------------------------------------------------
-        using ChecksumDelegate = std::function<std::string(Core::StorageLocation in_location, const std::string& in_filePath)>;
+        using ChecksumDelegate = std::function<std::string(StorageLocation in_location, const std::string& in_filePath)>;
         //--------------------------------------------------------
         /// Creates a new instance of this system.
         ///
@@ -130,7 +130,7 @@ namespace CS
         ///
         /// @return Whether or not the inteface is implemented.
         //---------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-----------------------------------------------------------
         /// Get the content manifest from the asset server and
         /// check for any changes with the local copy.
@@ -275,7 +275,7 @@ namespace CS
         ///
         /// @return The xml document.
         //-----------------------------------------------------------
-        Core::XMLUPtr LoadLocalManifest();
+        XMLUPtr LoadLocalManifest();
         //-----------------------------------------------------------
         /// The manifest file has downloaded we can now compare
         /// and contrast to check for outdated files
@@ -313,7 +313,7 @@ namespace CS
         ///
         /// @param Package element
         //-----------------------------------------------------------
-        void AddToDownloadListIfNotInBundle(Core::XML::Node* in_packageEl);
+        void AddToDownloadListIfNotInBundle(XML::Node* in_packageEl);
         //-----------------------------------------------------------
         /// Save the zip file to documents directory
         ///
@@ -359,7 +359,7 @@ namespace CS
         /// @param File path
         /// @return Checksum string
         //-----------------------------------------------------------
-        std::string CalculateChecksum(Core::StorageLocation in_location, const std::string& in_filePath) const;
+        std::string CalculateChecksum(StorageLocation in_location, const std::string& in_filePath) const;
         //-----------------------------------------------------------
         /// Perform the HTTP request for the next DLC package.
         ///
@@ -411,7 +411,7 @@ namespace CS
         u32	m_runningToDownloadTotal = 0;
         u32 m_runningDownloadedTotal = 0;
         
-        Core::XMLUPtr m_serverManifest;
+        XMLUPtr m_serverManifest;
         
         IContentDownloader* m_contentDownloader = nullptr;
         

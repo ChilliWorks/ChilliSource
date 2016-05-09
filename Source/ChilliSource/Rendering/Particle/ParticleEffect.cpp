@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(ParticleEffect);
     //-------------------------------------------------------
@@ -44,7 +44,7 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    bool ParticleEffect::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ParticleEffect::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleEffect::InterfaceID == in_interfaceId);
     }
@@ -74,7 +74,7 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    const ParticleProperty<Core::Vector2>* ParticleEffect::GetInitialScaleProperty() const
+    const ParticleProperty<Vector2>* ParticleEffect::GetInitialScaleProperty() const
     {
         return m_initialScaleProperty.get();
     }
@@ -86,7 +86,7 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    const ParticleProperty<Core::Colour>* ParticleEffect::GetInitialColourProperty() const
+    const ParticleProperty<Colour>* ParticleEffect::GetInitialColourProperty() const
     {
         return m_initialColourProperty.get();
     }
@@ -153,7 +153,7 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    void ParticleEffect::SetInitialScaleProperty(ParticlePropertyUPtr<Core::Vector2> in_initialScaleProperty)
+    void ParticleEffect::SetInitialScaleProperty(ParticlePropertyUPtr<Vector2> in_initialScaleProperty)
     {
         m_initialScaleProperty = std::move(in_initialScaleProperty);
     }
@@ -165,7 +165,7 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    void ParticleEffect::SetInitialColourProperty(ParticlePropertyUPtr<Core::Colour> in_initialColourProperty)
+    void ParticleEffect::SetInitialColourProperty(ParticlePropertyUPtr<Colour> in_initialColourProperty)
     {
         m_initialColourProperty = std::move(in_initialColourProperty);
     }

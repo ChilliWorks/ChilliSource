@@ -35,7 +35,7 @@
 
 #include <json/forwards.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A definition of a layout which can be built from a json object. This is
@@ -53,7 +53,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class LayoutDef : public Core::QueryableInterface
+    class LayoutDef : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(LayoutDef);

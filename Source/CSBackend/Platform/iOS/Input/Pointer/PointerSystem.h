@@ -49,7 +49,7 @@ namespace CSBackend
         ///
         /// @author Ian Copland
         //------------------------------------------------------------
-        class PointerSystem final : public CSInput::PointerSystem
+        class PointerSystem final : public ChilliSource::PointerSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(PointerSystem);
@@ -63,7 +63,7 @@ namespace CSBackend
             ///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
 			/// Called when a touch begin event is received.
             ///
@@ -101,7 +101,7 @@ namespace CSBackend
             //----------------------------------------------------
             void ShowCursor() override {};
         private:
-            friend class CSInput::PointerSystem;
+            friend class ChilliSource::PointerSystem;
             
             //------------------------------------------------
             /// Default constructor. Declared private to force
@@ -130,8 +130,8 @@ namespace CSBackend
             //------------------------------------------------
             void OnDestroy() override;
             
-            std::unordered_map<UITouch*, CSInput::Pointer::Id> m_touchToIdMap;
-            CSCore::Screen* m_screen;
+            std::unordered_map<UITouch*, ChilliSource::Pointer::Id> m_touchToIdMap;
+            ChilliSource::Screen* m_screen;
         };
     }
 }

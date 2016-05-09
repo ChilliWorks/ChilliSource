@@ -53,9 +53,9 @@ namespace CSBackend
 		}
         //--------------------------------------------------
         //--------------------------------------------------
-        bool LocalNotificationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool LocalNotificationSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-        	return (LocalNotificationSystem::InterfaceID == in_interfaceId || CSCore::LocalNotificationSystem::InterfaceID == in_interfaceId);
+        	return (LocalNotificationSystem::InterfaceID == in_interfaceId || ChilliSource::LocalNotificationSystem::InterfaceID == in_interfaceId);
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
@@ -70,7 +70,7 @@ namespace CSBackend
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority)
+		void LocalNotificationSystem::ScheduleNotificationForTime(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, TimeIntervalSecs in_time, ChilliSource::Notification::Priority in_priority)
         {
 			if (m_enabled == true)
 			{
@@ -79,13 +79,13 @@ namespace CSBackend
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+		void LocalNotificationSystem::GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
 		{
 			m_localNotificationJI->GetScheduledNotifications(out_notifications, in_time, in_period);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::CancelByID(CSCore::Notification::ID in_id)
+		void LocalNotificationSystem::CancelByID(ChilliSource::Notification::ID in_id)
 		{
 			m_localNotificationJI->CancelByID(in_id);
 		}
@@ -97,15 +97,15 @@ namespace CSBackend
 		}
         //--------------------------------------------------
         //--------------------------------------------------
-		CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::ReceivedDelegate>& LocalNotificationSystem::GetReceivedEvent()
+		ChilliSource::IConnectableEvent<ChilliSource::LocalNotificationSystem::ReceivedDelegate>& LocalNotificationSystem::GetReceivedEvent()
 		{
         	return m_recievedEvent;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::OnNotificationReceived(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, CSCore::Notification::Priority in_priority)
+		void LocalNotificationSystem::OnNotificationReceived(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, ChilliSource::Notification::Priority in_priority)
 		{
-			CSCore::NotificationSPtr notification = std::make_shared<CSCore::Notification>();
+			ChilliSource::NotificationSPtr notification = std::make_shared<ChilliSource::Notification>();
 			notification->m_id = in_id;
 			notification->m_params = in_params;
 			notification->m_priority = in_priority;

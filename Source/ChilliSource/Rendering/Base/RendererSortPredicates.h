@@ -34,7 +34,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------
     /// An abstract base for classes representing different ordering operations
@@ -70,7 +70,7 @@ namespace CS
         void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override;
         bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override;
     private:
-        Core::Matrix4 mCameraViewProj;
+        Matrix4 mCameraViewProj;
     };
     
     //---------------------------------------------------------

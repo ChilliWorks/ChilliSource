@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     //-------------------------------------------------------
@@ -46,7 +46,7 @@ namespace CS
     //-------------------------------------------------------
     u32 CubemapResourceOptions::GenerateHash() const
     {
-        return Core::HashCRC32::GenerateHashCode((const s8*)&m_options, sizeof(Options));
+        return HashCRC32::GenerateHashCode((const s8*)&m_options, sizeof(Options));
     }
     //-------------------------------------------------------
     //-------------------------------------------------------

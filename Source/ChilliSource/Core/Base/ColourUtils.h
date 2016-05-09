@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Base/Colour.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace ColourUtils
     {

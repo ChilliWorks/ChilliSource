@@ -44,7 +44,7 @@ namespace CSBackend
         ///
         /// @author Ian Copland
         //------------------------------------------------------------
-		class DeviceButtonSystem final : public CSInput::DeviceButtonSystem
+		class DeviceButtonSystem final : public ChilliSource::DeviceButtonSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(DeviceButtonSystem);
@@ -58,16 +58,16 @@ namespace CSBackend
             ///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
 			/// @author Ian Copland
             ///
             /// @return An event that will be called whenever a
             /// device button is triggered.
 			//----------------------------------------------------
-            CSCore::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() override;
+            ChilliSource::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() override;
 		private:
-            friend CSInput::DeviceButtonSystemUPtr CSInput::DeviceButtonSystem::Create();
+            friend ChilliSource::DeviceButtonSystemUPtr ChilliSource::DeviceButtonSystem::Create();
             
             //----------------------------------------------------
 			/// Constructor. Declared private to force the use of
@@ -77,7 +77,7 @@ namespace CSBackend
 			//----------------------------------------------------
 			DeviceButtonSystem() = default;
 
-            CSCore::Event<TriggeredDelegate> m_triggeredEvent;
+            ChilliSource::Event<TriggeredDelegate> m_triggeredEvent;
 		};
 	}
 }

@@ -49,7 +49,7 @@ namespace CSBackend
 			/// @param Post description
 			/// @param [Out] Key value array in the form key, value, key, value
 			//----------------------------------------------------
-			void PostDescToKeyValueArray(const CSSocial::FacebookPostSystem::PostDesc& in_desc, std::vector<std::string>& out_keyValues)
+			void PostDescToKeyValueArray(const ChilliSource::FacebookPostSystem::PostDesc& in_desc, std::vector<std::string>& out_keyValues)
 			{
 				out_keyValues.push_back("link");
 				out_keyValues.push_back(in_desc.m_url);
@@ -72,7 +72,7 @@ namespace CSBackend
 			/// @param Request description
 			/// @param [Out] Key value array in the form key, value, key, value
 			//----------------------------------------------------
-			void RequestDescToKeyValueArray(const CSSocial::FacebookPostSystem::RequestDesc& in_desc, std::vector<std::string>& out_keyValues)
+			void RequestDescToKeyValueArray(const ChilliSource::FacebookPostSystem::RequestDesc& in_desc, std::vector<std::string>& out_keyValues)
 			{
 				out_keyValues.push_back("caption");
 				out_keyValues.push_back(in_desc.m_caption);
@@ -81,16 +81,16 @@ namespace CSBackend
 				out_keyValues.push_back(in_desc.m_description);
 
 	            std::string recipients;
-	            CSCore::StringUtils::ToCSV(in_desc.m_recipients, recipients);
+	            ChilliSource::StringUtils::ToCSV(in_desc.m_recipients, recipients);
 
 	            std::string requestType = "to";
 
 	            switch (in_desc.m_type)
 	            {
-	                case CSSocial::FacebookPostSystem::RequestRecipientMode::k_fixed:
+	                case ChilliSource::FacebookPostSystem::RequestRecipientMode::k_fixed:
 	                    requestType = "to";
 	                    break;
-	                case CSSocial::FacebookPostSystem::RequestRecipientMode::k_optional:
+	                case ChilliSource::FacebookPostSystem::RequestRecipientMode::k_optional:
 	                    requestType = "suggestions";
 	                    break;
 	            }
@@ -104,9 +104,9 @@ namespace CSBackend
 
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool FacebookPostSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool FacebookPostSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return CSSocial::FacebookPostSystem::InterfaceID == in_interfaceId || FacebookPostSystem::InterfaceID == in_interfaceId;
+			return ChilliSource::FacebookPostSystem::InterfaceID == in_interfaceId || FacebookPostSystem::InterfaceID == in_interfaceId;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -122,7 +122,7 @@ namespace CSBackend
 			m_javaInterface->SetPostSystem(this);
 
             // Cache the Facebook authentication system.
-            m_authSystem = CSCore::Application::Get()->GetSystem<CSSocial::FacebookAuthenticationSystem>();
+            m_authSystem = ChilliSource::Application::Get()->GetSystem<ChilliSource::FacebookAuthenticationSystem>();
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -137,7 +137,7 @@ namespace CSBackend
 		//----------------------------------------------------
 		void FacebookPostSystem::Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
 		{
-            CSCore::TaskScheduler* taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
+            ChilliSource::TaskScheduler* taskScheduler = ChilliSource::Application::Get()->GetTaskScheduler();
 
             CS_ASSERT(m_postCompleteDelegateConnection == nullptr, "Cannot post more than once at a time");
             CS_ASSERT(taskScheduler && taskScheduler->IsMainThread(), "You must post in the main thread");

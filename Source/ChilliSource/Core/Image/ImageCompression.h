@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_CORE_IMAGE_IMAGECOMRPESSION_H_
 #define _CHILLISOURCE_CORE_IMAGE_IMAGECOMRPESSION_H_
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------
     /// Holds the supported image compression that can be

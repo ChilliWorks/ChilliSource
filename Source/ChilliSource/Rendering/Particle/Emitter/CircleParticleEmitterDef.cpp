@@ -31,7 +31,7 @@
 #include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -49,7 +49,7 @@ namespace CS
         CircleParticleEmitterDef::EmitFromType ParseEmitFromType(const std::string& in_emitFromTypeString)
         {
             std::string emitFromTypeString = in_emitFromTypeString;
-            Core::StringUtils::ToLowerCase(emitFromTypeString);
+            StringUtils::ToLowerCase(emitFromTypeString);
 
             if (emitFromTypeString == "inside")
             {
@@ -77,7 +77,7 @@ namespace CS
         CircleParticleEmitterDef::EmitDirectionType ParseEmitDirectionType(const std::string& in_emitDirectionTypeString)
         {
             std::string emitDirectionTypeString = in_emitDirectionTypeString;
-            Core::StringUtils::ToLowerCase(emitDirectionTypeString);
+            StringUtils::ToLowerCase(emitDirectionTypeString);
 
             if (emitDirectionTypeString == "awayfromcentre")
             {
@@ -139,13 +139,13 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool CircleParticleEmitterDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool CircleParticleEmitterDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleEmitterDef::InterfaceID == in_interfaceId || CircleParticleEmitterDef::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ParticleEmitterUPtr CircleParticleEmitterDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+    ParticleEmitterUPtr CircleParticleEmitterDef::CreateInstance(dynamic_array<Particle>* in_particleArray) const
     {
         return ParticleEmitterUPtr(new CircleParticleEmitter(this, in_particleArray));
     }

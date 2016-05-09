@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_RENDERING_BASE_DEPTHTESTCOMPARISON_H_
 #define _CHILLISOURCE_RENDERING_BASE_DEPTHTESTCOMPARISON_H_
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------
     /// Used in the depth test function to decide

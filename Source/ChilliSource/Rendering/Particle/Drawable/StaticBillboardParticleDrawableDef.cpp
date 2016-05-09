@@ -36,7 +36,7 @@
 #include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawable.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -54,7 +54,7 @@ namespace CS
         StaticBillboardParticleDrawableDef::ImageSelectionType ParseImageSelectionType(const std::string& in_imageSelectionTypeString)
         {
             std::string imageSelectionTypeString = in_imageSelectionTypeString;
-            Core::StringUtils::ToLowerCase(imageSelectionTypeString);
+            StringUtils::ToLowerCase(imageSelectionTypeString);
 
             if (imageSelectionTypeString == "cycle")
             {
@@ -82,7 +82,7 @@ namespace CS
         StaticBillboardParticleDrawableDef::SizePolicy ParseSizePolicy(const std::string& in_sizePolicyString)
         {
             std::string sizePolicyString = in_sizePolicyString;
-            Core::StringUtils::ToLowerCase(sizePolicyString);
+            StringUtils::ToLowerCase(sizePolicyString);
 
             if (sizePolicyString == "fillmaintainingaspect")
             {
@@ -123,21 +123,21 @@ namespace CS
         //-----------------------------------------------------------------
         std::vector<std::string> ParseStringList(const std::string& in_stringList)
         {
-            return Core::StringUtils::Split(in_stringList, " ");
+            return StringUtils::Split(in_stringList, " ");
         }
     }
 
     CS_DEFINE_NAMEDTYPE(StaticBillboardParticleDrawableDef);
     //--------------------------------------------------
     //--------------------------------------------------
-    StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+    StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Vector2& in_particleSize, SizePolicy in_sizePolicy)
         : m_material(in_material), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
     {
         CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
     }
     //--------------------------------------------------
     //--------------------------------------------------
-    StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+    StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Vector2& in_particleSize, SizePolicy in_sizePolicy)
         : m_material(in_material), m_textureAtlas(in_textureAtlas), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
     {
         CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
@@ -147,7 +147,7 @@ namespace CS
     }
     //--------------------------------------------------
     //--------------------------------------------------
-    StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+    StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Vector2& in_particleSize, SizePolicy in_sizePolicy)
         : m_material(in_material), m_textureAtlas(in_textureAtlas), m_atlasIds(in_atlasIds), m_imageSelectionType(in_imageSelectionType), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
     {
         CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
@@ -170,7 +170,7 @@ namespace CS
         if (jsonValue.isNull() == false)
         {
             CS_ASSERT(jsonValue.isString(), "particle size must be a string.");
-            m_particleSize = Core::ParseVector2(jsonValue.asString());
+            m_particleSize = ParseVector2(jsonValue.asString());
         }
 
         //Size Policy
@@ -193,13 +193,13 @@ namespace CS
     }
     //--------------------------------------------------
     //-------------------------------------------------
-    bool StaticBillboardParticleDrawableDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool StaticBillboardParticleDrawableDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleDrawableDef::InterfaceID == in_interfaceId || StaticBillboardParticleDrawableDef::InterfaceID == in_interfaceId);
     }
     //--------------------------------------------------
     //--------------------------------------------------
-    ParticleDrawableUPtr StaticBillboardParticleDrawableDef::CreateInstance(const Core::Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const
+    ParticleDrawableUPtr StaticBillboardParticleDrawableDef::CreateInstance(const Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const
     {
         return ParticleDrawableUPtr(new StaticBillboardParticleDrawable(in_entity, this, in_concurrentParticleData));
     }
@@ -229,7 +229,7 @@ namespace CS
     }
     //--------------------------------------------------
     //--------------------------------------------------
-    const Core::Vector2& StaticBillboardParticleDrawableDef::GetParticleSize() const
+    const Vector2& StaticBillboardParticleDrawableDef::GetParticleSize() const
     {
         return m_particleSize;
     }
@@ -243,7 +243,7 @@ namespace CS
     //----------------------------------------------------------------
     void StaticBillboardParticleDrawableDef::LoadResources(const Json::Value& in_paramsJson)
     {
-        auto resourcePool = Core::Application::Get()->GetResourcePool();
+        auto resourcePool = Application::Get()->GetResourcePool();
 
         //material
         Json::Value materialLocationJson = in_paramsJson.get("MaterialLocation", "Package");
@@ -251,8 +251,8 @@ namespace CS
         CS_ASSERT(materialLocationJson.isNull() == false && materialLocationJson.isString() == true && materialPathJson.isNull() == false &&
             materialPathJson.isString() == true, "Must provide a valid material for a billboard particle drawable.");
 
-        m_material = resourcePool->LoadResource<Rendering::Material>(Core::ParseStorageLocation(materialLocationJson.asString()), materialPathJson.asString());
-        CS_ASSERT((m_material != nullptr && m_material->GetLoadState() == Core::Resource::LoadState::k_loaded), "Could not load material: " + materialPathJson.asString());
+        m_material = resourcePool->LoadResource<Material>(ParseStorageLocation(materialLocationJson.asString()), materialPathJson.asString());
+        CS_ASSERT((m_material != nullptr && m_material->GetLoadState() == Resource::LoadState::k_loaded), "Could not load material: " + materialPathJson.asString());
 
         //texture atlas
         Json::Value atlasPathJson = in_paramsJson.get("AtlasPath", Json::nullValue);
@@ -269,15 +269,15 @@ namespace CS
             Json::Value atlasLocationJson = in_paramsJson.get("AtlasLocation", "Package");
             CS_ASSERT(atlasLocationJson.isNull() == false && atlasLocationJson.isString() == true, "Invalid atlas path and location.");
 
-            m_textureAtlas = resourcePool->LoadResource<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocationJson.asString()), atlasPathJson.asString());
-            CS_ASSERT((m_textureAtlas != nullptr && m_textureAtlas->GetLoadState() == Core::Resource::LoadState::k_loaded), "Could not load texture atlas: " + atlasPathJson.asString());
+            m_textureAtlas = resourcePool->LoadResource<TextureAtlas>(ParseStorageLocation(atlasLocationJson.asString()), atlasPathJson.asString());
+            CS_ASSERT((m_textureAtlas != nullptr && m_textureAtlas->GetLoadState() == Resource::LoadState::k_loaded), "Could not load texture atlas: " + atlasPathJson.asString());
         }
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
     void StaticBillboardParticleDrawableDef::LoadResourcesAsync(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
     {
-        auto resourcePool = Core::Application::Get()->GetResourcePool();
+        auto resourcePool = Application::Get()->GetResourcePool();
 
         //material
         Json::Value materialLocationJson = in_paramsJson.get("MaterialLocation", "Package");
@@ -285,10 +285,10 @@ namespace CS
         CS_ASSERT(materialLocationJson.isNull() == false && materialLocationJson.isString() == true && materialPathJson.isNull() == false &&
             materialPathJson.isString() == true, "Must provide a valid material for a billboard particle drawable.");
 
-        resourcePool->LoadResourceAsync<Rendering::Material>(Core::ParseStorageLocation(materialLocationJson.asString()), materialPathJson.asString(), [=](const Rendering::MaterialCSPtr& in_material)
+        resourcePool->LoadResourceAsync<Material>(ParseStorageLocation(materialLocationJson.asString()), materialPathJson.asString(), [=](const MaterialCSPtr& in_material)
         {
             m_material = in_material;
-            CS_ASSERT((m_material != nullptr && m_material->GetLoadState() == Core::Resource::LoadState::k_loaded), "Could not load material: " + materialPathJson.asString());
+            CS_ASSERT((m_material != nullptr && m_material->GetLoadState() == Resource::LoadState::k_loaded), "Could not load material: " + materialPathJson.asString());
 
             //texture atlas
             Json::Value atlasPathJson = in_paramsJson.get("AtlasPath", Json::nullValue);
@@ -305,10 +305,10 @@ namespace CS
                 Json::Value atlasLocationJson = in_paramsJson.get("AtlasLocation", "Package");
                 CS_ASSERT(atlasLocationJson.isNull() == false && atlasLocationJson.isString() == true, "Invalid atlas path and location.");
 
-                resourcePool->LoadResourceAsync<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocationJson.asString()), atlasPathJson.asString(), [=](const Rendering::TextureAtlasCSPtr& in_textureAtlas)
+                resourcePool->LoadResourceAsync<TextureAtlas>(ParseStorageLocation(atlasLocationJson.asString()), atlasPathJson.asString(), [=](const TextureAtlasCSPtr& in_textureAtlas)
                 {
                     m_textureAtlas = in_textureAtlas;
-                    CS_ASSERT((m_textureAtlas != nullptr && m_textureAtlas->GetLoadState() == Core::Resource::LoadState::k_loaded), "Could not load texture atlas: " + atlasPathJson.asString());
+                    CS_ASSERT((m_textureAtlas != nullptr && m_textureAtlas->GetLoadState() == Resource::LoadState::k_loaded), "Could not load texture atlas: " + atlasPathJson.asString());
 
                     in_asyncDelegate(this);
                 });

@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------
     /// A resource that holds the description for creating new
@@ -44,7 +44,7 @@ namespace CS
     ///
     /// @author S Downie
     //-------------------------------------------------------------
-    class WidgetTemplate final : public Core::Resource
+    class WidgetTemplate final : public Resource
     {
     public:
         CS_DECLARE_NAMEDTYPE(WidgetTemplate);
@@ -58,7 +58,7 @@ namespace CS
         ///
         /// @return Whether the object is of given type
         //-------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-------------------------------------------------------
         /// Build the resource which consists of the description
         /// of a widget and all its children
@@ -77,7 +77,7 @@ namespace CS
         
     private:
         
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //-------------------------------------------------------
         /// Factory method
         ///

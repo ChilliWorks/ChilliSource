@@ -37,13 +37,13 @@ namespace CSBackend
         CS_DEFINE_NAMEDTYPE(DeviceButtonSystem);
         //----------------------------------------------------
         //----------------------------------------------------
-        bool DeviceButtonSystem::IsA(CSCore::InterfaceIDType in_interfaceID) const
+        bool DeviceButtonSystem::IsA(ChilliSource::InterfaceIDType in_interfaceID) const
         {
-            return (in_interfaceID == CSInput::DeviceButtonSystem::InterfaceID || in_interfaceID == DeviceButtonSystem::InterfaceID);
+            return (in_interfaceID == ChilliSource::DeviceButtonSystem::InterfaceID || in_interfaceID == DeviceButtonSystem::InterfaceID);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        CSCore::IConnectableEvent<DeviceButtonSystem::TriggeredDelegate>& DeviceButtonSystem::GetTriggeredEvent()
+        ChilliSource::IConnectableEvent<DeviceButtonSystem::TriggeredDelegate>& DeviceButtonSystem::GetTriggeredEvent()
         {
             return m_triggeredEvent;
         }

@@ -36,7 +36,7 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(MaterialFactory);
     
@@ -55,7 +55,7 @@ namespace CS
     }
     //---------------------------------------------------
     //---------------------------------------------------
-    bool MaterialFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool MaterialFactory::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == MaterialFactory::InterfaceID;
     }
@@ -63,7 +63,7 @@ namespace CS
     //---------------------------------------------------
     MaterialSPtr MaterialFactory::CreateCustom(const std::string& in_uniqueId) const
     {
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         return resourcePool->CreateResource<Material>(in_uniqueId);
     }
     //---------------------------------------------------
@@ -72,8 +72,8 @@ namespace CS
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
         
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/GUI.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/GUI.csshader"));
         material->SetTransparencyEnabled(true);
         material->SetCullFace(CullFace::k_back);
         material->SetFaceCullingEnabled(true);
@@ -85,8 +85,8 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateSprite(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/Sprite.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Sprite.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -98,8 +98,8 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateStatic(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/Static.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -111,8 +111,8 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateStaticAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -124,10 +124,10 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateStaticBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
-        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticBlinnDirectional.csshader"));
-        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticBlinnPoint.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
+        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnDirectional.csshader"));
+        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPoint.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -144,10 +144,10 @@ namespace CS
         }
 
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
-        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticBlinnShadowedDirectional.csshader"));
-        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticBlinnPoint.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
+        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnShadowedDirectional.csshader"));
+        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPoint.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -159,10 +159,10 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
-        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexDirectional.csshader"));
-        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexPoint.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
+        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexDirectional.csshader"));
+        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexPoint.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -179,10 +179,10 @@ namespace CS
         }
 
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
-        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexShadowedDirectional.csshader"));
-        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexPoint.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
+        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexShadowedDirectional.csshader"));
+        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexPoint.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -194,8 +194,8 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateStaticDirectionalShadowMap(const std::string& in_uniqueId) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/StaticDirectionalShadowMap.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticDirectionalShadowMap.csshader"));
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
         material->SetFaceCullingEnabled(true);
@@ -213,8 +213,8 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateAnimated(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/Animated.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Animated.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -226,8 +226,8 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -239,10 +239,10 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
-        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnDirectional.csshader"));
-        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPoint.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
+        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnDirectional.csshader"));
+        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPoint.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -259,10 +259,10 @@ namespace CS
         }
 
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
-        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnShadowedDirectional.csshader"));
-        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPoint.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
+        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnShadowedDirectional.csshader"));
+        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPoint.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -274,10 +274,10 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
-        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexDirectional.csshader"));
-        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexPoint.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
+        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexDirectional.csshader"));
+        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexPoint.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -294,10 +294,10 @@ namespace CS
         }
 
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
-        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexShadowedDirectional.csshader"));
-        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexPoint.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
+        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexShadowedDirectional.csshader"));
+        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexPoint.csshader"));
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
@@ -309,8 +309,8 @@ namespace CS
     MaterialSPtr MaterialFactory::CreateAnimatedDirectionalShadowMap(const std::string& in_uniqueId) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(Core::StorageLocation::k_chilliSource, "Shaders/AnimatedDirectionalShadowMap.csshader"));
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedDirectionalShadowMap.csshader"));
         material->SetTransparencyEnabled(false);
         material->SetCullFace(CullFace::k_back);
         material->SetFaceCullingEnabled(true);

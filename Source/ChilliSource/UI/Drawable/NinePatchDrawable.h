@@ -38,7 +38,7 @@
 
 #include <array>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
     /// Interface for rendering widget with a texture and UVs as a 9 patch. This allows the
@@ -68,7 +68,7 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface.
         //----------------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------------------------------
         /// Get the texture that is currently used.
         ///
@@ -76,7 +76,7 @@ namespace CS
         ///
         /// @return Texture
         //----------------------------------------------------------------------------------------
-        const Rendering::TextureCSPtr& GetTexture() const override;
+        const TextureCSPtr& GetTexture() const override;
         //----------------------------------------------------------------------------------------
         /// Get the texture atlas that is currently used.
         ///
@@ -84,7 +84,7 @@ namespace CS
         ///
         /// @return Texture atlas
         //----------------------------------------------------------------------------------------
-        const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const override;
+        const TextureAtlasCSPtr& GetTextureAtlas() const override;
         //----------------------------------------------------------------------------------------
         /// Get the texture atlas frame Id that is currently used.
         ///
@@ -101,7 +101,7 @@ namespace CS
         ///
         /// @return Rectangle containing U, V, S, T
         //----------------------------------------------------------------------------------------
-        const Rendering::UVs& GetUVs() const override;
+        const UVs& GetUVs() const override;
         //----------------------------------------------------------------------------------------
         /// Gets the colour of the drawable.
         ///
@@ -109,7 +109,7 @@ namespace CS
         ///
         /// @param The colour.
         //----------------------------------------------------------------------------------------
-        const Core::Colour& GetColour() const override;
+        const Colour& GetColour() const override;
         //----------------------------------------------------------------------------------------
         /// Set the texture that should be used in subsequent draws
         ///
@@ -117,7 +117,7 @@ namespace CS
         ///
         /// @param Texture
         //----------------------------------------------------------------------------------------
-        void SetTexture(const Rendering::TextureCSPtr& in_texture) override;
+        void SetTexture(const TextureCSPtr& in_texture) override;
         //----------------------------------------------------------------------------------------
         /// Set the texture atlas that should be used in subsequent draws.
         ///
@@ -125,7 +125,7 @@ namespace CS
         ///
         /// @param Texture atlas
         //----------------------------------------------------------------------------------------
-        void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas) override;
+        void SetTextureAtlas(const TextureAtlasCSPtr& in_atlas) override;
         //----------------------------------------------------------------------------------------
         /// Set the texture atlas frame Id that should be used in subsequent draws.
         ///
@@ -144,7 +144,7 @@ namespace CS
         ///
         /// @param Rectangle containing U, V, S, T
         //----------------------------------------------------------------------------------------
-        void SetUVs(const Rendering::UVs& in_UVs) override;
+        void SetUVs(const UVs& in_UVs) override;
         //----------------------------------------------------------------------------------------
         /// Sets the colour of the drawable. The final colour of the drawable takes into account
         /// the owning widgets colour and this colour.
@@ -153,7 +153,7 @@ namespace CS
         ///
         /// @param The colour.
         //----------------------------------------------------------------------------------------
-        void SetColour(const Core::Colour& in_colour) override;
+        void SetColour(const Colour& in_colour) override;
         //----------------------------------------------------------------------------------------
         /// Set the UV insets that should be used to create the patches. Insets are from the edge
         /// and therefore no negative numbers need to be specified for right and bottom insets.
@@ -175,7 +175,7 @@ namespace CS
         /// @return The preferred size that the drawable wishes to de drawn at based on the
         /// texture size
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetPreferredSize() const override;
+        Vector2 GetPreferredSize() const override;
         //----------------------------------------------------------------------------------------
         /// Render the widget using the canvas renderer. The widget has is rendered using the
         /// set texture and UVs.
@@ -187,7 +187,7 @@ namespace CS
         /// @param Asbolute screen size
         /// @param Absolute colour
         //----------------------------------------------------------------------------------------
-        void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
+        void Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
         
     private:
         friend class NinePatchDrawableDef;
@@ -202,7 +202,7 @@ namespace CS
         /// @param The top inset.
         /// @param The bottom inset.
         //----------------------------------------------------------------------------------------
-        NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
+        NinePatchDrawable(const TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
         //----------------------------------------------------------------------------------------
         /// Constructor
         ///
@@ -216,20 +216,20 @@ namespace CS
         /// @param The top inset.
         /// @param The bottom inset.
         //----------------------------------------------------------------------------------------
-        NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
+        NinePatchDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
         
-        Rendering::TextureCSPtr m_texture;
-        Rendering::TextureAtlasCSPtr m_atlas;
-        Rendering::TextureAtlas::Frame m_atlasFrame;
-        Rendering::UVs m_uvs;
+        TextureCSPtr m_texture;
+        TextureAtlasCSPtr m_atlas;
+        TextureAtlas::Frame m_atlasFrame;
+        UVs m_uvs;
         std::string m_atlasId;
         
-        std::array<Rendering::UVs, k_numPatches> m_cachedUvs;
-        std::array<Core::Vector2, k_numPatches> m_cachedSizes;
-        std::array<Core::Vector2, k_numPatches> m_cachedPositions;
-        Core::Vector2 m_cachedOffsetTL;
-        Core::Vector2 m_cachedWidgetSize;
-        Core::Colour m_colour;
+        std::array<UVs, k_numPatches> m_cachedUvs;
+        std::array<Vector2, k_numPatches> m_cachedSizes;
+        std::array<Vector2, k_numPatches> m_cachedPositions;
+        Vector2 m_cachedOffsetTL;
+        Vector2 m_cachedWidgetSize;
+        Colour m_colour;
         
         f32 m_leftInset = 0.01f;
         f32 m_rightInset = 0.01f;

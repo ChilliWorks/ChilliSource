@@ -37,7 +37,7 @@
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -55,14 +55,14 @@ namespace CS
         m_shadowMapId = g_nextShadowMapId;
         ++g_nextShadowMapId;
         
-        m_renderCapabilities = Core::Application::Get()->GetSystem<RenderCapabilities>();
+        m_renderCapabilities = Application::Get()->GetSystem<RenderCapabilities>();
         
         CreateShadowMapTextures();
     }
     //----------------------------------------------------------
     /// Is A
     //----------------------------------------------------------
-    bool DirectionalLightComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
+    bool DirectionalLightComponent::IsA(InterfaceIDType inInterfaceID) const
     {
         return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == DirectionalLightComponent::InterfaceID;
     }
@@ -71,33 +71,33 @@ namespace CS
     //----------------------------------------------------------
     void DirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
     {
-        mmatProj = Core::Matrix4::CreateOrthographicProjectionLH(infWidth, infHeight, infNear, infFar);
+        mmatProj = Matrix4::CreateOrthographicProjectionLH(infWidth, infHeight, infNear, infFar);
         
         mbCacheValid = false;
     }
     //----------------------------------------------------------
     /// Get Direction
     //----------------------------------------------------------
-    Core::Vector3 DirectionalLightComponent::GetDirection() const
+    Vector3 DirectionalLightComponent::GetDirection() const
     {
         if(GetEntity() != nullptr)
         {
-            return Core::Vector3::Rotate(Core::Vector3::k_unitPositiveZ, GetEntity()->GetTransform().GetWorldOrientation());
+            return Vector3::Rotate(Vector3::k_unitPositiveZ, GetEntity()->GetTransform().GetWorldOrientation());
         }
         else
         {
-            return Core::Vector3::k_unitPositiveZ;
+            return Vector3::k_unitPositiveZ;
         }
     }
     //----------------------------------------------------------
     /// Get Light Matrix
     //----------------------------------------------------------
-    const Core::Matrix4& DirectionalLightComponent::GetLightMatrix() const
+    const Matrix4& DirectionalLightComponent::GetLightMatrix() const
     {
         //The matrix is a view projection
         if(mbMatrixCacheValid == false && GetEntity() != nullptr)
         {
-            Core::Matrix4 matView = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
+            Matrix4 matView = Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
             mmatLight = matView * mmatProj;
             mbMatrixCacheValid = true;
         }
@@ -138,7 +138,7 @@ namespace CS
     //----------------------------------------------------
     void DirectionalLightComponent::OnAddedToScene()
     {
-        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
+        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
     }
     //----------------------------------------------------
     //----------------------------------------------------
@@ -160,21 +160,21 @@ namespace CS
     {
         if(m_shadowMap == nullptr && m_renderCapabilities->IsShadowMappingSupported() == true && m_shadowMapRes > 0)
         {
-            m_shadowMap = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_ShadowMap" + Core::ToString(m_shadowMapId));
+            m_shadowMap = Application::Get()->GetResourcePool()->CreateResource<Texture>("_ShadowMap" + ToString(m_shadowMapId));
             Texture::Descriptor desc;
             desc.m_width = m_shadowMapRes;
             desc.m_height = m_shadowMapRes;
-            desc.m_format = Core::ImageFormat::k_Depth16;
-            desc.m_compression = Core::ImageCompression::k_none;
+            desc.m_format = ImageFormat::k_Depth16;
+            desc.m_compression = ImageCompression::k_none;
             desc.m_dataSize = 0;
             m_shadowMap->Build(desc, nullptr, false, false);
             
 #ifdef CS_ENABLE_DEBUGSHADOW
-            m_shadowMapDebug = Core::Application::Get()->GetResourcePool()->CreateResource<Rendering::Texture>("_ShadowMapDebug" + Core::ToString(m_shadowMapId));
+            m_shadowMapDebug = Application::Get()->GetResourcePool()->CreateResource<Texture>("_ShadowMapDebug" + ToString(m_shadowMapId));
             desc.m_width = m_shadowMapRes;
             desc.m_height = m_shadowMapRes;
-            desc.m_format = Core::ImageFormat::k_RGB888;
-            desc.m_compression = Core::ImageCompression::k_none;
+            desc.m_format = ImageFormat::k_RGB888;
+            desc.m_compression = ImageCompression::k_none;
             desc.m_dataSize = 0;
             m_shadowMapDebug->Build(desc, nullptr, false, false);
 #endif
@@ -184,7 +184,7 @@ namespace CS
     //----------------------------------------------------
     void DirectionalLightComponent::DestroyShadowMapTextures()
     {
-        Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
+        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         
         if(m_shadowMap != nullptr)
         {

@@ -100,7 +100,7 @@ namespace CSBackend
 		//--------------------------------------------------------
 		/// Get Java Interface
 		//--------------------------------------------------------
-		IJavaInterfaceSPtr JavaInterfaceManager::GetJavaInterface(CSCore::InterfaceIDType inInterfaceID)
+		IJavaInterfaceSPtr JavaInterfaceManager::GetJavaInterface(ChilliSource::InterfaceIDType inInterfaceID)
 		{
 			for (std::vector<IJavaInterfaceSPtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
 			{
@@ -116,7 +116,7 @@ namespace CSBackend
 		//--------------------------------------------------------
 		/// Get Java Interfaces
 		//--------------------------------------------------------
-		void JavaInterfaceManager::GetJavaInterfaces(CSCore::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces)
+		void JavaInterfaceManager::GetJavaInterfaces(ChilliSource::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces)
 		{
 			outJavaInterfaces.clear();
 			for (std::vector<IJavaInterfaceSPtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)

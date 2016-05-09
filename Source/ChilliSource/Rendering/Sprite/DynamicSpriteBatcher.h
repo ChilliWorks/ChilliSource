@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 
-namespace CS
+namespace ChilliSource
 {
     const u32 kudwNumBuffers = 2;
     
@@ -47,8 +47,8 @@ namespace CS
     {
         MaterialCSPtr m_material;
         
-        Core::Vector2 m_scissorPos;
-        Core::Vector2 m_scissorSize;
+        Vector2 m_scissorPos;
+        Vector2 m_scissorSize;
         
         u32 m_offset;
         u32 m_stride;
@@ -72,7 +72,7 @@ namespace CS
         ///
         /// @param Sprite data to batch
         //-------------------------------------------------------
-        void Render(const SpriteBatch::SpriteData& inpSprite, const Core::Matrix4 * inpTransform = nullptr);
+        void Render(const SpriteBatch::SpriteData& inpSprite, const Matrix4 * inpTransform = nullptr);
         //-------------------------------------------------------
         /// Enable scissoring with the given region. Any
         /// subsequent renders to the batcher will be clipped
@@ -83,7 +83,7 @@ namespace CS
         /// @param Bottom left pos of the scissor rect
         /// @param Size of the scissor rect
         //-------------------------------------------------------
-        void EnableScissoring(const Core::Vector2& in_pos, const Core::Vector2& in_size);
+        void EnableScissoring(const Vector2& in_pos, const Vector2& in_size);
         //-------------------------------------------------------
         /// Disable scissoring. Any
         /// subsequent renders to the batcher will not be clipped/

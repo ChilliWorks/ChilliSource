@@ -35,7 +35,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------
     /// System that allows purchasing of IAPs from
@@ -47,7 +47,7 @@ namespace CS
     ///
     /// @author S Downie
     //----------------------------------------------------------------------------------
-    class IAPSystem : public Core::AppSystem
+    class IAPSystem : public AppSystem
     {
     public:
         
@@ -149,7 +149,7 @@ namespace CS
         ///		AmazonPrivateKey		The private key used to encrypt
         ///								the on disk Amazon IAP cache.
         //---------------------------------------------------------------
-        static IAPSystemUPtr Create(const Core::ParamDictionary& in_params);
+        static IAPSystemUPtr Create(const ParamDictionary& in_params);
         //---------------------------------------------------------------
         /// Inform the system of which products are available for
         /// purchase and whether they are managed or unmanaged

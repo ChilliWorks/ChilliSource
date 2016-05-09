@@ -48,7 +48,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		class WebView final : public CSWeb::WebView
+		class WebView final : public ChilliSource::WebView
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(WebView);
@@ -62,7 +62,7 @@ namespace CSBackend
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------
             /// Displays the website at the given URL in an in-app
             /// web view.
@@ -76,7 +76,7 @@ namespace CSBackend
             /// @param in_customURLClickHandler - The delegate to call when a link is
             /// clicked on the displayed page
             //---------------------------------------------------------
-            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
+            void Present(const std::string& in_url, const ChilliSource::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
             //---------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
@@ -91,7 +91,7 @@ namespace CSBackend
             /// @param in_customURLClickHandler - The delegate to call when a link is
             /// clicked on the displayed page
             //---------------------------------------------------------
-            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
+            void PresentFromFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
             //---------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.
@@ -139,7 +139,7 @@ namespace CSBackend
             bool OnLinkClicked(const std::string& in_url);
             
         private:
-            friend CSWeb::WebViewUPtr CSWeb::WebView::Create();
+            friend ChilliSource::WebViewUPtr ChilliSource::WebView::Create();
             //---------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -160,7 +160,7 @@ namespace CSBackend
             ///
             /// @param The size.
             //---------------------------------------------------------
-            void CreateWebview(const CSCore::UnifiedVector2& in_size);
+            void CreateWebview(const ChilliSource::UnifiedVector2& in_size);
             //---------------------------------------------------------
             /// Adds the webview to the main view.
             ///
@@ -198,7 +198,7 @@ namespace CSBackend
             DismissedDelegate m_dismissedDelegate;
             CustomLinkHandlerDelegate m_linkHandlerDelegate;
             
-            CSCore::Screen* m_screen;
+            ChilliSource::Screen* m_screen;
 			UIWebView* m_webView;
 			UIButton * m_dismissButton;
             UIActivityIndicatorView* m_activityIndicator;
@@ -206,8 +206,8 @@ namespace CSBackend
             
             std::string m_anchor;
             
-			CSCore::Vector2 m_absoluteSize;
-			CSCore::Vector2 m_absolutePosition;
+			ChilliSource::Vector2 m_absoluteSize;
+			ChilliSource::Vector2 m_absolutePosition;
             
             f32 m_dismissButtonRelativeSize;
 			

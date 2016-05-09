@@ -43,7 +43,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -132,7 +132,7 @@ namespace CS
         ///
         /// @return The output component description.
         //-------------------------------------------------------
-        UIComponentDesc ParseComponent(const Json::Value& in_componentJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, UIComponentFactory* in_componentFactory)
+        UIComponentDesc ParseComponent(const Json::Value& in_componentJson, StorageLocation in_definitionLocation, const std::string& in_definitionPath, UIComponentFactory* in_componentFactory)
         {
             CS_ASSERT(in_componentJson.isNull() == false, "Cannot parse null component json.");
             CS_ASSERT(in_componentJson.isObject() == true, "UIComponent json must be an object.");
@@ -146,7 +146,7 @@ namespace CS
             
             std::string type = typeJson.asString();
             std::string name = nameJson.asString();
-            Core::PropertyMap propertyMap(in_componentFactory->GetPropertyDescs(type));
+            PropertyMap propertyMap(in_componentFactory->GetPropertyDescs(type));
             
             for(auto it = in_componentJson.begin(); it != in_componentJson.end(); ++it)
             {
@@ -185,7 +185,7 @@ namespace CS
         ///
         /// @return The output component descriptions.
         //-------------------------------------------------------
-        std::vector<UIComponentDesc> ParseComponents(const Json::Value& in_componentsJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, UIComponentFactory* in_componentFactory)
+        std::vector<UIComponentDesc> ParseComponents(const Json::Value& in_componentsJson, StorageLocation in_definitionLocation, const std::string& in_definitionPath, UIComponentFactory* in_componentFactory)
         {
             CS_ASSERT(in_componentsJson.isNull() == false, "Cannot parse null components json.");
             CS_ASSERT(in_componentsJson.isArray() == true, "Components json must be an array.");
@@ -212,7 +212,7 @@ namespace CS
         ///
         /// @return The child widget descriptions.
         //-------------------------------------------------------
-        std::vector<WidgetDesc> ParseChildWidgets(const Json::Value& in_children, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath)
+        std::vector<WidgetDesc> ParseChildWidgets(const Json::Value& in_children, StorageLocation in_definitionLocation, const std::string& in_definitionPath)
         {
             std::vector<WidgetDesc> output;
             
@@ -240,17 +240,17 @@ namespace CS
         ///
         /// @return The property map.
         //-------------------------------------------------------
-        Core::PropertyMap BuildPropertyMap(const std::vector<UIComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+        PropertyMap BuildPropertyMap(const std::vector<UIComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
                                      const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks)
         {
             //define the properties.
-            std::vector<Core::PropertyMap::PropertyDesc> descs = Widget::GetPropertyDescs();
+            std::vector<PropertyMap::PropertyDesc> descs = Widget::GetPropertyDescs();
             
             //add linked component properties
             for (auto& link : in_componentPropertyLinks)
             {
                 auto componentDesc = GetComponentDescWithName(in_componentDescs, link.GetLinkedOwner());
-                Core::PropertyMap::PropertyDesc desc;
+                PropertyMap::PropertyDesc desc;
                 desc.m_type = componentDesc.GetProperties().GetType(link.GetLinkedProperty());
                 desc.m_name = link.GetLinkName();
                 descs.push_back(desc);
@@ -264,14 +264,14 @@ namespace CS
                 {
                     CS_LOG_FATAL("Could not find widget desc with name: " + link.GetLinkedOwner());
                 }
-                Core::PropertyMap::PropertyDesc desc;
+                PropertyMap::PropertyDesc desc;
                 desc.m_type = widgetDesc.GetProperties().GetType(link.GetLinkedProperty());
                 desc.m_name = link.GetLinkName();
                 descs.push_back(desc);
             }
             
             //build the property map
-            Core::PropertyMap output(descs);
+            PropertyMap output(descs);
             
             return output;
         }
@@ -289,7 +289,7 @@ namespace CS
         /// @param [Out] Default property values
         /// @param [Out] Custom property values
         //-------------------------------------------------------
-        void ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, Core::PropertyMap& out_properties)
+        void ParseDefaultValues(const Json::Value& in_defaults, StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_properties)
         {
             for(auto it = in_defaults.begin(); it != in_defaults.end(); ++it)
             {
@@ -330,7 +330,7 @@ namespace CS
                 {
                     
                     std::string lowerValue = linkedComponentJson.asString();
-                    Core::StringUtils::ToLowerCase(lowerValue);
+                    StringUtils::ToLowerCase(lowerValue);
                     
                     if (lowerValue == k_componentLinkTypeAllKey)
                     {
@@ -409,7 +409,7 @@ namespace CS
         /// @param Async load delegate
         /// @param [Out] Resource
         //-------------------------------------------------------
-        void LoadDesc(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+        void LoadDesc(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
             const char k_widgetTypeKey[] = "Type";
             const char k_widgetComponentsKey[] = "Components";
@@ -418,17 +418,17 @@ namespace CS
             const char k_widgetChildPropertiesKey[] = "ChildPropertyLinks";
             const char k_widgetPropertyDefaultsKey[] = "DefaultPropertyValues";
             
-            UIComponentFactory* componentFactory = Core::Application::Get()->GetSystem<UIComponentFactory>();
+            UIComponentFactory* componentFactory = Application::Get()->GetSystem<UIComponentFactory>();
             
             //read the json
             Json::Value root;
-            if (Core::JsonUtils::ReadJson(in_storageLocation, in_filepath, root) == false)
+            if (JsonUtils::ReadJson(in_storageLocation, in_filepath, root) == false)
             {
                 CS_LOG_ERROR("Cannot read widget def file: " + in_filepath);
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                out_resource->SetLoadState(Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                     {
                        in_delegate(out_resource);
                     });
@@ -445,7 +445,7 @@ namespace CS
             //parse components
             std::string definitionFileName;
             std::string pathToDefinition;
-            Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
+            StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
         
             const Json::Value& componentsJson = root[k_widgetComponentsKey];
             std::vector<UIComponentDesc> componentDescs;
@@ -480,7 +480,7 @@ namespace CS
             }
             
             //build the default values property map and read the default values from the json
-            Core::PropertyMap defaultProperties = BuildPropertyMap(componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
+            PropertyMap defaultProperties = BuildPropertyMap(componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
             const Json::Value& defaults = root[k_widgetPropertyDefaultsKey];
             if(defaults.isNull() == false)
             {
@@ -489,11 +489,11 @@ namespace CS
 
             //build the widget def.
             widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
-            out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+            out_resource->SetLoadState(Resource::LoadState::k_loaded);
             
             if(in_delegate != nullptr)
             {
-                CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -510,13 +510,13 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    bool WidgetDefProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool WidgetDefProvider::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (in_interfaceId == Core::ResourceProvider::InterfaceID || in_interfaceId == WidgetDefProvider::InterfaceID);
+        return (in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == WidgetDefProvider::InterfaceID);
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Core::InterfaceIDType WidgetDefProvider::GetResourceType() const
+    InterfaceIDType WidgetDefProvider::GetResourceType() const
     {
         return WidgetDef::InterfaceID;
     }
@@ -528,13 +528,13 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    void WidgetDefProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+    void WidgetDefProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
         LoadDesc(in_storageLocation, in_filepath, nullptr, out_resource);
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    void WidgetDefProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void WidgetDefProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         //TODO: Async support.
         CS_LOG_FATAL("Asynchronous loading of Widget Def is currently not supported. Feature coming soon!");

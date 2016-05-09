@@ -36,7 +36,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayer.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(VideoPlayer);
     //-------------------------------------------------------

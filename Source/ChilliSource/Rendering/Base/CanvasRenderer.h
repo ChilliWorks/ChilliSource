@@ -40,7 +40,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------
     /// System that renders simple shapes and text to screen space. Responsible
@@ -48,7 +48,7 @@ namespace CS
     ///
     /// @author S Downie
     //----------------------------------------------------------------------------
-    class CanvasRenderer : public Core::AppSystem
+    class CanvasRenderer : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(CanvasRenderer);
@@ -78,9 +78,9 @@ namespace CS
         //----------------------------------------------------------------------------
         struct DisplayCharacterInfo
         {
-            Rendering::UVs m_UVs;
-            Core::Vector2 m_position;
-            Core::Vector2 m_packedImageSize;
+            UVs m_UVs;
+            Vector2 m_position;
+            Vector2 m_packedImageSize;
             f32 m_advance = 0.0f;
         };
         //----------------------------------------------------------------------------
@@ -110,13 +110,13 @@ namespace CS
         ///
         /// @return Whether the class implements the given interface
         //----------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------
         /// Render
         ///
         /// Draw UI
         //----------------------------------------------------------
-        void Render(UI::Canvas* in_canvas);
+        void Render(Canvas* in_canvas);
         //----------------------------------------------------------------------------
         /// Set the bounds beyond which any subviews will clip
         /// Pushes to a stack which tracks when to enable and
@@ -127,7 +127,7 @@ namespace CS
         /// @param Position of the bottom left corner of the rect in screen space
         /// @param Size of the clip region in screen space
         //----------------------------------------------------------------------------
-        void PushClipBounds(const Core::Vector2& in_blPosition, const Core::Vector2& in_size);
+        void PushClipBounds(const Vector2& in_blPosition, const Vector2& in_size);
         //----------------------------------------------------------------------------
         /// Pop the scissor tracking stack and disable clipping if the stack is empty
         ///
@@ -145,8 +145,8 @@ namespace CS
         /// @param Colour
         /// @param Origin anchor
         //----------------------------------------------------------------------------
-        void DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const Core::Vector2& in_offset, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
-                     const Core::Colour& in_colour, AlignmentAnchor in_anchor);
+        void DrawBox(const Matrix3& in_transform, const Vector2& in_size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& in_UVs,
+                     const Colour& in_colour, AlignmentAnchor in_anchor);
         //----------------------------------------------------------------------------
         /// Build the descriptions for all characters. The descriptions can then be
         /// passed into the draw method for rendering. The characters will be
@@ -163,7 +163,7 @@ namespace CS
         ///
         /// @return Built text struct containing all the character infos
         //----------------------------------------------------------------------------
-        BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_textProperties, f32& out_textScale) const;
+        BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, const Vector2& in_bounds, const TextProperties& in_textProperties, f32& out_textScale) const;
         //----------------------------------------------------------------------------
         /// Build the sprites for each given character and render them to screen.
         ///
@@ -172,11 +172,11 @@ namespace CS
         /// @param Colour
         /// @param Texture
         //----------------------------------------------------------------------------
-        void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture);
+        void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Matrix3& in_transform, const Colour& in_colour, const TextureCSPtr& in_texture);
 
     private:
 
-        friend class Core::Application;
+        friend class Application;
         //----------------------------------------------------------------------------
         /// Creates a new instance of the system.
         ///
@@ -210,13 +210,13 @@ namespace CS
 
         DynamicSpriteBatchUPtr m_overlayBatcher;
 
-        std::vector<Core::Vector2> m_scissorPositions;
-        std::vector<Core::Vector2> m_scissorSizes;
+        std::vector<Vector2> m_scissorPositions;
+        std::vector<Vector2> m_scissorSizes;
 
         CanvasMaterialPoolUPtr m_materialPool;
 
-        Core::ResourcePool* m_resourcePool;
-        Core::Screen* m_screen;
+        ResourcePool* m_resourcePool;
+        Screen* m_screen;
     };
 	}
 

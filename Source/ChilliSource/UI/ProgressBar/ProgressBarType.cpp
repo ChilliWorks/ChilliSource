@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -43,7 +43,7 @@ namespace CS
     ProgressBarType ParseProgressBarType(const std::string& in_stringType)
     {
         std::string lowerType = in_stringType;
-        Core::StringUtils::ToLowerCase(lowerType);
+        StringUtils::ToLowerCase(lowerType);
         
         if (lowerType == k_typeFill)
         {

@@ -36,7 +36,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------
     /// Listens to and stores the acceleration read from the
@@ -44,7 +44,7 @@ namespace CS
     ///
     /// @author S McGaw
     //------------------------------------------------------------
-    class Accelerometer : public Core::AppSystem
+    class Accelerometer : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(Accelerometer);
@@ -57,7 +57,7 @@ namespace CS
         /// @param The new acceleration. This wont neccessarily
         /// have changed since the last update.
         //----------------------------------------------------
-        typedef std::function<void(const Core::Vector3&)> AccelerationUpdatedDelegate;
+        typedef std::function<void(const Vector3&)> AccelerationUpdatedDelegate;
         //----------------------------------------------------
         /// Creates a new platform specific instance of the
         /// system.
@@ -84,7 +84,7 @@ namespace CS
         /// @return The acceleration applied to the device
         /// measured in "G"s.
         //----------------------------------------------------
-        virtual Core::Vector3 GetAcceleration() const = 0;
+        virtual Vector3 GetAcceleration() const = 0;
         //----------------------------------------------------
         /// @author Ian Copland
         ///
@@ -92,7 +92,7 @@ namespace CS
         /// acceleration is updated. The acceleration will not
         /// necessarily have changed between updates.
         //----------------------------------------------------
-        virtual Core::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() = 0;
+        virtual IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() = 0;
         //----------------------------------------------------
         /// Stop listening for accelerometer changes.
         ///

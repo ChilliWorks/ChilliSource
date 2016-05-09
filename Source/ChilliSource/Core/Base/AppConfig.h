@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A system for managing application configuration settings. The

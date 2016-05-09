@@ -34,7 +34,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Provides information on a task and the means for it to execute child tasks.

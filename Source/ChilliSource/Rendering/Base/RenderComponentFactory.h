@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------
     /// System that has convenience methods for creating
@@ -41,7 +41,7 @@ namespace CS
     ///
     /// @author S Downie
     //--------------------------------------------------------
-    class RenderComponentFactory final : public Core::AppSystem
+    class RenderComponentFactory final : public AppSystem
     {
     public:
         
@@ -54,7 +54,7 @@ namespace CS
         ///
         /// @return If the object is of the given interface type
         //---------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //---------------------------------------------------------------------------
         /// Creates a sprite component with the given size and material
         ///
@@ -67,7 +67,7 @@ namespace CS
         ///
         /// @return Ownership of new sprite component
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy);
+        SpriteComponentUPtr CreateSpriteComponent(const Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy);
         //---------------------------------------------------------------------------
         /// Creates a sprite component thats size and texture is based on the
         /// given material and texture atlas
@@ -83,7 +83,7 @@ namespace CS
         ///
         /// @return Ownership of new sprite component
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy);
+        SpriteComponentUPtr CreateSpriteComponent(const Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy);
         //---------------------------------------------------------------------------
         /// Creates a static mesh component with the given material
         ///
@@ -129,7 +129,7 @@ namespace CS
         ///
         /// @return Ownership of new camera component
         //---------------------------------------------------------------------------
-        OrthographicCameraComponentUPtr CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far);
+        OrthographicCameraComponentUPtr CreateOrthographicCameraComponent(const Vector2& in_viewportSize, f32 in_near, f32 in_far);
         //---------------------------------------------------------------------------
         /// Create a camera with an orthographic projection. The viewport of
         /// the camera is set to the screen resolution
@@ -186,7 +186,7 @@ namespace CS
         
     private:
         
-        friend class Core::Application;
+        friend class Application;
         //--------------------------------------------------------
         /// Creation method used by application to instantiate
         /// the system
@@ -212,7 +212,7 @@ namespace CS
 
     private:
         
-        Core::Screen* m_screen = nullptr;
+        Screen* m_screen = nullptr;
     };
 }
 

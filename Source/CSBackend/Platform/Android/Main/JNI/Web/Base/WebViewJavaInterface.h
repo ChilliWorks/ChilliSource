@@ -59,7 +59,7 @@ namespace CSBackend
 			/// @param size of webview
 			/// @param The relative size of the button.
 			//-----------------------------------------------
-			static void Present(u32 inudwIndex, const std::string& instrURL, const CSCore::Vector2& invSize, f32 in_dismissButtonRelativeSize);
+			static void Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Vector2& invSize, f32 in_dismissButtonRelativeSize);
 			//-----------------------------------------------
 			/// Present from file
 			///
@@ -72,7 +72,7 @@ namespace CSBackend
 			/// @param Anchor
 			/// @param The relative size of the button.
 			//-----------------------------------------------
-			static void PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const CSCore::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor, f32 in_dismissButtonRelativeSize);
+			static void PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor, f32 in_dismissButtonRelativeSize);
 			//-----------------------------------------------
 			/// Present from external browser
 			///

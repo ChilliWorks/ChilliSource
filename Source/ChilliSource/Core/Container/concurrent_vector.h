@@ -37,7 +37,7 @@
 #include <atomic>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// Concurrent vector is a thread safe dynamic array implementation.

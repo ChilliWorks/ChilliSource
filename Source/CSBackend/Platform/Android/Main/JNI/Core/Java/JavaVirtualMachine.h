@@ -48,7 +48,7 @@ namespace CSBackend
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
-		class JavaVirtualMachine final : public CSCore::Singleton<JavaVirtualMachine>
+		class JavaVirtualMachine final : public ChilliSource::Singleton<JavaVirtualMachine>
 		{
 		public:
 			//------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			void DetachCurrentThread();
 		private:
-		    friend class CSCore::Singleton<JavaVirtualMachine>;
+		    friend class ChilliSource::Singleton<JavaVirtualMachine>;
 			//------------------------------------------------------------------------------
 			/// Constructor.
 			///

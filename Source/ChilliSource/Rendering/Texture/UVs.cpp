@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------
     //----------------------------------------------------------

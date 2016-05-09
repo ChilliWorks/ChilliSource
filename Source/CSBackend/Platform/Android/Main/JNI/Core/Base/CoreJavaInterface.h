@@ -58,7 +58,7 @@ namespace CSBackend
 			///
 			/// @return Whether or not this object implements the given interface.
 			//--------------------------------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//--------------------------------------------------------------------------------------
 			/// Sets the Chilli Source Application pointer.
 			///
@@ -66,7 +66,7 @@ namespace CSBackend
 			///
 			/// @param the application pointer.
 			//--------------------------------------------------------------------------------------
-			void SetApplication(CSCore::Application* in_application);
+			void SetApplication(ChilliSource::Application* in_application);
 			//--------------------------------------------------------------------------------------
 			/// Deletes the Chilli Source Application pointer.
 			///
@@ -78,7 +78,7 @@ namespace CSBackend
 			///
 			/// @return returns the global instance of the Chilli Source application.
 			//--------------------------------------------------------------------------------------
-			CSCore::Application* GetApplication();
+			ChilliSource::Application* GetApplication();
 			//------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -171,7 +171,7 @@ namespace CSBackend
             
 		private:
 
-			CSCore::Application* m_application;
+			ChilliSource::Application* m_application;
 			s32 m_screenWidth;
 			s32 m_screenHeight;
 			f32 m_screenDensity;

@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Rendering/Particle/Particle.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
@@ -60,14 +60,14 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    Core::AABB ConcurrentParticleData::GetAABB() const
+    AABB ConcurrentParticleData::GetAABB() const
     {
         std::unique_lock<std::recursive_mutex> lock(m_mutex);
         return m_aabb;
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    Core::Sphere ConcurrentParticleData::GetBoundingSphere() const
+    Sphere ConcurrentParticleData::GetBoundingSphere() const
     {
         std::unique_lock<std::recursive_mutex> lock(m_mutex);
         return m_boundingSphere;
@@ -90,7 +90,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    const Core::dynamic_array<ConcurrentParticleData::Particle>& ConcurrentParticleData::GetParticles() const
+    const dynamic_array<ConcurrentParticleData::Particle>& ConcurrentParticleData::GetParticles() const
     {
         CS_ASSERT(m_lock.owns_lock() == true, "Must be locked when getting particles!");
 
@@ -104,7 +104,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    void ConcurrentParticleData::CommitParticleData(const Core::dynamic_array<Rendering::Particle>* in_particles, const std::vector<u32>& in_newIndices, const Core::AABB& in_aabb, const Core::Sphere& in_boundingSphere)
+    void ConcurrentParticleData::CommitParticleData(const dynamic_array<ChilliSource::Particle>* in_particles, const std::vector<u32>& in_newIndices, const AABB& in_aabb, const Sphere& in_boundingSphere)
     {
         std::unique_lock<std::recursive_mutex> lock(m_mutex);
 
@@ -114,7 +114,7 @@ namespace CS
         for (u32 i = 0; i < m_particles.size(); ++i)
         {
             Particle& concurrentParticle = m_particles[i];
-            const Rendering::Particle& particle = (*in_particles)[i];
+            const ChilliSource::Particle& particle = (*in_particles)[i];
 
             concurrentParticle.m_isActive = particle.m_isActive;
             concurrentParticle.m_position = particle.m_position;

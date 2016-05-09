@@ -36,7 +36,7 @@
 #include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Slider/SliderDirection.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A logic component for controlling a slider. This handles both vertical
@@ -74,7 +74,7 @@ namespace CS
         ///
         /// @return The list of properties supported by a progress bar component.
         //------------------------------------------------------------------------------
-        static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
+        static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not the component implements the interface
         /// associated with the given interface Id. Typically this won't be called
@@ -86,7 +86,7 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -158,7 +158,7 @@ namespace CS
         /// @param The component name.
         /// @param The property map.
         //------------------------------------------------------------------------------
-        SliderComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+        SliderComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //------------------------------------------------------------------------------
         /// Sets the name of the slider widget. This can only be called once, on
         /// construction. If this is called a second time the app is considered to be in
@@ -180,7 +180,7 @@ namespace CS
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        void UpdateSliderFromScreenPosition(const Core::Vector2& in_screenSpacePos);
+        void UpdateSliderFromScreenPosition(const Vector2& in_screenSpacePos);
         //------------------------------------------------------------------------------
         /// Called when the component is first added to the owning widget.
         ///
@@ -202,7 +202,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //------------------------------------------------------------------------------
-        void OnPressedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //------------------------------------------------------------------------------
         /// Called when the owning widget receives an input drag event inside its bounds
         /// having previously received one inside the bounds.
@@ -212,7 +212,7 @@ namespace CS
         /// @param The owning widget.
         /// @param The pointer that was pressed.
         //------------------------------------------------------------------------------
-        void OnDraggedInside(Widget* in_widget, const Input::Pointer& in_pointer);
+        void OnDraggedInside(Widget* in_widget, const Pointer& in_pointer);
         //------------------------------------------------------------------------------
         /// Called when the owning widget receives an input move event outside its
         /// bounds having previously received one inside the bounds.
@@ -222,7 +222,7 @@ namespace CS
         /// @param The owning widget.
         /// @param The pointer that was pressed.
         //------------------------------------------------------------------------------
-        void OnDraggedOutside(Widget* in_widget, const Input::Pointer& in_pointer);
+        void OnDraggedOutside(Widget* in_widget, const Pointer& in_pointer);
         //------------------------------------------------------------------------------
         /// Called when a pointer is released inside the bounds of the owning widget
         /// after having been pressed inside.
@@ -233,7 +233,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //------------------------------------------------------------------------------
-        void OnReleasedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //------------------------------------------------------------------------------
         /// Called when a pointer is released outside the bounds of the owning widget
         /// after having been pressed inside.
@@ -244,7 +244,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //------------------------------------------------------------------------------
-        void OnReleasedOutside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //------------------------------------------------------------------------------
         /// Called when the owning widget is being destructed.
         ///
@@ -258,13 +258,13 @@ namespace CS
         std::string m_sliderWidgetName;
         
         Widget* m_sliderWidget = nullptr;
-        std::vector<Input::Pointer::Id> m_activePointerIds;
+        std::vector<Pointer::Id> m_activePointerIds;
         
-        Core::EventConnectionUPtr m_pressedInsideConnection;
-        Core::EventConnectionUPtr m_draggedInsideConnection;
-        Core::EventConnectionUPtr m_draggedOutsideConnection;
-        Core::EventConnectionUPtr m_releasedInsideConnection;
-        Core::EventConnectionUPtr m_releasedOutsideConnection;
+        EventConnectionUPtr m_pressedInsideConnection;
+        EventConnectionUPtr m_draggedInsideConnection;
+        EventConnectionUPtr m_draggedOutsideConnection;
+        EventConnectionUPtr m_releasedInsideConnection;
+        EventConnectionUPtr m_releasedOutsideConnection;
     };
 }
 

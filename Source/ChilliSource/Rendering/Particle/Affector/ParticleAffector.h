@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// The base class for all particle affectors. Particle affectors are 
@@ -53,7 +53,7 @@ namespace CS
         /// @param The particle affector definition.
         /// @param The particle array.
         //----------------------------------------------------------------
-        ParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+        ParticleAffector(const ParticleAffectorDef* in_affectorDef, dynamic_array<Particle>* in_particleArray);
         //----------------------------------------------------------------
         /// Activates the particle with the given index.
         ///
@@ -96,11 +96,11 @@ namespace CS
         ///
         /// @return The particle array.
         //----------------------------------------------------------------
-        Core::dynamic_array<Particle>* GetParticleArray() const;
+        dynamic_array<Particle>* GetParticleArray() const;
     private:
 
         const ParticleAffectorDef* m_affectorDef = nullptr;
-        Core::dynamic_array<Particle>* m_particleArray = nullptr;
+        dynamic_array<Particle>* m_particleArray = nullptr;
     };
 }
 

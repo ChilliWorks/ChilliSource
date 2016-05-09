@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------------
     /// A resource provider which creates Particle Effect resources from
@@ -40,7 +40,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //-------------------------------------------------------------------------
-    class CSParticleProvider final : public Core::ResourceProvider
+    class CSParticleProvider final : public ResourceProvider
     {
     public:
         CS_DECLARE_NAMEDTYPE(CSParticleProvider);
@@ -54,13 +54,13 @@ namespace CS
         ///
         /// @return Whether this implements the interface.
         //-----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-----------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The type of resource loaded by this provider.
         //-----------------------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //-----------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -71,7 +71,7 @@ namespace CS
         //-----------------------------------------------------------------
         bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
     private:
-        friend class Core::Application;
+        friend class Application;
         //-----------------------------------------------------------------
         /// Factory method for creating new instances of this system.
         ///
@@ -100,8 +100,8 @@ namespace CS
         /// effect.
         /// @param [Out] The output particle effect resource.
         //-----------------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, 
-            const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, 
+            const ResourceSPtr& out_resource) override;
         //-----------------------------------------------------------------
         /// Populates the given Particle Effect resource with data from the
         /// given file. The loading is performed as a background task, the 
@@ -118,8 +118,8 @@ namespace CS
         /// @param The completion delegate. This should never be null.
         /// @param [Out] Resource object
         //------------------------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, 
-            const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, 
+            const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
         //------------------------------------------------------------------
         /// Tries to acquire references to the drawable, emitter and affector
         /// definition factories. If they don't exist this will try to assert.

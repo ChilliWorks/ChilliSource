@@ -32,7 +32,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -49,7 +49,7 @@ namespace CS
     }
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    bool Font::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool Font::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == Font::InterfaceID;
     }
@@ -71,7 +71,7 @@ namespace CS
         auto it = m_characters.begin();
         while(it < m_characters.end())
         {
-            auto character = Core::UTF8StringUtils::Next(it);
+            auto character = UTF8StringUtils::Next(it);
             
             CharacterInfo info;
             
@@ -164,7 +164,7 @@ namespace CS
     }
     //-------------------------------------------
     //-------------------------------------------
-    bool Font::TryGetCharacterInfo(Core::UTF8Char in_char, CharacterInfo& out_info) const
+    bool Font::TryGetCharacterInfo(UTF8Char in_char, CharacterInfo& out_info) const
     {
         auto itCharEntry = m_characterInfos.find(in_char);
         

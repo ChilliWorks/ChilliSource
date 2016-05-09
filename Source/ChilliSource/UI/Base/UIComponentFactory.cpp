@@ -36,7 +36,7 @@
 #include <ChilliSource/UI/Slider/SliderComponent.h>
 #include <ChilliSource/UI/Text/TextComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(UIComponentFactory);
     //-----------------------------------------------------------------
@@ -47,13 +47,13 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    bool UIComponentFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool UIComponentFactory::IsA(InterfaceIDType in_interfaceId) const
     {
         return (UIComponentFactory::InterfaceID == in_interfaceId);
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    std::vector<Core::PropertyMap::PropertyDesc> UIComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
+    std::vector<PropertyMap::PropertyDesc> UIComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
     {
         auto descsIt = m_descsMap.find(in_componentTypeName);
         CS_ASSERT(descsIt != m_descsMap.end(), "Could not get property descs for component with name: " + in_componentTypeName);
@@ -62,7 +62,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    UIComponentUPtr UIComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
+    UIComponentUPtr UIComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const PropertyMap& in_propertyMap) const
     {
         auto delegateIt = m_creatorDelegateMap.find(in_componentTypeName);
         CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create component with name: " + in_componentTypeName);

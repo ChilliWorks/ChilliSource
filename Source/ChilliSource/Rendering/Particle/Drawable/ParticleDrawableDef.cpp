@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(ParticleDrawableDef);
     //----------------------------------------------------------------

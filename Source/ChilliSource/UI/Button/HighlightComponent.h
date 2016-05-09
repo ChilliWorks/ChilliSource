@@ -36,7 +36,7 @@
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/UI/Base/UIComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A logic component for changing the drawable used to render a widget
@@ -64,7 +64,7 @@ namespace CS
         ///
         /// @return The list of properties supported by a highlight component.
         //-------------------------------------------------------------------
-        static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
+        static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         //-------------------------------------------------------------------
         /// Allows querying of whether or not the component implements the
         /// interface associated with the given interface Id. Typically
@@ -77,7 +77,7 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface.
         //-------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -97,7 +97,7 @@ namespace CS
         ///
         /// @return The highlight colour
         //-------------------------------------------------------------------
-        const Core::Colour& GetHighlightColour() const;
+        const Colour& GetHighlightColour() const;
         //-------------------------------------------------------------------
         /// Sets the drawable that will be set on the owning widget when
         /// it is not pressed.
@@ -123,7 +123,7 @@ namespace CS
         ///
         /// @param The colour.
         //-------------------------------------------------------------------
-        void SetHighlightColour(const Core::Colour& in_colour);
+        void SetHighlightColour(const Colour& in_colour);
         
     private:
         friend class UIComponentFactory;
@@ -137,7 +137,7 @@ namespace CS
         /// @param The component name.
         /// @param The property map.
         //-------------------------------------------------------------------
-        HighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+        HighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //-------------------------------------------------------------------
         /// Enables the highlight on the owning widget.
         ///
@@ -166,7 +166,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //-------------------------------------------------------------------
-        void OnPressedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //-------------------------------------------------------------------
         /// Called when the owning widget receives an input move event within
         /// its bounds having previously received one outside the bounds.
@@ -178,7 +178,7 @@ namespace CS
         /// @param The owning widget.
         /// @param The pointer that was pressed.
         //-------------------------------------------------------------------
-        void OnMoveEntered(Widget* in_widget, const Input::Pointer& in_pointer);
+        void OnMoveEntered(Widget* in_widget, const Pointer& in_pointer);
         //-------------------------------------------------------------------
         /// Called when the owning widget receives an input move event outside
         /// its bounds having previously received one inside the bounds.
@@ -190,7 +190,7 @@ namespace CS
         /// @param The owning widget.
         /// @param The pointer that was pressed.
         //-------------------------------------------------------------------
-        void OnMoveExited(Widget* in_widget, const Input::Pointer& in_pointer);
+        void OnMoveExited(Widget* in_widget, const Pointer& in_pointer);
         //-------------------------------------------------------------------
         /// Called when a pointer is released inside the bounds of the owning
         /// widget after having been pressed inside.
@@ -201,7 +201,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //-------------------------------------------------------------------
-        void OnReleasedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //-------------------------------------------------------------------
         /// Called when a pointer is released outside the bounds of the owning
         /// widget after having been pressed inside.
@@ -212,7 +212,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //-------------------------------------------------------------------
-        void OnReleasedOutside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //-------------------------------------------------------------------
         /// Called when the owning widget is being destructed.
         ///
@@ -222,19 +222,19 @@ namespace CS
         
         DrawableDefCSPtr m_normalDrawableDef;
         DrawableDefCSPtr m_highlightDrawableDef;
-        Core::Colour m_highlightColour;
+        Colour m_highlightColour;
         
         DrawableComponent* m_drawableComponent = nullptr;
         
         bool m_highlighted = false;
-        std::vector<Input::Pointer::Id> m_activePointerIds;
-        std::vector<Input::Pointer::Id> m_highlightingPointerIds;
+        std::vector<Pointer::Id> m_activePointerIds;
+        std::vector<Pointer::Id> m_highlightingPointerIds;
         
-        Core::EventConnectionUPtr m_pressedInsideConnection;
-        Core::EventConnectionUPtr m_moveEnteredConnection;
-        Core::EventConnectionUPtr m_moveExitedConnection;
-        Core::EventConnectionUPtr m_releasedInsideConnection;
-        Core::EventConnectionUPtr m_releasedOutsideConnection;
+        EventConnectionUPtr m_pressedInsideConnection;
+        EventConnectionUPtr m_moveEnteredConnection;
+        EventConnectionUPtr m_moveExitedConnection;
+        EventConnectionUPtr m_releasedInsideConnection;
+        EventConnectionUPtr m_releasedOutsideConnection;
     };
 }
 

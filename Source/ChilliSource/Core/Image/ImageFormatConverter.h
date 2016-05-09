@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------
     /// The image format converter provides a number of method

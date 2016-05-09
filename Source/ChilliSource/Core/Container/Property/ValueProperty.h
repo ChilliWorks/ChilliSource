@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/Property.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// A property that contains an instance of the given type. This is exposed
@@ -78,7 +78,7 @@ namespace CS
 //------------------------------------------------------------------------
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

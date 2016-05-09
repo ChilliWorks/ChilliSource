@@ -35,7 +35,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     const f32 k_downloadProgressUpdateIntervalDefault = 1.0f / 30.0f;
     
@@ -44,7 +44,7 @@ namespace CS
     MoContentDownloader::MoContentDownloader(HttpRequestSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
     : mpHttpRequestSystem(inpRequestSystem), mstrAssetServerURL(instrAssetServerURL), mastrTags(inastrTags)
     {
-        m_downloadProgressUpdateTimer = CSCore::TimerSPtr(new CSCore::Timer());
+        m_downloadProgressUpdateTimer = TimerSPtr(new Timer());
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
@@ -55,7 +55,7 @@ namespace CS
         //Request the content manifest
         if(mpHttpRequestSystem->CheckReachability())
         {
-            Core::Device* device = Core::Application::Get()->GetSystem<Core::Device>();
+            Device* device = Application::Get()->GetSystem<Device>();
             
             //Build the JSON request with the device info so the server can decide what
             //assets are suitable for us
@@ -74,7 +74,7 @@ namespace CS
             JDeviceData["Tags"] = JTags;
             
             Json::FastWriter JWriter;
-            mpHttpRequestSystem->MakePostRequest(mstrAssetServerURL, JWriter.write(JDeviceData), Core::MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
+            mpHttpRequestSystem->MakePostRequest(mstrAssetServerURL, JWriter.write(JDeviceData), MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
             return true;
         }
         else
@@ -87,7 +87,7 @@ namespace CS
     void MoContentDownloader::DownloadPackage(const std::string& in_url, const Delegate& in_completiondelegate, const DownloadProgressDelegate& in_progressDelegate)
     {
         mOnContentDownloadCompleteDelegate = in_completiondelegate;
-        mpCurrentRequest = mpHttpRequestSystem->MakeGetRequest(in_url, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+        mpCurrentRequest = mpHttpRequestSystem->MakeGetRequest(in_url, MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
         
         //Reset the timer
         m_downloadProgressUpdateTimer->Reset();

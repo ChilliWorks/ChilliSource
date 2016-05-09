@@ -35,7 +35,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// The definition for a billboard particle drawable. This enables the 
@@ -122,7 +122,7 @@ namespace CS
         /// when the rendered image has a different aspect ratio to the 
         /// given size.
         //----------------------------------------------------------------
-        StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+        StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Vector2& in_particleSize, SizePolicy in_sizePolicy);
         //----------------------------------------------------------------
         /// Constructor for creating a billboard particle drawable definition
         /// which uses a texture atlas and multiple atlas Ids.
@@ -138,7 +138,7 @@ namespace CS
         /// when the rendered image has a different aspect ratio to the 
         /// given size.
         //----------------------------------------------------------------
-        StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+        StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Vector2& in_particleSize, SizePolicy in_sizePolicy);
         //----------------------------------------------------------------
         /// Constructor for creating a billboard particle drawable 
         /// definition which uses a texture atlas and multiple atlas Ids.
@@ -156,7 +156,7 @@ namespace CS
         /// when the rendered image has a different aspect ratio to the 
         /// given size.
         //----------------------------------------------------------------
-        StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+        StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Vector2& in_particleSize, SizePolicy in_sizePolicy);
         //----------------------------------------------------------------
         /// Constructor. Loads the params for the drawable def from the 
         /// given json params. If the async delegate is not null, then
@@ -180,7 +180,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// Creates an instance of the particle drawable described by this.
         ///
@@ -191,7 +191,7 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        ParticleDrawableUPtr CreateInstance(const Core::Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const override;
+        ParticleDrawableUPtr CreateInstance(const Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const override;
         //----------------------------------------------------------------
         /// @author Ian Copland.
         ///
@@ -226,7 +226,7 @@ namespace CS
         ///
         /// @return The particle size.
         //----------------------------------------------------------------
-        const Core::Vector2& GetParticleSize() const;
+        const Vector2& GetParticleSize() const;
         //----------------------------------------------------------------
         /// @author Ian Copland.
         ///
@@ -259,7 +259,7 @@ namespace CS
         TextureAtlasCSPtr m_textureAtlas;
         std::vector<std::string> m_atlasIds;
         ImageSelectionType m_imageSelectionType = ImageSelectionType::k_cycle;
-        Core::Vector2 m_particleSize = Core::Vector2::k_one;
+        Vector2 m_particleSize = Vector2::k_one;
         SizePolicy m_sizePolicy = SizePolicy::k_none;
     };
 }

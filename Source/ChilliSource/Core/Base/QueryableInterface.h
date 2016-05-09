@@ -35,15 +35,15 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #define CS_DECLARE_NAMEDTYPE(x) \
-    static const ::CSCore::InterfaceIDType InterfaceID; \
+    static const ChilliSource::InterfaceIDType InterfaceID; \
     static const ::std::string TypeName; \
-    virtual ::CSCore::InterfaceIDType GetInterfaceID() const override; \
+    virtual ChilliSource::InterfaceIDType GetInterfaceID() const override; \
     virtual const ::std::string& GetInterfaceTypeName() const override;
 
 #define CS_DEFINE_NAMEDTYPE(x) \
-    const ::CSCore::InterfaceIDType x::InterfaceID = ::CSCore::QueryableInterface::InterfaceIDHash(#x); \
+    const ChilliSource::InterfaceIDType x::InterfaceID = ChilliSource::QueryableInterface::InterfaceIDHash(#x); \
     const ::std::string x::TypeName = #x; \
-    ::CSCore::InterfaceIDType x::GetInterfaceID() const \
+    ChilliSource::InterfaceIDType x::GetInterfaceID() const \
     { \
         return InterfaceID; \
     } \
@@ -53,9 +53,9 @@
     }
 
 #define CS_DEFINE_NAMEDTYPETEMPLATED(in_templatedClass, in_templateParams) \
-	template <typename in_templateParams> const ::CSCore::InterfaceIDType in_templatedClass<in_templateParams>::InterfaceID = ::CSCore::QueryableInterface::InterfaceIDHash(#in_templatedClass#in_templateParams); \
+	template <typename in_templateParams> const ChilliSource::InterfaceIDType in_templatedClass<in_templateParams>::InterfaceID = ChilliSource::QueryableInterface::InterfaceIDHash(#in_templatedClass#in_templateParams); \
 	template <typename in_templateParams> const ::std::string in_templatedClass<in_templateParams>::TypeName = #in_templatedClass#in_templateParams; \
-	template <typename in_templateParams> ::CSCore::InterfaceIDType in_templatedClass<in_templateParams>::GetInterfaceID() const \
+	template <typename in_templateParams> ChilliSource::InterfaceIDType in_templatedClass<in_templateParams>::GetInterfaceID() const \
     { \
     return InterfaceID; \
     } \
@@ -64,7 +64,7 @@
     return TypeName; \
     }
 
-namespace CS
+namespace ChilliSource
 {
     typedef u32 InterfaceIDType;
 
@@ -89,7 +89,7 @@ namespace CS
         //------------------------------------------------------------------------------
         static InterfaceIDType InterfaceIDHash(const std::string& in_name)
         {
-            return Core::HashCRC32::GenerateHashCode(in_name);
+            return HashCRC32::GenerateHashCode(in_name);
         }
         //------------------------------------------------------------------------------
         /// Queries whether or not this object implements the interface given as a

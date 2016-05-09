@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/Transform.h>
 
-namespace CS
+namespace ChilliSource
 {
     void BackToFrontSortPredicate::PrepareForSort(std::vector<RenderComponent*> * inpRenderable)
     {
@@ -44,7 +44,7 @@ namespace CS
         
         for(u32 i = 0; i < inpRenderable->size(); ++i)
         {
-            Core::Matrix4 matLocalTrans = Core::Matrix4::CreateTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntity()->GetTransform().GetWorldPosition());
+            Matrix4 matLocalTrans = Matrix4::CreateTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntity()->GetTransform().GetWorldPosition());
             matWorld = (*inpRenderable)[i]->GetTransformationMatrix() * matLocalTrans;
             matViewTrans = matWorld * mCameraViewProj;
             (*inpRenderable)[i]->SetSortValue(matViewTrans.GetTranslation().z);

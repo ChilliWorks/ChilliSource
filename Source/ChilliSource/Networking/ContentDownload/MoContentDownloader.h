@@ -34,7 +34,7 @@
 #include <ChilliSource/Networking/ContentDownload/IContentDownloader.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     class MoContentDownloader final : public IContentDownloader
     {
@@ -118,8 +118,8 @@ namespace CS
         
         HttpRequest* mpCurrentRequest;
         
-        CSCore::TimerSPtr m_downloadProgressUpdateTimer;
-        CSCore::EventConnectionUPtr m_downloadProgressEventConnection;
+        TimerSPtr m_downloadProgressUpdateTimer;
+        EventConnectionUPtr m_downloadProgressEventConnection;
     };
 }
 

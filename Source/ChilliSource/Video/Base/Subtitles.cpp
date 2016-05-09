@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Video/Base/Subtitles.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Subtitles);
     
@@ -40,7 +40,7 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool Subtitles::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool Subtitles::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == Subtitles::InterfaceID;
     }
@@ -60,13 +60,13 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Subtitles::SetLocalisedText(const Core::LocalisedTextCSPtr& in_text)
+    void Subtitles::SetLocalisedText(const LocalisedTextCSPtr& in_text)
     {
         m_localisedText = in_text;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Core::LocalisedTextCSPtr& Subtitles::GetLocalisedText() const
+    const LocalisedTextCSPtr& Subtitles::GetLocalisedText() const
     {
         return m_localisedText;
     }

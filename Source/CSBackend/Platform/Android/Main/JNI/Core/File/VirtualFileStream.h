@@ -45,7 +45,7 @@ namespace CSBackend
 		/// A filestream is used for all reading and writing of files. This will emulate the functionality
 		/// of fstream and allows for cross platform filereading.
 		//--------------------------------------------------------------------------------------------------
-		class VirtualFileStream final : public CSCore::FileStream
+		class VirtualFileStream final : public ChilliSource::FileStream
 		{
 		public:
 			//------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ namespace CSBackend
 			/// @param in_bufferSize - The size of the memory buffer.
 			/// @param in_fileMode - The file mode with which the "file" should be opened.
 			//------------------------------------------------------------------------------
-			VirtualFileStream(std::unique_ptr<u8[]> in_buffer, u32 in_bufferSize, CSCore::FileMode in_fileMode);
+			VirtualFileStream(std::unique_ptr<u8[]> in_buffer, u32 in_bufferSize, ChilliSource::FileMode in_fileMode);
 			//------------------------------------------------------------------------------
 			/// This should be called immediately after construction, before calling any
 			/// other file stream methods. If this returns false the FileStream should be
@@ -218,7 +218,7 @@ namespace CSBackend
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			void SeekG(s32 indwPosition, CSCore::SeekDir ineDir) override;
+			void SeekG(s32 indwPosition, ChilliSource::SeekDir ineDir) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Sync
 			///
@@ -272,7 +272,7 @@ namespace CSBackend
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			void SeekP(s32 indwPosition, CSCore::SeekDir ineDir) override;
+			void SeekP(s32 indwPosition, ChilliSource::SeekDir ineDir) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Flush
 			///

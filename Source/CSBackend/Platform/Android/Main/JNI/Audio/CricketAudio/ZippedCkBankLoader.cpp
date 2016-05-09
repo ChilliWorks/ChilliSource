@@ -43,22 +43,22 @@ namespace CSBackend
 	{
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void ZippedCkBankLoader::Load(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::ResourceSPtr& out_resource) const
+		void ZippedCkBankLoader::Load(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::ResourceSPtr& out_resource) const
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Must be called from the main thread.");
+			CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Must be called from the main thread.");
 
-			auto fileSystem = CSCore::Application::Get()->GetFileSystem();
+			auto fileSystem = ChilliSource::Application::Get()->GetFileSystem();
 
-			auto stream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_readBinary);
+			auto stream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_readBinary);
 			if (stream == nullptr)
 			{
-				out_resource->SetLoadState(CSCore::Resource::LoadState::k_failed);
+				out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
 				return;
 			}
 
-			stream->SeekG(0, CSCore::SeekDir::k_end);
+			stream->SeekG(0, ChilliSource::SeekDir::k_end);
 			u32 length = stream->TellG();
-			stream->SeekG(0, CSCore::SeekDir::k_beginning);
+			stream->SeekG(0, ChilliSource::SeekDir::k_beginning);
 
 			std::unique_ptr<u8[]> bankBuffer(new u8[length]);
 			stream->Read(reinterpret_cast<s8*>(bankBuffer.get()), length);
@@ -67,36 +67,36 @@ namespace CSBackend
 			::CkBank* bank = ::CkBank::newBankFromMemory(reinterpret_cast<void*>(bankBuffer.get()), length);
 			if (bank == nullptr)
 			{
-				out_resource->SetLoadState(CSCore::Resource::LoadState::k_failed);
+				out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
 				return;
 			}
 
-			static_cast<CSAudio::CkBank*>(out_resource.get())->Build(bank, std::move(bankBuffer));
-			out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+			static_cast<ChilliSource::CkBank*>(out_resource.get())->Build(bank, std::move(bankBuffer));
+			out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_loaded);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void ZippedCkBankLoader::LoadAsync(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource)
+		void ZippedCkBankLoader::LoadAsync(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource)
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Must be called from the main thread.");
+			CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Must be called from the main thread.");
 
-			auto taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
-			taskScheduler->ScheduleTask(CSCore::TaskType::k_file, [=](const CSCore::TaskContext&)
+			auto taskScheduler = ChilliSource::Application::Get()->GetTaskScheduler();
+			taskScheduler->ScheduleTask(ChilliSource::TaskType::k_file, [=](const ChilliSource::TaskContext&)
 			{
-				auto fileSystem = CSCore::Application::Get()->GetFileSystem();
-				auto stream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_readBinary);
+				auto fileSystem = ChilliSource::Application::Get()->GetFileSystem();
+				auto stream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_readBinary);
 				if (stream == nullptr)
 				{
-					taskScheduler->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+					taskScheduler->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 					{
-						out_resource->SetLoadState(CSCore::Resource::LoadState::k_failed);
+						out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
 						in_delegate(out_resource);
 					});
 				}
 
-				stream->SeekG(0, CSCore::SeekDir::k_end);
+				stream->SeekG(0, ChilliSource::SeekDir::k_end);
 				u32 length = stream->TellG();
-				stream->SeekG(0, CSCore::SeekDir::k_beginning);
+				stream->SeekG(0, ChilliSource::SeekDir::k_beginning);
 
 				std::unique_ptr<u8[]> bankBuffer(new u8[length]);
 				stream->Read(reinterpret_cast<s8*>(bankBuffer.get()), length);
@@ -107,20 +107,20 @@ namespace CSBackend
 				u8* bufferHandle = bankBuffer.get();
 				StoreBuffer(std::move(bankBuffer));
 
-				taskScheduler->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+				taskScheduler->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
                 {
 					std::unique_ptr<u8[]> retrievedBuffer = RetrieveBuffer(bufferHandle);
 
 					::CkBank* bank = ::CkBank::newBankFromMemory(reinterpret_cast<void*>(retrievedBuffer.get()), length);
 					if (bank != nullptr)
 					{
-						static_cast<CSAudio::CkBank*>(out_resource.get())->Build(bank, std::move(retrievedBuffer));
-						out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+						static_cast<ChilliSource::CkBank*>(out_resource.get())->Build(bank, std::move(retrievedBuffer));
+						out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_loaded);
 						in_delegate(out_resource);
 					}
 					else
 					{
-						out_resource->SetLoadState(CSCore::Resource::LoadState::k_failed);
+						out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
 						in_delegate(out_resource);
 					}
                 });

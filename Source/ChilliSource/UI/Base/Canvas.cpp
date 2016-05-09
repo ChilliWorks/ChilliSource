@@ -35,7 +35,7 @@
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Canvas);
     //----------------------------------------------------
@@ -46,7 +46,7 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    bool Canvas::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool Canvas::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == Canvas::InterfaceID;
     }
@@ -54,10 +54,10 @@ namespace CS
     //-------------------------------------------------------
     void Canvas::OnInit()
     {
-        m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+        m_screen = Application::Get()->GetSystem<Screen>();
         CS_ASSERT(m_screen != nullptr, "Canvas must have access to screen");
         
-        WidgetFactory* widgetFactory = Core::Application::Get()->GetWidgetFactory();
+        WidgetFactory* widgetFactory = Application::Get()->GetWidgetFactory();
         
         m_canvas = widgetFactory->CreateWidget();
         m_canvas->SetName("Canvas");
@@ -69,7 +69,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void Canvas::OnPointerAdded(const Input::Pointer& in_pointer, f64 in_timestamp)
+    void Canvas::OnPointerAdded(const Pointer& in_pointer, f64 in_timestamp)
     {
         m_canvas->OnPointerAdded(in_pointer, in_timestamp);
     }
@@ -77,38 +77,38 @@ namespace CS
     /// UI can filter input events to prevent them from being forwarded to the
     /// external app.
     //------------------------------------------------------------------------------
-    void Canvas::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, InputFilter& in_filter)
+    void Canvas::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, InputFilter& in_filter)
     {
         m_canvas->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void Canvas::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
+    void Canvas::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp)
     {
         m_canvas->OnPointerMoved(in_pointer, in_timestamp);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void Canvas::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
+    void Canvas::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType)
     {
         m_canvas->OnPointerUp(in_pointer, in_timestamp, in_inputType);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void Canvas::OnPointerRemoved(const Input::Pointer& in_pointer, f64 in_timestamp)
+    void Canvas::OnPointerRemoved(const Pointer& in_pointer, f64 in_timestamp)
     {
         m_canvas->OnPointerRemoved(in_pointer, in_timestamp);
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
-    void Canvas::OnScreenResolutionChanged(const Core::Vector2& in_resolution)
+    void Canvas::OnScreenResolutionChanged(const Vector2& in_resolution)
     {
         m_canvas->SetAbsoluteSize(in_resolution);
         m_canvas->SetAbsolutePosition(in_resolution * 0.5f);
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    const Core::Vector2& Canvas::GetSize() const
+    const Vector2& Canvas::GetSize() const
     {
         return m_screen->GetResolution();
     }
@@ -116,14 +116,14 @@ namespace CS
     //-------------------------------------------------------
     void Canvas::OnResume()
     {
-        m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnScreenResolutionChanged));
+        m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(MakeDelegate(this, &Canvas::OnScreenResolutionChanged));
         
-        auto pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
-        m_pointerAddedConnection = pointerSystem->GetPointerAddedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerAdded));
-        m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerDown));
-        m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerMoved));
-        m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerUp));
-        m_pointerRemovedConnection = pointerSystem->GetPointerRemovedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerRemoved));
+        auto pointerSystem = Application::Get()->GetSystem<PointerSystem>();
+        m_pointerAddedConnection = pointerSystem->GetPointerAddedEvent().OpenConnection(MakeDelegate(this, &Canvas::OnPointerAdded));
+        m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(MakeDelegate(this, &Canvas::OnPointerDown));
+        m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(MakeDelegate(this, &Canvas::OnPointerMoved));
+        m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(MakeDelegate(this, &Canvas::OnPointerUp));
+        m_pointerRemovedConnection = pointerSystem->GetPointerRemovedEvent().OpenConnection(MakeDelegate(this, &Canvas::OnPointerRemoved));
         
         m_canvas->OnResume();
     }
@@ -141,7 +141,7 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    void Canvas::Draw(Rendering::CanvasRenderer* in_renderer) const
+    void Canvas::Draw(CanvasRenderer* in_renderer) const
     {
         m_canvas->OnDraw(in_renderer);
     }

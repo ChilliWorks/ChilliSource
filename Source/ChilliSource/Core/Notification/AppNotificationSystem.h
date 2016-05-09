@@ -37,7 +37,7 @@
 #include <limits>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------
     /// Schedules notifications within the application. These
@@ -66,7 +66,7 @@ namespace CS
         /// @return Whether this implements the passed in
         /// interface id.
         //--------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //--------------------------------------------------
         /// Enables and disables addition of app notifications.
         /// All existing notifications will be cancelled

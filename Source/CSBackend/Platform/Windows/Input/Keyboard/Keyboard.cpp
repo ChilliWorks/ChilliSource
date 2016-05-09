@@ -42,7 +42,7 @@ namespace CSBackend
 
 		namespace
 		{
-			const sf::Keyboard::Key k_sfmlKeyCodesMap[(u32)CSInput::KeyCode::k_total] = 
+			const sf::Keyboard::Key k_sfmlKeyCodesMap[(u32)ChilliSource::KeyCode::k_total] = 
 			{
 				sf::Keyboard::Unknown,
 				sf::Keyboard::A,
@@ -147,109 +147,109 @@ namespace CSBackend
 				sf::Keyboard::F15,
 				sf::Keyboard::Pause
 			};
-			const CSInput::KeyCode k_csKeyCodesMap[(u32)sf::Keyboard::Key::KeyCount] =
+			const ChilliSource::KeyCode k_csKeyCodesMap[(u32)sf::Keyboard::Key::KeyCount] =
 			{
-				CSInput::KeyCode::k_a,
-				CSInput::KeyCode::k_b,
-				CSInput::KeyCode::k_c,
-				CSInput::KeyCode::k_d,
-				CSInput::KeyCode::k_e,
-				CSInput::KeyCode::k_f,
-				CSInput::KeyCode::k_g,
-				CSInput::KeyCode::k_h,
-				CSInput::KeyCode::k_i,
-				CSInput::KeyCode::k_j,
-				CSInput::KeyCode::k_k,
-				CSInput::KeyCode::k_l,
-				CSInput::KeyCode::k_m,
-				CSInput::KeyCode::k_n,
-				CSInput::KeyCode::k_o,
-				CSInput::KeyCode::k_p,
-				CSInput::KeyCode::k_q,
-				CSInput::KeyCode::k_r,
-				CSInput::KeyCode::k_s,
-				CSInput::KeyCode::k_t,
-				CSInput::KeyCode::k_u,
-				CSInput::KeyCode::k_v,
-				CSInput::KeyCode::k_w,
-				CSInput::KeyCode::k_x,
-				CSInput::KeyCode::k_y,
-				CSInput::KeyCode::k_z,
-				CSInput::KeyCode::k_num0,
-				CSInput::KeyCode::k_num1,
-				CSInput::KeyCode::k_num2,
-				CSInput::KeyCode::k_num3,
-				CSInput::KeyCode::k_num4,
-				CSInput::KeyCode::k_num5,
-				CSInput::KeyCode::k_num6,
-				CSInput::KeyCode::k_num7,
-				CSInput::KeyCode::k_num8,
-				CSInput::KeyCode::k_num9,
-				CSInput::KeyCode::k_escape,
-				CSInput::KeyCode::k_leftCtrl,
-				CSInput::KeyCode::k_leftShift,
-				CSInput::KeyCode::k_leftAlt,
-				CSInput::KeyCode::k_leftSystem,
-				CSInput::KeyCode::k_rightCtrl,
-				CSInput::KeyCode::k_rightShift,
-				CSInput::KeyCode::k_rightAlt,
-				CSInput::KeyCode::k_rightSystem,
-				CSInput::KeyCode::k_menu,
-				CSInput::KeyCode::k_leftBracket,
-				CSInput::KeyCode::k_rightBracket,
-				CSInput::KeyCode::k_semiColon,
-				CSInput::KeyCode::k_comma,
-				CSInput::KeyCode::k_period,
-				CSInput::KeyCode::k_quote,
-				CSInput::KeyCode::k_forwardSlash,
-				CSInput::KeyCode::k_backSlash,
-				CSInput::KeyCode::k_tilde,
-				CSInput::KeyCode::k_equals,
-				CSInput::KeyCode::k_hyphen,
-				CSInput::KeyCode::k_space,
-				CSInput::KeyCode::k_return,
-				CSInput::KeyCode::k_backSpace,
-				CSInput::KeyCode::k_tab,
-				CSInput::KeyCode::k_pageUp,
-				CSInput::KeyCode::k_pageDown,
-				CSInput::KeyCode::k_end,
-				CSInput::KeyCode::k_home,
-				CSInput::KeyCode::k_insert,
-				CSInput::KeyCode::k_delete,
-				CSInput::KeyCode::k_add,
-				CSInput::KeyCode::k_subtract,
-				CSInput::KeyCode::k_multiply,
-				CSInput::KeyCode::k_divide,
-				CSInput::KeyCode::k_left,
-				CSInput::KeyCode::k_right,
-				CSInput::KeyCode::k_up,
-				CSInput::KeyCode::k_down,
-				CSInput::KeyCode::k_numpad0,
-				CSInput::KeyCode::k_numpad1,
-				CSInput::KeyCode::k_numpad2,
-				CSInput::KeyCode::k_numpad3,
-				CSInput::KeyCode::k_numpad4,
-				CSInput::KeyCode::k_numpad5,
-				CSInput::KeyCode::k_numpad6,
-				CSInput::KeyCode::k_numpad7,
-				CSInput::KeyCode::k_numpad8,
-				CSInput::KeyCode::k_numpad9,
-				CSInput::KeyCode::k_f1,
-				CSInput::KeyCode::k_f2,
-				CSInput::KeyCode::k_f3,
-				CSInput::KeyCode::k_f4,
-				CSInput::KeyCode::k_f5,
-				CSInput::KeyCode::k_f6,
-				CSInput::KeyCode::k_f7,
-				CSInput::KeyCode::k_f8,
-				CSInput::KeyCode::k_f9,
-				CSInput::KeyCode::k_f10,
-				CSInput::KeyCode::k_f11,
-				CSInput::KeyCode::k_f12,
-				CSInput::KeyCode::k_f13,
-				CSInput::KeyCode::k_f14,
-				CSInput::KeyCode::k_f15,
-				CSInput::KeyCode::k_pause
+				ChilliSource::KeyCode::k_a,
+				ChilliSource::KeyCode::k_b,
+				ChilliSource::KeyCode::k_c,
+				ChilliSource::KeyCode::k_d,
+				ChilliSource::KeyCode::k_e,
+				ChilliSource::KeyCode::k_f,
+				ChilliSource::KeyCode::k_g,
+				ChilliSource::KeyCode::k_h,
+				ChilliSource::KeyCode::k_i,
+				ChilliSource::KeyCode::k_j,
+				ChilliSource::KeyCode::k_k,
+				ChilliSource::KeyCode::k_l,
+				ChilliSource::KeyCode::k_m,
+				ChilliSource::KeyCode::k_n,
+				ChilliSource::KeyCode::k_o,
+				ChilliSource::KeyCode::k_p,
+				ChilliSource::KeyCode::k_q,
+				ChilliSource::KeyCode::k_r,
+				ChilliSource::KeyCode::k_s,
+				ChilliSource::KeyCode::k_t,
+				ChilliSource::KeyCode::k_u,
+				ChilliSource::KeyCode::k_v,
+				ChilliSource::KeyCode::k_w,
+				ChilliSource::KeyCode::k_x,
+				ChilliSource::KeyCode::k_y,
+				ChilliSource::KeyCode::k_z,
+				ChilliSource::KeyCode::k_num0,
+				ChilliSource::KeyCode::k_num1,
+				ChilliSource::KeyCode::k_num2,
+				ChilliSource::KeyCode::k_num3,
+				ChilliSource::KeyCode::k_num4,
+				ChilliSource::KeyCode::k_num5,
+				ChilliSource::KeyCode::k_num6,
+				ChilliSource::KeyCode::k_num7,
+				ChilliSource::KeyCode::k_num8,
+				ChilliSource::KeyCode::k_num9,
+				ChilliSource::KeyCode::k_escape,
+				ChilliSource::KeyCode::k_leftCtrl,
+				ChilliSource::KeyCode::k_leftShift,
+				ChilliSource::KeyCode::k_leftAlt,
+				ChilliSource::KeyCode::k_leftSystem,
+				ChilliSource::KeyCode::k_rightCtrl,
+				ChilliSource::KeyCode::k_rightShift,
+				ChilliSource::KeyCode::k_rightAlt,
+				ChilliSource::KeyCode::k_rightSystem,
+				ChilliSource::KeyCode::k_menu,
+				ChilliSource::KeyCode::k_leftBracket,
+				ChilliSource::KeyCode::k_rightBracket,
+				ChilliSource::KeyCode::k_semiColon,
+				ChilliSource::KeyCode::k_comma,
+				ChilliSource::KeyCode::k_period,
+				ChilliSource::KeyCode::k_quote,
+				ChilliSource::KeyCode::k_forwardSlash,
+				ChilliSource::KeyCode::k_backSlash,
+				ChilliSource::KeyCode::k_tilde,
+				ChilliSource::KeyCode::k_equals,
+				ChilliSource::KeyCode::k_hyphen,
+				ChilliSource::KeyCode::k_space,
+				ChilliSource::KeyCode::k_return,
+				ChilliSource::KeyCode::k_backSpace,
+				ChilliSource::KeyCode::k_tab,
+				ChilliSource::KeyCode::k_pageUp,
+				ChilliSource::KeyCode::k_pageDown,
+				ChilliSource::KeyCode::k_end,
+				ChilliSource::KeyCode::k_home,
+				ChilliSource::KeyCode::k_insert,
+				ChilliSource::KeyCode::k_delete,
+				ChilliSource::KeyCode::k_add,
+				ChilliSource::KeyCode::k_subtract,
+				ChilliSource::KeyCode::k_multiply,
+				ChilliSource::KeyCode::k_divide,
+				ChilliSource::KeyCode::k_left,
+				ChilliSource::KeyCode::k_right,
+				ChilliSource::KeyCode::k_up,
+				ChilliSource::KeyCode::k_down,
+				ChilliSource::KeyCode::k_numpad0,
+				ChilliSource::KeyCode::k_numpad1,
+				ChilliSource::KeyCode::k_numpad2,
+				ChilliSource::KeyCode::k_numpad3,
+				ChilliSource::KeyCode::k_numpad4,
+				ChilliSource::KeyCode::k_numpad5,
+				ChilliSource::KeyCode::k_numpad6,
+				ChilliSource::KeyCode::k_numpad7,
+				ChilliSource::KeyCode::k_numpad8,
+				ChilliSource::KeyCode::k_numpad9,
+				ChilliSource::KeyCode::k_f1,
+				ChilliSource::KeyCode::k_f2,
+				ChilliSource::KeyCode::k_f3,
+				ChilliSource::KeyCode::k_f4,
+				ChilliSource::KeyCode::k_f5,
+				ChilliSource::KeyCode::k_f6,
+				ChilliSource::KeyCode::k_f7,
+				ChilliSource::KeyCode::k_f8,
+				ChilliSource::KeyCode::k_f9,
+				ChilliSource::KeyCode::k_f10,
+				ChilliSource::KeyCode::k_f11,
+				ChilliSource::KeyCode::k_f12,
+				ChilliSource::KeyCode::k_f13,
+				ChilliSource::KeyCode::k_f14,
+				ChilliSource::KeyCode::k_f15,
+				ChilliSource::KeyCode::k_pause
 			};
 			//-------------------------------------------------------
 			/// Convert from CS key code to SFML key code
@@ -260,7 +260,7 @@ namespace CSBackend
 			///
 			/// @return SFML key code
 			//-------------------------------------------------------
-			sf::Keyboard::Key CSKeyCodeToSFMLKeyCode(CSInput::KeyCode in_code)
+			sf::Keyboard::Key CSKeyCodeToSFMLKeyCode(ChilliSource::KeyCode in_code)
 			{
 				return k_sfmlKeyCodesMap[(u32)in_code];
 			}
@@ -273,11 +273,11 @@ namespace CSBackend
 			///
 			/// @return CS key code
 			//-------------------------------------------------------
-			CSInput::KeyCode SFMLKeyCodeToCSKeyCode(sf::Keyboard::Key in_code)
+			ChilliSource::KeyCode SFMLKeyCodeToCSKeyCode(sf::Keyboard::Key in_code)
 			{
 				if (in_code == sf::Keyboard::Key::Unknown)
 				{
-					return CSInput::KeyCode::k_unknown;
+					return ChilliSource::KeyCode::k_unknown;
 				}
 
 				return k_csKeyCodesMap[(u32)in_code];
@@ -286,9 +286,9 @@ namespace CSBackend
 
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool Keyboard::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool Keyboard::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return (CSInput::Keyboard::InterfaceID == in_interfaceId || Keyboard::InterfaceID == in_interfaceId);
+			return (ChilliSource::Keyboard::InterfaceID == in_interfaceId || Keyboard::InterfaceID == in_interfaceId);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -299,8 +299,8 @@ namespace CSBackend
 				flag = false;
 			}
 
-			m_keyPressedConnection = SFMLWindow::Get()->GetKeyPressedEvent().OpenConnection(CSCore::MakeDelegate(this, &Keyboard::OnKeyPressed));
-			m_keyReleasedConnection = SFMLWindow::Get()->GetKeyReleasedEvent().OpenConnection(CSCore::MakeDelegate(this, &Keyboard::OnKeyReleased));
+			m_keyPressedConnection = SFMLWindow::Get()->GetKeyPressedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyPressed));
+			m_keyReleasedConnection = SFMLWindow::Get()->GetKeyReleasedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyReleased));
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -312,24 +312,24 @@ namespace CSBackend
 			{
 				m_keysDown[static_cast<u32>(keyCode)] = true;
 
-				std::vector<CSInput::ModifierKeyCode> modifiers;
-				modifiers.reserve((u32)CSInput::ModifierKeyCode::k_total);
+				std::vector<ChilliSource::ModifierKeyCode> modifiers;
+				modifiers.reserve((u32)ChilliSource::ModifierKeyCode::k_total);
 
 				if (in_event.alt == true)
 				{
-					modifiers.push_back(CSInput::ModifierKeyCode::k_alt);
+					modifiers.push_back(ChilliSource::ModifierKeyCode::k_alt);
 				}
 				if (in_event.control == true)
 				{
-					modifiers.push_back(CSInput::ModifierKeyCode::k_ctrl);
+					modifiers.push_back(ChilliSource::ModifierKeyCode::k_ctrl);
 				}
 				if (in_event.shift == true)
 				{
-					modifiers.push_back(CSInput::ModifierKeyCode::k_shift);
+					modifiers.push_back(ChilliSource::ModifierKeyCode::k_shift);
 				}
 				if (in_event.system == true)
 				{
-					modifiers.push_back(CSInput::ModifierKeyCode::k_system);
+					modifiers.push_back(ChilliSource::ModifierKeyCode::k_system);
 				}
 
 				m_keyPressedEvent.NotifyConnections(keyCode, modifiers);
@@ -349,19 +349,19 @@ namespace CSBackend
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool Keyboard::IsKeyDown(CSInput::KeyCode in_code) const
+		bool Keyboard::IsKeyDown(ChilliSource::KeyCode in_code) const
 		{
 			return m_keysDown[static_cast<u32>(in_code)];
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		CSCore::IConnectableEvent<Keyboard::KeyPressedDelegate>& Keyboard::GetKeyPressedEvent()
+		ChilliSource::IConnectableEvent<Keyboard::KeyPressedDelegate>& Keyboard::GetKeyPressedEvent()
 		{
 			return m_keyPressedEvent;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		CSCore::IConnectableEvent<Keyboard::KeyReleasedDelegate>& Keyboard::GetKeyReleasedEvent()
+		ChilliSource::IConnectableEvent<Keyboard::KeyReleasedDelegate>& Keyboard::GetKeyReleasedEvent()
 		{
 			return m_keyReleasedEvent;
 		}

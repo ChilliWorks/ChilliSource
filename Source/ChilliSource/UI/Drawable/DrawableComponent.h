@@ -36,7 +36,7 @@
 #include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Drawable/Drawable.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A component for rendering image in a widget. This is handled through
@@ -65,7 +65,7 @@ namespace CS
         ///
         /// @return The list of properties supported by a drawable component.
         //-------------------------------------------------------------------
-        static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
+        static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         //-------------------------------------------------------------------
         /// Allows querying of whether or not the component implements the
         /// interface associated with the given interface Id. Typically
@@ -78,7 +78,7 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface.
         //-------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -116,7 +116,7 @@ namespace CS
         /// @param The component name.
         /// @param The property map.
         //-------------------------------------------------------------------
-        DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+        DrawableComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -136,7 +136,7 @@ namespace CS
         /// @param The final screen space size.
         /// @param The final colour.
         //----------------------------------------------------------------
-        void OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
+        void OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
         
         DrawableDefCSPtr m_drawableDef;
         DrawableUPtr m_drawable;

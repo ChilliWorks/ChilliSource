@@ -33,7 +33,7 @@
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 
-namespace CS
+namespace ChilliSource
 {
     //===============================================================
     /// Description:
@@ -54,7 +54,7 @@ namespace CS
         /// @param Comparison Type
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+        bool IsA(InterfaceIDType inInterfaceID) const override;
         //----------------------------------------------------
         /// Get Axis Aligned Bounding Box
         ///
@@ -63,7 +63,7 @@ namespace CS
         /// recomputed when required.
         /// @return Axis aligned bounding box
         //----------------------------------------------------
-        const Core::AABB& GetAABB() override;
+        const AABB& GetAABB() override;
         //----------------------------------------------------
         /// Get Object Oriented Bounding Box
         ///
@@ -72,7 +72,7 @@ namespace CS
         /// recomputed when required.
         /// @return OOBB
         //----------------------------------------------------
-        const Core::OOBB& GetOOBB() override;
+        const OOBB& GetOOBB() override;
         //----------------------------------------------------
         /// Get Bounding Sphere
         ///
@@ -81,7 +81,7 @@ namespace CS
         /// recomputed when required.
         /// @return bounding sphere
         //----------------------------------------------------
-        const Core::Sphere& GetBoundingSphere() override;
+        const Sphere& GetBoundingSphere() override;
         //-----------------------------------------------------------
         /// Is Transparent
         ///
@@ -206,7 +206,7 @@ namespace CS
         MeshCSPtr mpModel;
         std::vector<MaterialCSPtr> mMaterials;
         
-        Core::EventConnectionUPtr m_transformChangedConnection;
+        EventConnectionUPtr m_transformChangedConnection;
         
         bool m_isBSValid;
         bool m_isAABBValid;

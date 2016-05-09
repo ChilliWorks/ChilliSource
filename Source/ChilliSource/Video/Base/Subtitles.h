@@ -37,7 +37,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------
     /// A subtitles resource. This is used for displaying
@@ -46,7 +46,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //----------------------------------------------------------
-    class Subtitles final : public Core::Resource
+    class Subtitles final : public Resource
     {
     public:
         CS_DECLARE_NAMEDTYPE(Subtitles);
@@ -61,9 +61,9 @@ namespace CS
             std::string m_name;
             std::string m_fontName;
             u32 m_fontSize;
-            Core::Colour m_colour;
-            Core::Rectangle m_bounds;
-            Rendering::AlignmentAnchor m_alignment;
+            Colour m_colour;
+            Rectangle m_bounds;
+            AlignmentAnchor m_alignment;
             TimeIntervalMs m_fadeTimeMS;
         };
         typedef std::unique_ptr<const Style> StyleCUPtr;
@@ -89,7 +89,7 @@ namespace CS
         ///
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -126,18 +126,18 @@ namespace CS
         /// @param Localised text resource used by the internal
         /// subtitles
         //----------------------------------------------------------
-        void SetLocalisedText(const Core::LocalisedTextCSPtr& in_text);
+        void SetLocalisedText(const LocalisedTextCSPtr& in_text);
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Localised text resource used by the internal
         /// subtitles
         //----------------------------------------------------------
-        const Core::LocalisedTextCSPtr& GetLocalisedText() const;
+        const LocalisedTextCSPtr& GetLocalisedText() const;
         
     private:
         
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //----------------------------------------------------------
         /// Factory create method that creates a new empty subtitle
         /// resource. Only accessed by the resource pool
@@ -158,7 +158,7 @@ namespace CS
         std::unordered_map<std::string, StyleCUPtr> m_styles;
         std::vector<SubtitleCUPtr> m_subtitles;
         
-        Core::LocalisedTextCSPtr m_localisedText;
+        LocalisedTextCSPtr m_localisedText;
     };
 }
 

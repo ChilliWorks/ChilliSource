@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------------
     /// Describes the features used in this mesh.
@@ -58,11 +58,11 @@ namespace CS
         std::string mstrName;
         u32 mudwNumVertices;
         u32 mudwNumIndices;
-        CSCore::Vector3 mvMinBounds;
-        CSCore::Vector3 mvMaxBounds;
+        Vector3 mvMinBounds;
+        Vector3 mvMaxBounds;
         u8* mpVertexData;
         u8* mpIndexData;
-        std::vector<CSCore::Matrix4> mInverseBindPoseMatrices;
+        std::vector<Matrix4> mInverseBindPoseMatrices;
         PrimitiveType ePrimitiveType;            
     };
     //-------------------------------------------------------------------------
@@ -85,8 +85,8 @@ namespace CS
         MeshFeatureDescriptor mFeatures;
         std::vector<SubMeshDescriptor> mMeshes;
         VertexDeclaration mVertexDeclaration;
-        Core::Vector3 mvMinBounds;
-        Core::Vector3 mvMaxBounds;
+        Vector3 mvMinBounds;
+        Vector3 mvMaxBounds;
         u32 mudwIndexSize;
     };
 }

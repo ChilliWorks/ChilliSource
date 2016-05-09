@@ -32,7 +32,7 @@
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitterDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -43,16 +43,16 @@ namespace CS
         ///
         /// @return A random point in a unit sphere.
         //----------------------------------------------------------------
-        Core::Vector3 GeneratePointInUnitSphere()
+        Vector3 GeneratePointInUnitSphere()
         {
-            f32 dist = std::pow(Core::Random::GenerateNormalised<f32>(), (1.0f / 3.0f));
-            return Core::Random::GenerateDirection3D<f32>() * dist;
+            f32 dist = std::pow(Random::GenerateNormalised<f32>(), (1.0f / 3.0f));
+            return Random::GenerateDirection3D<f32>() * dist;
         }
     }
 
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    SphereParticleEmitter::SphereParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
+    SphereParticleEmitter::SphereParticleEmitter(const ParticleEmitterDef* in_particleEmitter, dynamic_array<Particle>* in_particleArray)
         : ParticleEmitter(in_particleEmitter, in_particleArray)
     {
         //Only the sphere emitter def can create this, so this is safe.
@@ -60,7 +60,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void SphereParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
+    void SphereParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Vector3& out_position, Vector3& out_direction)
     {
         f32 radius = m_sphereParticleEmitterDef->GetRadiusProperty()->GenerateValue(in_normalisedEmissionTime);
 
@@ -71,7 +71,7 @@ namespace CS
             out_position = GeneratePointInUnitSphere() * radius;
             break;
         case SphereParticleEmitterDef::EmitFromType::k_surface:
-            out_position = Core::Random::GenerateDirection3D<f32>() * radius;
+            out_position = Random::GenerateDirection3D<f32>() * radius;
             break;
         default:
             CS_LOG_FATAL("Invalid 'Emit From' type.");
@@ -82,10 +82,10 @@ namespace CS
         switch (m_sphereParticleEmitterDef->GetEmitDirectionType())
         {
         case SphereParticleEmitterDef::EmitDirectionType::k_random:
-            out_direction = Core::Random::GenerateDirection3D<f32>();
+            out_direction = Random::GenerateDirection3D<f32>();
             break;
         case SphereParticleEmitterDef::EmitDirectionType::k_awayFromCentre:
-            out_direction = Core::Vector3::Normalise(out_position);
+            out_direction = Vector3::Normalise(out_position);
             break;
         default:
             CS_LOG_FATAL("Invalid 'Emit Direction' type.");

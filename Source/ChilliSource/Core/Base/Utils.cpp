@@ -32,7 +32,7 @@
 #include <json/json.h>
 #include <zlib.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace Utils
     {

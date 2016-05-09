@@ -84,7 +84,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		/// Is A
 		//-----------------------------------------------
-		bool AccelerometerJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
+		bool AccelerometerJavaInterface::IsA(ChilliSource::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == AccelerometerJavaInterface::InterfaceID);
 		}
@@ -130,7 +130,7 @@ namespace CSBackend
 		{
 			if (true == mbListening && nullptr != mAccelerationChangedDelegate)
 			{
-				mAccelerationChangedDelegate(CSCore::Vector3(infAccelerationX, infAccelerationY, infAccelerationZ));
+				mAccelerationChangedDelegate(ChilliSource::Vector3(infAccelerationX, infAccelerationY, infAccelerationZ));
 			}
 		}
 	}

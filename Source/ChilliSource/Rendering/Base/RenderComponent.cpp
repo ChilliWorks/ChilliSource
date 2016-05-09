@@ -30,7 +30,7 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderComponent);
     //----------------------------------------------------
@@ -70,7 +70,7 @@ namespace CS
     //-----------------------------------------------------
     /// Get Transformation Matrix
     //-----------------------------------------------------
-    const Core::Matrix4& RenderComponent::GetTransformationMatrix()
+    const Matrix4& RenderComponent::GetTransformationMatrix()
     {
         return GetEntity()->GetTransform().GetWorldTransform();
     }

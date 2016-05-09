@@ -35,7 +35,7 @@
 #include <sys/time.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     class PerformanceTimer final
     {

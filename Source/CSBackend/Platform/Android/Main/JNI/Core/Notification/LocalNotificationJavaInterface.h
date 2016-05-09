@@ -62,7 +62,7 @@ namespace CSBackend
 			/// @return whether or not this object implements the
 			/// given interface.
 			//---------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//---------------------------------------------------
 			/// Schedules a notification to be displayed to the user
 			///
@@ -74,7 +74,7 @@ namespace CSBackend
 			/// @param [Optional] The notification priority. Defaults
 			/// to standard priority.
 			//---------------------------------------------------
-			void ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority);
+			void ScheduleNotificationForTime(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, TimeIntervalSecs in_time, ChilliSource::Notification::Priority in_priority);
 			//--------------------------------------------------------
 			/// Builds a list of all notifications currently scheduled
 			/// within the given time period.
@@ -85,7 +85,7 @@ namespace CSBackend
 			/// @param The start time.
 			/// @param The time period.
 			//--------------------------------------------------------
-			void GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const;
+			void GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const;
 			//---------------------------------------------------
 			/// Prevent any notifications with given ID type from
 			/// firing
@@ -94,7 +94,7 @@ namespace CSBackend
 			///
 			/// @param ID type
 			//---------------------------------------------------
-			void CancelByID(CSCore::Notification::ID in_id);
+			void CancelByID(ChilliSource::Notification::ID in_id);
 			//---------------------------------------------------
 			/// Terminate all currently scheduled notifications.
 			///

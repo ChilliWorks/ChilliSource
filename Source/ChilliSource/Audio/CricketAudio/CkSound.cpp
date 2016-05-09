@@ -40,7 +40,7 @@
 #include <ck/ck.h>
 #include <ck/sound.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -56,7 +56,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    CkSoundUPtr CkSound::CreateFromStream(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
+    CkSoundUPtr CkSound::CreateFromStream(StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
     {
         return CkSoundUPtr(new CkSound(in_streamStorageLocation, in_streamFilePath));
     }
@@ -66,26 +66,26 @@ namespace CS
     : m_audioBank(in_audioBank)
     {
         CS_ASSERT(m_audioBank != nullptr, "Cannot create " + std::string(k_className) + " with null audio bank.");
-        CS_ASSERT(m_audioBank->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot create CkSound with an audio bank that hasn't been loaded: " + m_audioBank->GetName());
+        CS_ASSERT(m_audioBank->GetLoadState() == Resource::LoadState::k_loaded, "Cannot create CkSound with an audio bank that hasn't been loaded: " + m_audioBank->GetName());
         
         m_sound = ::CkSound::newBankSound(m_audioBank->GetBank(), in_audioName.c_str());
         CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because sound '" + in_audioName + "' doesn't exist in the bank '" + m_audioBank->GetName() + "'.");
         
-        m_ckSystem = CSCore::Application::Get()->GetSystem<CricketAudioSystem>();
+        m_ckSystem = Application::Get()->GetSystem<CricketAudioSystem>();
         CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CricketAudioSystem::TypeName);
         
         m_ckSystem->Register(this);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    CkSound::CkSound(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
+    CkSound::CkSound(StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
     {
-        auto fileSystem = Core::Application::Get()->GetFileSystem();
-        auto taggedFilePath = Core::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_streamStorageLocation, in_streamFilePath);
+        auto fileSystem = Application::Get()->GetFileSystem();
+        auto taggedFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_streamStorageLocation, in_streamFilePath);
 
 #if CS_TARGETPLATFORM_ANDROID
-        if (in_streamStorageLocation == Core::StorageLocation::k_package || in_streamStorageLocation == Core::StorageLocation::k_chilliSource ||
-        (in_streamStorageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+        if (in_streamStorageLocation == StorageLocation::k_package || in_streamStorageLocation == StorageLocation::k_chilliSource ||
+        (in_streamStorageLocation == StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
         {
             auto androidFS = fileSystem->Cast<CSBackend::Android::FileSystem>();
             CS_ASSERT(androidFS != nullptr, "Could not cast to Android file system.");
@@ -105,9 +105,9 @@ namespace CS
             m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
         }
 #else
-        if (in_streamStorageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false)
+        if (in_streamStorageLocation == StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false)
         {
-            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + taggedFilePath;
+            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + taggedFilePath;
             m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
         }
         else
@@ -119,7 +119,7 @@ namespace CS
 
         CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because audio stream '" + in_streamFilePath + "' doesn't exist.");
         
-        m_ckSystem = CSCore::Application::Get()->GetSystem<CricketAudioSystem>();
+        m_ckSystem = Application::Get()->GetSystem<CricketAudioSystem>();
         CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CricketAudioSystem::TypeName);
         
         m_ckSystem->Register(this);

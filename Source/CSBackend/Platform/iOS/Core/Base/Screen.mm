@@ -51,13 +51,13 @@ namespace CSBackend
             ///
             /// @return The iOS device resolution.
             //----------------------------------------------------
-            CSCore::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation, CGSize in_dipsSize, f32 in_pixelScaleFactor)
+            ChilliSource::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation, CGSize in_dipsSize, f32 in_pixelScaleFactor)
             {
-                CSCore::Vector2 resolution(in_dipsSize.width * in_pixelScaleFactor, in_dipsSize.height * in_pixelScaleFactor);
+                ChilliSource::Vector2 resolution(in_dipsSize.width * in_pixelScaleFactor, in_dipsSize.height * in_pixelScaleFactor);
                 
                 if (in_orientation == UIInterfaceOrientationLandscapeLeft || in_orientation == UIInterfaceOrientationLandscapeRight)
                 {
-                    resolution = CSCore::Vector2(resolution.y, resolution.x);
+                    resolution = ChilliSource::Vector2(resolution.y, resolution.x);
                 }
                 
                 return resolution;
@@ -73,9 +73,9 @@ namespace CSBackend
             ///
             /// @return The iOS device resolution.
             //----------------------------------------------------
-            CSCore::Vector2 CalculateResolution(CGSize in_dipsSize, f32 in_pixelScaleFactor)
+            ChilliSource::Vector2 CalculateResolution(CGSize in_dipsSize, f32 in_pixelScaleFactor)
             {
-                CSCore::Vector2 resolution(std::round(in_dipsSize.width * in_pixelScaleFactor), std::round(in_dipsSize.height * in_pixelScaleFactor));
+                ChilliSource::Vector2 resolution(std::round(in_dipsSize.width * in_pixelScaleFactor), std::round(in_dipsSize.height * in_pixelScaleFactor));
                 return resolution;
             }
             //----------------------------------------------------
@@ -119,18 +119,18 @@ namespace CSBackend
                 m_invDensityScale = 1.0f / m_densityScale;
             }
             
-            m_supportedResolutions.push_back(CSCore::Integer2((s32)m_resolution.x, (s32)m_resolution.y));
-            m_supportedResolutions.push_back(CSCore::Integer2((s32)m_resolution.y, (s32)m_resolution.x));
+            m_supportedResolutions.push_back(ChilliSource::Integer2((s32)m_resolution.x, (s32)m_resolution.y));
+            m_supportedResolutions.push_back(ChilliSource::Integer2((s32)m_resolution.y, (s32)m_resolution.x));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Screen::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool Screen::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (CSCore::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
+            return (ChilliSource::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const CSCore::Vector2& Screen::GetResolution() const
+        const ChilliSource::Vector2& Screen::GetResolution() const
         {
             return m_resolution;
         }
@@ -148,25 +148,25 @@ namespace CSBackend
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        CSCore::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
+        ChilliSource::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
         {
             return m_resolutionChangedEvent;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        CSCore::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
+        ChilliSource::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
         {
             return m_displayModeChangedEvent;
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        std::vector<CSCore::Integer2> Screen::GetSupportedResolutions() const
+        std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
         {
             return m_supportedResolutions;
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
-		void Screen::SetResolution(const CSCore::Integer2& in_size)
+		void Screen::SetResolution(const ChilliSource::Integer2& in_size)
 		{
 			CS_LOG_WARNING("Screen::SetResolution has no effect on iOS");
 		}

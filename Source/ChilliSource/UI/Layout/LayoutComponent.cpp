@@ -34,13 +34,13 @@
 #include <ChilliSource/UI/Layout/Layout.h>
 #include <ChilliSource/UI/Layout/LayoutDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
         const char k_layoutKey[] = "Layout";
         
-        const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
+        const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
             {PropertyTypes::LayoutDef(), k_layoutKey},
         };
@@ -49,21 +49,21 @@ namespace CS
     CS_DEFINE_NAMEDTYPE(LayoutComponent);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const std::vector<Core::PropertyMap::PropertyDesc>& LayoutComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& LayoutComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    LayoutComponent::LayoutComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
+    LayoutComponent::LayoutComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<LayoutDefCSPtr>(PropertyTypes::LayoutDef(), k_layoutKey, Core::MakeDelegate(this, &LayoutComponent::GetLayoutDef), Core::MakeDelegate(this, &LayoutComponent::ApplyLayoutDef));
+        RegisterProperty<LayoutDefCSPtr>(PropertyTypes::LayoutDef(), k_layoutKey, MakeDelegate(this, &LayoutComponent::GetLayoutDef), MakeDelegate(this, &LayoutComponent::ApplyLayoutDef));
         ApplyRegisteredProperties(in_properties);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool LayoutComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool LayoutComponent::IsA(InterfaceIDType in_interfaceId) const
     {
         return (LayoutComponent::InterfaceID == in_interfaceId);
     }
@@ -98,13 +98,13 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector2 LayoutComponent::GetSizeForIndex(u32 in_index) const
+    Vector2 LayoutComponent::GetSizeForIndex(u32 in_index) const
     {
         return m_layout->GetSizeForIndex(in_index);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector2 LayoutComponent::GetPositionForIndex(u32 in_index) const
+    Vector2 LayoutComponent::GetPositionForIndex(u32 in_index) const
     {
         return m_layout->GetPositionForIndex(in_index);
     }

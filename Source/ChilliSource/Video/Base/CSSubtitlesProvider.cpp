@@ -39,7 +39,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -86,13 +86,13 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool CSSubtitlesProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool CSSubtitlesProvider::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSSubtitlesProvider::InterfaceID;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::InterfaceIDType CSSubtitlesProvider::GetResourceType() const
+    InterfaceIDType CSSubtitlesProvider::GetResourceType() const
     {
         return Subtitles::InterfaceID;
     }
@@ -104,36 +104,36 @@ namespace CS
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    void CSSubtitlesProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+    void CSSubtitlesProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
         SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
         LoadSubtitles(in_storageLocation, in_filePath, nullptr, pSubtitles);
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    void CSSubtitlesProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void CSSubtitlesProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(out_resource);
         
         //Load model as task
-        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
             LoadSubtitles(in_storageLocation, in_filePath, in_delegate, pSubtitles);
         });
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    void CSSubtitlesProvider::LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SubtitlesSPtr& out_resource) const
+    void CSSubtitlesProvider::LoadSubtitles(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const SubtitlesSPtr& out_resource) const
     {
         //read the JSON
         Json::Value root;
-        if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, root) == false)
+        if (JsonUtils::ReadJson(in_storageLocation, in_filePath, root) == false)
         {
             CS_LOG_ERROR("Subtitles file '" + in_filePath + "' could not be read.");
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -145,11 +145,11 @@ namespace CS
         u32 udwVersionNumber = root.get(k_tagVersionNumber, 0).asUInt();
         if (udwVersionNumber != 1)
         {
-            CS_LOG_ERROR("Subtitles file '" + in_filePath + "' has version number '" + Core::ToString(udwVersionNumber) + "'. Only version 1 is supported.");
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            CS_LOG_ERROR("Subtitles file '" + in_filePath + "' has version number '" + ToString(udwVersionNumber) + "'. Only version 1 is supported.");
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -161,10 +161,10 @@ namespace CS
         if (root.isMember(k_tagLocalisedText) == false)
         {
             CS_LOG_ERROR("Subtitles file '" + in_filePath + "' must have localised text resource");
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -173,16 +173,16 @@ namespace CS
         }
         
         Json::Value localisedTextJson(root[k_tagLocalisedText]);
-        Core::StorageLocation textLocation = Core::ParseStorageLocation(localisedTextJson.get("Location", "Package").asString());
+        StorageLocation textLocation = ParseStorageLocation(localisedTextJson.get("Location", "Package").asString());
         
-        auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(textLocation, localisedTextJson.get("Path", "").asString());
+        auto localisedText = Application::Get()->GetResourcePool()->LoadResource<LocalisedText>(textLocation, localisedTextJson.get("Path", "").asString());
         if (localisedText == nullptr)
         {
             CS_LOG_ERROR("Subtitles file '" + in_filePath + "' must have localised text resource");
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -205,10 +205,10 @@ namespace CS
                 else
                 {
                     CS_LOG_ERROR("Subtitles file '" + in_filePath + "' failed to load.");
-                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    out_resource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                         {
                             in_delegate(out_resource);
                         });
@@ -220,10 +220,10 @@ namespace CS
         else
         {
             CS_LOG_ERROR("Subtitles file '" + in_filePath + "' does not have styles.");
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -244,10 +244,10 @@ namespace CS
                 else
                 {
                     CS_LOG_ERROR("Subtitles file '" + in_filePath + "' failed to load.");
-                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    out_resource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                         {
                             in_delegate(out_resource);
                         });
@@ -259,10 +259,10 @@ namespace CS
         else
         {
             CS_LOG_ERROR("Subtitles file '" + in_filePath + "' does not have subtitles.");
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -270,11 +270,11 @@ namespace CS
             return;
         }
         
-        out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+        out_resource->SetLoadState(Resource::LoadState::k_loaded);
         
         if(in_delegate != nullptr)
         {
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
             {
                 in_delegate(out_resource);
             });
@@ -296,9 +296,9 @@ namespace CS
         
         pStyle->m_fontName = in_styleJSON.get(k_tagStyleFont, k_defaultFont).asString();
         pStyle->m_fontSize = in_styleJSON.get(k_tagStyleFontSize, k_defaultFontSize).asUInt();
-        pStyle->m_colour = Core::ParseColour(in_styleJSON.get(k_tagStyleFontColour, k_defaultColour).asString());
+        pStyle->m_colour = ParseColour(in_styleJSON.get(k_tagStyleFontColour, k_defaultColour).asString());
         pStyle->m_fadeTimeMS = ParseTime(in_styleJSON.get(k_tagStyleFadeTime, (s32)k_defaultFadeTimeMS).asString());
-        pStyle->m_alignment = Rendering::ParseAlignmentAnchor(in_styleJSON.get(k_tagStyleAlignment, k_defaultAlignment).asString());
+        pStyle->m_alignment = ParseAlignmentAnchor(in_styleJSON.get(k_tagStyleAlignment, k_defaultAlignment).asString());
         pStyle->m_bounds = LoadBounds(in_styleJSON.get(k_tagStyleBounds, ""));
         
         return Subtitles::StyleUPtr(std::move(pStyle));
@@ -332,14 +332,14 @@ namespace CS
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    Core::Rectangle CSSubtitlesProvider::LoadBounds(const Json::Value& in_boundsJSON) const
+    Rectangle CSSubtitlesProvider::LoadBounds(const Json::Value& in_boundsJSON) const
     {
         f32 fTop = (f32)in_boundsJSON.get(k_tagStyleBoundsTop, k_defaultTop).asDouble();
         f32 fBottom = (f32)in_boundsJSON.get(k_tagStyleBoundsBottom, k_defaultBottom).asDouble();
         f32 fLeft = (f32)in_boundsJSON.get(k_tagStyleBoundsLeft, k_defaultLeft).asDouble();
         f32 fRight = (f32)in_boundsJSON.get(k_tagStyleBoundsRight, k_defaultRight).asDouble();
         
-        return Core::Rectangle(CSCore::Vector2(fLeft + (fRight - fLeft) * 0.5f, fBottom + (fTop - fBottom) * 0.5f), CSCore::Vector2(fRight - fLeft, fBottom - fTop));
+        return Rectangle(Vector2(fLeft + (fRight - fLeft) * 0.5f, fBottom + (fTop - fBottom) * 0.5f), Vector2(fRight - fLeft, fBottom - fTop));
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

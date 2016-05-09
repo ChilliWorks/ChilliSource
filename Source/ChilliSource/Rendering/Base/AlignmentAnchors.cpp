@@ -28,13 +28,13 @@
 
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------
     //---------------------------------------------------------------
-    Core::Vector2 GetAnchorPoint(AlignmentAnchor in_alignment, const Core::Vector2& in_halfSize)
+    Vector2 GetAnchorPoint(AlignmentAnchor in_alignment, const Vector2& in_halfSize)
     {
-        Core::Vector2 output;
+        Vector2 output;
         
         //Vertical alignment
         switch (in_alignment)

@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A particle property for getting a random value between the given lower and
@@ -80,7 +80,7 @@ namespace CS
     //------------------------------------------------------------------------------
     template <typename TPropertyType> TPropertyType ComponentwiseRandomConstantParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
     {
-        return Core::Random::GenerateComponentwise(m_lowerValue, m_upperValue);
+        return Random::GenerateComponentwise(m_lowerValue, m_upperValue);
     }
 }
 

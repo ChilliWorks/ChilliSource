@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
 #include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -56,7 +56,7 @@ namespace CS
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    bool NotificationManager::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool NotificationManager::IsA(InterfaceIDType in_interfaceId) const
     {
         return (NotificationManager::InterfaceID == in_interfaceId);
     }

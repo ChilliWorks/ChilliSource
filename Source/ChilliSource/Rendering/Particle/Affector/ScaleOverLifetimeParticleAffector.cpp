@@ -33,11 +33,11 @@
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffectorDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ScaleOverLifetimeParticleAffector::ScaleOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
+    ScaleOverLifetimeParticleAffector::ScaleOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, dynamic_array<Particle>* in_particleArray)
         : ParticleAffector(in_affectorDef, in_particleArray), m_particleScaleData(in_particleArray->size())
     {
         //This can only be created by the ScaleOverLifetimeParticleAffectorDef so this is safe.
@@ -60,7 +60,7 @@ namespace CS
     //----------------------------------------------------------------
     void ScaleOverLifetimeParticleAffector::AffectParticles(f32 in_deltaTime, f32 in_effectProgress)
     {
-        Core::dynamic_array<Particle>* particleArray = GetParticleArray();
+        dynamic_array<Particle>* particleArray = GetParticleArray();
         for (u32 i = 0; i < particleArray->size(); ++i)
         {
             Particle& particle = particleArray->at(i);

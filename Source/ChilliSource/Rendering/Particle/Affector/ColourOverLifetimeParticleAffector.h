@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// A particle affector which will change the colour of particles over
@@ -83,7 +83,7 @@ namespace CS
         //----------------------------------------------------------------
         struct ColourData final
         {
-            Core::Colour m_colour;
+            Colour m_colour;
             f32 m_time;
         };
         //----------------------------------------------------------------
@@ -94,11 +94,11 @@ namespace CS
         /// @param The particle affector definition.
         /// @param The particle array.
         //----------------------------------------------------------------
-        ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+        ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, dynamic_array<Particle>* in_particleArray);
         
     private:
         const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
-        Core::dynamic_array<ColourData> m_particleColourData;
+        dynamic_array<ColourData> m_particleColourData;
         
         u32 m_intermediateParticles = 0;
     };

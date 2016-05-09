@@ -34,9 +34,9 @@
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 
-namespace CS
+namespace ChilliSource
 {
-    class LightComponent : public Core::Component
+    class LightComponent : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(LightComponent);
@@ -54,19 +54,19 @@ namespace CS
         ///
         /// @param Colour of the light
         //----------------------------------------------------------
-        void SetColour(const Core::Colour &inColour);
+        void SetColour(const Colour &inColour);
         //----------------------------------------------------------
         /// Get Colour
         ///
         /// @return Colour of the light with intensity applied
         //----------------------------------------------------------
-        Core::Colour GetColour() const;
+        Colour GetColour() const;
         //----------------------------------------------------------
         /// Get World Position
         ///
         /// @return Position in world space
         //----------------------------------------------------------
-        const Core::Vector3& GetWorldPosition() const;
+        const Vector3& GetWorldPosition() const;
         //----------------------------------------------------------
         /// Set Intensity
         ///
@@ -84,7 +84,7 @@ namespace CS
         ///
         /// @return Matrix to transform into light space
         //----------------------------------------------------------
-        virtual const Core::Matrix4& GetLightMatrix() const = 0;
+        virtual const Matrix4& GetLightMatrix() const = 0;
         //----------------------------------------------------------
         /// Is Cache Valid
         ///
@@ -109,9 +109,9 @@ namespace CS
         
     protected:
         
-        mutable Core::Matrix4 mmatLight;
+        mutable Matrix4 mmatLight;
         
-        Core::Colour mColour;
+        Colour mColour;
         
         f32 mfIntensity;
         

@@ -61,9 +61,9 @@ namespace CSBackend
     	}
         //--------------------------------------------------
         //--------------------------------------------------
-        bool GooglePlayRemoteNotificationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool GooglePlayRemoteNotificationSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (GooglePlayRemoteNotificationSystem::InterfaceID == in_interfaceId || CSCore::RemoteNotificationSystem::InterfaceID == in_interfaceId);
+            return (GooglePlayRemoteNotificationSystem::InterfaceID == in_interfaceId || ChilliSource::RemoteNotificationSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -92,7 +92,7 @@ namespace CSBackend
 		}
         //--------------------------------------------------
         //---------------------------------------------------
-        CSCore::IConnectableEvent<CSCore::RemoteNotificationSystem::NotificationReceivedDelegate>& GooglePlayRemoteNotificationSystem::GetReceivedEvent()
+        ChilliSource::IConnectableEvent<ChilliSource::RemoteNotificationSystem::NotificationReceivedDelegate>& GooglePlayRemoteNotificationSystem::GetReceivedEvent()
 		{
         	return m_receivedEvent;
 		}
@@ -100,7 +100,7 @@ namespace CSBackend
         //--------------------------------------------------
 		void GooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& in_token)
 		{
-			m_token = CSCore::BaseEncoding::Base64Encode(in_token);
+			m_token = ChilliSource::BaseEncoding::Base64Encode(in_token);
 			if(m_delegate != nullptr)
 			{
 				m_delegate(m_token);
@@ -109,14 +109,14 @@ namespace CSBackend
 		}
         //--------------------------------------------------
         //--------------------------------------------------
-		void GooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const CSCore::ParamDictionary& in_params)
+		void GooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const ChilliSource::ParamDictionary& in_params)
 		{
 			if (m_enabled == true)
 			{
-				CSCore::NotificationSPtr notification(std::make_shared<CSCore::Notification>());
+				ChilliSource::NotificationSPtr notification(std::make_shared<ChilliSource::Notification>());
 				notification->m_id = 0;
 				notification->m_params = in_params;
-				notification->m_priority = CSCore::Notification::Priority::k_standard;
+				notification->m_priority = ChilliSource::Notification::Priority::k_standard;
 				m_receivedEvent.NotifyConnections(notification);
 			}
 		}

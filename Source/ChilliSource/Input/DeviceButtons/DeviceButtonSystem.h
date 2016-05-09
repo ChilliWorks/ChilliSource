@@ -35,7 +35,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------
     /// A system that provides access to hard buttons on the device.
@@ -46,7 +46,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------
-    class DeviceButtonSystem : public Core::AppSystem
+    class DeviceButtonSystem : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(DeviceButtons);
@@ -74,7 +74,7 @@ namespace CS
         /// @return An event that will be called whenever a
         /// device button is triggered.
         //----------------------------------------------------
-        virtual Core::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() = 0;
+        virtual IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() = 0;
         //----------------------------------------------------
         /// Destructor
         ///
@@ -82,7 +82,7 @@ namespace CS
         //----------------------------------------------------
         virtual ~DeviceButtonSystem(){}
     protected:
-        friend class Core::Application;
+        friend class Application;
         
         //----------------------------------------------------
         /// Creates a new platfrom specific instance of pointer

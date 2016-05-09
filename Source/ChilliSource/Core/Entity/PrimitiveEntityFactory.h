@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A PrimitiveEntityFactory is a factory for creating primitive shape entities
@@ -119,7 +119,7 @@ namespace CS
         ///
         /// @return The material.
         //------------------------------------------------------------------------------
-        CSRendering::MaterialCSPtr CreateStaticBlinnColourMaterial(const CSCore::Colour& in_colour) const;
+        MaterialCSPtr CreateStaticBlinnColourMaterial(const Colour& in_colour) const;
         //------------------------------------------------------------------------------
         /// Initialises the system.
         ///
@@ -134,9 +134,9 @@ namespace CS
         void OnDestroy() override;
         
         ResourcePool* m_resourcePool = nullptr;
-        Rendering::RenderComponentFactory* m_renderComponentFactory = nullptr;
-        Rendering::PrimitiveModelFactory* m_primitiveModelFactory = nullptr;
-        Rendering::MaterialFactory* m_materialFactory = nullptr;
+        RenderComponentFactory* m_renderComponentFactory = nullptr;
+        PrimitiveModelFactory* m_primitiveModelFactory = nullptr;
+        MaterialFactory* m_materialFactory = nullptr;
         u64 m_entityCount = 0;
     };
 }

@@ -28,7 +28,7 @@
 
 #include <ChilliSource/UI/Layout/Layout.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Layout);
     //------------------------------------------------------------------------------

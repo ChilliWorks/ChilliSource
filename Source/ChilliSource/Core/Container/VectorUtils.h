@@ -34,7 +34,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A collection of convenience methods for working with vector from the
@@ -107,7 +107,7 @@ namespace CS
             
             for (const auto& itemA : in_a)
             {
-                if (CSCore::VectorUtils::Contains(in_b, itemA) == false)
+                if (VectorUtils::Contains(in_b, itemA) == false)
                 {
                     return false;
                 }

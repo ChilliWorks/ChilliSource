@@ -55,9 +55,9 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //--------------------------------------------------
-        bool RemoteNotificationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool RemoteNotificationSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (RemoteNotificationSystem::InterfaceID == in_interfaceId || CSCore::RemoteNotificationSystem::InterfaceID == in_interfaceId);
+            return (RemoteNotificationSystem::InterfaceID == in_interfaceId || ChilliSource::RemoteNotificationSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -112,7 +112,7 @@ namespace CSBackend
         //--------------------------------------------------
         void RemoteNotificationSystem::OnRemoteTokenReceived(NSData* in_token)
         {
-            m_token = CSCore::BaseEncoding::Base64Encode((const s8*)[in_token bytes], static_cast<u32>(in_token.length));
+            m_token = ChilliSource::BaseEncoding::Base64Encode((const s8*)[in_token bytes], static_cast<u32>(in_token.length));
             
             if(m_delegate != nullptr)
             {
@@ -130,9 +130,9 @@ namespace CSBackend
                 {
                     in_application.applicationIconBadgeNumber = 0;
                     
-                    CSCore::NotificationSPtr notification = std::make_shared<CSCore::Notification>();
+                    ChilliSource::NotificationSPtr notification = std::make_shared<ChilliSource::Notification>();
                     notification->m_id = 0;
-                    notification->m_priority = CSCore::Notification::Priority::k_standard;
+                    notification->m_priority = ChilliSource::Notification::Priority::k_standard;
                     
                     // Add the message
                     NSObject* apsObject = [in_payload objectForKey:@"aps"];
@@ -173,7 +173,7 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //---------------------------------------------------
-        CSCore::IConnectableEvent<CSCore::RemoteNotificationSystem::NotificationReceivedDelegate>& RemoteNotificationSystem::GetReceivedEvent()
+        ChilliSource::IConnectableEvent<ChilliSource::RemoteNotificationSystem::NotificationReceivedDelegate>& RemoteNotificationSystem::GetReceivedEvent()
         {
             return m_receivedEvent;
         }

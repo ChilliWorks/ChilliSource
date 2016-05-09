@@ -34,7 +34,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace JsonUtils
     {
@@ -59,9 +59,9 @@ namespace CS
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        bool ReadJson(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue)
+        bool ReadJson(StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue)
         {
-            Core::FileStreamSPtr fileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
+            FileStreamSPtr fileStream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
             
             if (fileStream == nullptr)
             {

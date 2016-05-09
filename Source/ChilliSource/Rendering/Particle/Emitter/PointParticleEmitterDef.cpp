@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitter.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(PointParticleEmitterDef);
     //----------------------------------------------------------------
@@ -53,13 +53,13 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool PointParticleEmitterDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool PointParticleEmitterDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleEmitterDef::InterfaceID == in_interfaceId || PointParticleEmitterDef::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ParticleEmitterUPtr PointParticleEmitterDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+    ParticleEmitterUPtr PointParticleEmitterDef::CreateInstance(dynamic_array<Particle>* in_particleArray) const
     {
         return ParticleEmitterUPtr(new PointParticleEmitter(this, in_particleArray));
     }

@@ -31,7 +31,7 @@
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Material);
 
@@ -69,7 +69,7 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool Material::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool Material::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == Material::InterfaceID;
     }
@@ -250,7 +250,7 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetEmissive(const Core::Colour& in_emissive)
+    void Material::SetEmissive(const Colour& in_emissive)
     {
         m_emissive = in_emissive;
         
@@ -258,13 +258,13 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Core::Colour& Material::GetEmissive() const
+    const Colour& Material::GetEmissive() const
     {
         return m_emissive;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetAmbient(const Core::Colour& in_ambient)
+    void Material::SetAmbient(const Colour& in_ambient)
     {
         m_ambient = in_ambient;
         
@@ -272,13 +272,13 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Core::Colour& Material::GetAmbient() const
+    const Colour& Material::GetAmbient() const
     {
         return m_ambient;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetDiffuse(const Core::Colour& in_diffuse)
+    void Material::SetDiffuse(const Colour& in_diffuse)
     {
         m_diffuse = in_diffuse;
         
@@ -286,13 +286,13 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Core::Colour& Material::GetDiffuse() const
+    const Colour& Material::GetDiffuse() const
     {
         return m_diffuse;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetSpecular(const Core::Colour& in_specular)
+    void Material::SetSpecular(const Colour& in_specular)
     {
         m_specular = in_specular;
         
@@ -300,7 +300,7 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Core::Colour& Material::GetSpecular() const
+    const Colour& Material::GetSpecular() const
     {
         return m_specular;
     }
@@ -315,7 +315,7 @@ namespace CS
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Core::Vector2& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Vector2& in_value)
     {
         m_vec2Vars[in_varName] = in_value;
         
@@ -324,7 +324,7 @@ namespace CS
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Core::Vector3& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Vector3& in_value)
     {
         m_vec3Vars[in_varName] = in_value;
         
@@ -333,7 +333,7 @@ namespace CS
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Core::Vector4& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Vector4& in_value)
     {
         m_vec4Vars[in_varName] = in_value;
         
@@ -342,7 +342,7 @@ namespace CS
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Core::Matrix4& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Matrix4& in_value)
     {
         m_mat4Vars[in_varName] = in_value;
         
@@ -351,7 +351,7 @@ namespace CS
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Core::Colour& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Colour& in_value)
     {
         m_colourVars[in_varName] = in_value;
         

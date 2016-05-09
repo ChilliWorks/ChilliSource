@@ -34,7 +34,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -54,7 +54,7 @@ namespace CS
             const char k_rowMajor[] = "rowmajor";
 
             std::string cellOrderString = in_cellOrderString;
-            Core::StringUtils::ToLowerCase(cellOrderString);
+            StringUtils::ToLowerCase(cellOrderString);
 
             if(cellOrderString == k_columnMajor)
             {
@@ -95,35 +95,35 @@ namespace CS
 
             if (key == k_relativeMarginsKey)
             {
-                m_relativeMargins = Core::ParseVector4(value);
+                m_relativeMargins = ParseVector4(value);
             }
             else if (key == k_absoluteMarginsKey)
             {
-                m_absoluteMargins = Core::ParseVector4(value);
+                m_absoluteMargins = ParseVector4(value);
             }
             else if (key == k_numRowsKey)
             {
-                m_numRows = Core::ParseU32(value);
+                m_numRows = ParseU32(value);
             }
             else if (key == k_numColumnsKey)
             {
-                m_numCols = Core::ParseU32(value);
+                m_numCols = ParseU32(value);
             }
             else if (key == k_relativeHSpacingKey)
             {
-                m_relativeHSpacing = Core::ParseF32(value);
+                m_relativeHSpacing = ParseF32(value);
             }
             else if (key == k_absoluteHSpacingKey)
             {
-                m_absoluteHSpacing = Core::ParseF32(value);
+                m_absoluteHSpacing = ParseF32(value);
             }
             else if (key == k_relativeVSpacingKey)
             {
-                m_relativeVSpacing = Core::ParseF32(value);
+                m_relativeVSpacing = ParseF32(value);
             }
             else if (key == k_absoluteVSpacingKey)
             {
-                m_absoluteVSpacing = Core::ParseF32(value);
+                m_absoluteVSpacing = ParseF32(value);
             }
             else if (key == k_cellOrderKey)
             {
@@ -141,7 +141,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    GridLayoutDef::GridLayoutDef(GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins,
+    GridLayoutDef::GridLayoutDef(GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                   f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing)
         : m_cellOrder(in_cellOrder), m_numRows(in_numRows), m_numCols(in_numCols), m_relativeMargins(in_relMargins), m_absoluteMargins(in_absMargins), m_relativeHSpacing(in_relHorizSpacing),
           m_absoluteHSpacing(in_absHorizSpacing), m_relativeVSpacing(in_relVertSpacing), m_absoluteVSpacing(in_absVertSpacing)
@@ -149,7 +149,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool GridLayoutDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool GridLayoutDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (LayoutDef::InterfaceID == in_interfaceId || GridLayoutDef::InterfaceID == in_interfaceId);
     }
@@ -167,13 +167,13 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector4 GridLayoutDef::GetRelativeMargins() const
+    Vector4 GridLayoutDef::GetRelativeMargins() const
     {
         return m_relativeMargins;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector4 GridLayoutDef::GetAbsoluteMargins() const
+    Vector4 GridLayoutDef::GetAbsoluteMargins() const
     {
         return m_absoluteMargins;
     }

@@ -34,7 +34,7 @@
 #include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitterDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(ParticleEmitterDefFactory);
     //-----------------------------------------------------------------
@@ -45,7 +45,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    bool ParticleEmitterDefFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ParticleEmitterDefFactory::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleEmitterDefFactory::InterfaceID == in_interfaceId);
     }

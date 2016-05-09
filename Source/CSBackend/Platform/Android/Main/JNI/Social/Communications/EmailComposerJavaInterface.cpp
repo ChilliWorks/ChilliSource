@@ -102,7 +102,7 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		/// Is A
 		//--------------------------------------------------------------
-		bool EmailComposerJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
+		bool EmailComposerJavaInterface::IsA(ChilliSource::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == EmailComposerJavaInterface::InterfaceID);
 		}

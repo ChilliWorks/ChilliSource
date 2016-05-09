@@ -47,7 +47,7 @@ namespace CSBackend
         ///
         /// @author Ian Copland
         //----------------------------------------------------------------
-		class Screen final : public CSCore::Screen
+		class Screen final : public ChilliSource::Screen
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Screen);
@@ -60,7 +60,7 @@ namespace CSBackend
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//-----------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -69,7 +69,7 @@ namespace CSBackend
             /// this will be the current size of the window. For a mobile
             /// application this will be full size of the screen.
 			//-----------------------------------------------------------
-			const CSCore::Vector2& GetResolution() const override;
+			const ChilliSource::Vector2& GetResolution() const override;
             //-----------------------------------------------------------
             /// The density scale factor as reported by the device. What
             /// this factor relates to is platform dependant. On iOS it
@@ -95,14 +95,14 @@ namespace CSBackend
 			/// @return An event that is called when the screen resolution
             /// changes.
 			//-----------------------------------------------------------
-            CSCore::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
+            ChilliSource::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
 			//-----------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return An event that is called when the screen display
 			/// mode changes.
 			//-----------------------------------------------------------
-			CSCore::IConnectableEvent<DisplayModeChangedDelegate>& GetDisplayModeChangedEvent() override;
+			ChilliSource::IConnectableEvent<DisplayModeChangedDelegate>& GetDisplayModeChangedEvent() override;
 			//----------------------------------------------------------
 			/// Changes the size of the application window
 			///
@@ -110,7 +110,7 @@ namespace CSBackend
 			///
 			/// @param Screen size in pixels
 			//----------------------------------------------------------
-			void SetResolution(const CSCore::Integer2& in_size) override;
+			void SetResolution(const ChilliSource::Integer2& in_size) override;
 			//----------------------------------------------------------
 			/// Set the screen to fullscreen more or windowed mode
 			/// on platforms where that is allowed. This will include the
@@ -124,9 +124,9 @@ namespace CSBackend
 			///
 			/// @return A list of resolutions supported by the display
 			//----------------------------------------------------------
-			std::vector<CSCore::Integer2> GetSupportedResolutions() const override;
+			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const override;
         private:
-            friend CSCore::ScreenUPtr CSCore::Screen::Create();
+            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create();
             //-------------------------------------------------------
 			/// Private constructor to force the use of the Create()
             /// factory method.
@@ -152,7 +152,7 @@ namespace CSBackend
 			///
 			/// @param The new resolution.
 			//------------------------------------------------------------
-			void OnResolutionChanged(const CSCore::Integer2& in_resolution);
+			void OnResolutionChanged(const ChilliSource::Integer2& in_resolution);
 			//----------------------------------------------------------
 			/// Triggered when window display mode changes
 			///
@@ -172,13 +172,13 @@ namespace CSBackend
 			//------------------------------------------------
 			void OnDestroy() override;
             
-            CSCore::Vector2 m_resolution;
+            ChilliSource::Vector2 m_resolution;
             f32 m_densityScale;
             f32 m_invDensityScale;
-            CSCore::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
-			CSCore::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
-			CSCore::EventConnectionUPtr m_windowResizeConnection;
-			CSCore::EventConnectionUPtr m_displayModeChangeConnection;
+            ChilliSource::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
+			ChilliSource::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
+			ChilliSource::EventConnectionUPtr m_windowResizeConnection;
+			ChilliSource::EventConnectionUPtr m_displayModeChangeConnection;
         };
     }
 }

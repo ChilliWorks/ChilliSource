@@ -35,7 +35,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------
     /// Event style class that objects can connect to

@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A PrimitiveModelFactory is a factory for creating primitive models types
@@ -50,7 +50,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class PrimitiveModelFactory final : public Core::AppSystem
+    class PrimitiveModelFactory final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(PrimitiveModelFactory);
@@ -65,7 +65,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// Creates a new plane model perpendicular to the Y axis of the given size. If
         /// an identical plane already exists it will be returned instead of creating
@@ -79,7 +79,7 @@ namespace CS
         ///
         /// @return The plane model.
         //------------------------------------------------------------------------------
-        MeshCSPtr CreatePlane(const Core::Vector2& in_size, const Core::Vector2& in_textureRepeat = Core::Vector2::k_one) const;
+        MeshCSPtr CreatePlane(const Vector2& in_size, const Vector2& in_textureRepeat = Vector2::k_one) const;
         //------------------------------------------------------------------------------
         /// Creates a box model of the given size. If an identical box already exists
         /// it will be returned instead of creating a new instance.
@@ -94,10 +94,10 @@ namespace CS
         ///
         /// @return The plane model.
         //------------------------------------------------------------------------------
-        MeshCSPtr CreateBox(const Core::Vector3& in_size, const Core::Vector2& in_textureRepeat = Core::Vector2::k_one, bool in_flipNormals = false) const;
+        MeshCSPtr CreateBox(const Vector3& in_size, const Vector2& in_textureRepeat = Vector2::k_one, bool in_flipNormals = false) const;
         
     private:
-        friend class Core::Application;
+        friend class Application;
         //------------------------------------------------------------------------------
         /// A factory method for creating new instances of the system.
         ///

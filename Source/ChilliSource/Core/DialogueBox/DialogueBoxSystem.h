@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------
     /// A system used to display platform specific system

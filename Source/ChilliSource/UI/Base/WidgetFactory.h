@@ -34,7 +34,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------
     /// System that has convenience methods for creating
@@ -42,7 +42,7 @@ namespace CS
     ///
     /// @author S Downie
     //--------------------------------------------------------
-    class WidgetFactory final : public Core::AppSystem
+    class WidgetFactory final : public AppSystem
     {
     public:
         
@@ -55,7 +55,7 @@ namespace CS
         ///
         /// @return If the object is of the given interface type
         //---------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //---------------------------------------------------------------------------
         /// Register the given widget definition so it is accessible via its type name.
         /// This allows UI files to reference the definition by a readable name
@@ -172,7 +172,7 @@ namespace CS
         
     private:
         
-        friend class Core::Application;
+        friend class Application;
         //---------------------------------------------------------------------------
         /// Creation method used by application to instantiate
         /// the system

@@ -47,7 +47,7 @@ namespace CSBackend
         ///
         /// @author Ian Copland
         //------------------------------------------------------------
-        class PointerSystem final : public CSInput::PointerSystem
+        class PointerSystem final : public ChilliSource::PointerSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(PointerSystem);
@@ -61,7 +61,7 @@ namespace CSBackend
             ///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
 			/// Called when a touch down event is received.
             ///
@@ -70,7 +70,7 @@ namespace CSBackend
             /// @param The system Id of the touch.
             /// @param The touch location.
 			//----------------------------------------------------
-            void OnTouchDown(s32 in_systemId, const CSCore::Vector2& in_location);
+            void OnTouchDown(s32 in_systemId, const ChilliSource::Vector2& in_location);
             //----------------------------------------------------
 			/// Called when a touch moved event is received.
             ///
@@ -79,7 +79,7 @@ namespace CSBackend
             /// @param The system Id of the touch.
             /// @param The touch location.
 			//----------------------------------------------------
-			void OnTouchMoved(s32 in_systemId, const CSCore::Vector2& in_location);
+			void OnTouchMoved(s32 in_systemId, const ChilliSource::Vector2& in_location);
             //----------------------------------------------------
 			/// Called when a touch up event is received.
             ///
@@ -101,7 +101,7 @@ namespace CSBackend
             //----------------------------------------------------
             void ShowCursor() override {};
         private:
-            friend class CSInput::PointerSystem;
+            friend class ChilliSource::PointerSystem;
 
             //------------------------------------------------
             /// Default constructor. Declared private to force
@@ -130,8 +130,8 @@ namespace CSBackend
             //------------------------------------------------
             void OnDestroy() override;
 
-            CSCore::Screen* m_screen = nullptr;
-            std::unordered_map<s32, CSInput::Pointer::Id> m_systemIdToPointerIdMap;
+            ChilliSource::Screen* m_screen = nullptr;
+            std::unordered_map<s32, ChilliSource::Pointer::Id> m_systemIdToPointerIdMap;
         };
     }
 }

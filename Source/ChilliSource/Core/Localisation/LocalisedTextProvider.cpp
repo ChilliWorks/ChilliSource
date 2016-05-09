@@ -36,7 +36,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -59,7 +59,7 @@ namespace CS
             LocalisedText* textResource((LocalisedText*)out_resource.get());
             
             Json::Value jsonRoot;
-            if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
+            if (JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
             {
                 CS_LOG_ERROR("Cannot read cstext file: " + in_filePath);
                 textResource->SetLoadState(Resource::LoadState::k_failed);

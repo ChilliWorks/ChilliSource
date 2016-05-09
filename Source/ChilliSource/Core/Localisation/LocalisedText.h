@@ -34,7 +34,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------
     /// Holds a resource loaded from the master text for a particular language.

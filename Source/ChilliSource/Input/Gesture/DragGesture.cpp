@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -46,14 +46,14 @@ namespace CS
     {
         CS_ASSERT(m_requiredPointerCount > 0, "Cannot have a drag gesture with 0 required pointers.");
         
-        Core::Screen* screen = Core::Application::Get()->GetScreen();
+        Screen* screen = Application::Get()->GetScreen();
         m_minDisplacementSquared = (k_minDisplacement * screen->GetDensityScale()) * (k_minDisplacement * screen->GetDensityScale());
         
         m_pendingPointers.reserve(m_requiredPointerCount);
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    bool DragGesture::IsA(Core::InterfaceIDType in_gestureInterfaceId) const
+    bool DragGesture::IsA(InterfaceIDType in_gestureInterfaceId) const
     {
         return (Gesture::InterfaceID == in_gestureInterfaceId || DragGesture::InterfaceID == in_gestureInterfaceId);
     }
@@ -71,19 +71,19 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<DragGesture::Delegate>& DragGesture::GetDragStartedEvent()
+    IConnectableEvent<DragGesture::Delegate>& DragGesture::GetDragStartedEvent()
     {
         return m_dragStartedEvent;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<DragGesture::Delegate>& DragGesture::GetDragMovedEvent()
+    IConnectableEvent<DragGesture::Delegate>& DragGesture::GetDragMovedEvent()
     {
         return m_dragMovedEvent;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<DragGesture::Delegate>& DragGesture::GetDragEndedEvent()
+    IConnectableEvent<DragGesture::Delegate>& DragGesture::GetDragEndedEvent()
     {
         return m_dragEndedEvent;
     }
@@ -131,8 +131,8 @@ namespace CS
             {
                 SetActive(true);
                 m_currentDragInfo.m_position = CalculatePosition();
-                m_currentDragInfo.m_displacement = Core::Vector2::k_zero;
-                m_currentDragInfo.m_delta = Core::Vector2::k_zero;
+                m_currentDragInfo.m_displacement = Vector2::k_zero;
+                m_currentDragInfo.m_delta = Vector2::k_zero;
                 m_dragStartedEvent.NotifyConnections(this, m_currentDragInfo);
             }
             else
@@ -144,9 +144,9 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::Vector2 DragGesture::CalculatePosition() const
+    Vector2 DragGesture::CalculatePosition() const
     {
-        Core::Vector2 gesturePos = Core::Vector2::k_zero;
+        Vector2 gesturePos = Vector2::k_zero;
         if (m_pendingPointers.size() >= m_requiredPointerCount && IsActive() == true && m_paused == false)
         {
             for (const auto& pointer : m_pendingPointers)
@@ -176,11 +176,11 @@ namespace CS
         SetActive(false);
         m_paused = false;
         
-        m_currentDragInfo.m_delta = Core::Vector2::k_zero;
+        m_currentDragInfo.m_delta = Vector2::k_zero;
         m_dragEndedEvent.NotifyConnections(this, m_currentDragInfo);
         
-        m_currentDragInfo.m_displacement = Core::Vector2::k_zero;
-        m_currentDragInfo.m_position = Core::Vector2::k_zero;
+        m_currentDragInfo.m_displacement = Vector2::k_zero;
+        m_currentDragInfo.m_position = Vector2::k_zero;
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
@@ -219,7 +219,7 @@ namespace CS
                 {
                     pointer.m_currentPosition = in_pointer.GetPosition();
                     
-                    Core::Vector2 displacement = pointer.m_currentPosition - pointer.m_initialPosition;
+                    Vector2 displacement = pointer.m_currentPosition - pointer.m_initialPosition;
                     if (displacement.LengthSquared() > m_minDisplacementSquared)
                     {
                         pointer.m_isDrag = true;
@@ -242,7 +242,7 @@ namespace CS
                 }
                 else if (isActive == true)
                 {
-                    Core::Vector2 newPosition = CalculatePosition();
+                    Vector2 newPosition = CalculatePosition();
                     m_currentDragInfo.m_delta = newPosition - m_currentDragInfo.m_position;
                     m_currentDragInfo.m_displacement += m_currentDragInfo.m_delta;
                     m_currentDragInfo.m_position = newPosition;

@@ -35,7 +35,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------
     /// A gesture for receiving hold input events. Allows for
@@ -61,7 +61,7 @@ namespace CS
         /// activated.
         /// @param The position at which the tap occurred.
         //----------------------------------------------------
-        using Delegate = std::function<void(const HoldGesture*, const Core::Vector2&)>;
+        using Delegate = std::function<void(const HoldGesture*, const Vector2&)>;
         //----------------------------------------------------
         /// Constructor. Constructs the hold gesture with the
         /// given settings.
@@ -85,7 +85,7 @@ namespace CS
         /// @return Whether or not the gesture inteface is
         /// implemented.
         //----------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_gestureInterfaceId) const override;
+        bool IsA(InterfaceIDType in_gestureInterfaceId) const override;
         //----------------------------------------------------
         /// @author Ian Copland
         ///
@@ -105,7 +105,7 @@ namespace CS
         /// @return An event that can be used to listen for
         /// ocurrances of the gesture.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetHeldEvent();
+        IConnectableEvent<Delegate>& GetHeldEvent();
     private:
         //----------------------------------------------------
         /// Information on the initial state of a single
@@ -115,7 +115,7 @@ namespace CS
         //----------------------------------------------------
         struct PointerInfo final
         {
-            Core::Vector2 m_initialPosition;
+            Vector2 m_initialPosition;
             Pointer::Id m_pointerId;
         };
         //--------------------------------------------------------
@@ -165,7 +165,7 @@ namespace CS
         
         u32 m_requiredPointerCount;
         Pointer::InputType m_requiredInputType;
-        Core::Event<Delegate> m_heldEvent;
+        Event<Delegate> m_heldEvent;
         
         f32 m_maxDisplacementSquared = 0.0f;
         

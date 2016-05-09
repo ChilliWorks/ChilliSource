@@ -36,7 +36,7 @@
 #include <ChilliSource/UI/Drawable/Drawable.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -46,46 +46,46 @@ namespace CS
         const char k_barDirectionKey[] = "BarDirection";
         const char k_barWidgetName[] = "BarWidgetName";
         
-        const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
+        const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            {Core::PropertyTypes::Vector2(), k_relBarSizeKey},
-            {Core::PropertyTypes::Float(), k_progressKey},
+            {PropertyTypes::Vector2(), k_relBarSizeKey},
+            {PropertyTypes::Float(), k_progressKey},
             {PropertyTypes::ProgressBarType(), k_barTypeKey},
             {PropertyTypes::ProgressBarDirection(), k_barDirectionKey},
-            {Core::PropertyTypes::String(), k_barWidgetName}
+            {PropertyTypes::String(), k_barWidgetName}
         };
     }
     
     CS_DEFINE_NAMEDTYPE(ProgressBarComponent);
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const std::vector<Core::PropertyMap::PropertyDesc>& ProgressBarComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& ProgressBarComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    ProgressBarComponent::ProgressBarComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
+    ProgressBarComponent::ProgressBarComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName), m_relBarSize(1.0f, 1.0f)
     {
-        RegisterProperty<Core::Vector2>(Core::PropertyTypes::Vector2(), k_relBarSizeKey, CSCore::MakeDelegate(this, &ProgressBarComponent::GetRelativeBarSize), CSCore::MakeDelegate(this, &ProgressBarComponent::SetRelativeBarSize));
-        RegisterProperty<f32>(Core::PropertyTypes::Float(), k_progressKey, CSCore::MakeDelegate(this, &ProgressBarComponent::GetProgress), CSCore::MakeDelegate(this, &ProgressBarComponent::SetProgress));
-        RegisterProperty<ProgressBarType>(PropertyTypes::ProgressBarType(), k_barTypeKey, CSCore::MakeDelegate(this, &ProgressBarComponent::GetBarType), CSCore::MakeDelegate(this, &ProgressBarComponent::SetBarType));
-        RegisterProperty<ProgressBarDirection>(PropertyTypes::ProgressBarDirection(), k_barDirectionKey, CSCore::MakeDelegate(this, &ProgressBarComponent::GetBarDirection), CSCore::MakeDelegate(this, &ProgressBarComponent::SetBarDirection));
-        RegisterProperty<std::string>(Core::PropertyTypes::String(), k_barWidgetName, CSCore::MakeDelegate(this, &ProgressBarComponent::GetBarWidgetName), CSCore::MakeDelegate(this, &ProgressBarComponent::SetBarWidgetName));
+        RegisterProperty<Vector2>(PropertyTypes::Vector2(), k_relBarSizeKey, MakeDelegate(this, &ProgressBarComponent::GetRelativeBarSize), MakeDelegate(this, &ProgressBarComponent::SetRelativeBarSize));
+        RegisterProperty<f32>(PropertyTypes::Float(), k_progressKey, MakeDelegate(this, &ProgressBarComponent::GetProgress), MakeDelegate(this, &ProgressBarComponent::SetProgress));
+        RegisterProperty<ProgressBarType>(PropertyTypes::ProgressBarType(), k_barTypeKey, MakeDelegate(this, &ProgressBarComponent::GetBarType), MakeDelegate(this, &ProgressBarComponent::SetBarType));
+        RegisterProperty<ProgressBarDirection>(PropertyTypes::ProgressBarDirection(), k_barDirectionKey, MakeDelegate(this, &ProgressBarComponent::GetBarDirection), MakeDelegate(this, &ProgressBarComponent::SetBarDirection));
+        RegisterProperty<std::string>(PropertyTypes::String(), k_barWidgetName, MakeDelegate(this, &ProgressBarComponent::GetBarWidgetName), MakeDelegate(this, &ProgressBarComponent::SetBarWidgetName));
         ApplyRegisteredProperties(in_properties);
         
         CS_ASSERT(m_barWidgetName.empty() == false, "Bar widget name must be set on a progress bar component.");
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool ProgressBarComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ProgressBarComponent::IsA(InterfaceIDType in_interfaceId) const
     {
         return (UIComponent::InterfaceID == in_interfaceId || ProgressBarComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const Core::Vector2& ProgressBarComponent::GetRelativeBarSize() const
+    const Vector2& ProgressBarComponent::GetRelativeBarSize() const
     {
         return m_relBarSize;
     }
@@ -115,7 +115,7 @@ namespace CS
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::SetRelativeBarSize(const Core::Vector2& in_relSize)
+    void ProgressBarComponent::SetRelativeBarSize(const Vector2& in_relSize)
     {
         m_relBarSize = in_relSize;
         
@@ -177,12 +177,12 @@ namespace CS
     //-------------------------------------------------------------------
     void ProgressBarComponent::UpdateHorizontalBar()
     {
-        CSCore::Vector2 relBarPosition = CSCore::Vector2(0.5f * (1.0f - m_relBarSize.x), 0.0f);
-        CSCore::Vector2 relBarSize = m_relBarSize;
+        Vector2 relBarPosition = Vector2(0.5f * (1.0f - m_relBarSize.x), 0.0f);
+        Vector2 relBarSize = m_relBarSize;
         relBarSize.x *= m_progress;
         
-        m_barWidget->SetParentalAnchor(Rendering::AlignmentAnchor::k_middleLeft);
-        m_barWidget->SetOriginAnchor(Rendering::AlignmentAnchor::k_middleLeft);
+        m_barWidget->SetParentalAnchor(AlignmentAnchor::k_middleLeft);
+        m_barWidget->SetOriginAnchor(AlignmentAnchor::k_middleLeft);
         m_barWidget->SetRelativePosition(relBarPosition);
         m_barWidget->SetRelativeSize(relBarSize);
         
@@ -192,24 +192,24 @@ namespace CS
             
             if (m_barDrawableComponent->GetDrawable() != nullptr)
             {
-                m_barDrawableComponent->GetDrawable()->SetUVs(Rendering::UVs(0.0f, 0.0f, m_progress, 1.0f));
+                m_barDrawableComponent->GetDrawable()->SetUVs(UVs(0.0f, 0.0f, m_progress, 1.0f));
             }
         }
         else if (m_barDrawableComponent != nullptr && m_barDrawableComponent->GetDrawable() != nullptr)
         {
-            m_barDrawableComponent->GetDrawable()->SetUVs(Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f));
+            m_barDrawableComponent->GetDrawable()->SetUVs(UVs(0.0f, 0.0f, 1.0f, 1.0f));
         }
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
     void ProgressBarComponent::UpdateVerticalBar()
     {
-        CSCore::Vector2 relBarPosition = CSCore::Vector2(0.0f, 0.5f * (1.0f - m_relBarSize.y));
-        CSCore::Vector2 relBarSize = m_relBarSize;
+        Vector2 relBarPosition = Vector2(0.0f, 0.5f * (1.0f - m_relBarSize.y));
+        Vector2 relBarSize = m_relBarSize;
         relBarSize.y *= m_progress;
         
-        m_barWidget->SetParentalAnchor(Rendering::AlignmentAnchor::k_bottomCentre);
-        m_barWidget->SetOriginAnchor(Rendering::AlignmentAnchor::k_bottomCentre);
+        m_barWidget->SetParentalAnchor(AlignmentAnchor::k_bottomCentre);
+        m_barWidget->SetOriginAnchor(AlignmentAnchor::k_bottomCentre);
         m_barWidget->SetRelativePosition(relBarPosition);
         m_barWidget->SetRelativeSize(relBarSize);
         
@@ -219,12 +219,12 @@ namespace CS
             
             if (m_barDrawableComponent->GetDrawable() != nullptr)
             {
-                m_barDrawableComponent->GetDrawable()->SetUVs(Rendering::UVs(0.0f, 1.0f - m_progress, 1.0f, m_progress));
+                m_barDrawableComponent->GetDrawable()->SetUVs(UVs(0.0f, 1.0f - m_progress, 1.0f, m_progress));
             }
         }
         else if (m_barDrawableComponent != nullptr && m_barDrawableComponent->GetDrawable() != nullptr)
         {
-            m_barDrawableComponent->GetDrawable()->SetUVs(Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f));
+            m_barDrawableComponent->GetDrawable()->SetUVs(UVs(0.0f, 0.0f, 1.0f, 1.0f));
         }
     }
     //-------------------------------------------------------------------

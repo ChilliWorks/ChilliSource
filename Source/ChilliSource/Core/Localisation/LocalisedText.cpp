@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(LocalisedText);
 

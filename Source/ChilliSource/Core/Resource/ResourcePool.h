@@ -42,7 +42,7 @@
 #include <mutex>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------------
     /// System that allows the loading and caching of resources. Resource can be loaded
@@ -535,7 +535,7 @@ namespace CS
         {
             ResourceSPtr& resource(resourceEntry.second);
             
-            if(resource->GetStorageLocation() != CSCore::StorageLocation::k_none)
+            if(resource->GetStorageLocation() != StorageLocation::k_none)
             {
                 //Find a provider that can load this resource
                 ResourceProvider* provider = FindProvider(resource->GetFilePath(), desc);

@@ -39,7 +39,7 @@
 #include <mutex>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// A container for particle effect data that needs to be shared across
@@ -61,10 +61,10 @@ namespace CS
         struct Particle final
         {
             bool m_isActive = false;
-            Core::Vector3 m_position;
-            Core::Vector2 m_scale = Core::Vector2::k_zero;
+            Vector3 m_position;
+            Vector2 m_scale = Vector2::k_zero;
             f32 m_rotation = 0.0f;
-            Core::Colour m_colour = Core::Colour::k_white;
+            Colour m_colour = Colour::k_white;
         };
         //-----------------------------------------------------------------
         /// Constructor
@@ -103,7 +103,7 @@ namespace CS
         /// is in world or local space is determined by the simulation space
         /// of a particle.
         //-----------------------------------------------------------------
-        Core::AABB GetAABB() const;
+        AABB GetAABB() const;
         //-----------------------------------------------------------------
         /// This is thread-safe, lock doesn't need to be called first.
         ///
@@ -113,7 +113,7 @@ namespace CS
         /// not this is in world or local space is determined by the 
         /// simulation space of a particle.
         //-----------------------------------------------------------------
-        Core::Sphere GetBoundingSphere() const;
+        Sphere GetBoundingSphere() const;
         //-----------------------------------------------------------------
         /// Locks the container so other threads cannot update it while
         /// accessing the new indices and particle list.
@@ -144,7 +144,7 @@ namespace CS
         ///
         /// @param The particle list.
         //-----------------------------------------------------------------
-        const Core::dynamic_array<ConcurrentParticleData::Particle>& GetParticles() const;
+        const dynamic_array<ConcurrentParticleData::Particle>& GetParticles() const;
         //-----------------------------------------------------------------
         /// Unlocks the container. This should be called as soon as possible
         /// after dealing with data that needs to be locked.
@@ -165,13 +165,13 @@ namespace CS
         /// @param The obb.
         /// @param The bounding sphere.
         //-----------------------------------------------------------------
-        void CommitParticleData(const Core::dynamic_array<Rendering::Particle>* in_particles, const std::vector<u32>& in_newIndices, const Core::AABB& in_aabb, const Core::Sphere& in_boundingSphere);
+        void CommitParticleData(const dynamic_array<ChilliSource::Particle>* in_particles, const std::vector<u32>& in_newIndices, const AABB& in_aabb, const Sphere& in_boundingSphere);
     private:
 
-        Core::dynamic_array<ConcurrentParticleData::Particle> m_particles;
+        dynamic_array<ConcurrentParticleData::Particle> m_particles;
         std::vector<u32> m_newParticleIndices;
-        Core::AABB m_aabb;
-        Core::Sphere m_boundingSphere;
+        AABB m_aabb;
+        Sphere m_boundingSphere;
         bool m_updating = false;
         bool m_activeParticles = false;
         

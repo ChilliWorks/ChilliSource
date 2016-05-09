@@ -35,18 +35,18 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(StandardDrawable);
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    StandardDrawable::StandardDrawable(const Rendering::TextureCSPtr& in_texture)
+    StandardDrawable::StandardDrawable(const TextureCSPtr& in_texture)
     {
         SetTexture(in_texture);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    StandardDrawable::StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId)
+    StandardDrawable::StandardDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId)
     {
         CS_ASSERT(in_atlas != nullptr, "The given texture atlas cannot be null.");
         CS_ASSERT(in_atlas->HasFrameWithId(in_atlasId) == true, "The texture atlas id \"" + in_atlasId + "\" must exist in the atlas.");
@@ -57,19 +57,19 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    bool StandardDrawable::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool StandardDrawable::IsA(InterfaceIDType in_interfaceId) const
     {
         return (Drawable::InterfaceID == in_interfaceId || StandardDrawable::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::TextureCSPtr& StandardDrawable::GetTexture() const
+    const TextureCSPtr& StandardDrawable::GetTexture() const
     {
         return m_texture;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::TextureAtlasCSPtr& StandardDrawable::GetTextureAtlas() const
+    const TextureAtlasCSPtr& StandardDrawable::GetTextureAtlas() const
     {
         return m_atlas;
     }
@@ -81,19 +81,19 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::UVs& StandardDrawable::GetUVs() const
+    const UVs& StandardDrawable::GetUVs() const
     {
         return m_uvs;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Core::Colour& StandardDrawable::GetColour() const
+    const Colour& StandardDrawable::GetColour() const
     {
         return m_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
+    void StandardDrawable::SetTexture(const TextureCSPtr& in_texture)
     {
         CS_ASSERT(in_texture != nullptr, "Cannot set a null texture on a drawable.");
         
@@ -103,7 +103,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
+    void StandardDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
     {
         m_atlas = in_atlas;
         m_atlasId = "";
@@ -122,7 +122,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetUVs(const Rendering::UVs& in_UVs)
+    void StandardDrawable::SetUVs(const UVs& in_UVs)
     {
         m_uvs = in_UVs;
         
@@ -130,31 +130,31 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetColour(const Core::Colour& in_colour)
+    void StandardDrawable::SetColour(const Colour& in_colour)
     {
         m_colour = in_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 StandardDrawable::GetPreferredSize() const
+    Vector2 StandardDrawable::GetPreferredSize() const
     {
         return m_atlasFrame.m_originalSize;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
+    void StandardDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
         CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot draw without texture");
         
         //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the box.
-        Core::Vector2 offsetTL
+        Vector2 offsetTL
         (
             (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x,
             (m_atlasFrame.m_originalSize.y * 0.5f) - (m_atlasFrame.m_croppedSize.y * 0.5f) - m_atlasFrame.m_offset.y
         );
         offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
-        Core::Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
+        Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
         
-        in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour * m_colour, Rendering::AlignmentAnchor::k_middleCentre);
+        in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour * m_colour, AlignmentAnchor::k_middleCentre);
     }
 }

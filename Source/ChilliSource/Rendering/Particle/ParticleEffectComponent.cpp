@@ -48,7 +48,7 @@
 #include <limits>
 #include <tuple>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -63,13 +63,13 @@ namespace CS
             ParticleEffectCSPtr m_particleEffect;
             ParticleEmitterSPtr m_particleEmitter;
             std::vector<ParticleAffectorSPtr> m_particleAffectors;
-            std::shared_ptr<Core::dynamic_array<Particle>> m_particleArray;
+            std::shared_ptr<dynamic_array<Particle>> m_particleArray;
             ConcurrentParticleDataSPtr m_concurrentParticleData;
             f32 m_playbackTime = 0.0f;
             f32 m_deltaTime = 0.0f; 
-            Core::Vector3 m_entityPosition;
-            Core::Vector3 m_entityScale;
-            Core::Quaternion m_entityOrientation;
+            Vector3 m_entityPosition;
+            Vector3 m_entityScale;
+            Quaternion m_entityOrientation;
             bool m_interpolateEmission = false;
         };
         //----------------------------------------------------------------
@@ -101,10 +101,10 @@ namespace CS
         /// 
         /// @return a pair containing the AABB and the Bounding Sphere.
         //----------------------------------------------------------------
-        std::pair<Core::AABB, Core::Sphere> CalculateBoundingShapes(const ParticleEffect* in_particleEffect, const Core::dynamic_array<Particle>* in_particleArray)
+        std::pair<AABB, Sphere> CalculateBoundingShapes(const ParticleEffect* in_particleEffect, const dynamic_array<Particle>* in_particleArray)
         {
-            Core::Vector3 min = CSCore::Vector3(std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max());
-            Core::Vector3 max = CSCore::Vector3(-std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max());
+            Vector3 min = Vector3(std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max());
+            Vector3 max = Vector3(-std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max());
 
             bool anyActive = false;
             for (const auto& particle : *in_particleArray)
@@ -131,14 +131,14 @@ namespace CS
 
             if (anyActive == false)
             {
-                min = CSCore::Vector3::k_zero;
-                max = CSCore::Vector3::k_zero;
+                min = Vector3::k_zero;
+                max = Vector3::k_zero;
             }
 
-            Core::Vector3 size = max - min;
-            Core::Vector3 centre = min + 0.5f * size;
+            Vector3 size = max - min;
+            Vector3 centre = min + 0.5f * size;
 
-            return std::make_pair(Core::AABB(centre, size), Core::Sphere(centre, size.Length() * 0.5f));
+            return std::make_pair(AABB(centre, size), Sphere(centre, size.Length() * 0.5f));
         }
         //----------------------------------------------------------------
         /// Updates the particles on a background thread. This will emit
@@ -214,7 +214,7 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    bool ParticleEffectComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ParticleEffectComponent::IsA(InterfaceIDType in_interfaceId) const
     {
         return (RenderComponent::InterfaceID == in_interfaceId || ParticleEffectComponent::InterfaceID == in_interfaceId);
     }
@@ -222,7 +222,7 @@ namespace CS
     //-------------------------------------------------------
     ParticleEffectCSPtr ParticleEffectComponent::GetParticleEffect() const
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
 
         return m_particleEffect;
     }
@@ -230,7 +230,7 @@ namespace CS
     //-------------------------------------------------------
     ParticleEffectComponent::PlaybackType ParticleEffectComponent::GetPlaybackType() const
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the playback type of a particle effect on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the playback type of a particle effect on the main thread.");
 
         return m_playbackType;
     }
@@ -238,7 +238,7 @@ namespace CS
     //-------------------------------------------------------
     bool ParticleEffectComponent::IsPlaying() const
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is playing on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is playing on the main thread.");
 
         return (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping);
     }
@@ -246,33 +246,33 @@ namespace CS
     //-------------------------------------------------------
     bool ParticleEffectComponent::IsEmitting() const
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is emitting on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is emitting on the main thread.");
 
         return (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing);
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    const Core::AABB& ParticleEffectComponent::GetAABB()
+    const AABB& ParticleEffectComponent::GetAABB()
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
 
         UpdateWorldBoundingShapes();
         return mBoundingBox;
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    const Core::OOBB& ParticleEffectComponent::GetOOBB()
+    const OOBB& ParticleEffectComponent::GetOOBB()
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
 
         UpdateWorldBoundingShapes();
         return mOBBoundingBox;
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    const Core::Sphere& ParticleEffectComponent::GetBoundingSphere()
+    const Sphere& ParticleEffectComponent::GetBoundingSphere()
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
 
         UpdateWorldBoundingShapes();
         return mBoundingSphere;
@@ -281,7 +281,7 @@ namespace CS
     //-------------------------------------------------------
     void ParticleEffectComponent::SetParticleEffect(const ParticleEffectCSPtr& in_particleEffect)
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Particle Effect type must be set on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Particle Effect type must be set on the main thread.");
 
         m_particleEffect = in_particleEffect;
 
@@ -296,7 +296,7 @@ namespace CS
     //-------------------------------------------------------
     void ParticleEffectComponent::SetPlaybackType(PlaybackType in_playbackType)
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play back type must be set on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play back type must be set on the main thread.");
 
         m_playbackType = in_playbackType;
     }
@@ -304,7 +304,7 @@ namespace CS
     //-------------------------------------------------------
     void ParticleEffectComponent::Play()
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play must be called on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play must be called on the main thread.");
         CS_ASSERT((m_playbackState == PlaybackState::k_notPlaying || m_playbackState == PlaybackState::k_stopping), "Cannot play a particle effect when it is already playing.");
 
         if (m_playbackState == PlaybackState::k_notPlaying)
@@ -322,15 +322,15 @@ namespace CS
         m_firstFrame = true;
 
         //reset the bounding shapes.
-        m_localAABB = Core::AABB();
-        m_localBoundingSphere = Core::Sphere();
+        m_localAABB = AABB();
+        m_localBoundingSphere = Sphere();
         m_invalidateBoundingShapeCache = true;
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
     void ParticleEffectComponent::Stop()
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
         CS_ASSERT((m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_stopping), "Cannot stop a particle effect when it is already stopped.");
 
         if (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing)
@@ -344,7 +344,7 @@ namespace CS
     //-------------------------------------------------------
     void ParticleEffectComponent::StopEmitting()
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop Emitting must be called on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop Emitting must be called on the main thread.");
         CS_ASSERT((m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_starting), "Cannot stop a particle effect emitting when it is not emitting.");
 
         m_playbackTimer = m_particleEffect->GetDuration();
@@ -353,17 +353,17 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Core::IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEvent()
+    IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEvent()
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Event on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Event on the main thread.");
 
         return m_finishedEvent;
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Core::IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEmittingEvent()
+    IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEmittingEvent()
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Emitting Event on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Emitting Event on the main thread.");
 
         return m_finishedEmittingEvent;
     }
@@ -377,7 +377,7 @@ namespace CS
         {
             ValidateParticleEffect(m_particleEffect);
 
-            m_particleArray = std::make_shared<Core::dynamic_array<Particle>>(m_particleEffect->GetMaxParticles());
+            m_particleArray = std::make_shared<dynamic_array<Particle>>(m_particleEffect->GetMaxParticles());
             m_concurrentParticleData = std::make_shared<ConcurrentParticleData>(m_particleEffect->GetMaxParticles());
 
             m_drawable = m_particleEffect->GetDrawableDef()->CreateInstance(GetEntity(), m_concurrentParticleData.get());
@@ -398,8 +398,8 @@ namespace CS
             mpMaterial = m_particleEffect->GetDrawableDef()->GetMaterial();
 
             //reset the bounding shapes.
-            m_localAABB = Core::AABB();
-            m_localBoundingSphere = Core::Sphere();
+            m_localAABB = AABB();
+            m_localBoundingSphere = Sphere();
             m_invalidateBoundingShapeCache = true;
         }
     }
@@ -434,20 +434,20 @@ namespace CS
             if (m_particleEffect != nullptr && m_particleEffect->GetSimulationSpace() == ParticleEffect::SimulationSpace::k_world)
             {
                 mBoundingBox = m_localAABB;
-                mOBBoundingBox = Core::OOBB(m_localAABB.GetOrigin(), m_localAABB.GetSize());
-                mOBBoundingBox.SetTransform(Core::Matrix4::k_identity);
+                mOBBoundingBox = OOBB(m_localAABB.GetOrigin(), m_localAABB.GetSize());
+                mOBBoundingBox.SetTransform(Matrix4::k_identity);
                 mBoundingSphere = m_localBoundingSphere;
             }
             else
             {
-                const Core::Matrix4& worldMatrix = GetEntity()->GetTransform().GetWorldTransform();
+                const Matrix4& worldMatrix = GetEntity()->GetTransform().GetWorldTransform();
 
                 //OBB is the AABB with the entity transform.
-                mOBBoundingBox = Core::OOBB(m_localAABB.GetOrigin(), m_localAABB.GetSize());
+                mOBBoundingBox = OOBB(m_localAABB.GetOrigin(), m_localAABB.GetSize());
                 mOBBoundingBox.SetTransform(worldMatrix);
 
                 //transform the 8 points of the AABB into world space and recalculate.
-                std::vector<Core::Vector3> points;
+                std::vector<Vector3> points;
                 points.push_back(m_localAABB.BackBottomLeft() * worldMatrix);
                 points.push_back(m_localAABB.BackBottomRight() * worldMatrix);
                 points.push_back(m_localAABB.BackTopLeft() * worldMatrix);
@@ -457,8 +457,8 @@ namespace CS
                 points.push_back(m_localAABB.FrontTopLeft() * worldMatrix);
                 points.push_back(m_localAABB.FrontTopRight() * worldMatrix);
 
-                Core::Vector3 min = CSCore::Vector3(std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max());
-                Core::Vector3 max = CSCore::Vector3(-std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max());
+                Vector3 min = Vector3(std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max());
+                Vector3 max = Vector3(-std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max());
                 for (auto& point : points)
                 {
                     if (point.x < min.x)
@@ -476,13 +476,13 @@ namespace CS
                         max.z = point.z;
                 }
 
-                Core::Vector3 size = max - min;
-                Core::Vector3 centre = min + 0.5f * size;
+                Vector3 size = max - min;
+                Vector3 centre = min + 0.5f * size;
 
-                mBoundingBox = Core::AABB(centre, size);
+                mBoundingBox = AABB(centre, size);
 
                 //bounding sphere encapsulates the AABB.
-                mBoundingSphere = Core::Sphere(centre, size.Length() * 0.5f);
+                mBoundingSphere = Sphere(centre, size.Length() * 0.5f);
             }
 
             m_invalidateBoundingShapeCache = false;
@@ -494,7 +494,7 @@ namespace CS
     {
         PrepareParticleEffect();
 
-        m_entityTransformConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &ParticleEffectComponent::OnEntityTransformChanged));
+        m_entityTransformConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &ParticleEffectComponent::OnEntityTransformChanged));
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
@@ -539,7 +539,7 @@ namespace CS
             {
                 particle.m_isActive = false;
             }
-            m_concurrentParticleData->CommitParticleData(m_particleArray.get(), std::vector<u32>(), Core::AABB(), Core::Sphere());
+            m_concurrentParticleData->CommitParticleData(m_particleArray.get(), std::vector<u32>(), AABB(), Sphere());
 
             m_playbackState = PlaybackState::k_playing;
             UpdatePlayingState(in_deltaTime);
@@ -588,7 +588,7 @@ namespace CS
             desc.m_entityScale = GetEntity()->GetTransform().GetWorldScale();
             desc.m_entityOrientation = GetEntity()->GetTransform().GetWorldOrientation();
             desc.m_interpolateEmission = (m_firstFrame == false);
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_small, [=](const Core::TaskContext&) noexcept
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_small, [=](const TaskContext&) noexcept
             {
                 ParticleUpdateTask(desc);
             });
@@ -624,7 +624,7 @@ namespace CS
                 desc.m_entityScale = GetEntity()->GetTransform().GetWorldScale();
                 desc.m_entityOrientation = GetEntity()->GetTransform().GetWorldOrientation();
                 desc.m_interpolateEmission = (m_firstFrame == false);
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_small, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_small, [=](const TaskContext&) noexcept
                 {
                     ParticleUpdateTask(desc);
                 });

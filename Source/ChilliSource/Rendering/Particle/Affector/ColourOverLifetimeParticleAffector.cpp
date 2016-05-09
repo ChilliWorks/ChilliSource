@@ -33,7 +33,7 @@
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffectorDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -46,19 +46,19 @@ namespace CS
         //----------------------------------------------------------------
         f32 Clamp(f32 in_value)
         {
-            return CSCore::MathUtils::Clamp(in_value, 0.0f, 1.0f);
+            return MathUtils::Clamp(in_value, 0.0f, 1.0f);
         }
     }
     
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ColourOverLifetimeParticleAffector::ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
+    ColourOverLifetimeParticleAffector::ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, dynamic_array<Particle>* in_particleArray)
     :ParticleAffector(in_affectorDef, in_particleArray)
     ,m_particleColourData(0)
     {
         m_colourOverLifetimeAffectorDef = static_cast<const ColourOverLifetimeParticleAffectorDef*>(in_affectorDef);
         m_intermediateParticles = static_cast<u32>(m_colourOverLifetimeAffectorDef->GetIntermediateColours().size());
-        m_particleColourData = std::move(Core::dynamic_array<ColourData>(in_particleArray->size() * (2 + m_intermediateParticles)));
+        m_particleColourData = std::move(dynamic_array<ColourData>(in_particleArray->size() * (2 + m_intermediateParticles)));
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace CS
     {
         const auto& interpolation = m_colourOverLifetimeAffectorDef->GetInterpolation();
         
-        Core::dynamic_array<Particle>* particleArray = GetParticleArray();
+        dynamic_array<Particle>* particleArray = GetParticleArray();
         for (u32 i = 0; i < particleArray->size(); ++i)
         {
             Particle& particle = particleArray->at(i);

@@ -50,7 +50,7 @@
 #include <mutex>
 #include <unordered_set>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
     /// The Widget class that holds the components for laying out, rendering and manipulating
@@ -120,7 +120,7 @@ namespace CS
         ///
         /// @return New size with function applied
         //----------------------------------------------------------------------------------------
-        using SizePolicyDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
+        using SizePolicyDelegate = std::function<Vector2(const Vector2&, const Vector2&)>;
         //----------------------------------------------------------------------------------------
         /// Delegate for standard input events such as pressed and released.
         ///
@@ -130,7 +130,7 @@ namespace CS
         /// @param The pointer.
         /// @param The input that triggered the event
         //----------------------------------------------------------------------------------------
-        using InputDelegate = std::function<void(Widget*, const Input::Pointer&, Input::Pointer::InputType)>;
+        using InputDelegate = std::function<void(Widget*, const Pointer&, Pointer::InputType)>;
         //----------------------------------------------------------------------------------------
         /// Delegate for moving input events.
         ///
@@ -139,13 +139,13 @@ namespace CS
         /// @param Widget that the input event occurred on
         /// @param The pointer
         //----------------------------------------------------------------------------------------
-        using InputMovedDelegate = std::function<void(Widget*, const Input::Pointer&)>;
+        using InputMovedDelegate = std::function<void(Widget*, const Pointer&)>;
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The list of properties supported by widget
         //----------------------------------------------------------------------------------------
-        static std::vector<Core::PropertyMap::PropertyDesc> GetPropertyDescs();
+        static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
         //----------------------------------------------------------------------------------------
         /// Event triggered when a pointer is pressed inside the widget
         ///
@@ -153,7 +153,7 @@ namespace CS
         ///
         /// @return Connectable event
         //----------------------------------------------------------------------------------------
-        Core::IConnectableEvent<InputDelegate>& GetPressedInsideEvent();
+        IConnectableEvent<InputDelegate>& GetPressedInsideEvent();
         //----------------------------------------------------------------------------------------
         /// Event triggered when a pointer is released inside the widget if it was originally pressed
         /// within the widget.
@@ -164,7 +164,7 @@ namespace CS
         ///
         /// @return Connectable event
         //----------------------------------------------------------------------------------------
-        Core::IConnectableEvent<InputDelegate>& GetReleasedInsideEvent();
+        IConnectableEvent<InputDelegate>& GetReleasedInsideEvent();
         //----------------------------------------------------------------------------------------
         /// Event triggered when a pointer is released outside the widget if it was originally pressed within
         /// the widget
@@ -173,7 +173,7 @@ namespace CS
         ///
         /// @return Connectable event
         //----------------------------------------------------------------------------------------
-        Core::IConnectableEvent<InputDelegate>& GetReleasedOutsideEvent();
+        IConnectableEvent<InputDelegate>& GetReleasedOutsideEvent();
         //----------------------------------------------------------------------------------------
         /// Event triggered when a pointer is moved outwith the widget having previously been
         /// within it
@@ -182,7 +182,7 @@ namespace CS
         ///
         /// @return Connectable event
         //----------------------------------------------------------------------------------------
-        Core::IConnectableEvent<InputMovedDelegate>& GetMoveExitedEvent();
+        IConnectableEvent<InputMovedDelegate>& GetMoveExitedEvent();
         //----------------------------------------------------------------------------------------
         /// Event triggered when a pointer is moved inside the widget have previously been outwith it
         ///
@@ -190,7 +190,7 @@ namespace CS
         ///
         /// @return Connectable event
         //----------------------------------------------------------------------------------------
-        Core::IConnectableEvent<InputMovedDelegate>& GetMoveEnteredEvent();
+        IConnectableEvent<InputMovedDelegate>& GetMoveEnteredEvent();
         //----------------------------------------------------------------------------------------
         /// Event triggered when a pointer is moved within the widget if it was originally pressed
         /// within the widget while one or more of the input buttons are down
@@ -199,7 +199,7 @@ namespace CS
         ///
         /// @return Connectable event
         //----------------------------------------------------------------------------------------
-        Core::IConnectableEvent<InputMovedDelegate>& GetDraggedInsideEvent();
+        IConnectableEvent<InputMovedDelegate>& GetDraggedInsideEvent();
         //----------------------------------------------------------------------------------------
         /// Event triggered when a pointer is moved outwith the widget if it was originally pressed
         /// within the widget and while one or more of the input buttons are down
@@ -208,7 +208,7 @@ namespace CS
         ///
         /// @return Connectable event
         //----------------------------------------------------------------------------------------
-        Core::IConnectableEvent<InputMovedDelegate>& GetDraggedOutsideEvent();
+        IConnectableEvent<InputMovedDelegate>& GetDraggedOutsideEvent();
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -229,13 +229,13 @@ namespace CS
         ///
         /// @param Percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
         //----------------------------------------------------------------------------------------
-        void SetRelativeSize(const Core::Vector2& in_size);
+        void SetRelativeSize(const Vector2& in_size);
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetLocalRelativeSize() const;
+        Vector2 GetLocalRelativeSize() const;
         //----------------------------------------------------------------------------------------
         /// Set the size of the widget in pixels
         ///
@@ -243,13 +243,13 @@ namespace CS
         ///
         /// @param Size in pixels
         //----------------------------------------------------------------------------------------
-        void SetAbsoluteSize(const Core::Vector2& in_size);
+        void SetAbsoluteSize(const Vector2& in_size);
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Size in pixels
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetLocalAbsoluteSize() const;
+        Vector2 GetLocalAbsoluteSize() const;
         //----------------------------------------------------------------------------------------
         /// The default preferred size is used in cases when there is no drawable to query for its
         /// preferred size. The preferred size is used to maintain aspect ratio depending on the
@@ -259,7 +259,7 @@ namespace CS
         ///
         /// @param The preferred size of the widget in absolutes
         //----------------------------------------------------------------------------------------
-        void SetDefaultPreferredSize(const Core::Vector2& in_size);
+        void SetDefaultPreferredSize(const Vector2& in_size);
         //----------------------------------------------------------------------------------------
         /// Set the function that will be used to alter the size in order to maintain the
         /// aspect ratio of the widget. This is usually based on the drawable image size and aspect
@@ -283,13 +283,13 @@ namespace CS
         ///
         /// @param Offset as percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
         //----------------------------------------------------------------------------------------
-        void SetRelativePosition(const Core::Vector2& in_pos);
+        void SetRelativePosition(const Vector2& in_pos);
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Offset as percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetLocalRelativePosition() const;
+        Vector2 GetLocalRelativePosition() const;
         //----------------------------------------------------------------------------------------
         /// Set the position of the widget from the parental anchor in pixels
         ///
@@ -297,13 +297,13 @@ namespace CS
         ///
         /// @param Position in pixels from parent anchor
         //----------------------------------------------------------------------------------------
-        void SetAbsolutePosition(const Core::Vector2& in_pos);
+        void SetAbsolutePosition(const Vector2& in_pos);
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Position in pixels from parent anchor
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetLocalAbsolutePosition() const;
+        Vector2 GetLocalAbsolutePosition() const;
         //----------------------------------------------------------------------------------------
         /// Move the position of the widget from the parental anchor by the given percentages
         /// of the parent height and width
@@ -312,7 +312,7 @@ namespace CS
         ///
         /// @param Offset as percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
         //----------------------------------------------------------------------------------------
-        void RelativeMoveBy(const Core::Vector2& in_translate);
+        void RelativeMoveBy(const Vector2& in_translate);
         //----------------------------------------------------------------------------------------
         /// Move the position of the widget from the parental anchor by the given pixels
         ///
@@ -320,7 +320,7 @@ namespace CS
         ///
         /// @param Translation in pixels
         //----------------------------------------------------------------------------------------
-        void AbsoluteMoveBy(const Core::Vector2& in_translate);
+        void AbsoluteMoveBy(const Vector2& in_translate);
         //----------------------------------------------------------------------------------------
         /// Rotate the widget about its origin by the given radians
         ///
@@ -350,7 +350,7 @@ namespace CS
         ///
         /// @param Scaler width and height
         //----------------------------------------------------------------------------------------
-        void ScaleBy(const Core::Vector2& in_scale);
+        void ScaleBy(const Vector2& in_scale);
         //----------------------------------------------------------------------------------------
         /// Scale the widgets current size about its origin to the given scaler
         ///
@@ -358,13 +358,13 @@ namespace CS
         ///
         /// @param Scaler width and height
         //----------------------------------------------------------------------------------------
-        void ScaleTo(const Core::Vector2& in_scale);
+        void ScaleTo(const Vector2& in_scale);
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Local scale X Y
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetLocalScale() const;
+        Vector2 GetLocalScale() const;
         //----------------------------------------------------------------------------------------
         /// Set the alignment anchor of the widget to its parent i.e. if the anchor is middle
         /// centre then the origin of the widget will be at the middle centre of the parent
@@ -373,13 +373,13 @@ namespace CS
         ///
         /// @param Alignment anchor
         //----------------------------------------------------------------------------------------
-        void SetParentalAnchor(Rendering::AlignmentAnchor in_anchor);
+        void SetParentalAnchor(AlignmentAnchor in_anchor);
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Alignment anchor
         //----------------------------------------------------------------------------------------
-        Rendering::AlignmentAnchor GetParentalAnchor() const;
+        AlignmentAnchor GetParentalAnchor() const;
         //----------------------------------------------------------------------------------------
         /// Sets the anchor to which the widget's origin position is aligned. The widgets origin
         /// is the position which the object is rendered and at the position arround which it will
@@ -389,7 +389,7 @@ namespace CS
         ///
         /// @param The alignment anchor
         //----------------------------------------------------------------------------------------
-        void SetOriginAnchor(Rendering::AlignmentAnchor in_anchor);
+        void SetOriginAnchor(AlignmentAnchor in_anchor);
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -397,7 +397,7 @@ namespace CS
         /// is the position which the object is rendered and at the position arround which it will
         /// be rotated.
         //----------------------------------------------------------------------------------------
-        Rendering::AlignmentAnchor GetOriginAnchor() const;
+        AlignmentAnchor GetOriginAnchor() const;
         //----------------------------------------------------------------------------------------
         /// Sets the widget origin's absolute position. The widgets origin is the position which
         /// the object is rendered and at the position arround which it will  be rotated. This
@@ -407,7 +407,7 @@ namespace CS
         ///
         /// @param The origin's absolute position.
         //----------------------------------------------------------------------------------------
-        void SetOriginAbsolutePosition(const Core::Vector2& in_position);
+        void SetOriginAbsolutePosition(const Vector2& in_position);
         //----------------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -415,7 +415,7 @@ namespace CS
         /// the object is rendered and at the position arround which it will  be rotated. This
         /// position is relative to the Origin Anchor.
         //----------------------------------------------------------------------------------------
-        const Core::Vector2& GetOriginAbsolutePosition() const;
+        const Vector2& GetOriginAbsolutePosition() const;
         //----------------------------------------------------------------------------------------
         /// Sets the widget origin's relative position. The widgets origin is the position which
         /// the object is rendered and at the position arround which it will  be rotated. This
@@ -425,7 +425,7 @@ namespace CS
         ///
         /// @param The origin's relative position.
         //----------------------------------------------------------------------------------------
-        void SetOriginRelativePosition(const Core::Vector2& in_position);
+        void SetOriginRelativePosition(const Vector2& in_position);
         //----------------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -433,7 +433,7 @@ namespace CS
         /// the object is rendered and at the position arround which it will  be rotated. This
         /// position is relative to the Origin Anchor.
         //----------------------------------------------------------------------------------------
-        const Core::Vector2& GetOriginRelativePosition() const;
+        const Vector2& GetOriginRelativePosition() const;
         //----------------------------------------------------------------------------------------
         /// Set the colour that is multiplied into the widget. Widgets inherit their parent's
         /// colour.
@@ -442,13 +442,13 @@ namespace CS
         ///
         /// @param Colour
         //----------------------------------------------------------------------------------------
-        void SetColour(const Core::Colour& in_colour);
+        void SetColour(const Colour& in_colour);
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Local colour
         //----------------------------------------------------------------------------------------
-        Core::Colour GetLocalColour() const;
+        Colour GetLocalColour() const;
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -727,7 +727,7 @@ namespace CS
         ///
         /// @return Screen space position of the origin in pixels
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetFinalPosition() const;
+        Vector2 GetFinalPosition() const;
         //----------------------------------------------------------------------------------------
         /// Calculate the screen space position of the centre of the object object based on the
         /// local position, local alignment to parent, local alignment to origin and the parents
@@ -741,7 +741,7 @@ namespace CS
         ///
         /// @return Screen space position of the centre of the object in pixels
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetFinalPositionOfCentre() const;
+        Vector2 GetFinalPositionOfCentre() const;
         //----------------------------------------------------------------------------------------
         /// Calculate the screen space size of the object based on the local size and the
         /// parent size.
@@ -754,7 +754,7 @@ namespace CS
         ///
         /// @return Screen space size in pixels
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetFinalSize() const;
+        Vector2 GetFinalSize() const;
         //----------------------------------------------------------------------------------------
         /// Returns the size of the rectange this widget will be positioned and sized relative to.
         /// This will either be the size of the parent or the size of the cell within the parents
@@ -769,14 +769,14 @@ namespace CS
         /// @return The screen space size that relative positions and size are relative to.
         /// This is in pixels.
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetRelativeReferenceSize() const;
+        Vector2 GetRelativeReferenceSize() const;
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The preferred size of the widget based on the current drawable or the
         /// fallback value if there is no drawable
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetPreferredSize() const;
+        Vector2 GetPreferredSize() const;
         //----------------------------------------------------------------------------------------
         /// Calculate the rotation of the object based on the local rotation and the
         /// parent rotation.
@@ -794,7 +794,7 @@ namespace CS
         ///
         /// @return Final scale
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetFinalScale() const;
+        Vector2 GetFinalScale() const;
         //----------------------------------------------------------------------------------------
         /// Calculate the colour of the object based on the local colour and the
         /// parent colour.
@@ -803,7 +803,7 @@ namespace CS
         ///
         /// @return Final colour
         //----------------------------------------------------------------------------------------
-        Core::Colour GetFinalColour() const;
+        Colour GetFinalColour() const;
         //----------------------------------------------------------------------------------------
         /// Set the value of the property with the given name. If no property exists
         /// with the name then it will assert.
@@ -844,7 +844,7 @@ namespace CS
         ///
         /// @return Whther the widget contains the point
         //----------------------------------------------------------------------------------------
-        bool Contains(const Core::Vector2& in_point) const;
+        bool Contains(const Vector2& in_point) const;
         //----------------------------------------------------------------------------------------
         /// Converts the input screen space point to local space relative to the given alignment
         /// anchor. As this requires the final transform of the widget this will assert if the
@@ -857,7 +857,7 @@ namespace CS
         ///
         /// @return The local space position relative to the given anchor.
         //----------------------------------------------------------------------------------------
-        Core::Vector2 ToLocalSpace(const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor) const;
+        Vector2 ToLocalSpace(const Vector2& in_point, AlignmentAnchor in_alignmentAnchor) const;
         //------------------------------------------------------------------------------
         /// Invalidates all caches, ensuring the transform for the widget and its
         /// children are re-calculated the next time it is rendered.
@@ -886,7 +886,7 @@ namespace CS
         /// @param The list of internal children.
         /// @param The list of internal children property links.
         //----------------------------------------------------------------------------------------
-        Widget(const Core::PropertyMap& in_properties, std::vector<UIComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+        Widget(const PropertyMap& in_properties, std::vector<UIComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
                const std::vector<PropertyLink>& in_childPropertyLinks);
         //----------------------------------------------------------------------------------------
         /// Initialises the internal mapping to base properties. This allows base properties,
@@ -932,7 +932,7 @@ namespace CS
         ///
         /// @param The property map.
         //----------------------------------------------------------------------------------------
-        void InitPropertyValues(const Core::PropertyMap& in_propertyMap);
+        void InitPropertyValues(const PropertyMap& in_propertyMap);
         //----------------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -975,7 +975,7 @@ namespace CS
         ///
         /// @return Local transformation matrix
         //----------------------------------------------------------------------------------------
-        Core::Matrix3 GetLocalTransform() const;
+        Matrix3 GetLocalTransform() const;
         //----------------------------------------------------------------------------------------
         /// Calculate the transform matrix of the object based on the local transform and the
         /// parent transform.
@@ -984,7 +984,7 @@ namespace CS
         ///
         /// @return Screen space transformation matrix
         //----------------------------------------------------------------------------------------
-        Core::Matrix3 GetFinalTransform() const;
+        Matrix3 GetFinalTransform() const;
         //----------------------------------------------------------------------------------------
         /// Calculates the position on the widget's origin in Local Render space, combining the
         /// relative and absolute components of the local position. Local Render space is relative
@@ -1000,7 +1000,7 @@ namespace CS
         ///
         /// @return The position in local render space. This is in pixels.
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetLocalRenderSpaceCombinedPosition() const;
+        Vector2 GetLocalRenderSpaceCombinedPosition() const;
         //----------------------------------------------------------------------------------------
         /// Calculates the local position of the origin, combining the relative and absolute
         /// components of the origin position. This is relative to the origin anchor point. This
@@ -1016,7 +1016,7 @@ namespace CS
         ///
         /// @return Position of the origin anchor in local space. This is in pixels.
         //----------------------------------------------------------------------------------------
-        Core::Vector2 GetLocalOriginCombinedPosition() const;
+        Vector2 GetLocalOriginCombinedPosition() const;
         //----------------------------------------------------------------------------------------
         /// Calculates the reference size of the given child widget. This will be either the size
         /// of the cell in the layout the child is in, or the size of this if there is no layout.
@@ -1030,7 +1030,7 @@ namespace CS
         ///
         /// @return The reference size in absolute screen space pixels.
         //----------------------------------------------------------------------------------------
-        Core::Vector2 CalculateRelativeReferenceSizeForChild(const Widget* in_child);
+        Vector2 CalculateRelativeReferenceSizeForChild(const Widget* in_child);
         //----------------------------------------------------------------------------------------
         /// Returns the layout and index into that layout for the given children.
         ///
@@ -1052,7 +1052,7 @@ namespace CS
         /// @param The property name.
         /// @param The property used to set the value.
         //----------------------------------------------------------------------------------------
-        void SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property);
+        void SetProperty(const std::string& in_propertyName, const IProperty* in_property);
         //------------------------------------------------------------------------------
         /// Checks the given pointer and updates the contained pointer set accordingly.
         /// If the pointer has changed state a pointer entered or exited event will be
@@ -1065,7 +1065,7 @@ namespace CS
         ///
         /// @param in_pointer - The pointer to check.
         //------------------------------------------------------------------------------
-        void UpdateContainedPointer(const Input::Pointer& in_pointer);
+        void UpdateContainedPointer(const Pointer& in_pointer);
         //------------------------------------------------------------------------------
         /// Removes the given pointer from the contained pointer set if it is present.
         /// If removed, the pointer exited event will be fired.
@@ -1077,7 +1077,7 @@ namespace CS
         ///
         /// @param in_pointer - The pointer to check.
         //------------------------------------------------------------------------------
-        void RemoveContainedPointer(const Input::Pointer& in_pointer);
+        void RemoveContainedPointer(const Pointer& in_pointer);
         //------------------------------------------------------------------------------
         /// Checks all existing pointers and updates the contained pointer set
         /// accordingly. For each pointer which has changed state a pointer exited or
@@ -1111,7 +1111,7 @@ namespace CS
         ///
         /// @return Whether or not the pointer is within the bounds.
         //------------------------------------------------------------------------------
-        bool IsContainedPointer(const Input::Pointer& in_pointer);
+        bool IsContainedPointer(const Pointer& in_pointer);
         //----------------------------------------------------------------------------------------
         /// Called when the parent transform changes forcing this to update its caches
         ///
@@ -1149,7 +1149,7 @@ namespace CS
         ///
         /// @param Canvas renderer
         //----------------------------------------------------------------------------------------
-        void OnDraw(Rendering::CanvasRenderer* in_renderer);
+        void OnDraw(CanvasRenderer* in_renderer);
         //----------------------------------------------------------------------------------------
         /// Backgrounds the widget, its components and its children. This is called when the widget
         /// is removed from the canvas and every time the state that owns the canvas is backgrounded
@@ -1174,7 +1174,7 @@ namespace CS
         /// @param in_pointer - The new pointer which was added.
         /// @param in_timestamp - The time the new pointer was added.
         //------------------------------------------------------------------------------
-        void OnPointerAdded(const Input::Pointer& in_pointer, f64 in_timestamp);
+        void OnPointerAdded(const Pointer& in_pointer, f64 in_timestamp);
         //------------------------------------------------------------------------------
         /// Called when the canvas receives cursor/touch input
         ///
@@ -1186,7 +1186,7 @@ namespace CS
         /// @param in_filter - Filter object to check if the event has been filtered or
         /// to filter it
         //------------------------------------------------------------------------------
-        void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, InputFilter& in_filter);
+        void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, InputFilter& in_filter);
         //------------------------------------------------------------------------------
         /// Called when the canvas receives cursor/touch move input
         ///
@@ -1195,7 +1195,7 @@ namespace CS
         /// @param in_pointer - The pointer
         /// @param in_timestamp - The timestamp.
         //------------------------------------------------------------------------------
-        void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
+        void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp);
         //-----------------------------------------------------------
         /// Called when the canvas receiving cursor/touch release input
         ///
@@ -1205,7 +1205,7 @@ namespace CS
         /// @param in_timestamp - The timestamp.
         /// @param in_inputType - The input type.
         //------------------------------------------------------------------------------
-        void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
+        void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType);
         //------------------------------------------------------------------------------
         /// Called whenever an existing pointer is removed from the canvas.
         ///
@@ -1214,42 +1214,42 @@ namespace CS
         /// @param in_pointer - The new pointer which was removed.
         /// @param in_timestamp - The time the pointer was removed.
         //------------------------------------------------------------------------------
-        void OnPointerRemoved(const Input::Pointer& in_pointer, f64 in_timestamp);
+        void OnPointerRemoved(const Pointer& in_pointer, f64 in_timestamp);
         
     private:
         
-        std::unordered_map<std::string, CSCore::IPropertyUPtr> m_baseProperties;
+        std::unordered_map<std::string, IPropertyUPtr> m_baseProperties;
         std::unordered_map<std::string, std::pair<UIComponent*, std::string>> m_componentPropertyLinks;
         std::unordered_map<std::string, std::pair<Widget*, std::string>> m_childPropertyLinks;
         
-        std::unordered_map<Input::Pointer::Id, std::set<Input::Pointer::InputType>> m_pressedInput;
-        std::unordered_set<Input::Pointer::Id> m_containedPointers;
+        std::unordered_map<Pointer::Id, std::set<Pointer::InputType>> m_pressedInput;
+        std::unordered_set<Pointer::Id> m_containedPointers;
         
-        Core::Event<InputDelegate> m_pressedInsideEvent;
-        Core::Event<InputDelegate> m_releasedInsideEvent;
-        Core::Event<InputDelegate> m_releasedOutsideEvent;
-        Core::Event<InputMovedDelegate> m_moveExitedEvent;
-        Core::Event<InputMovedDelegate> m_moveEnteredEvent;
-        Core::Event<InputMovedDelegate> m_draggedInsideEvent;
-        Core::Event<InputMovedDelegate> m_draggedOutsideEvent;
+        Event<InputDelegate> m_pressedInsideEvent;
+        Event<InputDelegate> m_releasedInsideEvent;
+        Event<InputDelegate> m_releasedOutsideEvent;
+        Event<InputMovedDelegate> m_moveExitedEvent;
+        Event<InputMovedDelegate> m_moveEnteredEvent;
+        Event<InputMovedDelegate> m_draggedInsideEvent;
+        Event<InputMovedDelegate> m_draggedOutsideEvent;
         
-        Core::UnifiedVector2 m_localPosition;
-        Core::UnifiedVector2 m_localSize = Core::UnifiedVector2(1.0f, 1.0f, 0.0f, 0.0f);
-        Core::Vector2 m_preferredSize = Core::Vector2::k_one;
-        Core::Vector2 m_localScale = Core::Vector2::k_one;
-        Core::Colour m_localColour;
+        UnifiedVector2 m_localPosition;
+        UnifiedVector2 m_localSize = UnifiedVector2(1.0f, 1.0f, 0.0f, 0.0f);
+        Vector2 m_preferredSize = Vector2::k_one;
+        Vector2 m_localScale = Vector2::k_one;
+        Colour m_localColour;
         f32 m_localRotation = 0.0f;
         
-        mutable Core::Matrix3 m_cachedLocalTransform;
-        mutable Core::Matrix3 m_cachedFinalTransform;
-        mutable Core::Vector2 m_cachedFinalPosition;
-        mutable Core::Vector2 m_cachedFinalSize;
+        mutable Matrix3 m_cachedLocalTransform;
+        mutable Matrix3 m_cachedFinalTransform;
+        mutable Vector2 m_cachedFinalPosition;
+        mutable Vector2 m_cachedFinalSize;
         
         SizePolicy m_sizePolicy = SizePolicy::k_none;
         SizePolicyDelegate m_sizePolicyDelegate;
         
-        Core::concurrent_vector<WidgetUPtr> m_internalChildren;
-        Core::concurrent_vector<WidgetSPtr> m_children;
+        concurrent_vector<WidgetUPtr> m_internalChildren;
+        concurrent_vector<WidgetSPtr> m_children;
         
         std::string m_name;
         
@@ -1260,9 +1260,9 @@ namespace CS
         Widget* m_parent = nullptr;
         const Widget* m_canvas = nullptr;
         
-        Rendering::AlignmentAnchor m_parentalAnchor = Rendering::AlignmentAnchor::k_middleCentre;
-        Rendering::AlignmentAnchor m_originAnchor = Rendering::AlignmentAnchor::k_middleCentre;
-        Core::UnifiedVector2 m_originPosition;
+        AlignmentAnchor m_parentalAnchor = AlignmentAnchor::k_middleCentre;
+        AlignmentAnchor m_originAnchor = AlignmentAnchor::k_middleCentre;
+        UnifiedVector2 m_originPosition;
         
         bool m_isVisible = true;
         bool m_isSubviewClippingEnabled = false;
@@ -1274,14 +1274,14 @@ namespace CS
         mutable bool m_isLocalSizeCacheValid = false;
         mutable bool m_isParentSizeCacheValid = false;
 
-        Core::Screen* m_screen = nullptr;
-        Input::PointerSystem* m_pointerSystem = nullptr;
+        Screen* m_screen = nullptr;
+        PointerSystem* m_pointerSystem = nullptr;
     };
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
     template <typename TComponentType> TComponentType* Widget::GetComponent()
     {
-        return Core::ConstMethodCast(this, &Widget::GetComponent<TComponentType>);
+        return ConstMethodCast(this, &Widget::GetComponent<TComponentType>);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -1302,12 +1302,12 @@ namespace CS
     template<typename TType> void Widget::SetProperty(const std::string& in_name, TType&& in_value)
     {
         std::string lowerName = in_name;
-        Core::StringUtils::ToLowerCase(lowerName);
+        StringUtils::ToLowerCase(lowerName);
         
         auto basePropIt = m_baseProperties.find(lowerName);
         if(basePropIt != m_baseProperties.end())
         {
-            auto property = CS_SMARTCAST(Core::Property<TType>*, basePropIt->second.get(), "Incorrect type for property with name: " + in_name);
+            auto property = CS_SMARTCAST(Property<TType>*, basePropIt->second.get(), "Incorrect type for property with name: " + in_name);
             property->Set(std::forward<TType>(in_value));
             return;
         }
@@ -1333,12 +1333,12 @@ namespace CS
     template<typename TType> TType Widget::GetProperty(const std::string& in_name) const
     {
         std::string lowerName = in_name;
-        Core::StringUtils::ToLowerCase(lowerName);
+        StringUtils::ToLowerCase(lowerName);
         
         auto basePropIt = m_baseProperties.find(lowerName);
         if(basePropIt != m_baseProperties.end())
         {
-            auto property = CS_SMARTCAST(Core::Property<TType>*, basePropIt->second.get(), "Incorrect type for property with name: " + in_name);
+            auto property = CS_SMARTCAST(Property<TType>*, basePropIt->second.get(), "Incorrect type for property with name: " + in_name);
             return property->Get();
         }
         

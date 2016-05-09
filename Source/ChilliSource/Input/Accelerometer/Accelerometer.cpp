@@ -36,7 +36,7 @@
 #include <CSBackend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Accelerometer);
     //----------------------------------------------------

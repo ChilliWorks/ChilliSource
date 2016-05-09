@@ -40,7 +40,7 @@
 #include <set>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A system that provides a generic API for working with pointer devices.
@@ -48,7 +48,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class PointerSystem : public Core::AppSystem
+    class PointerSystem : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(PointerSystem);
@@ -106,7 +106,7 @@ namespace CS
         /// @param in_timestamp - The timestamp of the event.
         /// @param in_delta - The scroll vector (x, y delta)
         //------------------------------------------------------------------------------
-        using PointerScrollDelegate = std::function<void(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta)>;
+        using PointerScrollDelegate = std::function<void(const Pointer& in_pointer, f64 in_timestamp, const Vector2& in_delta)>;
         //------------------------------------------------------------------------------
         /// A delegate that is used to receive pointer removal events.
         ///
@@ -132,7 +132,7 @@ namespace CS
         ///
         /// @return The pointer added event.
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerAddedDelegate>& GetPointerAddedEvent();
+        IConnectableEvent<PointerAddedDelegate>& GetPointerAddedEvent();
         //------------------------------------------------------------------------------
         /// Event that is triggered when the pointer is first down.
         ///
@@ -140,7 +140,7 @@ namespace CS
         ///
         /// @return The pointer down event.
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerDownDelegate>& GetPointerDownEvent();
+        IConnectableEvent<PointerDownDelegate>& GetPointerDownEvent();
         //------------------------------------------------------------------------------
         /// Event that is triggered when the pointer moves.
         ///
@@ -148,7 +148,7 @@ namespace CS
         ///
         /// @return The pointer moved event.
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerMovedDelegate>& GetPointerMovedEvent();
+        IConnectableEvent<PointerMovedDelegate>& GetPointerMovedEvent();
         //------------------------------------------------------------------------------
         /// Event that is triggered when the pointer is first up having been down.
         ///
@@ -156,7 +156,7 @@ namespace CS
         ///
         /// @return The pointer up event.
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerUpDelegate>& GetPointerUpEvent();
+        IConnectableEvent<PointerUpDelegate>& GetPointerUpEvent();
         //------------------------------------------------------------------------------
         /// Event that is triggered when the scroll wheel ticks.
         ///
@@ -164,7 +164,7 @@ namespace CS
         ///
         /// @return The event triggered on scroll change (i.e. mouse wheel scroll).
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerScrollDelegate>& GetPointerScrollEvent();
+        IConnectableEvent<PointerScrollDelegate>& GetPointerScrollEvent();
         //------------------------------------------------------------------------------
         /// Event that is triggered when the pointer is first down.
         ///
@@ -175,7 +175,7 @@ namespace CS
         ///
         /// @return The pointer down event.
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerDownDelegate>& GetPointerDownEventFiltered();
+        IConnectableEvent<PointerDownDelegate>& GetPointerDownEventFiltered();
         //------------------------------------------------------------------------------
         /// Event that is triggered when the pointer is first up having been down.
         ///
@@ -186,7 +186,7 @@ namespace CS
         ///
         /// @return The pointer up event.
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerUpDelegate>& GetPointerUpEventFiltered();
+        IConnectableEvent<PointerUpDelegate>& GetPointerUpEventFiltered();
         //------------------------------------------------------------------------------
         /// Event that is triggered when the scroll wheel ticks.
         ///
@@ -197,7 +197,7 @@ namespace CS
         ///
         /// @return The event triggered on scroll change (i.e. mouse wheel scroll).
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerScrollDelegate>& GetPointerScrollEventFiltered();
+        IConnectableEvent<PointerScrollDelegate>& GetPointerScrollEventFiltered();
         //------------------------------------------------------------------------------
         /// An event that is called whenever an existing pointer is removed.
         ///
@@ -209,7 +209,7 @@ namespace CS
         ///
         /// @return The pointer removed event.
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerRemovedDelegate>& GetPointerRemovedEvent();
+        IConnectableEvent<PointerRemovedDelegate>& GetPointerRemovedEvent();
         //------------------------------------------------------------------------------
         /// Tries to get the pointer with the given unique Id.
         ///
@@ -285,7 +285,7 @@ namespace CS
         ///
         /// @return The unique Id of the new pointer.
         //------------------------------------------------------------------------------
-        Pointer::Id AddPointerCreateEvent(const Core::Vector2& in_position);
+        Pointer::Id AddPointerCreateEvent(const Vector2& in_position);
         //------------------------------------------------------------------------------
         /// Adds a new pointer down event.
         ///
@@ -307,7 +307,7 @@ namespace CS
         /// @param in_pointerUniqueId - The unique Id of the pointer.
         /// @param in_position - The position it has moved to.
         //------------------------------------------------------------------------------
-        void AddPointerMovedEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_position);
+        void AddPointerMovedEvent(Pointer::Id in_pointerUniqueId, const Vector2& in_position);
         //------------------------------------------------------------------------------
         /// Adds a new pointer up event.
         ///
@@ -329,7 +329,7 @@ namespace CS
         /// @param in_pointerUniqueId - The unique Id of the pointer.
         /// @param in_delta - The scroll delta in the x-y plane
         //------------------------------------------------------------------------------
-        void AddPointerScrollEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_delta);
+        void AddPointerScrollEvent(Pointer::Id in_pointerUniqueId, const Vector2& in_delta);
         //------------------------------------------------------------------------------
         /// Adds a new remove pointer event.
         ///
@@ -349,9 +349,9 @@ namespace CS
         void RemoveAllPointers();
         
     private:
-        friend class Core::Application;
+        friend class Application;
         friend class GestureSystem;
-        friend class UI::Canvas;
+        friend class Canvas;
         //------------------------------------------------------------------------------
         /// Creates a new platform specific instance of pointer system.
         ///
@@ -383,7 +383,7 @@ namespace CS
         {
             PointerEventType m_type;
             Pointer::Id m_pointerUniqueId;
-            Core::Vector2 m_position;
+            Vector2 m_position;
             Pointer::InputType m_InputType;
             f64 m_timestamp;
         };
@@ -396,7 +396,7 @@ namespace CS
         /// @param in_timestamp - The timestamp of the creation event.
         /// @param in_initialPosition - The initial position.
         //------------------------------------------------------------------------------
-        void CreatePointer(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_initialPosition);
+        void CreatePointer(Pointer::Id in_uniqueId, f64 in_timestamp, const Vector2& in_initialPosition);
         //------------------------------------------------------------------------------
         /// Notifies listeners that the pointer with the given unique id is down.
         ///
@@ -417,7 +417,7 @@ namespace CS
         /// @param in_timestamp - The timestamp.
         /// @param in_newPosition - The new position.
         //------------------------------------------------------------------------------
-        void PointerMoved(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition);
+        void PointerMoved(Pointer::Id in_uniqueId, f64 in_timestamp, const Vector2& in_newPosition);
         //------------------------------------------------------------------------------
         /// Notifies listeners that the pointer with the given unique id is up.
         ///
@@ -438,7 +438,7 @@ namespace CS
         /// @param in_timestamp - The timestamp.
         /// @param in_delta - The scroll delta.
         //------------------------------------------------------------------------------
-        void PointerScrolled(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_delta);
+        void PointerScrolled(Pointer::Id in_uniqueId, f64 in_timestamp, const Vector2& in_delta);
         //------------------------------------------------------------------------------
         /// Removes the pointer with the given Id.
         ///
@@ -479,7 +479,7 @@ namespace CS
         /// @param in_delta - The scroll vector (x, y delta)
         /// @param in_filter - Filter
         //------------------------------------------------------------------------------
-        using PointerScrollDelegateInternal = std::function<void(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, InputFilter& in_filter)>;
+        using PointerScrollDelegateInternal = std::function<void(const Pointer& in_pointer, f64 in_timestamp, const Vector2& in_delta, InputFilter& in_filter)>;
         //------------------------------------------------------------------------------
         /// Event that is triggered when the pointer is first down.
         ///
@@ -487,7 +487,7 @@ namespace CS
         ///
         /// @return The pointer down event.
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerDownDelegateInternal>& GetPointerDownEventInternal();
+        IConnectableEvent<PointerDownDelegateInternal>& GetPointerDownEventInternal();
         //------------------------------------------------------------------------------
         /// Event that is triggered when the scroll wheel ticks.
         ///
@@ -495,21 +495,21 @@ namespace CS
         ///
         /// @return The event triggered on scroll change (i.e. mouse wheel scroll).
         //------------------------------------------------------------------------------
-        Core::IConnectableEvent<PointerScrollDelegateInternal>& GetPointerScrollEventInternal();
+        IConnectableEvent<PointerScrollDelegateInternal>& GetPointerScrollEventInternal();
         
-        Core::Event<PointerAddedDelegate> m_pointerAddedEvent;
-        Core::Event<PointerDownDelegate> m_pointerDownEvent;
-        Core::Event<PointerMovedDelegate> m_pointerMovedEvent;
-        Core::Event<PointerUpDelegate> m_pointerUpEvent;
-        Core::Event<PointerScrollDelegate> m_pointerScrolledEvent;
-        Core::Event<PointerRemovedDelegate> m_pointerRemovedEvent;
+        Event<PointerAddedDelegate> m_pointerAddedEvent;
+        Event<PointerDownDelegate> m_pointerDownEvent;
+        Event<PointerMovedDelegate> m_pointerMovedEvent;
+        Event<PointerUpDelegate> m_pointerUpEvent;
+        Event<PointerScrollDelegate> m_pointerScrolledEvent;
+        Event<PointerRemovedDelegate> m_pointerRemovedEvent;
         
-        Core::Event<PointerDownDelegate> m_pointerDownEventFiltered;
-        Core::Event<PointerUpDelegate> m_pointerUpEventFiltered;
-        Core::Event<PointerScrollDelegate> m_pointerScrolledEventFiltered;
+        Event<PointerDownDelegate> m_pointerDownEventFiltered;
+        Event<PointerUpDelegate> m_pointerUpEventFiltered;
+        Event<PointerScrollDelegate> m_pointerScrolledEventFiltered;
         
-        Core::Event<PointerDownDelegateInternal> m_pointerDownEventInternal;
-        Core::Event<PointerScrollDelegateInternal> m_pointerScrolledEventInternal;
+        Event<PointerDownDelegateInternal> m_pointerDownEventInternal;
+        Event<PointerScrollDelegateInternal> m_pointerScrolledEventInternal;
         
         std::mutex m_mutex;
         std::vector<Pointer> m_pointers;

@@ -41,7 +41,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -59,9 +59,9 @@ namespace CS
         ///
         /// @return The 3D Transform.
         //------------------------------------------------------
-        template <typename TType> Core::GenericMatrix4<TType> Convert2DTransformTo3D(const Core::GenericMatrix3<TType>& in_transform)
+        template <typename TType> GenericMatrix4<TType> Convert2DTransformTo3D(const GenericMatrix3<TType>& in_transform)
         {
-            return Core::GenericMatrix4<TType>(
+            return GenericMatrix4<TType>(
                 in_transform.m[0], in_transform.m[1], in_transform.m[2], 0,
                 in_transform.m[3], in_transform.m[4], in_transform.m[5], 0,
                 0, 0, 1, 0,
@@ -77,7 +77,7 @@ namespace CS
         /// @param The absolute character spacing offset.
         /// @param The text scale factor.
         //----------------------------------------------------------------------------
-        f32 GetCharacterWidth(Core::UTF8Char in_character, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale)
+        f32 GetCharacterWidth(UTF8Char in_character, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale)
         {
             Font::CharacterInfo charInfo;
             if(in_font->TryGetCharacterInfo(in_character, charInfo) == true)
@@ -94,7 +94,7 @@ namespace CS
         ///
         /// @return Whether the character can safely be line broken on.
         //----------------------------------------------------------------------------
-        bool IsBreakableCharacter(Core::UTF8Char in_character)
+        bool IsBreakableCharacter(UTF8Char in_character)
         {
             return in_character == ' ' || in_character == '\t' || in_character == '\n' || in_character == '-';
         }
@@ -115,7 +115,7 @@ namespace CS
             
             while(in_itStart < in_itEnd)
             {
-                auto nextCharacter = Core::UTF8StringUtils::Next(in_itStart);
+                auto nextCharacter = UTF8StringUtils::Next(in_itStart);
                 if (IsBreakableCharacter(nextCharacter) == true)
                 {
                     break;
@@ -141,11 +141,11 @@ namespace CS
             std::string line;
             while(it < in_text.end())
             {
-                auto character = Core::UTF8StringUtils::Next(it);
+                auto character = UTF8StringUtils::Next(it);
 
                 if(character != '\n')
                 {
-                    Core::UTF8StringUtils::Append(character, line);
+                    UTF8StringUtils::Append(character, line);
                 }
                 else
                 {
@@ -173,7 +173,7 @@ namespace CS
         /// @param Bounds
         /// @param [Out] Array of lines split to fit in bounds
         //----------------------------------------------------------------------------
-        void SplitByBounds(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale, const Core::Vector2& in_bounds, CanvasRenderer::WrappedText& out_lines)
+        void SplitByBounds(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale, const Vector2& in_bounds, CanvasRenderer::WrappedText& out_lines)
         {
             f32 maxLineWidth = in_bounds.x;
 
@@ -183,7 +183,7 @@ namespace CS
 
             while(it < in_text.end())
             {
-                auto character = Core::UTF8StringUtils::Next(it);
+                auto character = UTF8StringUtils::Next(it);
                 f32 characterWidth = GetCharacterWidth(character, in_font, in_absCharSpacingOffset, in_textScale);
                 
                 //If we come across a character on which we can wrap we need
@@ -203,11 +203,11 @@ namespace CS
                         //whitespace. To ensure this we want to jump the cursor forward to find
                         //the next non-breakable character.
                         auto nextIt = it;
-                        Core::UTF8Char nextCharacter = Core::UTF8StringUtils::Next(nextIt);
+                        UTF8Char nextCharacter = UTF8StringUtils::Next(nextIt);
                         while (IsBreakableCharacter(nextCharacter) == true)
                         {
                             it = nextIt;
-                            nextCharacter = Core::UTF8StringUtils::Next(nextIt);
+                            nextCharacter = UTF8StringUtils::Next(nextIt);
                         }
                         
                         continue;
@@ -224,7 +224,7 @@ namespace CS
                 }
                 
                 currentLineWidth += characterWidth;
-                Core::UTF8StringUtils::Append(character, line);
+                UTF8StringUtils::Append(character, line);
             }
 
             if(line.size() > 0)
@@ -247,7 +247,7 @@ namespace CS
         ///
         /// @return Display characer info
         //----------------------------------------------------------------------------
-        CanvasRenderer::DisplayCharacterInfo BuildCharacter(Core::UTF8Char in_character, const FontCSPtr& in_font, f32 in_cursorX, f32 in_cursorY, f32 in_textScale, f32 in_absCharSpacingOffset)
+        CanvasRenderer::DisplayCharacterInfo BuildCharacter(UTF8Char in_character, const FontCSPtr& in_font, f32 in_cursorX, f32 in_cursorY, f32 in_textScale, f32 in_absCharSpacingOffset)
         {
             CanvasRenderer::DisplayCharacterInfo result;
 
@@ -350,12 +350,12 @@ namespace CS
         /// @param Alignment
         /// @param [Out] Sprite
         //-----------------------------------------------------
-        void UpdateSpriteData(const Core::Matrix4& in_transform, const Core::Vector2& in_size, const Core::Vector2& in_offset, const Rendering::UVs& in_UVs, const Core::Colour& in_colour, AlignmentAnchor in_alignment,
+        void UpdateSpriteData(const Matrix4& in_transform, const Vector2& in_size, const Vector2& in_offset, const UVs& in_UVs, const Colour& in_colour, AlignmentAnchor in_alignment,
                               SpriteBatch::SpriteData& out_sprite)
         {
             const f32 k_nearClipDistance = 2.0f;
 
-            Core::ByteColour Col = Core::ColourUtils::ColourToByteColour(in_colour);
+            ByteColour Col = ColourUtils::ColourToByteColour(in_colour);
             
             out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = Col;
             out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = Col;
@@ -371,15 +371,15 @@ namespace CS
             out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
             out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = in_UVs.m_v + in_UVs.m_t;
 
-            Core::Vector2 vHalfSize(in_size.x * 0.5f, in_size.y * 0.5f);
-            Core::Vector2 anchorPoint = GetAnchorPoint(in_alignment, vHalfSize);
+            Vector2 vHalfSize(in_size.x * 0.5f, in_size.y * 0.5f);
+            Vector2 anchorPoint = GetAnchorPoint(in_alignment, vHalfSize);
 
-            Core::Vector4 vCentrePos(-anchorPoint.x, -anchorPoint.y, 0, 0);
-            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
+            Vector4 vCentrePos(-anchorPoint.x, -anchorPoint.y, 0, 0);
+            Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
             
-            Core::Vector4 offsetTL(in_offset.x, in_offset.y, 0.0f, 0.0f);
+            Vector4 offsetTL(in_offset.x, in_offset.y, 0.0f, 0.0f);
             
-            const Core::Matrix4& matTransform(in_transform);
+            const Matrix4& matTransform(in_transform);
             vTemp += (vCentrePos + offsetTL);
             out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = vTemp * matTransform;
             
@@ -436,13 +436,13 @@ namespace CS
             
             //Check the font contains '.' for building the ellipsis.
             Font::CharacterInfo charInfo;
-            if (in_font->TryGetCharacterInfo((Core::UTF8Char)'.', charInfo) == false)
+            if (in_font->TryGetCharacterInfo((UTF8Char)'.', charInfo) == false)
             {
                 return in_text;
             }
             
             //get the width of an ellipsis
-            f32 dotWidth = GetCharacterWidth((Core::UTF8Char)'.', in_font, in_absCharSpacingOffset, in_textScale);
+            f32 dotWidth = GetCharacterWidth((UTF8Char)'.', in_font, in_absCharSpacingOffset, in_textScale);
             f32 ellipsisWidth = dotWidth * k_numDots;
             
             //if there is space for some of the text and the ellipsis, then calculate the output string.
@@ -453,7 +453,7 @@ namespace CS
                 auto it = in_text.begin();
                 while(it < in_text.end())
                 {
-                    auto character = Core::UTF8StringUtils::Next(it);
+                    auto character = UTF8StringUtils::Next(it);
                     
                     currentLineWidth += GetCharacterWidth(character, in_font, in_absCharSpacingOffset, in_textScale);
                     if (currentLineWidth > in_maxTextWidth - ellipsisWidth)
@@ -461,13 +461,13 @@ namespace CS
                         break;
                     }
                     
-                    Core::UTF8StringUtils::Append(character, outputText);
+                    UTF8StringUtils::Append(character, outputText);
                 }
                 
                 //append the ellipsis
                 for (u32 i = 0; i < k_numDots; ++i)
                 {
-                    Core::UTF8StringUtils::Append((Core::UTF8Char)'.', outputText);
+                    UTF8StringUtils::Append((UTF8Char)'.', outputText);
                 }
             }
             
@@ -483,7 +483,7 @@ namespace CS
                         break;
                     }
                     
-                    Core::UTF8StringUtils::Append((Core::UTF8Char)'.', outputText);
+                    UTF8StringUtils::Append((UTF8Char)'.', outputText);
                 }
             }
             
@@ -531,7 +531,7 @@ namespace CS
         /// @return Vector where each entry is a line of in_text,
         ///         constrained by the in_bounds
         //----------------------------------------------------------------------------
-        CanvasRenderer::WrappedText GetWrappedText(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties)
+        CanvasRenderer::WrappedText GetWrappedText(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties)
         {
             //NOTE: | denotes the bounds of the box
             //- |The quick brown fox| jumped over\nthe ferocious honey badger
@@ -571,7 +571,7 @@ namespace CS
         /// @param in_properties - The text properties.
         /// @param out_builtText - Built text
         //----------------------------------------------------------------------------
-        void BuildText(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties, CanvasRenderer::BuiltText& out_builtText)
+        void BuildText(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties, CanvasRenderer::BuiltText& out_builtText)
         {
             f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_textScale);
             f32 maxHeight = in_bounds.y;
@@ -598,7 +598,7 @@ namespace CS
                 auto characterIt = linesOnBounds[lineIdx].begin();
                 while(characterIt != linesOnBounds[lineIdx].end())
                 {
-                    auto character = Core::UTF8StringUtils::Next(characterIt);
+                    auto character = UTF8StringUtils::Next(characterIt);
                     auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale, in_properties.m_absCharSpacingOffset));
                     
                     cursorX += builtCharacter.m_advance;
@@ -638,7 +638,7 @@ namespace CS
         ///
         /// @return Close to best case fitting scale
         //----------------------------------------------------------------------------
-        f32 GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const CSCore::Vector2& in_bounds, const CSCore::Vector2& in_minMax, u32 in_currentIteration = 0)
+        f32 GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const Vector2& in_bounds, const Vector2& in_minMax, u32 in_currentIteration = 0)
         {
             f32 min = in_minMax.x;
             f32 max = in_minMax.y;
@@ -674,13 +674,13 @@ namespace CS
             if(doesFit)
             {
                 //We recurse further, the valid midpoint scale is now used as the min value
-                return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, CSCore::Vector2(midpointScale, max), in_currentIteration);
+                return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, Vector2(midpointScale, max), in_currentIteration);
             }
             else
             {
                 //Recurse further, the midpoint value is used as the max value for this recursion
                 //This is based on the assumption that the min value is always a valid fitting scale
-                return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, CSCore::Vector2(min, midpointScale), in_currentIteration);
+                return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, Vector2(min, midpointScale), in_currentIteration);
             }
         }
     }
@@ -696,7 +696,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    bool CanvasRenderer::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool CanvasRenderer::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == CanvasRenderer::InterfaceID;
     }
@@ -704,16 +704,16 @@ namespace CS
     //----------------------------------------------------------------------------
     void CanvasRenderer::OnInit()
     {
-        m_resourcePool = Core::Application::Get()->GetResourcePool();
+        m_resourcePool = Application::Get()->GetResourcePool();
         CS_ASSERT(m_resourcePool != nullptr, "Must have a resource pool");
 
-        RenderSystem* renderSystem = Core::Application::Get()->GetRenderSystem();
+        RenderSystem* renderSystem = Application::Get()->GetRenderSystem();
         CS_ASSERT(renderSystem != nullptr, "Canvas renderer cannot find render system");
 
-        m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+        m_screen = Application::Get()->GetSystem<Screen>();
         CS_ASSERT(m_screen != nullptr, "Canvas renderer cannot find screen system");
 
-        auto materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
+        auto materialFactory = Application::Get()->GetSystem<MaterialFactory>();
         CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
         
         m_materialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory));
@@ -721,7 +721,7 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void CanvasRenderer::Render(UI::Canvas* in_canvas)
+    void CanvasRenderer::Render(Canvas* in_canvas)
     {
         CS_ASSERT(in_canvas != nullptr, "Canvas cannot render null UI canvas");
 
@@ -735,7 +735,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::PushClipBounds(const Core::Vector2& in_blPosition, const Core::Vector2& in_size)
+    void CanvasRenderer::PushClipBounds(const Vector2& in_blPosition, const Vector2& in_size)
     {
         if(m_scissorPositions.empty())
         {
@@ -744,21 +744,21 @@ namespace CS
         }
         else
         {
-            Core::Vector2 vOldBottomLeft = m_scissorPositions.back();
-            Core::Vector2 vOldTopRight = m_scissorSizes.back() + vOldBottomLeft;
-            Core::Vector2 vNewBottomLeft = in_blPosition;
-            Core::Vector2 vNewTopRight = in_blPosition + in_size;
+            Vector2 vOldBottomLeft = m_scissorPositions.back();
+            Vector2 vOldTopRight = m_scissorSizes.back() + vOldBottomLeft;
+            Vector2 vNewBottomLeft = in_blPosition;
+            Vector2 vNewTopRight = in_blPosition + in_size;
 
             //If the scissor region extends outside the bounds of the screen this is undefined behaviour and
             //the render system may wrap the values causing artefacts. We clamp them here to make sure this
             //doesn't happen.
-            vNewBottomLeft.x = Core::MathUtils::Clamp(std::max(vNewBottomLeft.x, vOldBottomLeft.x), 0.0f, m_screen->GetResolution().x);
-            vNewBottomLeft.y = Core::MathUtils::Clamp(std::max(vNewBottomLeft.y, vOldBottomLeft.y), 0.0f, m_screen->GetResolution().y);
+            vNewBottomLeft.x = MathUtils::Clamp(std::max(vNewBottomLeft.x, vOldBottomLeft.x), 0.0f, m_screen->GetResolution().x);
+            vNewBottomLeft.y = MathUtils::Clamp(std::max(vNewBottomLeft.y, vOldBottomLeft.y), 0.0f, m_screen->GetResolution().y);
 
-            vNewTopRight.x = Core::MathUtils::Clamp(std::min(vNewTopRight.x, vOldTopRight.x), 0.0f, m_screen->GetResolution().x);
-            vNewTopRight.y = Core::MathUtils::Clamp(std::min(vNewTopRight.y, vOldTopRight.y), 0.0f, m_screen->GetResolution().y);
+            vNewTopRight.x = MathUtils::Clamp(std::min(vNewTopRight.x, vOldTopRight.x), 0.0f, m_screen->GetResolution().x);
+            vNewTopRight.y = MathUtils::Clamp(std::min(vNewTopRight.y, vOldTopRight.y), 0.0f, m_screen->GetResolution().y);
 
-            Core::Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
+            Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
 
             m_scissorPositions.push_back(vNewBottomLeft);
             m_scissorSizes.push_back(vNewSize);
@@ -788,8 +788,8 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const Core::Vector2& in_offset, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
-                                 const Core::Colour& in_colour, AlignmentAnchor in_anchor)
+    void CanvasRenderer::DrawBox(const Matrix3& in_transform, const Vector2& in_size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& in_UVs,
+                                 const Colour& in_colour, AlignmentAnchor in_anchor)
     {
         m_canvasSprite.pMaterial = m_materialPool->GetMaterial(in_texture);
 
@@ -799,7 +799,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_properties, f32& out_textScale) const
+    CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, const Vector2& in_bounds, const TextProperties& in_properties, f32& out_textScale) const
     {
         BuiltText result;
         result.m_width = 0.0f;
@@ -849,7 +849,7 @@ namespace CS
                 else
                 {
                     //We should search for a more optimal scale between the min and the ideal, while still fitting
-                    textScale = GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, CSCore::Vector2(in_properties.m_minTextScale, textScale));
+                    textScale = GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, Vector2(in_properties.m_minTextScale, textScale));
                 }
             }
         }
@@ -858,23 +858,23 @@ namespace CS
         out_textScale = textScale;
         
         //Carry out the building of the text with the resolved scale
-        CSRendering::BuildText(in_text, textScale, in_font, in_bounds, in_properties, result);
+        ChilliSource::BuildText(in_text, textScale, in_font, in_bounds, in_properties, result);
         
         return result;
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture)
+    void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Matrix3& in_transform, const Colour& in_colour, const TextureCSPtr& in_texture)
     {
         m_canvasSprite.pMaterial = m_materialPool->GetMaterial(in_texture);
 
-        Core::Matrix4 matTransform = Convert2DTransformTo3D(in_transform);
-        Core::Matrix4 matTransformedLocal;
+        Matrix4 matTransform = Convert2DTransformTo3D(in_transform);
+        Matrix4 matTransformedLocal;
 
         for (const auto& character : in_characters)
         {
-            matTransformedLocal = Core::Matrix4::CreateTranslation(Core::Vector3(character.m_position, 0.0f)) * matTransform;
-            UpdateSpriteData(matTransformedLocal, character.m_packedImageSize, Core::Vector2::k_zero, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
+            matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
+            UpdateSpriteData(matTransformedLocal, character.m_packedImageSize, Vector2::k_zero, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
             m_overlayBatcher->Render(m_canvasSprite);
         }
     }

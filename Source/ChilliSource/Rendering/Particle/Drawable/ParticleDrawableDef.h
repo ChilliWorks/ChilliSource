@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A particle drawable def describes the properties that should be used 
@@ -48,7 +48,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //-----------------------------------------------------------------------
-    class ParticleDrawableDef : public Core::QueryableInterface
+    class ParticleDrawableDef : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleDrawableDef);
@@ -79,7 +79,7 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        virtual ParticleDrawableUPtr CreateInstance(const Core::Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const = 0;
+        virtual ParticleDrawableUPtr CreateInstance(const Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const = 0;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///

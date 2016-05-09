@@ -34,14 +34,14 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------
     /// A system for listening for remote/push notifications.
     ///
     /// @author Robert Henning
     //---------------------------------------------------
-    class RemoteNotificationSystem : public Core::AppSystem
+    class RemoteNotificationSystem : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(RemoteNotificationSystem);

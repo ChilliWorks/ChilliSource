@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_CORE_IMAGE_IMAGEFORMAT_H_
 #define _CHILLISOURCE_CORE_IMAGE_IMAGEFORMAT_H_
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------
     /// Holds the supported image formats that can be

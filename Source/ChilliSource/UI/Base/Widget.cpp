@@ -42,7 +42,7 @@
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 #include <ChilliSource/UI/Layout/LayoutComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -63,23 +63,23 @@ namespace CS
         const char k_properyNameInputConsumeEnabled[] = "inputconsumeenabled";
         const char k_properyNameSizePolicy[] = "sizepolicy";
         
-        const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
+        const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            {Core::PropertyTypes::String(), k_properyNameName},
-            {Core::PropertyTypes::Vector2(), k_properyNameRelPosition},
-            {Core::PropertyTypes::Vector2(), k_properyNameAbsPosition},
-            {Core::PropertyTypes::Vector2(), k_properyNameRelSize},
-            {Core::PropertyTypes::Vector2(), k_properyNameAbsSize},
-            {Core::PropertyTypes::Vector2(), k_properyNamePreferredSize},
-            {Core::PropertyTypes::Vector2(), k_properyNameScale},
-            {Core::PropertyTypes::Colour(), k_properyNameColour},
-            {Core::PropertyTypes::Float(), k_properyNameRotation},
+            {PropertyTypes::String(), k_properyNameName},
+            {PropertyTypes::Vector2(), k_properyNameRelPosition},
+            {PropertyTypes::Vector2(), k_properyNameAbsPosition},
+            {PropertyTypes::Vector2(), k_properyNameRelSize},
+            {PropertyTypes::Vector2(), k_properyNameAbsSize},
+            {PropertyTypes::Vector2(), k_properyNamePreferredSize},
+            {PropertyTypes::Vector2(), k_properyNameScale},
+            {PropertyTypes::Colour(), k_properyNameColour},
+            {PropertyTypes::Float(), k_properyNameRotation},
             {PropertyTypes::AlignmentAnchor(), k_properyNameOriginAnchor},
             {PropertyTypes::AlignmentAnchor(), k_properyNameParentalAnchor},
-            {Core::PropertyTypes::Bool(), k_properyNameVisible},
-            {Core::PropertyTypes::Bool(), k_properyNameClipChildren},
-            {Core::PropertyTypes::Bool(), k_properyNameInputEnabled},
-            {Core::PropertyTypes::Bool(), k_properyNameInputConsumeEnabled},
+            {PropertyTypes::Bool(), k_properyNameVisible},
+            {PropertyTypes::Bool(), k_properyNameClipChildren},
+            {PropertyTypes::Bool(), k_properyNameInputEnabled},
+            {PropertyTypes::Bool(), k_properyNameInputConsumeEnabled},
             {PropertyTypes::SizePolicy(), k_properyNameSizePolicy},
         };
         
@@ -94,17 +94,17 @@ namespace CS
         ///
         /// @return Whether the widget is considered offscreen and should be culled
         //----------------------------------------------------------------------------------------
-        bool ShouldCull(const Core::Vector2& in_absPos, const Core::Vector2& in_absSize, const Core::Vector2& in_canvasSize)
+        bool ShouldCull(const Vector2& in_absPos, const Vector2& in_absSize, const Vector2& in_canvasSize)
         {
-            Core::Vector2 halfSize(in_absSize * 0.5f);
+            Vector2 halfSize(in_absSize * 0.5f);
             //Treat it like a square so that we do not need to take rotation into account
             halfSize.x = std::max(halfSize.x, halfSize.y);
             halfSize.y = std::max(halfSize.y, halfSize.y);
             
-            Core::Vector2 bottomLeft = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize);
+            Vector2 bottomLeft = GetAnchorPoint(AlignmentAnchor::k_bottomLeft, halfSize);
             bottomLeft += in_absPos;
             
-            Core::Vector2 topRight = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_topRight, halfSize);
+            Vector2 topRight = GetAnchorPoint(AlignmentAnchor::k_topRight, halfSize);
             topRight += in_absPos;
             
             return (topRight.y < 0 || bottomLeft.y > in_canvasSize.y || topRight.x < 0 || bottomLeft.x > in_canvasSize.x);
@@ -124,7 +124,7 @@ namespace CS
             ///
             /// @return Original size
             //----------------------------------------------------------
-            Core::Vector2 UseOriginalSize(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Vector2 UseOriginalSize(const Vector2& in_originalSize, const Vector2& in_preferredSize)
             {
                 return in_originalSize;
             }
@@ -140,7 +140,7 @@ namespace CS
             ///
             /// @return Preferred size
             //----------------------------------------------------------
-            Core::Vector2 UsePreferredSize(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Vector2 UsePreferredSize(const Vector2& in_originalSize, const Vector2& in_preferredSize)
             {
                 return in_preferredSize;
             }
@@ -155,9 +155,9 @@ namespace CS
             ///
             /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Vector2 KeepOriginalWidthAdaptHeight(const Vector2& in_originalSize, const Vector2& in_preferredSize)
             {
-                return Rendering::AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+                return AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredSize.x/in_preferredSize.y);
             }
             //----------------------------------------------------------------------------------------
             /// Aspect ratio maintaining function that keeps the original height but adapts
@@ -170,9 +170,9 @@ namespace CS
             ///
             /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Vector2 KeepOriginalHeightAdaptWidth(const Vector2& in_originalSize, const Vector2& in_preferredSize)
             {
-                return Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+                return AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredSize.x/in_preferredSize.y);
             }
             //----------------------------------------------------------------------------------------
             /// Aspect ratio maintaining function that maintains the given target aspect ratio
@@ -185,9 +185,9 @@ namespace CS
             ///
             /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Vector2 FillOriginal(const Vector2& in_originalSize, const Vector2& in_preferredSize)
             {
-                return Rendering::AspectRatioUtils::FillOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+                return AspectRatioUtils::FillOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
             }
             //----------------------------------------------------------------------------------------
             /// Aspect ratio maintaining function that maintains the given target aspect ratio
@@ -200,9 +200,9 @@ namespace CS
             ///
             /// @return Size with aspect maintained
             //----------------------------------------------------------------------------------------
-            Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+            Vector2 FitOriginal(const Vector2& in_originalSize, const Vector2& in_preferredSize)
             {
-                return Rendering::AspectRatioUtils::FitOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
+                return AspectRatioUtils::FitOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
             }
             
             const Widget::SizePolicyDelegate k_sizePolicyFuncs[(u32)SizePolicy::k_totalNum] =
@@ -218,17 +218,17 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    std::vector<Core::PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
+    std::vector<PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Widget::Widget(const Core::PropertyMap& in_properties, std::vector<UIComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+    Widget::Widget(const PropertyMap& in_properties, std::vector<UIComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
                    const std::vector<PropertyLink>& in_childPropertyLinks)
     {
-        m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
-        m_pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
+        m_screen = Application::Get()->GetSystem<Screen>();
+        m_pointerSystem = Application::Get()->GetSystem<PointerSystem>();
         
         //ensure the size policy delegate is correct.
         SetSizePolicy(m_sizePolicy);
@@ -250,22 +250,22 @@ namespace CS
     //----------------------------------------------------------------------------------------
     void Widget::InitBaseProperties()
     {
-        m_baseProperties.emplace(k_properyNameName, Core::PropertyTypes::String()->CreateProperty(Core::MakeDelegate(this, &Widget::GetName), Core::MakeDelegate(this, &Widget::SetName)));
-        m_baseProperties.emplace(k_properyNameRelPosition, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativePosition), Core::MakeDelegate(this, &Widget::SetRelativePosition)));
-        m_baseProperties.emplace(k_properyNameAbsPosition, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsolutePosition), Core::MakeDelegate(this, &Widget::SetAbsolutePosition)));
-        m_baseProperties.emplace(k_properyNameRelSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativeSize), Core::MakeDelegate(this, &Widget::SetRelativeSize)));
-        m_baseProperties.emplace(k_properyNameAbsSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsoluteSize), Core::MakeDelegate(this, &Widget::SetAbsoluteSize)));
-        m_baseProperties.emplace(k_properyNamePreferredSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetPreferredSize), Core::MakeDelegate(this, &Widget::SetDefaultPreferredSize)));
-        m_baseProperties.emplace(k_properyNameScale, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalScale), Core::MakeDelegate(this, &Widget::ScaleTo)));
-        m_baseProperties.emplace(k_properyNameColour, Core::PropertyTypes::Colour()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalColour), Core::MakeDelegate(this, &Widget::SetColour)));
-        m_baseProperties.emplace(k_properyNameRotation, Core::PropertyTypes::Float()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRotation), Core::MakeDelegate(this, &Widget::RotateTo)));
-        m_baseProperties.emplace(k_properyNameOriginAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(Core::MakeDelegate(this, &Widget::GetOriginAnchor), Core::MakeDelegate(this, &Widget::SetOriginAnchor)));
-        m_baseProperties.emplace(k_properyNameParentalAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(Core::MakeDelegate(this, &Widget::GetParentalAnchor), Core::MakeDelegate(this, &Widget::SetParentalAnchor)));
-        m_baseProperties.emplace(k_properyNameVisible, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsVisible), Core::MakeDelegate(this, &Widget::SetVisible)));
-        m_baseProperties.emplace(k_properyNameClipChildren, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsClippingEnabled), Core::MakeDelegate(this, &Widget::SetClippingEnabled)));
-        m_baseProperties.emplace(k_properyNameInputEnabled, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputEnabled), Core::MakeDelegate(this, &Widget::SetInputEnabled)));
-        m_baseProperties.emplace(k_properyNameInputConsumeEnabled, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled), Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled)));
-        m_baseProperties.emplace(k_properyNameSizePolicy, PropertyTypes::SizePolicy()->CreateProperty(Core::MakeDelegate(this, &Widget::GetSizePolicy), Core::MakeDelegate(this, &Widget::SetSizePolicy)));
+        m_baseProperties.emplace(k_properyNameName, PropertyTypes::String()->CreateProperty(MakeDelegate(this, &Widget::GetName), MakeDelegate(this, &Widget::SetName)));
+        m_baseProperties.emplace(k_properyNameRelPosition, PropertyTypes::Vector2()->CreateProperty(MakeDelegate(this, &Widget::GetLocalRelativePosition), MakeDelegate(this, &Widget::SetRelativePosition)));
+        m_baseProperties.emplace(k_properyNameAbsPosition, PropertyTypes::Vector2()->CreateProperty(MakeDelegate(this, &Widget::GetLocalAbsolutePosition), MakeDelegate(this, &Widget::SetAbsolutePosition)));
+        m_baseProperties.emplace(k_properyNameRelSize, PropertyTypes::Vector2()->CreateProperty(MakeDelegate(this, &Widget::GetLocalRelativeSize), MakeDelegate(this, &Widget::SetRelativeSize)));
+        m_baseProperties.emplace(k_properyNameAbsSize, PropertyTypes::Vector2()->CreateProperty(MakeDelegate(this, &Widget::GetLocalAbsoluteSize), MakeDelegate(this, &Widget::SetAbsoluteSize)));
+        m_baseProperties.emplace(k_properyNamePreferredSize, PropertyTypes::Vector2()->CreateProperty(MakeDelegate(this, &Widget::GetPreferredSize), MakeDelegate(this, &Widget::SetDefaultPreferredSize)));
+        m_baseProperties.emplace(k_properyNameScale, PropertyTypes::Vector2()->CreateProperty(MakeDelegate(this, &Widget::GetLocalScale), MakeDelegate(this, &Widget::ScaleTo)));
+        m_baseProperties.emplace(k_properyNameColour, PropertyTypes::Colour()->CreateProperty(MakeDelegate(this, &Widget::GetLocalColour), MakeDelegate(this, &Widget::SetColour)));
+        m_baseProperties.emplace(k_properyNameRotation, PropertyTypes::Float()->CreateProperty(MakeDelegate(this, &Widget::GetLocalRotation), MakeDelegate(this, &Widget::RotateTo)));
+        m_baseProperties.emplace(k_properyNameOriginAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(MakeDelegate(this, &Widget::GetOriginAnchor), MakeDelegate(this, &Widget::SetOriginAnchor)));
+        m_baseProperties.emplace(k_properyNameParentalAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(MakeDelegate(this, &Widget::GetParentalAnchor), MakeDelegate(this, &Widget::SetParentalAnchor)));
+        m_baseProperties.emplace(k_properyNameVisible, PropertyTypes::Bool()->CreateProperty(MakeDelegate(this, &Widget::IsVisible), MakeDelegate(this, &Widget::SetVisible)));
+        m_baseProperties.emplace(k_properyNameClipChildren, PropertyTypes::Bool()->CreateProperty(MakeDelegate(this, &Widget::IsClippingEnabled), MakeDelegate(this, &Widget::SetClippingEnabled)));
+        m_baseProperties.emplace(k_properyNameInputEnabled, PropertyTypes::Bool()->CreateProperty(MakeDelegate(this, &Widget::IsInputEnabled), MakeDelegate(this, &Widget::SetInputEnabled)));
+        m_baseProperties.emplace(k_properyNameInputConsumeEnabled, PropertyTypes::Bool()->CreateProperty(MakeDelegate(this, &Widget::IsInputConsumeEnabled), MakeDelegate(this, &Widget::SetInputConsumeEnabled)));
+        m_baseProperties.emplace(k_properyNameSizePolicy, PropertyTypes::SizePolicy()->CreateProperty(MakeDelegate(this, &Widget::GetSizePolicy), MakeDelegate(this, &Widget::SetSizePolicy)));
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -327,7 +327,7 @@ namespace CS
                       link.GetLinkedOwner() + "' doesn't contain a property called '" + link.GetLinkedProperty() + "'.");
             
             std::string lowerLinkName = link.GetLinkName();
-            Core::StringUtils::ToLowerCase(lowerLinkName);
+            StringUtils::ToLowerCase(lowerLinkName);
             
             m_componentPropertyLinks.emplace(lowerLinkName, std::make_pair(component, link.GetLinkedProperty()));
         }
@@ -343,14 +343,14 @@ namespace CS
             CS_ASSERT(childWidget != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' because target widget '" + link.GetLinkedOwner() + "' doesn't exist.");
             
             std::string lowerLinkName = link.GetLinkName();
-            Core::StringUtils::ToLowerCase(lowerLinkName);
+            StringUtils::ToLowerCase(lowerLinkName);
             
             m_childPropertyLinks.emplace(lowerLinkName, std::make_pair(childWidget, link.GetLinkedProperty()));
         }
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::InitPropertyValues(const Core::PropertyMap& in_propertyMap)
+    void Widget::InitPropertyValues(const PropertyMap& in_propertyMap)
     {
         for (const auto& key : in_propertyMap.GetKeys())
         {
@@ -364,7 +364,7 @@ namespace CS
     //----------------------------------------------------------------------------------------
     UIComponent* Widget::GetComponentWithName(const std::string& in_name)
     {
-        return Core::ConstMethodCast(this, &Widget::GetComponentWithName, in_name);
+        return ConstMethodCast(this, &Widget::GetComponentWithName, in_name);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -382,43 +382,43 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::IConnectableEvent<Widget::InputDelegate>& Widget::GetPressedInsideEvent()
+    IConnectableEvent<Widget::InputDelegate>& Widget::GetPressedInsideEvent()
     {
         return m_pressedInsideEvent;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::IConnectableEvent<Widget::InputDelegate>& Widget::GetReleasedInsideEvent()
+    IConnectableEvent<Widget::InputDelegate>& Widget::GetReleasedInsideEvent()
     {
         return m_releasedInsideEvent;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::IConnectableEvent<Widget::InputDelegate>& Widget::GetReleasedOutsideEvent()
+    IConnectableEvent<Widget::InputDelegate>& Widget::GetReleasedOutsideEvent()
     {
         return m_releasedOutsideEvent;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetMoveExitedEvent()
+    IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetMoveExitedEvent()
     {
         return m_moveExitedEvent;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetMoveEnteredEvent()
+    IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetMoveEnteredEvent()
     {
         return m_moveEnteredEvent;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetDraggedInsideEvent()
+    IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetDraggedInsideEvent()
     {
         return m_draggedInsideEvent;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetDraggedOutsideEvent()
+    IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetDraggedOutsideEvent()
     {
         return m_draggedOutsideEvent;
     }
@@ -436,7 +436,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetRelativeSize(const Core::Vector2& in_size)
+    void Widget::SetRelativeSize(const Vector2& in_size)
     {
         m_localSize.vRelative = in_size;
         
@@ -444,13 +444,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetLocalRelativeSize() const
+    Vector2 Widget::GetLocalRelativeSize() const
     {
         return m_localSize.vRelative;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetAbsoluteSize(const Core::Vector2& in_size)
+    void Widget::SetAbsoluteSize(const Vector2& in_size)
     {
         m_localSize.vAbsolute = in_size;
         
@@ -458,13 +458,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetLocalAbsoluteSize() const
+    Vector2 Widget::GetLocalAbsoluteSize() const
     {
         return m_localSize.vAbsolute;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetDefaultPreferredSize(const Core::Vector2& in_size)
+    void Widget::SetDefaultPreferredSize(const Vector2& in_size)
     {
         m_preferredSize = in_size;
         
@@ -489,7 +489,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetRelativePosition(const Core::Vector2& in_pos)
+    void Widget::SetRelativePosition(const Vector2& in_pos)
     {
         m_localPosition.vRelative = in_pos;
         
@@ -497,13 +497,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetLocalRelativePosition() const
+    Vector2 Widget::GetLocalRelativePosition() const
     {
         return m_localPosition.vRelative;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetAbsolutePosition(const Core::Vector2& in_pos)
+    void Widget::SetAbsolutePosition(const Vector2& in_pos)
     {
         m_localPosition.vAbsolute = in_pos;
         
@@ -511,13 +511,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetLocalAbsolutePosition() const
+    Vector2 Widget::GetLocalAbsolutePosition() const
     {
         return m_localPosition.vAbsolute;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::RelativeMoveBy(const Core::Vector2& in_translate)
+    void Widget::RelativeMoveBy(const Vector2& in_translate)
     {
         m_localPosition.vRelative += in_translate;
         
@@ -525,7 +525,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::AbsoluteMoveBy(const Core::Vector2& in_translate)
+    void Widget::AbsoluteMoveBy(const Vector2& in_translate)
     {
         m_localPosition.vAbsolute += in_translate;
         
@@ -555,7 +555,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::ScaleBy(const Core::Vector2& in_scale)
+    void Widget::ScaleBy(const Vector2& in_scale)
     {
         m_localScale *= in_scale;
         
@@ -563,7 +563,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::ScaleTo(const Core::Vector2& in_scale)
+    void Widget::ScaleTo(const Vector2& in_scale)
     {
         m_localScale = in_scale;
         
@@ -571,13 +571,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetLocalScale() const
+    Vector2 Widget::GetLocalScale() const
     {
         return m_localScale;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetParentalAnchor(Rendering::AlignmentAnchor in_anchor)
+    void Widget::SetParentalAnchor(AlignmentAnchor in_anchor)
     {
         m_parentalAnchor = in_anchor;
         
@@ -585,13 +585,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Rendering::AlignmentAnchor Widget::GetParentalAnchor() const
+    AlignmentAnchor Widget::GetParentalAnchor() const
     {
         return m_parentalAnchor;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetOriginAnchor(Rendering::AlignmentAnchor in_anchor)
+    void Widget::SetOriginAnchor(AlignmentAnchor in_anchor)
     {
         m_originAnchor = in_anchor;
         
@@ -599,13 +599,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Rendering::AlignmentAnchor Widget::GetOriginAnchor() const
+    AlignmentAnchor Widget::GetOriginAnchor() const
     {
         return m_originAnchor;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetOriginAbsolutePosition(const Core::Vector2& in_position)
+    void Widget::SetOriginAbsolutePosition(const Vector2& in_position)
     {
         m_originPosition.vAbsolute = in_position;
         
@@ -613,13 +613,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Core::Vector2& Widget::GetOriginAbsolutePosition() const
+    const Vector2& Widget::GetOriginAbsolutePosition() const
     {
         return m_originPosition.vAbsolute;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetOriginRelativePosition(const Core::Vector2& in_position)
+    void Widget::SetOriginRelativePosition(const Vector2& in_position)
     {
         m_originPosition.vRelative = in_position;
         
@@ -627,19 +627,19 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Core::Vector2& Widget::GetOriginRelativePosition() const
+    const Vector2& Widget::GetOriginRelativePosition() const
     {
         return m_originPosition.vRelative;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetColour(const Core::Colour& in_colour)
+    void Widget::SetColour(const Colour& in_colour)
     {
-        m_localColour = Core::Colour::Clamp(in_colour);
+        m_localColour = Colour::Clamp(in_colour);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Colour Widget::GetLocalColour() const
+    Colour Widget::GetLocalColour() const
     {
         return m_localColour;
     }
@@ -711,7 +711,7 @@ namespace CS
     {
         CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
         CS_ASSERT(m_children.size() < static_cast<std::vector<WidgetSPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many widgets in the scene. It cannot exceed "
-                  + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
+                  + ToString(std::numeric_limits<u32>::max()) + ".");
         
         m_children.push_back(in_widget);
         in_widget->m_parent = this;
@@ -754,7 +754,7 @@ namespace CS
     //----------------------------------------------------------------------------------------
     WidgetSPtr Widget::GetWidget(const std::string& in_name)
     {
-        return Core::ConstMethodCast(this, &Widget::GetWidget, in_name);
+        return ConstMethodCast(this, &Widget::GetWidget, in_name);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -774,7 +774,7 @@ namespace CS
     //----------------------------------------------------------------------------------------
     WidgetSPtr Widget::GetWidgetRecursive(const std::string& in_name)
     {
-        return Core::ConstMethodCast(this, &Widget::GetWidgetRecursive, in_name);
+        return ConstMethodCast(this, &Widget::GetWidgetRecursive, in_name);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -827,7 +827,7 @@ namespace CS
     //----------------------------------------------------------------------------------------
     Widget* Widget::GetInternalWidget(const std::string& in_name)
     {
-        return Core::ConstMethodCast(this, &Widget::GetInternalWidget, in_name);
+        return ConstMethodCast(this, &Widget::GetInternalWidget, in_name);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -847,7 +847,7 @@ namespace CS
     //----------------------------------------------------------------------------------------
     Widget* Widget::GetInternalWidgetRecursive(const std::string& in_name)
     {
-        return Core::ConstMethodCast(this, &Widget::GetInternalWidgetRecursive, in_name);
+        return ConstMethodCast(this, &Widget::GetInternalWidgetRecursive, in_name);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -1033,40 +1033,40 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    bool Widget::Contains(const Core::Vector2& in_point) const
+    bool Widget::Contains(const Vector2& in_point) const
     {
         //Convert the point into our local space allowing us to do an AABB check
-        Core::Vector2 halfSize = GetFinalSize() * 0.5f;
+        Vector2 halfSize = GetFinalSize() * 0.5f;
         
-        Core::Vector2 bottLeft(-halfSize.x, -halfSize.y);
-        Core::Vector2 topRight(halfSize.x, halfSize.y);
+        Vector2 bottLeft(-halfSize.x, -halfSize.y);
+        Vector2 topRight(halfSize.x, halfSize.y);
         
-        Core::Vector2 localPoint = ToLocalSpace(in_point, Rendering::AlignmentAnchor::k_middleCentre);
+        Vector2 localPoint = ToLocalSpace(in_point, AlignmentAnchor::k_middleCentre);
         return localPoint.x >= bottLeft.x && localPoint.y >= bottLeft.y && localPoint.x <= topRight.x && localPoint.y <= topRight.y;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::ToLocalSpace(const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor) const
+    Vector2 Widget::ToLocalSpace(const Vector2& in_point, AlignmentAnchor in_alignmentAnchor) const
     {
-        Core::Vector2 localPointCentreRelative = in_point * Core::Matrix3::Inverse(GetFinalTransform());
-        Core::Vector2 localPointAligned = localPointCentreRelative - Rendering::GetAnchorPoint(in_alignmentAnchor, GetFinalSize());
+        Vector2 localPointCentreRelative = in_point * Matrix3::Inverse(GetFinalTransform());
+        Vector2 localPointAligned = localPointCentreRelative - GetAnchorPoint(in_alignmentAnchor, GetFinalSize());
         return localPointAligned;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Matrix3 Widget::GetLocalTransform() const
+    Matrix3 Widget::GetLocalTransform() const
     {
         if(m_isLocalTransformCacheValid == true)
         {
             return m_cachedLocalTransform;
         }
         
-        Core::Vector2 anchorPoint = GetLocalOriginCombinedPosition();
-        const Core::Vector2 renderSpacePositionCentred = GetLocalRenderSpaceCombinedPosition() - anchorPoint;
+        Vector2 anchorPoint = GetLocalOriginCombinedPosition();
+        const Vector2 renderSpacePositionCentred = GetLocalRenderSpaceCombinedPosition() - anchorPoint;
         
-        Core::Matrix3 pivot(Core::Matrix3::CreateTransform(-anchorPoint, Core::Vector2::k_one, 0.0f));
-        Core::Matrix3 rotate(Core::Matrix3::CreateTransform(Core::Vector2::k_zero, Core::Vector2::k_one, -m_localRotation));
-        Core::Matrix3 translate(Core::Matrix3::CreateTransform(renderSpacePositionCentred + anchorPoint, Core::Vector2::k_one, 0.0f));
+        Matrix3 pivot(Matrix3::CreateTransform(-anchorPoint, Vector2::k_one, 0.0f));
+        Matrix3 rotate(Matrix3::CreateTransform(Vector2::k_zero, Vector2::k_one, -m_localRotation));
+        Matrix3 translate(Matrix3::CreateTransform(renderSpacePositionCentred + anchorPoint, Vector2::k_one, 0.0f));
         
         m_cachedLocalTransform = pivot * rotate * translate;
         
@@ -1075,7 +1075,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Matrix3 Widget::GetFinalTransform() const
+    Matrix3 Widget::GetFinalTransform() const
     {
         if(m_isParentTransformCacheValid == true && m_isLocalTransformCacheValid == true)
         {
@@ -1084,7 +1084,7 @@ namespace CS
         
         if(m_canvas == this)
         {
-            m_cachedFinalTransform = Core::Matrix3::CreateTransform(m_localPosition.vAbsolute, Core::Vector2::k_one, -m_localRotation);
+            m_cachedFinalTransform = Matrix3::CreateTransform(m_localPosition.vAbsolute, Vector2::k_one, -m_localRotation);
             m_cachedFinalPosition = m_localPosition.vAbsolute;
             
             m_isParentTransformCacheValid = true;
@@ -1100,7 +1100,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetFinalPosition() const
+    Vector2 Widget::GetFinalPosition() const
     {
         //get the final transform to ensure the final position cache is up to date.
         GetFinalTransform();
@@ -1108,10 +1108,10 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetFinalPositionOfCentre() const
+    Vector2 Widget::GetFinalPositionOfCentre() const
     {
-        Core::Matrix3 finalTransform(GetFinalTransform());
-        return Core::Vector2(finalTransform.m[6], finalTransform.m[7]);
+        Matrix3 finalTransform(GetFinalTransform());
+        return Vector2(finalTransform.m[6], finalTransform.m[7]);
     }
     //----------------------------------------------------------------------------------------
     /// The position of the widget is calculated based on the local absolute and
@@ -1119,23 +1119,23 @@ namespace CS
     /// position is relative to the final parent position and cannot be calculated until
     /// there is an absolute reference point in the widget hierarchy.
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetLocalRenderSpaceCombinedPosition() const
+    Vector2 Widget::GetLocalRenderSpaceCombinedPosition() const
     {
         CS_ASSERT(m_canvas != nullptr, "Cannot get the local render space combined position of widget without attaching it to the canvas.");
         CS_ASSERT(m_parent != nullptr, "Cannot get the local render space combined position of widget without a parent.");
         
-        const Core::Vector2 parentSize(m_parent->GetFinalSize());
-        const Core::Vector2 parentHalfSize(parentSize * 0.5f);
+        const Vector2 parentSize(m_parent->GetFinalSize());
+        const Vector2 parentHalfSize(parentSize * 0.5f);
         
         auto layoutPair = m_parent->GetLayoutForChild(this);
         
         if(layoutPair.first == nullptr)
         {
             //Get the anchor point to which the widget is aligned
-            Core::Vector2 parentAnchorPos = Rendering::GetAnchorPoint(m_parentalAnchor, parentHalfSize);
+            Vector2 parentAnchorPos = GetAnchorPoint(m_parentalAnchor, parentHalfSize);
             
             //Calculate the position relative to the anchor point
-            Core::Vector2 localRenderSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
+            Vector2 localRenderSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
             return localRenderSpacePos;
         }
         else
@@ -1143,23 +1143,23 @@ namespace CS
             CS_ASSERT(layoutPair.second >= 0, "Cannot find child");
             
             //The parental anchor pertains to the cell when using a layout rather than the parent widget
-            Core::Vector2 parentAnchorPos = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, parentHalfSize);
-            Core::Vector2 cellSize(layoutPair.first->GetSizeForIndex((u32)layoutPair.second));
-            Core::Vector2 cellAnchorPos = Rendering::GetAnchorPoint(m_parentalAnchor, cellSize * 0.5f);
+            Vector2 parentAnchorPos = GetAnchorPoint(AlignmentAnchor::k_bottomLeft, parentHalfSize);
+            Vector2 cellSize(layoutPair.first->GetSizeForIndex((u32)layoutPair.second));
+            Vector2 cellAnchorPos = GetAnchorPoint(m_parentalAnchor, cellSize * 0.5f);
             
             //Transform into local render space then layout/cell space
-            Core::Vector2 localRenderSpacePos = parentAnchorPos;
-            Core::Vector2 layoutSpacePos = cellAnchorPos + (cellSize * m_localPosition.vRelative) + m_localPosition.vAbsolute + layoutPair.first->GetPositionForIndex((u32)layoutPair.second);
+            Vector2 localRenderSpacePos = parentAnchorPos;
+            Vector2 layoutSpacePos = cellAnchorPos + (cellSize * m_localPosition.vRelative) + m_localPosition.vAbsolute + layoutPair.first->GetPositionForIndex((u32)layoutPair.second);
             
             return localRenderSpacePos + layoutSpacePos;
         }
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetLocalOriginCombinedPosition() const
+    Vector2 Widget::GetLocalOriginCombinedPosition() const
     {
-        CSCore::Vector2 originAnchorPos = Rendering::GetAnchorPoint(m_originAnchor, GetFinalSize() * 0.5f);
-        CSCore::Vector2 originPos = originAnchorPos + (GetRelativeReferenceSize() * m_originPosition.vRelative) + m_originPosition.vAbsolute;
+        Vector2 originAnchorPos = GetAnchorPoint(m_originAnchor, GetFinalSize() * 0.5f);
+        Vector2 originPos = originAnchorPos + (GetRelativeReferenceSize() * m_originPosition.vRelative) + m_originPosition.vAbsolute;
         return originPos;
     }
     //----------------------------------------------------------------------------------------
@@ -1168,7 +1168,7 @@ namespace CS
     /// cannot be calculated until there is an absolute reference point in the widget
     /// hierarchy
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetFinalSize() const
+    Vector2 Widget::GetFinalSize() const
     {
         CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute size of widget without attaching it to the canvas");
         
@@ -1177,7 +1177,7 @@ namespace CS
             return m_cachedFinalSize;
         }
         
-        Core::Vector2 finalSize;
+        Vector2 finalSize;
         
         if(m_parent != nullptr)
         {
@@ -1199,7 +1199,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetRelativeReferenceSize() const
+    Vector2 Widget::GetRelativeReferenceSize() const
     {
         CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute size of widget without attaching it to the canvas");
         
@@ -1214,7 +1214,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetPreferredSize() const
+    Vector2 Widget::GetPreferredSize() const
     {
         //This should be improved to make the acquisition of preferred size from components
         //more generic, i.e handled via an interface. This will allow other component types
@@ -1244,7 +1244,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::GetFinalScale() const
+    Vector2 Widget::GetFinalScale() const
     {
         if(m_parent != nullptr)
         {
@@ -1255,7 +1255,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Colour Widget::GetFinalColour() const
+    Colour Widget::GetFinalColour() const
     {
         //TODO: Do we implement the inherit colour option?
         if(m_parent != nullptr)
@@ -1267,7 +1267,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 Widget::CalculateRelativeReferenceSizeForChild(const Widget* in_child)
+    Vector2 Widget::CalculateRelativeReferenceSizeForChild(const Widget* in_child)
     {
         auto layoutPair = GetLayoutForChild(in_child);
         
@@ -1303,10 +1303,10 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property)
+    void Widget::SetProperty(const std::string& in_propertyName, const IProperty* in_property)
     {
         std::string lowerName = in_propertyName;
-        Core::StringUtils::ToLowerCase(lowerName);
+        StringUtils::ToLowerCase(lowerName);
         
         auto basePropIt = m_baseProperties.find(lowerName);
         if(basePropIt != m_baseProperties.end())
@@ -1333,7 +1333,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void Widget::UpdateContainedPointer(const Input::Pointer& in_pointer)
+    void Widget::UpdateContainedPointer(const Pointer& in_pointer)
     {
         auto pointerIdIt = m_containedPointers.find(in_pointer.GetId());
         
@@ -1353,7 +1353,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void Widget::RemoveContainedPointer(const Input::Pointer& in_pointer)
+    void Widget::RemoveContainedPointer(const Pointer& in_pointer)
     {
         auto pointerIdIt = m_containedPointers.find(in_pointer.GetId());
         if (pointerIdIt != m_containedPointers.end())
@@ -1384,7 +1384,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool Widget::IsContainedPointer(const Input::Pointer& in_pointer)
+    bool Widget::IsContainedPointer(const Pointer& in_pointer)
     {
         return (m_containedPointers.find(in_pointer.GetId()) != m_containedPointers.end());
     }
@@ -1472,14 +1472,14 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::OnDraw(Rendering::CanvasRenderer* in_renderer)
+    void Widget::OnDraw(CanvasRenderer* in_renderer)
     {
         if(m_isVisible == false)
         {
             return;
         }
         
-        Core::Vector2 finalSize(GetFinalSize());
+        Vector2 finalSize(GetFinalSize());
         
         if (ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
         {
@@ -1491,7 +1491,7 @@ namespace CS
         
         if(m_isSubviewClippingEnabled == true)
         {
-            Core::Vector2 bottomLeftPos = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, finalSize * 0.5f);
+            Vector2 bottomLeftPos = GetAnchorPoint(AlignmentAnchor::k_bottomLeft, finalSize * 0.5f);
             bottomLeftPos += GetFinalPositionOfCentre();
             
             in_renderer->PushClipBounds(bottomLeftPos, finalSize);
@@ -1601,7 +1601,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void Widget::OnPointerAdded(const Input::Pointer& in_pointer, f64 in_timestamp)
+    void Widget::OnPointerAdded(const Pointer& in_pointer, f64 in_timestamp)
     {
         if(m_isInputEnabled == false)
             return;
@@ -1627,7 +1627,7 @@ namespace CS
     /// external app. Input events are notified from the front most child widget to
     /// the back most and can be consumed.
     //------------------------------------------------------------------------------
-    void Widget::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, InputFilter& in_filter)
+    void Widget::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, InputFilter& in_filter)
     {
         if(m_isInputEnabled == false)
             return;
@@ -1670,7 +1670,7 @@ namespace CS
             }
             else
             {
-                std::set<Input::Pointer::InputType> inputTypeSet = { in_inputType };
+                std::set<Pointer::InputType> inputTypeSet = { in_inputType };
                 m_pressedInput.emplace(in_pointer.GetId(), inputTypeSet);
             }
             
@@ -1686,7 +1686,7 @@ namespace CS
     /// UI can filter input events to prevent them from being forwarded to the
     /// external app.
     //------------------------------------------------------------------------------
-    void Widget::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
+    void Widget::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp)
     {
         if(m_isInputEnabled == false)
             return;
@@ -1730,7 +1730,7 @@ namespace CS
     /// UI can filter input events to prevent them from being forwarded to the
     /// external app.
     //------------------------------------------------------------------------------
-    void Widget::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
+    void Widget::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType)
     {
         if(m_isInputEnabled == false)
             return;
@@ -1775,7 +1775,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void Widget::OnPointerRemoved(const Input::Pointer& in_pointer, f64 in_timestamp)
+    void Widget::OnPointerRemoved(const Pointer& in_pointer, f64 in_timestamp)
     {
         if(m_isInputEnabled == false)
             return;

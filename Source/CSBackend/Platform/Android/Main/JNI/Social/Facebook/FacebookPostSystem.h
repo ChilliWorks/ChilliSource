@@ -45,7 +45,7 @@ namespace CSBackend
 		///
 		/// @author R Henning
 		//----------------------------------------------------
-		class FacebookPostSystem final : public CSSocial::FacebookPostSystem
+		class FacebookPostSystem final : public ChilliSource::FacebookPostSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(FacebookPostSystem);
@@ -56,7 +56,7 @@ namespace CSBackend
             ///
             /// @return Whether the object has the same interface ID
             //----------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
             /// Post the wall of the user specified in the post
             /// description. If no user is specified then post
@@ -106,7 +106,7 @@ namespace CSBackend
 			void OnPostRequestComplete(PostResult in_result);
 
 		private:
-			friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create();
+			friend ChilliSource::FacebookPostSystemUPtr ChilliSource::FacebookPostSystem::Create();
 			//----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
@@ -136,7 +136,7 @@ namespace CSBackend
 
 		private:
 			FacebookJavaInterfaceSPtr m_javaInterface;
-			CSSocial::FacebookAuthenticationSystem* m_authSystem;
+			ChilliSource::FacebookAuthenticationSystem* m_authSystem;
             PostResultDelegate::Connection m_postCompleteDelegateConnection;
             PostResultDelegate::Connection m_requestCompleteDelegateConnection;
 		};

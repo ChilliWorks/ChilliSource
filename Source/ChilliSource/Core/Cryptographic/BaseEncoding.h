@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------
     /// A collection of methods for working with Base 64 encoding.

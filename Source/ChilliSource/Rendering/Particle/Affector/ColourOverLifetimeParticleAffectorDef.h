@@ -37,7 +37,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// The definition for a Colour Over Lifetime particle affector. This
@@ -74,7 +74,7 @@ namespace CS
         //------------------------------------------------------------------------------
         struct IntermediateColour final
         {
-            ParticlePropertyUPtr<Core::Colour> m_colourProperty;
+            ParticlePropertyUPtr<Colour> m_colourProperty;
             ParticlePropertyUPtr<f32> m_timeProperty;
 
             //------------------------------------------------------------------------------
@@ -110,8 +110,8 @@ namespace CS
         /// @param in_interpolation - [Optional] The function used for interpolation
         /// between colours. Defaults to linear interpolation.
         //------------------------------------------------------------------------------
-        ColourOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Core::Colour> in_targetColour, std::vector<IntermediateColour> in_intermediateColours = std::vector<IntermediateColour>(), 
-            const std::function<f32(f32)>& in_interpolation = Core::Interpolate::Linear);
+        ColourOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Colour> in_targetColour, std::vector<IntermediateColour> in_intermediateColours = std::vector<IntermediateColour>(), 
+            const std::function<f32(f32)>& in_interpolation = Interpolate::Linear);
         //------------------------------------------------------------------------------
         /// Constructor. Loads the params for the affector def from the given param 
         /// dictionary. If the async delegate is not null, then any resource loading 
@@ -137,7 +137,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// Creates an instance of the particle affector described by this.
         ///
@@ -147,13 +147,13 @@ namespace CS
         ///
         /// @return the instance.
         //------------------------------------------------------------------------------
-        ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+        ParticleAffectorUPtr CreateInstance(dynamic_array<Particle>* in_particleArray) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A property describing the target colour.
         //------------------------------------------------------------------------------
-        const ParticleProperty<Core::Colour>* GetTargetColourProperty() const;
+        const ParticleProperty<Colour>* GetTargetColourProperty() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -175,7 +175,7 @@ namespace CS
         
     private:
         std::function<f32(f32)> m_interpolation;
-        ParticlePropertyUPtr<Core::Colour> m_targetColourProperty;
+        ParticlePropertyUPtr<Colour> m_targetColourProperty;
         
         std::vector<IntermediateColour> m_intermediateColours;
     };

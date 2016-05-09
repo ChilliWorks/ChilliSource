@@ -44,7 +44,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //--------------------------------------------------------------
-		class Texture final : public CSRendering::Texture
+		class Texture final : public ChilliSource::Texture
 		{
 		public:
             
@@ -57,7 +57,7 @@ namespace CSBackend
             ///
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------------------
             /// Construct the texture from the given image data.
             /// The texture will take ownership of the image data
@@ -130,7 +130,7 @@ namespace CSBackend
             /// @return The format of the image used to create
             ///			the texture.
             //--------------------------------------------------
-            CSCore::ImageFormat GetFormat() const;
+            ChilliSource::ImageFormat GetFormat() const;
             //--------------------------------------------------
             /// @author S Downie
             ///
@@ -181,7 +181,7 @@ namespace CSBackend
 			
 		private:
             
-            friend CSRendering::TextureUPtr CSRendering::Texture::Create();
+            friend ChilliSource::TextureUPtr ChilliSource::Texture::Create();
 			//----------------------------------------------------------
             /// Private constructor to enforce the use of the factory
             /// method
@@ -192,15 +192,15 @@ namespace CSBackend
 			
 		private:
             
-            CSRendering::RenderCapabilities* m_renderCapabilities;
+            ChilliSource::RenderCapabilities* m_renderCapabilities;
             TextureUnitSystem* m_texUnitSystem;
             
             GLuint m_texHandle = 0;
             
             u32 m_width = 0;
             u32 m_height = 0;
-            CSCore::ImageFormat m_format;
-            CSCore::ImageCompression m_compression;
+            ChilliSource::ImageFormat m_format;
+            ChilliSource::ImageCompression m_compression;
             
             FilterMode m_filterMode = FilterMode::k_bilinear;
             WrapMode m_sWrapMode = WrapMode::k_clamp;

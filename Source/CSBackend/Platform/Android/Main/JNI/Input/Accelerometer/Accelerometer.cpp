@@ -47,9 +47,9 @@ namespace CSBackend
 		}
 		//------------------------------------------------
 		//------------------------------------------------
-		bool Accelerometer::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool Accelerometer::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == CSInput::Accelerometer::InterfaceID || in_interfaceId == Accelerometer::InterfaceID);
+			return (in_interfaceId == ChilliSource::Accelerometer::InterfaceID || in_interfaceId == Accelerometer::InterfaceID);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -64,18 +64,18 @@ namespace CSBackend
 			if (false == m_isUpdating)
 			{
 				m_isUpdating = true;
-				m_accelerometerJI->StartListening(CSCore::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
+				m_accelerometerJI->StartListening(ChilliSource::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
 			}
 		}
 		//------------------------------------------------
 		//------------------------------------------------
-		CSCore::Vector3 Accelerometer::GetAcceleration() const
+		ChilliSource::Vector3 Accelerometer::GetAcceleration() const
 		{
 			return m_acceleration;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		CSCore::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
+		ChilliSource::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
 		{
 			return m_accelerationUpdatedEvent;
 		}
@@ -109,7 +109,7 @@ namespace CSBackend
         	//and now must restart listening
         	if(true == m_isUpdating)
         	{
-        		m_accelerometerJI->StartListening(CSCore::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
+        		m_accelerometerJI->StartListening(ChilliSource::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
         	}
         }
         //----------------------------------------------------
@@ -131,7 +131,7 @@ namespace CSBackend
         }
 		//------------------------------------------------
 		//------------------------------------------------
-		void Accelerometer::OnAccelerationChanged(const CSCore::Vector3& in_acceleration)
+		void Accelerometer::OnAccelerationChanged(const ChilliSource::Vector3& in_acceleration)
 		{
 			m_acceleration = in_acceleration;
 			m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);

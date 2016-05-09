@@ -32,7 +32,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -46,14 +46,14 @@ namespace CS
     RotationGesture::RotationGesture(Pointer::InputType in_inputType)
     : m_requiredInputType(in_inputType)
     {
-        Core::Screen* screen = Core::Application::Get()->GetScreen();
+        Screen* screen = Application::Get()->GetScreen();
         m_minDisplacementSquared = (k_minDisplacement * screen->GetDensityScale()) * (k_minDisplacement * screen->GetDensityScale());
         
         m_pendingPointers.reserve(k_requiredPointerCount);
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    bool RotationGesture::IsA(Core::InterfaceIDType in_gestureInterfaceId) const
+    bool RotationGesture::IsA(InterfaceIDType in_gestureInterfaceId) const
     {
         return (Gesture::InterfaceID == in_gestureInterfaceId || RotationGesture::InterfaceID == in_gestureInterfaceId);
     }
@@ -65,19 +65,19 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationStartedEvent()
+    IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationStartedEvent()
     {
         return m_rotationStartedEvent;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationMovedEvent()
+    IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationMovedEvent()
     {
         return m_rotationMovedEvent;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationEndedEvent()
+    IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationEndedEvent()
     {
         return m_rotationEndedEvent;
     }
@@ -144,9 +144,9 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::Vector2 RotationGesture::CalculatePosition() const
+    Vector2 RotationGesture::CalculatePosition() const
     {
-        Core::Vector2 gesturePos = Core::Vector2::k_zero;
+        Vector2 gesturePos = Vector2::k_zero;
         if (m_pendingPointers.size() >= k_requiredPointerCount && IsActive() == true && m_paused == false)
         {
             for (const auto& pointer : m_pendingPointers)
@@ -169,7 +169,7 @@ namespace CS
         f32 angle = 0.0f;
         if (m_pendingPointers.size() >= k_requiredPointerCount && IsActive() == true && m_paused == false)
         {
-            std::vector<Core::Vector2> positions;
+            std::vector<Vector2> positions;
             for (const auto& pointer : m_pendingPointers)
             {
                 if (pointer.m_active == true)
@@ -180,18 +180,18 @@ namespace CS
             
             CS_ASSERT(positions.size() == k_requiredPointerCount, "There are more active pointers than required.");
             
-            CSCore::Vector2 displacement = positions[1] - positions[0];
+            Vector2 displacement = positions[1] - positions[0];
             
-            angle = -Core::Vector2::Angle(CSCore::Vector2::k_unitPositiveY, displacement);
+            angle = -Vector2::Angle(Vector2::k_unitPositiveY, displacement);
             
             while (angle < 0.0f)
             {
-                angle += CSCore::MathUtils::k_pi * 2.0f;
+                angle += MathUtils::k_pi * 2.0f;
             }
 
-            while (angle >= CSCore::MathUtils::k_pi * 2.0f)
+            while (angle >= MathUtils::k_pi * 2.0f)
             {
-                angle -= CSCore::MathUtils::k_pi * 2.0f;
+                angle -= MathUtils::k_pi * 2.0f;
             }
         }
         
@@ -203,14 +203,14 @@ namespace CS
     {
         f32 angle = CalculateAngle() - m_initialAngle;
         
-        while (angle < -CSCore::MathUtils::k_pi)
+        while (angle < -MathUtils::k_pi)
         {
-            angle += CSCore::MathUtils::k_pi * 2.0f;
+            angle += MathUtils::k_pi * 2.0f;
         }
         
-        while (angle >= CSCore::MathUtils::k_pi)
+        while (angle >= MathUtils::k_pi)
         {
-            angle -= CSCore::MathUtils::k_pi * 2.0f;
+            angle -= MathUtils::k_pi * 2.0f;
         }
         
         return angle;
@@ -231,7 +231,7 @@ namespace CS
         
         m_currentRotationInfo.m_rotationDelta = 0.0f;
         m_rotationEndedEvent.NotifyConnections(this, m_currentRotationInfo);
-        m_currentRotationInfo.m_position = Core::Vector2::k_zero;
+        m_currentRotationInfo.m_position = Vector2::k_zero;
         m_currentRotationInfo.m_rotation = 0.0f;
     }
     //--------------------------------------------------------
@@ -272,7 +272,7 @@ namespace CS
                 {
                     pointer.m_currentPosition = in_pointer.GetPosition();
                     
-                    Core::Vector2 displacement = pointer.m_currentPosition - pointer.m_initialPosition;
+                    Vector2 displacement = pointer.m_currentPosition - pointer.m_initialPosition;
                     if (displacement.LengthSquared() > m_minDisplacementSquared)
                     {
                         pointer.m_isDrag = true;

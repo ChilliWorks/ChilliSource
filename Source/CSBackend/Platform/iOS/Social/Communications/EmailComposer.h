@@ -45,7 +45,7 @@ namespace CSBackend
         ///
         /// @author S McGaw
         //-------------------------------------------------------------
-        class EmailComposer final : public CSSocial::EmailComposer
+        class EmailComposer final : public ChilliSource::EmailComposer
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(EmailComposer);
@@ -58,7 +58,7 @@ namespace CSBackend
 			/// @param The interface Id.
 			/// @return Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Displays the email activity with the given recipients,
             /// subject and contents.
@@ -104,7 +104,7 @@ namespace CSBackend
             //-------------------------------------------------------
 			void OnResult(MFMailComposeViewController* in_viewController, MFMailComposeResult in_result);
 		private:
-            friend CSSocial::EmailComposerUPtr CSSocial::EmailComposer::Create();
+            friend ChilliSource::EmailComposerUPtr ChilliSource::EmailComposer::Create();
             
             //-------------------------------------------------------
             /// This checks whether or not the current iOS device

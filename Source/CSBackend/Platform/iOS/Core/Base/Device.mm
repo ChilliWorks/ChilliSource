@@ -126,7 +126,7 @@ namespace CSBackend
                     NSString* userLocale = [supportedLanguages objectAtIndex:0];
                     std::string localeCode = [userLocale UTF8String];
                     
-                    std::vector<std::string> localeBrokenUp = CSCore::StringUtils::Split(localeCode, "-", 0);
+                    std::vector<std::string> localeBrokenUp = ChilliSource::StringUtils::Split(localeCode, "-", 0);
                     if (localeBrokenUp.size() > 0)
                     {
                         return localeBrokenUp[0];
@@ -187,9 +187,9 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Device::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool Device::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (CSCore::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
+            return (ChilliSource::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
         }
         //---------------------------------------------------
         //---------------------------------------------------

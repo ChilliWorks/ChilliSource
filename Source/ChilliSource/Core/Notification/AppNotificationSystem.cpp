@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(AppNotificationSystem);
     //--------------------------------------------------
@@ -27,7 +27,7 @@ namespace CS
     }
     //--------------------------------------------------
     //--------------------------------------------------
-    bool AppNotificationSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool AppNotificationSystem::IsA(InterfaceIDType in_interfaceId) const
     {
         return (AppNotificationSystem::InterfaceID == in_interfaceId);
     }

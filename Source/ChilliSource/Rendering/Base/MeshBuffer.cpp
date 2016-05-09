@@ -29,7 +29,7 @@
 
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------
     /// Constructor

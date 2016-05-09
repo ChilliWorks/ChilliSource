@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Factory class from loading font resources
@@ -41,7 +41,7 @@ namespace CS
     ///
     /// @author S Downie
     //-------------------------------------------------------
-    class FontProvider final : public Core::ResourceProvider
+    class FontProvider final : public ResourceProvider
     {
     public:
 
@@ -62,13 +62,13 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface
         //-------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The type of resource loaded by this provider
         //----------------------------------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //----------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -96,7 +96,7 @@ namespace CS
         /// @param Options to customise the creation
         /// @param [Out] Resource object
         //----------------------------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// Load the font from the external file into a resource on a background
         /// thread. Delegate is called when the load is complete. Check resource
@@ -110,7 +110,7 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] Resource object
         //----------------------------------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// Function that does the heavy lifting of font loading. The 2 creation
         /// methods delegate to this one.
@@ -122,7 +122,7 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] Font resource
         //----------------------------------------------------------------------------
-        void LoadFont(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
+        void LoadFont(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource);
     };
 }
 

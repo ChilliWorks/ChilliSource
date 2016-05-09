@@ -35,7 +35,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A particle property describing a value which is randomly generated between
@@ -106,7 +106,7 @@ namespace CS
         TPropertyType lowerBound = TPropertyType(m_startLowerValue + (m_endLowerValue - m_startLowerValue) * interpolationFactor);
         TPropertyType upperBound = TPropertyType(m_startUpperValue + (m_endUpperValue - m_startUpperValue) * interpolationFactor);
         
-        return Core::Random::GenerateComponentwise(lowerBound, upperBound);
+        return Random::GenerateComponentwise(lowerBound, upperBound);
     }
 }
 

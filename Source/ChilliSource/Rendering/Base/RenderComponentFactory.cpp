@@ -44,7 +44,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderComponentFactory);
     
@@ -58,18 +58,18 @@ namespace CS
     //--------------------------------------------------------
     void RenderComponentFactory::OnInit()
     {
-        m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+        m_screen = Application::Get()->GetSystem<Screen>();
         CS_ASSERT(m_screen, "Render Component Factory is missing required system: Screen.");
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
-    bool RenderComponentFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool RenderComponentFactory::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == RenderComponentFactory::InterfaceID;
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
+    SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
     {
         SpriteComponentUPtr pSprite(new SpriteComponent());
         pSprite->SetMaterial(in_material);
@@ -79,7 +79,7 @@ namespace CS
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
+    SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
     {
         SpriteComponentUPtr pSprite(new SpriteComponent());
         pSprite->SetMaterial(in_material);
@@ -116,7 +116,7 @@ namespace CS
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Core::Vector2& in_viewportSize, f32 in_near, f32 in_far)
+    OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Vector2& in_viewportSize, f32 in_near, f32 in_far)
     {
         OrthographicCameraComponentUPtr pCamera(new OrthographicCameraComponent(in_viewportSize, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
         return pCamera;

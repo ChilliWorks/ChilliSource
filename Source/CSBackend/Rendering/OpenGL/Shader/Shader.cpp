@@ -50,9 +50,9 @@ namespace CSBackend
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		bool Shader::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool Shader::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == Shader::InterfaceID || in_interfaceId == CSRendering::Shader::InterfaceID;
+			return in_interfaceId == Shader::InterfaceID || in_interfaceId == ChilliSource::Shader::InterfaceID;
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -143,7 +143,7 @@ namespace CSBackend
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const CSCore::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const ChilliSource::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -165,7 +165,7 @@ namespace CSBackend
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const CSCore::Vector3& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const ChilliSource::Vector3& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -187,7 +187,7 @@ namespace CSBackend
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const CSCore::Vector4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const ChilliSource::Vector4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -209,7 +209,7 @@ namespace CSBackend
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const CSCore::Matrix4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const ChilliSource::Matrix4& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -231,7 +231,7 @@ namespace CSBackend
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const CSCore::Colour& in_value, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const ChilliSource::Colour& in_value, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -253,7 +253,7 @@ namespace CSBackend
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        void Shader::SetUniform(const std::string& in_varName, const std::vector<CSCore::Vector4>& in_vec4Values, UniformNotFoundPolicy in_notFoundPolicy)
+        void Shader::SetUniform(const std::string& in_varName, const std::vector<ChilliSource::Vector4>& in_vec4Values, UniformNotFoundPolicy in_notFoundPolicy)
         {
             GLint handle = GetUniformHandle(in_varName);
             
@@ -394,7 +394,7 @@ namespace CSBackend
         //----------------------------------------------------------
         void Shader::Destroy()
         {
-            bool hasContext = static_cast<RenderSystem*>(CSCore::Application::Get()->GetRenderSystem())->HasContext();
+            bool hasContext = static_cast<RenderSystem*>(ChilliSource::Application::Get()->GetRenderSystem())->HasContext();
             
             //If the context has already been destroyed then the shaders have already been destroyed
             if(hasContext == true)

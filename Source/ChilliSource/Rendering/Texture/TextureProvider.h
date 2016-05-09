@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Factory loader for creating texture resources
@@ -41,7 +41,7 @@ namespace CS
     ///
     /// @author S Downie
     //-------------------------------------------------------
-    class TextureProvider final : public Core::ResourceProvider
+    class TextureProvider final : public ResourceProvider
     {
     public:
         
@@ -61,13 +61,13 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface
         //-------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The resource type this provider loads
         //----------------------------------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //----------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -87,7 +87,7 @@ namespace CS
         /// @param Options to customise the creation
         /// @param [Out] Resource object
         //----------------------------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// Loads the image on a background thread and generate the texture via the output resource.
         /// Delegate is called on completion. Check the resource load state for success or failure
@@ -100,16 +100,16 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] Resource object
         //----------------------------------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------
         /// @author S Downie
         ///
         /// @retrun Default options for texture loading
         //----------------------------------------------------
-        Core::IResourceOptionsBaseCSPtr GetDefaultOptions() const override;
+        IResourceOptionsBaseCSPtr GetDefaultOptions() const override;
         
     private:
-        friend class Core::Application;
+        friend class Application;
         //-------------------------------------------------------
         /// Factory method
         ///
@@ -136,12 +136,12 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] Resource object
         //----------------------------------------------------------------------------
-        void LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
+        void LoadTexture(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource);
         
     private:
         
-        std::vector<Core::ResourceProvider*> m_imageProviders;
-        static const Core::IResourceOptionsBaseCSPtr s_defaultOptions;
+        std::vector<ResourceProvider*> m_imageProviders;
+        static const IResourceOptionsBaseCSPtr s_defaultOptions;
     };
 }
 

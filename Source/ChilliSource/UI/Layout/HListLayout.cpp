@@ -31,18 +31,18 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(HListLayout);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    HListLayout::HListLayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
+    HListLayout::HListLayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
         : Layout(in_layoutComponent), m_gridLayout(in_layoutComponent, GridLayout::CellOrder::k_rowMajor, 1, in_numCells, in_relMargins, in_absMargins, in_relSpacing, in_absSpacing, 0.0f, 0.0f)
     {
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool HListLayout::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool HListLayout::IsA(InterfaceIDType in_interfaceId) const
     {
         return (Layout::InterfaceID == in_interfaceId || HListLayout::InterfaceID == in_interfaceId);
     }
@@ -54,13 +54,13 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector4 HListLayout::GetRelativeMargins() const
+    Vector4 HListLayout::GetRelativeMargins() const
     {
         return m_gridLayout.GetRelativeMargins();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector4 HListLayout::GetAbsoluteMargins() const
+    Vector4 HListLayout::GetAbsoluteMargins() const
     {
         return m_gridLayout.GetAbsoluteMargins();
     }
@@ -116,13 +116,13 @@ namespace CS
     //------------------------------------------------------------------------------
     /// The cell size if fixed and uniform so the index is not required
     //------------------------------------------------------------------------------
-    Core::Vector2 HListLayout::GetSizeForIndex(u32 in_index) const
+    Vector2 HListLayout::GetSizeForIndex(u32 in_index) const
     {
         return m_gridLayout.GetSizeForIndex(in_index);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector2 HListLayout::GetPositionForIndex(u32 in_index) const
+    Vector2 HListLayout::GetPositionForIndex(u32 in_index) const
     {
         return m_gridLayout.GetPositionForIndex(in_index);
     }

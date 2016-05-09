@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Event/IDisconnectableEvent.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     //----------------------------------------------------------------

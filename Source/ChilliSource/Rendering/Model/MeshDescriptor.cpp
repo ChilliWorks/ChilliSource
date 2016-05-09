@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------------
     /// Describes the features used in this mesh.
@@ -46,8 +46,8 @@ namespace CS
     {
         mudwNumVertices = 0;
         mudwNumIndices = 0;
-        mvMinBounds = CSCore::Vector3(0.0f, 0.0f, 0.0f);
-        mvMaxBounds = CSCore::Vector3(0.0f, 0.0f, 0.0f);
+        mvMinBounds = Vector3(0.0f, 0.0f, 0.0f);
+        mvMaxBounds = Vector3(0.0f, 0.0f, 0.0f);
         mpVertexData = nullptr;
         mpIndexData = nullptr;
         ePrimitiveType = PrimitiveType::k_tri;

@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //TODO: Need to address the mutable member with the new definition of const
     //-------------------------------------------------

@@ -34,13 +34,13 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(CameraComponent);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
     CameraComponent::CameraComponent(f32 in_nearClip, f32 in_farClip)
-    : m_nearClip(in_nearClip), m_farClip(in_farClip), m_screen(Core::Application::Get()->GetScreen())
+    : m_nearClip(in_nearClip), m_farClip(in_farClip), m_screen(Application::Get()->GetScreen())
     {
         
     }
@@ -62,27 +62,27 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Ray CameraComponent::Unproject(const Core::Vector2 &invScreenPos)
+    Ray CameraComponent::Unproject(const Vector2 &invScreenPos)
     {
-        Core::Matrix4 matProj = Core::Matrix4::Inverse((GetView() * GetProjection()));
+        Matrix4 matProj = Matrix4::Inverse((GetView() * GetProjection()));
         
-        Core::Vector2 vScreenSize = m_screen->GetResolution();
+        Vector2 vScreenSize = m_screen->GetResolution();
         //Normalise the screen space co-ordinates into clip space
         f32 nx = ((2.0f * (invScreenPos.x/vScreenSize.x)) - 1.0f);
         f32 ny = ((2.0f * (invScreenPos.y/vScreenSize.y)) - 1.0f);
         
-        Core::Vector4 vNear(nx, ny, -1.0f, 1.0f);
-        Core::Vector4 vFar(nx,ny, 1.0f, 1.0f);
+        Vector4 vNear(nx, ny, -1.0f, 1.0f);
+        Vector4 vFar(nx,ny, 1.0f, 1.0f);
         vNear = vNear * matProj;
         vFar = vFar * matProj;
         
-        Core::Ray cRay;
+        Ray cRay;
         
         vNear /= vNear.w;
-        cRay.vOrigin = Core::Vector3(vNear.x, vNear.y, vNear.z);
+        cRay.vOrigin = Vector3(vNear.x, vNear.y, vNear.z);
 
         vFar /= vFar.w;
-        cRay.vDirection = Core::Vector3(vFar.x, vFar.y, vFar.z) - cRay.vOrigin;
+        cRay.vDirection = Vector3(vFar.x, vFar.y, vFar.z) - cRay.vOrigin;
         
         cRay.fLength = cRay.vDirection.Length();
         cRay.vDirection /= cRay.fLength;
@@ -91,13 +91,13 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector2 CameraComponent::Project(const Core::Vector3 &invWorldPos)
+    Vector2 CameraComponent::Project(const Vector3 &invWorldPos)
     {
         //Convert the world space position to clip space
-        Core::Matrix4 matToClip = (GetView() * GetProjection());
-        Core::Vector4 vScreenPos = Core::Vector4(invWorldPos, 1.0f) * matToClip;
+        Matrix4 matToClip = (GetView() * GetProjection());
+        Vector4 vScreenPos = Vector4(invWorldPos, 1.0f) * matToClip;
         
-        Core::Vector2 vScreenSize = m_screen->GetResolution();
+        Vector2 vScreenSize = m_screen->GetResolution();
         
         // Normalize co-ordinates
         vScreenPos.x = vScreenPos.x / vScreenPos.w;
@@ -108,11 +108,11 @@ namespace CS
         vScreenPos.y = (vScreenSize.y * 0.5f)* vScreenPos.y + vScreenSize.y * 0.5f;
 
         //Return 2D screen space co-ordinates
-        return Core::Vector2(vScreenPos.x, vScreenPos.y);
+        return Vector2(vScreenPos.x, vScreenPos.y);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Core::Matrix4& CameraComponent::GetProjection() 
+    const Matrix4& CameraComponent::GetProjection() 
     {
         if(m_isProjCacheValid == false)
         {
@@ -124,18 +124,18 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Core::Matrix4& CameraComponent::GetView()
+    const Matrix4& CameraComponent::GetView()
     {
         if(GetEntity())
         {
-            m_viewMat = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
+            m_viewMat = Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
         }
 
         return m_viewMat;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Core::Frustum& CameraComponent::GetFrustum()
+    const Frustum& CameraComponent::GetFrustum()
     {
         if(m_isFrustumCacheValid == false)
         {
@@ -147,10 +147,10 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Matrix4 CameraComponent::Billboard(const Core::Matrix4& in_toBillboard)
+    Matrix4 CameraComponent::Billboard(const Matrix4& in_toBillboard)
     {
-        const Core::Matrix4& viewMat = GetView();
-        Core::Matrix4 result = in_toBillboard * viewMat;
+        const Matrix4& viewMat = GetView();
+        Matrix4 result = in_toBillboard * viewMat;
         
         result.m[12] = in_toBillboard.m[12];
         result.m[13] = in_toBillboard.m[13];
@@ -207,7 +207,7 @@ namespace CS
     //------------------------------------------------------------------------------
     void CameraComponent::OnAddedToScene()
     {
-        m_resolutionChangedConnection = Core::Application::Get()->GetScreen()->GetResolutionChangedEvent().OpenConnection([=](const Core::Vector2& in_resolution)
+        m_resolutionChangedConnection = Application::Get()->GetScreen()->GetResolutionChangedEvent().OpenConnection([=](const Vector2& in_resolution)
         {
             m_isFrustumCacheValid = false;
         });

@@ -31,7 +31,7 @@
 #include <ck/ck.h>
 #include <ck/bank.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(CkBank);
     //------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool CkBank::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool CkBank::IsA(InterfaceIDType in_interfaceId) const
     {
         return (CkBank::InterfaceID == in_interfaceId);
     }

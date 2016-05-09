@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
     /// The response result of an http request. This contains the http response code and

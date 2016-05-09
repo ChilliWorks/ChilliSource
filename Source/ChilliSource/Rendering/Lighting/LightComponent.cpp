@@ -31,7 +31,7 @@
 
 #include <limits>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(LightComponent);
 
@@ -47,7 +47,7 @@ namespace CS
     //----------------------------------------------------------
     /// Set Colour
     //----------------------------------------------------------
-    void LightComponent::SetColour(const Core::Colour &inColour)
+    void LightComponent::SetColour(const Colour &inColour)
     {
         mColour = inColour;
         
@@ -56,21 +56,21 @@ namespace CS
     //----------------------------------------------------------
     /// Get Colour
     //----------------------------------------------------------
-    Core::Colour LightComponent::GetColour() const
+    Colour LightComponent::GetColour() const
     {
         return mColour * mfIntensity;
     }
     //----------------------------------------------------------
     /// Get World Position
     //----------------------------------------------------------
-    const Core::Vector3& LightComponent::GetWorldPosition() const
+    const Vector3& LightComponent::GetWorldPosition() const
     {
         if(GetEntity() != nullptr)
         {
             return GetEntity()->GetTransform().GetWorldPosition();
         }
         
-        return Core::Vector3::k_zero;
+        return Vector3::k_zero;
     }
     //----------------------------------------------------------
     /// Set Intensity

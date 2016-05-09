@@ -61,7 +61,7 @@ namespace CSBackend
 			/// @return whether or not this object implements
 			/// the given interface.
 			//-----------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const;
             //-----------------------------------------------
             /// Display the systems confirmation dialog
             ///

@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------
     /// A generic four dimensional mathematical vector. Typically
@@ -451,7 +451,7 @@ namespace CS
 #include <assert.h>
 #include <cmath>
 
-namespace CS
+namespace ChilliSource
 {
     template <typename TType> const GenericVector4<TType> GenericVector4<TType>::k_zero(0, 0, 0, 0);
     template <typename TType> const GenericVector4<TType> GenericVector4<TType>::k_one(1, 1, 1, 1);

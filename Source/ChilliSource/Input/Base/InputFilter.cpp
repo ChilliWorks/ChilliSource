@@ -26,7 +26,7 @@
 
 #include <ChilliSource/Input/Base/InputFilter.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------
     //--------------------------------------------------------------

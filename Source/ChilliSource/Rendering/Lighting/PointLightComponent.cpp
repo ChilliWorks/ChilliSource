@@ -33,7 +33,7 @@
 
 #include <limits>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(PointLightComponent);
 
@@ -49,7 +49,7 @@ namespace CS
     //----------------------------------------------------------
     /// Is A
     //----------------------------------------------------------
-    bool PointLightComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
+    bool PointLightComponent::IsA(InterfaceIDType inInterfaceID) const
     {
         return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == PointLightComponent::InterfaceID;
     }
@@ -114,13 +114,13 @@ namespace CS
     //----------------------------------------------------------
     /// Get Light Matrix
     //----------------------------------------------------------
-    const Core::Matrix4& PointLightComponent::GetLightMatrix() const
+    const Matrix4& PointLightComponent::GetLightMatrix() const
     {
         //The point light matrix is simply a light view matrix
         //as the projection is done in the shader
         if(mbMatrixCacheValid == false && GetEntity() != nullptr)
         {
-            mmatLight = Core::Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
+            mmatLight = Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
             mbMatrixCacheValid = true;
         }
         
@@ -130,7 +130,7 @@ namespace CS
     //----------------------------------------------------
     void PointLightComponent::OnAddedToScene()
     {
-        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged));
+        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged));
     }
     //----------------------------------------------------
     //----------------------------------------------------

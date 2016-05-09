@@ -34,7 +34,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Interface for laying out widgets. This is used by Layout UIComponent to
@@ -42,7 +42,7 @@ namespace CS
     ///
     /// @author S Downie
     //------------------------------------------------------------------------------
-    class Layout : public Core::QueryableInterface
+    class Layout : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(ILayout);
@@ -88,7 +88,7 @@ namespace CS
         ///
         /// @return Final absolute screen size
         //------------------------------------------------------------------------------
-        virtual Core::Vector2 GetSizeForIndex(u32 in_index) const = 0;
+        virtual Vector2 GetSizeForIndex(u32 in_index) const = 0;
         //------------------------------------------------------------------------------
         /// Get the local position of the widget that occupies the space at the given
         /// index
@@ -99,7 +99,7 @@ namespace CS
         ///
         /// @return Local position (aligned middle centre of the cell)
         //------------------------------------------------------------------------------
-        virtual Core::Vector2 GetPositionForIndex(u32 in_index) const = 0;
+        virtual Vector2 GetPositionForIndex(u32 in_index) const = 0;
         
         LayoutComponent* m_component = nullptr;
     };

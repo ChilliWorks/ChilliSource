@@ -37,7 +37,7 @@
 #include <limits>
 #include <queue>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------
     /// Manages the various different notification systems,
@@ -70,7 +70,7 @@ namespace CS
         /// @return Whether this implements the passed in
         /// interface id.
         //-----------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //--------------------------------------------------
         /// Schedules an App Notification which should fire
         /// as soon as it can. An App Notification is

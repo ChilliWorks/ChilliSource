@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------
     /// Collection of utility methods shared by drawables
@@ -56,7 +56,7 @@ namespace CS
         ///
         /// @return Atlas frame
         //----------------------------------------------------------------------------
-        Rendering::TextureAtlas::Frame BuildFrame(const Rendering::Texture* in_texture, const Rendering::TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const Rendering::UVs& in_virtualUVs);
+        TextureAtlas::Frame BuildFrame(const Texture* in_texture, const TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const UVs& in_virtualUVs);
     }
 }
 

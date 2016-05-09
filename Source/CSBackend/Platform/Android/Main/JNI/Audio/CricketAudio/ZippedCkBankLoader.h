@@ -75,7 +75,7 @@ namespace CSBackend
             /// @param out_resource - [Out] The output resource. If this was successful it
             /// will have its load state set to loaded, otherwise it will be set to failed.
             //------------------------------------------------------------------------------
-            void Load(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::ResourceSPtr& out_resource) const;
+            void Load(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::ResourceSPtr& out_resource) const;
             //------------------------------------------------------------------------------
             /// Asynchronously loads the entire file from the zip into memory then creates
             /// the CkBank from this memory buffer. This can technically be used for any of
@@ -93,8 +93,8 @@ namespace CSBackend
             /// @param out_resource - [Out] The output resource. If this was successful it
             /// will have its load state set to loaded, otherwise it will be set to failed.
             //------------------------------------------------------------------------------
-            void LoadAsync(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate,
-                const CSCore::ResourceSPtr& out_resource);
+            void LoadAsync(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate,
+                const ChilliSource::ResourceSPtr& out_resource);
 
 		private:
             //------------------------------------------------------------------------------

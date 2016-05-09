@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A particle emitter def describing the properties for a Point Particle
@@ -95,7 +95,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// Creates a new instance of a Point Particle Emitter.
         ///
@@ -105,7 +105,7 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        ParticleEmitterUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+        ParticleEmitterUPtr CreateInstance(dynamic_array<Particle>* in_particleArray) const override;
     };
 }
 

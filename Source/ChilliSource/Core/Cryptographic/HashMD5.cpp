@@ -30,7 +30,7 @@
 
 #include <md5/md5.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace HashMD5
     {

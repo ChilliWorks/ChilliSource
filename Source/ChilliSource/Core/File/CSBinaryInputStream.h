@@ -33,7 +33,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------
     /// A file input stream for reading files that use Chilli Source's

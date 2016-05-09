@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---Defaults
     const f32 kDefaultRayLength = 5000.0f;

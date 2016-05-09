@@ -37,7 +37,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ namespace CS
     bool PropertyMap::HasKey(const std::string& in_name) const
     {
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         return m_properties.find(lowerCaseName) != m_properties.end();
     }
@@ -132,7 +132,7 @@ namespace CS
     bool PropertyMap::HasValue(const std::string& in_name) const
     {
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         auto it = m_properties.find(lowerCaseName);
         if (it == m_properties.end())
@@ -154,7 +154,7 @@ namespace CS
     void PropertyMap::ParseProperty(const std::string& in_name, const std::string& in_value)
     {
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         auto entry = m_properties.find(lowerCaseName);
         CS_ASSERT(entry != m_properties.end(), "No property in property map with name: " + in_name);
@@ -174,7 +174,7 @@ namespace CS
     const IPropertyType* PropertyMap::GetType(const std::string& in_name) const
     {
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         auto entry = m_properties.find(lowerCaseName);
         CS_ASSERT(entry != m_properties.end(), "No property with name: " + in_name);
@@ -185,7 +185,7 @@ namespace CS
     IProperty* PropertyMap::GetPropertyObject(const std::string& in_name)
     {
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         auto entry = m_properties.find(lowerCaseName);
         CS_ASSERT(entry != m_properties.end(), "No property with name: " + in_name);
@@ -196,7 +196,7 @@ namespace CS
     const IProperty* PropertyMap::GetPropertyObject(const std::string& in_name) const
     {
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         auto entry = m_properties.find(lowerCaseName);
         CS_ASSERT(entry != m_properties.end(), "No property with name: " + in_name);

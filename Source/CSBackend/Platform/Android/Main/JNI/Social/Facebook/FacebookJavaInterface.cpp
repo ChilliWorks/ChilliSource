@@ -65,7 +65,7 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnAuthenti
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			gpAndroidAuthSystem->OnAuthenticationComplete(inbSuccess);
 		});
@@ -84,7 +84,7 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnReadAuth
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			gpAndroidAuthSystem->OnAuthoriseReadPermissionsComplete(inbSuccess);
 		});
@@ -103,7 +103,7 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnWriteAut
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			gpAndroidAuthSystem->OnAuthoriseWritePermissionsComplete(inbSuccess);
 		});
@@ -122,21 +122,21 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnPostToFe
 {
 	if(gpAndroidPostSystem)
 	{
-		CSSocial::FacebookPostSystem::PostResult result = CSSocial::FacebookPostSystem::PostResult::k_failed;
+		ChilliSource::FacebookPostSystem::PostResult result = ChilliSource::FacebookPostSystem::PostResult::k_failed;
 		switch(in_result)
 		{
 		case 0:
-			result = CSSocial::FacebookPostSystem::PostResult::k_success;
+			result = ChilliSource::FacebookPostSystem::PostResult::k_success;
 			break;
 		case 1:
-			result = CSSocial::FacebookPostSystem::PostResult::k_cancelled;
+			result = ChilliSource::FacebookPostSystem::PostResult::k_cancelled;
 			break;
 		default:
-			result = CSSocial::FacebookPostSystem::PostResult::k_failed;
+			result = ChilliSource::FacebookPostSystem::PostResult::k_failed;
 			break;
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			gpAndroidPostSystem->OnPostToFeedComplete(result);
 		});
@@ -155,21 +155,21 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnPostRequ
 {
 	if(gpAndroidPostSystem)
 	{
-		CSSocial::FacebookPostSystem::PostResult result = CSSocial::FacebookPostSystem::PostResult::k_failed;
+		ChilliSource::FacebookPostSystem::PostResult result = ChilliSource::FacebookPostSystem::PostResult::k_failed;
 		switch(in_result)
 		{
 		case 0:
-			result = CSSocial::FacebookPostSystem::PostResult::k_success;
+			result = ChilliSource::FacebookPostSystem::PostResult::k_success;
 			break;
 		case 1:
-			result = CSSocial::FacebookPostSystem::PostResult::k_cancelled;
+			result = ChilliSource::FacebookPostSystem::PostResult::k_cancelled;
 			break;
 		default:
-			result = CSSocial::FacebookPostSystem::PostResult::k_failed;
+			result = ChilliSource::FacebookPostSystem::PostResult::k_failed;
 			break;
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			gpAndroidPostSystem->OnPostRequestComplete(result);
 		});
@@ -201,7 +201,7 @@ namespace CSBackend
 		}
         //--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		bool FacebookJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
+		bool FacebookJavaInterface::IsA(ChilliSource::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == FacebookJavaInterface::InterfaceID;
 		}

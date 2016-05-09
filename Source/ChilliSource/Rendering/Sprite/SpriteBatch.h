@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 
-namespace CS
+namespace ChilliSource
 {
     const u32 k_numSpriteVerts = 4;
     const u32 k_numSpriteIndices = 6;
@@ -63,9 +63,9 @@ namespace CS
         //----------------------------------------------------------
         struct SpriteVertex
         {
-            Core::Vector4 vPos;
-            Core::Vector2 vTex;
-            Core::ByteColour Col;
+            Vector4 vPos;
+            Vector2 vTex;
+            ByteColour Col;
         };
         //----------------------------------------------------------
         /// Holds the data for each vertex of a sprite and

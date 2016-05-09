@@ -135,7 +135,7 @@ namespace CSBackend
             ///
             /// @return The file stream.
             //------------------------------------------------------------------------------
-            CSCore::FileStreamUPtr CreateFileStream(const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
+            ChilliSource::FileStreamUPtr CreateFileStream(const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const;
             //------------------------------------------------------------------------------
             /// Opens a series of files one by one without closing the zip. The contents of
             /// each file are returned via the FileReadDelegate.

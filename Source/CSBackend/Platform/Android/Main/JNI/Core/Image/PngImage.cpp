@@ -58,7 +58,7 @@ namespace CSBackend
 				return;
 			}
 
-			CSCore::FileStream* pStream = (CSCore::FileStream*)png_get_io_ptr(inpPng);
+			ChilliSource::FileStream* pStream = (ChilliSource::FileStream*)png_get_io_ptr(inpPng);
 			pStream->Read((s8*)inpData, indwLength);
 		}
 		//----------------------------------------------------------------------------------
@@ -70,18 +70,18 @@ namespace CSBackend
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = nullptr;
-			meFormat = CSCore::ImageFormat::k_RGBA8888;
+			meFormat = ChilliSource::ImageFormat::k_RGBA8888;
 		}
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		PngImage::PngImage(CSCore::StorageLocation ineStorageLocation, const std::string& instrFilename)
+		PngImage::PngImage(ChilliSource::StorageLocation ineStorageLocation, const std::string& instrFilename)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = nullptr;
-			meFormat = CSCore::ImageFormat::k_RGBA8888;
+			meFormat = ChilliSource::ImageFormat::k_RGBA8888;
 
 			Load(ineStorageLocation, instrFilename);
 		}
@@ -98,10 +98,10 @@ namespace CSBackend
 		//----------------------------------------------------------------------------------
 		/// Load
 		//----------------------------------------------------------------------------------
-		void PngImage::Load(CSCore::StorageLocation ineStorageLocation, const std::string& instrFilename)
+		void PngImage::Load(ChilliSource::StorageLocation ineStorageLocation, const std::string& instrFilename)
 		{
 			//create the file stream
-			CSCore::FileStreamSPtr stream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrFilename, CSCore::FileMode::k_readBinary);
+			ChilliSource::FileStreamSPtr stream = ChilliSource::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrFilename, ChilliSource::FileMode::k_readBinary);
 
 			//insure the stream is not broken
 			if (stream == nullptr)
@@ -167,14 +167,14 @@ namespace CSBackend
 		//----------------------------------------------------------------------------------
 		/// Get Image Format
 		//----------------------------------------------------------------------------------
-		CSCore::ImageFormat PngImage::GetImageFormat()
+		ChilliSource::ImageFormat PngImage::GetImageFormat()
 		{
 			return meFormat;
 		}
 		//----------------------------------------------------------------------------------
 		/// Load with lib png
 		//----------------------------------------------------------------------------------
-		bool PngImage::LoadWithLibPng(CSCore::FileStreamSPtr inStream)
+		bool PngImage::LoadWithLibPng(ChilliSource::FileStreamSPtr inStream)
 		{
 			//-------- Intialisation
 			//read the header to insure it is indeed a png
@@ -284,16 +284,16 @@ namespace CSBackend
 			switch (dwColorType)
 			{
 			case PNG_COLOR_TYPE_GRAY:
-				meFormat = CSCore::ImageFormat::k_Lum8;
+				meFormat = ChilliSource::ImageFormat::k_Lum8;
 				break;
 			case PNG_COLOR_TYPE_GRAY_ALPHA:
-				meFormat = CSCore::ImageFormat::k_LumA88;
+				meFormat = ChilliSource::ImageFormat::k_LumA88;
 				break;
 			case PNG_COLOR_TYPE_RGB:
-				meFormat = CSCore::ImageFormat::k_RGB888;
+				meFormat = ChilliSource::ImageFormat::k_RGB888;
 				break;
 			case PNG_COLOR_TYPE_RGB_ALPHA:
-				meFormat = CSCore::ImageFormat::k_RGBA8888;
+				meFormat = ChilliSource::ImageFormat::k_RGBA8888;
 				break;
 			default:
 				CS_LOG_ERROR("Trying to load a PNG with an unknown colour format!");

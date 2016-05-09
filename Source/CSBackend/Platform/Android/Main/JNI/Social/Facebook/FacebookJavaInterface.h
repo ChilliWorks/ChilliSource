@@ -58,7 +58,7 @@ namespace CSBackend
 			/// @param Interface ID to check against
 			/// @return true if this class is a class matched by interface ID
 			//--------------------------------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::InterfaceIDType inInterfaceID) const;
             //--------------------------------------------------------------------------------------
 			/// Set Authentication System
 			///

@@ -37,7 +37,7 @@
 #include <mutex>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------
     /// A cross platform logging system. This provides logging

@@ -33,7 +33,7 @@
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------
     /// Constructor
@@ -43,7 +43,7 @@ namespace CS
     {
         for (s32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
         {
-            mCurrentAnimationMatrices.push_back(Core::Matrix4());
+            mCurrentAnimationMatrices.push_back(Matrix4());
         }
     }
     //----------------------------------------------------------
@@ -173,7 +173,7 @@ namespace CS
     //----------------------------------------------------------
     /// Build Matrices
     //----------------------------------------------------------
-    void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::Matrix4& inParentMatrix)
+    void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Matrix4& inParentMatrix)
     {
         const std::vector<SkeletonNodeCUPtr>& nodes = mpSkeleton->GetNodes();
         u32 currIndex = 0;
@@ -182,10 +182,10 @@ namespace CS
             if ((*it)->mdwParentIndex == indwCurrentParent)
             {
                 //get the world translation and orientation
-                Core::Matrix4 localMat;
+                Matrix4 localMat;
                 if(mCurrentAnimationData->m_nodeTranslations.empty() == false)
                 {
-                    localMat = Core::Matrix4::CreateTransform(mCurrentAnimationData->m_nodeTranslations[currIndex], mCurrentAnimationData->m_nodeScales[currIndex], mCurrentAnimationData->m_nodeOrientations[currIndex]);
+                    localMat = Matrix4::CreateTransform(mCurrentAnimationData->m_nodeTranslations[currIndex], mCurrentAnimationData->m_nodeScales[currIndex], mCurrentAnimationData->m_nodeOrientations[currIndex]);
                 }
                 
                 //convert to matrix and store
@@ -201,25 +201,25 @@ namespace CS
     //----------------------------------------------------------
     /// Get Matrix At Index
     //----------------------------------------------------------
-    const Core::Matrix4& SkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
+    const Matrix4& SkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
     {
         if (indwIndex < (s32)mCurrentAnimationMatrices.size())
         {
             return mCurrentAnimationMatrices[indwIndex];
         }
-        return Core::Matrix4::k_identity;
+        return Matrix4::k_identity;
     }
     //----------------------------------------------------------
     /// Apply Inverse Bind Pose
     //----------------------------------------------------------
-    void SkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Core::Matrix4>& inInverseBindPoseMatrices, std::vector<Core::Matrix4>& outCombinedMatrices)
+    void SkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Matrix4>& inInverseBindPoseMatrices, std::vector<Matrix4>& outCombinedMatrices)
     {
         const std::vector<s32>& kadwJoints = mpSkeleton->GetJointIndices();
         
         outCombinedMatrices.clear();
         for (u32 i = 0; i < kadwJoints.size(); ++i)
         {
-            outCombinedMatrices.push_back(Core::Matrix4());
+            outCombinedMatrices.push_back(Matrix4());
         }
         
         //check that they have the same number of joints
@@ -231,7 +231,7 @@ namespace CS
         //iterate through and multiply together to get the new array
         s32 count = 0;
         std::vector<s32>::const_iterator joint = kadwJoints.begin();
-        for (std::vector<Core::Matrix4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
+        for (std::vector<Matrix4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
              joint != kadwJoints.end() && ibp != inInverseBindPoseMatrices.end();)
         {
             //multiply together
@@ -360,12 +360,12 @@ namespace CS
         {
             //iterate through each translation
             outFrame->m_nodeTranslations.reserve(inFrameB->m_nodeTranslations.size());
-            std::vector<Core::Vector3>::const_iterator transAIt = inFrameA->m_nodeTranslations.begin();
-            for (std::vector<Core::Vector3>::const_iterator transBIt = inFrameB->m_nodeTranslations.begin();
+            std::vector<Vector3>::const_iterator transAIt = inFrameA->m_nodeTranslations.begin();
+            for (std::vector<Vector3>::const_iterator transBIt = inFrameB->m_nodeTranslations.begin();
                  transAIt != inFrameA->m_nodeTranslations.end() && transBIt != inFrameB->m_nodeTranslations.end();)
             {
                 //lerp
-                Core::Vector3 newTrans = Core::MathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
+                Vector3 newTrans = MathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
                 
                 //add to frame
                 outFrame->m_nodeTranslations.push_back(newTrans);
@@ -377,12 +377,12 @@ namespace CS
             
             //iterate through each orientation
             outFrame->m_nodeOrientations.reserve(inFrameB->m_nodeOrientations.size());
-            std::vector<Core::Quaternion>::const_iterator orientAIt = inFrameA->m_nodeOrientations.begin();
-            for (std::vector<Core::Quaternion>::const_iterator orientBIt = inFrameB->m_nodeOrientations.begin();
+            std::vector<Quaternion>::const_iterator orientAIt = inFrameA->m_nodeOrientations.begin();
+            for (std::vector<Quaternion>::const_iterator orientBIt = inFrameB->m_nodeOrientations.begin();
                  orientAIt != inFrameA->m_nodeOrientations.end() && orientBIt != inFrameB->m_nodeOrientations.end();)
             {
                 //lerp
-                Core::Quaternion newOrient = Core::Quaternion::Slerp(*orientAIt, *orientBIt, infInterpFactor);
+                Quaternion newOrient = Quaternion::Slerp(*orientAIt, *orientBIt, infInterpFactor);
                 
                 //add to frame
                 outFrame->m_nodeOrientations.push_back(newOrient);
@@ -394,12 +394,12 @@ namespace CS
             
             //iterate through each scale
             outFrame->m_nodeScales.reserve(inFrameB->m_nodeScales.size());
-            std::vector<Core::Vector3>::const_iterator scaleAIt = inFrameA->m_nodeScales.begin();
-            for (std::vector<Core::Vector3>::const_iterator scaleBIt = inFrameB->m_nodeScales.begin();
+            std::vector<Vector3>::const_iterator scaleAIt = inFrameA->m_nodeScales.begin();
+            for (std::vector<Vector3>::const_iterator scaleBIt = inFrameB->m_nodeScales.begin();
                  scaleAIt != inFrameA->m_nodeScales.end() && scaleBIt != inFrameB->m_nodeScales.end();)
             {
                 //lerp
-                Core::Vector3 newScale = Core::MathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
+                Vector3 newScale = MathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
                 
                 //add to frame
                 outFrame->m_nodeScales.push_back(newScale);

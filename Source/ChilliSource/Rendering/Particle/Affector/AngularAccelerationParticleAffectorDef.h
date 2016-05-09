@@ -35,7 +35,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// The definition for an angular acceleration particle affector. This
@@ -88,7 +88,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// Creates an instance of the particle affector described by this.
         ///
@@ -98,7 +98,7 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+        ParticleAffectorUPtr CreateInstance(dynamic_array<Particle>* in_particleArray) const override;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///

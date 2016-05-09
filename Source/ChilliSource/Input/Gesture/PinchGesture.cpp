@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -45,14 +45,14 @@ namespace CS
     PinchGesture::PinchGesture(Pointer::InputType in_inputType)
     : m_requiredInputType(in_inputType)
     {
-        Core::Screen* screen = Core::Application::Get()->GetScreen();
+        Screen* screen = Application::Get()->GetScreen();
         m_minDisplacementSquared = (k_minDisplacement * screen->GetDensityScale()) * (k_minDisplacement * screen->GetDensityScale());
         
         m_pendingPointers.reserve(k_requiredPointerCount);
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    bool PinchGesture::IsA(Core::InterfaceIDType in_gestureInterfaceId) const
+    bool PinchGesture::IsA(InterfaceIDType in_gestureInterfaceId) const
     {
         return (Gesture::InterfaceID == in_gestureInterfaceId || PinchGesture::InterfaceID == in_gestureInterfaceId);
     }
@@ -64,19 +64,19 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchStartedEvent()
+    IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchStartedEvent()
     {
         return m_pinchStartedEvent;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchMovedEvent()
+    IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchMovedEvent()
     {
         return m_pinchMovedEvent;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchEndedEvent()
+    IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchEndedEvent()
     {
         return m_pinchEndedEvent;
     }
@@ -146,9 +146,9 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::Vector2 PinchGesture::CalculatePosition() const
+    Vector2 PinchGesture::CalculatePosition() const
     {
-        Core::Vector2 gesturePos = Core::Vector2::k_zero;
+        Vector2 gesturePos = Vector2::k_zero;
         if (m_pendingPointers.size() >= k_requiredPointerCount && IsActive() == true && m_paused == false)
         {
             for (const auto& pointer : m_pendingPointers)
@@ -172,7 +172,7 @@ namespace CS
         
         if (m_pendingPointers.size() >= k_requiredPointerCount && IsActive() == true && m_paused == false)
         {
-            std::vector<Core::Vector2> positions;
+            std::vector<Vector2> positions;
             for (const auto& pointer : m_pendingPointers)
             {
                 if (pointer.m_active == true)
@@ -183,7 +183,7 @@ namespace CS
             
             CS_ASSERT(positions.size() == k_requiredPointerCount, "There are more active pointers than required.");
             
-            Core::Vector2 displacement = positions[1] - positions[0];
+            Vector2 displacement = positions[1] - positions[0];
             distance = displacement.Length();
         }
         
@@ -216,7 +216,7 @@ namespace CS
         m_paused = false;
         
         m_pinchEndedEvent.NotifyConnections(this, m_currentPinchInfo);
-        m_currentPinchInfo.m_position = Core::Vector2::k_zero;
+        m_currentPinchInfo.m_position = Vector2::k_zero;
         m_currentPinchInfo.m_scale = 0.0f;
     }
     //--------------------------------------------------------
@@ -257,7 +257,7 @@ namespace CS
                 {
                     pointer.m_currentPosition = in_pointer.GetPosition();
                     
-                    Core::Vector2 displacement = pointer.m_currentPosition - pointer.m_initialPosition;
+                    Vector2 displacement = pointer.m_currentPosition - pointer.m_initialPosition;
                     if (displacement.LengthSquared() > m_minDisplacementSquared)
                     {
                         pointer.m_isDrag = true;

@@ -110,7 +110,7 @@ namespace CSBackend
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			PngImage(CSCore::StorageLocation ineStorageLocation, const std::string& instrFilename);
+			PngImage(ChilliSource::StorageLocation ineStorageLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ namespace CSBackend
 			/// @param The storage location to load from.
 			/// @param The file path.
 			//----------------------------------------------------------------------------------
-			void Load(CSCore::StorageLocation ineStorageLocation, const std::string& instrFilename);
+			void Load(ChilliSource::StorageLocation ineStorageLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Release
 			///
@@ -166,7 +166,7 @@ namespace CSBackend
 			///
 			/// @return the image format
 			//----------------------------------------------------------------------------------
-			CSCore::ImageFormat GetImageFormat();
+			ChilliSource::ImageFormat GetImageFormat();
 		protected:
 			//----------------------------------------------------------------------------------
 			/// Load with lib png
@@ -175,13 +175,13 @@ namespace CSBackend
 			///
 			/// @param the stream lib png should use to read the data.
 			//----------------------------------------------------------------------------------
-			bool LoadWithLibPng(CSCore::FileStreamSPtr inStream);
+			bool LoadWithLibPng(ChilliSource::FileStreamSPtr inStream);
 
 			bool mbIsLoaded;
 			s32 mdwHeight;
 			s32 mdwWidth;
 			u8 * mpData;
-			CSCore::ImageFormat meFormat;
+			ChilliSource::ImageFormat meFormat;
 			u32 m_dataSize = 0;
 		};
 	}

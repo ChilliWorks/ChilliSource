@@ -46,7 +46,7 @@
 #include <ChilliSource/UI/Layout/HListLayout.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(WidgetFactory);
     
@@ -74,7 +74,7 @@ namespace CS
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    bool WidgetFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool WidgetFactory::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == WidgetFactory::InterfaceID;
     }
@@ -82,45 +82,45 @@ namespace CS
     //---------------------------------------------------------------------------
     void WidgetFactory::OnInit()
     {
-        m_componentFactory = Core::Application::Get()->GetSystem<UIComponentFactory>();
+        m_componentFactory = Application::Get()->GetSystem<UIComponentFactory>();
         CS_ASSERT(m_componentFactory != nullptr, "WidgetFactory is missing required system: UIComponentFactory");
         
-        auto resPool = Core::Application::Get()->GetResourcePool();
+        auto resPool = Application::Get()->GetResourcePool();
 
-        WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Widget.csuidef");
+        WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/Widget.csuidef");
         RegisterDefinition(widgetDef);
         
-        WidgetDefCSPtr imageDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Image.csuidef");
+        WidgetDefCSPtr imageDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/Image.csuidef");
         RegisterDefinition(imageDef);
         
-        WidgetDefCSPtr layoutDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Layout.csuidef");
+        WidgetDefCSPtr layoutDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/Layout.csuidef");
         RegisterDefinition(layoutDef);
         
-        WidgetDefCSPtr highlightButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HighlightButton.csuidef");
+        WidgetDefCSPtr highlightButtonDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/HighlightButton.csuidef");
         RegisterDefinition(highlightButtonDef);
         
-        WidgetDefCSPtr toggleButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/ToggleButton.csuidef");
+        WidgetDefCSPtr toggleButtonDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/ToggleButton.csuidef");
         RegisterDefinition(toggleButtonDef);
         
-        WidgetDefCSPtr horizontalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalSlider.csuidef");
+        WidgetDefCSPtr horizontalSliderDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/HorizontalSlider.csuidef");
         RegisterDefinition(horizontalSliderDef);
         
-        WidgetDefCSPtr verticalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalSlider.csuidef");
+        WidgetDefCSPtr verticalSliderDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/VerticalSlider.csuidef");
         RegisterDefinition(verticalSliderDef);
 
-        WidgetDefCSPtr horizontalFillProgressBarDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalFillProgressBar.csuidef");
+        WidgetDefCSPtr horizontalFillProgressBarDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/HorizontalFillProgressBar.csuidef");
         RegisterDefinition(horizontalFillProgressBarDef);
         
-        WidgetDefCSPtr horizontalStretchProgressBarDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalStretchProgressBar.csuidef");
+        WidgetDefCSPtr horizontalStretchProgressBarDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/HorizontalStretchProgressBar.csuidef");
         RegisterDefinition(horizontalStretchProgressBarDef);
         
-        WidgetDefCSPtr verticalFillProgressBarDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalFillProgressBar.csuidef");
+        WidgetDefCSPtr verticalFillProgressBarDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/VerticalFillProgressBar.csuidef");
         RegisterDefinition(verticalFillProgressBarDef);
         
-        WidgetDefCSPtr verticalStretchProgressBarDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalStretchProgressBar.csuidef");
+        WidgetDefCSPtr verticalStretchProgressBarDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/VerticalStretchProgressBar.csuidef");
         RegisterDefinition(verticalStretchProgressBarDef);
         
-        WidgetDefCSPtr labelDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Label.csuidef");
+        WidgetDefCSPtr labelDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/Label.csuidef");
         RegisterDefinition(labelDef);
     }
     //---------------------------------------------------------------------------

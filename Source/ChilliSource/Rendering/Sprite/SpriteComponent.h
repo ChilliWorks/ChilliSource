@@ -39,7 +39,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A render component that draws a 2D textured quad. Sprites
@@ -80,7 +80,7 @@ namespace CS
         ///
         /// @return New size with function applied
         //----------------------------------------------------------------------------------------
-        using SizePolicyDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
+        using SizePolicyDelegate = std::function<Vector2(const Vector2&, const Vector2&)>;
         //----------------------------------------------------------
         /// Constructor
         ///
@@ -94,7 +94,7 @@ namespace CS
         ///
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------
         /// The axis aligned bounding box is positioned in
         /// world space but the orientation is aligned to
@@ -105,7 +105,7 @@ namespace CS
         ///
         /// @return AABB in world space
         //----------------------------------------------------
-        const Core::AABB& GetAABB() override;
+        const AABB& GetAABB() override;
         //----------------------------------------------------
         /// The object oriented bounding box complete with transform to
         /// transform from local space to world space. This is cached
@@ -115,7 +115,7 @@ namespace CS
         ///
         /// @return OOBB in local space with world transform
         //----------------------------------------------------
-        const Core::OOBB& GetOOBB() override;
+        const OOBB& GetOOBB() override;
         //----------------------------------------------------
         /// All render objects have an bounding sphere for
         /// culling. This is cached and recomputed when tranform
@@ -126,14 +126,14 @@ namespace CS
         ///
         /// @return world space bounding sphere
         //----------------------------------------------------
-        const Core::Sphere& GetBoundingSphere() override;
+        const Sphere& GetBoundingSphere() override;
         //-----------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Vector containing width and height of sprite in
         /// local space
         //-----------------------------------------------------------
-        void SetSize(const Core::Vector2& in_size);
+        void SetSize(const Vector2& in_size);
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -154,7 +154,7 @@ namespace CS
         ///
         /// @return Size after the size policy has been applied
         //-----------------------------------------------------------
-        Core::Vector2 GetSize() const;
+        Vector2 GetSize() const;
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -178,7 +178,7 @@ namespace CS
         ///
         /// @param Rect containing uv, st
         //-----------------------------------------------------------
-        void SetUVs(const Rendering::UVs& in_uvs);
+        void SetUVs(const UVs& in_uvs);
         //-----------------------------------------------------------
         /// Set the UV texture coordinates
         ///
@@ -199,7 +199,7 @@ namespace CS
         ///
         /// @param Colour containing RGBA
         //-----------------------------------------------------------
-        void SetColour(const Core::Colour& in_colour);
+        void SetColour(const Colour& in_colour);
         //-----------------------------------------------------------
         /// Set the RGBA colour of the sprite. This is independent
         /// of the material colour and is applied on a per sprite
@@ -218,7 +218,7 @@ namespace CS
         ///
         /// @return Sprite colour
         //-----------------------------------------------------------
-        const Core::Colour& GetColour() const;
+        const Colour& GetColour() const;
         //-----------------------------------------------------------
         /// Flip the sprite UVs about it's local x-axis
         ///
@@ -331,7 +331,7 @@ namespace CS
         ///
         /// @return Preferred size based on the current atlas, id or texture
         //-----------------------------------------------------------
-        Core::Vector2 GetPreferredSize() const;
+        Vector2 GetPreferredSize() const;
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -357,10 +357,10 @@ namespace CS
         /// @param out_centre - [Output] The frame centre from the centre of the sprite.
         /// @param out_size - [Output] The sprite frame size.
         //------------------------------------------------------------------------------
-        void CalcFrameCentreAndSize(Core::Vector2& out_centre, Core::Vector2& out_size) const;
+        void CalcFrameCentreAndSize(Vector2& out_centre, Vector2& out_size) const;
 
     private:
-        Core::EventConnectionUPtr m_transformChangedConnection;
+        EventConnectionUPtr m_transformChangedConnection;
     
         TextureAtlasCSPtr m_textureAtlas;
         u32 m_hashedTextureAtlasId = 0;
@@ -369,12 +369,12 @@ namespace CS
         
         SpriteBatch::SpriteData m_spriteData;
     
-        Core::Vector2 m_cachedTextureSize;
-        Core::Vector2 m_originalSize;
+        Vector2 m_cachedTextureSize;
+        Vector2 m_originalSize;
         
         UVs m_uvs;
         
-        Core::Colour m_colour;
+        Colour m_colour;
         
         AlignmentAnchor m_originAlignment = AlignmentAnchor::k_middleCentre;
         

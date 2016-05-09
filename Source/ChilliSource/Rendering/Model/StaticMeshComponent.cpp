@@ -42,7 +42,7 @@
 #include <algorithm>
 #include <limits>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(StaticMeshComponent);
     
@@ -54,7 +54,7 @@ namespace CS
     //----------------------------------------------------------
     /// Is A
     //----------------------------------------------------------
-    bool StaticMeshComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
+    bool StaticMeshComponent::IsA(InterfaceIDType inInterfaceID) const
     {
         return  (inInterfaceID == StaticMeshComponent::InterfaceID) || 
                 (inInterfaceID == RenderComponent::InterfaceID) ||
@@ -63,25 +63,25 @@ namespace CS
     //----------------------------------------------------
     /// Get Axis Aligned Bounding Box
     //----------------------------------------------------
-    const Core::AABB& StaticMeshComponent::GetAABB()
+    const AABB& StaticMeshComponent::GetAABB()
     {
         if(GetEntity() && !m_isAABBValid)
         {
             m_isAABBValid = true;
             
             //Rebuild the box
-            const Core::AABB& cAABB = mpModel->GetAABB();
-            const Core::Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
-            Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
-            Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
-            Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
-            Core::Vector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
-            Core::Vector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
-            Core::Vector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
-            Core::Vector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
-            Core::Vector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
+            const AABB& cAABB = mpModel->GetAABB();
+            const Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
+            Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
+            Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
+            Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
+            Vector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
+            Vector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
+            Vector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
+            Vector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
+            Vector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
             
-            Core::Vector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
+            Vector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
             vMin.x = std::min(vMin.x, vBackBottomLeft.x);
             vMin.x = std::min(vMin.x, vBackBottomRight.x);
             vMin.x = std::min(vMin.x, vBackTopLeft.x);
@@ -109,7 +109,7 @@ namespace CS
             vMin.z = std::min(vMin.z, vFrontTopLeft.z);
             vMin.z = std::min(vMin.z, vFrontTopRight.z);
             
-            Core::Vector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
+            Vector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
             vMax.x = std::max(vMax.x, vBackBottomLeft.x);
             vMax.x = std::max(vMax.x, vBackBottomRight.x);
             vMax.x = std::max(vMax.x, vBackTopLeft.x);
@@ -146,7 +146,7 @@ namespace CS
     //----------------------------------------------------
     /// Get Object Oriented Bounding Box
     //----------------------------------------------------
-    const Core::OOBB& StaticMeshComponent::GetOOBB()
+    const OOBB& StaticMeshComponent::GetOOBB()
     {
         if(GetEntity() && !m_isOOBBValid)
         {
@@ -160,13 +160,13 @@ namespace CS
     //----------------------------------------------------
     /// Get Bounding Sphere
     //----------------------------------------------------
-    const Core::Sphere& StaticMeshComponent::GetBoundingSphere()
+    const Sphere& StaticMeshComponent::GetBoundingSphere()
     {
         if(GetEntity() && !m_isBSValid)
         {
             m_isBSValid = true;
             
-            const Core::AABB& sAABB = GetAABB();
+            const AABB& sAABB = GetAABB();
             mBoundingSphere.vOrigin = sAABB.GetOrigin();
             mBoundingSphere.fRadius = (sAABB.BackTopRight() - sAABB.FrontBottomLeft()).Length() * 0.5f;
         }
@@ -241,7 +241,7 @@ namespace CS
             return mMaterials[indwSubMeshIndex];
         }
         
-        CS_LOG_ERROR("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
+        CS_LOG_ERROR("Failed to get material from sub mesh " + ToString(indwSubMeshIndex));
         return nullptr;
     }
     //-----------------------------------------------------------
@@ -318,7 +318,7 @@ namespace CS
     //----------------------------------------------------
     void StaticMeshComponent::OnAddedToScene()
     {
-        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged));
+        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged));
         
         OnEntityTransformChanged();
     }

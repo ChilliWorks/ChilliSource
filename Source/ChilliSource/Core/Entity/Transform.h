@@ -37,7 +37,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     class Transform
     {
@@ -53,7 +53,7 @@ namespace CS
         /// @param Look target
         /// @param Up direction
         //----------------------------------------------------------
-        void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
+        void SetLookAt(const Vector3& invPos, const Vector3& invTarget, const Vector3& invUp);
         //----------------------------------------------------------------
         /// Set Position Scale Orientation
         ///

@@ -50,7 +50,7 @@ namespace CSBackend
     	///
     	/// @author Ian Copland
     	//------------------------------------------------------------------------------
-        class VideoPlayer final : public CSVideo::VideoPlayer
+        class VideoPlayer final : public ChilliSource::VideoPlayer
         {
         public:
         	CS_DECLARE_NAMEDTYPE(VideoPlayer);
@@ -64,7 +64,7 @@ namespace CSBackend
 			///
 			/// @return Whether system is of given type.
 			//------------------------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------------------------------------
             /// Begin streaming the video from file
             ///
@@ -77,8 +77,8 @@ namespace CSBackend
             /// Defaults to true.
             /// @param [Optional] The video background colour. Defaults to black.
             //------------------------------------------------------------------------------
-            void Present(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
-                         const CSCore::Colour& in_backgroundColour = CSCore::Colour::k_black) override;
+            void Present(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
+                         const ChilliSource::Colour& in_backgroundColour = ChilliSource::Colour::k_black) override;
             //------------------------------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
             ///
@@ -92,8 +92,8 @@ namespace CSBackend
             /// Defaults to true.
             /// @param [Optional] The video background colour. Defaults to black.
             //------------------------------------------------------------------------------
-            void PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
-                                      bool in_dismissWithTap = true, const CSCore::Colour& in_backgroundColour = CSCore::Colour::k_black) override;
+            void PresentWithSubtitles(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
+                                      bool in_dismissWithTap = true, const ChilliSource::Colour& in_backgroundColour = ChilliSource::Colour::k_black) override;
             //------------------------------------------------------------------------------
             /// Called from java when the video finishes. This is for internal use only
             /// and should not be called by the user.
@@ -111,7 +111,7 @@ namespace CSBackend
             void OnUpdateSubtitles();
 
         private:
-            friend CSVideo::VideoPlayerUPtr CSVideo::VideoPlayer::Create();
+            friend ChilliSource::VideoPlayerUPtr ChilliSource::VideoPlayer::Create();
             //------------------------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -133,7 +133,7 @@ namespace CSBackend
 			/// @param The subtitle Id
 			/// @param The time in milliseconds.
 			//------------------------------------------------------------------------------
-			void UpdateSubtitle(const CSVideo::Subtitles::Subtitle* in_subtitle, s64 in_subtitleID, TimeIntervalMs in_timeMS);
+			void UpdateSubtitle(const ChilliSource::Subtitles::Subtitle* in_subtitle, s64 in_subtitleID, TimeIntervalMs in_timeMS);
             //------------------------------------------------------------------------------
             /// Called when the owning state is destroyed.
             ///
@@ -143,9 +143,9 @@ namespace CSBackend
 
             bool m_isPlaying = false;
             VideoCompleteDelegate::Connection m_completionDelegateConnection;
-            CSVideo::SubtitlesCSPtr m_subtitles;
-            std::unordered_map<const CSVideo::Subtitles::Subtitle*, s64> m_subtitleMap;
-            std::vector<const CSVideo::Subtitles::Subtitle*> m_subtitlesToRemove;
+            ChilliSource::SubtitlesCSPtr m_subtitles;
+            std::unordered_map<const ChilliSource::Subtitles::Subtitle*, s64> m_subtitleMap;
+            std::vector<const ChilliSource::Subtitles::Subtitle*> m_subtitlesToRemove;
             TimeIntervalMs m_currentSubtitleTimeMS = 0;
 
             JavaSystemUPtr m_javaSystem;

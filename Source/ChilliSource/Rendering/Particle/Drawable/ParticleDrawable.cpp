@@ -30,11 +30,11 @@
 
 #include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------
     //----------------------------------------------
-    ParticleDrawable::ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData)
+    ParticleDrawable::ParticleDrawable(const Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData)
         : m_entity(in_entity), m_drawableDef(in_drawableDef), m_concurrentParticleData(in_concurrentParticleData)
     {
     }
@@ -56,7 +56,7 @@ namespace CS
     }
     //----------------------------------------------
     //----------------------------------------------
-    const Core::Entity* ParticleDrawable::GetEntity() const
+    const Entity* ParticleDrawable::GetEntity() const
     {
         return m_entity;
     }

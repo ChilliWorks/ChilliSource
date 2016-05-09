@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------
     /// A generic 4x4 matrix that provides standard matrix math
@@ -661,7 +661,7 @@ namespace CS
 
 #include <cmath>
 
-namespace CS
+namespace ChilliSource
 {
     template <typename TType> const GenericMatrix4<TType> GenericMatrix4<TType>::k_identity(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     

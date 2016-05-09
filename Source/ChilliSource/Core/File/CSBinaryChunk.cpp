@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/File/CSBinaryChunk.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     //----------------------------------------------------------------

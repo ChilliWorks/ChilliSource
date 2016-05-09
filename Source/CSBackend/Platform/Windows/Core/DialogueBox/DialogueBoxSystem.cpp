@@ -49,13 +49,13 @@ namespace CSBackend
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool DialogueBoxSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool DialogueBoxSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (DialogueBoxSystem::InterfaceID == in_interfaceId || CSCore::DialogueBoxSystem::InterfaceID == in_interfaceId);
+            return (DialogueBoxSystem::InterfaceID == in_interfaceId || ChilliSource::DialogueBoxSystem::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-		void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
+		void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
 			MessageBox(SFMLWindow::Get()->GetWindowHandle(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), MB_OK);
 			if (in_delegate)
@@ -65,7 +65,7 @@ namespace CSBackend
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-		void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
+		void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
 			if (MessageBox(SFMLWindow::Get()->GetWindowHandle(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), MB_OKCANCEL) == IDOK)
 			{

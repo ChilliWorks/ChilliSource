@@ -34,7 +34,7 @@
 
 #include <random>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A collection of thread-safe methods which can be used to generate pseudo

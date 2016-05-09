@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A container for a description of a single UIComponent, comprising of a
@@ -63,7 +63,7 @@ namespace CS
         /// @param The map of properties the component should be created
         /// with.
         //------------------------------------------------------------------
-        UIComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap);
+        UIComponentDesc(const std::string& in_type, const std::string& in_name, const PropertyMap& in_propertyMap);
         //------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -82,11 +82,11 @@ namespace CS
         /// @return The map of properties the component should be created
         /// with.
         //------------------------------------------------------------------
-        const Core::PropertyMap& GetProperties() const;
+        const PropertyMap& GetProperties() const;
     private:
         std::string m_type;
         std::string m_name;
-        Core::PropertyMap m_propertyMap;
+        PropertyMap m_propertyMap;
     };
 }
 

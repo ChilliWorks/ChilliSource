@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace ShapeIntersection
     {

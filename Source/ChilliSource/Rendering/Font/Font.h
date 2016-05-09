@@ -37,15 +37,15 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
-    const Core::UTF8Char k_returnCharacter = '\n';
-    const Core::UTF8Char k_tabCharacter = '\t';
-    const Core::UTF8Char k_spaceCharacter = ' ';
+    const UTF8Char k_returnCharacter = '\n';
+    const UTF8Char k_tabCharacter = '\t';
+    const UTF8Char k_spaceCharacter = ' ';
     
     //The nbsp character has the hex code C2A0 which converts to
     //160 in decimal after utf-8 conversion
-    const Core::UTF8Char k_nbspCharacter = 160;
+    const UTF8Char k_nbspCharacter = 160;
     
     //---------------------------------------------------------------------
     /// The font resource describing the size, spacing and kerning of
@@ -53,7 +53,7 @@ namespace CS
     ///
     /// @author S Downie
     //---------------------------------------------------------------------
-    class Font final : public Core::Resource
+    class Font final : public Resource
     {
     public:
         
@@ -67,9 +67,9 @@ namespace CS
         //---------------------------------------------------------------------
         struct CharacterInfo
         {
-            Rendering::UVs m_UVs;
-            Core::Vector2 m_size;
-            Core::Vector2 m_offset;
+            UVs m_UVs;
+            Vector2 m_size;
+            Vector2 m_offset;
             f32 m_origin = 0.0f;
             f32 m_advance = 0.0f;
         };
@@ -121,7 +121,7 @@ namespace CS
         ///
         /// @return Whether this object is of given type
         //---------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //---------------------------------------------------------------------
         /// Build the font from the given description
         ///
@@ -175,11 +175,11 @@ namespace CS
         ///
         /// @return Whether the character exists in the font
         //---------------------------------------------------------------------
-        bool TryGetCharacterInfo(Core::UTF8Char in_char, CharacterInfo& out_info) const;
+        bool TryGetCharacterInfo(UTF8Char in_char, CharacterInfo& out_info) const;
     
     private:
         
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //---------------------------------------------------------------------
         /// Factory method to create empty font resource. Used only by the
         /// resource pool.
@@ -196,7 +196,7 @@ namespace CS
         
     private:
         
-        std::unordered_map<Core::UTF8Char, CharacterInfo> m_characterInfos;
+        std::unordered_map<UTF8Char, CharacterInfo> m_characterInfos;
         CharacterSet m_characters;
         
         TextureCSPtr m_texture;

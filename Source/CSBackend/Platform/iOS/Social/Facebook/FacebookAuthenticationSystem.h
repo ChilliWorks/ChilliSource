@@ -50,7 +50,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //------------------------------------------------
-		class FacebookAuthenticationSystem final : public CSSocial::FacebookAuthenticationSystem
+		class FacebookAuthenticationSystem final : public ChilliSource::FacebookAuthenticationSystem
 		{
 		public:
 
@@ -63,7 +63,7 @@ namespace CSBackend
             ///
             /// @return Whether the interface ID matches this object
             //----------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------
             /// Log the user into Facebook with the given
             /// read permissions. If no permissions are specified
@@ -130,7 +130,7 @@ namespace CSBackend
 			
 		private:
             
-            friend CSSocial::FacebookAuthenticationSystemUPtr CSSocial::FacebookAuthenticationSystem::Create();
+            friend ChilliSource::FacebookAuthenticationSystemUPtr ChilliSource::FacebookAuthenticationSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.

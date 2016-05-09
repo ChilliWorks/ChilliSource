@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitter.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A cone particle emitter. This spawns particles either within a
@@ -58,7 +58,7 @@ namespace CS
         /// @param [Out] The generated position in local space.
         /// @param [Out] The generate direction in local space.
         //----------------------------------------------------------------
-        void GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
+        void GenerateEmission(f32 in_normalisedEmissionTime, Vector3& out_position, Vector3& out_direction) override;
     private:
         friend class Cone2DParticleEmitterDef;
         //----------------------------------------------------------------
@@ -69,7 +69,7 @@ namespace CS
         /// @param The particle emitter definition.
         /// @param The particle array.
         //----------------------------------------------------------------
-        Cone2DParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+        Cone2DParticleEmitter(const ParticleEmitterDef* in_particleEmitter, dynamic_array<Particle>* in_particleArray);
 
         const Cone2DParticleEmitterDef* m_coneParticleEmitterDef = nullptr;
     };

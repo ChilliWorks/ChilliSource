@@ -33,7 +33,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// Anchor points for view alignment.
@@ -63,7 +63,7 @@ namespace CS
     ///
     /// @return The anchor point.
     //---------------------------------------------------------------
-    Core::Vector2 GetAnchorPoint(AlignmentAnchor in_alignment, const Core::Vector2& in_halfSize);
+    Vector2 GetAnchorPoint(AlignmentAnchor in_alignment, const Vector2& in_halfSize);
     //---------------------------------------------------------------
     /// @author S Downie
     ///

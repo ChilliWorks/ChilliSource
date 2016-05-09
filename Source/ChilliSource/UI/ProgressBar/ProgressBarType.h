@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// An enum describing the type of a progress bar: fill or stretch.

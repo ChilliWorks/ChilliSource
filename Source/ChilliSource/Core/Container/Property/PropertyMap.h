@@ -39,7 +39,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------------------
     /// Simplified version of a map data-structure. The keys can only be set at
@@ -280,7 +280,7 @@ namespace CS
         typedef typename std::decay<TType>::type TValueType;
         
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         auto entry = m_properties.find(lowerCaseName);
         CS_ASSERT(entry != m_properties.end(), "No property in property map with name: " + in_name);
@@ -296,7 +296,7 @@ namespace CS
         typedef typename std::decay<TType>::type TValueType;
         
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         auto entry = m_properties.find(lowerCaseName);
         CS_ASSERT(entry != m_properties.end(), "No property in property map with name: " + in_name);
@@ -312,7 +312,7 @@ namespace CS
         typedef typename std::decay<TType>::type TValueType;
         
         std::string lowerCaseName = in_name;
-        Core::StringUtils::ToLowerCase(lowerCaseName);
+        StringUtils::ToLowerCase(lowerCaseName);
         
         auto entry = m_properties.find(lowerCaseName);
         CS_ASSERT(entry != m_properties.end(), "No property in property map with name: " + in_name);

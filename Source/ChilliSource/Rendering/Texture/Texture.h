@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------
     /// Interface class to backend rendering texture resource. A
@@ -41,7 +41,7 @@ namespace CS
     ///
     /// @author S Downie
     //--------------------------------------------------------------
-    class Texture : public Core::Resource
+    class Texture : public Resource
     {
     public:
         
@@ -58,8 +58,8 @@ namespace CS
         {
             u32 m_width;
             u32 m_height;
-            Core::ImageFormat m_format;
-            Core::ImageCompression m_compression;
+            ImageFormat m_format;
+            ImageCompression m_compression;
             u32 m_dataSize;
         };
         //--------------------------------------------------------------
@@ -163,7 +163,7 @@ namespace CS
         virtual ~Texture(){}
         
     protected:
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //--------------------------------------------------------------
         /// Factory method for creating an empty texture resource.
         /// Only called by the resource pool

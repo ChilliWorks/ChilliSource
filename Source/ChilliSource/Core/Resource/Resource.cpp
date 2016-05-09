@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/File/StorageLocation.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     //-------------------------------------------------------

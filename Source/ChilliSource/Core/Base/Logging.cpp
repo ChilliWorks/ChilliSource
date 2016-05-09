@@ -63,7 +63,7 @@ extern "C"
 #include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -183,7 +183,7 @@ namespace CS
     //-----------------------------------------------
     void Logging::CreateLogFile()
     {
-        FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_write);
+        FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::k_write);
         stream->Write("Chilli Source Log");
     }
     //-----------------------------------------------
@@ -198,7 +198,7 @@ namespace CS
         {
             if (m_isFirstLog == true)
             {
-                FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_write);
+                FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::k_write);
                 stream->Write("Chilli Source Log");
                 stream->Write(m_logBuffer);
                 m_logBuffer.clear();
@@ -206,7 +206,7 @@ namespace CS
             }
             else
             {
-                FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_writeAppend);
+                FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::k_writeAppend);
                 stream->Write(m_logBuffer);
                 m_logBuffer.clear();
             }

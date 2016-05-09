@@ -34,7 +34,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -63,7 +63,7 @@ namespace CS
         LayoutType ParseLayoutType(const std::string& in_type)
         {
             std::string lowerCase = in_type;
-            Core::StringUtils::ToLowerCase(lowerCase);
+            StringUtils::ToLowerCase(lowerCase);
 
             if(lowerCase == "none") return LayoutType::k_none;
             if(lowerCase == "grid") return LayoutType::k_grid;

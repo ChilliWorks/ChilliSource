@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/UI/Base/Widget.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------
     /// A state system that holds and renders the UI
@@ -42,7 +42,7 @@ namespace CS
     ///
     /// @author S Downie
     //-----------------------------------------------------------
-    class Canvas final : public Core::StateSystem
+    class Canvas final : public StateSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(Canvas);
@@ -54,13 +54,13 @@ namespace CS
         ///
         /// @return Whether the object is of the given type
         //----------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------
         /// @author S Downie
         ///
         /// @return Size of the canvas in pixels
         //----------------------------------------------------
-        const Core::Vector2& GetSize() const;
+        const Vector2& GetSize() const;
         //----------------------------------------------------
         /// Traverse the hierarchy and render each widget
         /// using the canvas renderer
@@ -69,7 +69,7 @@ namespace CS
         ///
         /// @param Renderer
         //----------------------------------------------------
-        void Draw(Rendering::CanvasRenderer* in_renderer) const;
+        void Draw(CanvasRenderer* in_renderer) const;
         //----------------------------------------------------
         /// Adds a widget to the canvas. The widget
         /// will be rendered and updated. Any relative coordinates
@@ -147,7 +147,7 @@ namespace CS
         WidgetCSPtr GetWidgetRecursive(const std::string& in_name) const;
         
     private:
-        friend class Core::State;
+        friend class State;
         
         //----------------------------------------------------
         /// Creates a new instance of this system.
@@ -214,7 +214,7 @@ namespace CS
         ///
         /// @param The new resolution
         //-----------------------------------------------------------
-        void OnScreenResolutionChanged(const Core::Vector2& in_resolution);
+        void OnScreenResolutionChanged(const Vector2& in_resolution);
         //------------------------------------------------------------------------------
         /// Called when a new pointer is added to the canvas.
         ///
@@ -223,7 +223,7 @@ namespace CS
         /// @param in_pointer - The pointer.
         /// @param in_timestamp - The timestamp.
         //------------------------------------------------------------------------------
-        void OnPointerAdded(const Input::Pointer& in_pointer, f64 in_timestamp);
+        void OnPointerAdded(const Pointer& in_pointer, f64 in_timestamp);
         //------------------------------------------------------------------------------
         /// Called when the canvas receives cursor/touch input
         ///
@@ -234,7 +234,7 @@ namespace CS
         /// @param in_inputType - The press type.
         /// @param in_filter - Filter object to check if the event has been filtered or to filter it
         //------------------------------------------------------------------------------
-        void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, InputFilter& in_filter);
+        void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, InputFilter& in_filter);
         //------------------------------------------------------------------------------
         /// Called when the canvas receives cursor/touch move input
         ///
@@ -243,7 +243,7 @@ namespace CS
         /// @param in_pointer - The pointer
         /// @param in_timestamp - The timestamp.
         //------------------------------------------------------------------------------
-        void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
+        void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp);
         //------------------------------------------------------------------------------
         /// Called when the canvas receiving cursor/touch release input
         ///
@@ -253,7 +253,7 @@ namespace CS
         /// @param in_timestamp - The timestamp.
         /// @param in_inputType - The press type.
         //------------------------------------------------------------------------------
-        void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
+        void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType);
         //------------------------------------------------------------------------------
         /// Called when an existing pointer is removed to the canvas.
         ///
@@ -262,19 +262,19 @@ namespace CS
         /// @param in_pointer - The pointer.
         /// @param in_timestamp - The timestamp.
         //------------------------------------------------------------------------------
-        void OnPointerRemoved(const Input::Pointer& in_pointer, f64 in_timestamp);
+        void OnPointerRemoved(const Pointer& in_pointer, f64 in_timestamp);
         
     private:
         
         WidgetUPtr m_canvas;
-        Core::EventConnectionUPtr m_screenResizedConnection;
-        Core::EventConnectionUPtr m_pointerAddedConnection;
-        Core::EventConnectionUPtr m_pointerDownConnection;
-        Core::EventConnectionUPtr m_pointerMovedConnection;
-        Core::EventConnectionUPtr m_pointerUpConnection;
-        Core::EventConnectionUPtr m_pointerRemovedConnection;
+        EventConnectionUPtr m_screenResizedConnection;
+        EventConnectionUPtr m_pointerAddedConnection;
+        EventConnectionUPtr m_pointerDownConnection;
+        EventConnectionUPtr m_pointerMovedConnection;
+        EventConnectionUPtr m_pointerUpConnection;
+        EventConnectionUPtr m_pointerRemovedConnection;
         
-        Core::Screen* m_screen;
+        Screen* m_screen;
 		};
 }
 

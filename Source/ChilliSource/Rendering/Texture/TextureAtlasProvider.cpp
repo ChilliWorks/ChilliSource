@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -53,13 +53,13 @@ namespace CS
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    bool TextureAtlasProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool TextureAtlasProvider::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == TextureAtlasProvider::InterfaceID;
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    Core::InterfaceIDType TextureAtlasProvider::GetResourceType() const
+    InterfaceIDType TextureAtlasProvider::GetResourceType() const
     {
         return TextureAtlas::InterfaceID;
     }
@@ -71,22 +71,22 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void TextureAtlasProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+    void TextureAtlasProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
         LoadResource(in_location, in_filePath, nullptr, out_resource);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void TextureAtlasProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void TextureAtlasProvider::CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
-        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
             LoadResource(in_location, in_filePath, in_delegate, out_resource);
         });
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void TextureAtlasProvider::LoadResource(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void TextureAtlasProvider::LoadResource(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         TextureAtlas* spriteResource(static_cast<TextureAtlas*>(out_resource.get()));
         
@@ -96,17 +96,17 @@ namespace CS
         
         if(desc.m_frames.size() > 0 && desc.m_keys.size() > 0)
         {
-            spriteResource->SetLoadState(Core::Resource::LoadState::k_loaded);
+            spriteResource->SetLoadState(Resource::LoadState::k_loaded);
             spriteResource->Build(desc);
         }
         else
         {
-            spriteResource->SetLoadState(Core::Resource::LoadState::k_failed);
+            spriteResource->SetLoadState(Resource::LoadState::k_failed);
         }
         
         if(in_delegate != nullptr)
         {
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
             {
                 in_delegate(out_resource);
             });
@@ -114,9 +114,9 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void TextureAtlasProvider::LoadFrames(Core::StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc)
+    void TextureAtlasProvider::LoadFrames(StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc)
     {
-        CSCore::FileStreamUPtr frameFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, CSCore::FileMode::k_readBinary);
+        FileStreamUPtr frameFile = Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, FileMode::k_readBinary);
         
         if(frameFile == nullptr)
         {
@@ -172,14 +172,14 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void TextureAtlasProvider::LoadMap(Core::StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc)
+    void TextureAtlasProvider::LoadMap(StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc)
     {
         //The string IDs are loaded as a by-product so we have to deduce their file type
         std::string fileName;
         std::string fileExtension;
         
-        Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
-        Core::FileStreamUPtr mapFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".csatlasid", Core::FileMode::k_read);
+        StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
+        FileStreamUPtr mapFile = Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".csatlasid", FileMode::k_read);
         
         if(mapFile != nullptr)
         {
@@ -191,7 +191,7 @@ namespace CS
                 mapFile->GetLine(spriteID);
                 if(spriteID.empty() == false)
                 {
-                    out_desc.m_keys.push_back(Core::HashCRC32::GenerateHashCode(spriteID));
+                    out_desc.m_keys.push_back(HashCRC32::GenerateHashCode(spriteID));
                     spriteID.clear();
                 }
             }

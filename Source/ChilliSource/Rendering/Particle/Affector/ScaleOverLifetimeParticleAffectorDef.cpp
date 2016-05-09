@@ -31,12 +31,12 @@
 #include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(ScaleOverLifetimeParticleAffectorDef);
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ScaleOverLifetimeParticleAffectorDef::ScaleOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Core::Vector2> in_scaleProperty)
+    ScaleOverLifetimeParticleAffectorDef::ScaleOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Vector2> in_scaleProperty)
         : m_scaleProperty(std::move(in_scaleProperty))
     {
     }
@@ -47,7 +47,7 @@ namespace CS
         //scale
         Json::Value jsonValue = in_paramsJson.get("ScaleProperty", Json::nullValue);
         CS_ASSERT(jsonValue.isNull() == false, "No scale property provided.");
-        m_scaleProperty = ParticlePropertyFactory::CreateProperty<Core::Vector2>(jsonValue);
+        m_scaleProperty = ParticlePropertyFactory::CreateProperty<Vector2>(jsonValue);
 
         //call the loaded delegate if required.
         if (in_asyncDelegate != nullptr)
@@ -57,19 +57,19 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool ScaleOverLifetimeParticleAffectorDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ScaleOverLifetimeParticleAffectorDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleAffectorDef::InterfaceID == in_interfaceId || ScaleOverLifetimeParticleAffectorDef::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ParticleAffectorUPtr ScaleOverLifetimeParticleAffectorDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+    ParticleAffectorUPtr ScaleOverLifetimeParticleAffectorDef::CreateInstance(dynamic_array<Particle>* in_particleArray) const
     {
         return ParticleAffectorUPtr(new ScaleOverLifetimeParticleAffector(this, in_particleArray));
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    const ParticleProperty<Core::Vector2>* ScaleOverLifetimeParticleAffectorDef::GetScaleProperty() const
+    const ParticleProperty<Vector2>* ScaleOverLifetimeParticleAffectorDef::GetScaleProperty() const
     {
         return m_scaleProperty.get();
     }

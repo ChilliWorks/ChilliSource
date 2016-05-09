@@ -40,7 +40,7 @@
 #include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(PrimitiveEntityFactory);
     //------------------------------------------------------------------------------
@@ -61,10 +61,10 @@ namespace CS
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        Rendering::MeshCSPtr mesh = m_primitiveModelFactory->CreatePlane(in_size);
-        Rendering::MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
+        MeshCSPtr mesh = m_primitiveModelFactory->CreatePlane(in_size);
+        MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
         
-        Rendering::StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
+        StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
         
         auto entity = Entity::Create();
@@ -78,10 +78,10 @@ namespace CS
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        Rendering::MeshCSPtr mesh = m_primitiveModelFactory->CreateBox(in_size);
-        Rendering::MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
+        MeshCSPtr mesh = m_primitiveModelFactory->CreateBox(in_size);
+        MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
         
-        Rendering::StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
+        StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
         
         auto entity = Entity::Create();
@@ -91,21 +91,21 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    CSRendering::MaterialCSPtr PrimitiveEntityFactory::CreateStaticBlinnColourMaterial(const CSCore::Colour& in_colour) const
+    MaterialCSPtr PrimitiveEntityFactory::CreateStaticBlinnColourMaterial(const Colour& in_colour) const
     {
         auto materialName = "_PrimitiveStaticBlinnColour(" + ToString(in_colour) + ")";
-        auto material = m_resourcePool->GetResource<Rendering::Material>(materialName);
+        auto material = m_resourcePool->GetResource<Material>(materialName);
         
         if (material == nullptr)
         {
-            auto texture = m_resourcePool->LoadResource<CSRendering::Texture>(Core::StorageLocation::k_chilliSource, "Textures/Blank.csimage");
+            auto texture = m_resourcePool->LoadResource<Texture>(StorageLocation::k_chilliSource, "Textures/Blank.csimage");
             
             auto mutableMaterial = m_materialFactory->CreateStaticBlinnShadowed(materialName, texture);
-            mutableMaterial->SetEmissive(CSCore::Colour::k_black);
+            mutableMaterial->SetEmissive(Colour::k_black);
             mutableMaterial->SetAmbient(in_colour);
             mutableMaterial->SetDiffuse(in_colour);
-            mutableMaterial->SetSpecular(CSCore::Colour(0.5f, 0.5f, 0.5f, 10.0f));
-            mutableMaterial->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+            mutableMaterial->SetSpecular(Colour(0.5f, 0.5f, 0.5f, 10.0f));
+            mutableMaterial->SetLoadState(Resource::LoadState::k_loaded);
             
             material = mutableMaterial;
         }
@@ -118,13 +118,13 @@ namespace CS
     {
         m_resourcePool = Application::Get()->GetResourcePool();
         
-        m_renderComponentFactory = Application::Get()->GetSystem<Rendering::RenderComponentFactory>();
+        m_renderComponentFactory = Application::Get()->GetSystem<RenderComponentFactory>();
         CS_ASSERT(m_renderComponentFactory, "PrimitiveEntityFactory could not find required app system: RenderComponentFactory");
         
-        m_primitiveModelFactory = Application::Get()->GetSystem<Rendering::PrimitiveModelFactory>();
+        m_primitiveModelFactory = Application::Get()->GetSystem<PrimitiveModelFactory>();
         CS_ASSERT(m_primitiveModelFactory, "PrimitiveEntityFactory could not find required app system: PrimitiveModelFactory");
         
-        m_materialFactory = CSCore::Application::Get()->GetSystem<Rendering::MaterialFactory>();
+        m_materialFactory = Application::Get()->GetSystem<MaterialFactory>();
         CS_ASSERT(m_materialFactory, "PrimitiveEntityFactory could not find required app system: MaterialFactory");
         
         m_entityCount = 0;

@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Audio/CricketAudio/CkForwardDeclarations.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A Cricket Audio bank resource. This contains a group of sounds which are
@@ -46,7 +46,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class CkBank final : public Core::Resource
+    class CkBank final : public Resource
     {
     public:
         CS_DECLARE_NAMEDTYPE(CkBank);
@@ -61,7 +61,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// Populates the resource with the Cricket Audio bank that it represents. This
         /// can only be called once, if a call to this is repeated the app is considered
@@ -92,7 +92,7 @@ namespace CS
         //------------------------------------------------------------------------------
         ~CkBank();
     private:
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //------------------------------------------------------------------------------
         /// Factory method for creating a new instance of the resource. 
         ///

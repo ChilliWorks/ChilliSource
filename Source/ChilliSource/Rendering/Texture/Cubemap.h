@@ -35,7 +35,7 @@
 
 #include <array>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------
     /// Interface class to backend rendering cubemap resource. A
@@ -44,7 +44,7 @@ namespace CS
     ///
     /// @author S Downie
     //--------------------------------------------------------------
-    class Cubemap : public Core::Resource
+    class Cubemap : public Resource
     {
     public:
         
@@ -127,7 +127,7 @@ namespace CS
         virtual ~Cubemap(){}
         
     protected:
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //--------------------------------------------------------------
         /// Factory method for creating an empty cubemap resource.
         /// Only called by the resource pool

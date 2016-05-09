@@ -32,12 +32,12 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Layout/LayoutComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(GridLayout);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    GridLayout::GridLayout(LayoutComponent* in_layoutComponent, GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins,
+    GridLayout::GridLayout(LayoutComponent* in_layoutComponent, GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                            f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing)
         : Layout(in_layoutComponent), m_cellOrder(in_cellOrder), m_numRows(in_numRows), m_numCols(in_numCols), m_marginSizeTop(in_relMargins.x, in_absMargins.x), m_marginSizeRight(in_relMargins.y, in_absMargins.y),
         m_marginSizeBottom(in_relMargins.z, in_absMargins.z), m_marginSizeLeft(in_relMargins.w, in_absMargins.w), m_spacingSizeH(in_relHorizSpacing, in_absHorizSpacing), m_spacingSizeV(in_relVertSpacing, in_absVertSpacing)
@@ -45,7 +45,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool GridLayout::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool GridLayout::IsA(InterfaceIDType in_interfaceId) const
     {
         return (Layout::InterfaceID == in_interfaceId || GridLayout::InterfaceID == in_interfaceId);
     }
@@ -63,15 +63,15 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector4 GridLayout::GetRelativeMargins() const
+    Vector4 GridLayout::GetRelativeMargins() const
     {
-        return Core::Vector4(m_marginSizeTop.x, m_marginSizeRight.x, m_marginSizeBottom.x, m_marginSizeLeft.x);
+        return Vector4(m_marginSizeTop.x, m_marginSizeRight.x, m_marginSizeBottom.x, m_marginSizeLeft.x);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector4 GridLayout::GetAbsoluteMargins() const
+    Vector4 GridLayout::GetAbsoluteMargins() const
     {
-        return Core::Vector4(m_marginSizeTop.y, m_marginSizeRight.y, m_marginSizeBottom.y, m_marginSizeLeft.y);
+        return Vector4(m_marginSizeTop.y, m_marginSizeRight.y, m_marginSizeBottom.y, m_marginSizeLeft.y);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ namespace CS
         
         //The list doesn't care about the widgets as the size and position of each cell
         //is only relative to the number of cells and the root widget size
-        Core::Vector2 rootSize = GetComponent()->GetWidget()->GetFinalSize();
+        Vector2 rootSize = GetComponent()->GetWidget()->GetFinalSize();
         
         //The margins and spacing are relative to the root widget size
         m_finalSpacingSizeH = m_spacingSizeH.y + (rootSize.x * m_spacingSizeH.x);
@@ -211,17 +211,17 @@ namespace CS
     //------------------------------------------------------------------------------
     /// The cell size if fixed and uniform so the index is not required
     //------------------------------------------------------------------------------
-    Core::Vector2 GridLayout::GetSizeForIndex(u32 in_index) const
+    Vector2 GridLayout::GetSizeForIndex(u32 in_index) const
     {
-        CS_ASSERT(in_index < (m_numRows * m_numCols), "Cannot have more items in grid than number of cells(" + Core::ToString(m_numRows * m_numCols) + ")");
+        CS_ASSERT(in_index < (m_numRows * m_numCols), "Cannot have more items in grid than number of cells(" + ToString(m_numRows * m_numCols) + ")");
         return m_cellSize;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector2 GridLayout::GetPositionForIndex(u32 in_index) const
+    Vector2 GridLayout::GetPositionForIndex(u32 in_index) const
     {
         //Aligned to the middle centre in cell space
-        CS_ASSERT(in_index < (m_numRows * m_numCols), "Cannot have more items in grid than number of cells(" + Core::ToString(m_numRows * m_numCols) + ")");
+        CS_ASSERT(in_index < (m_numRows * m_numCols), "Cannot have more items in grid than number of cells(" + ToString(m_numRows * m_numCols) + ")");
         
         u32 indexCol = 0;
         u32 indexRow = 0;
@@ -247,6 +247,6 @@ namespace CS
         f32 yPos = m_firstCellPosY - (m_cellSize.y * (indexRow + 1)) - (spacingSizeV * indexRow);
         yPos += (m_cellSize.y * 0.5f);
         
-        return Core::Vector2(xPos, yPos);
+        return Vector2(xPos, yPos);
     }
 }

@@ -45,10 +45,10 @@ namespace CSBackend
 		/// Concrete implementation of a vertex buffer object 
 		/// for OpenGL ES
 		//==========================================================
-		class MeshBuffer : public CSRendering::MeshBuffer
+		class MeshBuffer : public ChilliSource::MeshBuffer
 		{
 		public:
-			MeshBuffer(CSRendering::BufferDescription &inBuffDesc);
+			MeshBuffer(ChilliSource::BufferDescription &inBuffDesc);
 			virtual ~MeshBuffer();
 			
             //-----------------------------------------------------

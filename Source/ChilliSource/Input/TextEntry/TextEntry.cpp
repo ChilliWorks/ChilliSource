@@ -40,7 +40,7 @@
 #include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(TextEntry);
     

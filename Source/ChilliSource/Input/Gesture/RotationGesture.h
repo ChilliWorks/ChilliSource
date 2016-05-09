@@ -35,7 +35,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------
     /// A gesture for receiving rotation input events.
@@ -64,7 +64,7 @@ namespace CS
         //----------------------------------------------------
         struct RotationInfo final
         {
-            Core::Vector2 m_position;   //The screen space location of the gesture. This is the centroid of the two active pointers.
+            Vector2 m_position;   //The screen space location of the gesture. This is the centroid of the two active pointers.
             f32 m_rotation = 0.0f;      //The clockwise angle of the gesture from the initial orientation. Change caused by the currently tracked pointer changing is ignored.
             f32 m_rotationDelta = 0.0f; //The change in the rotation since the last event. Change caused by the currently tracked pointer changing is ignored.
         };
@@ -99,7 +99,7 @@ namespace CS
         /// @return Whether or not the gesture inteface is
         /// implemented.
         //----------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_gestureInterfaceId) const override;
+        bool IsA(InterfaceIDType in_gestureInterfaceId) const override;
         //----------------------------------------------------
         /// @author Ian Copland
         ///
@@ -112,21 +112,21 @@ namespace CS
         /// @return An event that can be used to listen for
         /// start of a rotation.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetRotationStartedEvent();
+        IConnectableEvent<Delegate>& GetRotationStartedEvent();
         //----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return An event that can be used to listen for
         /// movement in a rotation.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetRotationMovedEvent();
+        IConnectableEvent<Delegate>& GetRotationMovedEvent();
         //----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return An event that can be used to listen for
         /// end of a rotation.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetRotationEndedEvent();
+        IConnectableEvent<Delegate>& GetRotationEndedEvent();
     private:
         //----------------------------------------------------
         /// Information on a single pointer within the gesture.
@@ -136,8 +136,8 @@ namespace CS
         struct PointerInfo final
         {
             Pointer::Id m_pointerId;
-            Core::Vector2 m_initialPosition;
-            Core::Vector2 m_currentPosition;
+            Vector2 m_initialPosition;
+            Vector2 m_currentPosition;
             bool m_isDrag = false;
             bool m_active = false;
         };
@@ -158,7 +158,7 @@ namespace CS
         ///
         /// @return The calculated position.
         //----------------------------------------------------
-        Core::Vector2 CalculatePosition() const;
+        Vector2 CalculatePosition() const;
         //----------------------------------------------------
         /// Calculates the clockwise angle of the gesture.
         ///
@@ -227,9 +227,9 @@ namespace CS
         void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType) override;
         
         Pointer::InputType m_requiredInputType;
-        Core::Event<Delegate> m_rotationStartedEvent;
-        Core::Event<Delegate> m_rotationMovedEvent;
-        Core::Event<Delegate> m_rotationEndedEvent;
+        Event<Delegate> m_rotationStartedEvent;
+        Event<Delegate> m_rotationMovedEvent;
+        Event<Delegate> m_rotationEndedEvent;
         
         f32 m_minDisplacementSquared = 0.0f;
         

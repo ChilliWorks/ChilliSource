@@ -43,7 +43,7 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate)
+		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const ChilliSource::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate)
         : m_type(in_type), m_url(in_url), m_body(in_body), m_headers(in_headers), m_completionDelegate(in_delegate)
 		{
             CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
@@ -80,21 +80,21 @@ namespace CSBackend
                     m_expectedSize = in_expectedSize;
                 };
                 
-                auto connectionFlushedDelegate = [this](CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+                auto connectionFlushedDelegate = [this](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
                 {
                     CS_ASSERT(m_complete == false, "Cannot flush an already completed request.");
                     m_downloadedBytes += in_data.length();
-                    m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
+                    m_completionDelegate(this, ChilliSource::HttpResponse(in_result, in_responseCode, in_data));
                 };
                 
-                auto connectionCompleteDelegate = [this](CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+                auto connectionCompleteDelegate = [this](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
                 {
                     CS_ASSERT(m_complete == false, "Cannot complete an already completed request.");
                     
                     m_downloadedBytes += in_data.length();
                     
                     m_complete = true;
-                    m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
+                    m_completionDelegate(this, ChilliSource::HttpResponse(in_result, in_responseCode, in_data));
                 };
                 
                 m_httpDelegate = [[HttpDelegate alloc] initWithConnectionDelegate:connectionEstablishedDelegate andFlushedDelegate:connectionFlushedDelegate andCompleteDelegate:connectionCompleteDelegate andMaxBufferSize:in_maxBufferSize];
@@ -121,7 +121,7 @@ namespace CSBackend
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const CSCore::ParamDictionary& HttpRequest::GetHeaders() const
+        const ChilliSource::ParamDictionary& HttpRequest::GetHeaders() const
         {
             return m_headers;
         }

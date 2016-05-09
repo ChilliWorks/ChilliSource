@@ -32,7 +32,7 @@
 #include <ChilliSource/Audio/CricketAudio/CricketAudioSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(CkAudioPlayer);
     //------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool CkAudioPlayer::IsA(CSCore::InterfaceIDType in_interfaceId) const
+    bool CkAudioPlayer::IsA(InterfaceIDType in_interfaceId) const
     {
         return (CkAudioPlayer::InterfaceID == in_interfaceId);
     }
@@ -102,7 +102,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void CkAudioPlayer::PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath)
+    void CkAudioPlayer::PlayMusic(StorageLocation in_storageLocation, const std::string& in_filePath)
     {
         m_music = CkSound::CreateFromStream(in_storageLocation, in_filePath);
         m_music->SetVolume(m_musicVolume);
@@ -121,7 +121,7 @@ namespace CS
     //------------------------------------------------------------------------------
     void CkAudioPlayer::OnInit()
     {
-        CS_ASSERT(Core::Application::Get()->GetSystem<CricketAudioSystem>() != nullptr, "CkAudioPlayer missing required system: CricketAudioSystem.");
+        CS_ASSERT(Application::Get()->GetSystem<CricketAudioSystem>() != nullptr, "CkAudioPlayer missing required system: CricketAudioSystem.");
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

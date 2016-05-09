@@ -295,7 +295,7 @@ CSAppDelegate* singletonInstance = nil;
 {
     if (isActive == YES)
     {
-        CSCore::Application::Get()->Update(controller.timeSinceLastUpdate, controller.timeSinceFirstResume);
+        ChilliSource::Application::Get()->Update(controller.timeSinceLastUpdate, controller.timeSinceFirstResume);
     }
 }
 //-------------------------------------------------------------
@@ -316,7 +316,7 @@ CSAppDelegate* singletonInstance = nil;
             [EAGLContext setCurrentContext:view.context];
         }
         
-        CSCore::Application::Get()->Render();
+        ChilliSource::Application::Get()->Render();
     }
 }
 
@@ -391,7 +391,7 @@ CSAppDelegate* singletonInstance = nil;
         }
     }
     
-	CSBackend::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::iOS::RemoteNotificationSystem>();
+	CSBackend::iOS::RemoteNotificationSystem* remoteNotificationSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::iOS::RemoteNotificationSystem>();
     if(nullptr != remoteNotificationSystem)
     {
         CS_LOG_WARNING("Received new remote notification token");
@@ -435,7 +435,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)application:(UIApplication*)in_application didReceiveRemoteNotification:(NSDictionary*)in_userInfo
 {
-	CSBackend::iOS::RemoteNotificationSystem* remoteNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::iOS::RemoteNotificationSystem>();
+	CSBackend::iOS::RemoteNotificationSystem* remoteNotificationSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::iOS::RemoteNotificationSystem>();
     if(nullptr != remoteNotificationSystem)
     {
         CS_LOG_VERBOSE("Received remote notification");

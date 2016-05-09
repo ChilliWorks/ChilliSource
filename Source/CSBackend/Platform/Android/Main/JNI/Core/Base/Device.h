@@ -45,7 +45,7 @@ namespace CSBackend
         ///
         /// @author Ian Copland
         //---------------------------------------------------------
-        class Device final : public CSCore::Device
+        class Device final : public ChilliSource::Device
         {
         public:
             CS_DECLARE_NAMEDTYPE(Device);
@@ -58,7 +58,7 @@ namespace CSBackend
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------
             /// @author Ian Copland
             ///
@@ -111,7 +111,7 @@ namespace CSBackend
 			//--------------------------------------------------
 			u32 GetNumberOfCPUCores() const override;
         private:
-            friend CSCore::DeviceUPtr CSCore::Device::Create();
+            friend ChilliSource::DeviceUPtr ChilliSource::Device::Create();
             //----------------------------------------------------
 			/// Constructor. Declared private to force the use of
             /// the factory method.

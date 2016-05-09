@@ -48,7 +48,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -64,7 +64,7 @@ namespace CS
         ///
         /// @param The billboard size.
         //-----------------------------------------------------------------------------
-        Core::Vector2 CalcBillboardSize(const Core::Vector2& in_particleSize, const Core::Vector2& in_imageSize, StaticBillboardParticleDrawableDef::SizePolicy in_sizePolicy)
+        Vector2 CalcBillboardSize(const Vector2& in_particleSize, const Vector2& in_imageSize, StaticBillboardParticleDrawableDef::SizePolicy in_sizePolicy)
         {
             switch (in_sizePolicy)
             {
@@ -82,7 +82,7 @@ namespace CS
                 return AspectRatioUtils::FillOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
             default:
                 CS_LOG_FATAL("Invalid size policy.");
-                return Core::Vector2::k_zero;
+                return Vector2::k_zero;
             }
         }
         //-----------------------------------------------------------------------------
@@ -101,15 +101,15 @@ namespace CS
         ///
         /// @param The sprite data.
         //-----------------------------------------------------------------------------
-        SpriteBatch::SpriteData BuildSpriteData(const MaterialCSPtr& in_material, const UVs& in_uvs, const Core::Vector2& in_localBL,
-            const Core::Vector2& in_localTR, const Core::Vector3& in_worldPosition, const Core::Vector2& in_worldScale, const Core::Quaternion& in_worldOrientation,
-            const Core::Colour& in_colour)
+        SpriteBatch::SpriteData BuildSpriteData(const MaterialCSPtr& in_material, const UVs& in_uvs, const Vector2& in_localBL,
+            const Vector2& in_localTR, const Vector3& in_worldPosition, const Vector2& in_worldScale, const Quaternion& in_worldOrientation,
+            const Colour& in_colour)
         {
             SpriteBatch::SpriteData spriteData;
             spriteData.pMaterial = in_material;
 
             //set the sprite colour
-            Core::ByteColour colour = Core::ColourUtils::ColourToByteColour(in_colour);
+            ByteColour colour = ColourUtils::ColourToByteColour(in_colour);
             spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = colour;
             spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = colour;
             spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].Col = colour;
@@ -126,21 +126,21 @@ namespace CS
             spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = in_uvs.m_v + in_uvs.m_t;
 
             //Build the vertex data.
-            Core::Vector3 localTopLeft(in_localBL.x * in_worldScale.x, in_localTR.y * in_worldScale.y, 0.0f);
-            Core::Vector3 worldTopLeft = in_worldPosition + Core::Vector3::Rotate(localTopLeft, in_worldOrientation);
-            spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = Core::Vector4(worldTopLeft, 1.0f);
+            Vector3 localTopLeft(in_localBL.x * in_worldScale.x, in_localTR.y * in_worldScale.y, 0.0f);
+            Vector3 worldTopLeft = in_worldPosition + Vector3::Rotate(localTopLeft, in_worldOrientation);
+            spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = Vector4(worldTopLeft, 1.0f);
 
-            Core::Vector3 localTopRight(in_localTR.x * in_worldScale.x, in_localTR.y * in_worldScale.y, 0.0f);
-            Core::Vector3 worldTopRight = in_worldPosition + Core::Vector3::Rotate(localTopRight, in_worldOrientation);
-            spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = Core::Vector4(worldTopRight, 1.0f);
+            Vector3 localTopRight(in_localTR.x * in_worldScale.x, in_localTR.y * in_worldScale.y, 0.0f);
+            Vector3 worldTopRight = in_worldPosition + Vector3::Rotate(localTopRight, in_worldOrientation);
+            spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = Vector4(worldTopRight, 1.0f);
 
-            Core::Vector3 localBottomLeft(in_localBL.x * in_worldScale.x, in_localBL.y * in_worldScale.y, 0.0f);
-            Core::Vector3 worldBottomLeft = in_worldPosition + Core::Vector3::Rotate(localBottomLeft, in_worldOrientation);
-            spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = Core::Vector4(worldBottomLeft, 1.0f);
+            Vector3 localBottomLeft(in_localBL.x * in_worldScale.x, in_localBL.y * in_worldScale.y, 0.0f);
+            Vector3 worldBottomLeft = in_worldPosition + Vector3::Rotate(localBottomLeft, in_worldOrientation);
+            spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = Vector4(worldBottomLeft, 1.0f);
 
-            Core::Vector3 localBottomRight(in_localTR.x * in_worldScale.x, in_localBL.y * in_worldScale.y, 0.0f);
-            Core::Vector3 worldBottomRight = in_worldPosition + Core::Vector3::Rotate(localBottomRight, in_worldOrientation);
-            spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = Core::Vector4(worldBottomRight, 1.0f);
+            Vector3 localBottomRight(in_localTR.x * in_worldScale.x, in_localBL.y * in_worldScale.y, 0.0f);
+            Vector3 worldBottomRight = in_worldPosition + Vector3::Rotate(localBottomRight, in_worldOrientation);
+            spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = Vector4(worldBottomRight, 1.0f);
 
             return spriteData;
         }
@@ -148,7 +148,7 @@ namespace CS
 
     //----------------------------------------------
     //----------------------------------------------
-    StaticBillboardParticleDrawable::StaticBillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData)
+    StaticBillboardParticleDrawable::StaticBillboardParticleDrawable(const Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData)
         : ParticleDrawable(in_entity, in_drawableDef, in_concurrentParticleData), m_billboardDrawableDef(static_cast<const StaticBillboardParticleDrawableDef*>(in_drawableDef)),
         m_particleBillboardIndices(in_drawableDef->GetParticleEffect()->GetMaxParticles())
     {
@@ -156,7 +156,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void StaticBillboardParticleDrawable::ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index)
+    void StaticBillboardParticleDrawable::ActivateParticle(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index)
     {
         CS_ASSERT(in_index >= 0 && in_index < m_particleBillboardIndices.size(), "Index out of bounds!");
 
@@ -170,7 +170,7 @@ namespace CS
             }
             break;
         case StaticBillboardParticleDrawableDef::ImageSelectionType::k_random:
-            m_particleBillboardIndices[in_index] = Core::Random::Generate<u32>(0, static_cast<s32>(m_billboards->size()) - 1);
+            m_particleBillboardIndices[in_index] = Random::Generate<u32>(0, static_cast<s32>(m_billboards->size()) - 1);
             break;
         default:
             CS_LOG_FATAL("Invalid image selection type.");
@@ -179,7 +179,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void StaticBillboardParticleDrawable::DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera)
+    void StaticBillboardParticleDrawable::DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera)
     {
         switch (GetDrawableDef()->GetParticleEffect()->GetSimulationSpace())
         {
@@ -202,7 +202,7 @@ namespace CS
 
         if (textureAtlas != nullptr && atlasIds.empty() == false)
         {
-            m_billboards = std::unique_ptr<Core::dynamic_array<BillboardData>>(new Core::dynamic_array<BillboardData>(m_billboardDrawableDef->GetAtlasIds().size()));
+            m_billboards = std::unique_ptr<dynamic_array<BillboardData>>(new dynamic_array<BillboardData>(m_billboardDrawableDef->GetAtlasIds().size()));
             for (u32 i = 0; i < m_billboards->size(); ++i)
             {
                 const auto& frame = textureAtlas->GetFrame(m_billboardDrawableDef->GetAtlasIds()[i]);
@@ -214,7 +214,7 @@ namespace CS
                 f32 bottom = (-0.5f * frame.m_originalSize.y + (frame.m_originalSize.y - frame.m_offset.y - frame.m_croppedSize.y)) / frame.m_originalSize.y;
 
                 //Get the billboard size. This is determined by the size policy.
-                Core::Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), frame.m_originalSize, m_billboardDrawableDef->GetSizePolicy());
+                Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), frame.m_originalSize, m_billboardDrawableDef->GetSizePolicy());
 
                 //scale the normalised bounds up to the billboard size.
                 BillboardData& billboardData = m_billboards->at(i);
@@ -231,9 +231,9 @@ namespace CS
             auto texture = m_billboardDrawableDef->GetMaterial()->GetTexture();
             CS_ASSERT(texture != nullptr, "Particle effect material cannot have no texture.");
 
-            m_billboards = std::unique_ptr<Core::dynamic_array<BillboardData>>(new Core::dynamic_array<BillboardData>(1));
+            m_billboards = std::unique_ptr<dynamic_array<BillboardData>>(new dynamic_array<BillboardData>(1));
 
-            Core::Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), Core::Vector2(f32(texture->GetWidth()), f32(texture->GetHeight())),
+            Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), Vector2(f32(texture->GetWidth()), f32(texture->GetHeight())),
                 m_billboardDrawableDef->GetSizePolicy());
 
             BillboardData& billboardData = m_billboards->at(0);
@@ -250,7 +250,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void StaticBillboardParticleDrawable::DrawLocalSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
+    void StaticBillboardParticleDrawable::DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
     {
         const auto& material = m_billboardDrawableDef->GetMaterial();
         auto entityWorldTransform = GetEntity()->GetTransform().GetWorldTransform();
@@ -268,25 +268,25 @@ namespace CS
         {
             const auto& particle = in_particleData[i];
 
-            if (particle.m_isActive == true && particle.m_colour != Core::Colour::k_transparent)
+            if (particle.m_isActive == true && particle.m_colour != Colour::k_transparent)
             {
                 auto worldPosition = particle.m_position * entityWorldTransform;
                 auto worldScale = particle.m_scale * particleScaleFactor;
 
                 //rotate locally in the XY plane before rotating to face the camera.
-                auto worldOrientation = Core::Quaternion(Core::Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
+                auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
 
                 const auto& billboardData = m_billboards->at(m_particleBillboardIndices[i]);
                 auto spriteData = BuildSpriteData(material, billboardData.m_uvs, billboardData.m_bottomLeft, billboardData.m_topRight, worldPosition, worldScale, worldOrientation,
                     particle.m_colour);
 
-                Core::Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
+                Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
             }
         }
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void StaticBillboardParticleDrawable::DrawWorldSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
+    void StaticBillboardParticleDrawable::DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
     {
         const auto& material = m_billboardDrawableDef->GetMaterial();
 
@@ -297,16 +297,16 @@ namespace CS
         {
             const auto& particle = in_particleData[i];
 
-            if (particle.m_isActive == true && particle.m_colour != Core::Colour::k_transparent)
+            if (particle.m_isActive == true && particle.m_colour != Colour::k_transparent)
             {
                 //rotate locally in the XY plane before rotating to face the camera.
-                auto worldOrientation = Core::Quaternion(Core::Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
+                auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
 
                 const auto& billboardData = m_billboards->at(m_particleBillboardIndices[i]);
                 auto spriteData = BuildSpriteData(material, billboardData.m_uvs, billboardData.m_bottomLeft, billboardData.m_topRight, particle.m_position, particle.m_scale,
                     worldOrientation, particle.m_colour);
 
-                Core::Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
+                Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
             }
         }
     }

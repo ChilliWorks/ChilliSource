@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Entity/Entity.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------
     //----------------------------------------------------

@@ -44,7 +44,7 @@ namespace CSBackend
 {
     namespace iOS
     {
-        class LocalNotificationSystem final : public CSCore::LocalNotificationSystem
+        class LocalNotificationSystem final : public ChilliSource::LocalNotificationSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(LocalNotificationSystem);
@@ -55,7 +55,7 @@ namespace CSBackend
             /// @return Whether this implements the passed in interface
             /// id.
             //-------------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Enables and disables addition of local notifications.
             /// All existing notifications will be cancelled
@@ -82,7 +82,7 @@ namespace CSBackend
             /// @param [Optional] The notification priority. Defaults
             /// to standard priority.
             //---------------------------------------------------
-            void ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority = CSCore::Notification::Priority::k_standard) override;
+            void ScheduleNotificationForTime(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, TimeIntervalSecs in_time, ChilliSource::Notification::Priority in_priority = ChilliSource::Notification::Priority::k_standard) override;
             //--------------------------------------------------------
             /// Builds a list of all notifications currently scheduled
             /// within the given time period.
@@ -93,7 +93,7 @@ namespace CSBackend
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            void GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
+            void GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
             //--------------------------------------------------------
             /// Prevent any notifications with given ID type from firing
             ///
@@ -101,7 +101,7 @@ namespace CSBackend
             ///
             /// @param ID type
             //--------------------------------------------------------
-            void CancelByID(CSCore::Notification::ID in_id) override;
+            void CancelByID(ChilliSource::Notification::ID in_id) override;
             //--------------------------------------------------------
             /// Terminate all currently scheduled notifications
             ///
@@ -114,7 +114,7 @@ namespace CSBackend
             /// @return An event that can be used to listen for
             /// new notifications being received.
             //---------------------------------------------------
-            CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::ReceivedDelegate>& GetReceivedEvent() override;
+            ChilliSource::IConnectableEvent<ChilliSource::LocalNotificationSystem::ReceivedDelegate>& GetReceivedEvent() override;
             //--------------------------------------------------------
             /// Called by the app delegate when the app launches. Used
             /// to pull local notification data from the options
@@ -152,7 +152,7 @@ namespace CSBackend
             //----------------------------------------------------------
             ~LocalNotificationSystem();
         private:
-            friend CSCore::LocalNotificationSystemUPtr CSCore::LocalNotificationSystem::Create();
+            friend ChilliSource::LocalNotificationSystemUPtr ChilliSource::LocalNotificationSystem::Create();
             //----------------------------------------------------------
             /// Private constructor to force use of factory method.
             ///
@@ -170,7 +170,7 @@ namespace CSBackend
             ///
             /// @author Ian Copland
             //--------------------------------------------------------
-            void OnNotificationReceived(const CSCore::NotificationSPtr& in_notification);
+            void OnNotificationReceived(const ChilliSource::NotificationSPtr& in_notification);
             //--------------------------------------------------------
             /// destroys the local notification system.
             ///
@@ -179,7 +179,7 @@ namespace CSBackend
             void OnDestroy() override;
             
             bool m_enabled;
-            CSCore::Event<CSCore::LocalNotificationSystem::ReceivedDelegate> m_receivedEvent;
+            ChilliSource::Event<ChilliSource::LocalNotificationSystem::ReceivedDelegate> m_receivedEvent;
             
             NSMutableArray* m_recentlyAddedNotifications;
         };

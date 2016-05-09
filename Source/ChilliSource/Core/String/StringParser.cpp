@@ -34,7 +34,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -291,30 +291,30 @@ namespace CS
     }
     //------------------------------------------------------------
     //------------------------------------------------------------
-    Rendering::SurfaceFormat ParseSurfaceFormat(const std::string& in_surfaceFormat)
+    SurfaceFormat ParseSurfaceFormat(const std::string& in_surfaceFormat)
     {
         std::string lowerCase = in_surfaceFormat;
         StringUtils::ToLowerCase(lowerCase);
         
         if (lowerCase == "rgb565_depth24")
         {
-            return Rendering::SurfaceFormat::k_rgb565_depth24;
+            return SurfaceFormat::k_rgb565_depth24;
         }
         else if (lowerCase == "rgb565_depth32")
         {
-            return Rendering::SurfaceFormat::k_rgb565_depth32;
+            return SurfaceFormat::k_rgb565_depth32;
         }
         else if (lowerCase == "rgb888_depth24")
         {
-            return Rendering::SurfaceFormat::k_rgb888_depth24;
+            return SurfaceFormat::k_rgb888_depth24;
         }
         else if (lowerCase == "rgb888_depth32")
         {
-            return Rendering::SurfaceFormat::k_rgb888_depth32;
+            return SurfaceFormat::k_rgb888_depth32;
         }
         
         CS_ASSERT(false, "Invalid surface format.");
         CS_LOG_ERROR("String Parser: Invalid surface format.");
-        return Rendering::SurfaceFormat::k_rgb565_depth24;
+        return SurfaceFormat::k_rgb565_depth24;
     }
 }

@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// A state level system. A state system is created

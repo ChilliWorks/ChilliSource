@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A system for receiving textual from both virtual and hardware
@@ -42,7 +42,7 @@ namespace CS
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class TextEntry : public Core::AppSystem
+    class TextEntry : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(TextEntry);

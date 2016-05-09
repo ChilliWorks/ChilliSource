@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------
     /// The base class for all input gestures that can be registered
@@ -41,7 +41,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------
-    class Gesture : public Core::QueryableInterface
+    class Gesture : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(Gesture);
@@ -162,7 +162,7 @@ namespace CS
         /// @param The timestamp of the event.
         /// @param The scroll vector (x, y delta)
         //--------------------------------------------------------
-        virtual void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta) {};
+        virtual void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Vector2& in_delta) {};
         
     private:
         friend class GestureSystem;

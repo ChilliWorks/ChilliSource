@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------
     /// Container for RGBA colour as normalised 0.0 - 1.0 values

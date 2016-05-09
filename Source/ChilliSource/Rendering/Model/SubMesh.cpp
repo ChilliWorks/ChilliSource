@@ -38,7 +38,7 @@
 
 #include <limits>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------
     /// Constructor
@@ -57,7 +57,7 @@ namespace CS
     //-----------------------------------------------------------------
     /// Get AABB
     //-----------------------------------------------------------------
-    const Core::AABB& SubMesh::GetAABB() const
+    const AABB& SubMesh::GetAABB() const
     {
         return mBoundingBox;
     }
@@ -128,7 +128,7 @@ namespace CS
     //-----------------------------------------------------------------
     /// Build
     //-----------------------------------------------------------------
-    void SubMesh::Build(void* inpVertexData, void* inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax)
+    void SubMesh::Build(void* inpVertexData, void* inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Vector3 invMin, Vector3 invMax)
     {
         mpMeshBuffer->SetVertexCount(inudwNumVertices);
         mpMeshBuffer->SetIndexCount(indwNumIndices);
@@ -162,10 +162,10 @@ namespace CS
             mpMeshBuffer->UnlockIndex();
         }
         //Calculate the size of this meshes bounding box
-        Core::Vector3 vSize = invMax - invMin;
+        Vector3 vSize = invMax - invMin;
         
         //Build our bounding box based on the size of all our sub-meshes
-        mBoundingBox = Core::AABB((invMax + invMin) * 0.5f, vSize);
+        mBoundingBox = AABB((invMax + invMin) * 0.5f, vSize);
         
     }
     //-----------------------------------------------------------------
@@ -178,7 +178,7 @@ namespace CS
     //-----------------------------------------------------------------
     /// Render
     //-----------------------------------------------------------------
-    void SubMesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
+    void SubMesh::Render(RenderSystem* inpRenderSystem, const Matrix4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
     {
         CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
         
@@ -189,7 +189,7 @@ namespace CS
             if (inpAnimationGroup != nullptr)
             {
                 //Apply inverse bind pose matrix.
-                std::vector<Core::Matrix4> combinedMatrices;
+                std::vector<Matrix4> combinedMatrices;
                 inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
                 inpRenderSystem->ApplyJoints(combinedMatrices);
             }

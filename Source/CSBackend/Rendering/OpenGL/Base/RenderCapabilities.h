@@ -43,7 +43,7 @@ namespace CSBackend
         ///
         /// @author Ian Copland
         //---------------------------------------------------------
-        class RenderCapabilities final : public CSRendering::RenderCapabilities
+        class RenderCapabilities final : public ChilliSource::RenderCapabilities
         {
         public:
             CS_DECLARE_NAMEDTYPE(RenderCapabilities);
@@ -58,7 +58,7 @@ namespace CSBackend
 			/// @return Whether the object implements that
             /// interface
 			//-------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------
             /// Determine the capabilities of the device
             /// in terms of GL and render support. This needs
@@ -105,7 +105,7 @@ namespace CSBackend
             
         private:
             
-            friend CSRendering::RenderCapabilitiesUPtr CSRendering::RenderCapabilities::Create();
+            friend ChilliSource::RenderCapabilitiesUPtr ChilliSource::RenderCapabilities::Create();
             //-------------------------------------------------
 			/// Private constructor to enforce use of the
             /// factory method.

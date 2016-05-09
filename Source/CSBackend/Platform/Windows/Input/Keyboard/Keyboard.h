@@ -46,7 +46,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //---------------------------------------------------------------
-		class Keyboard final : public CSInput::Keyboard
+		class Keyboard final : public ChilliSource::Keyboard
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Keyboard);
@@ -61,7 +61,7 @@ namespace CSBackend
 			///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Check whether the key is currently down. This is
             /// unbuffered so will only check the state of the key
@@ -73,7 +73,7 @@ namespace CSBackend
             ///
             /// @return Whether the key is down
             //-------------------------------------------------------
-			bool IsKeyDown(CSInput::KeyCode in_code) const override;
+			bool IsKeyDown(ChilliSource::KeyCode in_code) const override;
 			//-------------------------------------------------------
 			/// Get the event that is triggered whenever a key is pressed.
 			///
@@ -89,7 +89,7 @@ namespace CSBackend
 			///
 			/// @return Event to register for key presses
 			//-------------------------------------------------------
-			CSCore::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() override;
+			ChilliSource::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() override;
 			//-------------------------------------------------------
 			/// Get the event that is triggered whenever a key is released.
 			///
@@ -101,11 +101,11 @@ namespace CSBackend
 			///
 			/// @return Event to register for key releases
 			//-------------------------------------------------------
-			CSCore::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent() override;
+			ChilliSource::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent() override;
             
         private:
             
-			friend CSInput::KeyboardUPtr CSInput::Keyboard::Create();
+			friend ChilliSource::KeyboardUPtr ChilliSource::Keyboard::Create();
 			//-------------------------------------------------------
 			/// Constructor
 			/// 
@@ -146,13 +146,13 @@ namespace CSBackend
 
 		private:
 
-			CSCore::Event<KeyPressedDelegate> m_keyPressedEvent;
-			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;
+			ChilliSource::Event<KeyPressedDelegate> m_keyPressedEvent;
+			ChilliSource::Event<KeyReleasedDelegate> m_keyReleasedEvent;
 
-			CSCore::EventConnectionUPtr m_keyPressedConnection;
-			CSCore::EventConnectionUPtr m_keyReleasedConnection;
+			ChilliSource::EventConnectionUPtr m_keyPressedConnection;
+			ChilliSource::EventConnectionUPtr m_keyReleasedConnection;
 
-			std::array<bool, static_cast<u32>(CSInput::KeyCode::k_total)> m_keysDown;
+			std::array<bool, static_cast<u32>(ChilliSource::KeyCode::k_total)> m_keysDown;
 		};
 	}
 }

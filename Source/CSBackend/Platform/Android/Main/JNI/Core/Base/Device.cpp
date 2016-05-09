@@ -53,7 +53,7 @@ namespace CSBackend
 			//----------------------------------------------------
 			std::string ParseLanguageFromLocale(const std::string& in_locale)
 			{
-				std::vector<std::string> strLocaleBrokenUp = CSCore::StringUtils::Split(in_locale, "_", 0);
+				std::vector<std::string> strLocaleBrokenUp = ChilliSource::StringUtils::Split(in_locale, "_", 0);
 
 				if (strLocaleBrokenUp.size() > 0)
 				{
@@ -78,7 +78,7 @@ namespace CSBackend
             m_model = javaInterface->GetDeviceModel();
             m_modelType = javaInterface->GetDeviceModelType();
             m_manufacturer = javaInterface->GetDeviceManufacturer();
-            m_osVersion = CSCore::ToString(javaInterface->GetOSVersionCode());
+            m_osVersion = ChilliSource::ToString(javaInterface->GetOSVersionCode());
             m_locale = javaInterface->GetDefaultLocaleCode();
             m_language = ParseLanguageFromLocale(m_locale);
             m_udid = javaInterface->GetUniqueId();
@@ -86,9 +86,9 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Device::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool Device::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (CSCore::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
+            return (ChilliSource::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
         }
         //---------------------------------------------------
         //---------------------------------------------------

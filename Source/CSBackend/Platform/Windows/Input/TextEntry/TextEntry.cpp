@@ -41,9 +41,9 @@ namespace CSBackend
 
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool TextEntry::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool TextEntry::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == CSInput::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
+			return in_interfaceId == ChilliSource::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -54,7 +54,7 @@ namespace CSBackend
 				m_text = in_text;
 				m_textBufferChangedDelegate = in_changeDelegate;
 				m_textInputDeactivatedDelegate = in_deactivateDelegate;
-				m_textEnteredConnection = SFMLWindow::Get()->GetTextEnteredEvent().OpenConnection(CSCore::MakeDelegate(this, &TextEntry::OnTextEntered));
+				m_textEnteredConnection = SFMLWindow::Get()->GetTextEnteredEvent().OpenConnection(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
 			}
 		}
 		//-------------------------------------------------------
@@ -92,21 +92,21 @@ namespace CSBackend
         }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void TextEntry::OnTextEntered(CSCore::UTF8Char in_unicodeChar)
+		void TextEntry::OnTextEntered(ChilliSource::UTF8Char in_unicodeChar)
 		{
-			const CSCore::UTF8Char k_backspace = 8;
+			const ChilliSource::UTF8Char k_backspace = 8;
 
 			std::string text;
 
 			if (in_unicodeChar != k_backspace)
 			{
-				text = CSCore::UTF8StringUtils::AppendCopy(in_unicodeChar, m_text);
+				text = ChilliSource::UTF8StringUtils::AppendCopy(in_unicodeChar, m_text);
 			}
 			else
 			{
-				s32 length = (s32)CSCore::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end());
+				s32 length = (s32)ChilliSource::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end());
 				length = std::max(length-1, 0);
-				text = CSCore::UTF8StringUtils::SubString(m_text, 0, (u32)length);
+				text = ChilliSource::UTF8StringUtils::SubString(m_text, 0, (u32)length);
 			}
 
 			bool acceptText = true;

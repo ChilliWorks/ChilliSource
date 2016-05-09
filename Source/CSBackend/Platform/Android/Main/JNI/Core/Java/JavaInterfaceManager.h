@@ -105,7 +105,7 @@ namespace CSBackend
 			/// @param The type ID of the java interface you wish to implement
 			/// @return Java Interface that implements the given interface or nullptr if none
 			//--------------------------------------------------------
-			IJavaInterfaceSPtr GetJavaInterface(CSCore::InterfaceIDType inInterfaceID);
+			IJavaInterfaceSPtr GetJavaInterface(ChilliSource::InterfaceIDType inInterfaceID);
 			//--------------------------------------------------------
 			/// Get Java Interface
 			///
@@ -131,7 +131,7 @@ namespace CSBackend
 			/// @param The type ID of the Java Interface you wish to implement
 			/// @param OUT: The array of java interfaces.
 			//--------------------------------------------------------
-			void GetJavaInterfaces(CSCore::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces);
+			void GetJavaInterfaces(ChilliSource::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces);
 			//--------------------------------------------------------
 			/// Get Java Interfaces
 			///

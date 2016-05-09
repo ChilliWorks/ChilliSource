@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     /// An IConnectableEvent represents an object which can have multiple listeners

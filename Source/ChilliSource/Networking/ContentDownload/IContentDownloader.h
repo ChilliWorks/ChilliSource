@@ -33,7 +33,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     /// An interface for content downloaders. A downloader implementing

@@ -32,7 +32,7 @@
 #include <windows.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     PerformanceTimer::PerformanceTimer()
         : m_lastDurationMicroS(0.0)

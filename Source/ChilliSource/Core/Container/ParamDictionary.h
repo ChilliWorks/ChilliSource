@@ -33,7 +33,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     /// Dictionary wrapper that maps string keys to string values

@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(ParticleAffectorDef);
     //----------------------------------------------------------------

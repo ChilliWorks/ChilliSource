@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     class AmbientLightComponent : public LightComponent
     {
@@ -46,13 +46,13 @@ namespace CS
         /// @param Comparison Type
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+        bool IsA(InterfaceIDType inInterfaceID) const override;
         //----------------------------------------------------------
         /// Get Light Matrix
         ///
         /// @return Light transform
         //----------------------------------------------------------
-        const Core::Matrix4& GetLightMatrix() const override;
+        const Matrix4& GetLightMatrix() const override;
     };
 }
 

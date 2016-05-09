@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------
     /// A generic two dimensional mathematical vector. Typically
@@ -473,7 +473,7 @@ namespace CS
 #include <assert.h>
 #include <cmath>
 
-namespace CS
+namespace ChilliSource
 {
     template <typename TType> const GenericVector2<TType> GenericVector2<TType>::k_zero(0, 0);
     template <typename TType> const GenericVector2<TType> GenericVector2<TType>::k_one(1, 1);

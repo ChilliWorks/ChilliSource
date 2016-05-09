@@ -46,7 +46,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //-------------------------------------------------------------------------
-        class HttpRequest final : public CSNetworking::HttpRequest
+        class HttpRequest final : public ChilliSource::HttpRequest
         {
         public:
             //----------------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace CSBackend
             ///
             /// @return The original headers of the request as keys/values
             //----------------------------------------------------------------------------------------
-            const CSCore::ParamDictionary& GetHeaders() const override;
+            const ChilliSource::ParamDictionary& GetHeaders() const override;
             //----------------------------------------------------------------------------------------
             /// @author N Tanda
             ///
@@ -114,14 +114,14 @@ namespace CSBackend
             /// @param Max buffer size in bytes
             /// @param Completion delegate
             //------------------------------------------------------------------
-            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
+            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const ChilliSource::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
             
         private:
             
             const Type m_type;
             const std::string m_url;
             const std::string m_body;
-            const CSCore::ParamDictionary m_headers;
+            const ChilliSource::ParamDictionary m_headers;
             const Delegate m_completionDelegate;
             
             bool m_complete = false;

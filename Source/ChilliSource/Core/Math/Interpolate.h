@@ -36,7 +36,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A collection of Interpolate functions.

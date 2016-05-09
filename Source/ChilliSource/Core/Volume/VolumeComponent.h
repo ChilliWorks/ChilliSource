@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
-namespace CS
+namespace ChilliSource
 {
     //====================================================
     /// Description:
@@ -41,7 +41,7 @@ namespace CS
     /// Any object that has a AABB, OOBB or Bounding
     /// Sphere.
     //====================================================
-    class VolumeComponent : public Core::Component
+    class VolumeComponent : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(VolumeComponent);
@@ -56,7 +56,7 @@ namespace CS
         /// recomputed when required.
         /// @return Axis aligned bounding box
         //----------------------------------------------------
-        virtual const Core::AABB& GetAABB() = 0;
+        virtual const AABB& GetAABB() = 0;
         //----------------------------------------------------
         /// Get Object Oriented Bounding Box
         ///
@@ -65,7 +65,7 @@ namespace CS
         /// recomputed when required.
         /// @return OOBB
         //----------------------------------------------------
-        virtual const Core::OOBB& GetOOBB() = 0;
+        virtual const OOBB& GetOOBB() = 0;
         //----------------------------------------------------
         /// Get Bounding Sphere
         ///
@@ -74,7 +74,7 @@ namespace CS
         /// recomputed when required.
         /// @return bounding sphere
         //----------------------------------------------------
-        virtual const Core::Sphere& GetBoundingSphere() = 0;
+        virtual const Sphere& GetBoundingSphere() = 0;
         //----------------------------------------------------
         /// Is Visible
         ///

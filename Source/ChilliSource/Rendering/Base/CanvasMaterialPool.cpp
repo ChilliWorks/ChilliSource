@@ -31,7 +31,7 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace CS
         
         if (m_nextMaterial >= m_materials.size())
         {
-            m_materials.push_back(m_materialFactory->CreateGUI("_Canvas-" + Core::ToString(m_materials.size())));
+            m_materials.push_back(m_materialFactory->CreateGUI("_Canvas-" + ToString(m_materials.size())));
             CS_ASSERT(m_nextMaterial < m_materials.size(), "We've added a new material yet we still don't have enough - something has gone wrong.");
         }
         

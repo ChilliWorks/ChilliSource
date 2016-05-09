@@ -50,7 +50,7 @@ namespace CSBackend
 		///
 		/// @author S Downie
 		//---------------------------------------------------
-		class SFMLWindow final : public CSCore::Singleton<SFMLWindow>
+		class SFMLWindow final : public ChilliSource::Singleton<SFMLWindow>
 		{
 		public:
 			//-----------------------------------------------------------
@@ -70,7 +70,7 @@ namespace CSBackend
 			///
 			/// @param The new window size.
 			//-----------------------------------------------------------
-			using WindowResizeDelegate = std::function<void(const CSCore::Integer2&)>;
+			using WindowResizeDelegate = std::function<void(const ChilliSource::Integer2&)>;
 			//-----------------------------------------------------------
 			/// A delegate called when the window mode changes.
 			///
@@ -124,7 +124,7 @@ namespace CSBackend
 			///
 			/// @param UTF-8 character entered
 			//-----------------------------------------------------------
-			using TextEnteredEvent = std::function<void(CSCore::UTF8Char)>;
+			using TextEnteredEvent = std::function<void(ChilliSource::UTF8Char)>;
 			//-------------------------------------------------------
 			/// Delegate that receieves events on the key with the
 			/// given code when key is pressed
@@ -175,7 +175,7 @@ namespace CSBackend
 			///
 			/// @param Size in pixels
 			//-------------------------------------------------
-			void SetSize(const CSCore::Integer2& in_size);
+			void SetSize(const ChilliSource::Integer2& in_size);
 			//-------------------------------------------------
 			/// Set the window to fullscreen mode or windowed mode
 			/// which will hide or the menu bar
@@ -190,7 +190,7 @@ namespace CSBackend
 			///
 			/// @return A list of resolutions supported by the display
 			//----------------------------------------------------------
-			std::vector<CSCore::Integer2> GetSupportedResolutions() const;
+			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const;
 			//-------------------------------------------------
 			/// Flush to the display. Should be called at end
 			/// if each frame
@@ -215,37 +215,37 @@ namespace CSBackend
 			///
 			/// @return An event that is called when the window is resized
 			//------------------------------------------------
-			CSCore::IConnectableEvent<WindowResizeDelegate>& GetWindowResizedEvent();
+			ChilliSource::IConnectableEvent<WindowResizeDelegate>& GetWindowResizedEvent();
 			//-------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return An event that is called when the window fullscreen is enabled or disabled
 			//-------------------------------------------------
-			CSCore::IConnectableEvent<WindowDisplayModeDelegate>& GetWindowDisplayModeEvent();
+			ChilliSource::IConnectableEvent<WindowDisplayModeDelegate>& GetWindowDisplayModeEvent();
 			//-------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return An event that is called when a mouse button event occurs
 			//------------------------------------------------
-			CSCore::IConnectableEvent<MouseButtonDelegate>& GetMouseButtonEvent();
+			ChilliSource::IConnectableEvent<MouseButtonDelegate>& GetMouseButtonEvent();
 			//-------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return An event that is called when the mouse moves
 			//------------------------------------------------
-			CSCore::IConnectableEvent<MouseMovedDelegate>& GetMouseMovedEvent();
+			ChilliSource::IConnectableEvent<MouseMovedDelegate>& GetMouseMovedEvent();
 			//-------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return An event that is called when the mouse wheel scrolls
 			//------------------------------------------------
-			CSCore::IConnectableEvent<MouseWheelDelegate>& GetMouseWheelEvent();
+			ChilliSource::IConnectableEvent<MouseWheelDelegate>& GetMouseWheelEvent();
 			//-------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return An event that is called when text is entered
 			//------------------------------------------------
-			CSCore::IConnectableEvent<TextEnteredEvent>& GetTextEnteredEvent();
+			ChilliSource::IConnectableEvent<TextEnteredEvent>& GetTextEnteredEvent();
 			//-------------------------------------------------------
 			/// Get the event that is triggered whenever a key is pressed.
 			///
@@ -261,7 +261,7 @@ namespace CSBackend
 			///
 			/// @return Event to register for key presses
 			//-------------------------------------------------------
-			CSCore::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent();
+			ChilliSource::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent();
 			//-------------------------------------------------------
 			/// Get the event that is triggered whenever a key is released.
 			///
@@ -273,13 +273,13 @@ namespace CSBackend
 			///
 			/// @return Event to register for key releases
 			//-------------------------------------------------------
-			CSCore::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent();
+			ChilliSource::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent();
 			//------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return Current size of the SFML window
 			//------------------------------------------------
-			CSCore::Integer2 GetWindowSize() const;
+			ChilliSource::Integer2 GetWindowSize() const;
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -291,7 +291,7 @@ namespace CSBackend
 			///
 			/// @return Current position of mouse relative to Window
 			//------------------------------------------------
-			CSCore::Integer2 GetMousePosition() const;
+			ChilliSource::Integer2 GetMousePosition() const;
 			//-------------------------------------------------
 			/// Stops the update loop causing the application 
 			/// to terminate.
@@ -319,14 +319,14 @@ namespace CSBackend
 
 			sf::Window m_window;
 
-			CSCore::Event<WindowResizeDelegate> m_windowResizeEvent;
-			CSCore::Event<WindowDisplayModeDelegate> m_windowDisplayModeEvent;
-			CSCore::Event<MouseButtonDelegate> m_mouseButtonEvent;
-			CSCore::Event<MouseMovedDelegate> m_mouseMovedEvent;
-			CSCore::Event<MouseWheelDelegate> m_mouseWheelEvent;
-			CSCore::Event<TextEnteredEvent> m_textEnteredEvent;
-			CSCore::Event<KeyPressedDelegate> m_keyPressedEvent;
-			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;
+			ChilliSource::Event<WindowResizeDelegate> m_windowResizeEvent;
+			ChilliSource::Event<WindowDisplayModeDelegate> m_windowDisplayModeEvent;
+			ChilliSource::Event<MouseButtonDelegate> m_mouseButtonEvent;
+			ChilliSource::Event<MouseMovedDelegate> m_mouseMovedEvent;
+			ChilliSource::Event<MouseWheelDelegate> m_mouseWheelEvent;
+			ChilliSource::Event<TextEnteredEvent> m_textEnteredEvent;
+			ChilliSource::Event<KeyPressedDelegate> m_keyPressedEvent;
+			ChilliSource::Event<KeyReleasedDelegate> m_keyReleasedEvent;
 
 			std::string m_title;
 

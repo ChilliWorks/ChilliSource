@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Defines a markup parser

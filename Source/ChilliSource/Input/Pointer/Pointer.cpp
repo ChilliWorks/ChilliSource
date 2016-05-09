@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Input/Pointer/Pointer.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------
     //----------------------------------------------------
@@ -46,19 +46,19 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Pointer::Pointer(Id in_uniqueId, u32 in_index, const Core::Vector2& in_initialPosition)
+    Pointer::Pointer(Id in_uniqueId, u32 in_index, const Vector2& in_initialPosition)
     : m_uniqueId(in_uniqueId), m_index(in_index), m_position(in_initialPosition), m_previousPosition(in_initialPosition)
     {
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::Vector2 Pointer::GetPosition() const
+    Vector2 Pointer::GetPosition() const
     {
         return m_position;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::Vector2 Pointer::GetPreviousPosition() const
+    Vector2 Pointer::GetPreviousPosition() const
     {
         return m_previousPosition;
     }

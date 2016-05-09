@@ -40,7 +40,7 @@
 #include <CSBackend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(DeviceButtonSystem);
     //----------------------------------------------------

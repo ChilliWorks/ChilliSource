@@ -38,7 +38,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------
     /// Base class for posting messages and request
@@ -47,7 +47,7 @@ namespace CS
     ///
     /// @author S McGaw
     //----------------------------------------------------
-    class FacebookPostSystem : public Core::AppSystem
+    class FacebookPostSystem : public AppSystem
     {
     public:
         
@@ -105,7 +105,7 @@ namespace CS
         ///
         /// @param Result - Success, failure, etc.
         //-------------------------------------------------
-        using PostResultDelegate = Core::ConnectableDelegate<void(PostResult)>;
+        using PostResultDelegate = ConnectableDelegate<void(PostResult)>;
         
         //---------------------------------------------------
         /// Creates a new instance of the facebook post system.

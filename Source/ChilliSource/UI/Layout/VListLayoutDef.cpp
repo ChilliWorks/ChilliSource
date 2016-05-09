@@ -34,7 +34,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(VListLayoutDef);
     //------------------------------------------------------------------------------
@@ -57,23 +57,23 @@ namespace CS
             
             if (key == k_relativeMarginsKey)
             {
-                m_relativeMargins = Core::ParseVector4(value);
+                m_relativeMargins = ParseVector4(value);
             }
             else if (key == k_absoluteMarginsKey)
             {
-                m_absoluteMargins = Core::ParseVector4(value);
+                m_absoluteMargins = ParseVector4(value);
             }
             else if (key == k_numCellsKey)
             {
-                m_numCells = Core::ParseU32(value);
+                m_numCells = ParseU32(value);
             }
             else if (key == k_relativeSpacingKey)
             {
-                m_relativeSpacing = Core::ParseF32(value);
+                m_relativeSpacing = ParseF32(value);
             }
             else if (key == k_absoluteSpacingKey)
             {
-                m_absoluteSpacing = Core::ParseF32(value);
+                m_absoluteSpacing = ParseF32(value);
             }
             else if (key == k_typeKey)
             {
@@ -87,13 +87,13 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    VListLayoutDef::VListLayoutDef(u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
+    VListLayoutDef::VListLayoutDef(u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
     : m_numCells(in_numCells), m_relativeMargins(in_relMargins), m_absoluteMargins(in_absMargins), m_relativeSpacing(in_relSpacing), m_absoluteSpacing(in_absSpacing)
     {
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool VListLayoutDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool VListLayoutDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (LayoutDef::InterfaceID == in_interfaceId || VListLayoutDef::InterfaceID == in_interfaceId);
     }
@@ -105,13 +105,13 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector4 VListLayoutDef::GetRelativeMargins() const
+    Vector4 VListLayoutDef::GetRelativeMargins() const
     {
         return m_relativeMargins;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::Vector4 VListLayoutDef::GetAbsoluteMargins() const
+    Vector4 VListLayoutDef::GetAbsoluteMargins() const
     {
         return m_absoluteMargins;
     }

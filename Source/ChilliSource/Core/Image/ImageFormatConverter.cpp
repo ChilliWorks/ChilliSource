@@ -32,7 +32,7 @@
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace ImageFormatConverter
     {

@@ -40,7 +40,7 @@
 #include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Screen);
     //-----------------------------------------------------------

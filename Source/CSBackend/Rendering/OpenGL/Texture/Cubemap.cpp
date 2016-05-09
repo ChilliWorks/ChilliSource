@@ -51,23 +51,23 @@ namespace CSBackend
             /// @param Horizontal wrap mode
             /// @param Vertical wrap mode
             //---------------------------------------------------
-            void ApplyWrapMode(CSRendering::Texture::WrapMode in_smode, CSRendering::Texture::WrapMode in_tmode)
+            void ApplyWrapMode(ChilliSource::Texture::WrapMode in_smode, ChilliSource::Texture::WrapMode in_tmode)
             {
                 switch(in_smode)
                 {
-                    case CSRendering::Texture::WrapMode::k_clamp:
+                    case ChilliSource::Texture::WrapMode::k_clamp:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
                         break;
-                    case CSRendering::Texture::WrapMode::k_repeat:
+                    case ChilliSource::Texture::WrapMode::k_repeat:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
                         break;
                 };
                 switch(in_tmode)
                 {
-                    case CSRendering::Texture::WrapMode::k_clamp:
+                    case ChilliSource::Texture::WrapMode::k_clamp:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                         break;
-                    case CSRendering::Texture::WrapMode::k_repeat:
+                    case ChilliSource::Texture::WrapMode::k_repeat:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
                         break;
                 };
@@ -83,17 +83,17 @@ namespace CSBackend
             /// @param Filter mode
             /// @param Whether mip-mapping is enabled
             //---------------------------------------------------
-            void ApplyFilterMode(CSRendering::Texture::FilterMode in_mode, bool in_hasMipMaps)
+            void ApplyFilterMode(ChilliSource::Texture::FilterMode in_mode, bool in_hasMipMaps)
             {
                 if(in_hasMipMaps == false)
                 {
                     switch(in_mode)
                     {
-                        case CSRendering::Texture::FilterMode::k_nearestNeighbour:
+                        case ChilliSource::Texture::FilterMode::k_nearestNeighbour:
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                             break;
-                        case CSRendering::Texture::FilterMode::k_bilinear:
+                        case ChilliSource::Texture::FilterMode::k_bilinear:
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             break;
@@ -103,11 +103,11 @@ namespace CSBackend
                 {
                     switch(in_mode)
                     {
-                        case CSRendering::Texture::FilterMode::k_nearestNeighbour:
+                        case ChilliSource::Texture::FilterMode::k_nearestNeighbour:
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                             break;
-                        case CSRendering::Texture::FilterMode::k_bilinear:
+                        case ChilliSource::Texture::FilterMode::k_bilinear:
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             break;
@@ -128,33 +128,33 @@ namespace CSBackend
             /// @param Image height
             /// @param Image data
             //---------------------------------------------------
-            void UploadImageDataNoCompression(u32 in_faceIdx, CSCore::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData)
+            void UploadImageDataNoCompression(u32 in_faceIdx, ChilliSource::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData)
             {
                 switch(in_format)
                 {
                     default:
-                    case CSCore::ImageFormat::k_RGBA8888:
+                    case ChilliSource::ImageFormat::k_RGBA8888:
                         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_RGBA, in_imageWidth, in_imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGB888:
+                    case ChilliSource::ImageFormat::k_RGB888:
                         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_RGB, in_imageWidth, in_imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGBA4444:
+                    case ChilliSource::ImageFormat::k_RGBA4444:
                         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_RGBA, in_imageWidth, in_imageHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGB565:
+                    case ChilliSource::ImageFormat::k_RGB565:
                         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_RGB, in_imageWidth, in_imageHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_LumA88:
+                    case ChilliSource::ImageFormat::k_LumA88:
                         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_LUMINANCE_ALPHA, in_imageWidth, in_imageHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_Lum8:
+                    case ChilliSource::ImageFormat::k_Lum8:
                         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_LUMINANCE, in_imageWidth, in_imageHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_Depth16:
+                    case ChilliSource::ImageFormat::k_Depth16:
                         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_DEPTH_COMPONENT, in_imageWidth, in_imageHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_Depth32:
+                    case ChilliSource::ImageFormat::k_Depth32:
                         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_DEPTH_COMPONENT, in_imageWidth, in_imageHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, in_imageData);
                         break;
                 };
@@ -176,12 +176,12 @@ namespace CSBackend
             /// @param Image data
             /// @param Image data size in bytes
             //---------------------------------------------------
-            void UploadImageDataETC1(u32 in_faceIdx, CSCore::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            void UploadImageDataETC1(u32 in_faceIdx, ChilliSource::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
             {
 #ifndef CS_TARGETPLATFORM_ANDROID
                 CS_LOG_FATAL("ETC1 compression is only supported on Android");
 #endif
-                CS_ASSERT(in_format == CSCore::ImageFormat::k_RGB888, "ETC1 only supports RGB image format");
+                CS_ASSERT(in_format == ChilliSource::ImageFormat::k_RGB888, "ETC1 only supports RGB image format");
                 
 #ifdef CS_TARGETPLATFORM_ANDROID
                 glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_ETC1_RGB8_OES, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
@@ -204,7 +204,7 @@ namespace CSBackend
             /// @param Image data
             /// @param Image data size in bytes
             //---------------------------------------------------
-            void UploadImageDataPVR2(u32 in_faceIdx, CSCore::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            void UploadImageDataPVR2(u32 in_faceIdx, ChilliSource::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
             {
 #ifndef CS_TARGETPLATFORM_IOS
                 CS_LOG_FATAL("PVR compression is only supported on iOS");
@@ -216,10 +216,10 @@ namespace CSBackend
                     default:
                         CS_LOG_FATAL("PVR compression only supports RGB and RGBA image formats");
                         break;
-                    case CSCore::ImageFormat::k_RGBA8888:
+                    case ChilliSource::ImageFormat::k_RGBA8888:
                         glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGB888:
+                    case ChilliSource::ImageFormat::k_RGB888:
                         glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
                         break;
                 };
@@ -242,7 +242,7 @@ namespace CSBackend
             /// @param Image data
             /// @param Image data size in bytes
             //---------------------------------------------------
-            void UploadImageDataPVR4(u32 in_faceIdx, CSCore::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            void UploadImageDataPVR4(u32 in_faceIdx, ChilliSource::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
             {
 #ifndef CS_TARGETPLATFORM_IOS
                 CS_LOG_FATAL("PVR compression is only supported on iOS");
@@ -254,10 +254,10 @@ namespace CSBackend
                     default:
                         CS_LOG_FATAL("PVR compression only supports RGB and RGBA image formats");
                         break;
-                    case CSCore::ImageFormat::k_RGBA8888:
+                    case ChilliSource::ImageFormat::k_RGBA8888:
                         glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGB888:
+                    case ChilliSource::ImageFormat::k_RGB888:
                         glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + in_faceIdx, 0, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
                         break;
                 };
@@ -271,23 +271,23 @@ namespace CSBackend
 		//---------------------------------------------------------------
 		Cubemap::Cubemap()
 		{
-            m_renderCapabilities = CSCore::Application::Get()->GetSystem<CSRendering::RenderCapabilities>();
+            m_renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
             CS_ASSERT(m_renderCapabilities, "Cannot find required system: Render Capabilities.");
             
-            m_texUnitSystem = CSCore::Application::Get()->GetSystem<TextureUnitSystem>();
+            m_texUnitSystem = ChilliSource::Application::Get()->GetSystem<TextureUnitSystem>();
             CS_ASSERT(m_renderCapabilities, "Cannot find required system: Texture Unit System.");
 		}
         //--------------------------------------------------
 		//--------------------------------------------------
-		bool Cubemap::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool Cubemap::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == Cubemap::InterfaceID || in_interfaceId == CSRendering::Cubemap::InterfaceID;
+			return in_interfaceId == Cubemap::InterfaceID || in_interfaceId == ChilliSource::Cubemap::InterfaceID;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
 		void Cubemap::Bind(u32 in_texUnit)
 		{
-			CS_ASSERT(in_texUnit < m_renderCapabilities->GetNumTextureUnits(), "Attempting to bind to texture unit not supported on this device: " + CSCore::ToString(in_texUnit));
+			CS_ASSERT(in_texUnit < m_renderCapabilities->GetNumTextureUnits(), "Attempting to bind to texture unit not supported on this device: " + ChilliSource::ToString(in_texUnit));
 			
             m_texUnitSystem->Bind(this, in_texUnit);
             
@@ -307,7 +307,7 @@ namespace CSBackend
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Cubemap::Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled)
+        void Cubemap::Build(const std::array<ChilliSource::Texture::Descriptor, 6>& in_descs, std::array<ChilliSource::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled)
         {
             Destroy();
             
@@ -323,7 +323,7 @@ namespace CSBackend
             for(u32 i=0; i<in_descs.size(); ++i)
             {
                 CS_ASSERT(in_descs[i].m_width <= m_renderCapabilities->GetMaxTextureSize() && in_descs[i].m_height <= m_renderCapabilities->GetMaxTextureSize(),
-                          "OpenGL does not support textures of this size on this device (" + CSCore::ToString(in_descs[i].m_width) + ", " + CSCore::ToString(in_descs[i].m_height) + ")");
+                          "OpenGL does not support textures of this size on this device (" + ChilliSource::ToString(in_descs[i].m_width) + ", " + ChilliSource::ToString(in_descs[i].m_height) + ")");
                 
                 m_widths[i] = in_descs[i].m_width;
                 m_heights[i] = in_descs[i].m_height;
@@ -332,23 +332,23 @@ namespace CSBackend
                 
                 switch(m_compressions[i])
                 {
-                    case CSCore::ImageCompression::k_none:
+                    case ChilliSource::ImageCompression::k_none:
                         UploadImageDataNoCompression(i, m_formats[i], m_widths[i], m_heights[i], in_datas[i].get());
                         break;
-                    case CSCore::ImageCompression::k_ETC1:
+                    case ChilliSource::ImageCompression::k_ETC1:
                         UploadImageDataETC1(i, m_formats[i], m_widths[i], m_heights[i], in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
-                    case CSCore::ImageCompression::k_PVR2Bpp:
+                    case ChilliSource::ImageCompression::k_PVR2Bpp:
                         UploadImageDataPVR2(i, m_formats[i], m_widths[i], m_heights[i], in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
-                    case CSCore::ImageCompression::k_PVR4Bpp:
+                    case ChilliSource::ImageCompression::k_PVR4Bpp:
                         UploadImageDataPVR4(i, m_formats[i], m_widths[i], m_heights[i], in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
                 };
             }
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreCubemapDataEnabled == true)
+            if (GetStorageLocation() == ChilliSource::StorageLocation::k_none && in_restoreCubemapDataEnabled == true)
             {
             	m_restoreCubemapDataEnabled = true;
 
@@ -382,13 +382,13 @@ namespace CSBackend
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		CSCore::ImageFormat Cubemap::GetFormat(Face in_face) const
+		ChilliSource::ImageFormat Cubemap::GetFormat(Face in_face) const
 		{
 			return m_formats[(u32)in_face];
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void Cubemap::SetFilterMode(CSRendering::Texture::FilterMode in_mode)
+		void Cubemap::SetFilterMode(ChilliSource::Texture::FilterMode in_mode)
 		{
             m_filterMode = in_mode;
             
@@ -396,7 +396,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void Cubemap::SetWrapMode(CSRendering::Texture::WrapMode in_smode, CSRendering::Texture::WrapMode in_tmode)
+		void Cubemap::SetWrapMode(ChilliSource::Texture::WrapMode in_smode, ChilliSource::Texture::WrapMode in_tmode)
 		{
 			m_sWrapMode = in_smode;
 			m_tWrapMode = in_tmode;
@@ -408,9 +408,9 @@ namespace CSBackend
         //--------------------------------------------------
         void Cubemap::Restore()
         {
-            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
+            CS_ASSERT(GetStorageLocation() == ChilliSource::StorageLocation::k_none, "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
             
-            std::array<CSRendering::Texture::Descriptor, 6> descs;
+            std::array<ChilliSource::Texture::Descriptor, 6> descs;
             for (u32 i = 0; i < descs.size(); ++i)
             {
                 descs[i].m_width = m_widths[i];
@@ -420,9 +420,9 @@ namespace CSBackend
                 descs[i].m_dataSize = m_restorationDataSizes[i];
             }
             
-            CSRendering::Texture::WrapMode sWrap = m_sWrapMode;
-            CSRendering::Texture::WrapMode tWrap = m_tWrapMode;
-            CSRendering::Texture::FilterMode filterMode = m_filterMode;
+            ChilliSource::Texture::WrapMode sWrap = m_sWrapMode;
+            ChilliSource::Texture::WrapMode tWrap = m_tWrapMode;
+            ChilliSource::Texture::FilterMode filterMode = m_filterMode;
             
             Build(descs, std::move(m_restorationDatas), m_hasMipMaps, m_restoreCubemapDataEnabled);
             SetWrapMode(sWrap, tWrap);
@@ -437,11 +437,11 @@ namespace CSBackend
             m_hasWrapModeChanged = true;
             m_hasMipMaps = false;
             
-            m_sWrapMode = CSRendering::Texture::WrapMode::k_clamp;
-            m_tWrapMode = CSRendering::Texture::WrapMode::k_clamp;
+            m_sWrapMode = ChilliSource::Texture::WrapMode::k_clamp;
+            m_tWrapMode = ChilliSource::Texture::WrapMode::k_clamp;
             
             //If the context has already been destroyed then the cubemap has already been destroyed
-            bool hasContext = static_cast<RenderSystem*>(CSCore::Application::Get()->GetRenderSystem())->HasContext();
+            bool hasContext = static_cast<RenderSystem*>(ChilliSource::Application::Get()->GetRenderSystem())->HasContext();
             if(hasContext == true && m_cubemapHandle > 0)
             {
                 Unbind();

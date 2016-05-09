@@ -39,7 +39,7 @@
 #include <vector>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     typedef std::vector<ComponentSPtr> ComponentList;
     

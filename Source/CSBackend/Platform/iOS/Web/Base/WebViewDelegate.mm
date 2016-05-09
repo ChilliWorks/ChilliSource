@@ -94,7 +94,7 @@
     
     if (in_error.code == NSURLErrorNotConnectedToInternet)
     {
-        auto dialogResultLambda = [=](u32 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result)
+        auto dialogResultLambda = [=](u32 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result)
         {
             if(webViewSystem)
             {
@@ -102,7 +102,7 @@
             }
         };
         
-        auto dialogSystem = CSCore::Application::Get()->GetSystem<CSCore::DialogueBoxSystem>();
+        auto dialogSystem = ChilliSource::Application::Get()->GetSystem<ChilliSource::DialogueBoxSystem>();
         dialogSystem->ShowSystemDialogue(0, dialogResultLambda, "Error", [NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]], "OK");
     }
     else if(webViewSystem)

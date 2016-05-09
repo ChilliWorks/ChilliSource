@@ -52,7 +52,7 @@ namespace CSBackend
 		///
 		/// @author S Downie
 		//----------------------------------------------------------------------------------------
-		class HttpRequest final : public CSNetworking::HttpRequest
+		class HttpRequest final : public ChilliSource::HttpRequest
 		{
 		public:
 			//----------------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ namespace CSBackend
 			///
 			/// @return The original headers of the request as keys/values
 			//----------------------------------------------------------------------------------------
-			const CSCore::ParamDictionary& GetHeaders() const override;
+			const ChilliSource::ParamDictionary& GetHeaders() const override;
 			//----------------------------------------------------------------------------------------
 			/// Close the request. Note: The completion delegate is not invoked
 			///
@@ -115,7 +115,7 @@ namespace CSBackend
 			/// @param Max buffer size before flush required
 			/// @param Completion delegate
 			//----------------------------------------------------------------------------------------
-			HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs,
+			HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const ChilliSource::ParamDictionary& in_headers, u32 in_timeoutSecs,
 				HINTERNET in_requestHandle, HINTERNET in_connectionHandle, u32 in_bufferFlushSize, const Delegate& in_delegate);
 			//----------------------------------------------------------------------------------------
 			/// Reads data from the open stream when it becomes available
@@ -160,13 +160,13 @@ namespace CSBackend
 			const Type m_type;
 			const std::string m_url;
 			const std::string m_body;
-			const CSCore::ParamDictionary m_headers;
+			const ChilliSource::ParamDictionary m_headers;
 			const Delegate m_completionDelegate;
 			const u32 m_bufferFlushSize;
 
 			std::string m_responseData;
 			u32 m_responseCode = 0;
-			CSNetworking::HttpResponse::Result m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
+			ChilliSource::HttpResponse::Result m_requestResult = ChilliSource::HttpResponse::Result::k_failed;
 
 			u64 m_totalBytesRead = 0;
 			u64 m_expectedSize = 0;
@@ -176,7 +176,7 @@ namespace CSBackend
 			bool m_isRequestComplete = false;
 			bool m_isRequestCancelled = false;
 
-			CSCore::TaskScheduler* m_taskScheduler;
+			ChilliSource::TaskScheduler* m_taskScheduler;
 		};
 	}
 }

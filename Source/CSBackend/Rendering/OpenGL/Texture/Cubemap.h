@@ -46,7 +46,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //--------------------------------------------------------------
-		class Cubemap final : public CSRendering::Cubemap
+		class Cubemap final : public ChilliSource::Cubemap
 		{
 		public:
             
@@ -58,7 +58,7 @@ namespace CSBackend
             ///
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Construct the cubemap from the given image data.
             /// The texture will take ownership of the image data
@@ -85,7 +85,7 @@ namespace CSBackend
             /// disk. This will only work for RGBA8888, RGB888, RGBA4444
             /// and RGB565 cubemaps.
             //--------------------------------------------------
-            void Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled) override;
+            void Build(const std::array<ChilliSource::Texture::Descriptor, 6>& in_descs, std::array<ChilliSource::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled) override;
 			//--------------------------------------------------------------
             /// Binds this cubemap to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -109,7 +109,7 @@ namespace CSBackend
             ///
             /// @param Filter mode
             //--------------------------------------------------------------
-            void SetFilterMode(CSRendering::Texture::FilterMode in_mode) override;
+            void SetFilterMode(ChilliSource::Texture::FilterMode in_mode) override;
             //--------------------------------------------------------------
             /// Future sampling of the cubemap will use the given wrap mode
             ///
@@ -118,7 +118,7 @@ namespace CSBackend
             /// @param Horizontal wrapping
             /// @param Vertical wrapping
             //--------------------------------------------------------------
-			void SetWrapMode(CSRendering::Texture::WrapMode in_sMode, CSRendering::Texture::WrapMode in_tMode) override;
+			void SetWrapMode(ChilliSource::Texture::WrapMode in_sMode, ChilliSource::Texture::WrapMode in_tMode) override;
 			//--------------------------------------------------
 			/// @author S Downie
 			///
@@ -140,7 +140,7 @@ namespace CSBackend
             /// @return The format of the image used to create
             ///			the cubemap face.
             //--------------------------------------------------
-            CSCore::ImageFormat GetFormat(Face in_face) const;
+            ChilliSource::ImageFormat GetFormat(Face in_face) const;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
             //--------------------------------------------------
@@ -171,7 +171,7 @@ namespace CSBackend
 			
 		private:
             
-            friend CSRendering::CubemapUPtr CSRendering::Cubemap::Create();
+            friend ChilliSource::CubemapUPtr ChilliSource::Cubemap::Create();
 			//----------------------------------------------------------
             /// Private constructor to enforce the use of the factory
             /// method
@@ -182,19 +182,19 @@ namespace CSBackend
 			
 		private:
             
-            CSRendering::RenderCapabilities* m_renderCapabilities;
+            ChilliSource::RenderCapabilities* m_renderCapabilities;
             TextureUnitSystem* m_texUnitSystem;
             
             GLuint m_cubemapHandle = 0;
             
-            CSRendering::Texture::FilterMode m_filterMode = CSRendering::Texture::FilterMode::k_bilinear;
-            CSRendering::Texture::WrapMode m_sWrapMode = CSRendering::Texture::WrapMode::k_clamp;
-            CSRendering::Texture::WrapMode m_tWrapMode = CSRendering::Texture::WrapMode::k_clamp;
+            ChilliSource::Texture::FilterMode m_filterMode = ChilliSource::Texture::FilterMode::k_bilinear;
+            ChilliSource::Texture::WrapMode m_sWrapMode = ChilliSource::Texture::WrapMode::k_clamp;
+            ChilliSource::Texture::WrapMode m_tWrapMode = ChilliSource::Texture::WrapMode::k_clamp;
             
             std::array<u32, 6> m_widths;
             std::array<u32, 6> m_heights;
-            std::array<CSCore::ImageFormat, 6> m_formats;
-            std::array<CSCore::ImageCompression, 6> m_compressions;
+            std::array<ChilliSource::ImageFormat, 6> m_formats;
+            std::array<ChilliSource::ImageCompression, 6> m_compressions;
             
             bool m_hasFilterModeChanged = true;
             bool m_hasWrapModeChanged = true;
@@ -202,7 +202,7 @@ namespace CSBackend
             
 #ifdef CS_TARGETPLATFORM_ANDROID
             bool m_restoreCubemapDataEnabled = false;
-            std::array<CSRendering::Texture::TextureDataUPtr, 6> m_restorationDatas;
+            std::array<ChilliSource::Texture::TextureDataUPtr, 6> m_restorationDatas;
             std::array<u32, 6> m_restorationDataSizes;
 #endif
         };

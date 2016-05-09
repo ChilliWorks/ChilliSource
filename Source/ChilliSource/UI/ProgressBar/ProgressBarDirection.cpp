@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     const char k_directionHorizontal[] = "horizontal";
     const char k_directionVertical[] = "vertical";
@@ -40,7 +40,7 @@ namespace CS
     ProgressBarDirection ParseProgressBarDirection(const std::string& in_stringDirection)
     {
         std::string lowerDirection = in_stringDirection;
-        Core::StringUtils::ToLowerCase(lowerDirection);
+        StringUtils::ToLowerCase(lowerDirection);
         
         if (lowerDirection == k_directionHorizontal)
         {

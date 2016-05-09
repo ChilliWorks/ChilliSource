@@ -36,14 +36,14 @@
 #include <functional>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A system for receiving input from the current keyboard
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class Keyboard : public Core::AppSystem
+    class Keyboard : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(Keyboard);
@@ -94,7 +94,7 @@ namespace CS
         ///
         /// @return Event to register for key presses
         //-------------------------------------------------------
-        virtual Core::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() = 0;
+        virtual IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() = 0;
         //-------------------------------------------------------
         /// Get the event that is triggered whenever a key is released.
         ///
@@ -106,7 +106,7 @@ namespace CS
         ///
         /// @return Event to register for key releases
         //-------------------------------------------------------
-        virtual Core::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent() = 0;
+        virtual IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent() = 0;
         //-------------------------------------------------------
         /// Virtual destructor
         ///
@@ -116,7 +116,7 @@ namespace CS
         
     protected:
         
-        friend class Core::Application;
+        friend class Application;
         //-------------------------------------------------------
         /// Factory method from creating a new platform specific
         /// instance of the keyboard system.

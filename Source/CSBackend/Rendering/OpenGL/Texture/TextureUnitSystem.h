@@ -47,7 +47,7 @@ namespace CSBackend
         ///
         /// @author S Downie
 		//-----------------------------------------------------------
-		class TextureUnitSystem final : public CSCore::AppSystem
+		class TextureUnitSystem final : public ChilliSource::AppSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(TextureUnitSystem);
@@ -59,7 +59,7 @@ namespace CSBackend
             ///
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Bind the object to the given texture unit only if
             /// required (i.e. not already bound). GL hates
@@ -107,7 +107,7 @@ namespace CSBackend
             void Clear();
 
         private:
-            friend class CSCore::Application;
+            friend class ChilliSource::Application;
             //----------------------------------------------------
 			/// Creates a new instance of this system.
             ///

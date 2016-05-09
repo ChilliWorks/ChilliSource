@@ -32,7 +32,7 @@
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -173,7 +173,7 @@ namespace CS
             //Tell the render system to draw the contents of the buffer
             m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
 
-            m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4::k_identity);
+            m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Matrix4::k_identity);
         }
     }
     //------------------------------------------------------
@@ -192,7 +192,7 @@ namespace CS
             //Tell the render system to draw the contents of the buffer
             m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
 
-            m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4::k_identity);
+            m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Matrix4::k_identity);
         }
     }
     //------------------------------------------------------

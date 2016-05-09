@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------
     //--------------------------------------------

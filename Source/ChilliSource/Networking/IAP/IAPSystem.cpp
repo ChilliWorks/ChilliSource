@@ -40,12 +40,12 @@
 #endif
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(IAPSystem);
     //---------------------------------------------------------------
     //---------------------------------------------------------------
-    IAPSystemUPtr IAPSystem::Create(const Core::ParamDictionary& inParams)
+    IAPSystemUPtr IAPSystem::Create(const ParamDictionary& inParams)
     {
 #ifdef CS_TARGETPLATFORM_IOS
         return IAPSystemUPtr(new CSBackend::iOS::IAPSystem());

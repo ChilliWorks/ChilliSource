@@ -39,7 +39,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A factory for creating particle drawable definitions. This allows 
@@ -49,7 +49,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class ParticleDrawableDefFactory final : public Core::GenericFactory<ParticleDrawableDef>
+    class ParticleDrawableDefFactory final : public GenericFactory<ParticleDrawableDef>
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleDrawableDefFactory);
@@ -63,9 +63,9 @@ namespace CS
         ///
         /// @return Whether this implements the interface.
         //-----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
     private:
-        friend class Core::Application;
+        friend class Application;
         //-----------------------------------------------------------------
         /// A factory method for creating new instances of a particle 
         /// drawable def factory.

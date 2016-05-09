@@ -55,9 +55,9 @@ namespace CSBackend
 		}
         //-------------------------------------------------------
 		//-------------------------------------------------------
-		bool EmailComposer::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool EmailComposer::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == CSSocial::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
+			return (in_interfaceId == ChilliSource::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -65,7 +65,7 @@ namespace CSBackend
 				const SendResultDelegate& in_callback)
 		{
 			Attachment emptyAttachment;
-			emptyAttachment.m_storageLocation = CSCore::StorageLocation::k_none;
+			emptyAttachment.m_storageLocation = ChilliSource::StorageLocation::k_none;
 			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, in_contentFormat, emptyAttachment, in_callback);
 		}
 		//-------------------------------------------------------
@@ -82,15 +82,15 @@ namespace CSBackend
 			std::string attachmentAbsFilePath;
 			if (in_attachment.m_filename.size() > 0)
 			{
-			    CSCore::FileSystem* fileSystem = CSCore::Application::Get()->GetFileSystem();
-			    std::string attachmentTaggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_attachment.m_storageLocation, in_attachment.m_filename);
+			    ChilliSource::FileSystem* fileSystem = ChilliSource::Application::Get()->GetFileSystem();
+			    std::string attachmentTaggedFilePath = ChilliSource::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_attachment.m_storageLocation, in_attachment.m_filename);
 
-				if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_package || in_attachment.m_storageLocation == CSCore::StorageLocation::k_chilliSource ||
-				    (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(attachmentTaggedFilePath) == false))
+				if (in_attachment.m_storageLocation == ChilliSource::StorageLocation::k_package || in_attachment.m_storageLocation == ChilliSource::StorageLocation::k_chilliSource ||
+				    (in_attachment.m_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(attachmentTaggedFilePath) == false))
 				{
-					fileSystem->CreateDirectoryPath(CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory);
-					fileSystem->CopyFile(in_attachment.m_storageLocation, attachmentTaggedFilePath, CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory + attachmentTaggedFilePath);
-					attachmentAbsFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_cache) + k_tempAttachmentDirectory + attachmentTaggedFilePath;
+					fileSystem->CreateDirectoryPath(ChilliSource::StorageLocation::k_cache, k_tempAttachmentDirectory);
+					fileSystem->CopyFile(in_attachment.m_storageLocation, attachmentTaggedFilePath, ChilliSource::StorageLocation::k_cache, k_tempAttachmentDirectory + attachmentTaggedFilePath);
+					attachmentAbsFilePath = fileSystem->GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_cache) + k_tempAttachmentDirectory + attachmentTaggedFilePath;
 				}
 				else
 				{
@@ -98,7 +98,7 @@ namespace CSBackend
 				}
 			}
 
-			m_javaInterface->Present(in_recipientAddresses, in_subject, in_contents, (in_contentFormat == ContentFormat::k_html), attachmentAbsFilePath, CSCore::MakeDelegate(this, &EmailComposer::OnEmailClosed));
+			m_javaInterface->Present(in_recipientAddresses, in_subject, in_contents, (in_contentFormat == ContentFormat::k_html), attachmentAbsFilePath, ChilliSource::MakeDelegate(this, &EmailComposer::OnEmailClosed));
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -152,7 +152,7 @@ namespace CSBackend
         //------------------------------------------------------
         void EmailComposer::OnDestroy()
         {
-        	CSCore::Application::Get()->GetFileSystem()->DeleteDirectory(CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory);
+        	ChilliSource::Application::Get()->GetFileSystem()->DeleteDirectory(ChilliSource::StorageLocation::k_cache, k_tempAttachmentDirectory);
         	m_javaInterface.reset();
         }
 	}

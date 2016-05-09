@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// A particle affector which will change the speed of particles over
@@ -81,10 +81,10 @@ namespace CS
         /// @param The particle affector definition.
         /// @param The particle array.
         //----------------------------------------------------------------
-        AccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+        AccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, dynamic_array<Particle>* in_particleArray);
 
         const AccelerationParticleAffectorDef* m_accelerationAffectorDef = nullptr;
-        Core::dynamic_array<Core::Vector3> m_particleAcceleration;
+        dynamic_array<Vector3> m_particleAcceleration;
     };
 }
 

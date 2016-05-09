@@ -49,9 +49,9 @@ namespace CSBackend
 		}
         //------------------------------------------------------
         //------------------------------------------------------
-		bool EmailComposer::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool EmailComposer::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-			return (in_interfaceId == CSSocial::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
+			return (in_interfaceId == ChilliSource::EmailComposer::InterfaceID || in_interfaceId == EmailComposer::InterfaceID);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -59,7 +59,7 @@ namespace CSBackend
                                     const SendResultDelegate& in_callback)
         {
             Attachment emptyAttachment;
-            emptyAttachment.m_storageLocation = CSCore::StorageLocation::k_none;
+            emptyAttachment.m_storageLocation = ChilliSource::StorageLocation::k_none;
 			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, in_contentFormat, emptyAttachment, in_callback);
 		}
         //-------------------------------------------------------
@@ -106,12 +106,12 @@ namespace CSBackend
                 //add the attachment if one is available.
                 if (in_attachment.m_filename.size() > 0)
                 {
-                    auto fileSystem = CSCore::Application::Get()->GetFileSystem();
+                    auto fileSystem = ChilliSource::Application::Get()->GetFileSystem();
 
                     std::string strFilename;
-                    if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_attachment.m_filename) == false)
+                    if (in_attachment.m_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_attachment.m_filename) == false)
                     {
-                        strFilename = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_attachment.m_filename;
+                        strFilename = fileSystem->GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_attachment.m_filename;
                     }
                     else
                     {
@@ -119,7 +119,7 @@ namespace CSBackend
                     }
                     
                     std::string strPath, strBasename;
-                    CSCore::StringUtils::SplitFilename(in_attachment.m_filename, strBasename, strPath);
+                    ChilliSource::StringUtils::SplitFilename(in_attachment.m_filename, strBasename, strPath);
                     NSData* pData = [NSData dataWithContentsOfFile: [NSString stringWithUTF8String:strFilename.c_str()]];
                     [m_viewController addAttachmentData:pData mimeType:[NSString stringWithUTF8String:in_attachment.m_mimeType.c_str()] fileName:[NSString stringWithUTF8String:strBasename.c_str()]];
                 }

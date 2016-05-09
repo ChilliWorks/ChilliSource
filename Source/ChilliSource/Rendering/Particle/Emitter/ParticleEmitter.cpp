@@ -38,11 +38,11 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------
     //----------------------------------------------
-    ParticleEmitter::ParticleEmitter(const ParticleEmitterDef* in_emitterDef, Core::dynamic_array<Particle>* in_particleArray)
+    ParticleEmitter::ParticleEmitter(const ParticleEmitterDef* in_emitterDef, dynamic_array<Particle>* in_particleArray)
         : m_emitterDef(in_emitterDef), m_particleArray(in_particleArray)
     {
         CS_ASSERT(m_emitterDef != nullptr, "Cannot create particle emitter with null emitter def.");
@@ -50,7 +50,7 @@ namespace CS
     }
     //----------------------------------------------
     //----------------------------------------------
-    std::vector<u32> ParticleEmitter::TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation, bool in_interpolateEmission)
+    std::vector<u32> ParticleEmitter::TryEmit(f32 in_playbackTime, const Vector3& in_emitterPosition, const Vector3& in_emitterScale, const Quaternion& in_emitterOrientation, bool in_interpolateEmission)
     {
         CS_ASSERT(in_playbackTime >= 0.0f, "Playback time cannot be below zero.");
 
@@ -90,7 +90,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    std::vector<u32> ParticleEmitter::TryEmitStream(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
+    std::vector<u32> ParticleEmitter::TryEmitStream(f32 in_playbackTime, const Vector3& in_emitterPosition, const Vector3& in_emitterScale, const Quaternion& in_emitterOrientation)
     {
         std::vector<u32> emittedParticles;
 
@@ -102,9 +102,9 @@ namespace CS
         const f32 timeBetweenEmissions = 1.0f / m_emitterDef->GetEmissionRateProperty()->GenerateValue(normalisedPlaybackTime);
 
         f32 prevEmissionTime = m_emissionTime;
-        Core::Vector3 prevEntityPosition = m_emissionPosition;
-        Core::Vector3 prevEntityScale = m_emissionScale;
-        Core::Quaternion prevOrientation = m_emissionOrientation;
+        Vector3 prevEntityPosition = m_emissionPosition;
+        Vector3 prevEntityScale = m_emissionScale;
+        Quaternion prevOrientation = m_emissionOrientation;
 
         f32 nextEmissionTime = prevEmissionTime + timeBetweenEmissions;
         
@@ -112,9 +112,9 @@ namespace CS
         {
             m_emissionTime = nextEmissionTime;
             f32 t = (m_emissionTime - prevEmissionTime) / (in_playbackTime - prevEmissionTime);
-            m_emissionPosition = Core::Vector3::Lerp(prevEntityPosition, in_emitterPosition, t);
-            m_emissionScale = Core::Vector3::Lerp(prevEntityScale, in_emitterScale, t);
-            m_emissionOrientation = Core::Quaternion::Slerp(prevOrientation, in_emitterOrientation, t);
+            m_emissionPosition = Vector3::Lerp(prevEntityPosition, in_emitterPosition, t);
+            m_emissionScale = Vector3::Lerp(prevEntityScale, in_emitterScale, t);
+            m_emissionOrientation = Quaternion::Slerp(prevOrientation, in_emitterOrientation, t);
 
             f32 normalisedEmissionTime = m_emissionTime / particleEffect->GetDuration();
             while (normalisedEmissionTime < 0.0f)
@@ -127,7 +127,7 @@ namespace CS
             for (u32 i = 0; i < particlesPerEmission; ++i)
             {
                 f32 chanceOfEmission = m_emitterDef->GetEmissionChanceProperty()->GenerateValue(normalisedEmissionTime);
-                f32 random = Core::Random::GenerateNormalised<f32>();
+                f32 random = Random::GenerateNormalised<f32>();
                 if (random <= chanceOfEmission)
                 {
                     Emit(normalisedEmissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation, emittedParticles);
@@ -141,7 +141,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    std::vector<u32> ParticleEmitter::TryEmitBurst(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
+    std::vector<u32> ParticleEmitter::TryEmitBurst(f32 in_playbackTime, const Vector3& in_emitterPosition, const Vector3& in_emitterScale, const Quaternion& in_emitterOrientation)
     {
         std::vector<u32> emittedParticles;
 
@@ -158,7 +158,7 @@ namespace CS
             for (u32 i = 0; i < particlesPerEmission; ++i)
             {
                 f32 chanceOfEmission = m_emitterDef->GetEmissionChanceProperty()->GenerateValue(normalisedPlaybackTime);
-                f32 random = Core::Random::GenerateNormalised<f32>();
+                f32 random = Random::GenerateNormalised<f32>();
                 if (random <= chanceOfEmission)
                 {
                     Emit(normalisedPlaybackTime, m_emissionPosition, m_emissionScale, m_emissionOrientation, emittedParticles);
@@ -172,7 +172,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void ParticleEmitter::Emit(f32 in_normalisedEmissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation, std::vector<u32>& inout_emittedParticles)
+    void ParticleEmitter::Emit(f32 in_normalisedEmissionTime, const Vector3& in_emissionPosition, const Vector3& in_emissionScale, const Quaternion& in_emissionOrientation, std::vector<u32>& inout_emittedParticles)
     {
         const ParticleEffect* particleEffect = m_emitterDef->GetParticleEffect();
 
@@ -188,12 +188,12 @@ namespace CS
             inout_emittedParticles.push_back(particleIndex);
 
             //Get the emission position and direction.
-            Core::Vector3 localPosition;
-            Core::Vector3 localDirection;
+            Vector3 localPosition;
+            Vector3 localDirection;
             GenerateEmission(in_normalisedEmissionTime, localPosition, localDirection);
 
             //calculate the local space properties.
-            Core::Vector2 localScale = particleEffect->GetInitialScaleProperty()->GenerateValue(in_normalisedEmissionTime);
+            Vector2 localScale = particleEffect->GetInitialScaleProperty()->GenerateValue(in_normalisedEmissionTime);
             f32 localRotation = particleEffect->GetInitialRotationProperty()->GenerateValue(in_normalisedEmissionTime);
             f32 localSpeed = particleEffect->GetInitialSpeedProperty()->GenerateValue(in_normalisedEmissionTime);
 
@@ -203,7 +203,7 @@ namespace CS
                 case ParticleEffect::SimulationSpace::k_world:
                 {
                     //transform the position into world space.
-                    const Core::Matrix4 worldTransform = Core::Matrix4::CreateTransform(in_emissionPosition, in_emissionScale, in_emissionOrientation);
+                    const Matrix4 worldTransform = Matrix4::CreateTransform(in_emissionPosition, in_emissionScale, in_emissionOrientation);
                     particle.m_position = localPosition * worldTransform;
 
                     //we can't directly apply the emission scale to the particles as this would look strange as
@@ -213,7 +213,7 @@ namespace CS
                     particle.m_scale = localScale * particleScaleFactor;
 
                     //transform the velocity into world space.
-                    particle.m_velocity = Core::Vector3::Rotate(((localDirection * localSpeed) * in_emissionScale), in_emissionOrientation);
+                    particle.m_velocity = Vector3::Rotate(((localDirection * localSpeed) * in_emissionScale), in_emissionOrientation);
                     break;
                 }
                 case ParticleEffect::SimulationSpace::k_local:

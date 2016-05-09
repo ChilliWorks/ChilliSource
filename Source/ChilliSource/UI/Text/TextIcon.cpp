@@ -33,11 +33,11 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    TextIcon::TextIcon(const Rendering::TextureCSPtr& in_texture, f32 in_scale)
+    TextIcon::TextIcon(const TextureCSPtr& in_texture, f32 in_scale)
     :m_texture(in_texture), m_scale(in_scale)
     {
         CS_ASSERT(in_texture != nullptr, "Need to provide a texture for a Text Icon");
@@ -47,7 +47,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    TextIcon::TextIcon(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasID, f32 in_scale)
+    TextIcon::TextIcon(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasID, f32 in_scale)
     :TextIcon(in_texture, in_scale)
     {
         CS_ASSERT(in_atlas != nullptr, "Need to provide a texture atlas for a Text Icon");
@@ -63,13 +63,13 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Rendering::TextureCSPtr& TextIcon::GetTexture() const
+    const TextureCSPtr& TextIcon::GetTexture() const
     {
         return m_texture;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Rendering::TextureAtlasCSPtr& TextIcon::GetTextureAtlas() const
+    const TextureAtlasCSPtr& TextIcon::GetTextureAtlas() const
     {
         return m_atlas;
     }
@@ -87,25 +87,25 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Core::Vector2& TextIcon::GetOriginalSize() const
+    const Vector2& TextIcon::GetOriginalSize() const
     {
         return m_originalSize;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Core::Vector2& TextIcon::GetCroppedSize() const
+    const Vector2& TextIcon::GetCroppedSize() const
     {
         return m_croppedSize;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Core::Vector2& TextIcon::GetOffset() const
+    const Vector2& TextIcon::GetOffset() const
     {
         return m_offset;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Rendering::UVs& TextIcon::GetUVs() const
+    const UVs& TextIcon::GetUVs() const
     {
         return m_uvs;
     }

@@ -41,7 +41,7 @@ namespace CSBackend
         namespace
         {
             LocalNotificationSystem* g_localNotificationSystem;
-            std::vector<CSCore::NotificationSPtr> g_queuedNotifications;
+            std::vector<ChilliSource::NotificationSPtr> g_queuedNotifications;
             
             //---------------------------------------------------------------
             /// Convert UILocalNotification to Notification
@@ -51,11 +51,11 @@ namespace CSBackend
             /// @param Apple UILocalNotification
             /// @param [Out] Chilli Source notification
             //---------------------------------------------------------------
-            CSCore::NotificationUPtr ConvertUILocalNotificationToNotification(UILocalNotification* in_uiLocal)
+            ChilliSource::NotificationUPtr ConvertUILocalNotificationToNotification(UILocalNotification* in_uiLocal)
             {
-                CSCore::NotificationUPtr notification = CSCore::NotificationUPtr(new CSCore::Notification());
-                notification->m_id = (CSCore::Notification::ID)[[in_uiLocal.userInfo objectForKey:@"ID"] unsignedIntValue];
-                notification->m_priority = (CSCore::Notification::Priority)[[in_uiLocal.userInfo objectForKey:@"Priority"] unsignedIntValue];
+                ChilliSource::NotificationUPtr notification = ChilliSource::NotificationUPtr(new ChilliSource::Notification());
+                notification->m_id = (ChilliSource::Notification::ID)[[in_uiLocal.userInfo objectForKey:@"ID"] unsignedIntValue];
+                notification->m_priority = (ChilliSource::Notification::Priority)[[in_uiLocal.userInfo objectForKey:@"Priority"] unsignedIntValue];
                 
                 NSDictionary* nsParams = (NSDictionary*)[in_uiLocal.userInfo objectForKey:@"Params"];
                 for(id key in nsParams)
@@ -76,9 +76,9 @@ namespace CSBackend
         }
         //--------------------------------------------------------
         //-------------------------------------------------------
-        bool LocalNotificationSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool LocalNotificationSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (CSCore::LocalNotificationSystem::InterfaceID == in_interfaceId || LocalNotificationSystem::InterfaceID == in_interfaceId);
+            return (ChilliSource::LocalNotificationSystem::InterfaceID == in_interfaceId || LocalNotificationSystem::InterfaceID == in_interfaceId);
         }
         //--------------------------------------------------
         //---------------------------------------------------
@@ -93,7 +93,7 @@ namespace CSBackend
         }
         //---------------------------------------------------
         //---------------------------------------------------
-        void LocalNotificationSystem::ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority)
+        void LocalNotificationSystem::ScheduleNotificationForTime(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, TimeIntervalSecs in_time, ChilliSource::Notification::Priority in_priority)
         {
             @autoreleasepool
             {
@@ -132,7 +132,7 @@ namespace CSBackend
                     nsNotification.applicationIconBadgeNumber = 1;
                     
                     NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
-                    for(CSCore::ParamDictionary::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
+                    for(ChilliSource::ParamDictionary::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
                     {
                         NSString* key = [NSStringUtils newNSStringWithUTF8String:it->first];
                         NSString* value = [NSStringUtils newNSStringWithUTF8String:it->second];
@@ -165,7 +165,7 @@ namespace CSBackend
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void LocalNotificationSystem::GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+        void LocalNotificationSystem::GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
         {
             for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
 			{
@@ -174,7 +174,7 @@ namespace CSBackend
                 
 				if(std::abs(dwDeltaSecs) <= in_period)
 				{
-                    CSCore::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
+                    ChilliSource::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
 					out_notifications.push_back(notification);
 				}
                 
@@ -191,18 +191,18 @@ namespace CSBackend
                 
                 if(std::abs(dwDeltaSecs) <= in_period)
                 {
-                    CSCore::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
+                    ChilliSource::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
                     out_notifications.push_back(notification);
                 }
             }
         }
         //------------------------------------------------
         //------------------------------------------------
-        void LocalNotificationSystem::CancelByID(CSCore::Notification::ID in_id)
+        void LocalNotificationSystem::CancelByID(ChilliSource::Notification::ID in_id)
         {
 			for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
 			{
-				CSCore::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
+				ChilliSource::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
 				
 				if(notificationId == in_id)
 				{
@@ -217,7 +217,7 @@ namespace CSBackend
             
             for(UILocalNotification* nsNotification in m_recentlyAddedNotifications)
             {
-                CSCore::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
+                ChilliSource::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
                 
                 if(notificationId == in_id)
                 {
@@ -233,7 +233,7 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //---------------------------------------------------
-        CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::ReceivedDelegate>& LocalNotificationSystem::GetReceivedEvent()
+        ChilliSource::IConnectableEvent<ChilliSource::LocalNotificationSystem::ReceivedDelegate>& LocalNotificationSystem::GetReceivedEvent()
         {
             return m_receivedEvent;
         }
@@ -247,7 +247,7 @@ namespace CSBackend
             UILocalNotification* pLocalNotification = [inpOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
             if(pLocalNotification) 
             {
-                CSCore::NotificationSPtr notification = ConvertUILocalNotificationToNotification(pLocalNotification);
+                ChilliSource::NotificationSPtr notification = ConvertUILocalNotificationToNotification(pLocalNotification);
                 if (g_localNotificationSystem != nullptr)
                 {
                     g_localNotificationSystem->OnNotificationReceived(notification);
@@ -275,7 +275,7 @@ namespace CSBackend
             //Reset the badge number
             inpApplication.applicationIconBadgeNumber = (inpApplication.applicationIconBadgeNumber - 1);
             
-            CSCore::NotificationSPtr notification = ConvertUILocalNotificationToNotification(inpNotification);
+            ChilliSource::NotificationSPtr notification = ConvertUILocalNotificationToNotification(inpNotification);
             if (g_localNotificationSystem != nullptr)
             {
                 g_localNotificationSystem->OnNotificationReceived(notification);
@@ -298,12 +298,12 @@ namespace CSBackend
             }
 #endif
             
-            CSCore::LocalNotificationSystem::OnInit();
+            ChilliSource::LocalNotificationSystem::OnInit();
             
             CS_ASSERT(g_localNotificationSystem == nullptr, "Cannot create more than 1 Local Notification System!");
             g_localNotificationSystem = this;
             
-            for (const CSCore::NotificationSPtr& notification : g_queuedNotifications)
+            for (const ChilliSource::NotificationSPtr& notification : g_queuedNotifications)
             {
                 OnNotificationReceived(notification);
             }
@@ -313,7 +313,7 @@ namespace CSBackend
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void LocalNotificationSystem::OnNotificationReceived(const CSCore::NotificationSPtr& in_notification)
+        void LocalNotificationSystem::OnNotificationReceived(const ChilliSource::NotificationSPtr& in_notification)
         {
             m_receivedEvent.NotifyConnections(in_notification);
         }
@@ -322,7 +322,7 @@ namespace CSBackend
         void LocalNotificationSystem::OnDestroy()
         {
             g_localNotificationSystem = nullptr;
-            CSCore::LocalNotificationSystem::OnDestroy();
+            ChilliSource::LocalNotificationSystem::OnDestroy();
         }
         //----------------------------------------------------------
         //----------------------------------------------------------

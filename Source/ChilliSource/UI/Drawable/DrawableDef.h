@@ -35,7 +35,7 @@
 
 #include <json/forwards.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// A definition of a drawable which can be built from a json object.
@@ -75,7 +75,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
-    class DrawableDef : public Core::QueryableInterface
+    class DrawableDef : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(DrawableDef);
@@ -93,13 +93,13 @@ namespace CS
         /// there is no storage location specified in the json. Defaults
         /// to empty.
         //--------------------------------------------------------------
-        static DrawableDefCUPtr Create(const Json::Value& in_json, Core::StorageLocation in_defaultLocation = Core::StorageLocation::k_package, const std::string& in_defaultPath = "");
+        static DrawableDefCUPtr Create(const Json::Value& in_json, StorageLocation in_defaultLocation = StorageLocation::k_package, const std::string& in_defaultPath = "");
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The texture that will be rendered by the drawable.
         //--------------------------------------------------------------
-        virtual const Rendering::TextureCSPtr& GetTexture() const = 0;
+        virtual const TextureCSPtr& GetTexture() const = 0;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -107,7 +107,7 @@ namespace CS
         /// render only the portion of the texture described by this and
         /// the atlas id.
         //--------------------------------------------------------------
-        virtual const Rendering::TextureAtlasCSPtr& GetAtlas() const = 0;
+        virtual const TextureAtlasCSPtr& GetAtlas() const = 0;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -122,13 +122,13 @@ namespace CS
         /// atlas is used the UVs are virtual and are relative to the
         /// atlas image.
         //--------------------------------------------------------------
-        virtual const Rendering::UVs& GetUVs() const = 0;
+        virtual const UVs& GetUVs() const = 0;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The colour of the drawable.
         //--------------------------------------------------------------
-        virtual const Core::Colour& GetColour() const = 0;
+        virtual const Colour& GetColour() const = 0;
         //--------------------------------------------------------------
         /// Destructor
         ///

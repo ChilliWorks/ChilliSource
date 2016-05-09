@@ -33,8 +33,8 @@
 #include <cstdint>
 
 //------------------------------------------------------------
-/// Primitive types. These should be prefered over the standard
-/// primitive types as they guarantee their size.
+// Primitive types. These should be prefered over the standard
+// primitive types as they guarantee their size.
 //------------------------------------------------------------
 typedef char         		s8;
 typedef int_least16_t		s16;
@@ -53,9 +53,10 @@ typedef u64                 TimeIntervalSecs;
 typedef u64                 TimeIntervalMs;
 
 #include <ChilliSource/Core/Base/StandardMacros.h>
+
 //------------------------------------------------------------
-/// The forward declarations for each section of the Chilli
-/// Source libraries.
+// The forward declarations for each section of the Chilli
+// Source libraries.
 //------------------------------------------------------------
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
@@ -66,38 +67,22 @@ typedef u64                 TimeIntervalMs;
 #include <ChilliSource/UI/ForwardDeclarations.h>
 #include <ChilliSource/Video/ForwardDeclarations.h>
 #include <ChilliSource/Web/ForwardDeclarations.h>
+
 //------------------------------------------------------------
-/// The base include files.
+// The base include files.
 //------------------------------------------------------------
 #include <ChilliSource/Core/String/ToString.h>
 #include <ChilliSource/Core/Base/Logging.h>
+
 //------------------------------------------------------------
-/// Alternative, shorter namespace aliases for each of the
-/// Chilli Source libraries.
+// A shorter version of the namespace. This should be
+// preferred over the full version unless it would cause
+// a collision with another name in the global namespace. If
+// this is the case, the preprocessor macro
+// CS_DISABLE_SHORTNAMESPACE should be declared.
 //------------------------------------------------------------
-
-//TODO: Remove all of these.
-
-namespace CS {}
-
-namespace Audio = CS;
-namespace Core = CS;
-namespace Input = CS;
-namespace Networking = CS;
-namespace Rendering = CS;
-namespace Social = CS;
-namespace UI = CS;
-namespace Video = CS;
-namespace Web = CS;
-
-namespace CSAudio = CS;
-namespace CSCore = CS;
-namespace CSInput = CS;
-namespace CSNetworking = CS;
-namespace CSRendering = CS;
-namespace CSSocial = CS;
-namespace CSUI = CS;
-namespace CSVideo = CS;
-namespace CSWeb = CS;
+#ifndef CS_DISABLE_SHORTNAMESPACE
+namespace CS = ChilliSource;
+#endif
 
 #endif

@@ -36,7 +36,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Social/Communications/EmailComposer.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(EmailComposer);
     //-------------------------------------------------------

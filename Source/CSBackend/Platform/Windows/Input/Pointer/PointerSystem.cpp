@@ -48,18 +48,18 @@ namespace CSBackend
 			/// @return The equivelent Press Type for the
 			/// button Id
 			//------------------------------------------------
-			CSInput::Pointer::InputType ButtonIdToInputType(sf::Mouse::Button in_button)
+			ChilliSource::Pointer::InputType ButtonIdToInputType(sf::Mouse::Button in_button)
 			{
 				switch (in_button)
 				{
 				case sf::Mouse::Button::Left:
-					return CSInput::Pointer::InputType::k_leftMouseButton;
+					return ChilliSource::Pointer::InputType::k_leftMouseButton;
 				case sf::Mouse::Button::Middle:
-					return CSInput::Pointer::InputType::k_middleMouseButton;
+					return ChilliSource::Pointer::InputType::k_middleMouseButton;
 				case sf::Mouse::Button::Right:
-					return CSInput::Pointer::InputType::k_rightMouseButton;
+					return ChilliSource::Pointer::InputType::k_rightMouseButton;
 				default:
-					return CSInput::Pointer::InputType::k_none;
+					return ChilliSource::Pointer::InputType::k_none;
 				}
 
 			}
@@ -67,24 +67,24 @@ namespace CSBackend
 		CS_DEFINE_NAMEDTYPE(PointerSystem);
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool PointerSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool PointerSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return (CSInput::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
+			return (ChilliSource::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
 		}
 		//------------------------------------------------
 		//------------------------------------------------
 		void PointerSystem::OnInit()
 		{
-			m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
+			m_screen = ChilliSource::Application::Get()->GetSystem<ChilliSource::Screen>();
 			CS_ASSERT(m_screen != nullptr, "Cannot find system required by PointerSystem: Screen.");
 
-			m_mouseButtonConnection = SFMLWindow::Get()->GetMouseButtonEvent().OpenConnection(CSCore::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent));
-			m_mouseMovedConnection = SFMLWindow::Get()->GetMouseMovedEvent().OpenConnection(CSCore::MakeDelegate(this, &PointerSystem::OnMouseMoved));
-			m_mouseWheelConnection = SFMLWindow::Get()->GetMouseWheelEvent().OpenConnection(CSCore::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
+			m_mouseButtonConnection = SFMLWindow::Get()->GetMouseButtonEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent));
+			m_mouseMovedConnection = SFMLWindow::Get()->GetMouseMovedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved));
+			m_mouseWheelConnection = SFMLWindow::Get()->GetMouseWheelEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
 
 			//create the mouse pointer
-			CSCore::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
-			CSCore::Vector2 mousePos((f32)mousePosi.x, m_screen->GetResolution().y - (f32)mousePosi.y);
+			ChilliSource::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
+			ChilliSource::Vector2 mousePos((f32)mousePosi.x, m_screen->GetResolution().y - (f32)mousePosi.y);
 
 			m_pointerId = AddPointerCreateEvent(mousePos);
 		}
@@ -104,8 +104,8 @@ namespace CSBackend
 		//----------------------------------------------
 		void PointerSystem::OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos)
 		{
-			CSInput::Pointer::InputType type = ButtonIdToInputType(in_button);
-			if (type == CSInput::Pointer::InputType::k_none)
+			ChilliSource::Pointer::InputType type = ButtonIdToInputType(in_button);
+			if (type == ChilliSource::Pointer::InputType::k_none)
 			{
 				return;
 			}
@@ -124,14 +124,14 @@ namespace CSBackend
 		//----------------------------------------------
 		void PointerSystem::OnMouseMoved(s32 in_xPos, s32 in_yPos)
 		{
-			CSCore::Vector2 touchLocation((f32)in_xPos, m_screen->GetResolution().y - (f32)in_yPos);
+			ChilliSource::Vector2 touchLocation((f32)in_xPos, m_screen->GetResolution().y - (f32)in_yPos);
 			AddPointerMovedEvent(m_pointerId, touchLocation);
 		}
 		//----------------------------------------------
 		//----------------------------------------------
 		void PointerSystem::OnMouseWheeled(s32 in_delta)
 		{
-			CSCore::Vector2 delta(0.0f, (f32)in_delta);
+			ChilliSource::Vector2 delta(0.0f, (f32)in_delta);
 			AddPointerScrollEvent(m_pointerId, delta);
 		}
 		//------------------------------------------------

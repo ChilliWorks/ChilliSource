@@ -106,13 +106,13 @@ namespace CSBackend
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		bool WebView::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool WebView::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return (CSWeb::WebView::InterfaceID == in_interfaceId || WebView::InterfaceID == in_interfaceId);
+			return (ChilliSource::WebView::InterfaceID == in_interfaceId || WebView::InterfaceID == in_interfaceId);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
+		void WebView::Present(const std::string& in_url, const ChilliSource::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
@@ -120,22 +120,22 @@ namespace CSBackend
 			m_delegate = in_delegate;
 			m_customLinkHandlerDelegate = in_customLinkHandler;
 
-			CSCore::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
+			ChilliSource::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 
 			WebViewJavaInterface::Present(m_index, in_url, absoluteSize, in_dismissButtonRelativeSize);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
+		void WebView::PresentFromFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
-			auto fileSystem = static_cast<CSBackend::Android::FileSystem*>(CSCore::Application::Get()->GetFileSystem());
+			auto fileSystem = static_cast<CSBackend::Android::FileSystem*>(ChilliSource::Application::Get()->GetFileSystem());
 
 			std::string anchor;
 			std::string filePath;
 			GetFilePathAndAnchor(in_filePath, filePath, anchor);
-			auto taggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, filePath);
+			auto taggedFilePath = ChilliSource::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, filePath);
 
 			std::string htmlFileContents;
 			if (fileSystem->ReadFile(in_storageLocation, taggedFilePath, htmlFileContents) == false)
@@ -145,8 +145,8 @@ namespace CSBackend
 			}
 
 			std::string fullFilePath;
-			if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
-            	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+			if (in_storageLocation == ChilliSource::StorageLocation::k_package || in_storageLocation == ChilliSource::StorageLocation::k_package ||
+            	(in_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
 			{
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
 				fullFilePath = m_contentProvider->CallStringMethod("getContentPathPrefix") + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
@@ -172,7 +172,7 @@ namespace CSBackend
 			m_delegate = in_delegate;
 			m_customLinkHandlerDelegate = in_customLinkHandler;
 
-			CSCore::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
+			ChilliSource::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 			WebViewJavaInterface::PresentFromFile(m_index, htmlFileContents, absoluteSize, fullFilePath, anchor, in_dismissButtonRelativeSize);
 		}
 		//------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
 		void WebView::OnInit()
 		{
-			m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
+			m_screen = ChilliSource::Application::Get()->GetSystem<ChilliSource::Screen>();
 			s_indexToWebViewMap.emplace(m_index, this);
 
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY

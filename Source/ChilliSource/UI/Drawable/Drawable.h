@@ -33,14 +33,14 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// Interface for rendering widgets
     ///
     /// @author S Downie
     //------------------------------------------------------------------------
-    class Drawable : public Core::QueryableInterface
+    class Drawable : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(Drawable);
@@ -57,7 +57,7 @@ namespace CS
         /// @return The preferred size that the drawable wishes to de drawn at. This is usually
         /// based on an underlying image
         //----------------------------------------------------------------------------------------
-        virtual Core::Vector2 GetPreferredSize() const = 0;
+        virtual Vector2 GetPreferredSize() const = 0;
         //----------------------------------------------------------------------------------------
         /// Get the texture that is currently used.
         ///
@@ -65,7 +65,7 @@ namespace CS
         ///
         /// @return Texture
         //----------------------------------------------------------------------------------------
-        virtual const Rendering::TextureCSPtr& GetTexture() const = 0;
+        virtual const TextureCSPtr& GetTexture() const = 0;
         //----------------------------------------------------------------------------------------
         /// Get the texture atlas that is currently used.
         ///
@@ -73,7 +73,7 @@ namespace CS
         ///
         /// @return Texture atlas
         //----------------------------------------------------------------------------------------
-        virtual const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const = 0;
+        virtual const TextureAtlasCSPtr& GetTextureAtlas() const = 0;
         //----------------------------------------------------------------------------------------
         /// Get the texture atlas frame Id that is currently used.
         ///
@@ -90,7 +90,7 @@ namespace CS
         ///
         /// @return Rectangle containing U, V, S, T
         //----------------------------------------------------------------------------------------
-        virtual const Rendering::UVs& GetUVs() const = 0;
+        virtual const UVs& GetUVs() const = 0;
         //----------------------------------------------------------------------------------------
         /// Gets the colour of the drawable.
         ///
@@ -98,7 +98,7 @@ namespace CS
         ///
         /// @param The colour.
         //----------------------------------------------------------------------------------------
-        virtual const Core::Colour& GetColour() const = 0;
+        virtual const Colour& GetColour() const = 0;
         //----------------------------------------------------------------------------------------
         /// Set the texture that should be used in subsequent draws
         ///
@@ -106,7 +106,7 @@ namespace CS
         ///
         /// @param Texture
         //----------------------------------------------------------------------------------------
-        virtual void SetTexture(const Rendering::TextureCSPtr& in_texture) = 0;
+        virtual void SetTexture(const TextureCSPtr& in_texture) = 0;
         //----------------------------------------------------------------------------------------
         /// Set the texture atlas that should be used in subsequent draws. This will
         /// potentially affect the UVs of a drawable.
@@ -115,7 +115,7 @@ namespace CS
         ///
         /// @param Texture atlas
         //----------------------------------------------------------------------------------------
-        virtual void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas) = 0;
+        virtual void SetTextureAtlas(const TextureAtlasCSPtr& in_atlas) = 0;
         //----------------------------------------------------------------------------------------
         /// Set the texture atlas frame Id that should be used in subsequent draws. This will
         /// potentially affect the UVs of a drawable.
@@ -135,7 +135,7 @@ namespace CS
         ///
         /// @param Rectangle containing U, V, S, T
         //----------------------------------------------------------------------------------------
-        virtual void SetUVs(const Rendering::UVs& in_UVs) = 0;
+        virtual void SetUVs(const UVs& in_UVs) = 0;
         //----------------------------------------------------------------------------------------
         /// Sets the colour of the drawable. The final colour of the drawable takes into account
         /// the owning widgets colour and this colour.
@@ -144,7 +144,7 @@ namespace CS
         ///
         /// @param The colour.
         //----------------------------------------------------------------------------------------
-        virtual void SetColour(const Core::Colour& in_colour) = 0;
+        virtual void SetColour(const Colour& in_colour) = 0;
         //----------------------------------------------------------------------------------------
         /// Render the widget using the canvas renderer
         ///
@@ -155,7 +155,7 @@ namespace CS
         /// @param Asbolute screen size
         /// @param Absolute colour
         //----------------------------------------------------------------------------------------
-        virtual void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) = 0;
+        virtual void Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) = 0;
         //----------------------------------------------------------------------------------------
         /// Virtual destructor
         ///

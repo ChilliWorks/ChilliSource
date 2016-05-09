@@ -47,11 +47,11 @@
 {
     UIView* mpBaseView;
     CADisplayLink* mpDisplayLink;
-    CSCore::Screen* m_screen;
-    CSVideo::SubtitlesCSPtr mpSubtitles;
+    ChilliSource::Screen* m_screen;
+    ChilliSource::SubtitlesCSPtr mpSubtitles;
     CSBackend::iOS::VideoPlayer* m_videoPlayer;
-    std::unordered_map<const CSVideo::Subtitles::Subtitle*, UITextView*> maTextViewMap;
-    std::vector<const CSVideo::Subtitles::Subtitle*> maSubtitlesToRemove;
+    std::unordered_map<const ChilliSource::Subtitles::Subtitle*, UITextView*> maTextViewMap;
+    std::vector<const ChilliSource::Subtitles::Subtitle*> maSubtitlesToRemove;
     TimeIntervalMs mCurrentTimeMS;
 }
 //--------------------------------------------------------
@@ -63,7 +63,7 @@
 /// @param The view.
 /// @param The subtitles.
 //--------------------------------------------------------
--(id) initWithVideoPlayer:(CSBackend::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const CSVideo::SubtitlesCSPtr&)in_subtitles;
+-(id) initWithVideoPlayer:(CSBackend::iOS::VideoPlayer*)in_videoPlayer view:(UIView*)inpView andSubtitles:(const ChilliSource::SubtitlesCSPtr&)in_subtitles;
 //--------------------------------------------------------
 /// On Update
 ///
@@ -78,7 +78,7 @@
 /// @param the subtitle.
 /// @param Localised text resource
 //--------------------------------------------------------
--(void) AddTextViewWithSubtitle:(const CSVideo::Subtitles::Subtitle*)inpSubtitle andLocalisedText:(const CSCore::LocalisedText*) in_localisedText;
+-(void) AddTextViewWithSubtitle:(const ChilliSource::Subtitles::Subtitle*)inpSubtitle andLocalisedText:(const ChilliSource::LocalisedText*) in_localisedText;
 //--------------------------------------------------------
 /// Update Text View
 ///
@@ -87,7 +87,7 @@
 /// @param The text view.
 /// @param the subtitle.
 //--------------------------------------------------------
--(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const CSVideo::Subtitles::Subtitle*)inpSubtitle Time:(TimeIntervalMs)inTimeMS;
+-(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const ChilliSource::Subtitles::Subtitle*)inpSubtitle Time:(TimeIntervalMs)inTimeMS;
 //--------------------------------------------------------
 /// Remove Text View
 ///
@@ -96,7 +96,7 @@
 ///
 /// @param The subtitle.
 //--------------------------------------------------------
--(void) RemoveTextView:(const CSVideo::Subtitles::Subtitle*)inpSubtitle;
+-(void) RemoveTextView:(const ChilliSource::Subtitles::Subtitle*)inpSubtitle;
 //--------------------------------------------------------
 /// Set Alignment
 ///
@@ -105,7 +105,7 @@
 /// @param the UITextView.
 /// @param The alignment achor.
 //--------------------------------------------------------
--(void) SetAlignment:(UITextView*)inpView WithAnchor:(CSRendering::AlignmentAnchor)ineAnchor;
+-(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::AlignmentAnchor)ineAnchor;
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 ///
@@ -115,14 +115,14 @@
 /// @param The alignment achor.
 /// @return the NSTextAlignment.
 //--------------------------------------------------------
--(NSTextAlignment) TextAlignmentFromAnchor:(CSRendering::AlignmentAnchor)ineAnchor;
+-(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::AlignmentAnchor)ineAnchor;
 //--------------------------------------------------------
 /// Calculate Text Box Rect
 ///
 /// @return the rectangle in which the text box should
 /// appear on screen.
 //--------------------------------------------------------
--(CGRect) CalculateTextBoxRect:(const CSCore::Rectangle&)inRelativeBounds;
+-(CGRect) CalculateTextBoxRect:(const ChilliSource::Rectangle&)inRelativeBounds;
 //--------------------------------------------------------
 /// CleanUp
 ///

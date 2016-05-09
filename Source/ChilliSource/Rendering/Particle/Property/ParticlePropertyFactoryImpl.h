@@ -41,7 +41,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A collection of implementation functions for the particle property factory.
@@ -186,7 +186,7 @@ namespace CS
                 CS_ASSERT(endValue != Json::nullValue, "Must supply '" + std::string(k_endValueKey) + "' in '" + std::string(k_curveType) + "' property.");
                 CS_ASSERT(endValue.isString(), "'" + std::string(k_endValueKey) + "' in '" + std::string(k_curveType) + "' property must be a string.");
                 
-                return ParticlePropertyUPtr<TType>(new CurveParticleProperty<TType>(ParseValue<TType>(startValue.asString()), ParseValue<TType>(endValue.asString()), Core::Interpolate::GetInterpolateFunction(curve.asString())));
+                return ParticlePropertyUPtr<TType>(new CurveParticleProperty<TType>(ParseValue<TType>(startValue.asString()), ParseValue<TType>(endValue.asString()), Interpolate::GetInterpolateFunction(curve.asString())));
             }
             //------------------------------------------------------------------------------
             /// Creates a new random curve particle property with the value described in the
@@ -221,7 +221,7 @@ namespace CS
                 CS_ASSERT(endUpperValue.isString(), "'" + std::string(k_endUpperValueKey) + "' in '" + std::string(k_randomCurveType) + "' property must be a string.");
                 
                 return ParticlePropertyUPtr<TType>(new RandomCurveParticleProperty<TType>(ParseValue<TType>(startLowerValue.asString()), ParseValue<TType>(startUpperValue.asString()),
-                    ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), Core::Interpolate::GetInterpolateFunction(curve.asString())));
+                    ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), Interpolate::GetInterpolateFunction(curve.asString())));
             }
             //------------------------------------------------------------------------------
             /// Creates a new componentwise random curve particle property with the value
@@ -256,7 +256,7 @@ namespace CS
                 CS_ASSERT(endUpperValue.isString(), "'" + std::string(k_endUpperValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property must be a string.");
                 
                 return ParticlePropertyUPtr<TType>(new ComponentwiseRandomCurveParticleProperty<TType>(ParseValue<TType>(startLowerValue.asString()), ParseValue<TType>(startUpperValue.asString()),
-                    ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), Core::Interpolate::GetInterpolateFunction(curve.asString())));
+                    ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), Interpolate::GetInterpolateFunction(curve.asString())));
             }
             //------------------------------------------------------------------------------
             /// Specialisation for parsing u32 values.
@@ -317,7 +317,7 @@ namespace CS
             ///
             /// @return The parsed value.
             //------------------------------------------------------------------------------
-            template <> Core::Vector2 ParseValue(const std::string& in_value);
+            template <> Vector2 ParseValue(const std::string& in_value);
             //------------------------------------------------------------------------------
             /// Specialisation for parsing Vector3 values.
             ///
@@ -327,7 +327,7 @@ namespace CS
             ///
             /// @return The parsed value.
             //------------------------------------------------------------------------------
-            template <> Core::Vector3 ParseValue(const std::string& in_value);
+            template <> Vector3 ParseValue(const std::string& in_value);
             //------------------------------------------------------------------------------
             /// Specialisation for parsing Vector4 values.
             ///
@@ -337,7 +337,7 @@ namespace CS
             ///
             /// @return The parsed value.
             //------------------------------------------------------------------------------
-            template <> Core::Vector4 ParseValue(const std::string& in_value);
+            template <> Vector4 ParseValue(const std::string& in_value);
             //------------------------------------------------------------------------------
             /// Specialisation for parsing Matrix3 values.
             ///
@@ -347,7 +347,7 @@ namespace CS
             ///
             /// @return The parsed value.
             //------------------------------------------------------------------------------
-            template <> Core::Matrix3 ParseValue(const std::string& in_value);
+            template <> Matrix3 ParseValue(const std::string& in_value);
             //------------------------------------------------------------------------------
             /// Specialisation for parsing Matrix4 values.
             ///
@@ -357,7 +357,7 @@ namespace CS
             ///
             /// @return The parsed value.
             //------------------------------------------------------------------------------
-            template <> Core::Matrix4 ParseValue(const std::string& in_value);
+            template <> Matrix4 ParseValue(const std::string& in_value);
             //------------------------------------------------------------------------------
             /// Specialisation for parsing Quaternion values.
             ///
@@ -367,7 +367,7 @@ namespace CS
             ///
             /// @return The parsed value.
             //------------------------------------------------------------------------------
-            template <> Core::Quaternion ParseValue(const std::string& in_value);
+            template <> Quaternion ParseValue(const std::string& in_value);
             //------------------------------------------------------------------------------
             /// Specialisation for parsing Colour values.
             ///
@@ -377,7 +377,7 @@ namespace CS
             ///
             /// @return The parsed value.
             //------------------------------------------------------------------------------
-            template <> Core::Colour ParseValue(const std::string& in_value);
+            template <> Colour ParseValue(const std::string& in_value);
         }
         
         //------------------------------------------------------------------------------
@@ -398,7 +398,7 @@ namespace CS
                 CS_ASSERT(typeValue.isString() == true, "'" + std::string(Impl::k_typeKey) + "' in a Particle Property must be a string.")
                 
                 std::string typeString = typeValue.asString();
-                Core::StringUtils::ToLowerCase(typeString);
+                StringUtils::ToLowerCase(typeString);
                     
                 if (typeString == Impl::k_constantType)
                 {

@@ -35,7 +35,7 @@
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/Layout.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Lays out widgets in a vertical list where each widget has a single row. The
@@ -61,7 +61,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -77,14 +77,14 @@ namespace CS
         /// to the overall layout size (i.e owning widget size).X is top, Y is right,
         /// Z is bottom and W is left.
         //------------------------------------------------------------------------------
-        Core::Vector4 GetRelativeMargins() const;
+        Vector4 GetRelativeMargins() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The absolute border size margins for each edge. X is top, Y is
         /// right, Z is bottom and W is left.
         //------------------------------------------------------------------------------
-        Core::Vector4 GetAbsoluteMargins() const;
+        Vector4 GetAbsoluteMargins() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -161,7 +161,7 @@ namespace CS
         /// @param The relative spacing.
         /// @param The absolute spacing.
         //------------------------------------------------------------------------------
-        VListLayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
+        VListLayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
         //------------------------------------------------------------------------------
         /// Create the list layout sizes and positions based on the current layout
         /// properties and the owning widget.
@@ -178,7 +178,7 @@ namespace CS
         ///
         /// @return Final absolute screen size
         //------------------------------------------------------------------------------
-        Core::Vector2 GetSizeForIndex(u32 in_index) const override;
+        Vector2 GetSizeForIndex(u32 in_index) const override;
         //------------------------------------------------------------------------------
         /// Get the local position of the widget that occupies the space at the given
         /// index
@@ -189,7 +189,7 @@ namespace CS
         ///
         /// @return Local position in layout space (aligned middle centre of the cell)
         //------------------------------------------------------------------------------
-        Core::Vector2 GetPositionForIndex(u32 in_index) const override;
+        Vector2 GetPositionForIndex(u32 in_index) const override;
         
         GridLayout m_gridLayout;
     };

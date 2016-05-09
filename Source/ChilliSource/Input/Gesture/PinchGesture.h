@@ -35,7 +35,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------
     /// A gesture for receiving pinch input events.
@@ -63,7 +63,7 @@ namespace CS
         //----------------------------------------------------
         struct PinchInfo final
         {
-            Core::Vector2 m_position;   //The screen space location of the gesture. This is the centroid of the two active pointers.
+            Vector2 m_position;   //The screen space location of the gesture. This is the centroid of the two active pointers.
             f32 m_scale = 0.0f;         //The fraction difference between the initial pinch distance to the current. Change caused by the currently tracked pointer changing is ignored.
         };
         //----------------------------------------------------
@@ -97,7 +97,7 @@ namespace CS
         /// @return Whether or not the gesture inteface is
         /// implemented.
         //----------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_gestureInterfaceId) const override;
+        bool IsA(InterfaceIDType in_gestureInterfaceId) const override;
         //----------------------------------------------------
         /// @author Ian Copland
         ///
@@ -110,21 +110,21 @@ namespace CS
         /// @return An event that can be used to listen for
         /// start of a pinch.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetPinchStartedEvent();
+        IConnectableEvent<Delegate>& GetPinchStartedEvent();
         //----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return An event that can be used to listen for
         /// movement in a pinch
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetPinchMovedEvent();
+        IConnectableEvent<Delegate>& GetPinchMovedEvent();
         //----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return An event that can be used to listen for
         /// end of a pinch.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetPinchEndedEvent();
+        IConnectableEvent<Delegate>& GetPinchEndedEvent();
     private:
         //----------------------------------------------------
         /// Information on a single pointer within the gesture.
@@ -134,8 +134,8 @@ namespace CS
         struct PointerInfo final
         {
             Pointer::Id m_pointerId;
-            Core::Vector2 m_initialPosition;
-            Core::Vector2 m_currentPosition;
+            Vector2 m_initialPosition;
+            Vector2 m_currentPosition;
             bool m_isDrag = false;
             bool m_active = false;
         };
@@ -156,7 +156,7 @@ namespace CS
         ///
         /// @return The calculated position.
         //----------------------------------------------------
-        Core::Vector2 CalculatePosition() const;
+        Vector2 CalculatePosition() const;
         //----------------------------------------------------
         /// Calculates the current distance between the pointers
         /// in the gesture.
@@ -226,9 +226,9 @@ namespace CS
         void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType) override;
         
         Pointer::InputType m_requiredInputType;
-        Core::Event<Delegate> m_pinchStartedEvent;
-        Core::Event<Delegate> m_pinchMovedEvent;
-        Core::Event<Delegate> m_pinchEndedEvent;
+        Event<Delegate> m_pinchStartedEvent;
+        Event<Delegate> m_pinchMovedEvent;
+        Event<Delegate> m_pinchEndedEvent;
         
         f32 m_minDisplacementSquared = 0.0f;
         

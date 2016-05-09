@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A system for getting information on the capabilities of the
@@ -43,7 +43,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------
-    class RenderCapabilities : public Core::AppSystem
+    class RenderCapabilities : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(RenderCapabilities);

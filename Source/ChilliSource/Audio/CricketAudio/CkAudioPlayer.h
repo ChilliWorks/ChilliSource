@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A state system which simplies playback of basic audio using the Cricket
@@ -51,7 +51,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class CkAudioPlayer final : public Core::StateSystem
+    class CkAudioPlayer final : public StateSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(CkAudioPlayer);
@@ -66,7 +66,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Nicolas Tanda
         ///
@@ -121,7 +121,7 @@ namespace CS
         /// @param The storage location of the music stream.
         /// @param The file path of the music stream.
         //------------------------------------------------------------------------------
-        void PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath);
+        void PlayMusic(StorageLocation in_storageLocation, const std::string& in_filePath);
         //------------------------------------------------------------------------------
         /// Stops the currently playing music track. Does nothing if there is no track
         /// playing.
@@ -131,7 +131,7 @@ namespace CS
         void StopMusic();
         
     private:
-        friend class CSCore::State;
+        friend class State;
         //------------------------------------------------------------------------------
         /// A container for information on a playing effect.
         ///

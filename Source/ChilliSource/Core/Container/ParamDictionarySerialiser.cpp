@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace ParamDictionarySerialiser
     {
@@ -65,15 +65,15 @@ namespace CS
         {
             ParamDictionary result;
             
-            for(auto param = Core::XMLUtils::GetFirstChildElement(in_element); param != nullptr; param = Core::XMLUtils::GetNextSiblingElement(param))
+            for(auto param = XMLUtils::GetFirstChildElement(in_element); param != nullptr; param = XMLUtils::GetNextSiblingElement(param))
             {
                 std::string key;
                 std::string value;
-                for(auto attrib = Core::XMLUtils::GetFirstAttribute(param); attrib != nullptr; attrib = Core::XMLUtils::GetNextAttribute(attrib))
+                for(auto attrib = XMLUtils::GetFirstAttribute(param); attrib != nullptr; attrib = XMLUtils::GetNextAttribute(attrib))
                 {
                     if (XMLUtils::GetName(attrib) == "key")
                     {
-                        key = Core::XMLUtils::GetValue(attrib);
+                        key = XMLUtils::GetValue(attrib);
                     }
                     else if (XMLUtils::GetName(attrib) == "value")
                     {

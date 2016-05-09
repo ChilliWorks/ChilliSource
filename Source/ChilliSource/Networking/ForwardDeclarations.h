@@ -33,7 +33,7 @@
 
 #include <memory>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------
     /// Content Download

@@ -33,7 +33,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //=========================================================================
     /// Skeleton Node

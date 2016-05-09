@@ -32,7 +32,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/RenderCapabilities.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderCapabilities);
     

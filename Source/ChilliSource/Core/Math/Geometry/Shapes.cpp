@@ -33,7 +33,7 @@
 #include <limits>
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     //================================================
     //================================================

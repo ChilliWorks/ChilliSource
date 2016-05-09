@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/State/State.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {

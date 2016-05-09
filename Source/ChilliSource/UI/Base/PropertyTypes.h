@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// Additional property types that are specific to UI.
@@ -41,16 +41,16 @@ namespace CS
     //------------------------------------------------------------------------
     namespace PropertyTypes
     {
-        CS_DECLARE_PROPERTYTYPE(Rendering::AlignmentAnchor, AlignmentAnchor);
+        CS_DECLARE_PROPERTYTYPE(AlignmentAnchor, AlignmentAnchor);
         CS_DECLARE_PROPERTYTYPE(SizePolicy, SizePolicy);
         CS_DECLARE_PROPERTYTYPE(DrawableDefCSPtr, DrawableDef);
         CS_DECLARE_PROPERTYTYPE(LayoutDefCSPtr, LayoutDef);
-        CS_DECLARE_PROPERTYTYPE(Rendering::TextureCSPtr, Texture);
-        CS_DECLARE_PROPERTYTYPE(Rendering::TextureAtlasCSPtr, TextureAtlas);
-        CS_DECLARE_PROPERTYTYPE(Rendering::FontCSPtr, Font);
-        CS_DECLARE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText);
-        CS_DECLARE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification);
-        CS_DECLARE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification);
+        CS_DECLARE_PROPERTYTYPE(TextureCSPtr, Texture);
+        CS_DECLARE_PROPERTYTYPE(TextureAtlasCSPtr, TextureAtlas);
+        CS_DECLARE_PROPERTYTYPE(FontCSPtr, Font);
+        CS_DECLARE_PROPERTYTYPE(LocalisedTextCSPtr, LocalisedText);
+        CS_DECLARE_PROPERTYTYPE(HorizontalTextJustification, HorizontalTextJustification);
+        CS_DECLARE_PROPERTYTYPE(VerticalTextJustification, VerticalTextJustification);
         CS_DECLARE_PROPERTYTYPE(SliderDirection, SliderDirection);
         CS_DECLARE_PROPERTYTYPE(ProgressBarDirection, ProgressBarDirection);
         CS_DECLARE_PROPERTYTYPE(ProgressBarType, ProgressBarType);

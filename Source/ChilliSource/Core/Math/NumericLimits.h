@@ -33,7 +33,7 @@
 
 #include <limits>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A series of functions for acquiring the highest and lowest values for a

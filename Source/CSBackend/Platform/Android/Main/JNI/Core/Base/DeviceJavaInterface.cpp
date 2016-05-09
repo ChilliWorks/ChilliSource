@@ -56,7 +56,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		bool DeviceJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool DeviceJavaInterface::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == DeviceJavaInterface::InterfaceID);
 		}

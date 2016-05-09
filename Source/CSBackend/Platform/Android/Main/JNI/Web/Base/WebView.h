@@ -49,7 +49,7 @@ namespace CSBackend
 		///
 		/// @author S Hendrie
 		//--------------------------------------------------------------------------------------
-		class WebView final : public CSWeb::WebView
+		class WebView final : public ChilliSource::WebView
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(WebView);
@@ -88,7 +88,7 @@ namespace CSBackend
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//--------------------------------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------------------------------------------
             /// Displays the website at the given URL in an in-app
             /// web view.
@@ -102,7 +102,7 @@ namespace CSBackend
             /// @param in_customLinkHandler - The delegate to call when a link is clicked on
             /// the displayed page
             //--------------------------------------------------------------------------------------
-            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
+            void Present(const std::string& in_url, const ChilliSource::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
             //--------------------------------------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
@@ -117,7 +117,7 @@ namespace CSBackend
             /// @param in_customLinkHandler - The delegate to call when a link is clicked on
             /// the displayed page
             //--------------------------------------------------------------------------------------
-            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
+            void PresentFromFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
             //--------------------------------------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.
@@ -141,7 +141,7 @@ namespace CSBackend
             //--------------------------------------------------------------------------------------
             bool IsPresented() const override;
 		private:
-            friend CSWeb::WebViewUPtr CSWeb::WebView::Create();
+            friend ChilliSource::WebViewUPtr ChilliSource::WebView::Create();
             //--------------------------------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -181,7 +181,7 @@ namespace CSBackend
 			void OnDestroy() override;
 		private:
 
-			CSCore::Screen* m_screen;
+			ChilliSource::Screen* m_screen;
 
 			bool m_isPresented;
 			const s32 m_index;

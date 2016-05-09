@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace HashCRC32
     {

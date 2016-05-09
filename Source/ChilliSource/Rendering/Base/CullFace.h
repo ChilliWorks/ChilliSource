@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_RENDERING_BASE_CULLFACE_H_
 #define _CHILLISOURCE_RENDERING_BASE_CULLFACE_H_
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------
     /// Used in the face culling function to

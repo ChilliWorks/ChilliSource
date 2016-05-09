@@ -34,7 +34,7 @@
 
 #include <cmath>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -48,18 +48,18 @@ namespace CS
         ///
         /// @return The direction.
         //----------------------------------------------------------------
-        Core::Vector3 GenerateDirectionWithinAngle(f32 in_angle)
+        Vector3 GenerateDirectionWithinAngle(f32 in_angle)
         {
             //get the y value that would ensure the top of the cone is a circle of unit radius.
             f32 y = 1.0f / tan(in_angle * 0.5f);
 
             //get a random point within the circle at the top of the cone. the square root of the
             //random distance is used to acheive even distribution.
-            Core::Vector2 topDirection = Core::Random::GenerateDirection2D<f32>();
-            f32 dist = std::sqrt(Core::Random::GenerateNormalised<f32>());
+            Vector2 topDirection = Random::GenerateDirection2D<f32>();
+            f32 dist = std::sqrt(Random::GenerateNormalised<f32>());
 
             //normalise this to get a direction vector.
-            Core::Vector3 output(topDirection.x * dist, y, topDirection.y * dist);
+            Vector3 output(topDirection.x * dist, y, topDirection.y * dist);
             output.Normalise();
             return output;
         }
@@ -73,16 +73,16 @@ namespace CS
         ///
         /// @return The direction.
         //----------------------------------------------------------------
-        Core::Vector3 GenerateDirectionWithAngle(f32 in_angle)
+        Vector3 GenerateDirectionWithAngle(f32 in_angle)
         {
             //get the y value that would ensure the top of the cone is a circle of unit radius.
             f32 y = 1.0f / tan(in_angle * 0.5f);
 
             //get a random point on the surface the circle at the top of the cone.
-            Core::Vector2 topDirection = Core::Random::GenerateDirection2D<f32>();
+            Vector2 topDirection = Random::GenerateDirection2D<f32>();
 
             //normalise this to get a direction vector.
-            Core::Vector3 output(topDirection.x, y, topDirection.y);
+            Vector3 output(topDirection.x, y, topDirection.y);
             output.Normalise();
             return output;
         }
@@ -96,11 +96,11 @@ namespace CS
         ///
         /// @return The position.
         //----------------------------------------------------------------
-        Core::Vector3 GeneratePositionInUnitCone(f32 in_angle)
+        Vector3 GeneratePositionInUnitCone(f32 in_angle)
         {
             const f32 oneOverThree = 1.0f / 3.0f;
 
-            f32 dist = std::pow(Core::Random::GenerateNormalised<f32>(), oneOverThree);
+            f32 dist = std::pow(Random::GenerateNormalised<f32>(), oneOverThree);
             return GenerateDirectionWithinAngle(in_angle) * dist;
         }
         //----------------------------------------------------------------
@@ -113,18 +113,18 @@ namespace CS
         ///
         /// @return The direction.
         //----------------------------------------------------------------
-        Core::Vector3 GeneratePositionOnUnitCone(f32 in_angle)
+        Vector3 GeneratePositionOnUnitCone(f32 in_angle)
         {
             const f32 oneOverThree = 1.0f / 3.0f;
 
-            f32 dist = std::pow(Core::Random::GenerateNormalised<f32>(), oneOverThree);
+            f32 dist = std::pow(Random::GenerateNormalised<f32>(), oneOverThree);
             return GenerateDirectionWithAngle(in_angle) * dist;
         }
     }
 
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ConeParticleEmitter::ConeParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
+    ConeParticleEmitter::ConeParticleEmitter(const ParticleEmitterDef* in_particleEmitter, dynamic_array<Particle>* in_particleArray)
         : ParticleEmitter(in_particleEmitter, in_particleArray)
     {
         //Only the sphere emitter def can create this, so this is safe.
@@ -132,7 +132,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void ConeParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
+    void ConeParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Vector3& out_position, Vector3& out_direction)
     {
         f32 radius = m_coneParticleEmitterDef->GetRadiusProperty()->GenerateValue(in_normalisedEmissionTime);
         f32 angle = m_coneParticleEmitterDef->GetAngleProperty()->GenerateValue(in_normalisedEmissionTime);
@@ -147,7 +147,7 @@ namespace CS
             out_position = GeneratePositionOnUnitCone(angle) * radius;
             break;
         case ConeParticleEmitterDef::EmitFromType::k_base:
-            out_position = Core::Vector3::k_zero;
+            out_position = Vector3::k_zero;
             break;
         default:
             CS_LOG_FATAL("Invalid 'Emit From' type.");
@@ -161,9 +161,9 @@ namespace CS
             out_direction = GenerateDirectionWithinAngle(angle);
             break;
         case ConeParticleEmitterDef::EmitDirectionType::k_awayFromBase:
-            if (out_position != Core::Vector3::k_zero)
+            if (out_position != Vector3::k_zero)
             {
-                out_direction = Core::Vector3::Normalise(out_position);
+                out_direction = Vector3::Normalise(out_position);
             }
             else
             {

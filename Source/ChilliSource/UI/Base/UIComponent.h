@@ -37,7 +37,7 @@
 #include <type_traits>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// A component which can be attached to a widget to provide additional
@@ -47,7 +47,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------
-    class UIComponent : public Core::QueryableInterface
+    class UIComponent : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(UIComponent);
@@ -156,7 +156,7 @@ namespace CS
         /// @param The getter delegate for the property.
         /// @param The setter delegate for the property.
         //----------------------------------------------------------------
-        template <typename TPropertyType> void RegisterProperty(const Core::PropertyType<TPropertyType>* in_propertyType, const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter);
+        template <typename TPropertyType> void RegisterProperty(const PropertyType<TPropertyType>* in_propertyType, const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter);
         //----------------------------------------------------------------
         /// Finalises any registered properties and applies the default
         /// values for them as supplied by the given property map.
@@ -169,7 +169,7 @@ namespace CS
         ///
         /// @param The property map
         //----------------------------------------------------------------
-        void ApplyRegisteredProperties(const Core::PropertyMap& in_properties);
+        void ApplyRegisteredProperties(const PropertyMap& in_properties);
         //----------------------------------------------------------------
         /// A method which is called when all components owned by the parent
         /// widget have been created and added. Inheriting classes should use
@@ -225,7 +225,7 @@ namespace CS
         /// @param The final screen space size.
         /// @param The final colour.
         //----------------------------------------------------------------
-        virtual void OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) {}
+        virtual void OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) {}
         //----------------------------------------------------------------
         /// This is called when the application is backgrounded while the
         /// owning widget is on the canvas. This will also be called when
@@ -281,10 +281,10 @@ namespace CS
         /// @param The property name.
         /// @param The property used to set the value.
         //----------------------------------------------------------------
-        void SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property);
+        void SetProperty(const std::string& in_propertyName, const IProperty* in_property);
 
         bool m_propertyRegistrationComplete = false;
-        std::unordered_map<std::string, Core::IPropertyUPtr> m_properties;
+        std::unordered_map<std::string, IPropertyUPtr> m_properties;
         Widget* m_widget = nullptr;
         std::string m_name;
     };
@@ -292,48 +292,48 @@ namespace CS
     //----------------------------------------------------------------
     template <typename TPropertyType> TPropertyType UIComponent::GetProperty(const std::string& in_propertyName) const
     {
-        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot get a property on a UI::UIComponent prior to property registration completion.");
+        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot get a property on a UIComponent prior to property registration completion.");
         
         std::string lowerPropertyName = in_propertyName;
-        Core::StringUtils::ToLowerCase(lowerPropertyName);
+        StringUtils::ToLowerCase(lowerPropertyName);
         
         auto it = m_properties.find(lowerPropertyName);
         if(it == m_properties.end())
         {
-            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::UIComponent.");
+            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UIComponent.");
         }
         
-        auto accessor = CS_SMARTCAST(const Core::Property<typename std::decay<TPropertyType>::type>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
+        auto accessor = CS_SMARTCAST(const Property<typename std::decay<TPropertyType>::type>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
         return accessor->Get();
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
     template <typename TPropertyType> void UIComponent::SetProperty(const std::string& in_propertyName, TPropertyType&& in_propertyValue)
     {
-        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::UIComponent prior to property registration completion.");
+        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UIComponent prior to property registration completion.");
         
         std::string lowerPropertyName = in_propertyName;
-        Core::StringUtils::ToLowerCase(lowerPropertyName);
+        StringUtils::ToLowerCase(lowerPropertyName);
         
         auto it = m_properties.find(lowerPropertyName);
         if(it == m_properties.end())
         {
-            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::UIComponent.");
+            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UIComponent.");
         }
         
-        auto accessor = CS_SMARTCAST(Core::Property<typename std::decay<TPropertyType>::type>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
+        auto accessor = CS_SMARTCAST(Property<typename std::decay<TPropertyType>::type>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
         accessor->Set(std::forward<TPropertyType>(in_propertyValue));
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    template <typename TPropertyType> void UIComponent::RegisterProperty(const Core::PropertyType<TPropertyType>* in_propertyType, const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter)
+    template <typename TPropertyType> void UIComponent::RegisterProperty(const PropertyType<TPropertyType>* in_propertyType, const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter)
     {
-        CS_ASSERT(m_propertyRegistrationComplete == false, "UI::UIComponent properties cannot be registered after property registration completion.");
+        CS_ASSERT(m_propertyRegistrationComplete == false, "UIComponent properties cannot be registered after property registration completion.");
         
         std::string lowerPropertyName = in_name;
-        Core::StringUtils::ToLowerCase(lowerPropertyName);
+        StringUtils::ToLowerCase(lowerPropertyName);
         
-        CS_ASSERT(m_properties.find(lowerPropertyName) == m_properties.end(), "Cannot register duplicate property name '" + in_name + "' in a UI::UIComponent.");
+        CS_ASSERT(m_properties.find(lowerPropertyName) == m_properties.end(), "Cannot register duplicate property name '" + in_name + "' in a UIComponent.");
         
         m_properties.emplace(lowerPropertyName, in_propertyType->CreateProperty(std::forward<std::function<TPropertyType()>>(in_getter), std::forward<std::function<void(TPropertyType)>>(in_setter)));
     }

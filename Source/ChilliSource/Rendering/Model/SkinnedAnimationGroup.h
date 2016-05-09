@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
-namespace CS
+namespace ChilliSource
 {
     //===============================================================
     /// Animation Blend Type
@@ -113,14 +113,14 @@ namespace CS
         /// @param the current parent.
         /// @param the parent matrix.
         //----------------------------------------------------------
-        void BuildMatrices(s32 indwCurrentParent = -1, const Core::Matrix4& inParentMatrix = Core::Matrix4());
+        void BuildMatrices(s32 indwCurrentParent = -1, const Matrix4& inParentMatrix = Matrix4());
         //----------------------------------------------------------
         /// Get Matrix At Index
         ///
         /// @param the index of the required matrix.
         /// @return the matrix.
         //----------------------------------------------------------
-        const Core::Matrix4& GetMatrixAtIndex(s32 indwIndex) const;
+        const Matrix4& GetMatrixAtIndex(s32 indwIndex) const;
         //----------------------------------------------------------
         /// Apply Inverse Bind Pose
         ///
@@ -130,7 +130,7 @@ namespace CS
         /// @param the inverse bind pose matrices.
         /// @param OUT: The combined matrices.
         //----------------------------------------------------------
-        void ApplyInverseBindPose(const std::vector<Core::Matrix4>& inInverseBindPoseMatrices, std::vector<Core::Matrix4>& outCombinedMatrices);
+        void ApplyInverseBindPose(const std::vector<Matrix4>& inInverseBindPoseMatrices, std::vector<Matrix4>& outCombinedMatrices);
         //----------------------------------------------------------
         /// Get Animation Length
         ///
@@ -200,7 +200,7 @@ namespace CS
         const Skeleton* mpSkeleton;
         std::vector<AnimationItemPtr> mAnimations;
         SkinnedAnimation::FrameCUPtr mCurrentAnimationData;
-        std::vector<Core::Matrix4> mCurrentAnimationMatrices;
+        std::vector<Matrix4> mCurrentAnimationMatrices;
         bool mbAnimationLengthDirty;
         f32 mfAnimationLength;
         bool mbPrepared;

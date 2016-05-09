@@ -37,7 +37,7 @@
 #include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarType.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A logic component for controlling a progress bar. This handles both
@@ -81,7 +81,7 @@ namespace CS
         ///
         /// @return The list of properties supported by a progress bar component.
         //-------------------------------------------------------------------
-        static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
+        static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         //-------------------------------------------------------------------
         /// Allows querying of whether or not the component implements the
         /// interface associated with the given interface Id. Typically
@@ -94,13 +94,13 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface.
         //-------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The relative size of the bar when it is at 100% progress.
         //-------------------------------------------------------------------
-        const Core::Vector2& GetRelativeBarSize() const;
+        const Vector2& GetRelativeBarSize() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -132,7 +132,7 @@ namespace CS
         ///
         /// @param The new relative size.
         //-------------------------------------------------------------------
-        void SetRelativeBarSize(const Core::Vector2& in_relSize);
+        void SetRelativeBarSize(const Vector2& in_relSize);
         //-------------------------------------------------------------------
         /// Sets the current progress of the bar. This must be in the range
         /// 0.0 to 1.0. If a value outside this range is provided the app
@@ -172,7 +172,7 @@ namespace CS
         /// @param The component name.
         /// @param The property map.
         //-------------------------------------------------------------------
-        ProgressBarComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+        ProgressBarComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //-------------------------------------------------------------------
         /// Sets the name of the bar widget. This can only be called once,
         /// on construction. If this is called a second time the app is
@@ -217,7 +217,7 @@ namespace CS
         //-------------------------------------------------------------------
         void OnDestroy() override;
         
-        Core::Vector2 m_relBarSize;
+        Vector2 m_relBarSize;
         f32 m_progress = 0.0f;
         ProgressBarType m_barType = ProgressBarType::k_fill;
         ProgressBarDirection m_direction = ProgressBarDirection::k_horizontal;

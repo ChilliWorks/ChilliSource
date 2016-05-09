@@ -52,9 +52,9 @@ namespace CSBackend
 			///
 			/// @return Whether product was found
 			//---------------------------------------------------------------
-			bool TryGetProductType(const std::vector<CSNetworking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId, CSNetworking::IAPSystem::ProductRegInfo::Type& out_type)
+			bool TryGetProductType(const std::vector<ChilliSource::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId, ChilliSource::IAPSystem::ProductRegInfo::Type& out_type)
 			{
-				for(std::vector<CSNetworking::IAPSystem::ProductRegInfo>::const_iterator it = in_productInfos.begin(); it != in_productInfos.end(); ++it)
+				for(std::vector<ChilliSource::IAPSystem::ProductRegInfo>::const_iterator it = in_productInfos.begin(); it != in_productInfos.end(); ++it)
 				{
 					if(it->m_id == in_productId)
 					{
@@ -71,14 +71,14 @@ namespace CSBackend
 
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-		GooglePlayIAPSystem::GooglePlayIAPSystem(const CSCore::ParamDictionary& in_params)
+		GooglePlayIAPSystem::GooglePlayIAPSystem(const ChilliSource::ParamDictionary& in_params)
 		{
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        bool GooglePlayIAPSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool GooglePlayIAPSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == CSNetworking::IAPSystem::InterfaceID || in_interfaceId == GooglePlayIAPSystem::InterfaceID;
+            return in_interfaceId == ChilliSource::IAPSystem::InterfaceID || in_interfaceId == GooglePlayIAPSystem::InterfaceID;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -130,7 +130,7 @@ namespace CSBackend
             CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
             CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
 
-        	m_javaInterface->RequestProductDescriptions(in_productIds, [=](const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products, const std::vector<std::string>& in_currencyCodes, const std::vector<std::string>& in_unformattedPrices)
+        	m_javaInterface->RequestProductDescriptions(in_productIds, [=](const std::vector<ChilliSource::IAPSystem::ProductDesc>& in_products, const std::vector<std::string>& in_currencyCodes, const std::vector<std::string>& in_unformattedPrices)
         	{
         	    CS_ASSERT(in_products.size() == in_currencyCodes.size() && in_products.size() == in_unformattedPrices.size(), "Disparity betewen list sizes.");
 

@@ -50,7 +50,7 @@ namespace CSBackend
 		///
 		/// This is deprecated in favour of JavaClass.
 		//========================================================
-		class IJavaInterface : public CSCore::QueryableInterface
+		class IJavaInterface : public ChilliSource::QueryableInterface
 		{
 		public:
 			//--------------------------------------------------------

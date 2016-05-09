@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     typedef std::function<void(const f32)> TimeEventDelegate;
     

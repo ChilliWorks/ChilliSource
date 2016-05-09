@@ -36,7 +36,7 @@
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/UI/Base/UIComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A logic component for changing the drawable used to render a widget
@@ -75,7 +75,7 @@ namespace CS
         ///
         /// @return The list of properties supported by a highlight component.
         //-------------------------------------------------------------------
-        static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
+        static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         //-------------------------------------------------------------------
         /// Allows querying of whether or not the component implements the
         /// interface associated with the given interface Id. Typically
@@ -88,7 +88,7 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface.
         //-------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -108,7 +108,7 @@ namespace CS
         ///
         /// @return The colour set when the button is highlighted while off.
         //-------------------------------------------------------------------
-        const Core::Colour& GetHighlightOffColour() const;
+        const Colour& GetHighlightOffColour() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -128,7 +128,7 @@ namespace CS
         ///
         /// @return The colour set when the button is highlighted while on.
         //-------------------------------------------------------------------
-        const Core::Colour& GetHighlightOnColour() const;
+        const Colour& GetHighlightOnColour() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -160,7 +160,7 @@ namespace CS
         ///
         /// @param The colour.
         //-------------------------------------------------------------------
-        void SetHighlightOffColour(const Core::Colour& in_colour);
+        void SetHighlightOffColour(const Colour& in_colour);
         //-------------------------------------------------------------------
         /// Sets the drawable that will be set on the owning widget when
         /// it is not pressed and is toggled on.
@@ -186,7 +186,7 @@ namespace CS
         ///
         /// @param The colour.
         //-------------------------------------------------------------------
-        void SetHighlightOnColour(const Core::Colour& in_colour);
+        void SetHighlightOnColour(const Colour& in_colour);
         //-------------------------------------------------------------------
         /// Sets whether or not the toggle is on or off.
         ///
@@ -220,7 +220,7 @@ namespace CS
         /// @param The component name.
         /// @param The property map.
         //-------------------------------------------------------------------
-        ToggleHighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+        ToggleHighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -287,7 +287,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //-------------------------------------------------------------------
-        void OnPressedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //-------------------------------------------------------------------
         /// Called when the owning widget receives an input move event within
         /// its bounds having previously received one outside the bounds.
@@ -299,7 +299,7 @@ namespace CS
         /// @param The owning widget.
         /// @param The pointer that was pressed.
         //-------------------------------------------------------------------
-        void OnMoveEntered(Widget* in_widget, const Input::Pointer& in_pointer);
+        void OnMoveEntered(Widget* in_widget, const Pointer& in_pointer);
         //-------------------------------------------------------------------
         /// Called when the owning widget receives an input move event outside
         /// its bounds having previously received one inside the bounds.
@@ -311,7 +311,7 @@ namespace CS
         /// @param The owning widget.
         /// @param The pointer that was pressed.
         //-------------------------------------------------------------------
-        void OnMoveExited(Widget* in_widget, const Input::Pointer& in_pointer);
+        void OnMoveExited(Widget* in_widget, const Pointer& in_pointer);
         //-------------------------------------------------------------------
         /// Called when a pointer is released inside the bounds of the owning
         /// widget after having been pressed inside.
@@ -322,7 +322,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //-------------------------------------------------------------------
-        void OnReleasedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //-------------------------------------------------------------------
         /// Called when a pointer is released outside the bounds of the owning
         /// widget after having been pressed inside.
@@ -333,7 +333,7 @@ namespace CS
         /// @param The pointer that was pressed.
         /// @param The type of input.
         //-------------------------------------------------------------------
-        void OnReleasedOutside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType);
+        void OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
         //-------------------------------------------------------------------
         /// Called when the owning widget is being destructed.
         ///
@@ -343,22 +343,22 @@ namespace CS
         
         DrawableDefCSPtr m_normalOffDrawableDef;
         DrawableDefCSPtr m_highlightOffDrawableDef;
-        Core::Colour m_highlightOffColour;
+        Colour m_highlightOffColour;
         DrawableDefCSPtr m_normalOnDrawableDef;
         DrawableDefCSPtr m_highlightOnDrawableDef;
-        Core::Colour m_highlightOnColour;
+        Colour m_highlightOnColour;
 
         DrawableComponent* m_drawableComponent = nullptr;
         
         ToggleHighlightState m_state = ToggleHighlightState::k_normalOff;
-        std::vector<Input::Pointer::Id> m_activePointerIds;
-        std::vector<Input::Pointer::Id> m_highlightingPointerIds;
+        std::vector<Pointer::Id> m_activePointerIds;
+        std::vector<Pointer::Id> m_highlightingPointerIds;
         
-        Core::EventConnectionUPtr m_pressedInsideConnection;
-        Core::EventConnectionUPtr m_moveEnteredConnection;
-        Core::EventConnectionUPtr m_moveExitedConnection;
-        Core::EventConnectionUPtr m_releasedInsideConnection;
-        Core::EventConnectionUPtr m_releasedOutsideConnection;
+        EventConnectionUPtr m_pressedInsideConnection;
+        EventConnectionUPtr m_moveEnteredConnection;
+        EventConnectionUPtr m_moveExitedConnection;
+        EventConnectionUPtr m_releasedInsideConnection;
+        EventConnectionUPtr m_releasedOutsideConnection;
     };
 }
 

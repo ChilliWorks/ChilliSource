@@ -31,7 +31,7 @@
 #include <ctime>
 #include <random>
 
-namespace CS
+namespace ChilliSource
 {
     namespace MathUtils
     {

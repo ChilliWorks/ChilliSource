@@ -46,7 +46,7 @@ namespace CSBackend
 		///
 		/// @author Ian Copland
 		//----------------------------------------------------------------------------------------
-		class HttpRequest final : public CSNetworking::HttpRequest
+		class HttpRequest final : public ChilliSource::HttpRequest
 		{
 		public:
             //----------------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace CSBackend
             ///
             /// @return The original headers of the request as keys/values
             //----------------------------------------------------------------------------------------
-            const CSCore::ParamDictionary& GetHeaders() const override;
+            const ChilliSource::ParamDictionary& GetHeaders() const override;
             //----------------------------------------------------------------------------------------
             /// @author HMcLaughlin
             ///
@@ -130,7 +130,7 @@ namespace CSBackend
             /// @param Max buffer size in bytes
             /// @param Completion delegate
             //------------------------------------------------------------------
-            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
+            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const ChilliSource::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
             //----------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -149,7 +149,7 @@ namespace CSBackend
             const Type m_type;
             const std::string m_url;
             const std::string m_body;
-            const CSCore::ParamDictionary m_headers;
+            const ChilliSource::ParamDictionary m_headers;
 			const Delegate m_completionDelegate;
 			const u32 m_timeoutSecs;
 			const u32 m_maxBufferSize;
@@ -162,7 +162,7 @@ namespace CSBackend
             JavaClassSPtr m_javaHttpRequest;
 
 			std::string m_responseData;
-			CSNetworking::HttpResponse::Result m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
+			ChilliSource::HttpResponse::Result m_requestResult = ChilliSource::HttpResponse::Result::k_failed;
 			u32 m_responseCode = 0;
 		};
 	}

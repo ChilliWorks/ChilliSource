@@ -28,16 +28,16 @@
 
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
-namespace CS
+namespace ChilliSource
 {
-    const UnifiedVector2 UnifiedVector2::ZERO(Core::Vector2::k_zero, Core::Vector2::k_zero);
+    const UnifiedVector2 UnifiedVector2::ZERO(Vector2::k_zero, Vector2::k_zero);
     
     //------------------------------------------------------
     /// Get Absolute
     ///
     /// @return Absolute vector
     //------------------------------------------------------
-    const Core::Vector2& UnifiedVector2::GetAbsolute() const
+    const Vector2& UnifiedVector2::GetAbsolute() const
     {
         return vAbsolute;
     }
@@ -46,7 +46,7 @@ namespace CS
     ///
     /// @return Relative vector
     //------------------------------------------------------
-    const Core::Vector2& UnifiedVector2::GetRelative() const
+    const Vector2& UnifiedVector2::GetRelative() const
     {
         return vRelative;
     }

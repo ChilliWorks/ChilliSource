@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 
-namespace CS
+namespace ChilliSource
 {
     enum class PrimitiveType	{k_tri, k_triStrip, k_line};
     enum class BufferUsage	{k_static, k_dynamic};

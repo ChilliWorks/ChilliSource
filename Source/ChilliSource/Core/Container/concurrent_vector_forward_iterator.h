@@ -31,7 +31,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// Forward iterator for the concurrent vector class.

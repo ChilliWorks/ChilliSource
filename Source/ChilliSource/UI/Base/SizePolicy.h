@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
     /// Identifiers for functions that maintain the aspect ratio of the widget based on

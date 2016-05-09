@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------
     /// Holds the description of UV coordinates (normalised)

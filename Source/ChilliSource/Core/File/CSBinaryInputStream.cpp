@@ -32,7 +32,7 @@
 #include <ChilliSource/Core/File/CSBinaryChunk.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {

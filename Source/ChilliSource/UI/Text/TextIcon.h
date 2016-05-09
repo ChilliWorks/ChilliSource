@@ -35,7 +35,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A text specific image data
@@ -57,7 +57,7 @@ namespace CS
         /// @param in_texture - Texture
         /// @param in_scale - [Optional] Scale of the image, relative to the text height
         //------------------------------------------------------------------------------
-        TextIcon(const Rendering::TextureCSPtr& in_texture, f32 in_scale = 1.0f);
+        TextIcon(const TextureCSPtr& in_texture, f32 in_scale = 1.0f);
         //------------------------------------------------------------------------------
         /// @author Nicolas Tanda
         ///
@@ -66,20 +66,20 @@ namespace CS
         /// @param in_atlasID - Texture atlas ID
         /// @param in_scale - [Optional] Scale of the image, relative to the text height
         //------------------------------------------------------------------------------
-        TextIcon(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasID, f32 in_scale = 1.0f);
+        TextIcon(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasID, f32 in_scale = 1.0f);
         
         //------------------------------------------------------------------------------
         /// @author Nicolas Tanda
         ///
         /// @return The texture of the image
         //------------------------------------------------------------------------------
-        const Rendering::TextureCSPtr& GetTexture() const;
+        const TextureCSPtr& GetTexture() const;
         //------------------------------------------------------------------------------
         /// @author Nicolas Tanda
         ///
         /// @return The texture atlas of the image
         //------------------------------------------------------------------------------
-        const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const;
+        const TextureAtlasCSPtr& GetTextureAtlas() const;
         //------------------------------------------------------------------------------
         /// @author Nicolas Tanda
         ///
@@ -97,40 +97,40 @@ namespace CS
         ///
         /// @return The full size of the image prior to cropping.
         //------------------------------------------------------------------------------
-        const Core::Vector2& GetOriginalSize() const;
+        const Vector2& GetOriginalSize() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The size of the image after cropping. Icons which are not part of a
         /// texture atlas will return the same as GetOriginalSize().
         //------------------------------------------------------------------------------
-        const Core::Vector2& GetCroppedSize() const;
+        const Vector2& GetCroppedSize() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The "cropping" offset of the image. Icons which are not part of a
         /// texture atlas this will always return [0.0, 0.0].
         //------------------------------------------------------------------------------
-        const Core::Vector2& GetOffset() const;
+        const Vector2& GetOffset() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The UVs of the image. Icons which are not part of a texture atlas
         /// will always return [0.0, 0.0, 1.0, 1.0].
         //------------------------------------------------------------------------------
-        const Rendering::UVs& GetUVs() const;
+        const UVs& GetUVs() const;
         
     private:
-        Rendering::TextureCSPtr m_texture;
-        Rendering::TextureAtlasCSPtr m_atlas;
+        TextureCSPtr m_texture;
+        TextureAtlasCSPtr m_atlas;
         std::string m_atlasID;
         
         f32 m_scale = 1.0f;
         
-        Core::Vector2 m_originalSize;
-        Core::Vector2 m_croppedSize;
-        Core::Vector2 m_offset;
-        Rendering::UVs m_uvs;
+        Vector2 m_originalSize;
+        Vector2 m_croppedSize;
+        Vector2 m_offset;
+        UVs m_uvs;
     };
 }
 

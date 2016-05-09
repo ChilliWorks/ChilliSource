@@ -45,7 +45,7 @@ namespace CSBackend
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------
-		class Accelerometer final : public CSInput::Accelerometer
+		class Accelerometer final : public ChilliSource::Accelerometer
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(Accelerometer);
@@ -55,7 +55,7 @@ namespace CSBackend
 			/// @return whether or not this object implements
 			/// the given interface.
 			//----------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -75,7 +75,7 @@ namespace CSBackend
 			/// @return The acceleration applied to the device
 			/// measured in "G"s.
 			//----------------------------------------------------
-			CSCore::Vector3 GetAcceleration() const override;
+			ChilliSource::Vector3 GetAcceleration() const override;
 			//----------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -83,7 +83,7 @@ namespace CSBackend
 			/// acceleration is updated. The acceleration will not
 			/// necessarily have changed between updates.
 			//----------------------------------------------------
-			CSCore::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() override;
+			ChilliSource::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() override;
 			//----------------------------------------------------
 			/// Stop listening for accelerometer changes.
 			///
@@ -92,7 +92,7 @@ namespace CSBackend
 			void StopUpdating() override;
 
 		private:
-            friend CSInput::AccelerometerUPtr CSInput::Accelerometer::Create();
+            friend ChilliSource::AccelerometerUPtr ChilliSource::Accelerometer::Create();
 			//----------------------------------------------------
 			/// Constructor. Declared private to force the use of
             /// the factory method.
@@ -134,12 +134,12 @@ namespace CSBackend
 			///
 			/// @param The new acceleration.
 			//------------------------------------------------
-			void OnAccelerationChanged(const CSCore::Vector3& in_acceleration);
+			void OnAccelerationChanged(const ChilliSource::Vector3& in_acceleration);
 
-			CSCore::Vector3 m_acceleration;
+			ChilliSource::Vector3 m_acceleration;
 			AccelerometerJavaInterfaceSPtr m_accelerometerJI;
 			bool m_isUpdating;
-			CSCore::Event<AccelerationUpdatedDelegate> m_accelerationUpdatedEvent;
+			ChilliSource::Event<AccelerationUpdatedDelegate> m_accelerationUpdatedEvent;
 		};
 	}
 }

@@ -39,7 +39,7 @@
 #include <mutex>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A component for rendering a single instance of a particle effect.
@@ -95,7 +95,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// Returns the current particle effect. 
         ///
@@ -149,19 +149,19 @@ namespace CS
         ///
         /// @return The world space AABB of the effect.
         //----------------------------------------------------------------
-        const Core::AABB& GetAABB() override;
+        const AABB& GetAABB() override;
         //----------------------------------------------------------------
         /// @author Ian Copland
         /// 
         /// @return The world space OBB of the effect.
         //----------------------------------------------------------------
-        const Core::OOBB& GetOOBB() override;
+        const OOBB& GetOOBB() override;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The world space bounding sphere of the effect.
         //----------------------------------------------------------------
-        const Core::Sphere& GetBoundingSphere() override;
+        const Sphere& GetBoundingSphere() override;
         //----------------------------------------------------------------
         /// Sets a new particle effect for the component to play. If the
         /// component was playing, it will start playing the new effect
@@ -230,7 +230,7 @@ namespace CS
         ///
         /// @return The event.
         //----------------------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetFinishedEvent();
+        IConnectableEvent<Delegate>& GetFinishedEvent();
         //----------------------------------------------------------------
         /// Returns an event that will be fired when the particle effect
         /// finishes emitting. Particles may still be alive when this event
@@ -243,7 +243,7 @@ namespace CS
         ///
         /// @return The event.
         //----------------------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetFinishedEmittingEvent();
+        IConnectableEvent<Delegate>& GetFinishedEmittingEvent();
         //----------------------------------------------------------------
         /// Destructor
         ///
@@ -391,21 +391,21 @@ namespace CS
         ParticleDrawableUPtr m_drawable;
         ParticleEmitterSPtr m_emitter;
         std::vector<ParticleAffectorSPtr> m_affectors;
-        std::shared_ptr<Core::dynamic_array<Particle>> m_particleArray;
+        std::shared_ptr<dynamic_array<Particle>> m_particleArray;
         ConcurrentParticleDataSPtr m_concurrentParticleData;
 
         PlaybackType m_playbackType = PlaybackType::k_once;
         PlaybackState m_playbackState = PlaybackState::k_notPlaying;
         f32 m_playbackTimer = 0.0f;
         f32 m_accumulatedDeltaTime = 0.0f;
-        Core::Event<Delegate> m_finishedEvent;
-        Core::Event<Delegate> m_finishedEmittingEvent;
+        Event<Delegate> m_finishedEvent;
+        Event<Delegate> m_finishedEmittingEvent;
         bool m_firstFrame = false;
 
-        Core::AABB m_localAABB;
-        Core::Sphere m_localBoundingSphere;
+        AABB m_localAABB;
+        Sphere m_localBoundingSphere;
         bool m_invalidateBoundingShapeCache = true;
-        Core::EventConnectionUPtr m_entityTransformConnection;
+        EventConnectionUPtr m_entityTransformConnection;
     };
 }
 

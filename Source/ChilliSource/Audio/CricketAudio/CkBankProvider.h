@@ -38,7 +38,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Audio/CricketAudio/ZippedCkBankLoader.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// The resource provider for Cricket Audio sound banks. An audio bank contains
@@ -56,7 +56,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class CkBankProvider final : public Core::ResourceProvider
+    class CkBankProvider final : public ResourceProvider
     {
     public:
         CS_DECLARE_NAMEDTYPE(CkBankProvider);
@@ -71,14 +71,14 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The interface Id for the resource type that this provider can 
         /// create.
         //------------------------------------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not this system create resources from files 
         /// with the given extension. 
@@ -102,7 +102,7 @@ namespace CS
         /// an audio bank.
         /// @param [Out] The output audio bank resource.
         //------------------------------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
         //------------------------------------------------------------------------------
         /// Creates a new Cricket Audio bank from the described file asynchronously. The 
         /// load state of the resource should be checked for success or failure.
@@ -116,10 +116,10 @@ namespace CS
         /// @param The completion delegate.
         /// @param [Out] The output audio bank resource.
         //------------------------------------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
 
     private:
-        friend class Core::Application;
+        friend class Application;
         //------------------------------------------------------------------------------
         /// A container for information needed for asynchonous load requests.
         ///
@@ -162,7 +162,7 @@ namespace CS
         //------------------------------------------------------------------------------
         void OnUpdate(f32 in_deltaTime) override;
         
-        Core::concurrent_vector<AsyncRequest> m_asyncRequests;
+        concurrent_vector<AsyncRequest> m_asyncRequests;
 
 #ifdef CS_TARGETPLATFORM_ANDROID
         CSBackend::Android::ZippedCkBankLoader m_zippedCkBankLoader;

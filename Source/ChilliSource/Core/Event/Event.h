@@ -37,7 +37,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     /// An Event represents an object which can have multiple listeners

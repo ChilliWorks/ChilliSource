@@ -68,7 +68,7 @@ namespace CSBackend
             /// @param in_unformattedPrices - List of unformatted prices
             ///         corresponding with each entry of in_productDesc
             //------------------------------------------------------
-            using OnProductDescriptionsRequestCompleteDelegate = std::function<void(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_productDesc, const std::vector<std::string>& in_currencyCodes, const std::vector<std::string>& in_unformattedPrices)>;
+            using OnProductDescriptionsRequestCompleteDelegate = std::function<void(const std::vector<ChilliSource::IAPSystem::ProductDesc>& in_productDesc, const std::vector<std::string>& in_currencyCodes, const std::vector<std::string>& in_unformattedPrices)>;
 
 			//--------------------------------------------------------------
 			/// Constructor
@@ -85,7 +85,7 @@ namespace CSBackend
 			///
 			/// @return whether or not this object implements the given interface.
 			//--------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -102,7 +102,7 @@ namespace CSBackend
             ///
             /// @param in_delegate - Delegate
             //---------------------------------------------------------------
-            void StartListeningForTransactionUpdates(const CSNetworking::IAPSystem::TransactionStatusDelegate& in_delegate);
+            void StartListeningForTransactionUpdates(const ChilliSource::IAPSystem::TransactionStatusDelegate& in_delegate);
             //---------------------------------------------------------------
             /// Prevent any more transaction uppdates from being triggered.
             ///
@@ -136,7 +136,7 @@ namespace CSBackend
             /// @param in_productId - Product ID
             /// @param in_type - Product type (managed, unmanaged)
             //---------------------------------------------------------------
-            void RequestProductPurchase(const std::string& in_productId, CSNetworking::IAPSystem::ProductRegInfo::Type in_type);
+            void RequestProductPurchase(const std::string& in_productId, ChilliSource::IAPSystem::ProductRegInfo::Type in_type);
             //---------------------------------------------------------------
 			/// Tell the store to close the transaction as complete.
             /// NOTE: This should only be called after the goods have been
@@ -148,7 +148,7 @@ namespace CSBackend
             /// @param in_transactionId - Transaction ID
             /// @param in_delegate - Delegate to call when closed successfully
             //---------------------------------------------------------------
-            void CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const CSNetworking::IAPSystem::TransactionCloseDelegate& in_delegate);
+            void CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const ChilliSource::IAPSystem::TransactionCloseDelegate& in_delegate);
             //---------------------------------------------------------------
             /// Request that the store trigger new purchase requests for
             /// owned non-consumable items
@@ -167,7 +167,7 @@ namespace CSBackend
             /// @param in_currencyCodes - List of currency codes
             /// @param in_unformattedPrices - List of unformatted prices
             //---------------------------------------------------------------
-            void OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products, const std::vector<std::string>& in_currencyCodes, const std::vector<std::string>& in_unformattedPrices);
+            void OnProductDescriptionsRequestComplete(const std::vector<ChilliSource::IAPSystem::ProductDesc>& in_products, const std::vector<std::string>& in_currencyCodes, const std::vector<std::string>& in_unformattedPrices);
             //---------------------------------------------------------------
     		/// Called when transaction status changes
             ///
@@ -176,7 +176,7 @@ namespace CSBackend
             /// @param in_statusId - Status ID
             /// @param in_transaction - Transaction description
             //---------------------------------------------------------------
-            void OnTransactionStatusUpdated(u32 in_statusId, const CSNetworking::IAPSystem::Transaction& in_transaction);
+            void OnTransactionStatusUpdated(u32 in_statusId, const ChilliSource::IAPSystem::Transaction& in_transaction);
             //---------------------------------------------------------------
     		/// Delegate called when the transaction is closed either
             /// with success or failure
@@ -191,8 +191,8 @@ namespace CSBackend
 
 		private:
             OnProductDescriptionsRequestCompleteDelegate m_productsRequestDelegate;
-            CSNetworking::IAPSystem::TransactionStatusDelegate m_transactionStatusDelegate;
-            CSNetworking::IAPSystem::TransactionCloseDelegate m_transactionCloseDelegate;
+            ChilliSource::IAPSystem::TransactionStatusDelegate m_transactionStatusDelegate;
+            ChilliSource::IAPSystem::TransactionCloseDelegate m_transactionCloseDelegate;
 		};
 	}
 }

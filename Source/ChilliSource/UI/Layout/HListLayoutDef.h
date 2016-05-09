@@ -35,7 +35,7 @@
 #include <ChilliSource/UI/Layout/HListLayout.h>
 #include <ChilliSource/UI/Layout/LayoutDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A definition of a HList Layout which can be built from a json object. This is
@@ -86,7 +86,7 @@ namespace CS
         /// @param The relative spacing.
         /// @param The absolute spacing.
         //------------------------------------------------------------------------------
-        HListLayoutDef(u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
+        HListLayoutDef(u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not this system implements the interface
         /// described by the given interface Id. Typically this is not called directly
@@ -98,7 +98,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -112,14 +112,14 @@ namespace CS
         /// to the overall layout size (i.e owning widget size). X is top, Y is right,
         /// Z is bottom and W is left.
         //------------------------------------------------------------------------------
-        Core::Vector4 GetRelativeMargins() const;
+        Vector4 GetRelativeMargins() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The absolute border size margins for each edge. X is top, Y is
         /// right, Z is bottom and W is left.
         //------------------------------------------------------------------------------
-        Core::Vector4 GetAbsoluteMargins() const;
+        Vector4 GetAbsoluteMargins() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -147,8 +147,8 @@ namespace CS
         LayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
         
         u32 m_numCells = 1;
-        Core::Vector4 m_relativeMargins;
-        Core::Vector4 m_absoluteMargins;
+        Vector4 m_relativeMargins;
+        Vector4 m_absoluteMargins;
         f32 m_relativeSpacing = 0.0f;
         f32 m_absoluteSpacing = 0.0f;
     };

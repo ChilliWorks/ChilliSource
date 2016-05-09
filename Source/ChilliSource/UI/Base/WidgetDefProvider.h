@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------
     /// A resource provider that creates widget descriptions for
@@ -40,7 +40,7 @@ namespace CS
     ///
     /// @author S Downie
     //-------------------------------------------------------------
-    class WidgetDefProvider final : public Core::ResourceProvider
+    class WidgetDefProvider final : public ResourceProvider
     {
     public:
         CS_DECLARE_NAMEDTYPE(WidgetDefProvider);
@@ -54,13 +54,13 @@ namespace CS
         ///
         /// @return Whether the object is of given type
         //-------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The resource type this provider can load
         //-------------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //-------------------------------------------------------
         /// Queries whether or not this provider can create
         /// resources from files with the given extension.
@@ -84,7 +84,7 @@ namespace CS
         /// @param Options to customise the creation
         /// @param [Out] Resource
         //-------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------
         /// Creates a new resource from file asynchronously.
         /// Completion delegate is called on finish. Check
@@ -98,10 +98,10 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] The output resource.
         //----------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
     private:
         
-        friend class Core::Application;
+        friend class Application;
         //-------------------------------------------------------
         /// Factory method
         ///

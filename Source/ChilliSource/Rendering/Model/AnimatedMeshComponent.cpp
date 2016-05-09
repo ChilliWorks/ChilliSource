@@ -45,7 +45,7 @@
 #include <algorithm>
 #include <limits>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(AnimatedMeshComponent);
     
@@ -62,7 +62,7 @@ namespace CS
     //----------------------------------------------------------
     /// Is A
     //----------------------------------------------------------
-    bool AnimatedMeshComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
+    bool AnimatedMeshComponent::IsA(InterfaceIDType inInterfaceID) const
     {
         return  (inInterfaceID == AnimatedMeshComponent::InterfaceID) ||
                 (inInterfaceID == RenderComponent::InterfaceID) ||
@@ -71,23 +71,23 @@ namespace CS
     //----------------------------------------------------
     /// Get Axis Aligned Bounding Box
     //----------------------------------------------------
-    const Core::AABB& AnimatedMeshComponent::GetAABB()
+    const AABB& AnimatedMeshComponent::GetAABB()
     {
         if(GetEntity())
         {
             //Rebuild the box
-            const Core::AABB& cAABB = mpModel->GetAABB();
-            const Core::Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
-            Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
-            Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
-            Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
-            Core::Vector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
-            Core::Vector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
-            Core::Vector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
-            Core::Vector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
-            Core::Vector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
+            const AABB& cAABB = mpModel->GetAABB();
+            const Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
+            Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
+            Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
+            Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
+            Vector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
+            Vector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
+            Vector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
+            Vector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
+            Vector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
             
-            Core::Vector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
+            Vector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
             vMin.x = std::min(vMin.x, vBackBottomLeft.x);
             vMin.x = std::min(vMin.x, vBackBottomRight.x);
             vMin.x = std::min(vMin.x, vBackTopLeft.x);
@@ -115,7 +115,7 @@ namespace CS
             vMin.z = std::min(vMin.z, vFrontTopLeft.z);
             vMin.z = std::min(vMin.z, vFrontTopRight.z);
             
-            Core::Vector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
+            Vector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
             vMax.x = std::max(vMax.x, vBackBottomLeft.x);
             vMax.x = std::max(vMax.x, vBackBottomRight.x);
             vMax.x = std::max(vMax.x, vBackTopLeft.x);
@@ -153,7 +153,7 @@ namespace CS
     //----------------------------------------------------
     /// Get Object Oriented Bounding Box
     //----------------------------------------------------
-    const Core::OOBB& AnimatedMeshComponent::GetOOBB()
+    const OOBB& AnimatedMeshComponent::GetOOBB()
     {
         if(GetEntity())
         {
@@ -164,11 +164,11 @@ namespace CS
     //----------------------------------------------------
     /// Get Bounding Sphere
     //----------------------------------------------------
-    const Core::Sphere& AnimatedMeshComponent::GetBoundingSphere()
+    const Sphere& AnimatedMeshComponent::GetBoundingSphere()
     {
         if(GetEntity())
         {
-            const Core::AABB& sAABB = GetAABB();
+            const AABB& sAABB = GetAABB();
             mBoundingSphere.vOrigin = sAABB.GetOrigin();
             mBoundingSphere.fRadius = (sAABB.BackTopRight() - sAABB.FrontBottomLeft()).Length() * 0.5f;
         }
@@ -243,7 +243,7 @@ namespace CS
             return mMaterials[indwSubMeshIndex];
         }
         
-        CS_LOG_ERROR("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
+        CS_LOG_ERROR("Failed to get material from sub mesh " + ToString(indwSubMeshIndex));
         return MaterialCSPtr();
     }
     //-----------------------------------------------------------
@@ -373,7 +373,7 @@ namespace CS
     //----------------------------------------------------------
     /// Attach Entity
     //----------------------------------------------------------
-    void AnimatedMeshComponent::AttachEntity(const Core::EntitySPtr& inpEntity, const std::string& instrNodeName)
+    void AnimatedMeshComponent::AttachEntity(const EntitySPtr& inpEntity, const std::string& instrNodeName)
     {
         if (nullptr == GetEntity())
         {
@@ -390,7 +390,7 @@ namespace CS
         //check that it has not already been added.
         for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
         {
-            if (Core::EntitySPtr pEntity = it->first.lock())
+            if (EntitySPtr pEntity = it->first.lock())
             {
                 if (pEntity.get() == inpEntity.get())
                 {
@@ -407,17 +407,17 @@ namespace CS
         }
         
         GetEntity()->AddEntity(inpEntity);
-        maAttachedEntities.push_back(std::pair<Core::EntityWPtr, s32>(Core::EntityWPtr(inpEntity), dwNodeIndex));
+        maAttachedEntities.push_back(std::pair<EntityWPtr, s32>(EntityWPtr(inpEntity), dwNodeIndex));
     }
     //----------------------------------------------------------
     /// Detatch Entity
     //----------------------------------------------------------
-    void AnimatedMeshComponent::DetatchEntity(Core::Entity* inpEntity)
+    void AnimatedMeshComponent::DetatchEntity(Entity* inpEntity)
     {
         AttachedEntityList::iterator it;
         for (it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
         {
-            if (Core::EntitySPtr pEntity = it->first.lock())
+            if (EntitySPtr pEntity = it->first.lock())
             {
                 if (pEntity.get() == inpEntity)
                 {
@@ -439,7 +439,7 @@ namespace CS
     {
         for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
         {
-            if (Core::EntitySPtr pEntity = it->first.lock())
+            if (EntitySPtr pEntity = it->first.lock())
             {
                 pEntity->RemoveFromParent();
             }
@@ -733,11 +733,11 @@ namespace CS
         {
             for (AttachedEntityList::iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end();)
             {
-                if (Core::EntitySPtr pEntity = it->first.lock())
+                if (EntitySPtr pEntity = it->first.lock())
                 {
                     s32 dwNodeIndex = it->second;
                     
-                    const Core::Matrix4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
+                    const Matrix4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
                     pEntity->GetTransform().SetLocalTransform(matTransform);
                     ++it;
                 }

@@ -33,7 +33,7 @@
 
 #include <type_traits>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// Casts the const away from a pointer return value of a const method.

@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_RENDERING_BASE_BLENDMODE_H_
 #define _CHILLISOURCE_RENDERING_BASE_BLENDMODE_H_
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------
     /// The blend modes that are used to describe

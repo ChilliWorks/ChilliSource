@@ -32,7 +32,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -54,7 +54,7 @@ namespace CS
         CS_ASSERT(in_child->GetParent() == nullptr, "Cannot add child with existing parent");
         CS_ASSERT(in_child->GetScene() == nullptr, "Cannot add child with existing scene");
         CS_ASSERT(m_children.size() < static_cast<std::vector<EntitySPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many child entities. It cannot exceed "
-                  + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
+                  + ToString(std::numeric_limits<u32>::max()) + ".");
         
         m_children.push_back(in_child);
         m_transform.AddChildTransform(&in_child->GetTransform());
@@ -202,7 +202,7 @@ namespace CS
         CS_ASSERT(in_component != nullptr, "Cannot add null component");
         CS_ASSERT(in_component->GetEntity() == nullptr, "Component cannot be attached to more than 1 entity at a time.");
         CS_ASSERT(m_components.size() < static_cast<std::vector<ComponentSPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many components. It cannot exceed "
-                  + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
+                  + ToString(std::numeric_limits<u32>::max()) + ".");
         
         m_components.push_back(in_component);
         

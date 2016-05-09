@@ -34,7 +34,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A collection of methods for creating particle properties.

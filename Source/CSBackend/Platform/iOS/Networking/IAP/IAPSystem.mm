@@ -53,7 +53,7 @@ namespace CSBackend
             /// @return Whether a product reg info exists in the list
             /// with the given Id.
             //---------------------------------------------------------------
-            bool ContainsProductId(const std::vector<CSNetworking::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId)
+            bool ContainsProductId(const std::vector<ChilliSource::IAPSystem::ProductRegInfo>& in_productInfos, const std::string& in_productId)
             {
                 for(u32 i=0; i<in_productInfos.size(); ++i)
                 {
@@ -71,9 +71,9 @@ namespace CSBackend
         
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        bool IAPSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool IAPSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == CSNetworking::IAPSystem::InterfaceID || in_interfaceId == IAPSystem::InterfaceID;
+            return in_interfaceId == ChilliSource::IAPSystem::InterfaceID || in_interfaceId == IAPSystem::InterfaceID;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -107,7 +107,7 @@ namespace CSBackend
             CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
             m_transactionStatusDelegate = in_delegate;
             
-            [m_storeKitSystem startListeningForTransactions:CSCore::MakeDelegate(this, &IAPSystem::OnTransactionUpdate)];
+            [m_storeKitSystem startListeningForTransactions:ChilliSource::MakeDelegate(this, &IAPSystem::OnTransactionUpdate)];
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -146,10 +146,10 @@ namespace CSBackend
             if(hasReceipt)
             {
                 CS_ASSERT([in_skTransaction.transactionReceipt length] < static_cast<NSUInteger>(std::numeric_limits<u32>::max()), "Transaction receipt is too large, cannot exceed "
-                          + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+                          + ChilliSource::ToString(std::numeric_limits<u32>::max()) + " bytes.");
                 u32 length = static_cast<u32>([in_skTransaction.transactionReceipt length]);
                 
-                transaction->m_receipt = CSCore::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], length);
+                transaction->m_receipt = ChilliSource::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], length);
             }
             
             m_transactionStatusDelegate(result, transaction);
@@ -179,7 +179,7 @@ namespace CSBackend
                 [projectId release];
 			}
 			
-            [m_storeKitSystem requestProducts:idSet forDelegate:CSCore::MakeDelegate(this, &IAPSystem::OnProductDescriptionRequestComplete)];
+            [m_storeKitSystem requestProducts:idSet forDelegate:ChilliSource::MakeDelegate(this, &IAPSystem::OnProductDescriptionRequestComplete)];
             
             [idSet release];
         }
@@ -275,7 +275,7 @@ namespace CSBackend
         //---------------------------------------------------------------
         std::vector<IAPSystem::ExtraProductInfo> IAPSystem::GetExtraProductInfo() const
         {
-            CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
             
             ExtraProductInfo extraProductInfo;
             std::vector<ExtraProductInfo> extraProductsInfo;

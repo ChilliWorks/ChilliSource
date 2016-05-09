@@ -66,7 +66,7 @@ namespace CSBackend
 			///
 			/// @return Key value dictionary
 			//-------------------------------------------------------------------
-			CSCore::ParamDictionary ParseHeaders(const WCHAR* in_headerBlob, DWORD in_headerSize)
+			ChilliSource::ParamDictionary ParseHeaders(const WCHAR* in_headerBlob, DWORD in_headerSize)
 			{
 				//---SAMPLE
 
@@ -78,7 +78,7 @@ namespace CSBackend
 				//Server : Apache\r\n
 				//X - Powered - By: PHP / 5.3.10 - 1ubuntu3.9\r\n\r\n"
 
-				CSCore::ParamDictionary headers;
+				ChilliSource::ParamDictionary headers;
 
 				std::wstring key;
 				std::wstring value;
@@ -136,9 +136,9 @@ namespace CSBackend
 			///
 			/// @return Key value dictionary
 			//-------------------------------------------------------------------
-			CSCore::ParamDictionary GetRequestHeaders(HINTERNET in_requestHandle)
+			ChilliSource::ParamDictionary GetRequestHeaders(HINTERNET in_requestHandle)
 			{
-				CSCore::ParamDictionary headers;
+				ChilliSource::ParamDictionary headers;
 
 				DWORD headerSize;
 				WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_RAW_HEADERS_CRLF, WINHTTP_HEADER_NAME_BY_INDEX, nullptr, &headerSize, WINHTTP_NO_HEADER_INDEX);
@@ -160,7 +160,7 @@ namespace CSBackend
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
-		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, 
+		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const ChilliSource::ParamDictionary& in_headers, u32 in_timeoutSecs, 
 			HINTERNET in_requestHandle, HINTERNET in_connectionHandle, u32 in_bufferFlushSize, const Delegate& in_delegate)
 			: m_url(in_url), m_type(in_type), m_headers(in_headers), m_body(in_body), m_bufferFlushSize(in_bufferFlushSize), m_completionDelegate(in_delegate)
 		{
@@ -177,8 +177,8 @@ namespace CSBackend
 			::WinHttpSetTimeouts(in_requestHandle, connectTimeoutMilliSecs, connectTimeoutMilliSecs, readTimeoutMilliSecs, readTimeoutMilliSecs);
 
 			//TODO: This should probably be handled by a HTTP system specific thread, like the other platforms.
-			m_taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
-			m_taskScheduler->ScheduleTask(CSCore::TaskType::k_large, [=](const CSCore::TaskContext&)
+			m_taskScheduler = ChilliSource::Application::Get()->GetTaskScheduler();
+			m_taskScheduler->ScheduleTask(ChilliSource::TaskType::k_large, [=](const ChilliSource::TaskContext&)
 			{
 				PollReadStream(in_requestHandle, in_connectionHandle, destroyingMutex);
 			});
@@ -194,7 +194,7 @@ namespace CSBackend
 
 				if (m_isRequestCancelled == false)
 				{
-					m_completionDelegate(this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData));
+					m_completionDelegate(this, ChilliSource::HttpResponse(m_requestResult, m_responseCode, m_responseData));
 				}
 			}
 		}
@@ -220,14 +220,14 @@ namespace CSBackend
 			if (sendRequestResult == FALSE)
 			{
 				DWORD error = GetLastError();
-				CSNetworking::HttpResponse::Result result;
+				ChilliSource::HttpResponse::Result result;
 				switch (error)
 				{
 				case ERROR_WINHTTP_TIMEOUT:
-					result = CSNetworking::HttpResponse::Result::k_timeout;
+					result = ChilliSource::HttpResponse::Result::k_timeout;
 					break;
 				default:
-					result = CSNetworking::HttpResponse::Result::k_failed;
+					result = ChilliSource::HttpResponse::Result::k_failed;
 					break;
 				}
 
@@ -248,14 +248,14 @@ namespace CSBackend
 			if (receiveResponseResult == FALSE)
 			{
 				DWORD error = GetLastError();
-				CSNetworking::HttpResponse::Result result;
+				ChilliSource::HttpResponse::Result result;
 				switch (error)
 				{
 				case ERROR_WINHTTP_TIMEOUT:
-					result = CSNetworking::HttpResponse::Result::k_timeout;
+					result = ChilliSource::HttpResponse::Result::k_timeout;
 					break;
 				default:
-					result = CSNetworking::HttpResponse::Result::k_failed;
+					result = ChilliSource::HttpResponse::Result::k_failed;
 					break;
 				}
 
@@ -271,16 +271,16 @@ namespace CSBackend
 			u32 responseCode = 0;
 			WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, nullptr, &responseCode, &headerSize, nullptr);
 			
-			CSCore::ParamDictionary headers = GetRequestHeaders(in_requestHandle);
+			ChilliSource::ParamDictionary headers = GetRequestHeaders(in_requestHandle);
 			std::string expectedSize;
 			headers.TryGetValue("Content-Length", expectedSize);
-			m_expectedSize = CSCore::ParseU32(expectedSize);
+			m_expectedSize = ChilliSource::ParseU32(expectedSize);
 
 			// Keep reading from the remote server until there's
 			// nothing left to read
 			DWORD bytesToBeRead = 0;
 			DWORD bytesRead = 0;
-			CSNetworking::HttpResponse::Result result = CSNetworking::HttpResponse::Result::k_failed;
+			ChilliSource::HttpResponse::Result result = ChilliSource::HttpResponse::Result::k_failed;
 			u32 totalBytesReadThisBlock = 0;
 			s8 readBuffer[k_readBufferSize];
 			std::stringstream streamBuffer;
@@ -298,7 +298,7 @@ namespace CSBackend
 				{
 					WinHttpCloseHandle(in_requestHandle);
 					WinHttpCloseHandle(in_connectionHandle);
-					m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
+					m_requestResult = ChilliSource::HttpResponse::Result::k_failed;
 					m_isPollingComplete = true;
 					return;
 				}
@@ -314,7 +314,7 @@ namespace CSBackend
 				{
 					WinHttpCloseHandle(in_requestHandle);
 					WinHttpCloseHandle(in_connectionHandle);
-					m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
+					m_requestResult = ChilliSource::HttpResponse::Result::k_failed;
 					m_isPollingComplete = true;
 					return;
 				}
@@ -329,11 +329,11 @@ namespace CSBackend
 					if (bufferFlushSize != 0 && totalBytesReadThisBlock >= bufferFlushSize)
 					{
 						m_responseData = streamBuffer.str();
-						m_requestResult = CSNetworking::HttpResponse::Result::k_flushed;
+						m_requestResult = ChilliSource::HttpResponse::Result::k_flushed;
 
-						m_taskScheduler->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+						m_taskScheduler->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 						{
-							m_completionDelegate(this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData));
+							m_completionDelegate(this, ChilliSource::HttpResponse(m_requestResult, m_responseCode, m_responseData));
 						});
 
 						streamBuffer.clear();
@@ -346,7 +346,7 @@ namespace CSBackend
 
 			if (m_shouldKillThread == false)
 			{
-				result = CSNetworking::HttpResponse::Result::k_completed;
+				result = ChilliSource::HttpResponse::Result::k_completed;
 			}
 
 			WinHttpCloseHandle(in_requestHandle);
@@ -389,7 +389,7 @@ namespace CSBackend
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		const CSCore::ParamDictionary& HttpRequest::GetHeaders() const
+		const ChilliSource::ParamDictionary& HttpRequest::GetHeaders() const
 		{
 			return m_headers;
 		}

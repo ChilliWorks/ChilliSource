@@ -35,7 +35,7 @@
 #include <mutex>
 #include <queue>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------
     /// A queue which can safely be accessed from multiple threads. If

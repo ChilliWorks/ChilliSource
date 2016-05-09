@@ -47,7 +47,7 @@ namespace CSBackend
         ///
         /// @author Robert Henning
         //---------------------------------------------------------
-        class RemoteNotificationSystem : public CSCore::RemoteNotificationSystem
+        class RemoteNotificationSystem : public ChilliSource::RemoteNotificationSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(RemoteNotificationSystem);
@@ -59,7 +59,7 @@ namespace CSBackend
             /// @return Whether this implements the passed in
             /// interface id.
             //--------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Request the remote token for this device for use
             /// with Push Notifications.
@@ -100,7 +100,7 @@ namespace CSBackend
             /// @return An event that can be used to listen for
             /// new notifications being received.
             //---------------------------------------------------
-            CSCore::IConnectableEvent<NotificationReceivedDelegate>& GetReceivedEvent() override;
+            ChilliSource::IConnectableEvent<NotificationReceivedDelegate>& GetReceivedEvent() override;
             //---------------------------------------------------
             /// @author Robert Henning
             ///
@@ -120,7 +120,7 @@ namespace CSBackend
             void OnRemoteNotificationReceived(UIApplication* in_application, NSDictionary* in_payload);
             
         private:
-            friend CSCore::RemoteNotificationSystemUPtr CSCore::RemoteNotificationSystem::Create();
+            friend ChilliSource::RemoteNotificationSystemUPtr ChilliSource::RemoteNotificationSystem::Create();
             //----------------------------------------------------------
             /// Private constructor to force use of factory method.
             ///
@@ -138,7 +138,7 @@ namespace CSBackend
             bool m_enabled;
             std::string m_token;
             TokenReceivedDelegate m_delegate;
-            CSCore::Event<NotificationReceivedDelegate> m_receivedEvent;
+            ChilliSource::Event<NotificationReceivedDelegate> m_receivedEvent;
         };
     }
 }

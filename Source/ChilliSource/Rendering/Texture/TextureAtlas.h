@@ -36,7 +36,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// A resource that holds the information about packed textures in a
@@ -45,7 +45,7 @@ namespace CS
     ///
     /// @author S Downie
     //---------------------------------------------------------------------
-    class TextureAtlas final : public Core::Resource
+    class TextureAtlas final : public Resource
     {
     public:
         
@@ -75,10 +75,10 @@ namespace CS
         //---------------------------------------------------------------------
         struct Frame
         {
-            Rendering::UVs m_uvs;
-            Core::Vector2 m_croppedSize;
-            Core::Vector2 m_originalSize;
-            Core::Vector2 m_offset;
+            UVs m_uvs;
+            Vector2 m_croppedSize;
+            Vector2 m_originalSize;
+            Vector2 m_offset;
         };
         //---------------------------------------------------------------------
         /// Holds the description of a texture atlas. Used to build the resource
@@ -103,7 +103,7 @@ namespace CS
         ///
         /// @return Whether this object is of given type
         //---------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //---------------------------------------------------------------------
         /// Construct the sprite sheet data from the given descriptor
         /// this populates the resource ready for use
@@ -136,7 +136,7 @@ namespace CS
         ///
         /// @return Rect containing UV coords for the given frame
         //---------------------------------------------------------------------
-        Rendering::UVs GetFrameUVs(const std::string& in_textureId) const;
+        UVs GetFrameUVs(const std::string& in_textureId) const;
         //---------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -144,7 +144,7 @@ namespace CS
         ///
         /// @return Size of the given frame in pixels
         //---------------------------------------------------------------------
-        Core::Vector2 GetCroppedFrameSize(const std::string& in_textureId) const;
+        Vector2 GetCroppedFrameSize(const std::string& in_textureId) const;
         //---------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -152,7 +152,7 @@ namespace CS
         ///
         /// @return Size of the given frame in pixels prior to alpha cropping
         //---------------------------------------------------------------------
-        Core::Vector2 GetOriginalFrameSize(const std::string& in_textureId) const;
+        Vector2 GetOriginalFrameSize(const std::string& in_textureId) const;
         //---------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -161,7 +161,7 @@ namespace CS
         /// @return The value in pixels of the X, Y crop offset from the original
         /// sprite.
         //---------------------------------------------------------------------
-        Core::Vector2 GetFrameOffset(const std::string& in_textureId) const;
+        Vector2 GetFrameOffset(const std::string& in_textureId) const;
         //---------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -185,7 +185,7 @@ namespace CS
         ///
         /// @return Rect containing UV coords for the given frame
         //---------------------------------------------------------------------
-        Rendering::UVs GetFrameUVs(u32 in_hashedTextureId) const;
+        UVs GetFrameUVs(u32 in_hashedTextureId) const;
         //---------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -193,7 +193,7 @@ namespace CS
         ///
         /// @return Size of the given frame in pixels
         //---------------------------------------------------------------------
-        Core::Vector2 GetCroppedFrameSize(u32 in_hashedTextureId) const;
+        Vector2 GetCroppedFrameSize(u32 in_hashedTextureId) const;
         //---------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -201,7 +201,7 @@ namespace CS
         ///
         /// @return Size of the given frame in pixels prior to alpha cropping
         //---------------------------------------------------------------------
-        Core::Vector2 GetOriginalFrameSize(u32 in_hashedTextureId) const;
+        Vector2 GetOriginalFrameSize(u32 in_hashedTextureId) const;
         //---------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -210,7 +210,7 @@ namespace CS
         /// @return The value in pixels of the X, Y crop offset from the original
         /// sprite.
         //---------------------------------------------------------------------
-        Core::Vector2 GetFrameOffset(u32 in_hashedTextureId) const;
+        Vector2 GetFrameOffset(u32 in_hashedTextureId) const;
         //---------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -226,7 +226,7 @@ namespace CS
         
     private:
         
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //---------------------------------------------------------------------
         /// Factory method to create empty sprite sheet resource. Only called
         /// by the resource pool

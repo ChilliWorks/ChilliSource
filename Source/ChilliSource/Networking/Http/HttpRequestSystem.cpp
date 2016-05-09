@@ -40,7 +40,7 @@
 #include <CSBackend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(HttpRequestSystem);
     

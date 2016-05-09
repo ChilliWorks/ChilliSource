@@ -33,13 +33,13 @@
 #include <ChilliSource/UI/Drawable/Drawable.h>
 #include <ChilliSource/UI/Drawable/DrawableDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
         const char k_drawableKey[] = "Drawable";
         
-        const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
+        const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
             {PropertyTypes::DrawableDef(), k_drawableKey},
         };
@@ -48,21 +48,21 @@ namespace CS
     CS_DEFINE_NAMEDTYPE(DrawableComponent);
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const std::vector<Core::PropertyMap::PropertyDesc>& DrawableComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& DrawableComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    DrawableComponent::DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
+    DrawableComponent::DrawableComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawableDef), Core::MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
+        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, MakeDelegate(this, &DrawableComponent::GetDrawableDef), MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
         ApplyRegisteredProperties(in_properties);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool DrawableComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool DrawableComponent::IsA(InterfaceIDType in_interfaceId) const
     {
         return (UIComponent::InterfaceID == in_interfaceId || DrawableComponent::InterfaceID == in_interfaceId);
     }
@@ -98,7 +98,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void DrawableComponent::OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
+    void DrawableComponent::OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
         if (m_drawable != nullptr)
         {

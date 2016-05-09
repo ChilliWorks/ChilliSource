@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Layout/Layout.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Lays out widgets in a grid where each widget has a single cell. The cells
@@ -76,7 +76,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -100,14 +100,14 @@ namespace CS
         /// to the overall layout size (i.e owning widget size). X is top, Y is right,
         /// Z is bottom and W is left.
         //------------------------------------------------------------------------------
-        Core::Vector4 GetRelativeMargins() const;
+        Vector4 GetRelativeMargins() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The absolute border size margins for each edge. X is top, Y is
         /// right, Z is bottom and W is left.
         //------------------------------------------------------------------------------
-        Core::Vector4 GetAbsoluteMargins() const;
+        Vector4 GetAbsoluteMargins() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -242,7 +242,7 @@ namespace CS
         /// @param The relative vertical spacing.
         /// @param The absolute vertical spacing.
         //------------------------------------------------------------------------------
-        GridLayout(LayoutComponent* in_layoutComponent, GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins,
+        GridLayout(LayoutComponent* in_layoutComponent, GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                    f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing);
         //------------------------------------------------------------------------------
         /// Create the grid layout sizes and positions based on the current layout
@@ -260,7 +260,7 @@ namespace CS
         ///
         /// @return Final absolute screen size
         //------------------------------------------------------------------------------
-        Core::Vector2 GetSizeForIndex(u32 in_index) const override;
+        Vector2 GetSizeForIndex(u32 in_index) const override;
         //------------------------------------------------------------------------------
         /// Get the local position of the widget that occupies the space at the given
         /// index
@@ -271,17 +271,17 @@ namespace CS
         ///
         /// @return Local position in layout space (aligned middle centre of the cell)
         //------------------------------------------------------------------------------
-        Core::Vector2 GetPositionForIndex(u32 in_index) const override;
+        Vector2 GetPositionForIndex(u32 in_index) const override;
         
-        Core::Vector2 m_cellSize;
+        Vector2 m_cellSize;
         
-        Core::Vector2 m_marginSizeTop;
-        Core::Vector2 m_marginSizeBottom;
-        Core::Vector2 m_marginSizeLeft;
-        Core::Vector2 m_marginSizeRight;
+        Vector2 m_marginSizeTop;
+        Vector2 m_marginSizeBottom;
+        Vector2 m_marginSizeLeft;
+        Vector2 m_marginSizeRight;
         
-        Core::Vector2 m_spacingSizeH;
-        Core::Vector2 m_spacingSizeV;
+        Vector2 m_spacingSizeH;
+        Vector2 m_spacingSizeV;
         f32 m_finalSpacingSizeH = 0.0f;
         f32 m_finalSpacingSizeV = 0.0f;
         f32 m_firstCellPosX = 0.0f;

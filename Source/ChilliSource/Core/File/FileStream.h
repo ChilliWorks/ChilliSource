@@ -37,7 +37,7 @@
 #include <cstdio>
 #include <fstream>
 
-namespace CS
+namespace ChilliSource
 {
     //=================================================================
     /// File Mode
@@ -369,7 +369,7 @@ namespace CS
         std::ios_base::openmode GetFileMode() const;
 
         bool m_isValid = false;
-        Core::FileMode meFileMode;
+        FileMode meFileMode;
         std::string mstrFilename;
         std::fstream mFileStream;
     };

@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -49,7 +49,7 @@ namespace CS
         ParticleEmitterDef::EmissionMode ParseEmissionMode(const std::string& in_emissionModeString)
         {
             std::string emissionModeString = in_emissionModeString;
-            Core::StringUtils::ToLowerCase(emissionModeString);
+            StringUtils::ToLowerCase(emissionModeString);
 
             if (emissionModeString == "stream")
             {

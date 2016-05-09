@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------
     /// A resource provider that creates images from csimage files.

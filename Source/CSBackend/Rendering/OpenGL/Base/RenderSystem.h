@@ -58,7 +58,7 @@ namespace CSBackend
 		/// Creates and manages the OpenGL ES context and
 		/// handles the rendering of scene objects
 		//=======================================================
-		class RenderSystem final : public CSRendering::RenderSystem
+		class RenderSystem final : public ChilliSource::RenderSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(RenderSystem);
@@ -70,7 +70,7 @@ namespace CSBackend
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType inInterfaceID) const override;
+			bool IsA(ChilliSource::InterfaceIDType inInterfaceID) const override;
             //----------------------------------------------------------
             /// Called when the system is created. Sets up the
             /// render target, viewport, etc.
@@ -106,7 +106,7 @@ namespace CSBackend
 			/// Create a hardware accelerated VBO
 			/// @return An instantiated buffer
 			//----------------------------------------------------------
-			CSRendering::MeshBuffer* CreateBuffer(CSRendering::BufferDescription &inDesc) override;
+			ChilliSource::MeshBuffer* CreateBuffer(ChilliSource::BufferDescription &inDesc) override;
 			//----------------------------------------------------------
 			/// Render Vertex Buffer
 			///
@@ -117,7 +117,7 @@ namespace CSBackend
             /// @param Number of vertices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderVertexBuffer(CSRendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const CSCore::Matrix4& inmatWorld) override;
+			void RenderVertexBuffer(ChilliSource::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const ChilliSource::Matrix4& inmatWorld) override;
 			//----------------------------------------------------------
 			/// Render Buffer
 			///
@@ -129,7 +129,7 @@ namespace CSBackend
             /// @param Number of indices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderBuffer(CSRendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const CSCore::Matrix4& inmatWorld) override;
+			void RenderBuffer(ChilliSource::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const ChilliSource::Matrix4& inmatWorld) override;
             //----------------------------------------------------------
 			/// Apply Camera
 			///
@@ -140,7 +140,7 @@ namespace CSBackend
 			/// @param Camera view matrix
 			/// @param Frame buffer clear colour
 			//----------------------------------------------------------
-			void ApplyCamera(const CSCore::Vector3& invPos, const CSCore::Matrix4& inmatView, const CSCore::Matrix4& inmatProj, const CSCore::Colour& inClearCol) override;
+			void ApplyCamera(const ChilliSource::Vector3& invPos, const ChilliSource::Matrix4& inmatView, const ChilliSource::Matrix4& inmatProj, const ChilliSource::Colour& inClearCol) override;
             //----------------------------------------------------------
             /// Set Light
             ///
@@ -148,7 +148,7 @@ namespace CSBackend
             ///
             /// @param lighting components
             //----------------------------------------------------------
-            void SetLight(CSRendering::LightComponent* inpLightComponent) override;
+            void SetLight(ChilliSource::LightComponent* inpLightComponent) override;
 			//----------------------------------------------------------
 			/// Apply Material
 			///
@@ -157,7 +157,7 @@ namespace CSBackend
 			/// @param Material
             /// @param Shader pass
 			//----------------------------------------------------------
-			void ApplyMaterial(const CSRendering::MaterialCSPtr& inMaterial, CSRendering::ShaderPass in_shaderPass) override;
+			void ApplyMaterial(const ChilliSource::MaterialCSPtr& inMaterial, ChilliSource::ShaderPass in_shaderPass) override;
             //----------------------------------------------------------
 			/// Apply Joints
 			///
@@ -165,7 +165,7 @@ namespace CSBackend
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const std::vector<CSCore::Matrix4>& inaJoints) override;
+            void ApplyJoints(const std::vector<ChilliSource::Matrix4>& inaJoints) override;
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -175,7 +175,7 @@ namespace CSBackend
             /// @param Height
 			/// @return An instantiated target
 			//----------------------------------------------------------
-			CSRendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
+			ChilliSource::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
             
             //---Render states
             //----------------------------------------------------------
@@ -255,14 +255,14 @@ namespace CSBackend
             /// @param Position of the bottom left corner of the rect
             /// @param Size of the scissor region
             //---------------------------------------------------------
-            void SetScissorRegion(const CSCore::Vector2& invPosition, const CSCore::Vector2& invSize) override;
+            void SetScissorRegion(const ChilliSource::Vector2& invPosition, const ChilliSource::Vector2& invSize) override;
             //----------------------------------------------------------
 			/// Set Cull Face
 			///
 			/// Sets the cull face
 			/// @param Cull face
 			//----------------------------------------------------------
-			void SetCullFace(CSRendering::CullFace ineCullface) override;
+			void SetCullFace(ChilliSource::CullFace ineCullface) override;
             //----------------------------------------------------------
             /// Lock Blend Function
             ///
@@ -281,13 +281,13 @@ namespace CSBackend
 			/// @param Source function
 			/// @param Destination function
 			//----------------------------------------------------------
-			void SetBlendFunction(CSRendering::BlendMode ineSrcFunc, CSRendering::BlendMode ineDstFunc) override;
+			void SetBlendFunction(ChilliSource::BlendMode ineSrcFunc, ChilliSource::BlendMode ineDstFunc) override;
             //----------------------------------------------------------
 			/// Set Depth Function
 			///
             /// @param Function to be used for depth testing
 			//----------------------------------------------------------
-            void SetDepthFunction(CSRendering::DepthTestComparison ineFunc) override;
+            void SetDepthFunction(ChilliSource::DepthTestComparison ineFunc) override;
             //----------------------------------------------------------
             /// Remove Buffer
             ///
@@ -296,7 +296,7 @@ namespace CSBackend
             ///
             /// @param Mesh buffer pointer.
             //----------------------------------------------------------
-            void RemoveBuffer(CSRendering::MeshBuffer* inpBuffer);
+            void RemoveBuffer(ChilliSource::MeshBuffer* inpBuffer);
             //----------------------------------------------------------
             /// @author S Downie
             ///
@@ -306,7 +306,7 @@ namespace CSBackend
 			
 		private:
             
-            friend CSRendering::RenderSystemUPtr CSRendering::RenderSystem::Create(CSRendering::RenderCapabilities*);
+            friend ChilliSource::RenderSystemUPtr ChilliSource::RenderSystem::Create(ChilliSource::RenderCapabilities*);
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -314,7 +314,7 @@ namespace CSBackend
             ///
             /// @param Render capabilities
             //-------------------------------------------------------
-            RenderSystem(CSRendering::RenderCapabilities* in_renderCapabilities);
+            RenderSystem(ChilliSource::RenderCapabilities* in_renderCapabilities);
             //----------------------------------------------------------
             /// Backup Context
             ///
@@ -334,7 +334,7 @@ namespace CSBackend
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyRenderStates(const CSRendering::Material* inMaterial);
+            void ApplyRenderStates(const ChilliSource::Material* inMaterial);
             //----------------------------------------------------------
             /// Apply Textures
             ///
@@ -343,7 +343,7 @@ namespace CSBackend
             /// @param Material
             /// @param Shader
             //----------------------------------------------------------
-            void ApplyTextures(const CSRendering::Material* inMaterial, Shader* out_shader);
+            void ApplyTextures(const ChilliSource::Material* inMaterial, Shader* out_shader);
             //----------------------------------------------------------
             /// Apply Lighting Values
             ///
@@ -352,7 +352,7 @@ namespace CSBackend
             /// @param Material
             /// @param [Out] Shader
             //----------------------------------------------------------
-            void ApplyLightingValues(const CSRendering::Material* inMaterial, Shader* out_shader);
+            void ApplyLightingValues(const ChilliSource::Material* inMaterial, Shader* out_shader);
 			//------------------------------------------------------------
 			/// Enable Vertex Attribute For Semantic (Programmable pipeline)
 			///
@@ -361,7 +361,7 @@ namespace CSBackend
 			///
 			/// @param Element
 			//------------------------------------------------------------
-			void EnableVertexAttributeForSemantic(CSRendering::MeshBuffer* inpBuffer);
+			void EnableVertexAttributeForSemantic(ChilliSource::MeshBuffer* inpBuffer);
 			//------------------------------------------------------------
 			/// Get Primitive Type
 			///
@@ -369,19 +369,19 @@ namespace CSBackend
 			///
 			/// @param CS primitive type
 			//------------------------------------------------------------
-			s32 GetPrimitiveType(CSRendering::PrimitiveType inType);
+			s32 GetPrimitiveType(ChilliSource::PrimitiveType inType);
             //----------------------------------------------------------
 			/// Begin Frame
 			///
 			/// Clear the back buffer to the clear colour
 			//----------------------------------------------------------
-			void BeginFrame(CSRendering::RenderTarget* inpActiveRenderTarget) override;
+			void BeginFrame(ChilliSource::RenderTarget* inpActiveRenderTarget) override;
 			//----------------------------------------------------------
 			/// End Frame
 			///
 			/// Present the buffer to the screen
 			//----------------------------------------------------------
-			void EndFrame(CSRendering::RenderTarget* inpActiveRenderTarget) override;
+			void EndFrame(ChilliSource::RenderTarget* inpActiveRenderTarget) override;
 			//----------------------------------------------------------
 			/// Apply Shader Variables
 			///
@@ -390,7 +390,7 @@ namespace CSBackend
 			/// @param Material
 			/// @param Shader
 			//----------------------------------------------------------
-			void ApplyShaderVariables(const CSRendering::Material* inMaterial, Shader* out_shader);
+			void ApplyShaderVariables(const ChilliSource::Material* inMaterial, Shader* out_shader);
             //----------------------------------------------------------
             /// Apply Lighting
             ///
@@ -399,7 +399,7 @@ namespace CSBackend
             /// @param Lighting component
             /// @param [Out] Shader
             //----------------------------------------------------------
-            void ApplyLighting(CSRendering::LightComponent* inpLightComponent, Shader* out_shader);
+            void ApplyLighting(ChilliSource::LightComponent* inpLightComponent, Shader* out_shader);
 			//----------------------------------------------------------
 			/// Force Refresh Render States
 			///
@@ -425,7 +425,7 @@ namespace CSBackend
             ///
             /// @param The new screen resolution.
             //----------------------------------------------------------
-            void OnScreenResolutionChanged(const CSCore::Vector2& in_resolution);
+            void OnScreenResolutionChanged(const ChilliSource::Vector2& in_resolution);
             //----------------------------------------------------------
             /// Triggered when window is set to Fullscreen mode
             /// or away from Fullscreen mode; which results in loss of state
@@ -434,30 +434,30 @@ namespace CSBackend
 			///
 			/// @param Display mode
             //----------------------------------------------------------
-			void OnDisplayModeChanged(CSCore::Screen::DisplayMode in_mode);
+			void OnDisplayModeChanged(ChilliSource::Screen::DisplayMode in_mode);
             
 		private:
 			
-            void ApplyVertexAttributePointer(CSRendering::MeshBuffer* inpBuffer,
+            void ApplyVertexAttributePointer(ChilliSource::MeshBuffer* inpBuffer,
                                             const char* in_attribName, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
             
-            CSRendering::LightComponent* mpLightComponent;
+            ChilliSource::LightComponent* mpLightComponent;
             
-            CSCore::Colour mNewClearColour;
-			CSCore::Colour mClearColour;
-            CSCore::Colour mCurrentEmissive;
-            CSCore::Colour mCurrentAmbient;
-            CSCore::Colour mCurrentDiffuse;
-            CSCore::Colour mCurrentSpecular;
+            ChilliSource::Colour mNewClearColour;
+			ChilliSource::Colour mClearColour;
+            ChilliSource::Colour mCurrentEmissive;
+            ChilliSource::Colour mCurrentAmbient;
+            ChilliSource::Colour mCurrentDiffuse;
+            ChilliSource::Colour mCurrentSpecular;
             bool mbEmissiveSet;
             bool mbAmbientSet;
             bool mbDiffuseSet;
             bool mbSpecularSet;
             
-			CSCore::Matrix4 mmatProj;
-			CSCore::Matrix4 mmatViewProj;
-            CSCore::Matrix4 mmatView;
-            CSCore::Vector3 mvCameraPos;
+			ChilliSource::Matrix4 mmatProj;
+			ChilliSource::Matrix4 mmatViewProj;
+            ChilliSource::Matrix4 mmatView;
+            ChilliSource::Vector3 mvCameraPos;
 			
             RenderCapabilities* mpRenderCapabilities;
             TextureUnitSystem* m_textureUnitSystem;
@@ -469,10 +469,10 @@ namespace CSBackend
             
             std::vector<std::string> m_textureUniformNames;
             
-            CSCore::Vector2 mvCachedScissorPos;
-            CSCore::Vector2 mvCachedScissorSize;
+            ChilliSource::Vector2 mvCachedScissorPos;
+            ChilliSource::Vector2 mvCachedScissorSize;
             
-            const CSRendering::Material* mpCurrentMaterial;
+            const ChilliSource::Material* mpCurrentMaterial;
             Shader* m_currentShader;
             
             u32 mudwViewWidth;
@@ -484,7 +484,7 @@ namespace CSBackend
             
             struct VertexAttribSet
             {
-                CSRendering::MeshBuffer* pBuffer;
+                ChilliSource::MeshBuffer* pBuffer;
                 GLint size;
                 GLenum type;
                 GLboolean normalised;
@@ -519,10 +519,10 @@ namespace CSBackend
             
             bool m_hasContextBeenBackedUp;
             
-            CSRendering::BlendMode mSrcBlendFunc;
-            CSRendering::BlendMode mDstBlendFunc;
-            CSRendering::CullFace meCurrentCullFace;
-            CSRendering::DepthTestComparison meDepthFunc;
+            ChilliSource::BlendMode mSrcBlendFunc;
+            ChilliSource::BlendMode mDstBlendFunc;
+            ChilliSource::CullFace meCurrentCullFace;
+            ChilliSource::DepthTestComparison meDepthFunc;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
             ContextRestorer m_contextRestorer;
@@ -530,9 +530,9 @@ namespace CSBackend
    
             bool m_hasContext = false;
             
-            CSCore::Screen* m_screen;
-            CSCore::EventConnectionUPtr m_resolutionChangeConnection;
-            CSCore::EventConnectionUPtr m_displayModeChangeConnection;
+            ChilliSource::Screen* m_screen;
+            ChilliSource::EventConnectionUPtr m_resolutionChangeConnection;
+            ChilliSource::EventConnectionUPtr m_displayModeChangeConnection;
 		};
 	}
 }

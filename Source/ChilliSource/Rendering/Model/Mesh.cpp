@@ -36,7 +36,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Mesh);
     //---------------------------------------------------------------------
@@ -53,7 +53,7 @@ namespace CS
     }
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    bool Mesh::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool Mesh::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == Mesh::InterfaceID;
     }
@@ -82,7 +82,7 @@ namespace CS
             
             //prepare the mesh if it needs it, otherwise just update the vertex and index declarations.
             SubMesh* newSubMesh = CreateSubMesh(it->mstrName);
-            newSubMesh->Prepare(Core::Application::Get()->GetRenderSystem(), in_meshDesc.mVertexDeclaration, in_meshDesc.mudwIndexSize, udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
+            newSubMesh->Prepare(Application::Get()->GetRenderSystem(), in_meshDesc.mVertexDeclaration, in_meshDesc.mudwIndexSize, udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
             
             //check that the buffers are big enough to hold this data. if not throw an error.
             if (udwVertexDataCapacity <= newSubMesh->GetInternalMeshBuffer()->GetVertexCapacity() &&
@@ -114,7 +114,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    const Core::AABB& Mesh::GetAABB() const
+    const AABB& Mesh::GetAABB() const
     {
         return m_aabb;
     }
@@ -185,17 +185,17 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    void Mesh::SetBounds(const Core::Vector3& in_minBounds, const Core::Vector3& in_maxBounds)
+    void Mesh::SetBounds(const Vector3& in_minBounds, const Vector3& in_maxBounds)
     {
         //Calculate the size of this meshes bounding box
-        Core::Vector3 vSize = in_maxBounds - in_minBounds;
+        Vector3 vSize = in_maxBounds - in_minBounds;
         
         //Build our bounding box based on the size of all our sub-meshes
-        m_aabb = Core::AABB((in_maxBounds + in_minBounds) * 0.5f, vSize);
+        m_aabb = AABB((in_maxBounds + in_minBounds) * 0.5f, vSize);
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    void Mesh::Render(RenderSystem* in_renderSystem, const Core::Matrix4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup) const
+    void Mesh::Render(RenderSystem* in_renderSystem, const Matrix4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup) const
     {
         CS_ASSERT(in_materials.size() > 0, "Must have at least one material to render");
 

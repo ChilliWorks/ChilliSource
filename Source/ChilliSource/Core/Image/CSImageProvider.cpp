@@ -37,7 +37,7 @@
 
 #include <minizip/unzip.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -214,7 +214,7 @@ namespace CS
                 out_resource->SetLoadState(Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                     {
                         in_delegate(out_resource);
                     });
@@ -239,7 +239,7 @@ namespace CS
             out_resource->SetLoadState(Resource::LoadState::k_loaded);
             if(in_delegate != nullptr)
             {
-                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -282,7 +282,7 @@ namespace CS
     //----------------------------------------------------
     void CSImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
-        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
             LoadImage(in_storageLocation, in_filepath, in_delegate, out_resource);
         });

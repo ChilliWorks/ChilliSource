@@ -37,7 +37,7 @@
 #include <limits>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------
     /// A group of miscellaneous mathematical functions

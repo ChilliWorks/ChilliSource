@@ -35,7 +35,7 @@
 #include <string>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     /** Utility class for manipulating Strings.  */
     namespace StringUtils
@@ -204,7 +204,7 @@ namespace CS
         ///
         /// @return The output formatted UTF-8 string.
         //-------------------------------------------------------
-        std::string InsertVariables(const std::string& in_text, const Core::ParamDictionary& in_params);
+        std::string InsertVariables(const std::string& in_text, const ParamDictionary& in_params);
         
         /** Checks the std::string is a inValid number inValue. */
         bool isNumber(const std::string& inVal);

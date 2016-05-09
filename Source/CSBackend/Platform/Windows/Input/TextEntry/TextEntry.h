@@ -47,7 +47,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //----------------------------------------------------------------
-		class TextEntry final : public CSInput::TextEntry
+		class TextEntry final : public ChilliSource::TextEntry
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(TextEntry);
@@ -58,7 +58,7 @@ namespace CSBackend
 			///
 			/// @return Whether this system implements the given inteface
 			//-------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------
 			/// The system will now receive text input.
 			///
@@ -98,7 +98,7 @@ namespace CSBackend
             void SetTextBuffer(const std::string& in_text) override;
 
 		private:
-            friend CSInput::TextEntryUPtr CSInput::TextEntry::Create();
+            friend ChilliSource::TextEntryUPtr ChilliSource::TextEntry::Create();
         
             //-------------------------------------------------------
             /// Constructor. Declared private to force the use of the
@@ -114,14 +114,14 @@ namespace CSBackend
 			///
 			/// @param UTF-8 character
 			//-------------------------------------------------------
-			void OnTextEntered(CSCore::UTF8Char in_unicodeChar);
+			void OnTextEntered(ChilliSource::UTF8Char in_unicodeChar);
 
 		private:
             
             TextBufferChangedDelegate m_textBufferChangedDelegate;
             TextInputDeactivatedDelegate m_textInputDeactivatedDelegate;
 
-			CSCore::EventConnectionUPtr m_textEnteredConnection;
+			ChilliSource::EventConnectionUPtr m_textEnteredConnection;
 
 			std::string m_text;
 		};

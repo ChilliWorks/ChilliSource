@@ -41,7 +41,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -57,7 +57,7 @@ namespace CS
         ///
         /// @return Original size
         //----------------------------------------------------------
-        Core::Vector2 UseOriginalSize(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+        Vector2 UseOriginalSize(const Vector2& in_originalSize, const Vector2& in_preferredSize)
         {
             return in_originalSize;
         }
@@ -73,7 +73,7 @@ namespace CS
         ///
         /// @return Preferred size
         //----------------------------------------------------------
-        Core::Vector2 UsePreferredSize(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+        Vector2 UsePreferredSize(const Vector2& in_originalSize, const Vector2& in_preferredSize)
         {
             return in_preferredSize;
         }
@@ -88,7 +88,7 @@ namespace CS
         ///
         /// @return Size with aspect maintained
         //----------------------------------------------------------------------------------------
-        Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+        Vector2 KeepOriginalWidthAdaptHeight(const Vector2& in_originalSize, const Vector2& in_preferredSize)
         {
             return AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_originalSize, in_preferredSize.x/in_preferredSize.y);
         }
@@ -103,7 +103,7 @@ namespace CS
         ///
         /// @return Size with aspect maintained
         //----------------------------------------------------------------------------------------
-        Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+        Vector2 KeepOriginalHeightAdaptWidth(const Vector2& in_originalSize, const Vector2& in_preferredSize)
         {
             return AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_originalSize, in_preferredSize.x/in_preferredSize.y);
         }
@@ -118,7 +118,7 @@ namespace CS
         ///
         /// @return Size with aspect maintained
         //----------------------------------------------------------------------------------------
-        Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+        Vector2 FillOriginal(const Vector2& in_originalSize, const Vector2& in_preferredSize)
         {
             return AspectRatioUtils::FillOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
         }
@@ -133,7 +133,7 @@ namespace CS
         ///
         /// @return Size with aspect maintained
         //----------------------------------------------------------------------------------------
-        Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, const Core::Vector2& in_preferredSize)
+        Vector2 FitOriginal(const Vector2& in_originalSize, const Vector2& in_preferredSize)
         {
             return AspectRatioUtils::FitOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
         }
@@ -160,7 +160,7 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool SpriteComponent::IsA(CSCore::InterfaceIDType in_interfaceId) const
+    bool SpriteComponent::IsA(InterfaceIDType in_interfaceId) const
     {
         return  (in_interfaceId == SpriteComponent::InterfaceID) ||
                 (in_interfaceId == RenderComponent::InterfaceID) ||
@@ -168,7 +168,7 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    const Core::AABB& SpriteComponent::GetAABB()
+    const AABB& SpriteComponent::GetAABB()
     {
         if(IsTextureSizeCacheValid() == false)
         {
@@ -180,20 +180,20 @@ namespace CS
         {
             m_isAABBValid = true;
             
-            Core::Vector2 transformedSize = GetSize();
+            Vector2 transformedSize = GetSize();
             
             // Realign the origin
-            Core::Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
+            Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
             
             // Rebuild the box
-            mBoundingBox.SetSize(Core::Vector3(transformedSize, 0.0f));
-            mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition() - Core::Vector3(anchorPoint, 0.0f));
+            mBoundingBox.SetSize(Vector3(transformedSize, 0.0f));
+            mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition() - Vector3(anchorPoint, 0.0f));
         }
         return mBoundingBox;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    const Core::OOBB& SpriteComponent::GetOOBB()
+    const OOBB& SpriteComponent::GetOOBB()
     {
         if(IsTextureSizeCacheValid() == false)
         {
@@ -205,21 +205,21 @@ namespace CS
         {
             m_isOOBBValid = true;
             
-            Core::Vector2 transformedSize = GetSize();
+            Vector2 transformedSize = GetSize();
             
             // Realign the origin
-            Core::Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
+            Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
             
             // Rebuild the box
-            mOBBoundingBox.SetOrigin(Core::Vector3(-anchorPoint, 0.0f));
-            mOBBoundingBox.SetSize(Core::Vector3(transformedSize, 0.0f));
+            mOBBoundingBox.SetOrigin(Vector3(-anchorPoint, 0.0f));
+            mOBBoundingBox.SetSize(Vector3(transformedSize, 0.0f));
             mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
         }
         return mOBBoundingBox;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    const Core::Sphere& SpriteComponent::GetBoundingSphere()
+    const Sphere& SpriteComponent::GetBoundingSphere()
     {
         if(IsTextureSizeCacheValid() == false)
         {
@@ -231,12 +231,12 @@ namespace CS
         {
             m_isBSValid = true;
             
-            Core::Vector2 transformedSize = GetSize();
+            Vector2 transformedSize = GetSize();
             
             // Realign the origin
-            Core::Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
+            Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
             
-            mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() - Core::Vector3(anchorPoint, 0.0f);
+            mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() - Vector3(anchorPoint, 0.0f);
             mBoundingSphere.fRadius = std::sqrt((transformedSize.x * transformedSize.x) + (transformedSize.y * transformedSize.y)) * 0.5f;
         }
         return mBoundingSphere;
@@ -244,7 +244,7 @@ namespace CS
     //-----------------------------------------------------------
     /// The texture atlas has the priority, then the texture
     //-----------------------------------------------------------
-    Core::Vector2 SpriteComponent::GetPreferredSize() const
+    Vector2 SpriteComponent::GetPreferredSize() const
     {
         if(m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0)
         {
@@ -253,14 +253,14 @@ namespace CS
         else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            return Core::Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight());
+            return Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight());
         }
         
-        return Core::Vector2::k_one;
+        return Vector2::k_one;
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void SpriteComponent::SetSize(const Core::Vector2& in_size)
+    void SpriteComponent::SetSize(const Vector2& in_size)
     {
         OnTransformChanged();
         
@@ -270,7 +270,7 @@ namespace CS
     //-----------------------------------------------------------
     void SpriteComponent::SetSize(f32 in_width, f32 in_height)
     {
-        SetSize(Core::Vector2(in_width, in_height));
+        SetSize(Vector2(in_width, in_height));
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
@@ -282,9 +282,9 @@ namespace CS
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    Core::Vector2 SpriteComponent::GetSize() const
+    Vector2 SpriteComponent::GetSize() const
     {
-        Core::Vector2 preferredSize = GetPreferredSize();
+        Vector2 preferredSize = GetPreferredSize();
         return m_sizePolicyDelegate(m_originalSize, preferredSize);
     }
     //-----------------------------------------------------------
@@ -303,14 +303,14 @@ namespace CS
         
         OnTransformChanged();
         
-        m_hashedTextureAtlasId = Core::HashCRC32::GenerateHashCode(in_atlasId);
+        m_hashedTextureAtlasId = HashCRC32::GenerateHashCode(in_atlasId);
         m_uvs = m_textureAtlas->GetFrameUVs(m_hashedTextureAtlasId);
         
         UpdateVertexUVs(m_uvs);
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void SpriteComponent::SetUVs(const Rendering::UVs& in_uvs)
+    void SpriteComponent::SetUVs(const UVs& in_uvs)
     {
         m_uvs = in_uvs;
         UpdateVertexUVs(in_uvs);
@@ -324,11 +324,11 @@ namespace CS
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void SpriteComponent::SetColour(const Core::Colour& in_colour)
+    void SpriteComponent::SetColour(const Colour& in_colour)
     {
         m_colour = in_colour;
         
-        Core::ByteColour byteCol = Core::ColourUtils::ColourToByteColour(m_colour);
+        ByteColour byteCol = ColourUtils::ColourToByteColour(m_colour);
         m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = byteCol;
         m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = byteCol;
         m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].Col = byteCol;
@@ -338,11 +338,11 @@ namespace CS
     //-----------------------------------------------------------
     void SpriteComponent::SetColour(f32 in_r, f32 in_g, f32 in_b, f32 in_a)
     {
-        SetColour(Core::Colour(in_r, in_g, in_b, in_a));
+        SetColour(Colour(in_r, in_g, in_b, in_a));
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    const Core::Colour& SpriteComponent::GetColour() const
+    const Colour& SpriteComponent::GetColour() const
     {
         return m_colour;
     }
@@ -434,7 +434,7 @@ namespace CS
             if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
             {
                 auto texture = mpMaterial->GetTexture().get();
-                Core::Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
+                Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
                 
                 return texSize == m_cachedTextureSize;
             }
@@ -449,7 +449,7 @@ namespace CS
         if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            Core::Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
+            Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
             m_cachedTextureSize = texSize;
         }
     }
@@ -457,7 +457,7 @@ namespace CS
     //----------------------------------------------------
     void SpriteComponent::OnAddedToScene()
     {
-        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged));
+        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &SpriteComponent::OnTransformChanged));
         
         OnTransformChanged();
     }
@@ -475,8 +475,8 @@ namespace CS
     //-----------------------------------------------------------
     void SpriteComponent::UpdateVertexPositions()
     {
-        Core::Vector2 frameCenter;
-        Core::Vector2 frameSize;
+        Vector2 frameCenter;
+        Vector2 frameSize;
         if(m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0)
         {
             CalcFrameCentreAndSize(frameCenter, frameSize);
@@ -484,16 +484,16 @@ namespace CS
         else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            frameSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight()));
+            frameSize = m_sizePolicyDelegate(m_originalSize, Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight()));
         }
         
-        const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
-        Core::Vector2 halfFrameSize(frameSize.x * 0.5f, frameSize.y * 0.5f);
-        Core::Vector2 alignedPosition = -GetAnchorPoint(m_originAlignment, halfFrameSize);
-        Core::Vector4 vertexCentre(alignedPosition.x + frameCenter.x, alignedPosition.y + frameCenter.y, 0.0f, 1.0f);
+        const Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
+        Vector2 halfFrameSize(frameSize.x * 0.5f, frameSize.y * 0.5f);
+        Vector2 alignedPosition = -GetAnchorPoint(m_originAlignment, halfFrameSize);
+        Vector4 vertexCentre(alignedPosition.x + frameCenter.x, alignedPosition.y + frameCenter.y, 0.0f, 1.0f);
         
         //TL
-        Core::Vector4 vertexOffset(-halfFrameSize.x, halfFrameSize.y, 0.0f, 0.0f);
+        Vector4 vertexOffset(-halfFrameSize.x, halfFrameSize.y, 0.0f, 0.0f);
         m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = (vertexCentre + vertexOffset) * worldTransform;
         
         //TR
@@ -541,12 +541,12 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void SpriteComponent::CalcFrameCentreAndSize(Core::Vector2& out_centre, Core::Vector2& out_size) const
+    void SpriteComponent::CalcFrameCentreAndSize(Vector2& out_centre, Vector2& out_size) const
     {
         CS_ASSERT((m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0), "Texture atlas and atlas Id must be valid.");
         
         const auto& frame = m_textureAtlas->GetFrame(m_hashedTextureAtlasId);
-        Core::Vector2 spriteSize = m_sizePolicyDelegate(m_originalSize, frame.m_originalSize);
+        Vector2 spriteSize = m_sizePolicyDelegate(m_originalSize, frame.m_originalSize);
         
         if (m_flippedHorizontally == true)
         {
@@ -566,7 +566,7 @@ namespace CS
             out_centre.y = (frame.m_originalSize.y * 0.5f) - frame.m_offset.y - (frame.m_croppedSize.y * 0.5f);
         }
         
-        Core::Vector2 frameScale = spriteSize / frame.m_originalSize;
+        Vector2 frameScale = spriteSize / frame.m_originalSize;
         out_centre = out_centre * frameScale;
         out_size = frame.m_croppedSize * frameScale;
     }

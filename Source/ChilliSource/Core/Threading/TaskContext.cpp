@@ -32,7 +32,7 @@
 #include <ChilliSource/Core/Threading/TaskType.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

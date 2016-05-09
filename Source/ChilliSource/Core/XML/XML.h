@@ -33,7 +33,7 @@
 
 #include <rapidxml/rapidxml.hpp>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     /// A container class for an xml document. Rapid XML requires that

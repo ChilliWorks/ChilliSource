@@ -48,7 +48,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -81,7 +81,7 @@ namespace CS
     //--------------------------------------------------------------
     bool FileSystem::ReadFile(StorageLocation in_storageLocation, const std::string& in_directory, std::string& out_contents) const
     {
-        Core::FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, Core::FileMode::k_read);
+        FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, FileMode::k_read);
         if (fileStream == nullptr)
         {
             return false;
@@ -95,7 +95,7 @@ namespace CS
     //--------------------------------------------------------------
     bool FileSystem::WriteFile(StorageLocation in_storageLocation, const std::string& in_directory, const std::string& in_contents) const
     {
-        Core::FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, Core::FileMode::k_writeBinary);
+        FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, FileMode::k_writeBinary);
         if (fileStream.get() == nullptr)
         {
             return false;
@@ -109,7 +109,7 @@ namespace CS
     //--------------------------------------------------------------
     bool FileSystem::WriteFile(StorageLocation in_storageLocation, const std::string& in_directory, const s8* in_data, u32 in_dataSize) const
     {
-        Core::FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, Core::FileMode::k_writeBinary);
+        FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, FileMode::k_writeBinary);
         if (fileStream.get() == nullptr)
         {
             return false;
@@ -128,7 +128,7 @@ namespace CS
         std::string extension = "." + in_extension;
         auto it = std::remove_if(filePaths.begin(), filePaths.end(), [&] (const std::string& in_path)
         {
-            return (Core::StringUtils::EndsWith(in_path, extension, true) == false);
+            return (StringUtils::EndsWith(in_path, extension, true) == false);
         });
         
         filePaths.resize(it - filePaths.begin());
@@ -143,7 +143,7 @@ namespace CS
         
         auto it = std::remove_if(filePaths.begin(), filePaths.end(), [&in_fileName] (const std::string& in_path)
         {
-            return (Core::StringUtils::EndsWith(in_path, in_fileName, true) == false);
+            return (StringUtils::EndsWith(in_path, in_fileName, true) == false);
         });
         
         filePaths.resize(it - filePaths.begin());
@@ -209,7 +209,7 @@ namespace CS
         if (hashableDirectoryContents.length() > 0)
         {
             CS_ASSERT(hashableDirectoryContents.length() < static_cast<std::vector<std::string>::size_type>(std::numeric_limits<u32>::max()), "Hashable directory contents too large. It cannot exceed "
-                      + CSCore::ToString(std::numeric_limits<u32>::max()) + " characters.");
+                      + ToString(std::numeric_limits<u32>::max()) + " characters.");
             
             strOutput = HashMD5::GenerateBinaryHashCode(hashableDirectoryContents.c_str(), static_cast<u32>(hashableDirectoryContents.length()));
         }
@@ -273,7 +273,7 @@ namespace CS
         if (hashableDirectoryContents.length() > 0)
         {
             CS_ASSERT(hashableDirectoryContents.length() < static_cast<std::vector<std::string>::size_type>(std::numeric_limits<u32>::max()), "Hashable directory contents too large. It cannot exceed "
-                      + CSCore::ToString(std::numeric_limits<u32>::max()) + " characters.");
+                      + ToString(std::numeric_limits<u32>::max()) + " characters.");
             
             output = HashCRC32::GenerateHashCode(hashableDirectoryContents.c_str(), static_cast<u32>(hashableDirectoryContents.length()));
         }
@@ -326,18 +326,18 @@ namespace CS
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    bool FileSystem::IsWriteMode(Core::FileMode in_fileMode) const
+    bool FileSystem::IsWriteMode(FileMode in_fileMode) const
     {
         switch (in_fileMode)
         {
-            case Core::FileMode::k_write:
-            case Core::FileMode::k_writeAppend:
-            case Core::FileMode::k_writeAtEnd:
-            case Core::FileMode::k_writeBinary:
-            case Core::FileMode::k_writeBinaryAppend:
-            case Core::FileMode::k_writeBinaryAtEnd:
-            case Core::FileMode::k_writeBinaryTruncate:
-            case Core::FileMode::k_writeTruncate:
+            case FileMode::k_write:
+            case FileMode::k_writeAppend:
+            case FileMode::k_writeAtEnd:
+            case FileMode::k_writeBinary:
+            case FileMode::k_writeBinaryAppend:
+            case FileMode::k_writeBinaryAtEnd:
+            case FileMode::k_writeBinaryTruncate:
+            case FileMode::k_writeTruncate:
                 return true;
             default:
                 return false;

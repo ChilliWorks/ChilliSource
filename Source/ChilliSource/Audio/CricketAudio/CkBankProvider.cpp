@@ -36,7 +36,7 @@
 #include <ck/ck.h>
 #include <ck/bank.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -52,13 +52,13 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool CkBankProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool CkBankProvider::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (Core::ResourceProvider::InterfaceID == in_interfaceId || CkBankProvider::InterfaceID == in_interfaceId);
+        return (ResourceProvider::InterfaceID == in_interfaceId || CkBankProvider::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::InterfaceIDType CkBankProvider::GetResourceType() const
+    InterfaceIDType CkBankProvider::GetResourceType() const
     {
         return CkBank::InterfaceID;
     }
@@ -67,21 +67,21 @@ namespace CS
     bool CkBankProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
     {
         std::string lowerExtension = in_extension;
-        Core::StringUtils::ToLowerCase(lowerExtension);
+        StringUtils::ToLowerCase(lowerExtension);
 
         return (lowerExtension == k_bankExtension);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void CkBankProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+    void CkBankProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
-        auto fileSystem = Core::Application::Get()->GetFileSystem();
+        auto fileSystem = Application::Get()->GetFileSystem();
 
         ::CkBank* bank = nullptr;
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-        if (in_storageLocation == Core::StorageLocation::k_package || in_storageLocation == Core::StorageLocation::k_chilliSource ||
-            (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false))
+        if (in_storageLocation == StorageLocation::k_package || in_storageLocation == StorageLocation::k_chilliSource ||
+            (in_storageLocation == StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false))
         {
             m_zippedCkBankLoader.Load(in_storageLocation, in_filePath, out_resource);
             return;
@@ -92,9 +92,9 @@ namespace CS
             bank = ::CkBank::newBank(absFilePath.c_str(), kCkPathType_FileSystem);
         }
 #else
-        if (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false)
+        if (in_storageLocation == StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false)
         {
-            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_filePath;
+            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_filePath;
             bank = ::CkBank::newBank(absFilePath.c_str(), kCkPathType_FileSystem);
         }
         else
@@ -106,24 +106,24 @@ namespace CS
 
         if (bank == nullptr)
         {
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             return;
         }
         
         static_cast<CkBank*>(out_resource.get())->Build(bank);
-        out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+        out_resource->SetLoadState(Resource::LoadState::k_loaded);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void CkBankProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void CkBankProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
-        auto fileSystem = Core::Application::Get()->GetFileSystem();
+        auto fileSystem = Application::Get()->GetFileSystem();
 
         ::CkBank* bank = nullptr;
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-        if (in_storageLocation == Core::StorageLocation::k_package || in_storageLocation == Core::StorageLocation::k_chilliSource ||
-            (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false))
+        if (in_storageLocation == StorageLocation::k_package || in_storageLocation == StorageLocation::k_chilliSource ||
+            (in_storageLocation == StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false))
         {
             m_zippedCkBankLoader.LoadAsync(in_storageLocation, in_filePath, in_delegate, out_resource);
             return;
@@ -134,9 +134,9 @@ namespace CS
             bank = ::CkBank::newBankAsync(absFilePath.c_str(), kCkPathType_FileSystem);
         }
 #else
-        if (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false)
+        if (in_storageLocation == StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false)
         {
-            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_filePath;
+            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_filePath;
             bank = ::CkBank::newBankAsync(absFilePath.c_str(), kCkPathType_FileSystem);
         }
         else
@@ -156,7 +156,7 @@ namespace CS
         }
         else
         {
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             in_delegate(out_resource);
         }
     }
@@ -164,7 +164,7 @@ namespace CS
     //------------------------------------------------------------------------------
     void CkBankProvider::OnInit()
     {
-        CS_ASSERT(Core::Application::Get()->GetSystem<CricketAudioSystem>() != nullptr, "'CricketAudioSystem' is missing and is required by 'CkBankProvider'!");
+        CS_ASSERT(Application::Get()->GetSystem<CricketAudioSystem>() != nullptr, "'CricketAudioSystem' is missing and is required by 'CkBankProvider'!");
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -185,13 +185,13 @@ namespace CS
                     if (request.m_bank->isFailed() == false)
                     {
                         request.m_bankResource->Build(request.m_bank);
-                        request.m_bankResource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                        request.m_bankResource->SetLoadState(Resource::LoadState::k_loaded);
                         request.m_delegate(request.m_bankResource);
                     }
                     else
                     {
                         request.m_bank->destroy();
-                        request.m_bankResource->SetLoadState(Core::Resource::LoadState::k_failed);
+                        request.m_bankResource->SetLoadState(Resource::LoadState::k_failed);
                         request.m_delegate(request.m_bankResource);
                     }
                 }

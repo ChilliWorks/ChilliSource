@@ -32,7 +32,7 @@
 #include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Keyboard);
     //-------------------------------------------------------

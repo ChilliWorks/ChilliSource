@@ -36,7 +36,7 @@
 
 #include <type_traits>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------
     /// A collection of functions for working with xml

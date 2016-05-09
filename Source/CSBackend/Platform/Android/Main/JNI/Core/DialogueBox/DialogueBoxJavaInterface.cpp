@@ -59,10 +59,10 @@ extern "C"
 //-------------------------------------------------
 void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
 {
-	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
+	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
 	{
-		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, CSCore::DialogueBoxSystem::DialogueResult::k_confirm);
+		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_confirm);
 	}
 }
 //-------------------------------------------------
@@ -78,10 +78,10 @@ void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogu
 //------------------------------------------------
 void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogueCancelPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
 {
-	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
+	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
 	{
-		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, CSCore::DialogueBoxSystem::DialogueResult::k_cancel);
+		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_cancel);
 	}
 }
 
@@ -102,7 +102,7 @@ namespace CSBackend
 		}
 		//------------------------------------------------------
 		//------------------------------------------------------
-		bool DialogueBoxJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool DialogueBoxJavaInterface::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == DialogueBoxJavaInterface::InterfaceID);
 		}

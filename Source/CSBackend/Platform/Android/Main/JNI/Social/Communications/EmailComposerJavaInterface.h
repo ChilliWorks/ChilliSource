@@ -69,7 +69,7 @@ namespace CSBackend
 			///
 			/// @return whether or not this object implements the given interface.
 			//--------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::InterfaceIDType inInterfaceID) const;
 			//--------------------------------------------------------------
 			/// Present
 			///

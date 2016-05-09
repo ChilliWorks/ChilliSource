@@ -51,7 +51,7 @@ namespace CSBackend
     	///
     	/// @author Robert Henning
 		//-------------------------------------------------------
-        class GooglePlayRemoteNotificationSystem : public CSCore::RemoteNotificationSystem
+        class GooglePlayRemoteNotificationSystem : public ChilliSource::RemoteNotificationSystem
         {
         public:
         	CS_DECLARE_NAMEDTYPE(GooglePlayRemoteNotificationSystem);
@@ -62,7 +62,7 @@ namespace CSBackend
             /// @return Whether this implements the passed in
             /// interface id.
             //--------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------
             /// Enables and disables addition of remote notifications.
             /// All existing notifications will be cancelled
@@ -103,7 +103,7 @@ namespace CSBackend
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
             //---------------------------------------------------
-            CSCore::IConnectableEvent<NotificationReceivedDelegate>& GetReceivedEvent() override;
+            ChilliSource::IConnectableEvent<NotificationReceivedDelegate>& GetReceivedEvent() override;
             //------------------------------------------------
             /// @author Robert Henning
             ///
@@ -119,9 +119,9 @@ namespace CSBackend
             ///
             /// @param Dictionary payload of remote notification
             //------------------------------------------------
-            void OnRemoteNotificationReceived(const CSCore::ParamDictionary& in_params);
+            void OnRemoteNotificationReceived(const ChilliSource::ParamDictionary& in_params);
         private:
-            friend CSCore::RemoteNotificationSystemUPtr CSCore::RemoteNotificationSystem::Create();
+            friend ChilliSource::RemoteNotificationSystemUPtr ChilliSource::RemoteNotificationSystem::Create();
             //------------------------------------------------
             /// Private constructor to force use of factory method.
             ///
@@ -133,7 +133,7 @@ namespace CSBackend
             GooglePlayRemoteNotificationJavaInterfaceSPtr m_javaInterface;
             std::string	m_token;
             TokenReceivedDelegate m_delegate;
-            CSCore::Event<NotificationReceivedDelegate> m_receivedEvent;
+            ChilliSource::Event<NotificationReceivedDelegate> m_receivedEvent;
         };
     }
 }

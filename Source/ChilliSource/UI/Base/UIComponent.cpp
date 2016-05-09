@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(UIComponent);
     //----------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace CS
     bool UIComponent::HasProperty(const std::string& in_propertyName) const
     {
         std::string lowerPropertyName = in_propertyName;
-        Core::StringUtils::ToLowerCase(lowerPropertyName);
+        StringUtils::ToLowerCase(lowerPropertyName);
         
         auto it = m_properties.find(lowerPropertyName);
         return (it != m_properties.end());
@@ -81,7 +81,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void UIComponent::ApplyRegisteredProperties(const Core::PropertyMap& in_properties)
+    void UIComponent::ApplyRegisteredProperties(const PropertyMap& in_properties)
     {
         CS_ASSERT(m_propertyRegistrationComplete == false, "Registered properties have already been applied.");
         
@@ -106,17 +106,17 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void UIComponent::SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property)
+    void UIComponent::SetProperty(const std::string& in_propertyName, const IProperty* in_property)
     {
-        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::UIComponent prior to property registration completion.");
+        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UIComponent prior to property registration completion.");
         
         std::string lowerPropertyName = in_propertyName;
-        Core::StringUtils::ToLowerCase(lowerPropertyName);
+        StringUtils::ToLowerCase(lowerPropertyName);
         
         auto it = m_properties.find(lowerPropertyName);
         if(it == m_properties.end())
         {
-            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::UIComponent.");
+            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UIComponent.");
         }
         
         it->second->Set(in_property);

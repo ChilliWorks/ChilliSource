@@ -33,7 +33,7 @@
 
 #include <iterator>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A basic random access iterator. This can be used by any container that is

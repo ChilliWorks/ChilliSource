@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
-namespace CS
+namespace ChilliSource
 {
     //==================================================
     /// Description:
@@ -41,7 +41,7 @@ namespace CS
     /// Does a pre-pass on the scene to convert Chilli Source
     /// components to plain data for the render system
     //==================================================
-    class Renderer final : public Core::AppSystem
+    class Renderer final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(Renderer);
@@ -55,7 +55,7 @@ namespace CS
         ///
         /// @return Whether this object is of the given type.
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------
         /// Set Transparent Sort Predicate
         ///
@@ -93,7 +93,7 @@ namespace CS
         /// @param Scene to render
         /// @param Canvas to render
         //----------------------------------------------------------
-        void RenderToScreen(Core::Scene* inpScene, UI::Canvas* in_canvas);
+        void RenderToScreen(Scene* inpScene, Canvas* in_canvas);
         //----------------------------------------------------------
         /// Render To Texture
         ///
@@ -107,7 +107,7 @@ namespace CS
         /// @param Texture to render colour to.
         /// @param Texture to render depth to.
         //----------------------------------------------------------
-        void RenderToTexture(Core::Scene* inpScene, UI::Canvas* in_canvas, const TextureSPtr &inpColourTarget, const TextureSPtr& inpDepthTarget = TextureSPtr());
+        void RenderToTexture(Scene* inpScene, Canvas* in_canvas, const TextureSPtr &inpColourTarget, const TextureSPtr& inpDepthTarget = TextureSPtr());
         //----------------------------------------------------------
         /// Get Active Camera Pointer
         ///
@@ -115,10 +115,10 @@ namespace CS
         //----------------------------------------------------------
         CameraComponent* GetActiveCameraPtr();
 
-        static Core::Matrix4 matViewProjCache;
+        static Matrix4 matViewProjCache;
 
     private:
-        friend class Core::Application;
+        friend class Application;
         //-------------------------------------------------------
         /// Factory method
         ///
@@ -184,7 +184,7 @@ namespace CS
         /// @param Canvas
         /// @param Screen clear colour
         //----------------------------------------------------------
-        void RenderUI(UI::Canvas* in_canvas, const Core::Colour& in_clearColour);
+        void RenderUI(Canvas* in_canvas, const Colour& in_clearColour);
         //----------------------------------------------------------
         /// Render Scene To Target
         ///
@@ -194,7 +194,7 @@ namespace CS
         /// @param Canvas to render
         /// @param Target
         //----------------------------------------------------------
-        void RenderSceneToTarget(Core::Scene* inpScene, UI::Canvas* in_canvas, RenderTarget* inpRenderTarget);
+        void RenderSceneToTarget(Scene* inpScene, Canvas* in_canvas, RenderTarget* inpRenderTarget);
         //----------------------------------------------------------
         /// Find Renderable Objects In Scene
         ///
@@ -207,7 +207,7 @@ namespace CS
         /// @param Out: Dir lights
         /// @param Out: Point lights
         //----------------------------------------------------------
-        void FindRenderableObjectsInScene(Core::Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
+        void FindRenderableObjectsInScene(Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
                                           std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const;
         //----------------------------------------------------------
         /// Cull Renderables
@@ -259,7 +259,7 @@ namespace CS
         /// rendering
         /// @return Projection matrix for overlay rendering
         //----------------------------------------------------------
-        Core::Matrix4 CreateOverlayProjection(const Core::Vector2& in_size) const;
+        Matrix4 CreateOverlayProjection(const Vector2& in_size) const;
 
         //----------------------------------------------------------
         /// Sort Opaque

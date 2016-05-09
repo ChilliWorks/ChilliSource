@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {

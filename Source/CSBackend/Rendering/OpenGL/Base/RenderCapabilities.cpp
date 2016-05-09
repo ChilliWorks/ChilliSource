@@ -62,9 +62,9 @@ namespace CSBackend
         }
         //-------------------------------------------------
         //-------------------------------------------------
-        bool RenderCapabilities::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool RenderCapabilities::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (CSRendering::RenderCapabilities::InterfaceID == in_interfaceId || RenderCapabilities::InterfaceID == in_interfaceId);
+            return (ChilliSource::RenderCapabilities::InterfaceID == in_interfaceId || RenderCapabilities::InterfaceID == in_interfaceId);
         }
         //-------------------------------------------------
         //-------------------------------------------------

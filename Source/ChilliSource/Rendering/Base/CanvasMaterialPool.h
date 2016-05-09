@@ -34,7 +34,7 @@
 #include <vector>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Materials are not exposed to the user of the canvas renderer, but it still

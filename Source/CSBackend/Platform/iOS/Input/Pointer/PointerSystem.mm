@@ -42,9 +42,9 @@ namespace CSBackend
         CS_DEFINE_NAMEDTYPE(PointerSystem);
         //----------------------------------------------------
         //----------------------------------------------------
-        bool PointerSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool PointerSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (CSInput::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
+            return (ChilliSource::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -52,9 +52,9 @@ namespace CSBackend
         {
             //Grab the touch location from the OS
 			CGPoint uitouchLocation = [in_touch locationInView:in_touch.view];
-            CSCore::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
+            ChilliSource::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
 			u64 pointerId = AddPointerCreateEvent(touchLocation);
-            AddPointerDownEvent(pointerId, CSInput::Pointer::InputType::k_touch);
+            AddPointerDownEvent(pointerId, ChilliSource::Pointer::InputType::k_touch);
 			m_touchToIdMap.emplace(in_touch, pointerId);
         }
         //----------------------------------------------------
@@ -65,7 +65,7 @@ namespace CSBackend
 			if (it != m_touchToIdMap.end())
 			{
                 CGPoint uitouchLocation = [in_touch locationInView:in_touch.view];
-                CSCore::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
+                ChilliSource::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
 				AddPointerMovedEvent(it->second, touchLocation);
 			}
         }
@@ -76,7 +76,7 @@ namespace CSBackend
             auto it = m_touchToIdMap.find(in_touch);
 			if (it != m_touchToIdMap.end())
 			{
-				AddPointerUpEvent(it->second, CSInput::Pointer::InputType::k_touch);
+				AddPointerUpEvent(it->second, ChilliSource::Pointer::InputType::k_touch);
                 AddPointerRemoveEvent(it->second);
                 m_touchToIdMap.erase(it);
 			}
@@ -85,7 +85,7 @@ namespace CSBackend
         //------------------------------------------------
         void PointerSystem::OnInit()
         {
-            m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
+            m_screen = ChilliSource::Application::Get()->GetSystem<ChilliSource::Screen>();
         }
         //------------------------------------------------
         //------------------------------------------------

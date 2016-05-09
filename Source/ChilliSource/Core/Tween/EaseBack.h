@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Tween/Tween.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace EaseBackTween
     {

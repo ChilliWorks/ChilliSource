@@ -34,7 +34,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     template <typename T> class CatmullRomSpline {
     public:

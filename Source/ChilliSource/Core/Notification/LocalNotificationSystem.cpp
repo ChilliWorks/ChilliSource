@@ -38,7 +38,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Notification/LocalNotificationSystem.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(LocalNotificationSystem);
     //-------------------------------------------------------

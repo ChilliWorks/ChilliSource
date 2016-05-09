@@ -46,7 +46,7 @@ namespace CSBackend
 		///
 		/// @author R Henning
 		//------------------------------------------------
-		class FacebookAuthenticationSystem final : public CSSocial::FacebookAuthenticationSystem
+		class FacebookAuthenticationSystem final : public ChilliSource::FacebookAuthenticationSystem
 		{
 		public:
 
@@ -59,7 +59,7 @@ namespace CSBackend
             ///
             /// @return Whether the interface ID matches this object
             //----------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
             /// Called when the system is created allocating any
 			/// resources
@@ -168,7 +168,7 @@ namespace CSBackend
 			void OnAuthoriseWritePermissionsComplete(bool in_success);
 
 		private:
-			friend CSSocial::FacebookAuthenticationSystemUPtr CSSocial::FacebookAuthenticationSystem::Create();
+			friend ChilliSource::FacebookAuthenticationSystemUPtr ChilliSource::FacebookAuthenticationSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.

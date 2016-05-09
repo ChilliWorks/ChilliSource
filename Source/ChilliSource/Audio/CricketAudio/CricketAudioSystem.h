@@ -33,7 +33,7 @@
 
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// The Cricket Audio system. This manages the underlying cricket audio system,
@@ -80,7 +80,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class CricketAudioSystem final : public Core::AppSystem
+    class CricketAudioSystem final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(CricketAudioSystem);
@@ -95,7 +95,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// Destructor.
         ///
@@ -103,7 +103,7 @@ namespace CS
         //------------------------------------------------------------------------------
         ~CricketAudioSystem();
     private:
-        friend class CSCore::Application;
+        friend class Application;
         friend class CkSound;
         //------------------------------------------------------------------------------
         /// A factory method for creating new instances of the Cricket Audio System.

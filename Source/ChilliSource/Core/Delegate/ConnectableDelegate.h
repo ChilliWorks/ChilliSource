@@ -37,7 +37,7 @@
 #include <mutex>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------
     /// Wrapper around a delegate that allows 3rd parties to establish

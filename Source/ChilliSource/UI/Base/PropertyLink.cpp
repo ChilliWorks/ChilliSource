@@ -28,7 +28,7 @@
 
 #include <ChilliSource/UI/Base/PropertyLink.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------
     //------------------------------------------------------------------

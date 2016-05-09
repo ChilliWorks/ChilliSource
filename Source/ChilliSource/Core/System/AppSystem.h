@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// An application level system. An app system is created

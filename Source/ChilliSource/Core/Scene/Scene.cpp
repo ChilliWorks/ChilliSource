@@ -30,7 +30,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Scene);
     
@@ -125,7 +125,7 @@ namespace CS
         CS_ASSERT(in_entity->GetScene() == nullptr, "Cannot add an entity with pre-exisitng scene");
         CS_ASSERT((in_entity->GetParent() == nullptr || in_entity->GetParent()->GetScene() == this), "Cannot add an entity to a different scene than its parent.");
         CS_ASSERT(m_entities.size() < static_cast<std::vector<EntitySPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many entities in the scene. It cannot exceed "
-                  + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
+                  + ToString(std::numeric_limits<u32>::max()) + ".");
         
         m_entities.push_back(in_entity);
 
@@ -175,13 +175,13 @@ namespace CS
     }
     //------------------------------------------------------
     //------------------------------------------------------
-    void Scene::SetClearColour(const Core::Colour& in_colour)
+    void Scene::SetClearColour(const Colour& in_colour)
     {
         m_clearColour = in_colour;
     }
     //------------------------------------------------------
     //------------------------------------------------------
-    const Core::Colour& Scene::GetClearColour() const
+    const Colour& Scene::GetClearColour() const
     {
         return m_clearColour;
     }

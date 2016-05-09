@@ -36,7 +36,7 @@
 #include <ChilliSource/UI/Drawable/DrawableDef.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// A definition of a Three-Patch Drawable which can be built from a
@@ -79,7 +79,7 @@ namespace CS
         /// there is no storage location specified in the json. Defaults
         /// to empty.
         //--------------------------------------------------------------
-        ThreePatchDrawableDef(const Json::Value& in_json, Core::StorageLocation in_defaultLocation = Core::StorageLocation::k_package, const std::string& in_defaultPath = "");
+        ThreePatchDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation = StorageLocation::k_package, const std::string& in_defaultPath = "");
         //--------------------------------------------------------------
         /// Constructor. Creates a standard drawable definition from
         /// with just a texture.
@@ -92,8 +92,8 @@ namespace CS
         /// @param [Optional] The colour. Defaults to white.
         /// @param [Optional] The UVs. Defaults to (0, 0, 1, 1)
         //--------------------------------------------------------------
-        ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction, const Core::Colour& in_colour = Core::Colour::k_white,
-                              const Rendering::UVs& in_uvs = Rendering::UVs());
+        ThreePatchDrawableDef(const TextureCSPtr& in_texture, const Vector2& in_insets, ThreePatchDrawable::Direction in_direction, const Colour& in_colour = Colour::k_white,
+                              const UVs& in_uvs = UVs());
         //--------------------------------------------------------------
         /// Constructor. Creates a standard drawable definition from
         /// with a texture atlas.
@@ -108,8 +108,8 @@ namespace CS
         /// @param [Optional] The colour. Defaults to white.
         /// @param [Optional] The UVs. Defaults to (0, 0, 1, 1)
         //--------------------------------------------------------------
-        ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Core::Vector2& in_insets,
-                              ThreePatchDrawable::Direction in_direction, const Core::Colour& in_colour = Core::Colour::k_white, const Rendering::UVs& in_uvs = Rendering::UVs());
+        ThreePatchDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Vector2& in_insets,
+                              ThreePatchDrawable::Direction in_direction, const Colour& in_colour = Colour::k_white, const UVs& in_uvs = UVs());
         //--------------------------------------------------------------
         /// Allows querying of whether or not the component implements
         /// the interface associated with the given interface Id.
@@ -122,13 +122,13 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface.
         //--------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The texture that will be rendered by the drawable.
         //--------------------------------------------------------------
-        const Rendering::TextureCSPtr& GetTexture() const override;
+        const TextureCSPtr& GetTexture() const override;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -136,7 +136,7 @@ namespace CS
         /// render only the portion of the texture described by this and
         /// the atlas id.
         //--------------------------------------------------------------
-        const Rendering::TextureAtlasCSPtr& GetAtlas() const override;
+        const TextureAtlasCSPtr& GetAtlas() const override;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -151,20 +151,20 @@ namespace CS
         /// atlas is used the UVs are virtual and are relative to the
         /// atlas image.
         //--------------------------------------------------------------
-        const Rendering::UVs& GetUVs() const override;
+        const UVs& GetUVs() const override;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The colour of the drawable.
         //--------------------------------------------------------------
-        const Core::Colour& GetColour() const override;
+        const Colour& GetColour() const override;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The insets from the edges of the stretchable portion
         /// of the image.
         //--------------------------------------------------------------
-        const Core::Vector2& GetInsets() const;
+        const Vector2& GetInsets() const;
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -184,12 +184,12 @@ namespace CS
         //--------------------------------------------------------------
         DrawableUPtr CreateDrawable() const override;
         
-        Rendering::TextureCSPtr m_texture;
-        Rendering::TextureAtlasCSPtr m_atlas;
+        TextureCSPtr m_texture;
+        TextureAtlasCSPtr m_atlas;
         std::string m_atlasId;
-        Rendering::UVs m_uvs;
-        Core::Colour m_colour;
-        Core::Vector2 m_insets;
+        UVs m_uvs;
+        Colour m_colour;
+        Vector2 m_insets;
         ThreePatchDrawable::Direction m_direction;
     };
 }

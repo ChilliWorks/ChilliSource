@@ -39,7 +39,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A factory for creating particle affector definitions. This allows 
@@ -49,7 +49,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class ParticleAffectorDefFactory final : public Core::GenericFactory<ParticleAffectorDef>
+    class ParticleAffectorDefFactory final : public GenericFactory<ParticleAffectorDef>
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleAffectorDefFactory);
@@ -63,9 +63,9 @@ namespace CS
         ///
         /// @return Whether this implements the interface.
         //-----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
     private:
-        friend class Core::Application;
+        friend class Application;
         //-----------------------------------------------------------------
         /// A factory method for creating new instances of a particle 
         /// affector def factory.

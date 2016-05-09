@@ -42,23 +42,23 @@ namespace CSBackend
         //-------------------------------------------------------
         Screen::Screen()
         {
-			CSCore::Integer2 size = SFMLWindow::Get()->GetWindowSize();
+			ChilliSource::Integer2 size = SFMLWindow::Get()->GetWindowSize();
 			m_resolution.x = (f32)size.x;
 			m_resolution.y = (f32)size.y;
 
 			m_densityScale = m_invDensityScale = 1.0f;
 
-			m_displayModeChangeConnection = SFMLWindow::Get()->GetWindowDisplayModeEvent().OpenConnection(CSCore::MakeDelegate(this, &Screen::OnDisplayModeChanged));
+			m_displayModeChangeConnection = SFMLWindow::Get()->GetWindowDisplayModeEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Screen::OnDisplayModeChanged));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Screen::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool Screen::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (CSCore::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
+            return (ChilliSource::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const CSCore::Vector2& Screen::GetResolution() const
+        const ChilliSource::Vector2& Screen::GetResolution() const
         {
             return m_resolution;
         }
@@ -76,19 +76,19 @@ namespace CSBackend
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        CSCore::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
+        ChilliSource::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
         {
             return m_resolutionChangedEvent;
         }
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		CSCore::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
+		ChilliSource::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
 		{
 			return m_displayModeChangedEvent;
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		void Screen::SetResolution(const CSCore::Integer2& in_size)
+		void Screen::SetResolution(const ChilliSource::Integer2& in_size)
 		{
 			SFMLWindow::Get()->SetSize(in_size);
 			OnResolutionChanged(in_size);
@@ -109,13 +109,13 @@ namespace CSBackend
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		std::vector<CSCore::Integer2> Screen::GetSupportedResolutions() const
+		std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
 		{
 			return SFMLWindow::Get()->GetSupportedResolutions();
 		}
         //-----------------------------------------------------------
         //------------------------------------------------------------
-        void Screen::OnResolutionChanged(const CSCore::Integer2& in_resolution)
+        void Screen::OnResolutionChanged(const ChilliSource::Integer2& in_resolution)
         {
 			m_resolution.x = (f32)in_resolution.x;
 			m_resolution.y = (f32)in_resolution.y;
@@ -140,7 +140,7 @@ namespace CSBackend
 		//------------------------------------------------
 		void Screen::OnInit()
 		{
-			m_windowResizeConnection = SFMLWindow::Get()->GetWindowResizedEvent().OpenConnection(CSCore::MakeDelegate(this, &Screen::OnResolutionChanged));
+			m_windowResizeConnection = SFMLWindow::Get()->GetWindowResizedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged));
 		}
 		//------------------------------------------------
 		//------------------------------------------------

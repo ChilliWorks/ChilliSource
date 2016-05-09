@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Image);
 
@@ -43,7 +43,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool Image::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool Image::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == Image::InterfaceID;
     }

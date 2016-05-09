@@ -35,7 +35,7 @@
 
 #include <mutex>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------
     /// Local data store provides a simple key-value data store useful for

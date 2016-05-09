@@ -28,7 +28,7 @@
 
 #include <ChilliSource/UI/Base/WidgetDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(WidgetDef);
     //-------------------------------------------------------
@@ -39,13 +39,13 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    bool WidgetDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool WidgetDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == WidgetDef::InterfaceID;
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    void WidgetDef::Build(const std::string& in_typeName, const Core::PropertyMap& in_defaultProperties, const std::vector<UIComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+    void WidgetDef::Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<UIComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
                           const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks)
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loading, "A WidgetDef can only be built while in the loading state.");
@@ -65,7 +65,7 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    const Core::PropertyMap& WidgetDef::GetDefaultProperties() const
+    const PropertyMap& WidgetDef::GetDefaultProperties() const
     {
         return m_defaultProperties;
     }

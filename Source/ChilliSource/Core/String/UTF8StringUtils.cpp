@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace UTF8StringUtils
     {

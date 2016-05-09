@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_RENDERING_BASE_SHADERPASS_H_
 #define _CHILLISOURCE_RENDERING_BASE_SHADERPASS_H_
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------
     /// The renderer adds to the render buffer

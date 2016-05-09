@@ -35,7 +35,7 @@
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     namespace HashSHA1
     {

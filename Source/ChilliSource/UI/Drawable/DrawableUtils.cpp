@@ -31,15 +31,15 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace DrawableUtils
     {
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        Rendering::TextureAtlas::Frame BuildFrame(const Rendering::Texture* in_texture, const Rendering::TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const Rendering::UVs& in_virtualUVs)
+        TextureAtlas::Frame BuildFrame(const Texture* in_texture, const TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const UVs& in_virtualUVs)
         {
-            Rendering::TextureAtlas::Frame outputFrame;
+            TextureAtlas::Frame outputFrame;
             
             if (in_textureAtlas != nullptr && in_atlasId.empty() == false)
             {
@@ -51,7 +51,7 @@ namespace CS
             }
             else
             {
-                Core::Vector2 texSize;
+                Vector2 texSize;
                 if(in_texture != nullptr)
                 {
                     texSize.x = (f32)in_texture->GetWidth() * in_virtualUVs.m_s;
@@ -61,7 +61,7 @@ namespace CS
                 outputFrame.m_croppedSize = texSize;
                 outputFrame.m_originalSize = texSize;
                 outputFrame.m_uvs = in_virtualUVs;
-                outputFrame.m_offset = Core::Vector2::k_zero;
+                outputFrame.m_offset = Vector2::k_zero;
             }
             
             return outputFrame;

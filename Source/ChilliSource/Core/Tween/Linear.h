@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Tween/Tween.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// Functor that performs linear interpolation on the start and end

@@ -51,7 +51,7 @@ namespace CSBackend
 			//------------------------------------------------
 			/// Delegates
 			//------------------------------------------------
-			typedef std::function<void(const CSCore::Vector3&)> AccelerationChangedDelegate;
+			typedef std::function<void(const ChilliSource::Vector3&)> AccelerationChangedDelegate;
 			//------------------------------------------------
 			/// Constructor
 			//------------------------------------------------
@@ -62,7 +62,7 @@ namespace CSBackend
 			/// @return whether or not this object implements
 			/// the given interface.
 			//------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::InterfaceIDType inInterfaceID) const;
 			//------------------------------------------------
 			/// Is Available
 			///

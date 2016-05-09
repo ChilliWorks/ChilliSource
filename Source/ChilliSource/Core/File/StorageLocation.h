@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_CORE_FILE_STORAGELOCATION_H_
 #define _CHILLISOURCE_CORE_FILE_STORAGELOCATION_H_
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     /// An enum describing the different possible locations for

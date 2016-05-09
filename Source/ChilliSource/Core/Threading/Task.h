@@ -33,7 +33,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A delegate describing a single task. A context is provided which provides

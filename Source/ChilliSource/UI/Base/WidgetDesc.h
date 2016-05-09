@@ -34,7 +34,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A container for a description of a single widget, comprising of a type
@@ -64,7 +64,7 @@ namespace CS
         /// @param The map of properties the widget should be created with.
         /// @param The list of child widget descriptions.
         //------------------------------------------------------------------
-        WidgetDesc(const std::string& in_type, const Core::PropertyMap& in_properties, const std::vector<WidgetDesc>& in_childDescs);
+        WidgetDesc(const std::string& in_type, const PropertyMap& in_properties, const std::vector<WidgetDesc>& in_childDescs);
         //------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -76,7 +76,7 @@ namespace CS
         ///
         /// @return The map of properties the widget should be created with.
         //------------------------------------------------------------------
-        const Core::PropertyMap& GetProperties() const;
+        const PropertyMap& GetProperties() const;
         //------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -85,7 +85,7 @@ namespace CS
         const std::vector<WidgetDesc>& GetChildDescs() const;
     private:
         std::string m_type = "";
-        Core::PropertyMap m_propertyMap;
+        PropertyMap m_propertyMap;
         std::vector<WidgetDesc> m_childDescs;
     };
 }

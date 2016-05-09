@@ -36,7 +36,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------------------------------
     /// Common response codes
@@ -61,7 +61,7 @@ namespace CS
     ///
     /// @author S Downie
     //--------------------------------------------------------------------------------------------------
-    class HttpRequestSystem : public Core::AppSystem
+    class HttpRequestSystem : public AppSystem
     {
     public:
         
@@ -101,7 +101,7 @@ namespace CS
         ///
         /// @return A pointer to the request. The system owns this pointer.
         //--------------------------------------------------------------------------------------------------
-        virtual HttpRequest* MakeGetRequest(const std::string& in_url, const Core::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+        virtual HttpRequest* MakeGetRequest(const std::string& in_url, const ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
         //--------------------------------------------------------------------------------------------------
         /// Causes the system to issue an Http POST request with the given body.
         ///
@@ -128,7 +128,7 @@ namespace CS
         ///
         /// @return A pointer to the request. The system owns this pointer.
         //--------------------------------------------------------------------------------------------------
-        virtual HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const Core::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+        virtual HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
         //--------------------------------------------------------------------------------------------------
         /// Equivalent to calling cancel on every incomplete request in progress.
         ///

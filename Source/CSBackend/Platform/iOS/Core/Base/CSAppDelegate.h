@@ -45,7 +45,7 @@
 {
     UIWindow* window;
     GLKViewController* viewControllerInternal;
-    CSCore::Application* csApplication;
+    ChilliSource::Application* csApplication;
     
     //Used to manually invoke OnForeground to conform to
     //ChilliSource lifecycle events

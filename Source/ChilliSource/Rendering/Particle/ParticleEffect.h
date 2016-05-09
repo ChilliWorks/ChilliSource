@@ -41,7 +41,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A Particle Effect contains all the properties and definitions for the
@@ -56,7 +56,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //-----------------------------------------------------------------------
-    class ParticleEffect final : public Core::Resource
+    class ParticleEffect final : public Resource
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleEffect);
@@ -81,7 +81,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -113,7 +113,7 @@ namespace CS
         /// @return The property used to generate the initial scale of a 
         /// new particle.
         //----------------------------------------------------------------
-        const ParticleProperty<Core::Vector2>* GetInitialScaleProperty() const;
+        const ParticleProperty<Vector2>* GetInitialScaleProperty() const;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -127,7 +127,7 @@ namespace CS
         /// @return The property used to generate the initial colour of 
         /// a new particle.
         //----------------------------------------------------------------
-        const ParticleProperty<Core::Colour>* GetInitialColourProperty() const;
+        const ParticleProperty<Colour>* GetInitialColourProperty() const;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -202,7 +202,7 @@ namespace CS
         ///
         /// @param The property
         //----------------------------------------------------------------
-        void SetInitialScaleProperty(ParticlePropertyUPtr<Core::Vector2> in_initialScaleProperty);
+        void SetInitialScaleProperty(ParticlePropertyUPtr<Vector2> in_initialScaleProperty);
         //----------------------------------------------------------------
         /// Sets the property used to generate the initial rotation of a 
         /// new particle.
@@ -220,7 +220,7 @@ namespace CS
         ///
         /// @param The property
         //----------------------------------------------------------------
-        void SetInitialColourProperty(ParticlePropertyUPtr<Core::Colour> in_initialColourProperty);
+        void SetInitialColourProperty(ParticlePropertyUPtr<Colour> in_initialColourProperty);
         //----------------------------------------------------------------
         /// Sets the property used to generate the initial speed of a new 
         /// particle. The initial direction of motion is described by the 
@@ -271,7 +271,7 @@ namespace CS
         //----------------------------------------------------------------
         virtual ~ParticleEffect();
     private:
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //----------------------------------------------------------------
         /// Factory method to create an new instance of an empty material 
         /// resource. Only called by the resource pool.
@@ -291,9 +291,9 @@ namespace CS
         SimulationSpace m_simulationSpace = SimulationSpace::k_local;
 
         ParticlePropertyUPtr<f32> m_lifetimeProperty;
-        ParticlePropertyUPtr<Core::Vector2> m_initialScaleProperty = ParticlePropertyUPtr<Core::Vector2>(new ConstantParticleProperty<Core::Vector2>(Core::Vector2::k_one));
+        ParticlePropertyUPtr<Vector2> m_initialScaleProperty = ParticlePropertyUPtr<Vector2>(new ConstantParticleProperty<Vector2>(Vector2::k_one));
         ParticlePropertyUPtr<f32> m_initialRotationProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(0.0f));
-        ParticlePropertyUPtr<Core::Colour> m_initialColourProperty = ParticlePropertyUPtr<Core::Colour>(new ConstantParticleProperty<Core::Colour>(Core::Colour::k_white));
+        ParticlePropertyUPtr<Colour> m_initialColourProperty = ParticlePropertyUPtr<Colour>(new ConstantParticleProperty<Colour>(Colour::k_white));
         ParticlePropertyUPtr<f32> m_initialSpeedProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(0.0f));
         ParticlePropertyUPtr<f32> m_initialAngularVelocityProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(0.0f));
 

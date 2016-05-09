@@ -35,7 +35,7 @@
 #include <list>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------
     /// Manages the state stack ensuring that only one state

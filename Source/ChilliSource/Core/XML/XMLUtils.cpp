@@ -35,7 +35,7 @@
 
 #include <cstring>
 
-namespace CS
+namespace ChilliSource
 {
     namespace XMLUtils
     {
@@ -43,7 +43,7 @@ namespace CS
         //--------------------------------------------------
         XMLUPtr ReadDocument(StorageLocation in_storageLocation, const std::string& in_filePath)
         {
-            Core::FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
+            FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
             if (stream != nullptr)
             {
                 std::string contents;
@@ -373,7 +373,7 @@ namespace CS
         //--------------------------------------------------
         bool WriteDocument(XML::Document* in_document, StorageLocation in_storageLocation, const std::string& in_filePath)
         {
-            Core::FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_write);
+            FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_write);
             if (stream != nullptr)
             {
                 std::string contents = XMLUtils::ToString(in_document);

@@ -38,7 +38,7 @@ namespace CSBackend
 {
 	namespace OpenGL
 	{
-		class RenderTarget final : public CSRendering::RenderTarget
+		class RenderTarget final : public ChilliSource::RenderTarget
 		{
 		public:
             //--------------------------------------------------
@@ -69,19 +69,19 @@ namespace CSBackend
             /// @param The colour texture.
             /// @param The depth texture.
             //------------------------------------------------------
-			void SetTargetTextures(const CSRendering::TextureSPtr& inpColourTexture, const CSRendering::TextureSPtr& inpDepthTexture);
+			void SetTargetTextures(const ChilliSource::TextureSPtr& inpColourTexture, const ChilliSource::TextureSPtr& inpDepthTexture);
             //------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The colour texture.
             //------------------------------------------------------
-			const CSRendering::TextureSPtr& GetColourTexture() const;
+			const ChilliSource::TextureSPtr& GetColourTexture() const;
             //------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The depth texture.
             //------------------------------------------------------
-			const CSRendering::TextureSPtr& GetDepthTexture() const;
+			const ChilliSource::TextureSPtr& GetDepthTexture() const;
             //------------------------------------------------------
             /// Bind
             ///
@@ -123,8 +123,8 @@ namespace CSBackend
 			GLuint mRenderBuffer;
 			GLuint mDepthBuffer;
             
-            CSRendering::TextureSPtr m_colourTexture;
-            CSRendering::TextureSPtr m_depthTexture;
+            ChilliSource::TextureSPtr m_colourTexture;
+            ChilliSource::TextureSPtr m_depthTexture;
             
             static RenderTarget* pCurrentlyBoundTarget;
         

@@ -37,7 +37,7 @@
 #include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Layout/Layout.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A component for applying layouts to the children of the owning widget.
@@ -59,7 +59,7 @@ namespace CS
         ///
         /// @return The list of properties supported by a layout component.
         //------------------------------------------------------------------------------
-        static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
+        static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not this system implements the interface
         /// described by the given interface Id. Typically this is not called directly
@@ -71,7 +71,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -111,7 +111,7 @@ namespace CS
         ///
         /// @return Final absolute screen size
         //------------------------------------------------------------------------------
-        Core::Vector2 GetSizeForIndex(u32 in_index) const;
+        Vector2 GetSizeForIndex(u32 in_index) const;
         //------------------------------------------------------------------------------
         /// Get the local position of the widget that occupies the space at the given
         /// index
@@ -122,7 +122,7 @@ namespace CS
         ///
         /// @return Local position in layout space (aligned middle centre of the cell)
         //------------------------------------------------------------------------------
-        Core::Vector2 GetPositionForIndex(u32 in_index) const;
+        Vector2 GetPositionForIndex(u32 in_index) const;
         //------------------------------------------------------------------------------
         /// Called when the internal layout changes so that the widget can be told to
         /// update its children. This is for internal use and should not be called by
@@ -143,7 +143,7 @@ namespace CS
         /// @param The component name.
         /// @param The property map.
         //------------------------------------------------------------------------------
-        LayoutComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+        LayoutComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///

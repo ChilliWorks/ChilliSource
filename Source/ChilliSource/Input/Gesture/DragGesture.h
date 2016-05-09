@@ -35,7 +35,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------
     /// A gesture for receiving drag input events. This incudes
@@ -64,9 +64,9 @@ namespace CS
         //----------------------------------------------------
         struct DragInfo final
         {
-            Core::Vector2 m_position;        //The screen space location of the gesture.
-            Core::Vector2 m_displacement;   //The displacement since the gesture started. Displacement caused by the currently tracked pointer changing is ignored.
-            Core::Vector2 m_delta;          //The change in displacement since the last event. Displacement caused by the currently tracked pointer changing is ignored.
+            Vector2 m_position;        //The screen space location of the gesture.
+            Vector2 m_displacement;   //The displacement since the gesture started. Displacement caused by the currently tracked pointer changing is ignored.
+            Vector2 m_delta;          //The change in displacement since the last event. Displacement caused by the currently tracked pointer changing is ignored.
         };
         //----------------------------------------------------
         /// A delegate called for any of the drag gesture
@@ -101,7 +101,7 @@ namespace CS
         /// @return Whether or not the gesture inteface is
         /// implemented.
         //----------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_gestureInterfaceId) const override;
+        bool IsA(InterfaceIDType in_gestureInterfaceId) const override;
         //----------------------------------------------------
         /// @author Ian Copland
         ///
@@ -121,21 +121,21 @@ namespace CS
         /// @return An event that can be used to listen for the
         /// start of a drag gesture.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetDragStartedEvent();
+        IConnectableEvent<Delegate>& GetDragStartedEvent();
         //----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return An event that can be used to list for
         /// movement events within a drag gesture.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetDragMovedEvent();
+        IConnectableEvent<Delegate>& GetDragMovedEvent();
         //----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return An event that can be used to list for
         /// the end of a drag gesture.
         //----------------------------------------------------
-        Core::IConnectableEvent<Delegate>& GetDragEndedEvent();
+        IConnectableEvent<Delegate>& GetDragEndedEvent();
     private:
         //----------------------------------------------------
         /// Information on a single pointer within the gesture.
@@ -145,8 +145,8 @@ namespace CS
         struct PointerInfo
         {
             Pointer::Id m_pointerId;
-            Core::Vector2 m_initialPosition;
-            Core::Vector2 m_currentPosition;
+            Vector2 m_initialPosition;
+            Vector2 m_currentPosition;
             bool m_isDrag = false;
             bool m_active = false;
         };
@@ -167,7 +167,7 @@ namespace CS
         ///
         /// @return The calculated position.
         //----------------------------------------------------
-        Core::Vector2 CalculatePosition() const;
+        Vector2 CalculatePosition() const;
         //--------------------------------------------------------
         /// This will be called if the gesture is currently active
         /// and conflict resolution deduces that it should end.
@@ -220,9 +220,9 @@ namespace CS
         
         u32 m_requiredPointerCount;
         Pointer::InputType m_requiredInputType;
-        Core::Event<Delegate> m_dragStartedEvent;
-        Core::Event<Delegate> m_dragMovedEvent;
-        Core::Event<Delegate> m_dragEndedEvent;
+        Event<Delegate> m_dragStartedEvent;
+        Event<Delegate> m_dragMovedEvent;
+        Event<Delegate> m_dragEndedEvent;
 
         f32 m_minDisplacementSquared = 0.0f;
         

@@ -37,7 +37,7 @@
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -312,7 +312,7 @@ namespace CS
     //--------------------------------------------------------------------------------------------------
     /// SeekG
     //--------------------------------------------------------------------------------------------------
-    void FileStream::SeekG(s32 indwPosition, Core::SeekDir ineDir)
+    void FileStream::SeekG(s32 indwPosition, SeekDir ineDir)
     {
         CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
@@ -320,13 +320,13 @@ namespace CS
         switch (ineDir)
         {
             default:
-            case Core::SeekDir::k_beginning:
+            case SeekDir::k_beginning:
                 dir = std::ios_base::beg;
                 break;
-            case Core::SeekDir::k_current:
+            case SeekDir::k_current:
                 dir = std::ios_base::cur;
                 break;
-            case Core::SeekDir::k_end:
+            case SeekDir::k_end:
                 dir = std::ios_base::end;
                 break;
         }
@@ -389,7 +389,7 @@ namespace CS
     //--------------------------------------------------------------------------------------------------
     /// SeekP
     //--------------------------------------------------------------------------------------------------
-    void FileStream::SeekP(s32 indwPosition, Core::SeekDir ineDir)
+    void FileStream::SeekP(s32 indwPosition, SeekDir ineDir)
     {
         CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
@@ -397,13 +397,13 @@ namespace CS
         switch (ineDir)
         {
             default:
-            case Core::SeekDir::k_beginning:
+            case SeekDir::k_beginning:
                 dir = std::ios_base::beg;
                 break;
-            case Core::SeekDir::k_current:
+            case SeekDir::k_current:
                 dir = std::ios_base::cur;
                 break;
-            case Core::SeekDir::k_end:
+            case SeekDir::k_end:
                 dir = std::ios_base::end;
                 break;
         }
@@ -425,25 +425,25 @@ namespace CS
     {
         switch (meFileMode)
         {
-            case Core::FileMode::k_read:
+            case FileMode::k_read:
                 return (std::ios_base::in);
-            case Core::FileMode::k_readBinary:
+            case FileMode::k_readBinary:
                 return (std::ios_base::in | std::ios_base::binary);
-            case Core::FileMode::k_write:
+            case FileMode::k_write:
                 return (std::ios_base::out);
-            case Core::FileMode::k_writeAppend:
+            case FileMode::k_writeAppend:
                 return (std::ios_base::out | std::ios_base::app);
-            case Core::FileMode::k_writeAtEnd:
+            case FileMode::k_writeAtEnd:
                 return (std::ios_base::out | std::ios_base::ate);
-            case Core::FileMode::k_writeTruncate:
+            case FileMode::k_writeTruncate:
                 return (std::ios_base::out | std::ios_base::trunc);
-            case Core::FileMode::k_writeBinary:
+            case FileMode::k_writeBinary:
                 return (std::ios_base::out | std::ios_base::binary);
-            case Core::FileMode::k_writeBinaryAppend:
+            case FileMode::k_writeBinaryAppend:
                 return (std::ios_base::out | std::ios_base::binary | std::ios_base::app);
-            case Core::FileMode::k_writeBinaryAtEnd:
+            case FileMode::k_writeBinaryAtEnd:
                 return (std::ios_base::out | std::ios_base::binary | std::ios_base::ate);
-            case Core::FileMode::k_writeBinaryTruncate:
+            case FileMode::k_writeBinaryTruncate:
                 return (std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
             default:
                 return (std::ios_base::in);

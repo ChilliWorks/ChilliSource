@@ -28,11 +28,11 @@
 
 #include <ChilliSource/UI/Base/UIComponentDesc.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------
     //------------------------------------------------------------------
-    UIComponentDesc::UIComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap)
+    UIComponentDesc::UIComponentDesc(const std::string& in_type, const std::string& in_name, const PropertyMap& in_propertyMap)
         : m_type(in_type), m_name(in_name), m_propertyMap(in_propertyMap)
     {
     }
@@ -50,7 +50,7 @@ namespace CS
     }
     //------------------------------------------------------------------
     //------------------------------------------------------------------
-    const Core::PropertyMap& UIComponentDesc::GetProperties() const
+    const PropertyMap& UIComponentDesc::GetProperties() const
     {
         return m_propertyMap;
     }

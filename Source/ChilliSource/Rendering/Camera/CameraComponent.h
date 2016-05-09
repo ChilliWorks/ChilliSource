@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Base class for camera components. The camera is added to the scene and
@@ -43,7 +43,7 @@ namespace CS
     ///
     /// @author S Downie
     //------------------------------------------------------------------------------
-    class CameraComponent : public Core::Component
+    class CameraComponent : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(CameraComponent);
@@ -89,13 +89,13 @@ namespace CS
         ///
         /// @return Projection matrix
         //------------------------------------------------------------------------------
-        const Core::Matrix4& GetProjection();
+        const Matrix4& GetProjection();
         //------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return View matrix
         //------------------------------------------------------------------------------
-        const Core::Matrix4& GetView();
+        const Matrix4& GetView();
         //------------------------------------------------------------------------------
         /// Unproject from a point in screen space to a ray in world space
         ///
@@ -103,7 +103,7 @@ namespace CS
         ///
         /// @return Ray in world space with camera view direction
         //------------------------------------------------------------------------------
-        Core::Ray Unproject(const Core::Vector2& in_screenPos);
+        Ray Unproject(const Vector2& in_screenPos);
         //------------------------------------------------------------------------------
         /// Convert from a point in world space to a point in screen space
         ///
@@ -111,13 +111,13 @@ namespace CS
         ///
         /// @return Screen space pos
         //------------------------------------------------------------------------------
-        Core::Vector2 Project(const Core::Vector3& in_worldPos);
+        Vector2 Project(const Vector3& in_worldPos);
         //------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Camera frustum
         //------------------------------------------------------------------------------
-        const Core::Frustum& GetFrustum();
+        const Frustum& GetFrustum();
         //------------------------------------------------------------------------------
         /// Orientate the given matrix to face the cameras view vector
         ///
@@ -127,7 +127,7 @@ namespace CS
         ///
         /// @return Billboarded matrix
         //------------------------------------------------------------------------------
-        Core::Matrix4 Billboard(const Core::Matrix4& in_toBillboard);
+        Matrix4 Billboard(const Matrix4& in_toBillboard);
         //------------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -174,7 +174,7 @@ namespace CS
         ///
         /// @return Projection matrix
         //------------------------------------------------------------------------------
-        virtual Core::Matrix4 CalculateProjectionMatrix() = 0;
+        virtual Matrix4 CalculateProjectionMatrix() = 0;
         //------------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -208,25 +208,25 @@ namespace CS
         
     protected:
         
-        Core::Frustum m_frustum;
+        Frustum m_frustum;
         f32 m_nearClip;
         f32 m_farClip;
         bool m_isProjCacheValid = false;
         bool m_isFrustumCacheValid = false;
-        Core::Screen* m_screen = nullptr;
+        Screen* m_screen = nullptr;
 
     private:
         
-        Core::Matrix4 m_projMat;
-        Core::Matrix4 m_viewMat;
+        Matrix4 m_projMat;
+        Matrix4 m_viewMat;
         
         RendererSortPredicateSPtr m_opaqueSortPredicate;
         RendererSortPredicateSPtr m_transparentSortPredicate;
         
         ICullingPredicateSPtr m_cullPredicate;
         
-        Core::EventConnectionUPtr m_transformChangedConnection;
-        Core::EventConnectionUPtr m_resolutionChangedConnection;
+        EventConnectionUPtr m_transformChangedConnection;
+        EventConnectionUPtr m_resolutionChangedConnection;
     };
 }
 

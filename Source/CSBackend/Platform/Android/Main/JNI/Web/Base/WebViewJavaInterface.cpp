@@ -88,7 +88,7 @@ namespace CSBackend
 			InitCallableStaticMethod("com/chilliworks/chillisource/web/WebViewNativeInterface","PresentInExternalBrowser", "(Ljava/lang/String;)V");
 			InitCallableStaticMethod("com/chilliworks/chillisource/web/WebViewNativeInterface","Dismiss", "(I)V");
 		}
-		void WebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const CSCore::Vector2& invSize, f32 in_dismissButtonRelativeSize)
+		void WebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Vector2& invSize, f32 in_dismissButtonRelativeSize)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("Present");
 
@@ -105,7 +105,7 @@ namespace CSBackend
 				env->DeleteLocalRef(jstrURL);
 			}
 		}
-		void WebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const CSCore::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor, f32 in_dismissButtonRelativeSize)
+		void WebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor, f32 in_dismissButtonRelativeSize)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentFromFile");
 

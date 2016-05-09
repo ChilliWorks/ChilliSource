@@ -51,13 +51,13 @@ namespace CSBackend
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool DialogueBoxSystem::IsA(CSCore::InterfaceIDType in_interfaceID) const
+        bool DialogueBoxSystem::IsA(ChilliSource::InterfaceIDType in_interfaceID) const
         {
-            return (DialogueBoxSystem::InterfaceID == in_interfaceID || CSCore::DialogueBoxSystem::InterfaceID == in_interfaceID);
+            return (DialogueBoxSystem::InterfaceID == in_interfaceID || ChilliSource::DialogueBoxSystem::InterfaceID == in_interfaceID);
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
+        void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
             NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
             NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
@@ -77,7 +77,7 @@ namespace CSBackend
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
+        void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
             NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
             NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
@@ -105,7 +105,7 @@ namespace CSBackend
         }
         //------------------------------------------------------
         //------------------------------------------------------
-        void DialogueBoxSystem::OnSystemConfirmDialogResult(s64 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result)
+        void DialogueBoxSystem::OnSystemConfirmDialogResult(s64 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result)
         {
             if(m_activeSysConfirmDelegate)
         	{

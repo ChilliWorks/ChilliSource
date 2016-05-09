@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     class DirectionalLightComponent : public LightComponent
     {
@@ -53,7 +53,7 @@ namespace CS
         /// @param Comparison Type
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+        bool IsA(InterfaceIDType inInterfaceID) const override;
         //----------------------------------------------------------
         /// Set Shadow Volume
         ///
@@ -81,13 +81,13 @@ namespace CS
         /// @return Direction vector of light
         /// (only applies to directional lights)
         //----------------------------------------------------------
-        Core::Vector3 GetDirection() const;
+        Vector3 GetDirection() const;
         //----------------------------------------------------------
         /// Get Light Matrix
         ///
         /// @return Matrix to transform into light space
         //----------------------------------------------------------
-        const Core::Matrix4& GetLightMatrix() const override;
+        const Matrix4& GetLightMatrix() const override;
         //----------------------------------------------------
         /// Triggered when the component is attached to
         /// an entity on the scene
@@ -145,10 +145,10 @@ namespace CS
         
         RenderCapabilities* m_renderCapabilities = nullptr;
         
-        Core::Matrix4 mmatProj;
+        Matrix4 mmatProj;
         mutable bool mbMatrixCacheValid;
         
-        Core::EventConnectionUPtr m_transformChangedConnection;
+        EventConnectionUPtr m_transformChangedConnection;
         
         f32 mfShadowTolerance;
         u32 m_shadowMapRes;

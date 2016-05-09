@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------
     /// An image provider for the ETC1 format. The ETC1 format is not
@@ -41,7 +41,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------
-    class ETC1ImageProvider final : public Core::ResourceProvider
+    class ETC1ImageProvider final : public ResourceProvider
     {
     public:
         CS_DECLARE_NAMEDTYPE(ETC1ImageProvider);

@@ -37,7 +37,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A state system for displaying Web pages, either in application
@@ -45,7 +45,7 @@ namespace CS
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class WebView : public Core::StateSystem
+    class WebView : public StateSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(WebViewActivity);
@@ -82,7 +82,7 @@ namespace CS
         /// @param in_customURLClickHandler - The delegate to call when a link is
         /// clicked on the displayed page
         //------------------------------------------------------------------------------
-        virtual void Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) = 0;
+        virtual void Present(const std::string& in_url, const UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) = 0;
         //------------------------------------------------------------------------------
         /// Displays the website at the given location on disk in
         /// an in-app web view.
@@ -98,7 +98,7 @@ namespace CS
         /// @param in_customURLClickHandler - The delegate to call when a link is
         /// clicked on the displayed page
         //------------------------------------------------------------------------------
-        virtual void PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) = 0;
+        virtual void PresentFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) = 0;
         //------------------------------------------------------------------------------
         /// Displays the website at the given Url in an external
         /// browser.
@@ -123,7 +123,7 @@ namespace CS
         virtual bool IsPresented() const = 0;
         
     protected:
-        friend class Core::State;
+        friend class State;
         //------------------------------------------------------------------------------
         /// Create the platform dependent backend.
         ///

@@ -32,12 +32,12 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------------
     /// Loads model files into a Mesh resource.
     //-------------------------------------------------------------------------
-    class CSModelProvider final : public Core::ResourceProvider
+    class CSModelProvider final : public ResourceProvider
     {
     public:
         
@@ -56,13 +56,13 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface
         //-------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------
         /// @author S Downie
         ///
         /// @return The resource type this provider can create
         //----------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //----------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -90,7 +90,7 @@ namespace CS
         /// @param Options to customise the creation
         /// @param [Out] the output resource pointer
         //----------------------------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// Create mesh resource from model file on a background thread
         ///
@@ -102,7 +102,7 @@ namespace CS
         /// @param Delegate to callback on completion either success or failure
         /// @param [Out] the output resource pointer
         //----------------------------------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -111,7 +111,7 @@ namespace CS
         /// @param Delegate to callback on completion either success or failure
         /// @param the output resource pointer
         //----------------------------------------------------------------------------
-        void LoadMeshDataTask(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const MeshSPtr& out_resource);
+        void LoadMeshDataTask(StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const MeshSPtr& out_resource);
         //----------------------------------------------------------------------------
         /// Constructs the mesh buffer from the mesh description
         ///

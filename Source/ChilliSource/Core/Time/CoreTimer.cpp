@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Time/CoreTimer.h>
 
-namespace CS
+namespace ChilliSource
 {
     Event<TimeEventDelegate> CoreTimer::mOnTimerUpdateEvent;
     

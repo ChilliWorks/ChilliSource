@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------
     /// Interface into a shader resource. Shaders
@@ -42,7 +42,7 @@ namespace CS
     ///
     /// @author S Downie
     //------------------------------------------------
-    class Shader : public Core::Resource
+    class Shader : public Resource
     {
     public:
         
@@ -56,7 +56,7 @@ namespace CS
         virtual ~Shader(){}
         
     protected:
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //----------------------------------------------------------
         /// Factory method that creates a new empty shader resource.
         /// Only called by resource pool

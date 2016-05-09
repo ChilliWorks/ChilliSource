@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------
     /// A notification that can be used by any of the notification

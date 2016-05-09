@@ -36,7 +36,7 @@
 
 #include <mutex>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A system for handling cross platform access to the file system. This
@@ -481,7 +481,7 @@ namespace CS
         ///
         /// @return whether or not the given file mode is a write mode
         //------------------------------------------------------------------------------
-        bool IsWriteMode(Core::FileMode in_fileMode) const;
+        bool IsWriteMode(FileMode in_fileMode) const;
 
     private:
         std::string m_packageDLCPath;

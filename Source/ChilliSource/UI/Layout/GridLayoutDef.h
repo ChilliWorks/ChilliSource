@@ -35,7 +35,7 @@
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/LayoutDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A definition of a Grid Layout which can be built from a json object. This is
@@ -100,7 +100,7 @@ namespace CS
         /// @param The relative vertical spacing.
         /// @param The absolute vertical spacing.
         //------------------------------------------------------------------------------
-        GridLayoutDef(GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins,
+        GridLayoutDef(GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                       f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing);
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not this system implements the interface
@@ -113,7 +113,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -143,14 +143,14 @@ namespace CS
         /// to the overall layout size (i.e owning widget size). X is top, Y is right,
         /// Z is bottom and W is left.
         //------------------------------------------------------------------------------
-        Core::Vector4 GetRelativeMargins() const;
+        Vector4 GetRelativeMargins() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The absolute border size margins for each edge. X is top, Y is
         /// right, Z is bottom and W is left.
         //------------------------------------------------------------------------------
-        Core::Vector4 GetAbsoluteMargins() const;
+        Vector4 GetAbsoluteMargins() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -194,8 +194,8 @@ namespace CS
         GridLayout::CellOrder m_cellOrder = GridLayout::CellOrder::k_rowMajor;
         u32 m_numRows = 1;
         u32 m_numCols = 1;
-        Core::Vector4 m_relativeMargins;
-        Core::Vector4 m_absoluteMargins;
+        Vector4 m_relativeMargins;
+        Vector4 m_absoluteMargins;
         f32 m_relativeHSpacing = 0.0f;
         f32 m_absoluteHSpacing = 0.0f;
         f32 m_relativeVSpacing = 0.0f;

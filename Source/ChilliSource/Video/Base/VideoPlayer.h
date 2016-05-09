@@ -38,14 +38,14 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------
     /// A state system for cross platform playback of videos.
     ///
     /// @author S Downie
     //--------------------------------------------------------------
-    class VideoPlayer : public Core::StateSystem
+    class VideoPlayer : public StateSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(VideoPlayer);
@@ -54,7 +54,7 @@ namespace CS
         ///
         /// @author S Downie
         //-------------------------------------------------------
-        using VideoCompleteDelegate = Core::ConnectableDelegate<void()>;
+        using VideoCompleteDelegate = ConnectableDelegate<void()>;
         //-------------------------------------------------------
         /// Begin streaming the video from file
         ///
@@ -68,8 +68,8 @@ namespace CS
         /// @param [Optional] The video background colour. Defaults
         /// to black.
         //--------------------------------------------------------
-        virtual void Present(Core::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
-                             const Core::Colour& in_backgroundColour = Core::Colour::k_black) = 0;
+        virtual void Present(StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
+                             const Colour& in_backgroundColour = Colour::k_black) = 0;
         //--------------------------------------------------------
         /// Begin streaming the video from file with subtitles.
         ///
@@ -84,8 +84,8 @@ namespace CS
         /// @param [Optional] The video background colour. Defaults
         /// to black.
         //--------------------------------------------------------
-        virtual void PresentWithSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
-                                          bool in_dismissWithTap, const Core::Colour& in_backgroundColour = Core::Colour::k_black) = 0;
+        virtual void PresentWithSubtitles(StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
+                                          bool in_dismissWithTap, const Colour& in_backgroundColour = Colour::k_black) = 0;
         //--------------------------------------------------------
         /// Destructor
         ///
@@ -93,7 +93,7 @@ namespace CS
         //--------------------------------------------------------
         virtual ~VideoPlayer(){}
     protected:
-        friend class Core::State;
+        friend class State;
         //-------------------------------------------------------
         /// Create the platform dependent backend
         ///

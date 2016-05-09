@@ -48,7 +48,7 @@ namespace CSBackend
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------
-		class PointerSystem final : public CSInput::PointerSystem
+		class PointerSystem final : public ChilliSource::PointerSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(PointerSystem);
@@ -62,7 +62,7 @@ namespace CSBackend
 			///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
 			/// Hide the window cursor
 			///
@@ -77,7 +77,7 @@ namespace CSBackend
 			void ShowCursor() override;
 
 		private:
-			friend class CSInput::PointerSystem;
+			friend class ChilliSource::PointerSystem;
 			//----------------------------------------------
 			/// Triggered by SFML when the cursor moves
 			///
@@ -134,12 +134,12 @@ namespace CSBackend
 			//------------------------------------------------
 			void OnDestroy() override;
 
-			CSCore::Screen* m_screen;
-			CSInput::Pointer::Id m_pointerId;
+			ChilliSource::Screen* m_screen;
+			ChilliSource::Pointer::Id m_pointerId;
 
-			CSCore::EventConnectionUPtr m_mouseButtonConnection;
-			CSCore::EventConnectionUPtr m_mouseMovedConnection;
-			CSCore::EventConnectionUPtr m_mouseWheelConnection;
+			ChilliSource::EventConnectionUPtr m_mouseButtonConnection;
+			ChilliSource::EventConnectionUPtr m_mouseMovedConnection;
+			ChilliSource::EventConnectionUPtr m_mouseWheelConnection;
 		};
 	}
 }

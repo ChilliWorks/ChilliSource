@@ -39,14 +39,14 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //===============================================
     /// Inverse Bind Pose
     //===============================================
     struct InverseBindPose
     {
-        std::vector<CSCore::Matrix4> mInverseBindPoseMatrices;
+        std::vector<Matrix4> mInverseBindPoseMatrices;
     };
     typedef std::shared_ptr<InverseBindPose> InverseBindPosePtr;
     
@@ -67,7 +67,7 @@ namespace CS
         ///
         /// @return AABB
         //-----------------------------------------------------------------
-        const Core::AABB& GetAABB() const;
+        const AABB& GetAABB() const;
         //-----------------------------------------------------------------
         /// Get Name
         ///
@@ -132,7 +132,7 @@ namespace CS
         /// @param the minimum bounds.
         /// @param the maximum bounds.
         //-----------------------------------------------------------------
-        void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax);
+        void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Vector3 invMin, Vector3 invMax);
         //-----------------------------------------------------------------
         /// Set Inverse Bind Pose
         /// 
@@ -148,14 +148,14 @@ namespace CS
         /// @param the render system.
         /// @param World transform matrix
         //-----------------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, const Core::Matrix4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
+        void Render(RenderSystem* inpRenderSystem, const Matrix4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
         
         friend class Mesh;
         
     private:
         
         std::string mstrName;
-        Core::AABB mBoundingBox;
+        AABB mBoundingBox;
         
         //We own this!!!
         MeshBuffer* mpMeshBuffer;

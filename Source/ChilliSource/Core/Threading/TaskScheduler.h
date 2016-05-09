@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/Threading/TaskPool.h>
 #include <ChilliSource/Core/Threading/TaskType.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A system for executing task on the main thread or background threads.
@@ -65,7 +65,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //------------------------------------------------------------------------------
-        bool IsA(CSCore::InterfaceIDType in_interfaceId) const noexcept override;
+        bool IsA(InterfaceIDType in_interfaceId) const noexcept override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///

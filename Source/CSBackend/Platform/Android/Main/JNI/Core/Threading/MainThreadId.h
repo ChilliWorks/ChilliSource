@@ -48,7 +48,7 @@ namespace CSBackend
 		///
 		/// @author Nicolas Tanda
 		//------------------------------------------------------------------------------
-		class MainThreadId final : public CSCore::Singleton<MainThreadId>
+		class MainThreadId final : public ChilliSource::Singleton<MainThreadId>
 		{
 		public:
 			//------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ namespace CSBackend
 			void SetCurrentThread();
 
 		private:
-		    friend class CSCore::Singleton<MainThreadId>;
+		    friend class ChilliSource::Singleton<MainThreadId>;
 			//------------------------------------------------------------------------------
 			/// Constructor.
 			///

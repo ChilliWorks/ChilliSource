@@ -47,7 +47,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //----------------------------------------------------------
-		class Shader final : public CSRendering::Shader
+		class Shader final : public ChilliSource::Shader
 		{
 		public:
 			
@@ -79,7 +79,7 @@ namespace CSBackend
             ///
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------
             /// Set this shader to be the active one.
             ///
@@ -118,7 +118,7 @@ namespace CSBackend
             /// @param Value
             /// @param Failure policy
             //----------------------------------------------------------
-            void SetUniform(const std::string& in_varName, const CSCore::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            void SetUniform(const std::string& in_varName, const ChilliSource::Vector2& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
             //----------------------------------------------------------
             /// Attempts to set the uniform shader variable with the
             /// given name to the given value.
@@ -129,7 +129,7 @@ namespace CSBackend
             /// @param Value
             /// @param Failure policy
             //----------------------------------------------------------
-            void SetUniform(const std::string& in_varName, const CSCore::Vector3& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            void SetUniform(const std::string& in_varName, const ChilliSource::Vector3& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
             //----------------------------------------------------------
             /// Attempts to set the uniform shader variable with the
             /// given name to the given value.
@@ -140,7 +140,7 @@ namespace CSBackend
             /// @param Value
             /// @param Failure policy
             //----------------------------------------------------------
-            void SetUniform(const std::string& in_varName, const CSCore::Vector4& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            void SetUniform(const std::string& in_varName, const ChilliSource::Vector4& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
             //----------------------------------------------------------
             /// Attempts to set the uniform shader variable with the
             /// given name to the given value.
@@ -151,7 +151,7 @@ namespace CSBackend
             /// @param Value
             /// @param Failure policy
             //----------------------------------------------------------
-            void SetUniform(const std::string& in_varName, const CSCore::Matrix4& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            void SetUniform(const std::string& in_varName, const ChilliSource::Matrix4& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
             //----------------------------------------------------------
             /// Attempts to set the uniform shader variable with the
             /// given name to the given value.
@@ -162,7 +162,7 @@ namespace CSBackend
             /// @param Value
             /// @param Failure policy
             //----------------------------------------------------------
-            void SetUniform(const std::string& in_varName, const CSCore::Colour& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            void SetUniform(const std::string& in_varName, const ChilliSource::Colour& in_value, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
             //----------------------------------------------------------
             /// Attempts to set the uniform shader variable with the
             /// given name to the given values.
@@ -173,7 +173,7 @@ namespace CSBackend
             /// @param Values
             /// @param Failure policy
             //----------------------------------------------------------
-            void SetUniform(const std::string& in_varName, const std::vector<CSCore::Vector4>& in_vec4Values, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
+            void SetUniform(const std::string& in_varName, const std::vector<ChilliSource::Vector4>& in_vec4Values, UniformNotFoundPolicy in_notFoundPolicy = UniformNotFoundPolicy::k_failHard);
             //----------------------------------------------------------
             /// @author S Downie
             ///
@@ -209,7 +209,7 @@ namespace CSBackend
             ~Shader();
             
 		private:
-            friend CSRendering::ShaderUPtr CSRendering::Shader::Create();
+            friend ChilliSource::ShaderUPtr ChilliSource::Shader::Create();
 			//----------------------------------------------------------
             /// Private constructor to enforce the use of the factory
             /// method

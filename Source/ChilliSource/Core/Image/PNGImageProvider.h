@@ -32,14 +32,14 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// An image loader interface that providers PNG resources
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class PNGImageProvider : public Core::ResourceProvider
+    class PNGImageProvider : public ResourceProvider
     {
     protected:
         friend class Application;

@@ -35,7 +35,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -93,7 +93,7 @@ namespace CS
         ///
         /// @return Value of type T
         //----------------------------------------------------------------------------
-        template <typename TType> TType ReadValue(const Core::FileStreamSPtr& in_meshStream)
+        template <typename TType> TType ReadValue(const FileStreamSPtr& in_meshStream)
         {
             TType value;
             in_meshStream->Read(reinterpret_cast<s8*>(&value), sizeof(TType));
@@ -108,7 +108,7 @@ namespace CS
         /// @param Num to read
         /// @param [Out] data
         //----------------------------------------------------------------------------
-        template <typename TType> void ReadBlock(const Core::FileStreamSPtr& in_meshStream, u32 in_numToRead, TType* out_data)
+        template <typename TType> void ReadBlock(const FileStreamSPtr& in_meshStream, u32 in_numToRead, TType* out_data)
         {
             in_meshStream->Read(reinterpret_cast<s8*>(out_data), sizeof(TType) * in_numToRead);
         }
@@ -121,7 +121,7 @@ namespace CS
         /// @param Mesh stream
         /// @param [Out] Mesh description
         //-----------------------------------------------------------------------------
-        void ReadVertexDeclaration(const Core::FileStreamSPtr& in_meshStream, MeshDescriptor& out_meshDesc)
+        void ReadVertexDeclaration(const FileStreamSPtr& in_meshStream, MeshDescriptor& out_meshDesc)
         {
             //build the vertex declaration from the file
             u8 numVertexElements = ReadValue<u8>(in_meshStream);
@@ -175,14 +175,14 @@ namespace CS
         /// @param Mesh description
         /// @param [Out] Submesh description
         //-----------------------------------------------------------------------------
-        void ReadSubMeshData(const Core::FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
+        void ReadSubMeshData(const FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
         {
             //read the inverse bind matrices
             if(true == in_meshDesc.mFeatures.mbHasAnimationData)
             {
                 for(u32 i=0; i<in_meshDesc.m_skeletonDesc.m_jointIndices.size(); ++i)
                 {
-                    CSCore::Matrix4 IBPMat;
+                    Matrix4 IBPMat;
                     ReadBlock<f32>(in_meshStream, 16, IBPMat.m);
                     out_subMeshDesc.mInverseBindPoseMatrices.push_back(IBPMat);
                 }
@@ -205,7 +205,7 @@ namespace CS
         /// @param Mesh description
         /// @param [Out] Sube mesh description
         //-----------------------------------------------------------------------------
-        void ReadSubMeshHeader(const Core::FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
+        void ReadSubMeshHeader(const FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
         {
             //read mesh name
             u8 nextChar = 0;
@@ -267,7 +267,7 @@ namespace CS
         /// @param Container holding the num of meshes, joints and bones
         /// @param [Out] Skeleton description
         //-----------------------------------------------------------------------------
-        void ReadSkeletonData(const Core::FileStreamSPtr& in_meshStream, const MeshDataQuantities& in_quantities, SkeletonDescriptor& out_skeletonDesc)
+        void ReadSkeletonData(const FileStreamSPtr& in_meshStream, const MeshDataQuantities& in_quantities, SkeletonDescriptor& out_skeletonDesc)
         {
             //read the skeleton nodes
             out_skeletonDesc.m_nodeNames.reserve(in_quantities.m_numSkeletonNodes);
@@ -320,7 +320,7 @@ namespace CS
         ///
         /// @return Whether the file is correct
         //-----------------------------------------------------------------------------
-        bool ReadGlobalHeader(const Core::FileStreamSPtr& in_meshStream, const std::string& in_filePath, MeshDescriptor& out_meshDesc, MeshDataQuantities& out_meshQuantities)
+        bool ReadGlobalHeader(const FileStreamSPtr& in_meshStream, const std::string& in_filePath, MeshDescriptor& out_meshDesc, MeshDataQuantities& out_meshQuantities)
         {
             u32 fileCheckValue = ReadValue<u32>(in_meshStream);
             if(fileCheckValue != k_fileCheckValue)
@@ -397,9 +397,9 @@ namespace CS
         ///
         /// @return true if successful, false if not
         //----------------------------------------------------------------------------
-        bool ReadFile(Core::StorageLocation in_location, const std::string& in_filePath, MeshDescriptor& out_meshDesc)
+        bool ReadFile(StorageLocation in_location, const std::string& in_filePath, MeshDescriptor& out_meshDesc)
         {
-            Core::FileStreamSPtr meshStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
+            FileStreamSPtr meshStream = Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, FileMode::k_readBinary);
             
             //Check file for corruption
             if(nullptr == meshStream)
@@ -443,13 +443,13 @@ namespace CS
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    bool CSModelProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool CSModelProvider::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSModelProvider::InterfaceID;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::InterfaceIDType CSModelProvider::GetResourceType() const
+    InterfaceIDType CSModelProvider::GetResourceType() const
     {
         return Mesh::InterfaceID;
     }
@@ -461,7 +461,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CSModelProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+    void CSModelProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
         MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
         
@@ -469,7 +469,7 @@ namespace CS
         
         if (ReadFile(in_location, in_filePath, descriptor) == false)
         {
-            meshResource->SetLoadState(Core::Resource::LoadState::k_failed);
+            meshResource->SetLoadState(Resource::LoadState::k_failed);
             return;
         }
         
@@ -477,35 +477,35 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CSModelProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void CSModelProvider::CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         CS_ASSERT(in_delegate != nullptr, "Cannot load mesh async with null delegate");
         
         MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
         
         //Load model as task
-        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
             LoadMeshDataTask(in_location, in_filePath, in_delegate, meshResource);
         });
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CSModelProvider::LoadMeshDataTask(Core::StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const MeshSPtr& out_resource)
+    void CSModelProvider::LoadMeshDataTask(StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const MeshSPtr& out_resource)
     {
         //read the mesh data into a MoStaticDeclaration
         MeshDescriptor descriptor;
         if (false == ReadFile(in_location, in_filePath, descriptor))
         {
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
             {
                 in_delegate(out_resource);
             });
         }
         
         //start a main thread task for loading the data into a mesh
-        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_large, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_large, [=](const TaskContext&) noexcept
         {
             BuildMesh(in_delegate, descriptor, out_resource);
         });
@@ -523,7 +523,7 @@ namespace CS
             delete[] it->mpIndexData;
         }
         
-        Core::Resource::LoadState loadState = success ? Core::Resource::LoadState::k_loaded : Core::Resource::LoadState::k_failed;
+        Resource::LoadState loadState = success ? Resource::LoadState::k_loaded : Resource::LoadState::k_failed;
         out_resource->SetLoadState(loadState);
         
         if(in_delegate != nullptr)

@@ -59,7 +59,7 @@ void Java_com_chilliworks_chillisource_input_DeviceButtonNativeInterface_onTrigg
 	CSBackend::Android::DeviceButtonJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::DeviceButtonJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			javaInterface->OnTriggered(in_buttonPressed);
 		});
@@ -79,7 +79,7 @@ namespace CSBackend
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		bool DeviceButtonJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool DeviceButtonJavaInterface::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
 			return (DeviceButtonJavaInterface::InterfaceID == in_interfaceId);
 		}

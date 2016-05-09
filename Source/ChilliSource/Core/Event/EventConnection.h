@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     /// A connection is a channel to an event. When a listener

@@ -31,7 +31,7 @@
 
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------
     /// An perspective camera. Objects scale with
@@ -62,7 +62,7 @@ namespace CS
         /// @param Comparison Type
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------
         /// @author S Downie
         ///
@@ -98,7 +98,7 @@ namespace CS
         ///
         /// @return Projection matrix
         //------------------------------------------------------
-        Core::Matrix4 CalculateProjectionMatrix() override;
+        Matrix4 CalculateProjectionMatrix() override;
         //------------------------------------------------------
         /// @author S Downie
         ///
@@ -111,14 +111,14 @@ namespace CS
         ///
         /// @author I Copland
         //------------------------------------------------------
-        void OnResolutionChanged(const Core::Vector2& in_resolution);
+        void OnResolutionChanged(const Vector2& in_resolution);
 
     private:
         
         f32 m_fov;
         f32 m_aspectRatio;
         ViewportResizePolicy m_resizePolicy;
-        Core::EventConnectionUPtr m_screenResizedConnection;
+        EventConnectionUPtr m_screenResizedConnection;
     };
 }
 

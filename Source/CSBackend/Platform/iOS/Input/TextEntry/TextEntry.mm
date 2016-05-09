@@ -59,9 +59,9 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool TextEntry::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool TextEntry::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == CSInput::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
+            return in_interfaceId == ChilliSource::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -125,10 +125,10 @@ namespace CSBackend
             {
                 switch (in_type)
                 {
-                    case CSInput::TextEntry::Type::k_text:
+                    case ChilliSource::TextEntry::Type::k_text:
                         m_textView.keyboardType = UIKeyboardTypeASCIICapable;
                         break;
-                    case CSInput::TextEntry::Type::k_numeric:
+                    case ChilliSource::TextEntry::Type::k_numeric:
                         m_textView.keyboardType = UIKeyboardTypeNumberPad;
                         break;
                     default:
@@ -146,16 +146,16 @@ namespace CSBackend
             {
                 switch (in_capitalisation)
                 {
-                    case CSInput::TextEntry::Capitalisation::k_none:
+                    case ChilliSource::TextEntry::Capitalisation::k_none:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
                         break;
-                    case CSInput::TextEntry::Capitalisation::k_words:
+                    case ChilliSource::TextEntry::Capitalisation::k_words:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeWords;
                         break;
-                    case CSInput::TextEntry::Capitalisation::k_sentences:
+                    case ChilliSource::TextEntry::Capitalisation::k_sentences:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
                         break;
-                    case CSInput::TextEntry::Capitalisation::k_all:
+                    case ChilliSource::TextEntry::Capitalisation::k_all:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
                         break;
                     default:

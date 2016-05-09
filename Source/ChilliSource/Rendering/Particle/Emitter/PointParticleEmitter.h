@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitter.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A point particle emitter. The spawns particles at the entity's
@@ -57,7 +57,7 @@ namespace CS
         /// @param [Out] The generated position in local space.
         /// @param [Out] The generate direction in local space.
         //----------------------------------------------------------------
-        void GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
+        void GenerateEmission(f32 in_normalisedEmissionTime, Vector3& out_position, Vector3& out_direction) override;
     private:
         friend class PointParticleEmitterDef;
         //----------------------------------------------------------------
@@ -68,7 +68,7 @@ namespace CS
         /// @param The particle emitter definition.
         /// @param The particle array.
         //----------------------------------------------------------------
-        PointParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+        PointParticleEmitter(const ParticleEmitterDef* in_particleEmitter, dynamic_array<Particle>* in_particleArray);
     };
 }
 

@@ -49,7 +49,7 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //--------------------------------------------------
-        bool TextureUnitSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool TextureUnitSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
             return in_interfaceId == TextureUnitSystem::InterfaceID;
         }
@@ -77,7 +77,7 @@ namespace CSBackend
             
             if(m_texUnits.empty() == true)
 			{
-                CSRendering::RenderCapabilities* renderCapabilities = CSCore::Application::Get()->GetSystem<CSRendering::RenderCapabilities>();
+                ChilliSource::RenderCapabilities* renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
                 CS_ASSERT(renderCapabilities, "Cannot find required system: Render Capabilities.");
                 
                 //Create the available texture unit slots

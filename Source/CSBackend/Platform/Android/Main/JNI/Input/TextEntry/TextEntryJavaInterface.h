@@ -63,7 +63,7 @@ namespace CSBackend
 			/// @return whether or not this object implements
 			/// the given interface.
 			//-----------------------------------------------
-			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::InterfaceIDType inInterfaceID) const;
 			//-------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -107,7 +107,7 @@ namespace CSBackend
 			/// @param The keyboard type to be used the
 			/// next time the keyboard is displayed.
 			//-------------------------------------------
-            void SetKeyboardType(CSInput::TextEntry::Type ineKeyboardType);
+            void SetKeyboardType(ChilliSource::TextEntry::Type ineKeyboardType);
 			//-------------------------------------------
 			/// Set Capitalisation Method
 			///
@@ -115,7 +115,7 @@ namespace CSBackend
             /// used the next time the keyboard is
             /// displayed.
 			//-------------------------------------------
-            void SetCapitalisationMethod(CSInput::TextEntry::Capitalisation ineKeyboardCapitalisation);
+            void SetCapitalisationMethod(ChilliSource::TextEntry::Capitalisation ineKeyboardCapitalisation);
 			//-----------------------------------------------
 			/// Called when the contents of the text buffer
             /// has changed

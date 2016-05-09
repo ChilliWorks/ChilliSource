@@ -178,7 +178,7 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(
 	CSBackend::Android::MainThreadId::Create();
 
 	//create the application
-	CSCore::Application* pApplication = CreateApplication();
+	ChilliSource::Application* pApplication = CreateApplication();
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->SetApplication(pApplication);
 
 	//setup other interfaces
@@ -192,25 +192,25 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this)
 {
-	CSCore::Application::Get()->Resume();
+	ChilliSource::Application::Get()->Resume();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this)
 {
-	CSCore::Application::Get()->Foreground();
+	ChilliSource::Application::Get()->Foreground();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this)
 {
-	CSCore::Application::Get()->Background();
+	ChilliSource::Application::Get()->Background();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this)
 {
-	CSCore::Application::Get()->Suspend();
+	ChilliSource::Application::Get()->Suspend();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
@@ -229,22 +229,22 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplicati
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elapsedTime)
 {
 	//Create the message with the time between frames
-	CSCore::Application::Get()->Update(in_deltaTime, (u64)in_elapsedTime);
-	CSCore::Application::Get()->Render();
+	ChilliSource::Application::Get()->Update(in_deltaTime, (u64)in_elapsedTime);
+	ChilliSource::Application::Get()->Render();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this)
 {
-	CSCore::Application::Get()->ApplicationMemoryWarning();
+	ChilliSource::Application::Get()->ApplicationMemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height)
 {
-	CSBackend::Android::Screen* screen = CSCore::Application::Get()->GetSystem<CSBackend::Android::Screen>();
+	CSBackend::Android::Screen* screen = ChilliSource::Application::Get()->GetSystem<CSBackend::Android::Screen>();
 	CS_ASSERT(screen != nullptr, "Cannot find required system: Screen.");
-	screen->OnResolutionChanged(CSCore::Vector2((f32)in_width, (f32)in_height));
+	screen->OnResolutionChanged(ChilliSource::Vector2((f32)in_width, (f32)in_height));
 }
 
 namespace CSBackend
@@ -275,13 +275,13 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		bool CoreJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool CoreJavaInterface::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == CoreJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		void CoreJavaInterface::SetApplication(CSCore::Application* in_application)
+		void CoreJavaInterface::SetApplication(ChilliSource::Application* in_application)
 		{
 			m_application = in_application;
 		}
@@ -294,7 +294,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		CSCore::Application* CoreJavaInterface::GetApplication()
+		ChilliSource::Application* CoreJavaInterface::GetApplication()
 		{
 			return m_application;
 		}

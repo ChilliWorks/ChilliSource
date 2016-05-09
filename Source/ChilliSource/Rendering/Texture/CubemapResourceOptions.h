@@ -34,14 +34,14 @@
 #include <ChilliSource/Core/Resource/IResourceOptions.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Custom options for loading a texture
     ///
     /// @author S Downie
     //-------------------------------------------------------
-    class CubemapResourceOptions final : public Core::IResourceOptions<Rendering::Cubemap>
+    class CubemapResourceOptions final : public IResourceOptions<Cubemap>
     {
     public:
         //-------------------------------------------------------

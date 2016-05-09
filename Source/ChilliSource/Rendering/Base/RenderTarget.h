@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //=====================================================
     /// Description:
@@ -62,13 +62,13 @@ namespace CS
         ///
         /// @return The colour texture.
         //------------------------------------------------------
-        virtual const CSRendering::TextureSPtr& GetColourTexture() const = 0;
+        virtual const TextureSPtr& GetColourTexture() const = 0;
         //------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The depth texture.
         //------------------------------------------------------
-        virtual const CSRendering::TextureSPtr& GetDepthTexture() const = 0;
+        virtual const TextureSPtr& GetDepthTexture() const = 0;
         //------------------------------------------------------
         /// Bind
         ///

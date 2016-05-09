@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(WidgetTemplate);
     //-------------------------------------------------------
@@ -42,12 +42,12 @@ namespace CS
     //-------------------------------------------------------
     //-------------------------------------------------------
     WidgetTemplate::WidgetTemplate()
-        : m_desc("", Core::PropertyMap(), std::vector<WidgetDesc>())
+        : m_desc("", PropertyMap(), std::vector<WidgetDesc>())
     {
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    bool WidgetTemplate::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool WidgetTemplate::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == WidgetTemplate::InterfaceID;
     }

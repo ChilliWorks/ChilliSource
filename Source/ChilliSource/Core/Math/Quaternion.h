@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// A generic quaternion class for respresention 3D
@@ -382,7 +382,7 @@ namespace CS
 
 #include <cmath>
 
-namespace CS
+namespace ChilliSource
 {
     template <typename TType> const GenericQuaternion<TType> GenericQuaternion<TType>::k_identity(0, 0, 0, 1);
     

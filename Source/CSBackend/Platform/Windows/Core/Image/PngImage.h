@@ -48,7 +48,7 @@ namespace CSBackend
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			PngImage(CSCore::StorageLocation ineLocation, const std::string& instrFilename);
+			PngImage(ChilliSource::StorageLocation ineLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace CSBackend
 			/// @param std::string instrFilename - the path to the file relative to either
 			///									   documents or the package.
 			//----------------------------------------------------------------------------------
-			void Load(CSCore::StorageLocation ineLocation, const std::string& instrFilename);
+			void Load(ChilliSource::StorageLocation ineLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Release
 			///
@@ -104,7 +104,7 @@ namespace CSBackend
 			///
 			/// @return the image format
 			//----------------------------------------------------------------------------------
-			CSCore::ImageFormat GetImageFormat() const;
+			ChilliSource::ImageFormat GetImageFormat() const;
 		protected:
 			//----------------------------------------------------------------------------------
 			/// Load with lib png
@@ -112,13 +112,13 @@ namespace CSBackend
 			/// Loads the png data using lib png
 			/// @param FileStreamSPtr inStream - the stream lib png should use to read the data.
 			//----------------------------------------------------------------------------------
-			bool LoadWithLibPng(CSCore::FileStreamSPtr inStream);
+			bool LoadWithLibPng(ChilliSource::FileStreamSPtr inStream);
 
 			bool mbIsLoaded;
 			s32 mdwHeight;
 			s32 mdwWidth;
 			u8 * mpData;
-			CSCore::ImageFormat m_format;
+			ChilliSource::ImageFormat m_format;
 			u32 m_dataSize = 0;
 		};
 	}

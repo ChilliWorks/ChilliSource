@@ -31,7 +31,7 @@
 #include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -49,7 +49,7 @@ namespace CS
         ConeParticleEmitterDef::EmitFromType ParseEmitFromType(const std::string& in_emitFromTypeString)
         {
             std::string emitFromTypeString = in_emitFromTypeString;
-            Core::StringUtils::ToLowerCase(emitFromTypeString);
+            StringUtils::ToLowerCase(emitFromTypeString);
 
             if (emitFromTypeString == "base")
             {
@@ -81,7 +81,7 @@ namespace CS
         ConeParticleEmitterDef::EmitDirectionType ParseEmitDirectionType(const std::string& in_emitDirectionTypeString)
         {
             std::string emitDirectionTypeString = in_emitDirectionTypeString;
-            Core::StringUtils::ToLowerCase(emitDirectionTypeString);
+            StringUtils::ToLowerCase(emitDirectionTypeString);
 
             if (emitDirectionTypeString == "awayfrombase")
             {
@@ -151,13 +151,13 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool ConeParticleEmitterDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ConeParticleEmitterDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleEmitterDef::InterfaceID == in_interfaceId || ConeParticleEmitterDef::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ParticleEmitterUPtr ConeParticleEmitterDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+    ParticleEmitterUPtr ConeParticleEmitterDef::CreateInstance(dynamic_array<Particle>* in_particleArray) const
     {
         return ParticleEmitterUPtr(new ConeParticleEmitter(this, in_particleArray));
     }

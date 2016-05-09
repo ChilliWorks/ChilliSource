@@ -33,7 +33,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     enum class VertexDataType {k_float2, k_float3, k_float4, k_byte4};
     enum class VertexDataSemantic {k_position, k_normal, k_uv, k_colour, k_weight, k_jointIndex};

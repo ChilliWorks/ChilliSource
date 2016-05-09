@@ -32,14 +32,14 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------------
     /// Factory for creating material resources based on rendering type
     ///
     /// @author S Downie
     //-------------------------------------------------------------------------
-    class MaterialFactory final : public Core::AppSystem
+    class MaterialFactory final : public AppSystem
     {
     public:
         
@@ -63,7 +63,7 @@ namespace CS
         ///
         /// @return Whether the object is of the same interface
         //---------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //---------------------------------------------------
         /// Create a material with no shader programs.
         /// The shader programs must be specified by the

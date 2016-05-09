@@ -31,7 +31,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/IProperty.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// A specific type of property. This implements the IProperty interface
@@ -109,7 +109,7 @@ namespace CS
 //------------------------------------------------------------------------
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

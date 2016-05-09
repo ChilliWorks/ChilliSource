@@ -30,14 +30,14 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
     SizePolicy ParseSizePolicy(const std::string& in_policy)
     {
         std::string lowerCase = in_policy;
-        Core::StringUtils::ToLowerCase(lowerCase);
+        StringUtils::ToLowerCase(lowerCase);
         
         if(lowerCase == "none") return SizePolicy::k_none;
         if(lowerCase == "usepreferredsize") return SizePolicy::k_usePreferredSize;

@@ -36,7 +36,7 @@
 
 #include <atomic>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Interface into a resource. A resource is typically

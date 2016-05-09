@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(SkinnedAnimation);
     //---------------------------------------------------------------------
@@ -45,7 +45,7 @@ namespace CS
     }
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    bool SkinnedAnimation::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool SkinnedAnimation::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == SkinnedAnimation::InterfaceID;
     }

@@ -50,7 +50,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace WidgetParserUtils
     {
@@ -69,7 +69,7 @@ namespace CS
         /// @return a pair containing the storage location and
         /// file path of the resource.
         //-------------------------------------------------------
-        std::pair<Core::StorageLocation, std::string> ParseResource(const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath)
+        std::pair<StorageLocation, std::string> ParseResource(const Json::Value& in_jsonValue, StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath)
         {
             const char k_resourceFilePathKey[] = "Path";
             const char k_resourceLocationKey[] = "Location";
@@ -82,50 +82,50 @@ namespace CS
             
             std::string outputPath = pathJson.asString();
             
-            Core::StorageLocation outputLocation;
+            StorageLocation outputLocation;
             if (in_jsonValue.isMember(k_resourceLocationKey) == true)
             {
                 const Json::Value& locationJson = in_jsonValue.get(k_resourceLocationKey, Json::nullValue);
                 CS_ASSERT(locationJson.isString() == true, "'" + std::string(k_resourceLocationKey) + "' must be a string.");
 
-                outputLocation = Core::ParseStorageLocation(locationJson.asString());
+                outputLocation = ParseStorageLocation(locationJson.asString());
             }
             else
             {
                 outputLocation = in_relStorageLocation;
-                outputPath = Core::StringUtils::StandardiseDirectoryPath(in_relDirectoryPath) + outputPath;
+                outputPath = StringUtils::StandardiseDirectoryPath(in_relDirectoryPath) + outputPath;
             }
             
             return std::make_pair(outputLocation, outputPath);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, Core::PropertyMap& out_propertyMap)
+        void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, PropertyMap& out_propertyMap)
         {
             auto propertyType = out_propertyMap.GetType(in_propertyName);
             
             if (propertyType == PropertyTypes::Texture())
             {
                 auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                auto texture = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Texture>(resourcePair.first, resourcePair.second);
+                auto texture = Application::Get()->GetResourcePool()->LoadResource<Texture>(resourcePair.first, resourcePair.second);
                 out_propertyMap.SetProperty(in_propertyName, texture);
             }
             else if (propertyType == PropertyTypes::TextureAtlas())
             {
                 auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                auto textureAtlas = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::TextureAtlas>(resourcePair.first, resourcePair.second);
+                auto textureAtlas = Application::Get()->GetResourcePool()->LoadResource<TextureAtlas>(resourcePair.first, resourcePair.second);
                 out_propertyMap.SetProperty(in_propertyName, textureAtlas);
             }
             else if (propertyType == PropertyTypes::Font())
             {
                 auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                auto font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(resourcePair.first, resourcePair.second);
+                auto font = Application::Get()->GetResourcePool()->LoadResource<Font>(resourcePair.first, resourcePair.second);
                 out_propertyMap.SetProperty(in_propertyName, font);
             }
             else if (propertyType == PropertyTypes::LocalisedText())
             {
                 auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(resourcePair.first, resourcePair.second);
+                auto localisedText = Application::Get()->GetResourcePool()->LoadResource<LocalisedText>(resourcePair.first, resourcePair.second);
                 out_propertyMap.SetProperty(in_propertyName, localisedText);
             }
             else if (propertyType == PropertyTypes::DrawableDef())
@@ -148,7 +148,7 @@ namespace CS
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        WidgetDesc ParseWidget(const Json::Value& in_widget, Core::StorageLocation in_templateLocation, const std::string& in_templatePath)
+        WidgetDesc ParseWidget(const Json::Value& in_widget, StorageLocation in_templateLocation, const std::string& in_templatePath)
         {
             const char k_widgetTypeKey[] = "Type";
             const char k_widgetChildrenKey[] = "Children";
@@ -159,7 +159,7 @@ namespace CS
             CS_ASSERT(in_widget.isMember(k_widgetTypeKey) == true, "Widget must have '" + std::string(k_widgetTypeKey) + "' key.");
             
             std::string outputType = in_widget[k_widgetTypeKey].asString();
-            Core::PropertyMap outputProperties;
+            PropertyMap outputProperties;
             std::vector<WidgetDesc> outputChildren;
             
             if(outputType == k_templateTypeName)
@@ -168,30 +168,30 @@ namespace CS
                 CS_ASSERT(in_widget.isMember(k_templateFilePathKey), "Link to template file must have '" + std::string(k_templateFilePathKey) + "' key.");
                 
                 bool relativePath = in_widget.isMember(k_templateLocationKey) == false;
-                Core::StorageLocation location = in_templateLocation;
+                StorageLocation location = in_templateLocation;
                 std::string path = in_widget[k_templateFilePathKey].asString();
                 
                 if(relativePath == false)
                 {
-                    location = Core::ParseStorageLocation(in_widget[k_templateLocationKey].asString());
+                    location = ParseStorageLocation(in_widget[k_templateLocationKey].asString());
                 }
                 else
                 {
-                    path = Core::StringUtils::ResolveParentedDirectories(in_templatePath + path);
+                    path = StringUtils::ResolveParentedDirectories(in_templatePath + path);
                 }
                 
                 //Template widgets need to be created as a hierarchy so that we can set properties such as layout
                 //on the widget without affecting the contents of the template and vice-versa.
                 outputType = "Widget";
-                outputProperties = Core::PropertyMap(Widget::GetPropertyDescs());
+                outputProperties = PropertyMap(Widget::GetPropertyDescs());
 
                 //TODO: this will not work with async loading.
-                WidgetTemplateCSPtr widgetTemplate = Core::Application::Get()->GetResourcePool()->LoadResource<WidgetTemplate>(location, path);
+                WidgetTemplateCSPtr widgetTemplate = Application::Get()->GetResourcePool()->LoadResource<WidgetTemplate>(location, path);
                 outputChildren.push_back(widgetTemplate->GetWidgetDesc());
             }
             else
             {
-                auto widgetFactory = Core::Application::Get()->GetWidgetFactory();
+                auto widgetFactory = Application::Get()->GetWidgetFactory();
                 WidgetDefCSPtr widgetDef = widgetFactory->GetDefinition(outputType);
                 outputProperties = widgetDef->GetDefaultProperties();
             }

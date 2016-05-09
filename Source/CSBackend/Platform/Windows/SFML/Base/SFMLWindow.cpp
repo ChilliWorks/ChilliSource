@@ -67,7 +67,7 @@ namespace CSBackend
 				GetModuleFileName(nullptr, pathChars, MAX_PATH);
 				std::string path = WindowsStringUtils::ConvertWindowsFilePathToStandard(std::wstring(pathChars));
 				std::string::size_type pos = path.find_last_of("/");
-				std::string workingDir = CSCore::StringUtils::StandardiseDirectoryPath(path.substr(0, pos));
+				std::string workingDir = ChilliSource::StringUtils::StandardiseDirectoryPath(path.substr(0, pos));
 
 				//open the file
 				std::ifstream file(workingDir + "assets/AppResources/App.config");
@@ -97,7 +97,7 @@ namespace CSBackend
 			///
 			/// @return The surface format.
 			//-------------------------------------------------------------
-			CSRendering::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root)
+			ChilliSource::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root)
 			{
 				const std::string k_defaultFormat = "rgb565_depth24";
 				std::string formatString = in_root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
@@ -108,7 +108,7 @@ namespace CSBackend
 					formatString = windows["PreferredSurfaceFormat"].asString();
 				}
 
-				return CSCore::ParseSurfaceFormat(formatString);
+				return ChilliSource::ParseSurfaceFormat(formatString);
 			}
 			//-------------------------------------------------------------
 			/// Reads the multisample format from the App.config file.
@@ -129,7 +129,7 @@ namespace CSBackend
 					stringFormat = windows["Multisample"].asString();
 				}
 
-				CSCore::StringUtils::ToLowerCase(stringFormat);
+				ChilliSource::StringUtils::ToLowerCase(stringFormat);
 
 				if (stringFormat == "none")
 				{
@@ -161,7 +161,7 @@ namespace CSBackend
 			///
 			/// @return Context settings
 			//-------------------------------------------------------------
-			sf::ContextSettings CreateContextSettings(CSRendering::SurfaceFormat in_format, u32 in_multiSampleFormat)
+			sf::ContextSettings CreateContextSettings(ChilliSource::SurfaceFormat in_format, u32 in_multiSampleFormat)
 			{
 				sf::ContextSettings glSettings;
 				glSettings.majorVersion = 2;
@@ -171,13 +171,13 @@ namespace CSBackend
 
 				switch (in_format)
 				{
-				case CSRendering::SurfaceFormat::k_rgb565_depth24:
-				case CSRendering::SurfaceFormat::k_rgb888_depth24:
+				case ChilliSource::SurfaceFormat::k_rgb565_depth24:
+				case ChilliSource::SurfaceFormat::k_rgb888_depth24:
 				default:
 					glSettings.depthBits = 24;
 					break;
-				case CSRendering::SurfaceFormat::k_rgb565_depth32:
-				case CSRendering::SurfaceFormat::k_rgb888_depth32:
+				case ChilliSource::SurfaceFormat::k_rgb565_depth32:
+				case ChilliSource::SurfaceFormat::k_rgb888_depth32:
 					glSettings.depthBits = 32;
 					break;
 				}
@@ -193,19 +193,19 @@ namespace CSBackend
 			///
 			/// @return Pixel bit depth
 			//-------------------------------------------------------------
-			u32 ReadRGBAPixelDepth(CSRendering::SurfaceFormat in_format)
+			u32 ReadRGBAPixelDepth(ChilliSource::SurfaceFormat in_format)
 			{
 				u32 depth = 32;
 
 				switch (in_format)
 				{
-				case CSRendering::SurfaceFormat::k_rgb565_depth24:
-				case CSRendering::SurfaceFormat::k_rgb565_depth32:
+				case ChilliSource::SurfaceFormat::k_rgb565_depth24:
+				case ChilliSource::SurfaceFormat::k_rgb565_depth32:
 				default:
 					depth = 16;
 					break;
-				case CSRendering::SurfaceFormat::k_rgb888_depth24:
-				case CSRendering::SurfaceFormat::k_rgb888_depth32:
+				case ChilliSource::SurfaceFormat::k_rgb888_depth24:
+				case ChilliSource::SurfaceFormat::k_rgb888_depth32:
 					depth = 32;
 					break;
 				}
@@ -238,15 +238,15 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void SFMLWindow::SetSize(const CSCore::Integer2& in_size)
+		void SFMLWindow::SetSize(const ChilliSource::Integer2& in_size)
 		{
 			if (m_displayMode == DisplayMode::k_fullscreen)
 			{
-				CS_ASSERT(CSCore::VectorUtils::Contains(GetSupportedResolutions(), in_size) == true, "Resolution not supported in fullscreen mode.");
+				CS_ASSERT(ChilliSource::VectorUtils::Contains(GetSupportedResolutions(), in_size) == true, "Resolution not supported in fullscreen mode.");
 			}
 
 			//Clamp to the actual screen size
-			auto windowSize = CSCore::Integer2::Max(in_size, CSCore::Integer2::k_one);
+			auto windowSize = ChilliSource::Integer2::Max(in_size, ChilliSource::Integer2::k_one);
 
 			//This will trigger an SFML resize event
 			m_window.setSize(sf::Vector2u(windowSize.x, windowSize.y));
@@ -279,7 +279,7 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow::SetFullscreen()
 		{
-			CS_ASSERT(CSCore::VectorUtils::Contains(GetSupportedResolutions(), GetWindowSize()) == true, "Resolution not supported in fullscreen mode.");
+			CS_ASSERT(ChilliSource::VectorUtils::Contains(GetSupportedResolutions(), GetWindowSize()) == true, "Resolution not supported in fullscreen mode.");
 
 			//Pick the best fit RGBA depth based on the supported depths
 			for (auto it = sf::VideoMode::getFullscreenModes().rbegin(); it != sf::VideoMode::getFullscreenModes().rend(); ++it)
@@ -304,15 +304,15 @@ namespace CSBackend
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		std::vector<CSCore::Integer2> SFMLWindow::GetSupportedResolutions() const
+		std::vector<ChilliSource::Integer2> SFMLWindow::GetSupportedResolutions() const
 		{
-			std::vector<CSCore::Integer2> result;
+			std::vector<ChilliSource::Integer2> result;
 			result.reserve(sf::VideoMode::getFullscreenModes().size());
 
 			for (const auto& mode : sf::VideoMode::getFullscreenModes())
 			{
-				CSCore::Integer2 resolution((s32)mode.width, (s32)mode.height);
-				if (CSCore::VectorUtils::Contains(result, resolution) == false)
+				ChilliSource::Integer2 resolution((s32)mode.width, (s32)mode.height);
+				if (ChilliSource::VectorUtils::Contains(result, resolution) == false)
 				{
 					result.push_back(resolution);
 				}
@@ -322,58 +322,58 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::WindowResizeDelegate>& SFMLWindow::GetWindowResizedEvent()
+		ChilliSource::IConnectableEvent<SFMLWindow::WindowResizeDelegate>& SFMLWindow::GetWindowResizedEvent()
 		{
 			return m_windowResizeEvent;
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::WindowDisplayModeDelegate>& SFMLWindow::GetWindowDisplayModeEvent()
+		ChilliSource::IConnectableEvent<SFMLWindow::WindowDisplayModeDelegate>& SFMLWindow::GetWindowDisplayModeEvent()
 		{
 			return m_windowDisplayModeEvent;
 		}
 		//-------------------------------------------------
 		//------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::MouseButtonDelegate>& SFMLWindow::GetMouseButtonEvent()
+		ChilliSource::IConnectableEvent<SFMLWindow::MouseButtonDelegate>& SFMLWindow::GetMouseButtonEvent()
 		{
 			return m_mouseButtonEvent;
 		}
 		//-------------------------------------------------
 		//------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::MouseMovedDelegate>& SFMLWindow::GetMouseMovedEvent()
+		ChilliSource::IConnectableEvent<SFMLWindow::MouseMovedDelegate>& SFMLWindow::GetMouseMovedEvent()
 		{
 			return m_mouseMovedEvent;
 		}
 		//-------------------------------------------------
 		//------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::MouseWheelDelegate>& SFMLWindow::GetMouseWheelEvent()
+		ChilliSource::IConnectableEvent<SFMLWindow::MouseWheelDelegate>& SFMLWindow::GetMouseWheelEvent()
 		{
 			return m_mouseWheelEvent;
 		}
 		//-------------------------------------------------
 		//------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::TextEnteredEvent>& SFMLWindow::GetTextEnteredEvent()
+		ChilliSource::IConnectableEvent<SFMLWindow::TextEnteredEvent>& SFMLWindow::GetTextEnteredEvent()
 		{
 			return m_textEnteredEvent;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::KeyPressedDelegate>& SFMLWindow::GetKeyPressedEvent()
+		ChilliSource::IConnectableEvent<SFMLWindow::KeyPressedDelegate>& SFMLWindow::GetKeyPressedEvent()
 		{
 			return m_keyPressedEvent;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::KeyReleasedDelegate>& SFMLWindow::GetKeyReleasedEvent()
+		ChilliSource::IConnectableEvent<SFMLWindow::KeyReleasedDelegate>& SFMLWindow::GetKeyReleasedEvent()
 		{
 			return m_keyReleasedEvent;
 		}
 		//------------------------------------------------
 		//------------------------------------------------
-		CSCore::Integer2 SFMLWindow::GetWindowSize() const
+		ChilliSource::Integer2 SFMLWindow::GetWindowSize() const
 		{
 			auto size = m_window.getSize();
-			return CSCore::Integer2((s32)size.x, (s32)size.y);
+			return ChilliSource::Integer2((s32)size.x, (s32)size.y);
 		}
 		//------------------------------------------------
 		//------------------------------------------------
@@ -383,10 +383,10 @@ namespace CSBackend
 		}
 		//------------------------------------------------
 		//------------------------------------------------
-		CSCore::Integer2 SFMLWindow::GetMousePosition() const
+		ChilliSource::Integer2 SFMLWindow::GetMousePosition() const
 		{
 			sf::Vector2i pos = sf::Mouse::getPosition(m_window);
-			return CSCore::Integer2((s32)pos.x, (s32)pos.y);
+			return ChilliSource::Integer2((s32)pos.x, (s32)pos.y);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -405,12 +405,12 @@ namespace CSBackend
 		void SFMLWindow::Run()
 		{
 			Json::Value appConfigRoot = ReadAppConfig();
-			CSRendering::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
+			ChilliSource::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
 			u32 msaaFormat = ReadMultisampleFormat(appConfigRoot);
 			m_contextSettings = CreateContextSettings(surfaceFormat, msaaFormat);
 			m_preferredRGBADepth = ReadRGBAPixelDepth(surfaceFormat);
 
-			CSCore::Integer2 windowSize(s32(f32(sf::VideoMode::getDesktopMode().width) * 0.8f), s32(f32(sf::VideoMode::getDesktopMode().height) * 0.8f));
+			ChilliSource::Integer2 windowSize(s32(f32(sf::VideoMode::getDesktopMode().width) * 0.8f), s32(f32(sf::VideoMode::getDesktopMode().height) * 0.8f));
 			m_window.create(sf::VideoMode((u32)windowSize.x, (u32)windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
 
 			GLenum glewError = glewInit();
@@ -424,7 +424,7 @@ namespace CSBackend
 			auto appStartTime = clock.getElapsedTime().asSeconds();
 			auto appPreviousTime = appStartTime;
 
-			CSCore::Application* app = CreateApplication();
+			ChilliSource::Application* app = CreateApplication();
 			app->Init();
 			app->Resume();
 			app->Foreground();
@@ -432,7 +432,7 @@ namespace CSBackend
 			m_isRunning = true;
 			m_isFocused = true;
 
-			auto appConfig = CSCore::Application::Get()->GetAppConfig();
+			auto appConfig = ChilliSource::Application::Get()->GetAppConfig();
 			m_preferredFPS = appConfig->GetPreferredFPS();
 			
 			if (appConfig->IsVSyncEnabled())
@@ -460,7 +460,7 @@ namespace CSBackend
 							app->Quit();
 							return;
 						case sf::Event::Resized:
-							m_windowResizeEvent.NotifyConnections(CSCore::Integer2(s32(event.size.width), s32(event.size.height)));
+							m_windowResizeEvent.NotifyConnections(ChilliSource::Integer2(s32(event.size.width), s32(event.size.height)));
 							break;
 						case sf::Event::GainedFocus:
 							if (m_isFocused == false)
@@ -496,7 +496,7 @@ namespace CSBackend
 							break;
 						case sf::Event::TextEntered:
 						{
-							CSCore::UTF8Char utf8Char = event.text.unicode;
+							ChilliSource::UTF8Char utf8Char = event.text.unicode;
 							m_textEnteredEvent.NotifyConnections(utf8Char);
 							break;
 						}
@@ -527,12 +527,12 @@ namespace CSBackend
 		{
 			if (m_isFocused == true)
 			{
-				CSCore::Application::Get()->Background();
+				ChilliSource::Application::Get()->Background();
 				m_isFocused = false;
 			}
 
-			CSCore::Application::Get()->Suspend();
-			CSCore::Application::Get()->Destroy();
+			ChilliSource::Application::Get()->Suspend();
+			ChilliSource::Application::Get()->Destroy();
 
 			m_isRunning = false;
 		}

@@ -50,7 +50,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------
-        class IAPSystem final : public CSNetworking::IAPSystem
+        class IAPSystem final : public ChilliSource::IAPSystem
         {
         public:
 
@@ -75,7 +75,7 @@ namespace CSBackend
             ///
             /// @return Whether the class is of the given type
             //---------------------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
@@ -183,7 +183,7 @@ namespace CSBackend
             
         private:
             
-            friend CSNetworking::IAPSystemUPtr CSNetworking::IAPSystem::Create(const CSCore::ParamDictionary&);
+            friend ChilliSource::IAPSystemUPtr ChilliSource::IAPSystem::Create(const ChilliSource::ParamDictionary&);
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///

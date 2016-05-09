@@ -38,7 +38,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //===============================================================
     /// Animation Playback Type
@@ -54,11 +54,11 @@ namespace CS
     /// Events
     //===============================================================
     typedef std::function<void(AnimatedMeshComponent*)> AnimationChangedDelegate;
-    typedef Core::Event<AnimationChangedDelegate> AnimationChangedEvent;
+    typedef Event<AnimationChangedDelegate> AnimationChangedEvent;
     typedef std::function<void(AnimatedMeshComponent*)> AnimationCompletionDelegate;
-    typedef Core::Event<AnimationCompletionDelegate> AnimationCompletionEvent;
+    typedef Event<AnimationCompletionDelegate> AnimationCompletionEvent;
     typedef std::function<void(AnimatedMeshComponent*)> AnimationLoopedDelegate;
-    typedef Core::Event<AnimationLoopedDelegate> AnimationLoopedEvent;
+    typedef Event<AnimationLoopedDelegate> AnimationLoopedEvent;
     //===============================================================
     /// Animated Mesh component
     ///
@@ -79,7 +79,7 @@ namespace CS
         /// @param Comparison Type
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+        bool IsA(InterfaceIDType inInterfaceID) const override;
         //----------------------------------------------------
         /// Get Axis Aligned Bounding Box
         ///
@@ -88,7 +88,7 @@ namespace CS
         /// recomputed when required.
         /// @return Axis aligned bounding box
         //----------------------------------------------------
-        const Core::AABB& GetAABB() override;
+        const AABB& GetAABB() override;
         //----------------------------------------------------
         /// Get Object Oriented Bounding Box
         ///
@@ -97,7 +97,7 @@ namespace CS
         /// recomputed when required.
         /// @return OOBB
         //----------------------------------------------------
-        const Core::OOBB& GetOOBB() override;
+        const OOBB& GetOOBB() override;
         //----------------------------------------------------
         /// Get Bounding Sphere
         ///
@@ -106,7 +106,7 @@ namespace CS
         /// recomputed when required.
         /// @return bounding sphere
         //----------------------------------------------------
-        const Core::Sphere& GetBoundingSphere() override;
+        const Sphere& GetBoundingSphere() override;
         //-----------------------------------------------------------
         /// Is Transparent
         ///
@@ -238,7 +238,7 @@ namespace CS
         /// @param The entity.
         /// @param the name of the node to attach to.
         //----------------------------------------------------------
-        void AttachEntity(const Core::EntitySPtr& inpEntity, const std::string& instrNodeName);
+        void AttachEntity(const EntitySPtr& inpEntity, const std::string& instrNodeName);
         //----------------------------------------------------------
         /// Detatch Entity
         ///
@@ -247,7 +247,7 @@ namespace CS
         ///
         /// @param The entity.
         //----------------------------------------------------------
-        void DetatchEntity(Core::Entity* inpEntity);
+        void DetatchEntity(Entity* inpEntity);
         //----------------------------------------------------------
         /// Detatch All Entities
         ///
@@ -454,7 +454,7 @@ namespace CS
         void Reset();
         
     private:
-        typedef std::vector<std::pair<Core::EntityWPtr, s32> > AttachedEntityList;
+        typedef std::vector<std::pair<EntityWPtr, s32> > AttachedEntityList;
         AttachedEntityList maAttachedEntities;
         MeshCSPtr mpModel;
         std::vector<MaterialCSPtr> mMaterials;

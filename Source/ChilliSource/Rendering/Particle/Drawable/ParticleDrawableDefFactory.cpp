@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawableDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(ParticleDrawableDefFactory);
     //-----------------------------------------------------------------
@@ -41,7 +41,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    bool ParticleDrawableDefFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ParticleDrawableDefFactory::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleDrawableDefFactory::InterfaceID == in_interfaceId);
     }

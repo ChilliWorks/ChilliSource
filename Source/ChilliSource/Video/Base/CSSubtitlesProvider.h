@@ -35,14 +35,14 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------------
     /// Factory loader for creating subtitle resources from file.
     ///
     /// @param Ian Copland
     //-------------------------------------------------------------------------
-    class CSSubtitlesProvider final : public Core::ResourceProvider
+    class CSSubtitlesProvider final : public ResourceProvider
     {
     public:
         
@@ -55,13 +55,13 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface
         //-------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------
         /// @author S Downie
         ///
         /// @return The resource type this provider can create
         //----------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //-------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -72,7 +72,7 @@ namespace CS
         //-------------------------------------------------------------------------
         bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
     private:
-        friend class Core::Application;
+        friend class Application;
         //-------------------------------------------------------
         /// Creates a new instance of the subtitle provider.
         ///
@@ -98,7 +98,7 @@ namespace CS
         /// @param Options to customise the creation
         /// @param [Out] Resource object
         //-------------------------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
         //-------------------------------------------------------------------------
         /// Load the subtitles resource on a background thread from the given
         /// file location. Calls the completion delegate on completion. Check
@@ -112,7 +112,7 @@ namespace CS
         /// @param Delegate
         /// @param [Out] Resource object
         //-------------------------------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
         //-------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -121,7 +121,7 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] Resource object
         //-------------------------------------------------------------------------
-        void LoadSubtitles(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SubtitlesSPtr& out_resource) const;
+        void LoadSubtitles(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const SubtitlesSPtr& out_resource) const;
         //-------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -146,7 +146,7 @@ namespace CS
         /// @return the rectangle representing the bounding box that contains the
         /// subtitles.
         //-------------------------------------------------------------------------
-        Core::Rectangle LoadBounds(const Json::Value& in_boundsJSON) const;
+        Rectangle LoadBounds(const Json::Value& in_boundsJSON) const;
         //-------------------------------------------------------------------------
         /// Parses a time string in the format Hours:Minutes:Seconds:Milliseconds.
         /// For example 01:05:34:123.

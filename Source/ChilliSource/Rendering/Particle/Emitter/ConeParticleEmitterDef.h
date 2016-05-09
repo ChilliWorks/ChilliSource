@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A particle emitter def describing the properties for a Cone Particle
@@ -145,7 +145,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// Creates a new instance of a Cone Particle Emitter.
         ///
@@ -155,7 +155,7 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        ParticleEmitterUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+        ParticleEmitterUPtr CreateInstance(dynamic_array<Particle>* in_particleArray) const override;
         //----------------------------------------------------------------
         /// @author Ian Copland.
         ///
@@ -187,7 +187,7 @@ namespace CS
         EmitFromType m_emitFromType = EmitFromType::k_base;
         EmitDirectionType m_emitDirectionType = EmitDirectionType::k_awayFromBase;
         ParticlePropertyUPtr<f32> m_radiusProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(1.0f));
-        ParticlePropertyUPtr<f32> m_angleProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(Core::MathUtils::k_pi / 4.0f));
+        ParticlePropertyUPtr<f32> m_angleProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(MathUtils::k_pi / 4.0f));
     };
 }
 

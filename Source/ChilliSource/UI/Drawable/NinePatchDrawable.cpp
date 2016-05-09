@@ -37,7 +37,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -72,9 +72,9 @@ namespace CS
         ///
         /// @return UVs for the 9 patches
         //----------------------------------------------------------------------------------------
-        std::array<Rendering::UVs, NinePatchDrawable::k_numPatches> CalculateNinePatchUVs(const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+        std::array<UVs, NinePatchDrawable::k_numPatches> CalculateNinePatchUVs(const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
         {
-            std::array<Rendering::UVs, NinePatchDrawable::k_numPatches> result;
+            std::array<UVs, NinePatchDrawable::k_numPatches> result;
             
             f32 uvWidth = (in_frame.m_originalSize.x/in_frame.m_croppedSize.x) * in_frame.m_uvs.m_s;
             
@@ -178,23 +178,23 @@ namespace CS
         ///
         /// @return Sizes for the 9 patches
         //----------------------------------------------------------------------------------------
-        std::array<Core::Vector2, NinePatchDrawable::k_numPatches> CalculateNinePatchSizes(const Core::Vector2& in_widgetSize, const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+        std::array<Vector2, NinePatchDrawable::k_numPatches> CalculateNinePatchSizes(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
         {
-            std::array<Core::Vector2, NinePatchDrawable::k_numPatches> result;
+            std::array<Vector2, NinePatchDrawable::k_numPatches> result;
             
             f32 widthImageLeft = in_frame.m_originalSize.x * in_left;
-            f32 widthVisibleLeft = Core::MathUtils::Clamp(-in_frame.m_offset.x + widthImageLeft, 0.0f, in_frame.m_croppedSize.x);
+            f32 widthVisibleLeft = MathUtils::Clamp(-in_frame.m_offset.x + widthImageLeft, 0.0f, in_frame.m_croppedSize.x);
         
             f32 offsetRight = -(in_frame.m_originalSize.x - (in_frame.m_offset.x + in_frame.m_croppedSize.x));
             f32 widthImageRight = in_frame.m_originalSize.x * in_right;
-            f32 widthVisibleRight = Core::MathUtils::Clamp(offsetRight + widthImageRight, 0.0f, in_frame.m_croppedSize.x);
+            f32 widthVisibleRight = MathUtils::Clamp(offsetRight + widthImageRight, 0.0f, in_frame.m_croppedSize.x);
             
             f32 heightImageTop = in_frame.m_originalSize.y * in_top;
-            f32 heightVisibleTop = Core::MathUtils::Clamp(-in_frame.m_offset.y + heightImageTop, 0.0f, in_frame.m_croppedSize.y);
+            f32 heightVisibleTop = MathUtils::Clamp(-in_frame.m_offset.y + heightImageTop, 0.0f, in_frame.m_croppedSize.y);
             
             f32 offsetBottom = -(in_frame.m_originalSize.y - (in_frame.m_offset.y + in_frame.m_croppedSize.y));
             f32 heightImageBottom = in_frame.m_originalSize.y * in_bottom;
-            f32 heightVisibleBottom = Core::MathUtils::Clamp(offsetBottom + heightImageBottom, 0.0f, in_frame.m_croppedSize.y);
+            f32 heightVisibleBottom = MathUtils::Clamp(offsetBottom + heightImageBottom, 0.0f, in_frame.m_croppedSize.y);
             
             //If the fixed dimensions are too big to fit in the widget then we need to downscale them
             f32 heightTotal = heightVisibleTop + heightVisibleBottom;
@@ -213,12 +213,12 @@ namespace CS
             }
             
             f32 widthImageCentre = in_frame.m_originalSize.x * (1.0f - in_right - in_left);
-            f32 widthVisibleCentre = Core::MathUtils::Clamp(widthImageCentre - (in_frame.m_offset.x + widthVisibleLeft - widthImageLeft), 0.0f, in_frame.m_croppedSize.x);
+            f32 widthVisibleCentre = MathUtils::Clamp(widthImageCentre - (in_frame.m_offset.x + widthVisibleLeft - widthImageLeft), 0.0f, in_frame.m_croppedSize.x);
             f32 widthStretched = in_widgetSize.x - widthVisibleLeft - widthVisibleRight;
             f32 widthWidgetCentre = widthVisibleCentre * (widthStretched/widthImageCentre);
             
             f32 heightImageCentre = in_frame.m_originalSize.y * (1.0f - in_bottom - in_top);
-            f32 heightVisibleCentre = Core::MathUtils::Clamp(heightImageCentre - (in_frame.m_offset.y + heightVisibleTop - heightImageTop), 0.0f, in_frame.m_croppedSize.y);
+            f32 heightVisibleCentre = MathUtils::Clamp(heightImageCentre - (in_frame.m_offset.y + heightVisibleTop - heightImageTop), 0.0f, in_frame.m_croppedSize.y);
             f32 heightStretched = in_widgetSize.y - heightVisibleTop - heightVisibleBottom;
             f32 heightWidgetCentre = heightVisibleCentre * (heightStretched/heightImageCentre);
             
@@ -254,20 +254,20 @@ namespace CS
         ///
         /// @return Sizes for the 9 patches
         //----------------------------------------------------------------------------------------
-        std::array<Core::Vector2, NinePatchDrawable::k_numPatches> CalculateNinePatchPositions(const Core::Vector2& in_widgetSize, const std::array<Core::Vector2, NinePatchDrawable::k_numPatches>& in_sizes)
+        std::array<Vector2, NinePatchDrawable::k_numPatches> CalculateNinePatchPositions(const Vector2& in_widgetSize, const std::array<Vector2, NinePatchDrawable::k_numPatches>& in_sizes)
         {
-            std::array<Core::Vector2, NinePatchDrawable::k_numPatches> result;
+            std::array<Vector2, NinePatchDrawable::k_numPatches> result;
             
-            Core::Vector2 halfWidgetSize = in_widgetSize * 0.5f;
-            Core::Vector2 halfMiddleCentre = in_sizes[(u32)Patch::k_middleCentre] * 0.5f;
-            Core::Vector2 halfMiddleLeft = in_sizes[(u32)Patch::k_middleLeft] * 0.5f;
-            Core::Vector2 halfMiddleRight = in_sizes[(u32)Patch::k_middleRight] * 0.5f;
-            Core::Vector2 halfTopCentre = in_sizes[(u32)Patch::k_topCentre] * 0.5f;
-            Core::Vector2 halfTopLeft = in_sizes[(u32)Patch::k_topLeft] * 0.5f;
-            Core::Vector2 halfTopRight = in_sizes[(u32)Patch::k_topRight] * 0.5f;
-            Core::Vector2 halfBottomCentre = in_sizes[(u32)Patch::k_bottomCentre] * 0.5f;
-            Core::Vector2 halfBottomLeft = in_sizes[(u32)Patch::k_bottomLeft] * 0.5f;
-            Core::Vector2 halfBottomRight = in_sizes[(u32)Patch::k_bottomRight] * 0.5f;
+            Vector2 halfWidgetSize = in_widgetSize * 0.5f;
+            Vector2 halfMiddleCentre = in_sizes[(u32)Patch::k_middleCentre] * 0.5f;
+            Vector2 halfMiddleLeft = in_sizes[(u32)Patch::k_middleLeft] * 0.5f;
+            Vector2 halfMiddleRight = in_sizes[(u32)Patch::k_middleRight] * 0.5f;
+            Vector2 halfTopCentre = in_sizes[(u32)Patch::k_topCentre] * 0.5f;
+            Vector2 halfTopLeft = in_sizes[(u32)Patch::k_topLeft] * 0.5f;
+            Vector2 halfTopRight = in_sizes[(u32)Patch::k_topRight] * 0.5f;
+            Vector2 halfBottomCentre = in_sizes[(u32)Patch::k_bottomCentre] * 0.5f;
+            Vector2 halfBottomLeft = in_sizes[(u32)Patch::k_bottomLeft] * 0.5f;
+            Vector2 halfBottomRight = in_sizes[(u32)Patch::k_bottomRight] * 0.5f;
             
             result[(u32)Patch::k_topLeft].x = -halfWidgetSize.x + halfTopLeft.x;
             result[(u32)Patch::k_topLeft].y = halfWidgetSize.y - halfTopLeft.y;
@@ -313,9 +313,9 @@ namespace CS
         ///
         /// @return Offset from top left
         //----------------------------------------------------------------------------------------
-        Core::Vector2 CalculatePatchesOffset(const Core::Vector2& in_widgetSize, const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+        Vector2 CalculatePatchesOffset(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
         {
-            Core::Vector2 result;
+            Vector2 result;
             
             f32 leftImageEnd = in_frame.m_originalSize.x * in_left;
             f32 leftImageWidth = leftImageEnd;
@@ -377,14 +377,14 @@ namespace CS
     CS_DEFINE_NAMEDTYPE(NinePatchDrawable);
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    NinePatchDrawable::NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset)
+    NinePatchDrawable::NinePatchDrawable(const TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset)
     {
         SetTexture(in_texture);
         SetInsets(in_leftInset, in_rightInset, in_topInset, in_bottomInset);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    NinePatchDrawable::NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset,
+    NinePatchDrawable::NinePatchDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset,
                                          f32 in_topInset, f32 in_bottomInset)
     {
         CS_ASSERT(in_atlas != nullptr, "Texture atlas cannot be null.");
@@ -397,19 +397,19 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    bool NinePatchDrawable::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool NinePatchDrawable::IsA(InterfaceIDType in_interfaceId) const
     {
         return (Drawable::InterfaceID == in_interfaceId || NinePatchDrawable::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::TextureCSPtr& NinePatchDrawable::GetTexture() const
+    const TextureCSPtr& NinePatchDrawable::GetTexture() const
     {
         return m_texture;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::TextureAtlasCSPtr& NinePatchDrawable::GetTextureAtlas() const
+    const TextureAtlasCSPtr& NinePatchDrawable::GetTextureAtlas() const
     {
         return m_atlas;
     }
@@ -421,19 +421,19 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::UVs& NinePatchDrawable::GetUVs() const
+    const UVs& NinePatchDrawable::GetUVs() const
     {
         return m_uvs;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Core::Colour& NinePatchDrawable::GetColour() const
+    const Colour& NinePatchDrawable::GetColour() const
     {
         return m_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
+    void NinePatchDrawable::SetTexture(const TextureCSPtr& in_texture)
     {
         CS_ASSERT(in_texture != nullptr, "Texture cannot be null in a nine-patch drawable.");
         
@@ -444,7 +444,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
+    void NinePatchDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
     {
         m_atlas = in_atlas;
         m_atlasId = "";
@@ -465,7 +465,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetUVs(const Rendering::UVs& in_UVs)
+    void NinePatchDrawable::SetUVs(const UVs& in_UVs)
     {
         m_uvs = in_UVs;
         
@@ -474,7 +474,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetColour(const Core::Colour& in_colour)
+    void NinePatchDrawable::SetColour(const Colour& in_colour)
     {
         m_colour = in_colour;
     }
@@ -495,13 +495,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 NinePatchDrawable::GetPreferredSize() const
+    Vector2 NinePatchDrawable::GetPreferredSize() const
     {
         return m_atlasFrame.m_originalSize;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
+    void NinePatchDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
         CS_ASSERT(m_texture != nullptr, "NinePatchDrawable cannot draw without texture");
         
@@ -524,8 +524,8 @@ namespace CS
         
         for(u32 i=0; i<k_numPatches; ++i)
         {
-            Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(m_cachedPositions[i]);
-            in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, Rendering::AlignmentAnchor::k_middleCentre);
+            Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
+            in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, AlignmentAnchor::k_middleCentre);
         }
     }
 }

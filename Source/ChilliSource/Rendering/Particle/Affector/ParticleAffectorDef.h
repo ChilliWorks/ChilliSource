@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A particle affector def describes the properties that should be used 
@@ -49,7 +49,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //-----------------------------------------------------------------------
-    class ParticleAffectorDef : public Core::QueryableInterface
+    class ParticleAffectorDef : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleAffectorDef);
@@ -79,7 +79,7 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        virtual ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const = 0;
+        virtual ParticleAffectorUPtr CreateInstance(dynamic_array<Particle>* in_particleArray) const = 0;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///

@@ -35,7 +35,7 @@
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// Holds the sub meshes and skeleton that make up a mesh resource.
@@ -43,7 +43,7 @@ namespace CS
     ///
     /// @author S Downie
     //---------------------------------------------------------------------
-    class Mesh final : public Core::Resource
+    class Mesh final : public Resource
     {
     public:
         
@@ -56,7 +56,7 @@ namespace CS
         ///
         /// @return Whether this object is of given type
         //---------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------------------
         /// Build the mesh from the given description. This will build the mesh buffers
         /// and sub meshes
@@ -71,7 +71,7 @@ namespace CS
         ///
         /// @return Axis-aligned bounding box
         //-----------------------------------------------------------------
-        const Core::AABB& GetAABB() const;
+        const AABB& GetAABB() const;
         //-----------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -132,10 +132,10 @@ namespace CS
         /// @param Shader pass
         /// @param Skinned animation group
         //-----------------------------------------------------------------
-        void Render(RenderSystem* in_renderSystem, const Core::Matrix4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup = SkinnedAnimationGroupSPtr()) const;
+        void Render(RenderSystem* in_renderSystem, const Matrix4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup = SkinnedAnimationGroupSPtr()) const;
     private:
         
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //---------------------------------------------------------------------
         /// Factory method for creating mesh resource instance. Only accessed
         /// by the resource pool
@@ -169,7 +169,7 @@ namespace CS
         /// @param the minimum bounds
         /// @param the maximum bounds.
         //-----------------------------------------------------------------
-        void SetBounds(const Core::Vector3& in_minBounds, const Core::Vector3& in_maxBounds);
+        void SetBounds(const Vector3& in_minBounds, const Vector3& in_maxBounds);
         //-----------------------------------------------------------------
         /// Calculates the internal vertex and index counts. This should be
         /// called after filling all of the submeshes with data.
@@ -187,7 +187,7 @@ namespace CS
         std::vector<SubMeshUPtr> m_subMeshes;
         SkeletonUPtr m_skeleton;
         
-        Core::AABB m_aabb;
+        AABB m_aabb;
         u32 m_totalNumVerts;
         u32 m_totalNumIndices;
     };

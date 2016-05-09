@@ -33,7 +33,7 @@
 
 #include <mutex>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------
     /// Connection wrapper around a delegate to allow safe callbacks

@@ -35,7 +35,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------
     /// Base class for logging in to Facebook using
@@ -44,7 +44,7 @@ namespace CS
     ///
     /// @author S Downie
     //------------------------------------------------
-    class FacebookAuthenticationSystem : public Core::AppSystem
+    class FacebookAuthenticationSystem : public AppSystem
     {
     public:
         
@@ -76,7 +76,7 @@ namespace CS
         /// @param Response containing result and token
         /// if successful
         //------------------------------------------------
-        using AuthenticationCompleteDelegate = Core::ConnectableDelegate<void(const AuthenticateResponse&)>;
+        using AuthenticationCompleteDelegate = ConnectableDelegate<void(const AuthenticateResponse&)>;
         
         CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
         

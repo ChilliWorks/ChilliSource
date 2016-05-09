@@ -41,7 +41,7 @@
 #include <array>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------
     /// Holds the render state of an object. Used to organise
@@ -50,7 +50,7 @@ namespace CS
     ///
     /// @author S Downie
     //----------------------------------------------------------
-    class Material final : public Core::Resource
+    class Material final : public Resource
     {
     public:
         CS_DECLARE_NAMEDTYPE(Material);
@@ -62,7 +62,7 @@ namespace CS
         ///
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------
         /// @author S Downie
         ///
@@ -243,13 +243,13 @@ namespace CS
         ///
         /// @param Emissive colour used in ambient pass
         //----------------------------------------------------------
-        void SetEmissive(const Core::Colour& in_emissive);
+        void SetEmissive(const Colour& in_emissive);
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Emissive colour used in ambient pass
         //----------------------------------------------------------
-        const Core::Colour& GetEmissive() const;
+        const Colour& GetEmissive() const;
         //----------------------------------------------------------
         /// The ambient colour is used to simulate the light absorbed
         /// by the object from light reflections in the scene.
@@ -258,13 +258,13 @@ namespace CS
         ///
         /// @param Ambient colour used in ambient pass
         //----------------------------------------------------------
-        void SetAmbient(const Core::Colour& in_ambient);
+        void SetAmbient(const Colour& in_ambient);
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Ambient colour used in ambient pass
         //----------------------------------------------------------
-        const Core::Colour& GetAmbient() const;
+        const Colour& GetAmbient() const;
         //----------------------------------------------------------
         /// The diffuse colour is used to simulate the light absorbed
         /// by the object directly from the light source.
@@ -273,13 +273,13 @@ namespace CS
         ///
         /// @param Diffuse light colour used in subsequent light passes
         //----------------------------------------------------------
-        void SetDiffuse(const Core::Colour& in_diffuse);
+        void SetDiffuse(const Colour& in_diffuse);
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Diffuse light colour used in subsequent light passes
         //----------------------------------------------------------
-        const Core::Colour& GetDiffuse() const;
+        const Colour& GetDiffuse() const;
         //----------------------------------------------------------
         /// The specular colour is used to simulate the light reflected
         /// back by the object creating a highlight.
@@ -288,13 +288,13 @@ namespace CS
         ///
         /// @param Specular light colour used in subsequent light passes
         //----------------------------------------------------------
-        void SetSpecular(const Core::Colour& in_specular);
+        void SetSpecular(const Colour& in_specular);
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Specular light colour used in subsequent light passes
         //----------------------------------------------------------
-        const Core::Colour& GetSpecular() const;
+        const Colour& GetSpecular() const;
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -314,7 +314,7 @@ namespace CS
         /// @param Variable name
         /// @param Vec2 value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Core::Vector2& in_value);
+        void SetShaderVar(const std::string& in_varName, const Vector2& in_value);
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -324,7 +324,7 @@ namespace CS
         /// @param Variable name
         /// @param Vec3 value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Core::Vector3& in_value);
+        void SetShaderVar(const std::string& in_varName, const Vector3& in_value);
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -334,7 +334,7 @@ namespace CS
         /// @param Variable name
         /// @param Vec4 value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Core::Vector4& in_value);
+        void SetShaderVar(const std::string& in_varName, const Vector4& in_value);
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -344,7 +344,7 @@ namespace CS
         /// @param Variable name
         /// @param Mat4 value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Core::Matrix4& in_value);
+        void SetShaderVar(const std::string& in_varName, const Matrix4& in_value);
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -354,7 +354,7 @@ namespace CS
         /// @param Variable name
         /// @param Colour value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Core::Colour& in_value);
+        void SetShaderVar(const std::string& in_varName, const Colour& in_value);
         
         //TODO: Remove these once we no longer rely on render system and material to hold our state
         //i.e. when we have a proper render command queue
@@ -380,15 +380,15 @@ namespace CS
         
         //TODO: Make private when we rework the render system
         std::unordered_map<std::string, f32> m_floatVars;
-        std::unordered_map<std::string, Core::Vector2> m_vec2Vars;
-        std::unordered_map<std::string, Core::Vector3> m_vec3Vars;
-        std::unordered_map<std::string, Core::Vector4> m_vec4Vars;
-        std::unordered_map<std::string, Core::Matrix4> m_mat4Vars;
-        std::unordered_map<std::string, Core::Colour> m_colourVars;
+        std::unordered_map<std::string, Vector2> m_vec2Vars;
+        std::unordered_map<std::string, Vector3> m_vec3Vars;
+        std::unordered_map<std::string, Vector4> m_vec4Vars;
+        std::unordered_map<std::string, Matrix4> m_mat4Vars;
+        std::unordered_map<std::string, Colour> m_colourVars;
         
     private:
         
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //----------------------------------------------------------
         /// Factory method to create an new instance of an empty
         /// material resource. Only called by the resource pool
@@ -412,10 +412,10 @@ namespace CS
         
         std::array<ShaderCSPtr, (u32)ShaderPass::k_total> m_shaders;
         
-        Core::Colour m_emissive;
-        Core::Colour m_ambient;
-        Core::Colour m_diffuse;
-        Core::Colour m_specular;
+        Colour m_emissive;
+        Colour m_ambient;
+        Colour m_diffuse;
+        Colour m_specular;
         
         BlendMode m_srcBlendMode;
         BlendMode m_dstBlendMode;

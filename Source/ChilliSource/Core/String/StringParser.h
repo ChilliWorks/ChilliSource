@@ -38,7 +38,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------
     /// Parse a string to a 32 bit float. If the string cannot be
@@ -227,7 +227,7 @@ namespace CS
     ///
     /// @return The surface format.
     //------------------------------------------------------------
-    Rendering::SurfaceFormat ParseSurfaceFormat(const std::string& in_surfaceFormat);
+    SurfaceFormat ParseSurfaceFormat(const std::string& in_surfaceFormat);
 }
 
 #endif

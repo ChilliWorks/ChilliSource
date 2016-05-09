@@ -37,7 +37,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -65,9 +65,9 @@ namespace CS
         ///
         /// @return UVs for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Rendering::UVs, ThreePatchDrawable::k_numPatches> CalculateThreePatchUVsHorizontal(const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
+        std::array<UVs, ThreePatchDrawable::k_numPatches> CalculateThreePatchUVsHorizontal(const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
         {
-            std::array<Rendering::UVs, ThreePatchDrawable::k_numPatches> result;
+            std::array<UVs, ThreePatchDrawable::k_numPatches> result;
             
             f32 uvWidth = (in_frame.m_originalSize.x/in_frame.m_croppedSize.x) * in_frame.m_uvs.m_s;
             
@@ -133,9 +133,9 @@ namespace CS
         ///
         /// @return UVs for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Rendering::UVs, ThreePatchDrawable::k_numPatches> CalculateThreePatchUVsVertical(const Rendering::TextureAtlas::Frame& in_frame, f32 in_bottom, f32 in_top)
+        std::array<UVs, ThreePatchDrawable::k_numPatches> CalculateThreePatchUVsVertical(const TextureAtlas::Frame& in_frame, f32 in_bottom, f32 in_top)
         {
-            std::array<Rendering::UVs, ThreePatchDrawable::k_numPatches> result;
+            std::array<UVs, ThreePatchDrawable::k_numPatches> result;
             
             f32 uvWidth = (in_frame.m_originalSize.x/in_frame.m_croppedSize.x) * in_frame.m_uvs.m_s;
             
@@ -204,22 +204,22 @@ namespace CS
         ///
         /// @return Sizes for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchSizesHorizontal(const Core::Vector2& in_widgetSize, const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
+        std::array<Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchSizesHorizontal(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
         {
-            std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> result;
+            std::array<Vector2, ThreePatchDrawable::k_numPatches> result;
             
             f32 height = in_widgetSize.y/in_frame.m_originalSize.y * in_frame.m_croppedSize.y;
-            Core::Vector2 widgetSizeAspectMaintained = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(Core::Vector2(in_frame.m_originalSize.x, height), in_frame.m_originalSize.x/in_frame.m_originalSize.y);
+            Vector2 widgetSizeAspectMaintained = AspectRatioUtils::KeepOriginalHeightAdaptWidth(Vector2(in_frame.m_originalSize.x, height), in_frame.m_originalSize.x/in_frame.m_originalSize.y);
             
             f32 widthImageLeft = in_frame.m_originalSize.x * in_left;
-            f32 widthVisibleLeft = Core::MathUtils::Clamp(-in_frame.m_offset.x + widthImageLeft, 0.0f, in_frame.m_croppedSize.x);
+            f32 widthVisibleLeft = MathUtils::Clamp(-in_frame.m_offset.x + widthImageLeft, 0.0f, in_frame.m_croppedSize.x);
 
             f32 offsetRight = -(in_frame.m_originalSize.x - (in_frame.m_offset.x + in_frame.m_croppedSize.x));
             f32 widthImageRight = in_frame.m_originalSize.x * in_right;
-            f32 widthVisibleRight = Core::MathUtils::Clamp(offsetRight + widthImageRight, 0.0f, in_frame.m_croppedSize.x);
+            f32 widthVisibleRight = MathUtils::Clamp(offsetRight + widthImageRight, 0.0f, in_frame.m_croppedSize.x);
             
             f32 widthImageCentre = in_frame.m_originalSize.x * (1.0f - in_right - in_left);
-            f32 widthVisibleCentre = Core::MathUtils::Clamp(widthImageCentre - (in_frame.m_offset.x + widthVisibleLeft - widthImageLeft), 0.0f, in_frame.m_croppedSize.x);
+            f32 widthVisibleCentre = MathUtils::Clamp(widthImageCentre - (in_frame.m_offset.x + widthVisibleLeft - widthImageLeft), 0.0f, in_frame.m_croppedSize.x);
             f32 widthStretched = in_widgetSize.x - widthVisibleLeft - widthVisibleRight;
             f32 widthWidgetCentre = widthVisibleCentre * (widthStretched/widthImageCentre);
             
@@ -246,22 +246,22 @@ namespace CS
         ///
         /// @return Sizes for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchSizesVertical(const Core::Vector2& in_widgetSize, const Rendering::TextureAtlas::Frame& in_frame, f32 in_bottom, f32 in_top)
+        std::array<Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchSizesVertical(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_bottom, f32 in_top)
         {
-            std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> result;
+            std::array<Vector2, ThreePatchDrawable::k_numPatches> result;
             
             f32 width = in_widgetSize.x/in_frame.m_originalSize.x * in_frame.m_croppedSize.x;
-            Core::Vector2 widgetSizeAspectMaintained = Rendering::AspectRatioUtils::KeepOriginalWidthAdaptHeight(Core::Vector2(width, in_frame.m_originalSize.y), in_frame.m_originalSize.x/in_frame.m_originalSize.y);
+            Vector2 widgetSizeAspectMaintained = AspectRatioUtils::KeepOriginalWidthAdaptHeight(Vector2(width, in_frame.m_originalSize.y), in_frame.m_originalSize.x/in_frame.m_originalSize.y);
             
             f32 heightImageTop = in_frame.m_originalSize.y * in_top;
-            f32 heightVisibleTop = Core::MathUtils::Clamp(-in_frame.m_offset.y + heightImageTop, 0.0f, in_frame.m_croppedSize.y);
+            f32 heightVisibleTop = MathUtils::Clamp(-in_frame.m_offset.y + heightImageTop, 0.0f, in_frame.m_croppedSize.y);
             
             f32 offsetBottom = -(in_frame.m_originalSize.y - (in_frame.m_offset.y + in_frame.m_croppedSize.y));
             f32 heightImageBottom = in_frame.m_originalSize.y * in_bottom;
-            f32 heightVisibleBottom = Core::MathUtils::Clamp(offsetBottom + heightImageBottom, 0.0f, in_frame.m_croppedSize.y);
+            f32 heightVisibleBottom = MathUtils::Clamp(offsetBottom + heightImageBottom, 0.0f, in_frame.m_croppedSize.y);
             
             f32 heightImageCentre = in_frame.m_originalSize.y * (1.0f - in_bottom - in_top);
-            f32 heightVisibleCentre = Core::MathUtils::Clamp(heightImageCentre - (in_frame.m_offset.y + heightVisibleTop - heightImageTop), 0.0f, in_frame.m_croppedSize.y);
+            f32 heightVisibleCentre = MathUtils::Clamp(heightImageCentre - (in_frame.m_offset.y + heightVisibleTop - heightImageTop), 0.0f, in_frame.m_croppedSize.y);
             f32 heightStretched = in_widgetSize.y - heightVisibleTop - heightVisibleBottom;
             f32 heightWidgetCentre = heightVisibleCentre * (heightStretched/heightImageCentre);
             
@@ -285,14 +285,14 @@ namespace CS
         ///
         /// @return Sizes for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchPositionsHorizontal(const Core::Vector2& in_widgetSize, const std::array<Core::Vector2, ThreePatchDrawable::k_numPatches>& in_sizes)
+        std::array<Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchPositionsHorizontal(const Vector2& in_widgetSize, const std::array<Vector2, ThreePatchDrawable::k_numPatches>& in_sizes)
         {
-            std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> result;
+            std::array<Vector2, ThreePatchDrawable::k_numPatches> result;
             
-            Core::Vector2 halfWidgetSize = in_widgetSize * 0.5f;
-            Core::Vector2 halfLeft = in_sizes[(u32)Patch::k_leftOrBottom] * 0.5f;
-            Core::Vector2 halfMiddle = in_sizes[(u32)Patch::k_centre] * 0.5f;
-            Core::Vector2 halfRight = in_sizes[(u32)Patch::k_rightOrTop] * 0.5f;
+            Vector2 halfWidgetSize = in_widgetSize * 0.5f;
+            Vector2 halfLeft = in_sizes[(u32)Patch::k_leftOrBottom] * 0.5f;
+            Vector2 halfMiddle = in_sizes[(u32)Patch::k_centre] * 0.5f;
+            Vector2 halfRight = in_sizes[(u32)Patch::k_rightOrTop] * 0.5f;
             
             result[(u32)Patch::k_leftOrBottom].x = -halfWidgetSize.x + halfLeft.x;
             result[(u32)Patch::k_leftOrBottom].y = halfWidgetSize.y - halfLeft.y;
@@ -316,14 +316,14 @@ namespace CS
         ///
         /// @return Sizes for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchPositionsVertical(const Core::Vector2& in_widgetSize, const std::array<Core::Vector2, ThreePatchDrawable::k_numPatches>& in_sizes)
+        std::array<Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchPositionsVertical(const Vector2& in_widgetSize, const std::array<Vector2, ThreePatchDrawable::k_numPatches>& in_sizes)
         {
-            std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> result;
+            std::array<Vector2, ThreePatchDrawable::k_numPatches> result;
             
-            Core::Vector2 halfWidgetSize = in_widgetSize * 0.5f;
-            Core::Vector2 halfTop = in_sizes[(u32)Patch::k_rightOrTop] * 0.5f;
-            Core::Vector2 halfMiddle = in_sizes[(u32)Patch::k_centre] * 0.5f;
-            Core::Vector2 halfBottom = in_sizes[(u32)Patch::k_leftOrBottom] * 0.5f;
+            Vector2 halfWidgetSize = in_widgetSize * 0.5f;
+            Vector2 halfTop = in_sizes[(u32)Patch::k_rightOrTop] * 0.5f;
+            Vector2 halfMiddle = in_sizes[(u32)Patch::k_centre] * 0.5f;
+            Vector2 halfBottom = in_sizes[(u32)Patch::k_leftOrBottom] * 0.5f;
             
             result[(u32)Patch::k_rightOrTop].x = -halfWidgetSize.x + halfTop.x;
             result[(u32)Patch::k_rightOrTop].y = halfWidgetSize.y - halfTop.y;
@@ -349,9 +349,9 @@ namespace CS
         ///
         /// @return Offset from top left
         //----------------------------------------------------------------------------------------
-        Core::Vector2 CalculateThreePatchOffsetHorizontal(const Core::Vector2& in_widgetSize, const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
+        Vector2 CalculateThreePatchOffsetHorizontal(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
         {
-            Core::Vector2 result;
+            Vector2 result;
             
             f32 leftImageEnd = in_frame.m_originalSize.x * in_left;
             f32 leftImageWidth = leftImageEnd;
@@ -396,9 +396,9 @@ namespace CS
         ///
         /// @return Offset from top left
         //----------------------------------------------------------------------------------------
-        Core::Vector2 CalculateThreePatchOffsetVertical(const Core::Vector2& in_widgetSize, const Rendering::TextureAtlas::Frame& in_frame, f32 in_top, f32 in_bottom)
+        Vector2 CalculateThreePatchOffsetVertical(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_top, f32 in_bottom)
         {
-            Core::Vector2 result;
+            Vector2 result;
             
             result.x = (in_frame.m_offset.x/in_frame.m_originalSize.x) * in_widgetSize.x;
             
@@ -435,7 +435,7 @@ namespace CS
     CS_DEFINE_NAMEDTYPE(ThreePatchDrawable);
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    ThreePatchDrawable::ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop)
+    ThreePatchDrawable::ThreePatchDrawable(const TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop)
     {
         switch (in_direction)
         {
@@ -458,7 +458,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    ThreePatchDrawable::ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction,
+    ThreePatchDrawable::ThreePatchDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction,
                                            f32 in_leftOrBottom, f32 in_rightOrTop)
     {
         CS_ASSERT(in_atlas != nullptr, "The given texture atlas cannot be null.");
@@ -488,19 +488,19 @@ namespace CS
     
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    bool ThreePatchDrawable::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ThreePatchDrawable::IsA(InterfaceIDType in_interfaceId) const
     {
         return (Drawable::InterfaceID == in_interfaceId || ThreePatchDrawable::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::TextureCSPtr& ThreePatchDrawable::GetTexture() const
+    const TextureCSPtr& ThreePatchDrawable::GetTexture() const
     {
         return m_texture;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::TextureAtlasCSPtr& ThreePatchDrawable::GetTextureAtlas() const
+    const TextureAtlasCSPtr& ThreePatchDrawable::GetTextureAtlas() const
     {
         return m_atlas;
     }
@@ -512,19 +512,19 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Rendering::UVs& ThreePatchDrawable::GetUVs() const
+    const UVs& ThreePatchDrawable::GetUVs() const
     {
         return m_uvs;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Core::Colour& ThreePatchDrawable::GetColour() const
+    const Colour& ThreePatchDrawable::GetColour() const
     {
         return m_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
+    void ThreePatchDrawable::SetTexture(const TextureCSPtr& in_texture)
     {
         CS_ASSERT(in_texture != nullptr, "Cannot set a null texture on a drawable.");
         
@@ -535,7 +535,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
+    void ThreePatchDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
     {
         m_atlas = in_atlas;
         m_atlasId = "";
@@ -556,7 +556,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetUVs(const Rendering::UVs& in_UVs)
+    void ThreePatchDrawable::SetUVs(const UVs& in_UVs)
     {
         m_uvs = in_UVs;
         
@@ -565,7 +565,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetColour(const Core::Colour& in_colour)
+    void ThreePatchDrawable::SetColour(const Colour& in_colour)
     {
         m_colour = in_colour;
     }
@@ -583,13 +583,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Core::Vector2 ThreePatchDrawable::GetPreferredSize() const
+    Vector2 ThreePatchDrawable::GetPreferredSize() const
     {
         return m_atlasFrame.m_originalSize;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
+    void ThreePatchDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
         CS_ASSERT(m_texture != nullptr, "ThreePatchDrawable cannot draw without texture");
         
@@ -610,8 +610,8 @@ namespace CS
 
         for(u32 i=0; i<k_numPatches; ++i)
         {
-            Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(m_cachedPositions[i]);
-            in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, Rendering::AlignmentAnchor::k_middleCentre);
+            Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
+            in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, AlignmentAnchor::k_middleCentre);
         }
     }
 }

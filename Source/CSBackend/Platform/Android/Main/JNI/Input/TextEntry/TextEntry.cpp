@@ -48,16 +48,16 @@ namespace CSBackend
 			if (m_textEntryJI == nullptr)
 			{
 				m_textEntryJI = TextEntryJavaInterfaceSPtr(new TextEntryJavaInterface());
-				m_textEntryJI->SetTextChangedDelegate(CSCore::MakeDelegate(this, &TextEntry::OnTextChanged));
-				m_textEntryJI->SetKeyboardDismissedDelegate(CSCore::MakeDelegate(this, &TextEntry::OnKeyboardDismissed));
+				m_textEntryJI->SetTextChangedDelegate(ChilliSource::MakeDelegate(this, &TextEntry::OnTextChanged));
+				m_textEntryJI->SetKeyboardDismissedDelegate(ChilliSource::MakeDelegate(this, &TextEntry::OnKeyboardDismissed));
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_textEntryJI);
 			}
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool TextEntry::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool TextEntry::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == CSInput::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
+            return in_interfaceId == ChilliSource::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

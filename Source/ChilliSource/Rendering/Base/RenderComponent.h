@@ -34,14 +34,14 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 
-namespace CS
+namespace ChilliSource
 {
     //====================================================
     /// Description:
     ///
     /// Any object that can be rendered
     //====================================================
-    class RenderComponent : public Core::VolumeComponent
+    class RenderComponent : public VolumeComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(RenderComponent);
@@ -56,7 +56,7 @@ namespace CS
         /// recomputed when required.
         /// @return Axis aligned bounding box
         //----------------------------------------------------
-        virtual const Core::AABB& GetAABB() override { return mBoundingBox; }
+        virtual const AABB& GetAABB() override { return mBoundingBox; }
         //----------------------------------------------------
         /// Get Object Oriented Bounding Box
         ///
@@ -65,7 +65,7 @@ namespace CS
         /// recomputed when required.
         /// @return OOBB
         //----------------------------------------------------
-        virtual const Core::OOBB& GetOOBB() override { return mOBBoundingBox; }
+        virtual const OOBB& GetOOBB() override { return mOBBoundingBox; }
         //----------------------------------------------------
         /// Get Bounding Sphere
         ///
@@ -74,7 +74,7 @@ namespace CS
         /// recomputed when required.
         /// @return bounding sphere
         //----------------------------------------------------
-        virtual const Core::Sphere& GetBoundingSphere() override { return mBoundingSphere; }
+        virtual const Sphere& GetBoundingSphere() override { return mBoundingSphere; }
         //----------------------------------------------------
         /// Is Visible
         ///
@@ -116,7 +116,7 @@ namespace CS
         ///
         /// @return Objects transform
         //-----------------------------------------------------
-        const Core::Matrix4& GetTransformationMatrix();
+        const Matrix4& GetTransformationMatrix();
         //-----------------------------------------------------
         /// Render 
         ///
@@ -182,9 +182,9 @@ namespace CS
         
     protected:
         
-        Core::AABB mBoundingBox;
-        Core::OOBB mOBBoundingBox;
-        Core::Sphere mBoundingSphere;
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
 
         MaterialCSPtr mpMaterial;
         

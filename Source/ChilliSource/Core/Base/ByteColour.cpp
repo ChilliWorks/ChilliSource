@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Base/ByteColour.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------
     //-----------------------------------------------------------

@@ -35,12 +35,12 @@
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(NinePatchDrawableDef);
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    NinePatchDrawableDef::NinePatchDrawableDef(const Json::Value& in_json, Core::StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+    NinePatchDrawableDef::NinePatchDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation, const std::string& in_defaultPath)
     {
         const char k_typeKey[] = "Type";
         const char k_textureLocationKey[] = "TextureLocation";
@@ -55,8 +55,8 @@ namespace CS
         CS_ASSERT(in_json.isObject() == true, "Drawable Def must be created from a json value of type Object.");
         
         //read all the properties from JSON.
-        Core::StorageLocation textureLocation = Core::StorageLocation::k_none;
-        Core::StorageLocation atlasLocation = Core::StorageLocation::k_none;
+        StorageLocation textureLocation = StorageLocation::k_none;
+        StorageLocation atlasLocation = StorageLocation::k_none;
         std::string texturePath;
         std::string atlasPath;
         for(auto it = in_json.begin(); it != in_json.end(); ++it)
@@ -68,7 +68,7 @@ namespace CS
             
             if (key == k_textureLocationKey)
             {
-                textureLocation = Core::ParseStorageLocation(value);
+                textureLocation = ParseStorageLocation(value);
             }
             else if (key == k_textureFilePathKey)
             {
@@ -76,7 +76,7 @@ namespace CS
             }
             else if (key == k_atlasLocationKey)
             {
-                atlasLocation = Core::ParseStorageLocation(value);
+                atlasLocation = ParseStorageLocation(value);
             }
             else if (key == k_atlasFilePathKey)
             {
@@ -88,16 +88,16 @@ namespace CS
             }
             else if (key == k_uvsKey)
             {
-                auto vec =  Core::ParseVector4(value);;
-                m_uvs = Rendering::UVs(vec.x, vec.y, vec.z, vec.w);
+                auto vec =  ParseVector4(value);;
+                m_uvs = UVs(vec.x, vec.y, vec.z, vec.w);
             }
             else if (key == k_colourKey)
             {
-                m_colour = Core::ParseColour(value);
+                m_colour = ParseColour(value);
             }
             else if (key == k_insetsKey)
             {
-                m_insets = Core::ParseVector4(value);
+                m_insets = ParseVector4(value);
             }
             else if (key == k_typeKey)
             {
@@ -112,26 +112,26 @@ namespace CS
         //load the texture.
         CS_ASSERT(texturePath.empty() == false, "A texture must be supplied in a Nine-Patch Drawable Def.")
         
-        auto resPool = Core::Application::Get()->GetResourcePool();
-        if (textureLocation == Core::StorageLocation::k_none)
+        auto resPool = Application::Get()->GetResourcePool();
+        if (textureLocation == StorageLocation::k_none)
         {
             textureLocation = in_defaultLocation;
-            texturePath = Core::StringUtils::StandardiseDirectoryPath(in_defaultPath) + texturePath;
+            texturePath = StringUtils::StandardiseDirectoryPath(in_defaultPath) + texturePath;
         }
         
-        m_texture = resPool->LoadResource<Rendering::Texture>(textureLocation, texturePath);
+        m_texture = resPool->LoadResource<Texture>(textureLocation, texturePath);
         CS_ASSERT(m_texture != nullptr, "Invalid texture supplied in a Nine-Patch Drawable Def.");
         
         //try and load the atlas
         if (atlasPath.empty() == false)
         {
-            if (atlasLocation == Core::StorageLocation::k_none)
+            if (atlasLocation == StorageLocation::k_none)
             {
                 atlasLocation = in_defaultLocation;
-                atlasPath = Core::StringUtils::StandardiseDirectoryPath(in_defaultPath) + atlasPath;
+                atlasPath = StringUtils::StandardiseDirectoryPath(in_defaultPath) + atlasPath;
             }
             
-            m_atlas = resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath);
+            m_atlas = resPool->LoadResource<TextureAtlas>(atlasLocation, atlasPath);
             CS_ASSERT(m_texture, "Invalid texture atlas supplied in a Nine-Patch Drawable Def.");
             CS_ASSERT(m_atlasId.empty() == false, "A texture atlas Id must be specified when using a texture atlas in a Nine-Patch Drawable Def.");
         }
@@ -142,15 +142,15 @@ namespace CS
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    NinePatchDrawableDef::NinePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Core::Vector4& in_insets, const Core::Colour& in_colour, const Rendering::UVs& in_uvs)
+    NinePatchDrawableDef::NinePatchDrawableDef(const TextureCSPtr& in_texture, const Vector4& in_insets, const Colour& in_colour, const UVs& in_uvs)
         : m_texture(in_texture), m_insets(in_insets), m_colour(in_colour), m_uvs(in_uvs)
     {
         CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Nine-Patch Drawable Def.");
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    NinePatchDrawableDef::NinePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Core::Vector4& in_insets,
-                                               const Core::Colour& in_colour, const Rendering::UVs& in_uvs)
+    NinePatchDrawableDef::NinePatchDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Vector4& in_insets,
+                                               const Colour& in_colour, const UVs& in_uvs)
         : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_insets(in_insets), m_colour(in_colour), m_uvs(in_uvs)
     {
         CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Nine-Patch Drawable Def.");
@@ -159,19 +159,19 @@ namespace CS
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    bool NinePatchDrawableDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool NinePatchDrawableDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (DrawableDef::InterfaceID == in_interfaceId || NinePatchDrawableDef::InterfaceID == in_interfaceId);
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const Rendering::TextureCSPtr& NinePatchDrawableDef::GetTexture() const
+    const TextureCSPtr& NinePatchDrawableDef::GetTexture() const
     {
         return m_texture;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const Rendering::TextureAtlasCSPtr& NinePatchDrawableDef::GetAtlas() const
+    const TextureAtlasCSPtr& NinePatchDrawableDef::GetAtlas() const
     {
         return m_atlas;
     }
@@ -183,19 +183,19 @@ namespace CS
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const Rendering::UVs& NinePatchDrawableDef::GetUVs() const
+    const UVs& NinePatchDrawableDef::GetUVs() const
     {
         return m_uvs;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const Core::Colour& NinePatchDrawableDef::GetColour() const
+    const Colour& NinePatchDrawableDef::GetColour() const
     {
         return m_colour;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const Core::Vector4& NinePatchDrawableDef::GetInsets() const
+    const Vector4& NinePatchDrawableDef::GetInsets() const
     {
         return m_insets;
     }

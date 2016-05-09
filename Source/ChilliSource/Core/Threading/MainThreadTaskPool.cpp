@@ -31,12 +31,12 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
     MainThreadTaskPool::MainThreadTaskPool()
-        : m_taskContext(CSCore::TaskType::k_mainThread)
+        : m_taskContext(TaskType::k_mainThread)
     {
     }
     //------------------------------------------------------------------------------

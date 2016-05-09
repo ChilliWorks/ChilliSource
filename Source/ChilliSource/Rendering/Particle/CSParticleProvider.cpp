@@ -40,7 +40,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -64,7 +64,7 @@ namespace CS
         ParticleEffect::SimulationSpace ParseSimulationSpace(const std::string& in_string)
         {
             std::string simulationSpaceString = in_string;
-            Core::StringUtils::ToLowerCase(simulationSpaceString);
+            StringUtils::ToLowerCase(simulationSpaceString);
 
             if (simulationSpaceString == "world")
             {
@@ -97,7 +97,7 @@ namespace CS
             if (jsonValue.isNull() == false)
             {
                 CS_ASSERT(jsonValue.isString(), "Duration value must be a string.");
-                out_particleEffect->SetDuration(Core::ParseF32(jsonValue.asString()));
+                out_particleEffect->SetDuration(ParseF32(jsonValue.asString()));
             }
 
             //Max Particles
@@ -105,7 +105,7 @@ namespace CS
             if (jsonValue.isNull() == false)
             {
                 CS_ASSERT(jsonValue.isString(), "Max particles value must be a string.");
-                out_particleEffect->SetMaxParticles(Core::ParseU32(jsonValue.asString()));
+                out_particleEffect->SetMaxParticles(ParseU32(jsonValue.asString()));
             }
 
             //Simulation Space
@@ -128,7 +128,7 @@ namespace CS
             jsonValue = in_jsonRoot.get("InitialScaleProperty", Json::nullValue);
             if (jsonValue.isNull() == false)
             {
-                auto prop = ParticlePropertyFactory::CreateProperty<Core::Vector2>(jsonValue);
+                auto prop = ParticlePropertyFactory::CreateProperty<Vector2>(jsonValue);
                 out_particleEffect->SetInitialScaleProperty(std::move(prop));
             }
 
@@ -144,7 +144,7 @@ namespace CS
             jsonValue = in_jsonRoot.get("InitialColourProperty", Json::nullValue);
             if (jsonValue.isNull() == false)
             {
-                auto prop = ParticlePropertyFactory::CreateProperty<Core::Colour>(jsonValue);
+                auto prop = ParticlePropertyFactory::CreateProperty<Colour>(jsonValue);
                 out_particleEffect->SetInitialColourProperty(std::move(prop));
             }
 
@@ -256,13 +256,13 @@ namespace CS
         /// @param The particle affector def factory.
         /// @param [Out] The particle effect that should be populated.
         //-----------------------------------------------------------------
-        void LoadCSParticle(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const ParticleDrawableDefFactory* in_drawableDefFactory,
+        void LoadCSParticle(StorageLocation in_storageLocation, const std::string& in_filePath, const ParticleDrawableDefFactory* in_drawableDefFactory,
             const ParticleEmitterDefFactory* in_emitterDefFactory, const ParticleAffectorDefFactory* in_affectorDefFactory, const ParticleEffectSPtr& out_particleEffect)
         {
             Json::Value jsonRoot;
-            if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
+            if (JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
             {
-                out_particleEffect->SetLoadState(Core::Resource::LoadState::k_failed);
+                out_particleEffect->SetLoadState(Resource::LoadState::k_failed);
                 return;
             }
 
@@ -271,7 +271,7 @@ namespace CS
             ReadEmitterDef(jsonRoot, in_emitterDefFactory, out_particleEffect);
             ReadAffectorDefs(jsonRoot, in_affectorDefFactory, out_particleEffect);
 
-            out_particleEffect->SetLoadState(Core::Resource::LoadState::k_loaded);
+            out_particleEffect->SetLoadState(Resource::LoadState::k_loaded);
         }
         //-----------------------------------------------------------------
         /// Reads the drawable def from the csparticle json asynchronously.
@@ -408,15 +408,15 @@ namespace CS
         /// @param The particle affector def factory.
         /// @param [Out] The particle effect that should be populated.
         //-----------------------------------------------------------------
-        void LoadCSParticleAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const ParticleDrawableDefFactory* in_drawableDefFactory,
-            const ParticleEmitterDefFactory* in_emitterDefFactory, const ParticleAffectorDefFactory* in_affectorDefFactory, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate,
+        void LoadCSParticleAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const ParticleDrawableDefFactory* in_drawableDefFactory,
+            const ParticleEmitterDefFactory* in_emitterDefFactory, const ParticleAffectorDefFactory* in_affectorDefFactory, const ResourceProvider::AsyncLoadDelegate& in_delegate,
             const ParticleEffectSPtr& out_particleEffect)
         {
             Json::Value jsonRoot;
-            if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
+            if (JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
             {
-                out_particleEffect->SetLoadState(Core::Resource::LoadState::k_failed);
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                out_particleEffect->SetLoadState(Resource::LoadState::k_failed);
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_particleEffect);
                 });
@@ -431,8 +431,8 @@ namespace CS
                 {
                     ReadAffectorDefsAsync(jsonRoot, in_affectorDefFactory, out_particleEffect, [=]()
                     {
-                        out_particleEffect->SetLoadState(Core::Resource::LoadState::k_loaded);
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                        out_particleEffect->SetLoadState(Resource::LoadState::k_loaded);
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                         {
                             in_delegate(out_particleEffect);
                         });
@@ -451,13 +451,13 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    bool CSParticleProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool CSParticleProvider::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (Core::ResourceProvider::InterfaceID == in_interfaceId || CSParticleProvider::InterfaceID == in_interfaceId);
+        return (ResourceProvider::InterfaceID == in_interfaceId || CSParticleProvider::InterfaceID == in_interfaceId);
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    Core::InterfaceIDType CSParticleProvider::GetResourceType() const
+    InterfaceIDType CSParticleProvider::GetResourceType() const
     {
         return ParticleEffect::InterfaceID;
     }
@@ -466,13 +466,13 @@ namespace CS
     bool CSParticleProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
     {
         std::string lowerExtension = in_extension;
-        Core::StringUtils::ToLowerCase(lowerExtension);
+        StringUtils::ToLowerCase(lowerExtension);
         return (lowerExtension == k_fileExtension);
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    void CSParticleProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, 
-        const Core::ResourceSPtr& out_resource)
+    void CSParticleProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, 
+        const ResourceSPtr& out_resource)
     {
         CS_ASSERT(out_resource != nullptr, "resource cannot be null.");
         CS_ASSERT(out_resource->IsA<ParticleEffect>() == true, "resource must be a particle effect.");
@@ -482,15 +482,15 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //------------------------------------------------------------------
-    void CSParticleProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, 
-        const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void CSParticleProvider::CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, 
+        const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         CS_ASSERT(out_resource != nullptr, "resource cannot be null.");
         CS_ASSERT(out_resource->IsA<ParticleEffect>() == true, "resource must be a particle effect."); 
         CS_ASSERT(in_delegate != nullptr, "Async load delegate cannot be null.");
 
         ParticleEffectSPtr particleEffect = std::static_pointer_cast<ParticleEffect>(out_resource);
-        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
             LoadCSParticleAsync(in_location, in_filePath, m_drawableDefFactory, m_emitterDefFactory, m_affectorDefFactory, in_delegate, particleEffect);
         });
@@ -499,13 +499,13 @@ namespace CS
     //------------------------------------------------------------------
     void CSParticleProvider::OnInit()
     {
-        m_drawableDefFactory = Core::Application::Get()->GetSystem<ParticleDrawableDefFactory>();
+        m_drawableDefFactory = Application::Get()->GetSystem<ParticleDrawableDefFactory>();
         CS_ASSERT(m_drawableDefFactory != nullptr, "CSParticle Provider is missing required system: ParticleDrawableDefFactory.");
 
-        m_emitterDefFactory = Core::Application::Get()->GetSystem<ParticleEmitterDefFactory>();
+        m_emitterDefFactory = Application::Get()->GetSystem<ParticleEmitterDefFactory>();
         CS_ASSERT(m_emitterDefFactory != nullptr, "CSParticle Provider is missing required system: ParticleEmitterDefFactory.");
 
-        m_affectorDefFactory = Core::Application::Get()->GetSystem<ParticleAffectorDefFactory>();
+        m_affectorDefFactory = Application::Get()->GetSystem<ParticleAffectorDefFactory>();
         CS_ASSERT(m_affectorDefFactory != nullptr, "CSParticle Provider is missing required system: ParticleAffectorDefFactory.");
     }
     //------------------------------------------------------------------

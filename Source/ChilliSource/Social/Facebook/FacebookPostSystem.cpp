@@ -34,7 +34,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookPostSystem.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
     //---------------------------------------------------

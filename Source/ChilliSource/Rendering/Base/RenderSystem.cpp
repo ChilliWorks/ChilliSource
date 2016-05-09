@@ -35,7 +35,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/RenderSystem.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderSystem);
     

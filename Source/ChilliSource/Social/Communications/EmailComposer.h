@@ -36,7 +36,7 @@
 #include <functional>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A state system for presenting the user with an email
@@ -44,7 +44,7 @@ namespace CS
     ///
     /// @author S McGaw
     //---------------------------------------------------------------
-    class EmailComposer : public Core::StateSystem
+    class EmailComposer : public StateSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(EmailComposer);
@@ -77,7 +77,7 @@ namespace CS
         //-------------------------------------------------------
         struct Attachment
         {
-            Core::StorageLocation m_storageLocation;
+            StorageLocation m_storageLocation;
             std::string m_filename;
             std::string m_mimeType;
         };
@@ -131,7 +131,7 @@ namespace CS
         //-------------------------------------------------------
         virtual ~EmailComposer() {};
     protected:
-        friend class Core::State;
+        friend class State;
         
         //-------------------------------------------------------
         /// Creates a new instance of the email composition

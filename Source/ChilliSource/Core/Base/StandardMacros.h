@@ -37,15 +37,15 @@
 //------------------------------------------------------------
 /// Logging macros
 //------------------------------------------------------------
-#define CS_LOG_VERBOSE(in_message)      (CSCore::Logging::Get()->LogVerbose(in_message))
-#define CS_LOG_WARNING(in_message)      (CSCore::Logging::Get()->LogWarning(in_message))
-#define CS_LOG_ERROR(in_message)        (CSCore::Logging::Get()->LogError(in_message))
-#define CS_LOG_FATAL(in_message)        (CSCore::Logging::Get()->LogFatal(in_message))
+#define CS_LOG_VERBOSE(in_message)      (ChilliSource::Logging::Get()->LogVerbose(in_message))
+#define CS_LOG_WARNING(in_message)      (ChilliSource::Logging::Get()->LogWarning(in_message))
+#define CS_LOG_ERROR(in_message)        (ChilliSource::Logging::Get()->LogError(in_message))
+#define CS_LOG_FATAL(in_message)        (ChilliSource::Logging::Get()->LogFatal(in_message))
 //------------------------------------------------------------
 /// Assertion macros
 //------------------------------------------------------------
 #ifdef CS_ENABLE_DEBUG
-#define CS_ASSERT(in_query, in_message) if((in_query) == 0){CSCore::Logging::Get()->LogFatal(in_message);}
+#define CS_ASSERT(in_query, in_message) if((in_query) == 0){ChilliSource::Logging::Get()->LogFatal(in_message);}
 #else
 #define CS_ASSERT(in_query, in_message)
 #endif

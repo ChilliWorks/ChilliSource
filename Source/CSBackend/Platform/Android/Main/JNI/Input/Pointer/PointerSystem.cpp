@@ -41,27 +41,27 @@ namespace CSBackend
 		CS_DEFINE_NAMEDTYPE(PointerSystem);
 		//----------------------------------------------------
 		//----------------------------------------------------
-		bool PointerSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool PointerSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return (CSInput::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
+			return (ChilliSource::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void PointerSystem::OnTouchDown(s32 in_systemId, const CSCore::Vector2& in_location)
+		void PointerSystem::OnTouchDown(s32 in_systemId, const ChilliSource::Vector2& in_location)
 		{
-			CSCore::Vector2 touchLocation(in_location.x, m_screen->GetResolution().y - in_location.y);
-			CSInput::Pointer::Id pointerId = AddPointerCreateEvent(touchLocation);
-			AddPointerDownEvent(pointerId, CSInput::Pointer::InputType::k_touch);
+			ChilliSource::Vector2 touchLocation(in_location.x, m_screen->GetResolution().y - in_location.y);
+			ChilliSource::Pointer::Id pointerId = AddPointerCreateEvent(touchLocation);
+			AddPointerDownEvent(pointerId, ChilliSource::Pointer::InputType::k_touch);
 			m_systemIdToPointerIdMap.emplace(in_systemId, pointerId);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void PointerSystem::OnTouchMoved(s32 in_systemId, const CSCore::Vector2& in_location)
+		void PointerSystem::OnTouchMoved(s32 in_systemId, const ChilliSource::Vector2& in_location)
 		{
 			auto it = m_systemIdToPointerIdMap.find(in_systemId);
 			if (it != m_systemIdToPointerIdMap.end())
 			{
-				CSCore::Vector2 touchLocation(in_location.x, m_screen->GetResolution().y - in_location.y);
+				ChilliSource::Vector2 touchLocation(in_location.x, m_screen->GetResolution().y - in_location.y);
 				AddPointerMovedEvent(it->second, touchLocation);
 			}
 		}
@@ -72,7 +72,7 @@ namespace CSBackend
 			auto it = m_systemIdToPointerIdMap.find(in_systemId);
 			if (it != m_systemIdToPointerIdMap.end())
 			{
-				AddPointerUpEvent(it->second, CSInput::Pointer::InputType::k_touch);
+				AddPointerUpEvent(it->second, ChilliSource::Pointer::InputType::k_touch);
 				AddPointerRemoveEvent(it->second);
 				m_systemIdToPointerIdMap.erase(it);
 			}
@@ -81,7 +81,7 @@ namespace CSBackend
 		//------------------------------------------------
 		void PointerSystem::OnInit()
 		{
-			m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
+			m_screen = ChilliSource::Application::Get()->GetSystem<ChilliSource::Screen>();
 			CS_ASSERT(m_screen != nullptr, "Cannot find required system for PointerSystem: Screen.");
 
 			TouchInputJavaInterface::SetPointerSystem(this);

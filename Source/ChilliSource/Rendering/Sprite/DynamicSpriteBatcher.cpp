@@ -33,7 +33,7 @@
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 
-namespace CS
+namespace ChilliSource
 {
     const u32 kudwMaxSpritesInDynamicBatch = 512;
     
@@ -62,7 +62,7 @@ namespace CS
     ///
     /// @param Sprite data to batch
     //-------------------------------------------------------
-    void DynamicSpriteBatch::Render(const SpriteBatch::SpriteData& inpSprite, const Core::Matrix4 * inpTransform)
+    void DynamicSpriteBatch::Render(const SpriteBatch::SpriteData& inpSprite, const Matrix4 * inpTransform)
     {
         //If we exceed the capacity of the buffer then we will be forced to flush it
         if(maSpriteCache.size() >= kudwMaxSpritesInDynamicBatch)
@@ -89,7 +89,7 @@ namespace CS
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    void DynamicSpriteBatch::EnableScissoring(const Core::Vector2& in_pos, const Core::Vector2& in_size)
+    void DynamicSpriteBatch::EnableScissoring(const Vector2& in_pos, const Vector2& in_size)
     {
         InsertDrawCommand();
         

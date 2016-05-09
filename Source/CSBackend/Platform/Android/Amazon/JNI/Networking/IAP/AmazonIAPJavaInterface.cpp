@@ -89,12 +89,12 @@ void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_Nativ
 	if (javaInterface != nullptr)
 	{
 		u32 numProducts = in_env->GetArrayLength(in_productIds);
-		std::vector<CSNetworking::IAPSystem::ProductDesc> products;
+		std::vector<ChilliSource::IAPSystem::ProductDesc> products;
 		products.reserve(numProducts);
 
 		for(u32 i=0; i<numProducts; ++i)
 		{
-			CSNetworking::IAPSystem::ProductDesc desc;
+			ChilliSource::IAPSystem::ProductDesc desc;
 			jstring id = (jstring)in_env->GetObjectArrayElement(in_productIds, i);
 			desc.m_id = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(id);
 
@@ -110,7 +110,7 @@ void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_Nativ
 			products.push_back(desc);
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			javaInterface->OnProductDescriptionsRequestComplete(products);
 		});
@@ -123,12 +123,12 @@ void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_Nativ
 	CSBackend::Android::AmazonIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AmazonIAPJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		CSNetworking::IAPSystem::Transaction transaction;
+		ChilliSource::IAPSystem::Transaction transaction;
 		transaction.m_productId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_productId);
 		transaction.m_transactionId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_transactionId);
 		transaction.m_receipt = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_receipt);
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			javaInterface->OnTransactionStatusUpdated(in_result, transaction);
 		});
@@ -144,7 +144,7 @@ void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_Nativ
 		std::string productId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_productId);
 		std::string transactionId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_transactionId);
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 		{
 			javaInterface->OnTransactionClosed(productId, transactionId);
 		});
@@ -181,7 +181,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool AmazonIAPJavaInterface::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool AmazonIAPJavaInterface::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
 			return in_interfaceId == AmazonIAPJavaInterface::InterfaceID;
 		}
@@ -194,7 +194,7 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::StartListeningForTransactionUpdates(const CSNetworking::IAPSystem::TransactionStatusDelegate& in_delegate)
+        void AmazonIAPJavaInterface::StartListeningForTransactionUpdates(const ChilliSource::IAPSystem::TransactionStatusDelegate& in_delegate)
         {
         	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
 
@@ -214,7 +214,7 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const CSNetworking::IAPSystem::ProductDescDelegate& in_delegate)
+        void AmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const ChilliSource::IAPSystem::ProductDescDelegate& in_delegate)
         {
             CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
             CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
@@ -244,7 +244,7 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products)
+        void AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<ChilliSource::IAPSystem::ProductDesc>& in_products)
         {
         	if(m_productsRequestDelegate != nullptr)
         	{
@@ -270,11 +270,11 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 in_statusId, const CSNetworking::IAPSystem::Transaction& in_transaction)
+        void AmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 in_statusId, const ChilliSource::IAPSystem::Transaction& in_transaction)
         {
         	if(m_transactionStatusDelegate != nullptr)
         	{
-				CSNetworking::IAPSystem::Transaction::Status status = CSNetworking::IAPSystem::Transaction::Status::k_failed;
+				ChilliSource::IAPSystem::Transaction::Status status = ChilliSource::IAPSystem::Transaction::Status::k_failed;
 
 				//This requires a little bit of faith. These numbers correspond to the constants defined
 				//in the java class CPurchaseTransaction
@@ -286,21 +286,21 @@ namespace CSBackend
 				switch(in_statusId)
 				{
 					case k_purchaseSucceeded:
-						status = CSNetworking::IAPSystem::Transaction::Status::k_succeeded;
+						status = ChilliSource::IAPSystem::Transaction::Status::k_succeeded;
 						break;
 					case k_purchaseResumed:
-						status = CSNetworking::IAPSystem::Transaction::Status::k_resumed;
+						status = ChilliSource::IAPSystem::Transaction::Status::k_resumed;
 						break;
 					case k_purchaseRestored:
-						status = CSNetworking::IAPSystem::Transaction::Status::k_restored;
+						status = ChilliSource::IAPSystem::Transaction::Status::k_restored;
 						break;
 					case k_purchaseFailed:
 					default:
-						status = CSNetworking::IAPSystem::Transaction::Status::k_failed;
+						status = ChilliSource::IAPSystem::Transaction::Status::k_failed;
 						break;
 				}
 
-				CSNetworking::IAPSystem::TransactionSPtr transaction(new CSNetworking::IAPSystem::Transaction());
+				ChilliSource::IAPSystem::TransactionSPtr transaction(new ChilliSource::IAPSystem::Transaction());
 				transaction->m_productId = in_transaction.m_productId;
 				transaction->m_transactionId = in_transaction.m_transactionId;
 				transaction->m_receipt = in_transaction.m_receipt;
@@ -310,7 +310,7 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void AmazonIAPJavaInterface::CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const CSNetworking::IAPSystem::TransactionCloseDelegate& in_delegate)
+        void AmazonIAPJavaInterface::CloseTransaction(const std::string& in_productId, const std::string& in_transactionId, const ChilliSource::IAPSystem::TransactionCloseDelegate& in_delegate)
         {
         	CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction close delegate");
         	CS_ASSERT(m_transactionCloseDelegate == nullptr, "Only 1 transaction can be closed at a time");

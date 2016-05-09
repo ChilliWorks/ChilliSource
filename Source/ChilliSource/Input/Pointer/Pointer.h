@@ -34,7 +34,7 @@
 
 #include <set>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------
     /// A container for information on a single pointer.
@@ -87,19 +87,19 @@ namespace CS
         /// @param Index in list
         /// @param Position
         //----------------------------------------------------
-        Pointer(Id in_uniqueId, u32 in_index, const Core::Vector2& in_initialPosition);
+        Pointer(Id in_uniqueId, u32 in_index, const Vector2& in_initialPosition);
         //----------------------------------------------------
         /// @author S Downie
         ///
         /// @return Current pointer location
         //----------------------------------------------------
-        Core::Vector2 GetPosition() const;
+        Vector2 GetPosition() const;
         //----------------------------------------------------
         /// @author S Downie
         ///
         /// @return Previous pointer location
         //----------------------------------------------------
-        Core::Vector2 GetPreviousPosition() const;
+        Vector2 GetPreviousPosition() const;
         //----------------------------------------------------
         /// @author S Downie
         ///
@@ -140,8 +140,8 @@ namespace CS
         
         friend class PointerSystem;
         
-        Core::Vector2 m_position;
-        Core::Vector2 m_previousPosition;
+        Vector2 m_position;
+        Vector2 m_previousPosition;
         Id m_uniqueId;
         u32 m_index;
         std::set<InputType> m_activeInput;

@@ -63,9 +63,9 @@ namespace CSBackend
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool Accelerometer::IsA(CSCore::InterfaceIDType in_interfaceID) const
+        bool Accelerometer::IsA(ChilliSource::InterfaceIDType in_interfaceID) const
         {
-            return (in_interfaceID == CSInput::Accelerometer::InterfaceID || in_interfaceID == Accelerometer::InterfaceID);
+            return (in_interfaceID == ChilliSource::Accelerometer::InterfaceID || in_interfaceID == Accelerometer::InterfaceID);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -85,37 +85,37 @@ namespace CSBackend
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        CSCore::Vector3 Accelerometer::GetAcceleration() const
+        ChilliSource::Vector3 Accelerometer::GetAcceleration() const
         {
-            CSCore::Matrix4 orientationTransform;
+            ChilliSource::Matrix4 orientationTransform;
             switch ([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation)
             {
                 case UIInterfaceOrientationPortrait:
-                    orientationTransform = CSCore::Matrix4::k_identity;
+                    orientationTransform = ChilliSource::Matrix4::k_identity;
                     break;
                 case UIInterfaceOrientationLandscapeLeft:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi * 1.5f);
+                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi * 1.5f);
                     break;
                 case UIInterfaceOrientationLandscapeRight:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi * 0.5f);
+                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi * 0.5f);
                     break;
                 case UIInterfaceOrientationPortraitUpsideDown:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi);
+                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi);
                     break;
                 default:
                     CS_LOG_ERROR("Unknown orientation!");
-                    orientationTransform = CSCore::Matrix4::k_identity;
+                    orientationTransform = ChilliSource::Matrix4::k_identity;
                     break;
             }
             
             CMAcceleration acceleration(m_motionManager.accelerometerData.acceleration);
-            CSCore::Vector3 deviceSpaceAcceleration(acceleration.x, acceleration.y, acceleration.z);
+            ChilliSource::Vector3 deviceSpaceAcceleration(acceleration.x, acceleration.y, acceleration.z);
             deviceSpaceAcceleration.Transform3x4(orientationTransform);
             return deviceSpaceAcceleration;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        CSCore::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
+        ChilliSource::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
         {
             return m_accelerationUpdatedEvent;
         }

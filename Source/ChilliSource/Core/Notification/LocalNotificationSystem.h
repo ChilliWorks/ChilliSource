@@ -36,7 +36,7 @@
 #include <functional>
 #include <limits>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Schedules notifications using the platform specific

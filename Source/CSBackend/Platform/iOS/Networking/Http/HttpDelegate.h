@@ -52,7 +52,7 @@ typedef std::function<void(u64 in_expectedSize)> ConnectionEstablishedDelegate;
 /// @param in_responseCode - The response code.
 /// @param in_data - The data in string form.
 //--------------------------------------------------------------------------------------------------
-typedef std::function<void(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)> FlushedDelegate;
+typedef std::function<void(ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)> FlushedDelegate;
 //--------------------------------------------------------------------------------------------------
 /// Called once the request has complete
 ///
@@ -62,7 +62,7 @@ typedef std::function<void(CSNetworking::HttpResponse::Result in_result, u32 in_
 /// @param in_responseCode - The response code.
 /// @param in_data - The data in string form.
 //--------------------------------------------------------------------------------------------------
-typedef std::function<void(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)> CompleteDelegate;
+typedef std::function<void(ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)> CompleteDelegate;
 
 
 //--------------------------------------------------------------------------------------------------

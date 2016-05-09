@@ -31,7 +31,7 @@
 #include <ChilliSource/Rendering/Particle/Emitter/Cone2DParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -49,7 +49,7 @@ namespace CS
         Cone2DParticleEmitterDef::EmitFromType ParseEmitFromType(const std::string& in_emitFromTypeString)
         {
             std::string emitFromTypeString = in_emitFromTypeString;
-            Core::StringUtils::ToLowerCase(emitFromTypeString);
+            StringUtils::ToLowerCase(emitFromTypeString);
 
             if (emitFromTypeString == "base")
             {
@@ -81,7 +81,7 @@ namespace CS
         Cone2DParticleEmitterDef::EmitDirectionType ParseEmitDirectionType(const std::string& in_emitDirectionTypeString)
         {
             std::string emitDirectionTypeString = in_emitDirectionTypeString;
-            Core::StringUtils::ToLowerCase(emitDirectionTypeString);
+            StringUtils::ToLowerCase(emitDirectionTypeString);
 
             if (emitDirectionTypeString == "awayfrombase")
             {
@@ -151,13 +151,13 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool Cone2DParticleEmitterDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool Cone2DParticleEmitterDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleEmitterDef::InterfaceID == in_interfaceId || Cone2DParticleEmitterDef::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ParticleEmitterUPtr Cone2DParticleEmitterDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+    ParticleEmitterUPtr Cone2DParticleEmitterDef::CreateInstance(dynamic_array<Particle>* in_particleArray) const
     {
         return ParticleEmitterUPtr(new Cone2DParticleEmitter(this, in_particleArray));
     }

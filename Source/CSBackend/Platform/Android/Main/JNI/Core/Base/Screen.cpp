@@ -45,22 +45,22 @@ namespace CSBackend
         	CoreJavaInterfaceSPtr javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
         	CS_ASSERT(javaInterface != nullptr, "Cannot get CoreJavaInterface!");
 
-			m_resolution = CSCore::Vector2((f32)javaInterface->GetScreenWidth(), (f32)javaInterface->GetScreenHeight());
+			m_resolution = ChilliSource::Vector2((f32)javaInterface->GetScreenWidth(), (f32)javaInterface->GetScreenHeight());
 			m_densityScale = javaInterface->GetScreenDensity();
 			m_invDensityScale = 1.0f / m_densityScale;
 
-            m_supportedResolutions.push_back(CSCore::Integer2((s32)m_resolution.x, (s32)m_resolution.y));
-            m_supportedResolutions.push_back(CSCore::Integer2((s32)m_resolution.y, (s32)m_resolution.x));
+            m_supportedResolutions.push_back(ChilliSource::Integer2((s32)m_resolution.x, (s32)m_resolution.y));
+            m_supportedResolutions.push_back(ChilliSource::Integer2((s32)m_resolution.y, (s32)m_resolution.x));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Screen::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool Screen::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (CSCore::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
+            return (ChilliSource::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        const CSCore::Vector2& Screen::GetResolution() const
+        const ChilliSource::Vector2& Screen::GetResolution() const
         {
             return m_resolution;
         }
@@ -78,19 +78,19 @@ namespace CSBackend
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        CSCore::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
+        ChilliSource::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
         {
             return m_resolutionChangedEvent;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        CSCore::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
+        ChilliSource::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
         {
             return m_displayModeChangedEvent;
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
-		void Screen::SetResolution(const CSCore::Integer2& in_size)
+		void Screen::SetResolution(const ChilliSource::Integer2& in_size)
 		{
 			CS_LOG_WARNING("Screen::SetResolution has no effect on Android");
 		}
@@ -102,13 +102,13 @@ namespace CSBackend
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        std::vector<CSCore::Integer2> Screen::GetSupportedResolutions() const
+        std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
         {
             return m_supportedResolutions;
         }
         //-----------------------------------------------------------
         //------------------------------------------------------------
-        void Screen::OnResolutionChanged(const CSCore::Vector2& in_resolution)
+        void Screen::OnResolutionChanged(const ChilliSource::Vector2& in_resolution)
         {
         	m_resolution = in_resolution;
         	m_resolutionChangedEvent.NotifyConnections(m_resolution);

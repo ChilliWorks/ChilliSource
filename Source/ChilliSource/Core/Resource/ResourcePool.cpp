@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(ResourcePool);
     
@@ -71,7 +71,7 @@ namespace CS
         //Find the resource provider that can handle this extension
         std::string fileName;
         std::string fileExtension;
-        Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
+        StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
         
         u32 numProviders = static_cast<u32>(in_desc.m_providers.size());
         for(u32 i=0; i<numProviders; ++i)

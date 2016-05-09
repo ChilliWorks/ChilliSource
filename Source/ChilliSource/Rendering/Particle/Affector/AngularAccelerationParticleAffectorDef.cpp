@@ -31,7 +31,7 @@
 #include <ChilliSource/Rendering/Particle/Affector/AngularAccelerationParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(AngularAccelerationParticleAffectorDef);
     //----------------------------------------------------------------
@@ -57,13 +57,13 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool AngularAccelerationParticleAffectorDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool AngularAccelerationParticleAffectorDef::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleAffectorDef::InterfaceID == in_interfaceId || AngularAccelerationParticleAffectorDef::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ParticleAffectorUPtr AngularAccelerationParticleAffectorDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+    ParticleAffectorUPtr AngularAccelerationParticleAffectorDef::CreateInstance(dynamic_array<Particle>* in_particleArray) const
     {
         return ParticleAffectorUPtr(new AngularAccelerationParticleAffector(this, in_particleArray));
     }

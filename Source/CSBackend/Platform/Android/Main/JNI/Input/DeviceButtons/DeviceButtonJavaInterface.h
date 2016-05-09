@@ -76,7 +76,7 @@ namespace CSBackend
             ///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const;
 			//-----------------------------------------------
 			/// @author Ian Copland
 			///

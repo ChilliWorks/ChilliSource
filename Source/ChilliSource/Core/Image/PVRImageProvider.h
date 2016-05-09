@@ -32,14 +32,14 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// An image loader that provides PVR images
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class PVRImageProvider final : public Core::ResourceProvider
+    class PVRImageProvider final : public ResourceProvider
     {
     public:
         CS_DECLARE_NAMEDTYPE(PVRImageProvider);
@@ -52,13 +52,13 @@ namespace CS
         ///
         /// @return Whether the object is of given type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The resource type this provider can load
         //-------------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //----------------------------------------------------------
         /// Whether or not the provider can create resources from
         /// files with the given extension.

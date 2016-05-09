@@ -49,7 +49,7 @@
 /// width and height of the view once the relative term has 
 /// been applied.
 //--------------------------------------------------------------
-namespace CS
+namespace ChilliSource
 {
     struct UnifiedScalar
     {
@@ -63,7 +63,7 @@ namespace CS
     struct UnifiedVector2
     {
         UnifiedVector2(){}
-        UnifiedVector2(const Core::Vector2& invRelative, const Core::Vector2& invAbsolute) : vRelative(invRelative), vAbsolute(invAbsolute){}
+        UnifiedVector2(const Vector2& invRelative, const Vector2& invAbsolute) : vRelative(invRelative), vAbsolute(invAbsolute){}
         UnifiedVector2(f32 infRelX, f32 infRelY, f32 infAbsX, f32 infAbsY) : vRelative(infRelX, infRelY), vAbsolute(infAbsX, infAbsY){}
 
         //------------------------------------------------------
@@ -71,16 +71,16 @@ namespace CS
         ///
         /// @return Absolute vector
         //------------------------------------------------------
-        const Core::Vector2& GetAbsolute() const;
+        const Vector2& GetAbsolute() const;
         //------------------------------------------------------
         /// Get Relative
         ///
         /// @return Relative vector
         //------------------------------------------------------
-        const Core::Vector2& GetRelative() const;
+        const Vector2& GetRelative() const;
 
-        Core::Vector2 vRelative;
-        Core::Vector2 vAbsolute;
+        Vector2 vRelative;
+        Vector2 vAbsolute;
 
         //---------------------------------
         // Operators

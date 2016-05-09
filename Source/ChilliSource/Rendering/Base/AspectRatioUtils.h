@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------
     /// Utility methods for calculating a size based on the given
@@ -52,7 +52,7 @@ namespace CS
         ///
         /// @return Size with aspect maintained
         //----------------------------------------------------------------------------------------
-        Core::Vector2 KeepOriginalWidthAdaptHeight(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
+        Vector2 KeepOriginalWidthAdaptHeight(const Vector2& in_originalSize, f32 in_preferredAspectRatio);
         //----------------------------------------------------------------------------------------
         /// Aspect ratio maintaining function that keeps the original height but adapts
         /// the width to maintain the aspect ratio
@@ -64,7 +64,7 @@ namespace CS
         ///
         /// @return Size with aspect maintained
         //----------------------------------------------------------------------------------------
-        Core::Vector2 KeepOriginalHeightAdaptWidth(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
+        Vector2 KeepOriginalHeightAdaptWidth(const Vector2& in_originalSize, f32 in_preferredAspectRatio);
         //----------------------------------------------------------------------------------------
         /// Aspect ratio maintaining function that maintains the given target aspect ratio
         /// while ensuring the size does not DROP BELOW the original size
@@ -76,7 +76,7 @@ namespace CS
         ///
         /// @return Size with aspect maintained
         //----------------------------------------------------------------------------------------
-        Core::Vector2 FillOriginal(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
+        Vector2 FillOriginal(const Vector2& in_originalSize, f32 in_preferredAspectRatio);
         //----------------------------------------------------------------------------------------
         /// Aspect ratio maintaining function that maintains the given target aspect ratio
         /// while ensuring the size does not EXCEED the original size
@@ -88,7 +88,7 @@ namespace CS
         ///
         /// @return Size with aspect maintained
         //----------------------------------------------------------------------------------------
-        Core::Vector2 FitOriginal(const Core::Vector2& in_originalSize, f32 in_preferredAspectRatio);
+        Vector2 FitOriginal(const Vector2& in_originalSize, f32 in_preferredAspectRatio);
     }
 }
 

@@ -32,7 +32,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(PerspectiveCameraComponent);
     //----------------------------------------------------------
@@ -45,13 +45,13 @@ namespace CS
             case ViewportResizePolicy::k_none:
                 break;
             case ViewportResizePolicy::k_scaleWithScreen:
-                m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &PerspectiveCameraComponent::OnResolutionChanged));
+                m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(MakeDelegate(this, &PerspectiveCameraComponent::OnResolutionChanged));
                 break;
         }
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool PerspectiveCameraComponent::IsA(CSCore::InterfaceIDType in_interfaceId) const
+    bool PerspectiveCameraComponent::IsA(InterfaceIDType in_interfaceId) const
     {
         return (in_interfaceId == CameraComponent::InterfaceID || in_interfaceId == PerspectiveCameraComponent::InterfaceID);
     }
@@ -85,9 +85,9 @@ namespace CS
     }
     //------------------------------------------------------
     //------------------------------------------------------
-    Core::Matrix4 PerspectiveCameraComponent::CalculateProjectionMatrix()
+    Matrix4 PerspectiveCameraComponent::CalculateProjectionMatrix()
     {
-        return Core::Matrix4::CreatePerspectiveProjectionLH(m_fov, m_aspectRatio, m_nearClip, m_farClip);
+        return Matrix4::CreatePerspectiveProjectionLH(m_fov, m_aspectRatio, m_nearClip, m_farClip);
     }
     //------------------------------------------------------
     //------------------------------------------------------
@@ -97,7 +97,7 @@ namespace CS
     }
     //------------------------------------------------------
     //------------------------------------------------------
-    void PerspectiveCameraComponent::OnResolutionChanged(const Core::Vector2& in_resolution)
+    void PerspectiveCameraComponent::OnResolutionChanged(const Vector2& in_resolution)
     {
         switch(m_resizePolicy)
         {

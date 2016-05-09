@@ -38,7 +38,7 @@
 #include <ChilliSource/UI/Drawable/DrawableDef.h>
 
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -46,34 +46,34 @@ namespace CS
         const char k_highlightDrawableKey[] = "HighlightDrawable";
         const char k_highlightColourKey[] = "HighlightColour";
         
-        const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
+        const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
             {PropertyTypes::DrawableDef(), k_normalDrawableKey},
             {PropertyTypes::DrawableDef(), k_highlightDrawableKey},
-            {Core::PropertyTypes::Colour(), k_highlightColourKey}
+            {PropertyTypes::Colour(), k_highlightColourKey}
         };
     }
     
     CS_DEFINE_NAMEDTYPE(HighlightComponent);
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const std::vector<Core::PropertyMap::PropertyDesc>& HighlightComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& HighlightComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    HighlightComponent::HighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
+    HighlightComponent::HighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawableDef), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawableDef));
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawableDef), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawableDef));
-        RegisterProperty<Core::Colour>(Core::PropertyTypes::Colour(), k_highlightColourKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightColour), Core::MakeDelegate(this, &HighlightComponent::SetHighlightColour));
+        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalDrawableKey, MakeDelegate(this, &HighlightComponent::GetNormalDrawableDef), MakeDelegate(this, &HighlightComponent::SetNormalDrawableDef));
+        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightDrawableKey, MakeDelegate(this, &HighlightComponent::GetHighlightDrawableDef), MakeDelegate(this, &HighlightComponent::SetHighlightDrawableDef));
+        RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightColourKey, MakeDelegate(this, &HighlightComponent::GetHighlightColour), MakeDelegate(this, &HighlightComponent::SetHighlightColour));
         ApplyRegisteredProperties(in_properties);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool HighlightComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool HighlightComponent::IsA(InterfaceIDType in_interfaceId) const
     {
         return (UIComponent::InterfaceID == in_interfaceId || HighlightComponent::InterfaceID == in_interfaceId);
     }
@@ -91,7 +91,7 @@ namespace CS
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const Core::Colour& HighlightComponent::GetHighlightColour() const
+    const Colour& HighlightComponent::GetHighlightColour() const
     {
         return m_highlightColour;
     }
@@ -119,7 +119,7 @@ namespace CS
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::SetHighlightColour(const Core::Colour& in_colour)
+    void HighlightComponent::SetHighlightColour(const Colour& in_colour)
     {
         m_highlightColour = in_colour;
         
@@ -179,20 +179,20 @@ namespace CS
             Highlight();
         }
         
-        m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnPressedInside));
-        m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnMoveEntered));
-        m_moveExitedConnection = GetWidget()->GetMoveExitedEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnMoveExited));
-        m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnReleasedInside));
-        m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnReleasedOutside));
+        m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnPressedInside));
+        m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnMoveEntered));
+        m_moveExitedConnection = GetWidget()->GetMoveExitedEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnMoveExited));
+        m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnReleasedInside));
+        m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnReleasedOutside));
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnPressedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
+    void HighlightComponent::OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
-        if (in_inputType == Input::Pointer::GetDefaultInputType())
+        if (in_inputType == Pointer::GetDefaultInputType())
         {
-            CS_ASSERT(Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == false, "Received pressed event for already pressed Id.");
-            CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received pressed event for already highlighting Id.");
+            CS_ASSERT(VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == false, "Received pressed event for already pressed Id.");
+            CS_ASSERT(VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received pressed event for already highlighting Id.");
             
             m_activePointerIds.push_back(in_pointer.GetId());
             m_highlightingPointerIds.push_back(in_pointer.GetId());
@@ -205,11 +205,11 @@ namespace CS
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnMoveEntered(Widget* in_widget, const Input::Pointer& in_pointer)
+    void HighlightComponent::OnMoveEntered(Widget* in_widget, const Pointer& in_pointer)
     {
-        if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
+        if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
-            CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received move entered for already highlighting Id.");
+            CS_ASSERT(VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received move entered for already highlighting Id.");
             
             m_highlightingPointerIds.push_back(in_pointer.GetId());
             
@@ -221,13 +221,13 @@ namespace CS
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnMoveExited(Widget* in_widget, const Input::Pointer& in_pointer)
+    void HighlightComponent::OnMoveExited(Widget* in_widget, const Pointer& in_pointer)
     {
-        if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
+        if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
-            CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == true, "Received move exited event for an id that is not in the highlighting list.");
+            CS_ASSERT(VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == true, "Received move exited event for an id that is not in the highlighting list.");
             
-            Core::VectorUtils::Remove(m_highlightingPointerIds, in_pointer.GetId());
+            VectorUtils::Remove(m_highlightingPointerIds, in_pointer.GetId());
             
             if (m_highlighted == true && m_highlightingPointerIds.empty() == true)
             {
@@ -237,14 +237,14 @@ namespace CS
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnReleasedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
+    void HighlightComponent::OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
-        if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
+        if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
-            CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == true, "Received released inside event for an id that is not in the highlighting list.");
+            CS_ASSERT(VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == true, "Received released inside event for an id that is not in the highlighting list.");
             
-            Core::VectorUtils::Remove(m_activePointerIds, in_pointer.GetId());
-            Core::VectorUtils::Remove(m_highlightingPointerIds, in_pointer.GetId());
+            VectorUtils::Remove(m_activePointerIds, in_pointer.GetId());
+            VectorUtils::Remove(m_highlightingPointerIds, in_pointer.GetId());
             
             if (m_highlighted == true && m_highlightingPointerIds.empty() == true)
             {
@@ -254,13 +254,13 @@ namespace CS
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnReleasedOutside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
+    void HighlightComponent::OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
-        if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
+        if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
-            CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received released inside event for an id that is in the highlighting list.");
+            CS_ASSERT(VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received released inside event for an id that is in the highlighting list.");
             
-            Core::VectorUtils::Remove(m_activePointerIds, in_pointer.GetId());
+            VectorUtils::Remove(m_activePointerIds, in_pointer.GetId());
             
             if (m_highlighted == true && m_highlightingPointerIds.empty() == true)
             {

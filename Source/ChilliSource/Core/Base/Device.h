@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------
     /// An application system for providing cross platform
@@ -105,7 +105,7 @@ namespace CS
         //---------------------------------------------------
         virtual ~Device() {};
     protected:
-        friend class Core::Application;
+        friend class Application;
         //---------------------------------------------------
         /// Creates a new platform specific backend for the
         /// system.

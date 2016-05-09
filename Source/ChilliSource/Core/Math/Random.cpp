@@ -44,7 +44,7 @@
 #import <CSBackend/Platform/iOS/Core/Math/RNGContainer.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {

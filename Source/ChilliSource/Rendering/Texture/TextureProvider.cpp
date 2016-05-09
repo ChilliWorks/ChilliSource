@@ -34,11 +34,11 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(TextureProvider);
     
-    const Core::IResourceOptionsBaseCSPtr TextureProvider::s_defaultOptions(std::make_shared<TextureResourceOptions>());
+    const IResourceOptionsBaseCSPtr TextureProvider::s_defaultOptions(std::make_shared<TextureResourceOptions>());
     
     //-------------------------------------------------------
     //-------------------------------------------------------
@@ -48,7 +48,7 @@ namespace CS
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    bool TextureProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool TextureProvider::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == TextureProvider::InterfaceID;
     }
@@ -56,11 +56,11 @@ namespace CS
     //----------------------------------------------------------------------------
     void TextureProvider::PostCreate()
     {
-        auto resourceProviders = Core::Application::Get()->GetSystems<Core::ResourceProvider>();
+        auto resourceProviders = Application::Get()->GetSystems<ResourceProvider>();
         
         for(u32 i=0; i<resourceProviders.size(); ++i)
         {
-            if(resourceProviders[i]->GetResourceType() == Core::Image::InterfaceID)
+            if(resourceProviders[i]->GetResourceType() == Image::InterfaceID)
             {
                 m_imageProviders.push_back(resourceProviders[i]);
             }
@@ -68,7 +68,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    Core::InterfaceIDType TextureProvider::GetResourceType() const
+    InterfaceIDType TextureProvider::GetResourceType() const
     {
         return Texture::InterfaceID;
     }
@@ -88,36 +88,36 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IResourceOptionsBaseCSPtr TextureProvider::GetDefaultOptions() const
+    IResourceOptionsBaseCSPtr TextureProvider::GetDefaultOptions() const
     {
         return s_defaultOptions;
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void TextureProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+    void TextureProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
         LoadTexture(in_location, in_filePath, in_options, nullptr, out_resource);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void TextureProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void TextureProvider::CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
-        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
             LoadTexture(in_location, in_filePath, in_options, in_delegate, out_resource);
         });
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void TextureProvider::LoadTexture(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void TextureProvider::LoadTexture(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         CS_ASSERT(in_options != nullptr, "Options for texture load cannot be null");
         
         std::string fileName;
         std::string fileExtension;
-        Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
+        StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
         
-        Core::ResourceProvider* imageProvider = nullptr;
+        ResourceProvider* imageProvider = nullptr;
         for(u32 i=0; i<m_imageProviders.size(); ++i)
         {
             if(m_imageProviders[i]->CanCreateResourceWithFileExtension(fileExtension))
@@ -130,10 +130,10 @@ namespace CS
         if(imageProvider == nullptr)
         {
             CS_LOG_ERROR("Cannot find provider for " + in_filePath);
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -141,17 +141,17 @@ namespace CS
             return;
         }
         
-        Core::ResourceSPtr imageResource(Core::Image::Create());
+        ResourceSPtr imageResource(Image::Create());
         imageProvider->CreateResourceFromFile(in_location, in_filePath, nullptr, imageResource);
-        Core::ImageSPtr image(std::static_pointer_cast<Core::Image>(imageResource));
+        ImageSPtr image(std::static_pointer_cast<Image>(imageResource));
         
-        if(image->GetLoadState() == Core::Resource::LoadState::k_failed)
+        if(image->GetLoadState() == Resource::LoadState::k_failed)
         {
             CS_LOG_ERROR("Failed to load image " + in_filePath);
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -174,11 +174,11 @@ namespace CS
             texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled(), options->IsRestoreTextureDataEnabled());
             texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
             texture->SetFilterMode(options->GetFilterMode());
-            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+            out_resource->SetLoadState(Resource::LoadState::k_loaded);
         }
         else
         {
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
             {
                 Texture* texture = (Texture*)out_resource.get();
                 const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
@@ -193,7 +193,7 @@ namespace CS
                 texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled(), options->IsRestoreTextureDataEnabled());
                 texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
                 texture->SetFilterMode(options->GetFilterMode());
-                out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                out_resource->SetLoadState(Resource::LoadState::k_loaded);
                 in_delegate(out_resource);
             });
         }

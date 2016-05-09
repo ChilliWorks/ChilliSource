@@ -56,7 +56,7 @@ namespace CSBackend
 		///
 		/// @author Ian Copland
 		//----------------------------------------------------------------------------------
-		class AmazonIAPSystem final : public CSNetworking::IAPSystem
+		class AmazonIAPSystem final : public ChilliSource::IAPSystem
 		{
 		public:
 
@@ -69,7 +69,7 @@ namespace CSBackend
             ///
             /// @return Whether the class is of the given type
             //---------------------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------
             /// Inform the system of which products are available for
             /// purchase and whether they are managed or unmanaged
@@ -165,7 +165,7 @@ namespace CSBackend
 
 		private:
 
-            friend CSNetworking::IAPSystemUPtr CSNetworking::IAPSystem::Create(const CSCore::ParamDictionary&);
+            friend ChilliSource::IAPSystemUPtr ChilliSource::IAPSystem::Create(const ChilliSource::ParamDictionary&);
             //---------------------------------------------------------------
             /// Private constructor to enforce use of factory method
             ///
@@ -177,7 +177,7 @@ namespace CSBackend
 			/// 	AmazonPrivateKey	The private key used to encrypt
             ///							the on disk Amazon IAP cache.
             //---------------------------------------------------------------
-			AmazonIAPSystem(const CSCore::ParamDictionary& in_params);
+			AmazonIAPSystem(const ChilliSource::ParamDictionary& in_params);
             //-------------------------------------------------------
             /// Called when the system is created. Initialises
             /// the StoreKit backend

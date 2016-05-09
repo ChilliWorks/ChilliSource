@@ -56,7 +56,7 @@ namespace CSBackend
 			///
 			/// @return whether or not this object implements the given interface.
 			//--------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::InterfaceIDType inInterfaceID) const;
 			//--------------------------------------------------------------
 			/// Request Remote Token
 			///
@@ -75,7 +75,7 @@ namespace CSBackend
 			///
 			/// @param Dictionary of notification keys and values.
 			//-------------------------------------------------------------------------
-			void OnRemoteNotificationReceived(const CSCore::ParamDictionary& insParams);
+			void OnRemoteNotificationReceived(const ChilliSource::ParamDictionary& insParams);
         };
     }
 }

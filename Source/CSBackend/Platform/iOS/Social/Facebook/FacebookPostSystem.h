@@ -45,7 +45,7 @@ namespace CSBackend
         ///
         /// @author S McGaw
         //----------------------------------------------------
-		class FacebookPostSystem final : public CSSocial::FacebookPostSystem
+		class FacebookPostSystem final : public ChilliSource::FacebookPostSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(FacebookPostSystem);
@@ -56,7 +56,7 @@ namespace CSBackend
             ///
             /// @return Whether the object has the same interface ID
             //----------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
             /// Share from the app to appear in the user's timeline and in their friends' News Feeds.
             ///
@@ -86,7 +86,7 @@ namespace CSBackend
             void SendRequest(const RequestDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection) override;
 
         private:
-            friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create();
+            friend ChilliSource::FacebookPostSystemUPtr ChilliSource::FacebookPostSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
@@ -132,7 +132,7 @@ namespace CSBackend
             bool IsSignedIn() const;
             
         private:
-            CSSocial::FacebookAuthenticationSystem* m_authSystem = nullptr;
+            ChilliSource::FacebookAuthenticationSystem* m_authSystem = nullptr;
             PostResultDelegate::Connection m_postCompleteDelegateConnection;
             PostResultDelegate::Connection m_requestCompleteDelegateConnection;
 		};

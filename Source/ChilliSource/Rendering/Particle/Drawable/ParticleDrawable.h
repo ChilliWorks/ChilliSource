@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// The base class for all particle drawables. Particle drawables are 
@@ -59,7 +59,7 @@ namespace CS
         /// @param The particle drawable definition.
         /// @param The concurrent particle data.
         //----------------------------------------------------------------
-        ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
+        ParticleDrawable(const Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
         //----------------------------------------------------------------
         /// Updates the particle drawable and renders all active particles
         /// in the effect. 
@@ -84,7 +84,7 @@ namespace CS
         /// @return The entity the owning particle component is attached 
         /// to. This should never be null.
         //----------------------------------------------------------------
-        const Core::Entity* GetEntity() const;
+        const Entity* GetEntity() const;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -103,7 +103,7 @@ namespace CS
         /// @param The particle draw data.
         /// @param The index of the particle to activate.
         //----------------------------------------------------------------
-        virtual void ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index) = 0;
+        virtual void ActivateParticle(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index) = 0;
         //----------------------------------------------------------------
         /// Renders all active particles in the effect. 
         ///
@@ -114,9 +114,9 @@ namespace CS
         /// @param The particle draw data.
         /// @param The camera component used to render.
         //----------------------------------------------------------------
-        virtual void DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) = 0;
+        virtual void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) = 0;
     private:
-        const Core::Entity* m_entity = nullptr;
+        const Entity* m_entity = nullptr;
         const ParticleDrawableDef* m_drawableDef = nullptr;
         ConcurrentParticleData* m_concurrentParticleData = nullptr;
     };

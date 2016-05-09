@@ -33,7 +33,7 @@
 
 #include <json/forwards.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------
     /// A collection of convenience methods for working with json. This
@@ -70,7 +70,7 @@ namespace CS
         ///
         /// @return The new json object.
         //---------------------------------------------------------------
-        bool ReadJson(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue);
+        bool ReadJson(StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue);
     }
 }
 

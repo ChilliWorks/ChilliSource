@@ -43,7 +43,7 @@ namespace CSBackend
 		/// A system used to display platform specific system
         /// dialogue boxes.
 		//-----------------------------------------------------------
-		class DialogueBoxSystem final : public CSCore::DialogueBoxSystem
+		class DialogueBoxSystem final : public ChilliSource::DialogueBoxSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(DialogueBoxSystem);
@@ -53,7 +53,7 @@ namespace CSBackend
             /// @return Whether this implements the passed in
             /// interface id.
             //-----------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///
@@ -65,7 +65,7 @@ namespace CSBackend
             /// @param Message text (UTF-8)
             /// @param Confirm text (UTF-8)
             //------------------------------------------------------
-			void ShowSystemDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm) override;
+			void ShowSystemDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm) override;
             //-----------------------------------------------------
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
@@ -79,7 +79,7 @@ namespace CSBackend
             /// @param Confirm text (UTF-8)
             /// @param Cancel text (UTF-8)
             //-----------------------------------------------------
-			void ShowSystemConfirmDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel) override;
+			void ShowSystemConfirmDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel) override;
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
@@ -95,7 +95,7 @@ namespace CSBackend
 			//----------------------------------------------------
             ~DialogueBoxSystem();
         private:
-			friend CSCore::DialogueBoxSystemUPtr CSCore::DialogueBoxSystem::Create();
+			friend ChilliSource::DialogueBoxSystemUPtr ChilliSource::DialogueBoxSystem::Create();
 
 			//----------------------------------------------------
 			/// Constructor

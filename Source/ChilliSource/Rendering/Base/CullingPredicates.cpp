@@ -30,7 +30,7 @@
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     bool ViewportCullPredicate::CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const
     {

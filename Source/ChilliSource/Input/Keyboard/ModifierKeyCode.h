@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_INPUT_KEYBOARD_MODIFIERKEYCODE_H_
 #define _CHILLISOURCE_INPUT_KEYBOARD_MODIFIERKEYCODE_H_
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// List of all the modifier key-codes supported for keyboard events.

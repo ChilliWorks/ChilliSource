@@ -41,7 +41,7 @@
 
 #include <minizip/unzip.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -109,11 +109,11 @@ namespace CS
         ///
         /// @return If the saving was successful
         //-----------------------------------------------------------
-        bool SaveTempManifest(const Core::XML::Document* in_manifestDoc, const std::string& in_filePath)
+        bool SaveTempManifest(const XML::Document* in_manifestDoc, const std::string& in_filePath)
         {
             //Clone the manifest before we modify it
-            auto xmlString = Core::XMLUtils::ToString(in_manifestDoc);
-            auto doc = Core::XMLUtils::ParseDocument(xmlString);
+            auto xmlString = XMLUtils::ToString(in_manifestDoc);
+            auto doc = XMLUtils::ParseDocument(xmlString);
             
             //Remove the TimeStamp attribute as it interferes with the checksum comparison
             auto manifestNode = doc->GetDocument()->first_node();
@@ -121,7 +121,7 @@ namespace CS
             {
                 for(rapidxml::xml_attribute<>* attribute = manifestNode->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
                 {
-                    if (Core::XMLUtils::GetName(attribute) == "Timestamp")
+                    if (XMLUtils::GetName(attribute) == "Timestamp")
                     {
                         manifestNode->remove_attribute(attribute);
                         break;
@@ -129,7 +129,7 @@ namespace CS
                 }
             }
             
-            return Core::XMLUtils::WriteDocument(doc->GetDocument(), CSCore::StorageLocation::k_DLC, in_filePath);
+            return XMLUtils::WriteDocument(doc->GetDocument(), StorageLocation::k_DLC, in_filePath);
         }
         //-----------------------------------------------------------
         /// Deletes a directory from the DLC Storage Location.
@@ -138,7 +138,7 @@ namespace CS
         //-----------------------------------------------------------
         void DeleteDirectory(const std::string& in_directory)
         {
-            CSCore::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_DLC, in_directory);
+            Application::Get()->GetFileSystem()->DeleteDirectory(StorageLocation::k_DLC, in_directory);
         }
         //-----------------------------------------------------------
         /// Clears the temp download folder
@@ -169,26 +169,26 @@ namespace CS
     //-----------------------------------------------------------
     void ContentManagementSystem::OnInit()
     {
-        m_contentDirectory = Core::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(Core::StorageLocation::k_DLC);
+        m_contentDirectory = Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(StorageLocation::k_DLC);
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    bool ContentManagementSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ContentManagementSystem::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == ContentManagementSystem::InterfaceID;
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    Core::XMLUPtr ContentManagementSystem::LoadLocalManifest()
+    XMLUPtr ContentManagementSystem::LoadLocalManifest()
     {
         //The manifest lives in the documents directory
-        Core::XMLUPtr xml = Core::XMLUtils::ReadDocument(Core::StorageLocation::k_DLC, k_manifestFile);
+        XMLUPtr xml = XMLUtils::ReadDocument(StorageLocation::k_DLC, k_manifestFile);
         if (xml != nullptr && xml->GetDocument() != nullptr)
         {
-            Core::XML::Node* rootNode = Core::XMLUtils::GetFirstChildElement(xml->GetDocument());
+            XML::Node* rootNode = XMLUtils::GetFirstChildElement(xml->GetDocument());
             
             //If there is no DLC we should check to see if there ever was any
-            Core::AppDataStore* ads = Core::Application::Get()->GetSystem<Core::AppDataStore>();
+            AppDataStore* ads = Application::Get()->GetSystem<AppDataStore>();
             if(rootNode == nullptr && ads->Contains(k_adsKeyHasCached) == true)
             {
                 m_dlcCachePurged = true;
@@ -200,11 +200,11 @@ namespace CS
     //-----------------------------------------------------------
     std::string ContentManagementSystem::GetManifestChecksumForFile(const std::string& in_filename) const
     {
-        return CalculateChecksum(Core::StorageLocation::k_DLC, in_filename);
+        return CalculateChecksum(StorageLocation::k_DLC, in_filename);
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation in_location, const std::string& in_filePath) const
+    std::string ContentManagementSystem::CalculateChecksum(StorageLocation in_location, const std::string& in_filePath) const
     {
         if(m_checksumDelegate)
         {
@@ -212,10 +212,10 @@ namespace CS
             return m_checksumDelegate(in_location, in_filePath);
         }
         
-        std::string checksum = Core::Application::Get()->GetFileSystem()->GetFileChecksumSHA1(in_location, in_filePath);
-        CSCore::StringUtils::ToLowerCase(checksum);
-        std::string base64Encoded = Core::BaseEncoding::Base64Encode(checksum);
-        Core::StringUtils::ChopTrailingChars(base64Encoded, '=');
+        std::string checksum = Application::Get()->GetFileSystem()->GetFileChecksumSHA1(in_location, in_filePath);
+        StringUtils::ToLowerCase(checksum);
+        std::string base64Encoded = BaseEncoding::Base64Encode(checksum);
+        StringUtils::ChopTrailingChars(base64Encoded, '=');
         return base64Encoded;
     }
     //-----------------------------------------------------------
@@ -232,13 +232,13 @@ namespace CS
     //-----------------------------------------------------------
     void ContentManagementSystem::CheckForUpdates(const ContentManagementSystem::CheckForUpdateDelegate& in_delegate)
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
         
         //Clear any stale data from last update check
         ClearDownloadData();
         
         //Have the downloader request the manifest in its own way
-        if(m_contentDownloader->DownloadContentManifest(Core::MakeDelegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
+        if(m_contentDownloader->DownloadContentManifest(MakeDelegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
         {
             //The request has started successfully
             m_onUpdateCheckCompleteDelegate = in_delegate;
@@ -261,7 +261,7 @@ namespace CS
     //-----------------------------------------------------------
     void ContentManagementSystem::DownloadUpdates(const ContentManagementSystem::CompleteDelegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate)
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
         
         CS_ASSERT(!m_downloadInProgress, "Cannot call DownloadUpdates while updates are being downloaded!");
 
@@ -275,7 +275,7 @@ namespace CS
         {
             //Add a temp directory so that the packages are stored atomically and only overwrite
             //the originals on full success
-            Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, k_tempDirectory);
+            Application::Get()->GetFileSystem()->CreateDirectoryPath(StorageLocation::k_DLC, k_tempDirectory);
             DownloadPackage(m_currentPackageDownload);
         }
         else
@@ -298,7 +298,7 @@ namespace CS
         CS_ASSERT(in_packageIndex < m_packageDetails.size(), "Package index out of range");
         
         const auto& package = m_packageDetails[in_packageIndex];
-        bool existsInCache = CSCore::VectorUtils::Contains<PackageDetails>(m_cachedPackageDetails, package);
+        bool existsInCache = VectorUtils::Contains<PackageDetails>(m_cachedPackageDetails, package);
         
         if(in_checkCached && existsInCache)
         {
@@ -321,15 +321,15 @@ namespace CS
         }
         else
         {
-            m_contentDownloader->DownloadPackage(package.m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete),
-                                                 Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadProgress));
+            m_contentDownloader->DownloadPackage(package.m_url, MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete),
+                                                 MakeDelegate(this, &ContentManagementSystem::OnContentDownloadProgress));
         }
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
     void ContentManagementSystem::InstallUpdates(const CompleteDelegate& inDelegate)
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
         
         if(!m_packageDetails.empty() || !m_removePackageIds.empty())
         {
@@ -357,13 +357,13 @@ namespace CS
             }
             
             //Save the new content manifest
-            CSCore::XMLUtils::WriteDocument(m_serverManifest->GetDocument(), Core::StorageLocation::k_DLC, k_manifestFile);
+            XMLUtils::WriteDocument(m_serverManifest->GetDocument(), StorageLocation::k_DLC, k_manifestFile);
             
             m_dlcCachePurged = false;
             
             //Store that we have DLC cached. If there is no DLC on next check then 
             //we know the cache has been purged and we have to block on download
-            Core::AppDataStore* ads = Core::Application::Get()->GetSystem<Core::AppDataStore>();
+            AppDataStore* ads = Application::Get()->GetSystem<AppDataStore>();
             ads->SetValue(k_adsKeyHasCached, true);
             
             //Tell the delegate all is good
@@ -450,9 +450,9 @@ namespace CS
     void ContentManagementSystem::BuildDownloadList(const std::string& in_serverManifest)
     {
         //Validate the server manifest
-        m_serverManifest = Core::XMLUtils::ParseDocument(in_serverManifest);
+        m_serverManifest = XMLUtils::ParseDocument(in_serverManifest);
         
-        Core::XML::Node* serverManifestRootNode = CSCore::XMLUtils::GetFirstChildElement(m_serverManifest->GetDocument());
+        XML::Node* serverManifestRootNode = XMLUtils::GetFirstChildElement(m_serverManifest->GetDocument());
         if(serverManifestRootNode == nullptr)
         {
             CS_LOG_ERROR("CMS: Server content manifest is invalid");
@@ -469,21 +469,21 @@ namespace CS
         }
         
         //Check if DLC is enabled
-        if(!Core::XMLUtils::GetAttributeValue<bool>(serverManifestRootNode, "DLCEnabled", false))
+        if(!XMLUtils::GetAttributeValue<bool>(serverManifestRootNode, "DLCEnabled", false))
         {
             m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_notAvailable);
             return;
         }
         
-        Core::XMLUPtr currentManifest = LoadLocalManifest();
+        XMLUPtr currentManifest = LoadLocalManifest();
         
         //If we have not successfully loaded a manifest from file we need to check if any of the assets 
         //are in the bundle and pull down the others
-        if(currentManifest == nullptr || Core::XMLUtils::GetFirstChildElement(currentManifest->GetDocument()) == nullptr)
+        if(currentManifest == nullptr || XMLUtils::GetFirstChildElement(currentManifest->GetDocument()) == nullptr)
         {
             //Grab all the URL's from the new manifest
             
-            Core::XML::Node* serverPackageEl = Core::XMLUtils::GetFirstChildElement(serverManifestRootNode, "Package");
+            XML::Node* serverPackageEl = XMLUtils::GetFirstChildElement(serverManifestRootNode, "Package");
             
             while(serverPackageEl)
             {
@@ -491,7 +491,7 @@ namespace CS
                 AddToDownloadListIfNotInBundle(serverPackageEl);
                 
                 //On to the next package
-                serverPackageEl = Core::XMLUtils::GetNextSiblingElement(serverPackageEl, "Package");
+                serverPackageEl = XMLUtils::GetNextSiblingElement(serverPackageEl, "Package");
             }
         }
         //Lets find out what we need already have in the manifest
@@ -500,32 +500,32 @@ namespace CS
             std::unordered_map<std::string, std::string> mapPackageIDToChecksum;
             
             //Store the data from the local manifest to make a comparison with the server manifest
-            Core::XML::Node* currentRoot = Core::XMLUtils::GetFirstChildElement(currentManifest->GetDocument());
+            XML::Node* currentRoot = XMLUtils::GetFirstChildElement(currentManifest->GetDocument());
             if(currentRoot != nullptr)
             {
                 //Loop round 
-                Core::XML::Node* pLocalPackageEl = Core::XMLUtils::GetFirstChildElement(currentRoot, "Package");
+                XML::Node* pLocalPackageEl = XMLUtils::GetFirstChildElement(currentRoot, "Package");
                 while(pLocalPackageEl)
                 {
                     //Store the local ID's and checksums for comparison later
-                    std::string strLocalPackageID = Core::XMLUtils::GetAttributeValue<std::string>(pLocalPackageEl, "ID", "");
-                    std::string strLocalPackageChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pLocalPackageEl, "Checksum", "");
+                    std::string strLocalPackageID = XMLUtils::GetAttributeValue<std::string>(pLocalPackageEl, "ID", "");
+                    std::string strLocalPackageChecksum = XMLUtils::GetAttributeValue<std::string>(pLocalPackageEl, "Checksum", "");
                     
                     mapPackageIDToChecksum.insert(std::make_pair(strLocalPackageID, strLocalPackageChecksum));
                     
                     //On to the next package
-                    pLocalPackageEl = Core::XMLUtils::GetNextSiblingElement(pLocalPackageEl, "Package");
+                    pLocalPackageEl = XMLUtils::GetNextSiblingElement(pLocalPackageEl, "Package");
                 }
             }
             
             //Now process the server manifest and see whats different between the two
-            Core::XML::Node* pServerPackageEl = Core::XMLUtils::GetFirstChildElement(serverManifestRootNode, "Package");
+            XML::Node* pServerPackageEl = XMLUtils::GetFirstChildElement(serverManifestRootNode, "Package");
             while(pServerPackageEl)
             {
                 //Store the local ID's and checksums for comparison later
-                std::string strServerPackageID = Core::XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "ID", "");
-                std::string strServerPackageChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "Checksum", "");
-                std::string strMinVersionForPackage = Core::XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "MinVersion", "");
+                std::string strServerPackageID = XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "ID", "");
+                std::string strServerPackageChecksum = XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "Checksum", "");
+                std::string strMinVersionForPackage = XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "MinVersion", "");
                 
                 std::unordered_map<std::string, std::string>::iterator it = mapPackageIDToChecksum.find(strServerPackageID);
             
@@ -545,22 +545,22 @@ namespace CS
                         //server but the file may have been altered locally
                         //Check if the files within are corrupt
                         //Check all the file names
-                        Core::XML::Node* pFileEl = Core::XMLUtils::GetFirstChildElement(pServerPackageEl, "File");
+                        XML::Node* pFileEl = XMLUtils::GetFirstChildElement(pServerPackageEl, "File");
                         while(pFileEl)
                         {
-                            std::string strFullPath = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Location", "");
-                            std::string strChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Checksum", "");
+                            std::string strFullPath = XMLUtils::GetAttributeValue<std::string>(pFileEl, "Location", "");
+                            std::string strChecksum = XMLUtils::GetAttributeValue<std::string>(pFileEl, "Checksum", "");
                             
                             if(strFullPath.empty()) //Maintain backwards compatability with old versions
                             {
-                                std::string strFileName = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Name", "");
+                                std::string strFileName = XMLUtils::GetAttributeValue<std::string>(pFileEl, "Name", "");
                                 strFullPath = strServerPackageID + "/" + strFileName;
                             }
                             
                             if(!DoesFileExist(strFullPath, strChecksum, false))
                             {
-                                std::string strPackageUrl = Core::XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "URL", "");
-                                u32 udwPackageSize = Core::XMLUtils::GetAttributeValue<u32>(pServerPackageEl, "Size", 0);
+                                std::string strPackageUrl = XMLUtils::GetAttributeValue<std::string>(pServerPackageEl, "URL", "");
+                                u32 udwPackageSize = XMLUtils::GetAttributeValue<u32>(pServerPackageEl, "Size", 0);
                                 m_runningToDownloadTotal += udwPackageSize;
 
                                 PackageDetails packageDetails;
@@ -572,7 +572,7 @@ namespace CS
                                 break;
                             }
                             
-                            pFileEl = Core::XMLUtils::GetNextSiblingElement(pFileEl, "File");
+                            pFileEl = XMLUtils::GetNextSiblingElement(pFileEl, "File");
                         }
                     }
                     
@@ -586,7 +586,7 @@ namespace CS
                 }
                 
                 //On to the next package
-                pServerPackageEl = Core::XMLUtils::GetNextSiblingElement(pServerPackageEl, "Package");
+                pServerPackageEl = XMLUtils::GetNextSiblingElement(pServerPackageEl, "Package");
             }
            
             //Any packages left in the local manifest need to be removed
@@ -619,25 +619,25 @@ namespace CS
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void ContentManagementSystem::AddToDownloadListIfNotInBundle(Core::XML::Node* in_packageEl)
+    void ContentManagementSystem::AddToDownloadListIfNotInBundle(XML::Node* in_packageEl)
     {
         //Check all the file names
-        Core::XML::Node* pFileEl = Core::XMLUtils::GetFirstChildElement(in_packageEl, "File");
+        XML::Node* pFileEl = XMLUtils::GetFirstChildElement(in_packageEl, "File");
         while(pFileEl)
         {
-            const std::string& strFileName = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Name", "");
-            const std::string& strLocation = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Location", "");
-            const std::string& strChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Checksum", "");
-            const std::string& strPackageID = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "ID", "");
+            const std::string& strFileName = XMLUtils::GetAttributeValue<std::string>(pFileEl, "Name", "");
+            const std::string& strLocation = XMLUtils::GetAttributeValue<std::string>(pFileEl, "Location", "");
+            const std::string& strChecksum = XMLUtils::GetAttributeValue<std::string>(pFileEl, "Checksum", "");
+            const std::string& strPackageID = XMLUtils::GetAttributeValue<std::string>(in_packageEl, "ID", "");
             
             std::string filePath = strLocation.empty() ? strPackageID + "/" + strFileName : strLocation;
             if(!DoesFileExist(filePath, strChecksum, true))
             {
                 //It doesn't exist in the bundle either!
-                std::string strPackageUrl = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "URL", "");
-                std::string strPackageChecksum = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "Checksum", "");
+                std::string strPackageUrl = XMLUtils::GetAttributeValue<std::string>(in_packageEl, "URL", "");
+                std::string strPackageChecksum = XMLUtils::GetAttributeValue<std::string>(in_packageEl, "Checksum", "");
                 
-                u32 udwPackageSize = Core::XMLUtils::GetAttributeValue<u32>(in_packageEl, "Size", 0);
+                u32 udwPackageSize = XMLUtils::GetAttributeValue<u32>(in_packageEl, "Size", 0);
                 m_runningToDownloadTotal += udwPackageSize;
                 
                 PackageDetails packageDetails;
@@ -653,10 +653,10 @@ namespace CS
             {
                 //It exists in the bundle let's remove the old version from DLC cache
                 //Remove old content
-                Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_DLC, filePath);
+                Application::Get()->GetFileSystem()->DeleteFile(StorageLocation::k_DLC, filePath);
                 
                 //On to the next file
-                pFileEl = Core::XMLUtils::GetNextSiblingElement(pFileEl, "File");
+                pFileEl = XMLUtils::GetNextSiblingElement(pFileEl, "File");
             }
         }
     }
@@ -667,7 +667,7 @@ namespace CS
         std::string strFile = k_tempDirectory + in_packageDetails.m_id + k_packageExtensionFull;
 
         //Append to the file as it can take multiple writes
-        Core::FileStreamUPtr pFileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
+        FileStreamUPtr pFileStream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_DLC, strFile, FileMode::k_writeBinaryAppend);
         if (pFileStream == nullptr)
         {
             CS_LOG_ERROR("CMS: " + in_packageDetails.m_id + " Couldn't write package.");
@@ -680,7 +680,7 @@ namespace CS
         //Check if the full file has been written and perform a checksum validation 
         if(in_fullyDownloaded)
         {
-            std::string strChecksum = CalculateChecksum(Core::StorageLocation::k_DLC, strFile);
+            std::string strChecksum = CalculateChecksum(StorageLocation::k_DLC, strFile);
             if(strChecksum != in_packageDetails.m_checksum)
             {
                 CS_LOG_ERROR("CMS: " + in_packageDetails.m_id + " Package download corrupted");
@@ -723,7 +723,7 @@ namespace CS
             //Get file information
             unz_file_info FileInfo;
             unzGetCurrentFileInfo(ZippedFile, &FileInfo, byaFileName, uddwFilenameLength, nullptr, 0, nullptr, 0);
-            CS_ASSERT(FileInfo.uncompressed_size < static_cast<uLong>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+            CS_ASSERT(FileInfo.uncompressed_size < static_cast<uLong>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + ToString(std::numeric_limits<u32>::max()) + " bytes.");
             
             //Load the file into memory and then save it out to the directory
             s8* pbyDataBuffer =  new s8[FileInfo.uncompressed_size];
@@ -735,12 +735,12 @@ namespace CS
             {
                 //There is a nested folder so we need to create the directory structure
                 std::string strPath = GetPathExcludingFileName(strFilePath);
-                Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, "/" + strPath);
+                Application::Get()->GetFileSystem()->CreateDirectoryPath(StorageLocation::k_DLC, "/" + strPath);
             }
             
             if(IsFile(strFilePath))
             {
-                Core::Application::Get()->GetFileSystem()->WriteFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, static_cast<u32>(FileInfo.uncompressed_size));
+                Application::Get()->GetFileSystem()->WriteFile(StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, static_cast<u32>(FileInfo.uncompressed_size));
             }
             
             //Close current file and jump to the next
@@ -782,20 +782,20 @@ namespace CS
     {
         if(in_checkOnlyBundle)
         {
-            if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_filename))
+            if(Application::Get()->GetFileSystem()->DoesFileExist(StorageLocation::k_package, Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_filename))
             {
                 //Check if the file has become corrupted
-                return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_filename) == in_checksum);
+                return (CalculateChecksum(StorageLocation::k_package, Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_filename) == in_checksum);
             }
             
             return false;
         }
         else
         {
-            if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_DLC, in_filename))
+            if(Application::Get()->GetFileSystem()->DoesFileExist(StorageLocation::k_DLC, in_filename))
             {
                 //Check if the file has become corrupted
-                return (CalculateChecksum(Core::StorageLocation::k_DLC, in_filename) == in_checksum);
+                return (CalculateChecksum(StorageLocation::k_DLC, in_filename) == in_checksum);
             }
             
             return false;
@@ -808,7 +808,7 @@ namespace CS
         if(m_onDownloadProgressDelegate)
         {
             CS_ASSERT(m_packageDetails.size() > m_currentPackageDownload,
-                      "Current package index out of range - " + CSCore::ToString(m_currentPackageDownload) + ", " + CSCore::ToString((u32)m_packageDetails.size()));
+                      "Current package index out of range - " + ToString(m_currentPackageDownload) + ", " + ToString((u32)m_packageDetails.size()));
             
             f32 increment = 1.0f / m_packageDetails.size();
             f32 totalProgress = m_currentPackageDownload * increment + (in_progress * increment);
@@ -821,9 +821,9 @@ namespace CS
     void ContentManagementSystem::RefreshIncompleteDownloadInfo()
     {
         //Check if the temp file exists before writing it, if it does then we are resuming
-        if(!Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_DLC, k_tempManifestFilePath))
+        if(!Application::Get()->GetFileSystem()->DoesFileExist(StorageLocation::k_DLC, k_tempManifestFilePath))
         {
-            Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, k_tempDirectory);
+            Application::Get()->GetFileSystem()->CreateDirectoryPath(StorageLocation::k_DLC, k_tempDirectory);
             
             //Save the temperary manifest for resuming later
             SaveTempManifest(m_serverManifest->GetDocument(), k_tempManifestFilePath);
@@ -835,8 +835,8 @@ namespace CS
             //We need to compare checksums to see if the downloaded one is different from the cached one
             SaveTempManifest(m_serverManifest->GetDocument(), tempDownloadedContentPath);
             
-            const std::string downloadedChecksum = CalculateChecksum(CSCore::StorageLocation::k_DLC, tempDownloadedContentPath);
-            const std::string cachedChecksum = CalculateChecksum(CSCore::StorageLocation::k_DLC, k_tempManifestFilePath);
+            const std::string downloadedChecksum = CalculateChecksum(StorageLocation::k_DLC, tempDownloadedContentPath);
+            const std::string cachedChecksum = CalculateChecksum(StorageLocation::k_DLC, k_tempManifestFilePath);
             
             //Manifests are different, clear the temperary folder
             if(downloadedChecksum != cachedChecksum)
@@ -855,19 +855,19 @@ namespace CS
     //-----------------------------------------------------------
     void ContentManagementSystem::VerifyTemporaryDownloads(const std::string& in_manifestPath)
     {
-        auto manifest = Core::XMLUtils::ReadDocument(Core::StorageLocation::k_DLC, in_manifestPath);
-        Core::XML::Node* manifestRootNode = CSCore::XMLUtils::GetFirstChildElement(m_serverManifest->GetDocument());
+        auto manifest = XMLUtils::ReadDocument(StorageLocation::k_DLC, in_manifestPath);
+        XML::Node* manifestRootNode = XMLUtils::GetFirstChildElement(m_serverManifest->GetDocument());
         
-        auto tempPackageFiles = CSCore::Application::Get()->GetFileSystem()->GetFilePathsWithExtension(CSCore::StorageLocation::k_DLC, k_tempDirectory, false, k_packageExtension);
+        auto tempPackageFiles = Application::Get()->GetFileSystem()->GetFilePathsWithExtension(StorageLocation::k_DLC, k_tempDirectory, false, k_packageExtension);
         
-        const Core::XML::Node* serverPackageEl = Core::XMLUtils::GetFirstChildElement(manifestRootNode, "Package");
+        const XML::Node* serverPackageEl = XMLUtils::GetFirstChildElement(manifestRootNode, "Package");
         
         std::vector<ContentManagementSystem::PackageDetails> alreadyCachedPackages;
         
         while(serverPackageEl && (tempPackageFiles.size() != alreadyCachedPackages.size()))
         {
             //Check if this is the one were after
-            auto id = Core::XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "ID", "");
+            auto id = XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "ID", "");
             CS_ASSERT(!id.empty(), "Cannot be empty!");
             
             //Go through all packages and verify
@@ -876,22 +876,22 @@ namespace CS
                 std::string name;
                 std::string extension;
                 
-                Core::StringUtils::SplitBaseFilename(packageName, name, extension);
+                StringUtils::SplitBaseFilename(packageName, name, extension);
                 
                 if(id == name)
                 {
                     //Validate the file
                     std::string cachedFilePath = k_tempDirectory + packageName;
                     
-                    std::string cachedFileChecksum = CalculateChecksum(CSCore::StorageLocation::k_DLC, cachedFilePath);
-                    std::string expectedChecksum = Core::XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "Checksum", "");
+                    std::string cachedFileChecksum = CalculateChecksum(StorageLocation::k_DLC, cachedFilePath);
+                    std::string expectedChecksum = XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "Checksum", "");
                     CS_ASSERT(!expectedChecksum.empty(), "Cannot be empty!");
                     
                     if(cachedFileChecksum == expectedChecksum)
                     {
                         //Add a validated package
-                        std::string url = Core::XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "URL", "");
-                        u32 packageSize = Core::XMLUtils::GetAttributeValue<u32>(serverPackageEl, "Size", 0);
+                        std::string url = XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "URL", "");
+                        u32 packageSize = XMLUtils::GetAttributeValue<u32>(serverPackageEl, "Size", 0);
                         CS_ASSERT(packageSize > 0, "Package size cannot be 0!");
                         
                         PackageDetails details;
@@ -905,13 +905,13 @@ namespace CS
                     else
                     {
                         //Cached package is corrupt/incomplete, remove it
-                        CSCore::Application::Get()->GetFileSystem()->DeleteFile(CSCore::StorageLocation::k_DLC, cachedFilePath);
+                        Application::Get()->GetFileSystem()->DeleteFile(StorageLocation::k_DLC, cachedFilePath);
                     }
                 }
             }
             
             //On to the next package
-            serverPackageEl = Core::XMLUtils::GetNextSiblingElement(serverPackageEl, "Package");
+            serverPackageEl = XMLUtils::GetNextSiblingElement(serverPackageEl, "Package");
         }
         
         m_cachedPackageDetails = alreadyCachedPackages;

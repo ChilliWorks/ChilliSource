@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Factory loader for creating texture atlas resources
@@ -42,7 +42,7 @@ namespace CS
     ///
     /// @author S Downie
     //-------------------------------------------------------
-    class TextureAtlasProvider final : public Core::ResourceProvider
+    class TextureAtlasProvider final : public ResourceProvider
     {
     public:
         
@@ -55,13 +55,13 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface
         //-------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The resource type this provider loads
         //----------------------------------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //----------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -72,7 +72,7 @@ namespace CS
         bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
         
     private:
-        friend class Core::Application;
+        friend class Application;
         //-------------------------------------------------------
         /// Factory method
         ///
@@ -99,7 +99,7 @@ namespace CS
         /// @param Options to customise the creation
         /// @param [Out] Resource object
         //----------------------------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// Loads the two files that constitute a atlas resource and
         /// parses them into the output resource on a background thread. Delegate
@@ -113,7 +113,7 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] Resource object
         //----------------------------------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// Performs the actual loading delegated to by the 2 create methods
         ///
@@ -124,7 +124,7 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] Resource object
         //----------------------------------------------------------------------------
-        void LoadResource(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
+        void LoadResource(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource);
         //----------------------------------------------------------------------------
         /// Loads the file containing the frame data for each texture in the atlas
         ///
@@ -134,7 +134,7 @@ namespace CS
         /// @param Filename
         /// @param [Out] Descriptor
         //----------------------------------------------------------------------------
-        void LoadFrames(Core::StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc);
+        void LoadFrames(StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc);
         //----------------------------------------------------------------------------
         /// Loads the file containing the map key data for each texture in the atlas
         ///
@@ -144,7 +144,7 @@ namespace CS
         /// @param Filename
         /// @param [Out] Descriptor
         //----------------------------------------------------------------------------
-        void LoadMap(Core::StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc);
+        void LoadMap(StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc);
     };
 }
 

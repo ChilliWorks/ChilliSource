@@ -65,39 +65,39 @@ namespace CSBackend
         {
             if(m_hasContextBeenBackedUp == true)
             {
-                CSCore::ResourcePool* resourcePool = CSCore::Application::Get()->GetResourcePool();
+                ChilliSource::ResourcePool* resourcePool = ChilliSource::Application::Get()->GetResourcePool();
                 
                 //---Shaders
-                auto allShaders = resourcePool->GetAllResources<CSRendering::Shader>();
+                auto allShaders = resourcePool->GetAllResources<ChilliSource::Shader>();
                 for (const auto& shader : allShaders)
                 {
-                	CS_ASSERT(shader->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Shader because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
+                	CS_ASSERT(shader->GetStorageLocation() != ChilliSource::StorageLocation::k_none, "Cannot restore Shader because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
                 }
-                resourcePool->RefreshResources<CSRendering::Shader>();
+                resourcePool->RefreshResources<ChilliSource::Shader>();
                 
                 //---Textures
-                auto allTextures = resourcePool->GetAllResources<CSRendering::Texture>();
+                auto allTextures = resourcePool->GetAllResources<ChilliSource::Texture>();
                 for (const auto& texture : allTextures)
 				{
-                    if (texture->GetStorageLocation() == CSCore::StorageLocation::k_none)
+                    if (texture->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
                     {
-                        Texture* glTexture = static_cast<Texture*>(const_cast<CSRendering::Texture*>(texture.get()));
+                        Texture* glTexture = static_cast<Texture*>(const_cast<ChilliSource::Texture*>(texture.get()));
                         glTexture->Restore();
                     }
                 }
-                resourcePool->RefreshResources<CSRendering::Texture>();
+                resourcePool->RefreshResources<ChilliSource::Texture>();
                 
                 //---Cubemaps
-                auto allCubemaps = resourcePool->GetAllResources<CSRendering::Cubemap>();
+                auto allCubemaps = resourcePool->GetAllResources<ChilliSource::Cubemap>();
                 for (const auto& cubemap : allCubemaps)
 				{
-					if (cubemap->GetStorageLocation() == CSCore::StorageLocation::k_none)
+					if (cubemap->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
                     {
-                        Cubemap* glCubemap = static_cast<Cubemap*>(const_cast<CSRendering::Cubemap*>(cubemap.get()));
+                        Cubemap* glCubemap = static_cast<Cubemap*>(const_cast<ChilliSource::Cubemap*>(cubemap.get()));
                         glCubemap->Restore();
                     }
                 }
-                resourcePool->RefreshResources<CSRendering::Cubemap>();
+                resourcePool->RefreshResources<ChilliSource::Cubemap>();
                 
                 //---Meshes
                 for(auto& buffer : m_meshBuffers)

@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -49,14 +49,14 @@ namespace CS
     {
         CS_ASSERT(m_requiredPointerCount > 0, "Cannot have a hold gesture which requres 0 pointers.");
         
-        Core::Screen* screen = Core::Application::Get()->GetScreen();
+        Screen* screen = Application::Get()->GetScreen();
         
         m_maxDisplacementSquared = (k_maxDisplacement * screen->GetDensityScale()) * (k_maxDisplacement * screen->GetDensityScale());
         m_pendingPointers.reserve(m_requiredPointerCount);
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    bool HoldGesture::IsA(Core::InterfaceIDType in_gestureInterfaceId) const
+    bool HoldGesture::IsA(InterfaceIDType in_gestureInterfaceId) const
     {
         return (Gesture::InterfaceID == in_gestureInterfaceId || HoldGesture::InterfaceID == in_gestureInterfaceId);
     }
@@ -74,7 +74,7 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<HoldGesture::Delegate>& HoldGesture::GetHeldEvent()
+    IConnectableEvent<HoldGesture::Delegate>& HoldGesture::GetHeldEvent()
     {
         return m_heldEvent;
     }
@@ -92,10 +92,10 @@ namespace CS
     {
         if (m_holdPending == true && m_pendingPointers.size() == m_requiredPointerCount)
         {
-            f64 timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
+            f64 timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
             if (timestamp - m_currentStartTimestamp > k_holdTime)
             {
-                Core::Vector2 gesturePosition = Core::Vector2::k_zero;
+                Vector2 gesturePosition = Vector2::k_zero;
                 for (auto& pointerInfo : m_pendingPointers)
                 {
                     gesturePosition += pointerInfo.m_initialPosition;
@@ -149,7 +149,7 @@ namespace CS
             {
                 if (in_pointer.GetId() == pointerInfo.m_pointerId)
                 {
-                    const Core::Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
+                    const Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
                     if (displacement.LengthSquared() > m_maxDisplacementSquared)
                     {
                         shouldReset = true;

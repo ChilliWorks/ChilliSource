@@ -32,7 +32,7 @@
 #include <CSBackend/Rendering/OpenGL/Shader/Shader.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Shader);
     //----------------------------------------------------------

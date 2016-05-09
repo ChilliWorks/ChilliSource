@@ -38,7 +38,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A factory for creating new instances of UIComponents from a string
@@ -52,7 +52,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class UIComponentFactory final : public Core::AppSystem
+    class UIComponentFactory final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(UIComponentFactory);
@@ -66,7 +66,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //-----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-----------------------------------------------------------------
         /// Registers a new component type with the factory. Future calls
         /// to CreateComponent() with the given name will instantiate a
@@ -94,7 +94,7 @@ namespace CS
         ///
         /// @return The property descs.
         //-----------------------------------------------------------------
-        std::vector<Core::PropertyMap::PropertyDesc> GetPropertyDescs(const std::string& in_componentTypeName) const;
+        std::vector<PropertyMap::PropertyDesc> GetPropertyDescs(const std::string& in_componentTypeName) const;
         //-----------------------------------------------------------------
         /// Creates an instance of the component type registered under the
         /// given name with the given owner widget and property map.
@@ -108,9 +108,9 @@ namespace CS
         ///
         /// @return The new component instance.
         //-----------------------------------------------------------------
-        UIComponentUPtr CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const;
+        UIComponentUPtr CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const PropertyMap& in_propertyMap) const;
     private:
-        friend class Core::Application;
+        friend class Application;
         //-----------------------------------------------------------------
         /// A factory method for creating new instances of the system.
         ///
@@ -130,7 +130,7 @@ namespace CS
         ///
         /// @return The newly created component.
         //-----------------------------------------------------------------
-        using CreatorDelegate = std::function<UIComponentUPtr(const std::string& in_name, const Core::PropertyMap& in_propertyMap)>;
+        using CreatorDelegate = std::function<UIComponentUPtr(const std::string& in_name, const PropertyMap& in_propertyMap)>;
         //-----------------------------------------------------------------
         /// Creates a new instance of the given component type. This is the
         /// method referred to by the creator delegates.
@@ -142,7 +142,7 @@ namespace CS
         ///
         /// @return The newly created component.
         //-----------------------------------------------------------------
-        template <typename TComponentType> std::unique_ptr<TComponentType> CreateComponent(const std::string& in_name, const Core::PropertyMap& in_propertyMap) const;
+        template <typename TComponentType> std::unique_ptr<TComponentType> CreateComponent(const std::string& in_name, const PropertyMap& in_propertyMap) const;
         //-----------------------------------------------------------------
         /// Initialised the factory, registering all default component
         /// types.
@@ -158,18 +158,18 @@ namespace CS
         void OnDestroy() override;
         
         std::unordered_map<std::string, CreatorDelegate> m_creatorDelegateMap;
-        std::unordered_map<std::string, std::vector<Core::PropertyMap::PropertyDesc>> m_descsMap;
+        std::unordered_map<std::string, std::vector<PropertyMap::PropertyDesc>> m_descsMap;
     };
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
     template <typename TComponentType> void UIComponentFactory::Register(const std::string& in_componentTypeName)
     {
-        m_creatorDelegateMap.insert(std::make_pair(in_componentTypeName, Core::MakeDelegate(this, &UIComponentFactory::CreateComponent<TComponentType>)));
+        m_creatorDelegateMap.insert(std::make_pair(in_componentTypeName, MakeDelegate(this, &UIComponentFactory::CreateComponent<TComponentType>)));
         m_descsMap.insert(std::make_pair(in_componentTypeName, TComponentType::GetPropertyDescs()));
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    template <typename TComponentType> std::unique_ptr<TComponentType> UIComponentFactory::CreateComponent(const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
+    template <typename TComponentType> std::unique_ptr<TComponentType> UIComponentFactory::CreateComponent(const std::string& in_name, const PropertyMap& in_propertyMap) const
     {
         return std::unique_ptr<TComponentType>(new TComponentType(in_name, in_propertyMap));
     }

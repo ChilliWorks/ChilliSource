@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------
     /// Container for RGBA colour as 0 - 255 values

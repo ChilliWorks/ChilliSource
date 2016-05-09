@@ -35,7 +35,7 @@
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawable.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A particle drawable for rendering particles as billboards.
@@ -55,8 +55,8 @@ namespace CS
         struct BillboardData
         {
             UVs m_uvs;
-            Core::Vector2 m_bottomLeft;
-            Core::Vector2 m_topRight;
+            Vector2 m_bottomLeft;
+            Vector2 m_topRight;
         };
         //----------------------------------------------------------------
         /// Constructor.
@@ -67,7 +67,7 @@ namespace CS
         /// @param The particle drawable definition.
         /// @param The concurrent particle data.
         //----------------------------------------------------------------
-        StaticBillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
+        StaticBillboardParticleDrawable(const Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
         //----------------------------------------------------------------
         /// Activates the particle with the given index.
         ///
@@ -76,7 +76,7 @@ namespace CS
         /// @param The particle draw data.
         /// @param The index of the particle to activate.
         //----------------------------------------------------------------
-        void ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index) override;
+        void ActivateParticle(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index) override;
         //----------------------------------------------------------------
         /// Renders all active particles in the effect.
         ///
@@ -85,7 +85,7 @@ namespace CS
         /// @param The particle draw data.
         /// @param The camera component used to render.
         //----------------------------------------------------------------
-        void DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) override;
+        void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) override;
         //----------------------------------------------------------------
         /// Builds the billboard image data from the provided texture
         /// or texture atlas.
@@ -110,7 +110,7 @@ namespace CS
         /// @param The particle draw data.
         /// @param The camera component used to render.
         //----------------------------------------------------------------
-        void DrawLocalSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
+        void DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
         //----------------------------------------------------------------
         /// Draws the particles without taking into account the world
         /// space transform of the owning entity as the particles are
@@ -121,11 +121,11 @@ namespace CS
         /// @param The particle draw data.
         /// @param The camera component used to render.
         //----------------------------------------------------------------
-        void DrawWorldSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
+        void DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
 
         const StaticBillboardParticleDrawableDef* m_billboardDrawableDef;
-        std::unique_ptr <Core::dynamic_array<BillboardData>> m_billboards;
-        Core::dynamic_array<u32> m_particleBillboardIndices;
+        std::unique_ptr <dynamic_array<BillboardData>> m_billboards;
+        dynamic_array<u32> m_particleBillboardIndices;
         u32 m_nextBillboardIndex = 0;
     };
 }

@@ -38,7 +38,7 @@
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -58,7 +58,7 @@ namespace CS
         ///
         /// @return Whether or not the read was successful.
         //----------------------------------------------------------------------------
-        bool ReadINFOChunk(Core::CSBinaryChunk* in_chunk, Font::Descriptor& out_desc)
+        bool ReadINFOChunk(CSBinaryChunk* in_chunk, Font::Descriptor& out_desc)
         {
             const u32 k_infoChunkSize = 7 * 4;
             
@@ -92,7 +92,7 @@ namespace CS
         ///
         /// @return Whether or not the read was successful.
         //----------------------------------------------------------------------------
-        bool ReadCHARChunk(Core::CSBinaryChunk* in_chunk, Font::Descriptor& out_desc)
+        bool ReadCHARChunk(CSBinaryChunk* in_chunk, Font::Descriptor& out_desc)
         {
             CS_ASSERT(in_chunk != nullptr, "CHAR chunk cannot be null.");
             
@@ -116,7 +116,7 @@ namespace CS
         ///
         /// @return Whether or not the read was successful.
         //----------------------------------------------------------------------------
-        bool ReadGLPHChunk(Core::CSBinaryChunk* in_chunk, Font::Descriptor& out_desc)
+        bool ReadGLPHChunk(CSBinaryChunk* in_chunk, Font::Descriptor& out_desc)
         {
             const u32 k_glyphInfoSize = 10 * 2;
             
@@ -158,10 +158,10 @@ namespace CS
         ///
         /// @return Whether or not the read was successful.
         //----------------------------------------------------------------------------
-        bool LoadCSFont(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Font::Descriptor& out_desc)
+        bool LoadCSFont(StorageLocation in_storageLocation, const std::string& in_filePath, Font::Descriptor& out_desc)
         {
             //create the stream.
-            Core::CSBinaryInputStream stream(in_storageLocation, in_filePath);
+            CSBinaryInputStream stream(in_storageLocation, in_filePath);
             if (stream.IsValid() == false || stream.GetFileFormatId() != k_fileFormatId || stream.GetFileFormatVersion() != k_fileFormatVersion)
             {
                 CS_LOG_ERROR("Could not open csfont file: " + in_filePath);
@@ -169,7 +169,7 @@ namespace CS
             }
             
             //Read the INFO chunk.
-            Core::CSBinaryChunkUPtr chunk = stream.ReadChunk("INFO");
+            CSBinaryChunkUPtr chunk = stream.ReadChunk("INFO");
             if (chunk == nullptr || ReadINFOChunk(chunk.get(), out_desc) == false)
             {
                 CS_LOG_ERROR("Could not read INFO chunk in csfont file: " + in_filePath);
@@ -194,7 +194,7 @@ namespace CS
             }
             
             //ensure the data makes sense
-            u32 numCharacters = Core::UTF8StringUtils::CalcLength(out_desc.m_supportedCharacters.begin(), out_desc.m_supportedCharacters.end());
+            u32 numCharacters = UTF8StringUtils::CalcLength(out_desc.m_supportedCharacters.begin(), out_desc.m_supportedCharacters.end());
             if (out_desc.m_frames.size() != numCharacters)
             {
                 CS_LOG_ERROR("Glyph count different to character count in font: " + in_filePath);
@@ -215,13 +215,13 @@ namespace CS
     }
     //-------------------------------------------------------------------------e
     //-------------------------------------------------------------------------
-    bool FontProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool FontProvider::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == FontProvider::InterfaceID;
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    Core::InterfaceIDType FontProvider::GetResourceType() const
+    InterfaceIDType FontProvider::GetResourceType() const
     {
         return Font::InterfaceID;
     }
@@ -233,55 +233,55 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void FontProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+    void FontProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
         LoadFont(in_location, in_filePath, nullptr, out_resource);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void FontProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void FontProvider::CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
-        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
             LoadFont(in_location, in_filePath, in_delegate, out_resource);
         });
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void FontProvider::LoadFont(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void FontProvider::LoadFont(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         std::string fileName, fileExtension;
-        Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
+        StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
         
         const std::string textureFilePath(fileName + "." + k_textureFileExtension);
         
         if(in_delegate == nullptr)
         {
             Font::Descriptor desc;
-            desc.m_texture = Core::Application::Get()->GetResourcePool()->LoadResource<Texture>(in_location, textureFilePath);
+            desc.m_texture = Application::Get()->GetResourcePool()->LoadResource<Texture>(in_location, textureFilePath);
             if(desc.m_texture == nullptr)
             {
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                out_resource->SetLoadState(Resource::LoadState::k_failed);
                 return;
             }
             
             if (LoadCSFont(in_location, in_filePath, desc) == false)
             {
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                out_resource->SetLoadState(Resource::LoadState::k_failed);
                 return;
             }
             
             Font* font = (Font*)(out_resource.get());
             font->Build(desc);
-            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+            out_resource->SetLoadState(Resource::LoadState::k_loaded);
         }
         else
         {
-            Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Texture>(in_location, textureFilePath, [=](const TextureCSPtr& in_texture)
+            Application::Get()->GetResourcePool()->LoadResourceAsync<Texture>(in_location, textureFilePath, [=](const TextureCSPtr& in_texture)
             {
                 if(in_texture != nullptr)
                 {
-                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
                     {
                         Font::Descriptor desc;
                         desc.m_texture = in_texture;
@@ -290,14 +290,14 @@ namespace CS
                         {
                             Font* font = (Font*)(out_resource.get());
                             font->Build(desc);
-                            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                            out_resource->SetLoadState(Resource::LoadState::k_loaded);
                         }
                         else
                         {
-                            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                            out_resource->SetLoadState(Resource::LoadState::k_failed);
                         }
 
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                         {
                             in_delegate(out_resource);
                         });
@@ -306,7 +306,7 @@ namespace CS
                 else
                 {
                     //Already on main thread
-                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    out_resource->SetLoadState(Resource::LoadState::k_failed);
                     in_delegate(out_resource);
                 }
             });

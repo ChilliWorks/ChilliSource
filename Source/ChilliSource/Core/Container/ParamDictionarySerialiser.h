@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     /// Methods for serialising param dictionaries to and from a

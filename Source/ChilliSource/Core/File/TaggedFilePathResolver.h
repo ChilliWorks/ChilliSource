@@ -34,7 +34,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     /// A system that resolves file paths based on the device configuration.

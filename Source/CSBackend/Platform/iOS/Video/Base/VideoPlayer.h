@@ -46,7 +46,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //--------------------------------------------------------------
-        class VideoPlayer final : public CSVideo::VideoPlayer
+        class VideoPlayer final : public ChilliSource::VideoPlayer
         {
         public:
             CS_DECLARE_NAMEDTYPE(VideoPlayer);
@@ -59,7 +59,7 @@ namespace CSBackend
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Begin streaming the video from file
             ///
@@ -73,8 +73,8 @@ namespace CSBackend
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void Present(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
-                         const CSCore::Colour& in_backgroundColour = CSCore::Colour::k_black) override;
+            void Present(ChilliSource::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
+                         const ChilliSource::Colour& in_backgroundColour = ChilliSource::Colour::k_black) override;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
             ///
@@ -89,8 +89,8 @@ namespace CSBackend
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
-                                      bool in_dismissWithTap, const CSCore::Colour& in_backgroundColour = CSCore::Colour::k_black) override;
+            void PresentWithSubtitles(ChilliSource::StorageLocation in_storageLocation, const std::string& in_fileName, const ChilliSource::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
+                                      bool in_dismissWithTap, const ChilliSource::Colour& in_backgroundColour = ChilliSource::Colour::k_black) override;
             //-------------------------------------------------------
             /// @author S Downie
             ///
@@ -102,10 +102,10 @@ namespace CSBackend
             ///
             /// @return the actual dimensions of the playing video.
             //-------------------------------------------------------
-            CSCore::Vector2 GetVideoDimensions() const;
+            ChilliSource::Vector2 GetVideoDimensions() const;
         private:
             
-            friend CSVideo::VideoPlayerUPtr CSVideo::VideoPlayer::Create();
+            friend ChilliSource::VideoPlayerUPtr ChilliSource::VideoPlayer::Create();
             //--------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -204,21 +204,21 @@ namespace CSBackend
             void OnDestroy() override;
             
         private:
-            CSCore::Screen* m_screen;
+            ChilliSource::Screen* m_screen;
             
             bool m_playing;
             MPMoviePlayerController* m_moviePlayerController;
             
             bool m_dismissWithTap;
-            CSVideo::SubtitlesCSPtr m_subtitles;
+            ChilliSource::SubtitlesCSPtr m_subtitles;
             UIView* m_videoOverlayView;
             CVideoPlayerTapListener* m_tapListener;
             CSubtitlesRenderer* m_subtitlesRenderer;
             
-            CSCore::Colour m_backgroundColour;
+            ChilliSource::Colour m_backgroundColour;
             
-            CSCore::EventConnectionUPtr m_moviePlayerLoadStateChangedConnection;
-            CSCore::EventConnectionUPtr m_moviePlayerPlaybackFinishedConnection;
+            ChilliSource::EventConnectionUPtr m_moviePlayerLoadStateChangedConnection;
+            ChilliSource::EventConnectionUPtr m_moviePlayerPlaybackFinishedConnection;
             
             VideoCompleteDelegate::Connection m_completionDelegateConnection;
         };

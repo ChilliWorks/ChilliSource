@@ -30,29 +30,29 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
     HorizontalTextJustification ParseHorizontalTextJustification(const std::string& in_string)
     {
         std::string verticalJustificationString = in_string;
-        Core::StringUtils::ToLowerCase(verticalJustificationString);
+        StringUtils::ToLowerCase(verticalJustificationString);
         
         if (verticalJustificationString == "left")
         {
-            return Rendering::HorizontalTextJustification::k_left;
+            return HorizontalTextJustification::k_left;
         }
         else if (verticalJustificationString == "centre")
         {
-            return Rendering::HorizontalTextJustification::k_centre;
+            return HorizontalTextJustification::k_centre;
         }
         else if (verticalJustificationString == "right")
         {
-            return Rendering::HorizontalTextJustification::k_right;
+            return HorizontalTextJustification::k_right;
         }
         
         CS_LOG_FATAL("Invalid vertical justification.");
-        return Rendering::HorizontalTextJustification::k_centre;
+        return HorizontalTextJustification::k_centre;
     }
 }

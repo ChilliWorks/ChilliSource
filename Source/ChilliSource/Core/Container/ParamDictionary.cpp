@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

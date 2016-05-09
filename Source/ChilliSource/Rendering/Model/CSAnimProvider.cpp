@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -52,7 +52,7 @@ namespace CS
         /// @param File stream
         /// @return Value of type TType
         //----------------------------------------------------------------------------
-        template <typename TType> TType ReadValue(const Core::FileStreamSPtr& in_fileStream)
+        template <typename TType> TType ReadValue(const FileStreamSPtr& in_fileStream)
         {
             TType value;
             in_fileStream->Read(reinterpret_cast<s8*>(&value), sizeof(TType));
@@ -68,7 +68,7 @@ namespace CS
         /// @param The number of skeleton nodes.
         /// @param [Out] Animation resource to populate
         //----------------------------------------------------------------------------
-        void ReadAnimationData(const Core::FileStreamSPtr& in_fileStream, u32 in_numFrames, s32 in_numSkeletonNodes, const SkinnedAnimationSPtr& out_resource)
+        void ReadAnimationData(const FileStreamSPtr& in_fileStream, u32 in_numFrames, s32 in_numSkeletonNodes, const SkinnedAnimationSPtr& out_resource)
         {
             for (u32 frameCount=0; frameCount<in_numFrames; ++frameCount)
             {
@@ -79,20 +79,20 @@ namespace CS
                 for (u32 skelNodeCount=0; skelNodeCount<(u32)in_numSkeletonNodes; ++skelNodeCount)
                 {
                     //create new translation
-                    Core::Vector3 translation;
+                    Vector3 translation;
                     translation.x = ReadValue<f32>(in_fileStream);
                     translation.y = ReadValue<f32>(in_fileStream);
                     translation.z = ReadValue<f32>(in_fileStream);
                     
                     //create new orientation
-                    Core::Quaternion orientation;
+                    Quaternion orientation;
                     orientation.x = ReadValue<f32>(in_fileStream);
                     orientation.y = ReadValue<f32>(in_fileStream);
                     orientation.z = ReadValue<f32>(in_fileStream);
                     orientation.w = ReadValue<f32>(in_fileStream);
                     
                     //create new scale
-                    Core::Vector3 scale;
+                    Vector3 scale;
                     scale.x = ReadValue<f32>(in_fileStream);
                     scale.y = ReadValue<f32>(in_fileStream);
                     scale.z = ReadValue<f32>(in_fileStream);
@@ -117,7 +117,7 @@ namespace CS
         ///
         /// @return whether or not this was successful
         //----------------------------------------------------------------------------
-        bool ReadHeader(const Core::FileStreamSPtr& in_stream, const std::string & in_filePath, const SkinnedAnimationSPtr& out_resource, u32& out_numFrames, s32& out_numSkeletonNodes)
+        bool ReadHeader(const FileStreamSPtr& in_stream, const std::string & in_filePath, const SkinnedAnimationSPtr& out_resource, u32& out_numFrames, s32& out_numSkeletonNodes)
         {
             //Check file for corruption
             if(in_stream == nullptr)
@@ -168,13 +168,13 @@ namespace CS
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    bool CSAnimProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool CSAnimProvider::IsA(InterfaceIDType in_interfaceId) const
     {
         return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == CSAnimProvider::InterfaceID;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::InterfaceIDType CSAnimProvider::GetResourceType() const
+    InterfaceIDType CSAnimProvider::GetResourceType() const
     {
         return SkinnedAnimation::InterfaceID;
     }
@@ -186,7 +186,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CSAnimProvider::CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+    void CSAnimProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
         SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
         
@@ -194,29 +194,29 @@ namespace CS
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CSAnimProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+    void CSAnimProvider::CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         SkinnedAnimationSPtr anim = std::static_pointer_cast<SkinnedAnimation>(out_resource);
-        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
             ReadSkinnedAnimationFromFile(in_location, in_filePath, in_delegate, anim);
         });
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CSAnimProvider::ReadSkinnedAnimationFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SkinnedAnimationSPtr& out_resource) const
+    void CSAnimProvider::ReadSkinnedAnimationFromFile(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const SkinnedAnimationSPtr& out_resource) const
     {
-        Core::FileStreamSPtr stream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
+        FileStreamSPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, FileMode::k_readBinary);
 
         u32 numFrames = 0;
         s32 numSkeletonNodes = 0;
         if(ReadHeader(stream, in_filePath, out_resource, numFrames, numSkeletonNodes) == false)
         {
             CS_LOG_ERROR("Failed to read header in anim: " + in_filePath);
-            out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+            out_resource->SetLoadState(Resource::LoadState::k_failed);
             if(in_delegate != nullptr)
             {
-                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });
@@ -226,11 +226,11 @@ namespace CS
         
         ReadAnimationData(stream, numFrames, numSkeletonNodes, out_resource);
         
-        out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+        out_resource->SetLoadState(Resource::LoadState::k_loaded);
         
         if(in_delegate != nullptr)
         {
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
             {
                 in_delegate(out_resource);
             });

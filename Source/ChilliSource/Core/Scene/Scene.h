@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------------------------------
     /// Holds the entities that form the scene. Entities will be updated from the scene and the
@@ -102,13 +102,13 @@ namespace CS
         ///
         /// @param Screen clear colour
         //------------------------------------------------------
-        void SetClearColour(const Core::Colour& in_colour);
+        void SetClearColour(const Colour& in_colour);
         //------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Screen clear colour
         //------------------------------------------------------
-        const Core::Colour& GetClearColour() const;
+        const Colour& GetClearColour() const;
         //-------------------------------------------------------
         /// Sends the resume event on to the entities.
         ///

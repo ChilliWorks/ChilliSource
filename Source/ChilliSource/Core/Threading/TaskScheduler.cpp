@@ -39,7 +39,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(TaskScheduler);
     //------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool TaskScheduler::IsA(CSCore::InterfaceIDType in_interfaceId) const noexcept
+    bool TaskScheduler::IsA(InterfaceIDType in_interfaceId) const noexcept
     {
         return (TaskScheduler::InterfaceID == in_interfaceId);
     }
@@ -215,7 +215,7 @@ namespace CS
         constexpr s32 k_minThreadsPerPool = 2;
         constexpr s32 k_namedThreads = 1; //The main thread.
         
-        Device* device = Core::Application::Get()->GetSystem<Device>();
+        Device* device = Application::Get()->GetSystem<Device>();
         
         s32 numFreeCores = s32(device->GetNumberOfCPUCores()) - k_namedThreads;
         s32 threadsPerPool = std::max(k_minThreadsPerPool, numFreeCores);

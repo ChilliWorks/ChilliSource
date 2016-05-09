@@ -132,16 +132,16 @@ namespace CSBackend
             /// @param Completion delegate
             /// @param [Out] Shader resource
             //----------------------------------------------
-			void LoadShader(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const ShaderSPtr& out_shader)
+			void LoadShader(ChilliSource::StorageLocation in_location, const std::string& in_filePath, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ShaderSPtr& out_shader)
             {
-                CSCore::FileStreamUPtr shaderStream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, CSCore::FileMode::k_read);
+                ChilliSource::FileStreamUPtr shaderStream = ChilliSource::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, ChilliSource::FileMode::k_read);
                 if(shaderStream == nullptr)
                 {
                     CS_LOG_ERROR("Failed to open shader file: " + in_filePath);
-                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
+                    out_shader->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&) noexcept
                         {
                             in_delegate(out_shader);
                         });
@@ -157,10 +157,10 @@ namespace CSBackend
                 if(languageChunk.empty() == true)
                 {
                     CS_LOG_ERROR("Failed to find GLSL chunk in shader: " + in_filePath);
-                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
+                    out_shader->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&) noexcept
                         {
                             in_delegate(out_shader);
                         });
@@ -172,10 +172,10 @@ namespace CSBackend
                 if(vsChunk.empty() == true)
                 {
                     CS_LOG_ERROR("Failed to find VertexShader chunk in shader: " + in_filePath);
-                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
+                    out_shader->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&) noexcept
                         {
                             in_delegate(out_shader);
                         });
@@ -187,10 +187,10 @@ namespace CSBackend
                 if(fsChunk.empty() == true)
                 {
                     CS_LOG_ERROR("Failed to find FragmentShader chunk in shader: " + in_filePath);
-                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
+                    out_shader->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&) noexcept
                         {
                             in_delegate(out_shader);
                         });
@@ -201,15 +201,15 @@ namespace CSBackend
                 if(in_delegate == nullptr)
                 {
                     out_shader->Build(vsChunk, fsChunk);
-                    out_shader->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+                    out_shader->SetLoadState(ChilliSource::Resource::LoadState::k_loaded);
                 }
                 else
                 {
                     //All GL related tasks must be performed on the main thread.
-                    CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&) noexcept
                     {
                         out_shader->Build(vsChunk, fsChunk);
-                        out_shader->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+                        out_shader->SetLoadState(ChilliSource::Resource::LoadState::k_loaded);
                         in_delegate(out_shader);
                     });
                 }
@@ -226,13 +226,13 @@ namespace CSBackend
         }
 		//-------------------------------------------------------------------------
 		//-------------------------------------------------------------------------
-		bool GLSLShaderProvider::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool GLSLShaderProvider::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
 			return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == GLSLShaderProvider::InterfaceID;
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        CSCore::InterfaceIDType GLSLShaderProvider::GetResourceType() const
+        ChilliSource::InterfaceIDType GLSLShaderProvider::GetResourceType() const
         {
             return Shader::InterfaceID;
         }
@@ -244,14 +244,14 @@ namespace CSBackend
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void GLSLShaderProvider::CreateResourceFromFile(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceSPtr& out_resource)
+		void GLSLShaderProvider::CreateResourceFromFile(ChilliSource::StorageLocation in_location, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceSPtr& out_resource)
         {
             ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
             LoadShader(in_location, in_filePath, nullptr, shaderResource);
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-		void GLSLShaderProvider::CreateResourceFromFileAsync(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource)
+		void GLSLShaderProvider::CreateResourceFromFileAsync(ChilliSource::StorageLocation in_location, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource)
         {
             ShaderSPtr shaderResource = std::static_pointer_cast<Shader>(out_resource);
             LoadShader(in_location, in_filePath, in_delegate, shaderResource);

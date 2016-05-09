@@ -28,11 +28,11 @@
 
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    ParticleAffector::ParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
+    ParticleAffector::ParticleAffector(const ParticleAffectorDef* in_affectorDef, dynamic_array<Particle>* in_particleArray)
         : m_affectorDef(in_affectorDef), m_particleArray(in_particleArray)
     {
     }
@@ -44,7 +44,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    Core::dynamic_array<Particle>* ParticleAffector::GetParticleArray() const
+    dynamic_array<Particle>* ParticleAffector::GetParticleArray() const
     {
         return m_particleArray;
     }

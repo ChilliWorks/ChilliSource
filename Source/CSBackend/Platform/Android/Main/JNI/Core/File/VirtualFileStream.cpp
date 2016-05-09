@@ -36,9 +36,9 @@ namespace CSBackend
 	{
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		VirtualFileStream::VirtualFileStream(std::unique_ptr<u8[]> in_buffer, u32 in_bufferSize, CSCore::FileMode in_fileMode)
+		VirtualFileStream::VirtualFileStream(std::unique_ptr<u8[]> in_buffer, u32 in_bufferSize, ChilliSource::FileMode in_fileMode)
 		{
-			CS_ASSERT(in_fileMode == CSCore::FileMode::k_read || in_fileMode == CSCore::FileMode::k_readBinary, "Virtual file stream only supports read file modes.");
+			CS_ASSERT(in_fileMode == ChilliSource::FileMode::k_read || in_fileMode == ChilliSource::FileMode::k_readBinary, "Virtual file stream only supports read file modes.");
             CS_ASSERT(in_buffer != nullptr, "Cannot create a virtual file stream with a null buffer.");
             CS_ASSERT(in_bufferSize > 0, "Invalid buffer size.");
 
@@ -209,7 +209,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void VirtualFileStream::SeekG(s32 indwPosition, CSCore::SeekDir ineDir)
+		void VirtualFileStream::SeekG(s32 indwPosition, ChilliSource::SeekDir ineDir)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
@@ -217,13 +217,13 @@ namespace CSBackend
 			switch (ineDir)
 			{
 				default:
-				case CSCore::SeekDir::k_beginning:
+				case ChilliSource::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
-				case CSCore::SeekDir::k_current:
+				case ChilliSource::SeekDir::k_current:
 					dir = std::ios_base::cur;
 					break;
-				case CSCore::SeekDir::k_end:
+				case ChilliSource::SeekDir::k_end:
 					dir = std::ios_base::end;
 					break;
 			}
@@ -278,7 +278,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void VirtualFileStream::SeekP(s32 indwPosition, CSCore::SeekDir ineDir)
+		void VirtualFileStream::SeekP(s32 indwPosition, ChilliSource::SeekDir ineDir)
 		{
         	CS_LOG_FATAL("A virtual file stream does not have a 'put' position to seek.");
 		}

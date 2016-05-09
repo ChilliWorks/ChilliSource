@@ -55,11 +55,11 @@
         // NO = 0, YES = 1
         if(buttonIndex == 0)
         {
-            dialogueBoxSystem->OnSystemConfirmDialogResult(tag, CSCore::DialogueBoxSystem::DialogueResult::k_cancel);
+            dialogueBoxSystem->OnSystemConfirmDialogResult(tag, ChilliSource::DialogueBoxSystem::DialogueResult::k_cancel);
         }
         else
         {
-            dialogueBoxSystem->OnSystemConfirmDialogResult(tag, CSCore::DialogueBoxSystem::DialogueResult::k_confirm);
+            dialogueBoxSystem->OnSystemConfirmDialogResult(tag, ChilliSource::DialogueBoxSystem::DialogueResult::k_confirm);
         }
     }
 }

@@ -38,7 +38,7 @@
 #include <functional>
 #include <mutex>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// A system for managing all input gestures. All gestures must
@@ -48,7 +48,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------
-    class GestureSystem final : public Core::StateSystem
+    class GestureSystem final : public StateSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(GestureSystem);
@@ -91,7 +91,7 @@ namespace CS
         ///
         /// @return Whether or not the inteface is implemented.
         //---------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //--------------------------------------------------------
         /// Adds a gesture to the gesture system. When added to the
         /// system a gesture will receive input events. This is
@@ -128,7 +128,7 @@ namespace CS
         void SetConflictResolutionDelegate(const ConflictResolutionDelegate& in_delegate);
     private:
 
-        friend class Core::State;
+        friend class State;
         friend class Gesture;
         //--------------------------------------------------------
         /// Creates a new instance of this system. This shou
@@ -240,7 +240,7 @@ namespace CS
         /// @param The filter, allowing exclusion from the filtered
         /// input event.
         //--------------------------------------------------------
-        void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, InputFilter& in_filter);
+        void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Vector2& in_delta, InputFilter& in_filter);
         //-------------------------------------------------------
         /// A proxy method for calling GestureSystem::OnPointerDown()
         /// using the old GUI consumption model. This simply relays
@@ -269,14 +269,14 @@ namespace CS
         void OnDestroy() override;
         
         std::recursive_mutex m_mutex;
-        Core::concurrent_vector<GestureSPtr> m_gestures;
+        concurrent_vector<GestureSPtr> m_gestures;
         
         ConflictResolutionDelegate m_conflictResolutionDelegate;
 
-        Core::EventConnectionUPtr m_pointerDownConnection;
-        Core::EventConnectionUPtr m_pointerMovedConnection;
-        Core::EventConnectionUPtr m_pointerUpConnection;
-        Core::EventConnectionUPtr m_pointerScrolledConnection;
+        EventConnectionUPtr m_pointerDownConnection;
+        EventConnectionUPtr m_pointerMovedConnection;
+        EventConnectionUPtr m_pointerUpConnection;
+        EventConnectionUPtr m_pointerScrolledConnection;
     };
 }
 

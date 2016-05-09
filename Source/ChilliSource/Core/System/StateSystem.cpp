@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Core/System/StateSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------
     //------------------------------------------------

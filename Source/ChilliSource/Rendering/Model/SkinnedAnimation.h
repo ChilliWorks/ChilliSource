@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------------
     /// A resource that holds data for a single skinned animation.
@@ -43,7 +43,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
-    class SkinnedAnimation final : public Core::Resource
+    class SkinnedAnimation final : public Resource
     {
     public:
         
@@ -54,9 +54,9 @@ namespace CS
         //---------------------------------------------------------------------
         struct Frame
         {
-            std::vector<Core::Vector3> m_nodeTranslations;
-            std::vector<Core::Quaternion> m_nodeOrientations;
-            std::vector<Core::Vector3> m_nodeScales;
+            std::vector<Vector3> m_nodeTranslations;
+            std::vector<Quaternion> m_nodeOrientations;
+            std::vector<Vector3> m_nodeScales;
         };
         using FrameUPtr = std::unique_ptr<Frame>;
         using FrameSPtr = std::shared_ptr<Frame>;
@@ -72,7 +72,7 @@ namespace CS
         ///
         /// @return Whether this object is of given type
         //---------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //---------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -113,7 +113,7 @@ namespace CS
         
     private:
         
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //---------------------------------------------------------------------
         /// Factory method for creating mesh resource instance. Only accessed
         /// by the resource pool

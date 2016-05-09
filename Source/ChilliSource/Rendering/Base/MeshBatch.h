@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------
     /// Vertex format for mesh batches. Mesh batches must be in this
@@ -41,14 +41,14 @@ namespace CS
     struct MeshBatchVertex
     {
         MeshBatchVertex(){}
-        MeshBatchVertex(const Core::Vector4 &invPos, const Core::Vector3 &invNorm, const Core::Vector2 &invTexCoord)
+        MeshBatchVertex(const Vector4 &invPos, const Vector3 &invNorm, const Vector2 &invTexCoord)
         : Pos(invPos), Norm(invNorm), Tex(invTexCoord)
         {
             
         }
-        Core::Vector4 Pos;
-        Core::Vector3 Norm;
-        Core::Vector2 Tex;
+        Vector4 Pos;
+        Vector3 Norm;
+        Vector2 Tex;
     };
     
     
@@ -65,7 +65,7 @@ namespace CS
         /// @param Static mesh component
         /// @param Transform
         //------------------------------------------------------
-        void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Core::Matrix4& inmatTransform);
+        void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Matrix4& inmatTransform);
         //------------------------------------------------------
         /// Set Material
         ///
@@ -130,7 +130,7 @@ namespace CS
         MeshBuffer* mpMeshBuffer;
         
         //List of sprites in the batch
-        typedef std::unordered_map<StaticMeshComponentSPtr, Core::Matrix4> MapMeshToTransform;
+        typedef std::unordered_map<StaticMeshComponentSPtr, Matrix4> MapMeshToTransform;
         MapMeshToTransform mmapMeshCache;
     };
 }

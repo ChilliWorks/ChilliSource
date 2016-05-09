@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     /// A resource for a loaded image in one of the formats supported
@@ -68,7 +68,7 @@ namespace CS
         ///
         /// @return Whether the object is of given type
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// Populate the image with the given data. The image resource
         /// takes ownership of the raw image data
@@ -121,8 +121,8 @@ namespace CS
         
     private:
         friend class ResourcePool;
-        friend class Rendering::TextureProvider;
-        friend class Rendering::CubemapProvider;
+        friend class TextureProvider;
+        friend class CubemapProvider;
         //----------------------------------------------------------------
         /// Factory create method. Only called by resource pool or by
         /// texture provider.

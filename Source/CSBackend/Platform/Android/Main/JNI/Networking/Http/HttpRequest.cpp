@@ -82,7 +82,7 @@ void Java_com_chilliworks_chillisource_networking_HttpRequest_onBufferFlushed(JN
 	CSBackend::Android::HttpRequest* httpRequest = CSBackend::Android::BoxedPointer::Unbox<CSBackend::Android::HttpRequest>(javaBoxedPointer.get());
 	std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
 
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 	{
 		httpRequest->OnFlushed(data, (u32)in_responseCode);
 	});
@@ -96,7 +96,7 @@ void Java_com_chilliworks_chillisource_networking_HttpRequest_onComplete(JNIEnv*
 	CSBackend::Android::HttpRequest* httpRequest = CSBackend::Android::BoxedPointer::Unbox<CSBackend::Android::HttpRequest>(javaBoxedPointer.get());
 	std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
 
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 	{
 		httpRequest->OnComplete((u32)in_resultCode, data, (u32)in_responseCode);
 	});
@@ -108,7 +108,7 @@ namespace CSBackend
 	{
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
-		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate)
+		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const ChilliSource::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate)
 	    : m_type(in_type), m_url(in_url), m_body(in_body), m_headers(in_headers), m_completionDelegate(in_delegate), m_timeoutSecs(in_timeoutSecs), m_maxBufferSize(in_maxBufferSize)
 		{
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
@@ -156,7 +156,7 @@ namespace CSBackend
             jstring url = JavaUtils::CreateJStringFromSTDString(m_url);
             jstring body = JavaUtils::CreateJStringFromSTDString(m_body);
 
-            bool isPost = m_type == CSNetworking::HttpRequest::Type::k_post;
+            bool isPost = m_type == ChilliSource::HttpRequest::Type::k_post;
 
 			//Finally call the java function
 			m_javaHttpRequest->CallVoidMethod("performHttpRequest", url, isPost, keys, values, body, m_timeoutSecs, m_maxBufferSize);
@@ -173,7 +173,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------
 		void HttpRequest::OnFlushed(const std::string& in_data, u32 in_responseCode)
 		{
-			m_completionDelegate(this, CSNetworking::HttpResponse(CSNetworking::HttpResponse::Result::k_flushed, in_responseCode, in_data));
+			m_completionDelegate(this, ChilliSource::HttpResponse(ChilliSource::HttpResponse::Result::k_flushed, in_responseCode, in_data));
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ namespace CSBackend
 		{
 			if(m_isRequestCancelled == false && m_completionDelegate)
 			{
-				m_completionDelegate(this, CSNetworking::HttpResponse((CSNetworking::HttpResponse::Result)in_resultCode, in_responseCode, in_data));
+				m_completionDelegate(this, ChilliSource::HttpResponse((ChilliSource::HttpResponse::Result)in_resultCode, in_responseCode, in_data));
 			}
 		}
 		//----------------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ namespace CSBackend
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const CSCore::ParamDictionary& HttpRequest::GetHeaders() const
+        const ChilliSource::ParamDictionary& HttpRequest::GetHeaders() const
         {
             return m_headers;
         }

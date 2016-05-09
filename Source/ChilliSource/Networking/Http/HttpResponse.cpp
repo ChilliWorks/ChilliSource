@@ -30,7 +30,7 @@
 
 #include <limits>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ namespace CS
     : m_data(in_data), m_result(in_result), m_code(in_code)
     {
         CS_ASSERT(m_data.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "Response data is too large. Cannot exceed "
-                  + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+                  + ToString(std::numeric_limits<u32>::max()) + " bytes.");
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------

@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {

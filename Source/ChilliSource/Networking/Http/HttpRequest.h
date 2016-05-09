@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
     /// Interface class to a platform dependent http request. A request can be issued
@@ -97,7 +97,7 @@ namespace CS
         ///
         /// @return The original headers of the request as keys/values
         //----------------------------------------------------------------------------------------
-        virtual const Core::ParamDictionary& GetHeaders() const = 0;
+        virtual const ParamDictionary& GetHeaders() const = 0;
         //----------------------------------------------------------------------------------------
         /// @author N Tanda
         ///

@@ -52,23 +52,23 @@ namespace CSBackend
             /// @param Horizontal wrap mode
             /// @param Vertical wrap mode
             //---------------------------------------------------
-            void ApplyWrapMode(CSRendering::Texture::WrapMode in_smode, CSRendering::Texture::WrapMode in_tmode)
+            void ApplyWrapMode(ChilliSource::Texture::WrapMode in_smode, ChilliSource::Texture::WrapMode in_tmode)
             {
                 switch(in_smode)
                 {
-                    case CSRendering::Texture::WrapMode::k_clamp:
+                    case ChilliSource::Texture::WrapMode::k_clamp:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
                         break;
-                    case CSRendering::Texture::WrapMode::k_repeat:
+                    case ChilliSource::Texture::WrapMode::k_repeat:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
                         break;
                 };
                 switch(in_tmode)
                 {
-                    case CSRendering::Texture::WrapMode::k_clamp:
+                    case ChilliSource::Texture::WrapMode::k_clamp:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                         break;
-                    case CSRendering::Texture::WrapMode::k_repeat:
+                    case ChilliSource::Texture::WrapMode::k_repeat:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
                         break;
                 };
@@ -84,17 +84,17 @@ namespace CSBackend
             /// @param Filter mode
             /// @param Whether mip-mapping is enabled
             //---------------------------------------------------
-            void ApplyFilterMode(CSRendering::Texture::FilterMode in_mode, bool in_hasMipMaps)
+            void ApplyFilterMode(ChilliSource::Texture::FilterMode in_mode, bool in_hasMipMaps)
             {
                 if(in_hasMipMaps == false)
                 {
                     switch(in_mode)
                     {
-                        case CSRendering::Texture::FilterMode::k_nearestNeighbour:
+                        case ChilliSource::Texture::FilterMode::k_nearestNeighbour:
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                             break;
-                        case CSRendering::Texture::FilterMode::k_bilinear:
+                        case ChilliSource::Texture::FilterMode::k_bilinear:
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             break;
@@ -104,11 +104,11 @@ namespace CSBackend
                 {
                     switch(in_mode)
                     {
-                        case CSRendering::Texture::FilterMode::k_nearestNeighbour:
+                        case ChilliSource::Texture::FilterMode::k_nearestNeighbour:
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                             break;
-                        case CSRendering::Texture::FilterMode::k_bilinear:
+                        case ChilliSource::Texture::FilterMode::k_bilinear:
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             break;
@@ -128,33 +128,33 @@ namespace CSBackend
             /// @param Image height
             /// @param Image data
             //---------------------------------------------------
-            void UploadImageDataNoCompression(CSCore::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData)
+            void UploadImageDataNoCompression(ChilliSource::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData)
             {
                 switch(in_format)
                 {
                     default:
-                    case CSCore::ImageFormat::k_RGBA8888:
+                    case ChilliSource::ImageFormat::k_RGBA8888:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, in_imageWidth, in_imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGB888:
+                    case ChilliSource::ImageFormat::k_RGB888:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, in_imageWidth, in_imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGBA4444:
+                    case ChilliSource::ImageFormat::k_RGBA4444:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, in_imageWidth, in_imageHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGB565:
+                    case ChilliSource::ImageFormat::k_RGB565:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, in_imageWidth, in_imageHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_LumA88:
+                    case ChilliSource::ImageFormat::k_LumA88:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, in_imageWidth, in_imageHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_Lum8:
+                    case ChilliSource::ImageFormat::k_Lum8:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, in_imageWidth, in_imageHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_Depth16:
+                    case ChilliSource::ImageFormat::k_Depth16:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, in_imageWidth, in_imageHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_Depth32:
+                    case ChilliSource::ImageFormat::k_Depth32:
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, in_imageWidth, in_imageHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, in_imageData);
                         break;
                 };
@@ -175,12 +175,12 @@ namespace CSBackend
             /// @param Image data
             /// @param Image data size in bytes
             //---------------------------------------------------
-            void UploadImageDataETC1(CSCore::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            void UploadImageDataETC1(ChilliSource::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
             {
 #ifndef CS_TARGETPLATFORM_ANDROID
                 CS_LOG_FATAL("ETC1 compression is only supported on Android");
 #endif
-                CS_ASSERT(in_format == CSCore::ImageFormat::k_RGB888, "ETC1 only supports RGB image format");
+                CS_ASSERT(in_format == ChilliSource::ImageFormat::k_RGB888, "ETC1 only supports RGB image format");
                 
 #ifdef CS_TARGETPLATFORM_ANDROID
                 glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
@@ -201,7 +201,7 @@ namespace CSBackend
             /// @param Image data
             /// @param Image data size in bytes
             //---------------------------------------------------
-            void UploadImageDataPVR2(CSCore::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            void UploadImageDataPVR2(ChilliSource::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
             {
 #ifndef CS_TARGETPLATFORM_IOS
                 CS_LOG_FATAL("PVR compression is only supported on iOS");
@@ -213,10 +213,10 @@ namespace CSBackend
                     default:
                         CS_LOG_FATAL("PVR compression only supports RGB and RGBA image formats");
                         break;
-                    case CSCore::ImageFormat::k_RGBA8888:
+                    case ChilliSource::ImageFormat::k_RGBA8888:
                         glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGB888:
+                    case ChilliSource::ImageFormat::k_RGB888:
                         glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
                         break;
                 };
@@ -237,7 +237,7 @@ namespace CSBackend
             /// @param Image data
             /// @param Image data size in bytes
             //---------------------------------------------------
-            void UploadImageDataPVR4(CSCore::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
+            void UploadImageDataPVR4(ChilliSource::ImageFormat in_format, u32 in_imageWidth, u32 in_imageHeight, const u8* in_imageData, u32 in_imageDataSize)
             {
 #ifndef CS_TARGETPLATFORM_IOS
                 CS_LOG_FATAL("PVR compression is only supported on iOS");
@@ -249,10 +249,10 @@ namespace CSBackend
                     default:
                         CS_LOG_FATAL("PVR compression only supports RGB and RGBA image formats");
                         break;
-                    case CSCore::ImageFormat::k_RGBA8888:
+                    case ChilliSource::ImageFormat::k_RGBA8888:
                         glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
                         break;
-                    case CSCore::ImageFormat::k_RGB888:
+                    case ChilliSource::ImageFormat::k_RGB888:
                         glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, in_imageWidth, in_imageHeight, 0, in_imageDataSize, in_imageData);
                         break;
                 };
@@ -265,25 +265,25 @@ namespace CSBackend
 		//---------------------------------------------------------------
 		//---------------------------------------------------------------
 		Texture::Texture()
-        : m_format(CSCore::ImageFormat::k_RGBA8888)
+        : m_format(ChilliSource::ImageFormat::k_RGBA8888)
 		{
-            m_renderCapabilities = CSCore::Application::Get()->GetSystem<CSRendering::RenderCapabilities>();
+            m_renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
             CS_ASSERT(m_renderCapabilities, "Cannot find required system: Render Capabilities.");
             
-            m_texUnitSystem = CSCore::Application::Get()->GetSystem<TextureUnitSystem>();
+            m_texUnitSystem = ChilliSource::Application::Get()->GetSystem<TextureUnitSystem>();
             CS_ASSERT(m_texUnitSystem, "Cannot find required system: Texture Unit System.");
 		}
         //--------------------------------------------------
 		//--------------------------------------------------
-		bool Texture::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool Texture::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == Texture::InterfaceID || in_interfaceId == CSRendering::Texture::InterfaceID;
+			return in_interfaceId == Texture::InterfaceID || in_interfaceId == ChilliSource::Texture::InterfaceID;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
 		void Texture::Bind(u32 in_texUnit)
 		{
-			CS_ASSERT(in_texUnit < m_renderCapabilities->GetNumTextureUnits(), "Attempting to bind to texture unit not supported on this device: " + CSCore::ToString(in_texUnit));
+			CS_ASSERT(in_texUnit < m_renderCapabilities->GetNumTextureUnits(), "Attempting to bind to texture unit not supported on this device: " + ChilliSource::ToString(in_texUnit));
 			
             m_texUnitSystem->Bind(this, in_texUnit);
             
@@ -313,7 +313,7 @@ namespace CSBackend
             m_compression = in_desc.m_compression;
             
             CS_ASSERT(m_width <= m_renderCapabilities->GetMaxTextureSize() && m_height <= m_renderCapabilities->GetMaxTextureSize(),
-                      "OpenGL does not support textures of this size on this device (" + CSCore::ToString(m_width) + ", " + CSCore::ToString(m_height) + ")");
+                      "OpenGL does not support textures of this size on this device (" + ChilliSource::ToString(m_width) + ", " + ChilliSource::ToString(m_height) + ")");
             
             glGenTextures(1, &m_texHandle);
             Bind();
@@ -322,16 +322,16 @@ namespace CSBackend
             
 			switch(m_compression)
 			{
-				case CSCore::ImageCompression::k_none:
+				case ChilliSource::ImageCompression::k_none:
                     UploadImageDataNoCompression(m_format, m_width, m_height, data);
 					break;
-				case CSCore::ImageCompression::k_ETC1:
+				case ChilliSource::ImageCompression::k_ETC1:
                     UploadImageDataETC1(m_format, m_width, m_height, data, in_desc.m_dataSize);
 					break;
-				case CSCore::ImageCompression::k_PVR2Bpp:
+				case ChilliSource::ImageCompression::k_PVR2Bpp:
                     UploadImageDataPVR2(m_format, m_width, m_height, data, in_desc.m_dataSize);
 					break;
-				case CSCore::ImageCompression::k_PVR4Bpp:
+				case ChilliSource::ImageCompression::k_PVR4Bpp:
                     UploadImageDataPVR4(m_format, m_width, m_height, data, in_desc.m_dataSize);
 					break;
 			};
@@ -344,7 +344,7 @@ namespace CSBackend
             m_hasMipMaps = in_mipMap;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreTextureDataEnabled == true)
+            if (GetStorageLocation() == ChilliSource::StorageLocation::k_none && in_restoreTextureDataEnabled == true)
             {
             	m_restoreTextureDataEnabled = true;
                 m_restorationDataSize = in_desc.m_dataSize;
@@ -374,7 +374,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		CSCore::ImageFormat Texture::GetFormat() const
+		ChilliSource::ImageFormat Texture::GetFormat() const
 		{
 			return m_format;
 		}
@@ -412,7 +412,7 @@ namespace CSBackend
         //--------------------------------------------------
         void Texture::UpdateRestorationData()
         {
-            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot update restoration data on texture that was loaded from file.");
+            CS_ASSERT(GetStorageLocation() == ChilliSource::StorageLocation::k_none, "Cannot update restoration data on texture that was loaded from file.");
             
             if (m_restoreTextureDataEnabled == true)
             {
@@ -438,23 +438,23 @@ namespace CSBackend
 				glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, unconvertedData.get());
 
 				//Convert to the format of this texture
-				CSCore::ImageFormatConverter::ImageBuffer convertedData;
+				ChilliSource::ImageFormatConverter::ImageBuffer convertedData;
 				switch (m_format)
 				{
-				case CSCore::ImageFormat::k_RGBA8888:
+				case ChilliSource::ImageFormat::k_RGBA8888:
 					convertedData.m_size = unconvertedDataSize;
 					convertedData.m_data = std::move(unconvertedData);
 					break;
-				case CSCore::ImageFormat::k_RGB888:
-					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGB888(unconvertedData.get(), unconvertedDataSize);
+				case ChilliSource::ImageFormat::k_RGB888:
+					convertedData = ChilliSource::ImageFormatConverter::RGBA8888ToRGB888(unconvertedData.get(), unconvertedDataSize);
 					unconvertedData.reset();
 					break;
-				case CSCore::ImageFormat::k_RGBA4444:
-					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGBA4444(unconvertedData.get(), unconvertedDataSize);
+				case ChilliSource::ImageFormat::k_RGBA4444:
+					convertedData = ChilliSource::ImageFormatConverter::RGBA8888ToRGBA4444(unconvertedData.get(), unconvertedDataSize);
 					unconvertedData.reset();
 					break;
-				case CSCore::ImageFormat::k_RGB565:
-					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGB565(unconvertedData.get(), unconvertedDataSize);
+				case ChilliSource::ImageFormat::k_RGB565:
+					convertedData = ChilliSource::ImageFormatConverter::RGBA8888ToRGB565(unconvertedData.get(), unconvertedDataSize);
 					unconvertedData.reset();
 					break;
 				default:
@@ -476,7 +476,7 @@ namespace CSBackend
         //--------------------------------------------------
         void Texture::Restore()
         {
-            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
+            CS_ASSERT(GetStorageLocation() == ChilliSource::StorageLocation::k_none, "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
 
             Texture::Descriptor desc;
             desc.m_width = m_width;
@@ -510,7 +510,7 @@ namespace CSBackend
             m_tWrapMode = WrapMode::k_clamp;
             
             //If the context has already been destroyed then the cubemap has already been destroyed
-            bool hasContext = static_cast<RenderSystem*>(CSCore::Application::Get()->GetRenderSystem())->HasContext();
+            bool hasContext = static_cast<RenderSystem*>(ChilliSource::Application::Get()->GetRenderSystem())->HasContext();
             if(hasContext == true && m_texHandle > 0)
             {
                 Unbind();

@@ -33,7 +33,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// A container for a specific type of property. This exposes a method
@@ -138,7 +138,7 @@ namespace CS
 #include <ChilliSource/Core/Container/Property/ReferenceProperty.h>
 #include <ChilliSource/Core/Container/Property/ValueProperty.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
@@ -173,12 +173,12 @@ namespace CS
 }
 
 #define CS_DECLARE_PROPERTYTYPE(in_type, in_name) \
-    const CSCore::PropertyType<in_type>* in_name();
+    const ChilliSource::PropertyType<in_type>* in_name();
 
 #define CS_DEFINE_PROPERTYTYPE(in_type, in_name, in_defaultValue, in_parseMethod) \
-    const CSCore::PropertyType<in_type>* in_name() \
+    const ChilliSource::PropertyType<in_type>* in_name() \
     { \
-        static const CSCore::PropertyType<in_type> k_property(in_defaultValue, in_parseMethod); \
+        static const ChilliSource::PropertyType<in_type> k_property(in_defaultValue, in_parseMethod); \
         return &k_property; \
     }
 

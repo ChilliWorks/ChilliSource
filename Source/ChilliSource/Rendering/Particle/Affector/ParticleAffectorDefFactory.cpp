@@ -33,7 +33,7 @@
 #include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffectorDef.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(ParticleAffectorDefFactory);
     //-----------------------------------------------------------------
@@ -44,7 +44,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    bool ParticleAffectorDefFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool ParticleAffectorDefFactory::IsA(InterfaceIDType in_interfaceId) const
     {
         return (ParticleAffectorDefFactory::InterfaceID == in_interfaceId);
     }

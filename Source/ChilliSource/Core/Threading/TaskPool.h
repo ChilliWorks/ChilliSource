@@ -38,7 +38,7 @@
 #include <mutex>
 #include <thread>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A collection of tasks which will be performed on one of the worker threads

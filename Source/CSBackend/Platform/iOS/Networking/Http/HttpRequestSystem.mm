@@ -43,19 +43,19 @@ namespace CSBackend
         
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-		bool HttpRequestSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool HttpRequestSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return in_interfaceId == CSNetworking::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
+			return in_interfaceId == ChilliSource::HttpRequestSystem::InterfaceID || in_interfaceId == HttpRequestSystem::InterfaceID;
 		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
         HttpRequest* HttpRequestSystem::MakeGetRequest(const std::string& in_url, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
         {
-            return MakeRequest(HttpRequest::Type::k_get, in_url, "", CSCore::ParamDictionary(), in_delegate, in_timeoutSecs);
+            return MakeRequest(HttpRequest::Type::k_get, in_url, "", ChilliSource::ParamDictionary(), in_delegate, in_timeoutSecs);
         }
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
-        HttpRequest* HttpRequestSystem::MakeGetRequest(const std::string& in_url, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+        HttpRequest* HttpRequestSystem::MakeGetRequest(const std::string& in_url, const ChilliSource::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
         {
             return MakeRequest(HttpRequest::Type::k_get, in_url, "", in_headers, in_delegate, in_timeoutSecs);
         }
@@ -63,26 +63,26 @@ namespace CSBackend
         //--------------------------------------------------------------------------------------------------
         HttpRequest* HttpRequestSystem::MakePostRequest(const std::string& in_url, const std::string& in_body, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
         {
-            return MakeRequest(HttpRequest::Type::k_post, in_url, in_body, CSCore::ParamDictionary(), in_delegate, in_timeoutSecs);
+            return MakeRequest(HttpRequest::Type::k_post, in_url, in_body, ChilliSource::ParamDictionary(), in_delegate, in_timeoutSecs);
         }
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
-        HttpRequest* HttpRequestSystem::MakePostRequest(const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+        HttpRequest* HttpRequestSystem::MakePostRequest(const std::string& in_url, const std::string& in_body, const ChilliSource::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
         {
             return MakeRequest(HttpRequest::Type::k_post, in_url, in_body, in_headers, in_delegate, in_timeoutSecs);
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        HttpRequest* HttpRequestSystem::MakeRequest(HttpRequest::Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+        HttpRequest* HttpRequestSystem::MakeRequest(HttpRequest::Type in_type, const std::string& in_url, const std::string& in_body, const ChilliSource::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
         {
-            CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Http requests can currently only be made on the main thread");
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Http requests can currently only be made on the main thread");
             CS_ASSERT(in_delegate != nullptr, "Cannot make an http request with a null delegate");
             CS_ASSERT(in_url.empty() == false, "Cannot make an http request to a blank url");
             
-            HttpRequestUPtr request(new HttpRequest(in_type, in_url, in_body, in_headers, in_timeoutSecs, GetMaxBufferSize(), [=](const CSNetworking::HttpRequest* in_request, const CSNetworking::HttpResponse& in_response)
+            HttpRequestUPtr request(new HttpRequest(in_type, in_url, in_body, in_headers, in_timeoutSecs, GetMaxBufferSize(), [=](const ChilliSource::HttpRequest* in_request, const ChilliSource::HttpResponse& in_response)
             {
                 //If flushed, we are not finished with the request yet
-                if(in_response.GetResult() != CSNetworking::HttpResponse::Result::k_flushed)
+                if(in_response.GetResult() != ChilliSource::HttpResponse::Result::k_flushed)
                 {
                     m_finishedRequests.push_back(in_request);
                 }
@@ -99,7 +99,7 @@ namespace CSBackend
         //------------------------------------------------------------------
 		void HttpRequestSystem::CancelAllRequests()
         {
-            CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Http requests can currently only be made on the main thread");
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Http requests can currently only be made on the main thread");
             
             for(auto& request : m_requests)
             {

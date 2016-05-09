@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace CS
+namespace ChilliSource
 {
     class Component : public QueryableInterface
     {

@@ -35,7 +35,7 @@
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -46,9 +46,9 @@ namespace CS
         //------------------------------------------------------------------------------
         struct Vertex
         {
-            Core::Vector4 m_position;
-            Core::Vector2 m_texCoord;
-            Core::Vector3 m_normal;
+            Vector4 m_position;
+            Vector2 m_texCoord;
+            Vector3 m_normal;
         };
         //------------------------------------------------------------------------------
         /// Creates a new mesh descriptor describing a plane model.
@@ -60,9 +60,9 @@ namespace CS
         ///
         /// @return The new mesh descriptor.
         //------------------------------------------------------------------------------
-        MeshDescriptor CreatePlaneDesc(const Core::Vector2& in_size, const Core::Vector2& in_textureRepeat)
+        MeshDescriptor CreatePlaneDesc(const Vector2& in_size, const Vector2& in_textureRepeat)
         {
-            Core::Vector2 halfSize = in_size * 0.5f;
+            Vector2 halfSize = in_size * 0.5f;
             
             //Setup the mesh description
             MeshDescriptor meshDescriptor;
@@ -82,8 +82,8 @@ namespace CS
             
             //setup sub mesh
             SubMeshDescriptor subMesh;
-            subMesh.mvMinBounds = Core::Vector3(-halfSize.x, 0.0f, -halfSize.y);
-            subMesh.mvMaxBounds = Core::Vector3(halfSize.x, 0.0f, halfSize.y);
+            subMesh.mvMinBounds = Vector3(-halfSize.x, 0.0f, -halfSize.y);
+            subMesh.mvMaxBounds = Vector3(halfSize.x, 0.0f, halfSize.y);
             subMesh.mstrName = "SubMesh";
             subMesh.mudwNumVertices = 4;
             subMesh.mudwNumIndices = 6;
@@ -93,10 +93,10 @@ namespace CS
             Vertex* vertices = new Vertex[subMesh.mudwNumVertices];
             subMesh.mpVertexData = reinterpret_cast<u8*>(vertices);
             
-            vertices[0] = { Core::Vector4(-halfSize.x, 0.0f, -halfSize.y, 1.0f), Core::Vector2(0.0f, 0.0f), Core::Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[1] = { Core::Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Core::Vector2(0.0f, in_textureRepeat.y), Core::Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[2] = { Core::Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Core::Vector2(in_textureRepeat.x, 0.0f), Core::Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[3] = { Core::Vector4(halfSize.x, 0.0f, halfSize.y, 1.0f), Core::Vector2(in_textureRepeat.x, in_textureRepeat.y), Core::Vector3(0.0f, 1.0f, 0.0f) };
+            vertices[0] = { Vector4(-halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f) };
+            vertices[1] = { Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 1.0f, 0.0f) };
+            vertices[2] = { Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 1.0f, 0.0f) };
+            vertices[3] = { Vector4(halfSize.x, 0.0f, halfSize.y, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 1.0f, 0.0f) };
             
             //Indices
             u16 *indices(new u16[subMesh.mudwNumIndices]);
@@ -112,8 +112,8 @@ namespace CS
             
             //Create the mesh.
             meshDescriptor.mMeshes.push_back(subMesh);
-            meshDescriptor.mvMinBounds = Core::Vector3(-halfSize.x, 0.0f, -halfSize.y);
-            meshDescriptor.mvMaxBounds = Core::Vector3(halfSize.x, 0.0f, halfSize.y);
+            meshDescriptor.mvMinBounds = Vector3(-halfSize.x, 0.0f, -halfSize.y);
+            meshDescriptor.mvMaxBounds = Vector3(halfSize.x, 0.0f, halfSize.y);
             
             return meshDescriptor;
         }
@@ -130,9 +130,9 @@ namespace CS
         ///
         /// @return The new mesh descriptor.
         //------------------------------------------------------------------------------
-        MeshDescriptor CreateBoxDesc(const Core::Vector3& in_size, const Core::Vector2& in_textureRepeat, bool in_flipNormals)
+        MeshDescriptor CreateBoxDesc(const Vector3& in_size, const Vector2& in_textureRepeat, bool in_flipNormals)
         {
-            Core::Vector3 halfSize = in_size * 0.5f;
+            Vector3 halfSize = in_size * 0.5f;
             
             //Setup the mesh description
             MeshDescriptor meshDescriptor;
@@ -152,8 +152,8 @@ namespace CS
             
             //setup sub mesh
             SubMeshDescriptor subMesh;
-            subMesh.mvMinBounds = Core::Vector3(-halfSize.x, -halfSize.y, -halfSize.z);
-            subMesh.mvMaxBounds = Core::Vector3(halfSize.x, halfSize.y, halfSize.z);
+            subMesh.mvMinBounds = Vector3(-halfSize.x, -halfSize.y, -halfSize.z);
+            subMesh.mvMaxBounds = Vector3(halfSize.x, halfSize.y, halfSize.z);
             subMesh.mstrName = "SubMesh";
             subMesh.mudwNumVertices = 24;
             subMesh.mudwNumIndices = 36;
@@ -166,40 +166,40 @@ namespace CS
             float normalDir = (in_flipNormals == false) ? 1.0f : -1.0f;
             
             //bottom
-            vertices[0] = { Core::Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Core::Vector2(0.0f, 0.0f), Core::Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[1] = { Core::Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Core::Vector2(0.0f, in_textureRepeat.y), Core::Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[2] = { Core::Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, 0.0f), Core::Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[3] = { Core::Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, in_textureRepeat.y), Core::Vector3(0.0f, -normalDir, 0.0f) };
+            vertices[0] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, -normalDir, 0.0f) };
+            vertices[1] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, -normalDir, 0.0f) };
+            vertices[2] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, -normalDir, 0.0f) };
+            vertices[3] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, -normalDir, 0.0f) };
             
             //top
-            vertices[4] = { Core::Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Core::Vector2(0.0f, 0.0f), Core::Vector3(0.0f, normalDir, 0.0f) };
-            vertices[5] = { Core::Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Core::Vector2(0.0f, in_textureRepeat.y), Core::Vector3(0.0f, normalDir, 0.0f) };
-            vertices[6] = { Core::Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, 0.0f), Core::Vector3(0.0f, normalDir, 0.0f) };
-            vertices[7] = { Core::Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, in_textureRepeat.y), Core::Vector3(0.0f, normalDir, 0.0f) };
+            vertices[4] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, normalDir, 0.0f) };
+            vertices[5] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, normalDir, 0.0f) };
+            vertices[6] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, normalDir, 0.0f) };
+            vertices[7] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, normalDir, 0.0f) };
             
             //left
-            vertices[8] = { Core::Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Core::Vector2(0.0f, 0.0f), Core::Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[9] = { Core::Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Core::Vector2(0.0f, in_textureRepeat.y), Core::Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[10] = { Core::Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, 0.0f), Core::Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[11] = { Core::Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, in_textureRepeat.y), Core::Vector3(-normalDir, 0.0f, 0.0f) };
+            vertices[8] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(-normalDir, 0.0f, 0.0f) };
+            vertices[9] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(-normalDir, 0.0f, 0.0f) };
+            vertices[10] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(-normalDir, 0.0f, 0.0f) };
+            vertices[11] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(-normalDir, 0.0f, 0.0f) };
             
             //right
-            vertices[12] = { Core::Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Core::Vector2(0.0f, 0.0f), Core::Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[13] = { Core::Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Core::Vector2(0.0f, in_textureRepeat.y), Core::Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[14] = { Core::Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, 0.0f), Core::Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[15] = { Core::Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, in_textureRepeat.y), Core::Vector3(normalDir, 0.0f, 0.0f) };
+            vertices[12] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(normalDir, 0.0f, 0.0f) };
+            vertices[13] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(normalDir, 0.0f, 0.0f) };
+            vertices[14] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(normalDir, 0.0f, 0.0f) };
+            vertices[15] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(normalDir, 0.0f, 0.0f) };
             
             //front
-            vertices[16] = { Core::Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Core::Vector2(0.0f, 0.0f), Core::Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[17] = { Core::Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Core::Vector2(0.0f, in_textureRepeat.y), Core::Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[18] = { Core::Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, 0.0f), Core::Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[19] = { Core::Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, in_textureRepeat.y), Core::Vector3(0.0f, 0.0f, -normalDir) };
+            vertices[16] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 0.0f, -normalDir) };
+            vertices[17] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 0.0f, -normalDir) };
+            vertices[18] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 0.0f, -normalDir) };
+            vertices[19] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 0.0f, -normalDir) };
             
             //back
-            vertices[20] = { Core::Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Core::Vector2(0.0f, 0.0f), Core::Vector3(0.0f, 0.0f, normalDir) };
-            vertices[21] = { Core::Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Core::Vector2(0.0f, in_textureRepeat.y), Core::Vector3(0.0f, 0.0f, normalDir) };
-            vertices[22] = { Core::Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, 0.0f), Core::Vector3(0.0f, 0.0f, normalDir) };
-            vertices[23] = { Core::Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Core::Vector2(in_textureRepeat.x, in_textureRepeat.y), Core::Vector3(0.0f, 0.0f, normalDir) };
+            vertices[20] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 0.0f, normalDir) };
+            vertices[21] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 0.0f, normalDir) };
+            vertices[22] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 0.0f, normalDir) };
+            vertices[23] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 0.0f, normalDir) };
             
             //Indices
             u16 *indices(new u16[subMesh.mudwNumIndices]);
@@ -265,8 +265,8 @@ namespace CS
             
             //Create the mesh.
             meshDescriptor.mMeshes.push_back(subMesh);
-            meshDescriptor.mvMinBounds = Core::Vector3(-halfSize.x, -halfSize.y, -halfSize.z);
-            meshDescriptor.mvMaxBounds = Core::Vector3(halfSize.x, halfSize.y, halfSize.z);
+            meshDescriptor.mvMinBounds = Vector3(-halfSize.x, -halfSize.y, -halfSize.z);
+            meshDescriptor.mvMaxBounds = Vector3(halfSize.x, halfSize.y, halfSize.z);
             
             return meshDescriptor;
         }
@@ -298,18 +298,18 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool PrimitiveModelFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool PrimitiveModelFactory::IsA(InterfaceIDType in_interfaceId) const
     {
         return (PrimitiveModelFactory::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    MeshCSPtr PrimitiveModelFactory::CreatePlane(const Core::Vector2& in_size, const Core::Vector2& in_textureRepeat) const
+    MeshCSPtr PrimitiveModelFactory::CreatePlane(const Vector2& in_size, const Vector2& in_textureRepeat) const
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
         
-        auto resourcePool = Core::Application::Get()->GetResourcePool();
-        auto meshName = "_PrimitivePlane(" + Core::ToString(in_size) + ")";
+        auto resourcePool = Application::Get()->GetResourcePool();
+        auto meshName = "_PrimitivePlane(" + ToString(in_size) + ")";
         auto mesh = resourcePool->GetResource<Mesh>(meshName);
         
         if (mesh == nullptr)
@@ -319,7 +319,7 @@ namespace CS
             auto desc = CreatePlaneDesc(in_size, in_textureRepeat);
             mutableMesh->Build(desc);
             CleanupDesc(desc);
-            mutableMesh->SetLoadState(Core::Resource::LoadState::k_loaded);
+            mutableMesh->SetLoadState(Resource::LoadState::k_loaded);
             
             mesh = mutableMesh;
         }
@@ -328,12 +328,12 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    MeshCSPtr PrimitiveModelFactory::CreateBox(const Core::Vector3& in_size, const Core::Vector2& in_textureRepeat, bool in_flipNormals) const
+    MeshCSPtr PrimitiveModelFactory::CreateBox(const Vector3& in_size, const Vector2& in_textureRepeat, bool in_flipNormals) const
     {
-        CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
         
-        auto resourcePool = Core::Application::Get()->GetResourcePool();
-        auto meshName = "_PrimitiveBox(" + Core::ToString(in_size) + "|" + Core::ToString(in_textureRepeat) + "|" + Core::ToString(in_flipNormals) + ")";
+        auto resourcePool = Application::Get()->GetResourcePool();
+        auto meshName = "_PrimitiveBox(" + ToString(in_size) + "|" + ToString(in_textureRepeat) + "|" + ToString(in_flipNormals) + ")";
         auto mesh = resourcePool->GetResource<Mesh>(meshName);
         
         if (mesh == nullptr)
@@ -343,7 +343,7 @@ namespace CS
             auto desc = CreateBoxDesc(in_size, in_textureRepeat, in_flipNormals);
             mutableMesh->Build(desc);
             CleanupDesc(desc);
-            mutableMesh->SetLoadState(Core::Resource::LoadState::k_loaded);
+            mutableMesh->SetLoadState(Resource::LoadState::k_loaded);
             
             mesh = mutableMesh;
         }

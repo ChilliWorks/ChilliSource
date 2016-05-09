@@ -32,14 +32,14 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------------------
     /// Loads CS Anim files into a SkinnedAnimation resource
     ///
     /// @author Ian Copland
     //-------------------------------------------------------------------------
-    class CSAnimProvider final : public Core::ResourceProvider
+    class CSAnimProvider final : public ResourceProvider
     {
     public:
         
@@ -58,13 +58,13 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface
         //-------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------
         /// @author S Downie
         ///
         /// @return The resource type this provider can create
         //----------------------------------------------------
-        Core::InterfaceIDType GetResourceType() const override;
+        InterfaceIDType GetResourceType() const override;
         //----------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -86,7 +86,7 @@ namespace CS
         /// @param Options to customise the creation
         /// @param [Out] the output resource pointer
         //----------------------------------------------------------------------------
-        void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// Load a skinned animation from the given CSAnim file on a background
         /// thread. Delegate is called on completion. Check the load state of the
@@ -100,7 +100,7 @@ namespace CS
         /// @param Delegate
         /// @param [Out] the output resource pointer
         //----------------------------------------------------------------------------
-        void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        void CreateResourceFromFileAsync(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
         //----------------------------------------------------------------------------
         /// Loads an anim file into a SkinnedAnimation.
         ///
@@ -111,7 +111,7 @@ namespace CS
         /// @param Completion delegate
         /// @param [Out] the output resource pointer
         //----------------------------------------------------------------------------
-        void ReadSkinnedAnimationFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SkinnedAnimationSPtr& out_resource) const;
+        void ReadSkinnedAnimationFromFile(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const SkinnedAnimationSPtr& out_resource) const;
     };
 }
 

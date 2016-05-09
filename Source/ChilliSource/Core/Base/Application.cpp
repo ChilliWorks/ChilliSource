@@ -80,7 +80,7 @@
 #include <algorithm>
 #include <ctime>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -385,35 +385,35 @@ namespace CS
         CreateSystem<LocalisedTextProvider>();
 
         //Input
-        CreateSystem<Input::Keyboard>();
-        m_pointerSystem = CreateSystem<Input::PointerSystem>();
-        CreateSystem<Input::DeviceButtonSystem>();
-        CreateSystem<Input::TextEntry>();
+        CreateSystem<Keyboard>();
+        m_pointerSystem = CreateSystem<PointerSystem>();
+        CreateSystem<DeviceButtonSystem>();
+        CreateSystem<TextEntry>();
         
         //Rendering
-        Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
-        m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
-        m_renderer = CreateSystem<Rendering::Renderer>(m_renderSystem);
-        CreateSystem<Rendering::CanvasRenderer>();
-        CreateSystem<Rendering::MaterialFactory>(renderCapabilities);
-        CreateSystem<Rendering::MaterialProvider>(renderCapabilities);
-        CreateSystem<Rendering::TextureAtlasProvider>();
-        CreateSystem<Rendering::TextureProvider>();
-        CreateSystem<Rendering::CubemapProvider>();
-        CreateSystem<Rendering::FontProvider>();
-        CreateSystem<Rendering::RenderComponentFactory>();
+        RenderCapabilities* renderCapabilities = CreateSystem<RenderCapabilities>();
+        m_renderSystem = CreateSystem<RenderSystem>(renderCapabilities);
+        m_renderer = CreateSystem<Renderer>(m_renderSystem);
+        CreateSystem<CanvasRenderer>();
+        CreateSystem<MaterialFactory>(renderCapabilities);
+        CreateSystem<MaterialProvider>(renderCapabilities);
+        CreateSystem<TextureAtlasProvider>();
+        CreateSystem<TextureProvider>();
+        CreateSystem<CubemapProvider>();
+        CreateSystem<FontProvider>();
+        CreateSystem<RenderComponentFactory>();
         
         //Particles
-        CreateSystem<Rendering::CSParticleProvider>();
-        CreateSystem<Rendering::ParticleAffectorDefFactory>();
-        CreateSystem<Rendering::ParticleDrawableDefFactory>();
-        CreateSystem<Rendering::ParticleEmitterDefFactory>();
+        CreateSystem<CSParticleProvider>();
+        CreateSystem<ParticleAffectorDefFactory>();
+        CreateSystem<ParticleDrawableDefFactory>();
+        CreateSystem<ParticleEmitterDefFactory>();
         
         //UI
-        CreateSystem<UI::UIComponentFactory>();
-        m_widgetFactory = CreateSystem<UI::WidgetFactory>();
-        CreateSystem<UI::WidgetDefProvider>();
-        CreateSystem<UI::WidgetTemplateProvider>();
+        CreateSystem<UIComponentFactory>();
+        m_widgetFactory = CreateSystem<WidgetFactory>();
+        CreateSystem<WidgetDefProvider>();
+        CreateSystem<WidgetTemplateProvider>();
 
         //Create any platform specific default systems
         m_platformSystem->CreateDefaultSystems(this);
@@ -436,8 +436,8 @@ namespace CS
         m_renderSystem->Init();
         
         //Texture/Cubemap provider is a compound provider and needs to be informed when the other providers are created.
-        GetSystem<Rendering::TextureProvider>()->PostCreate();
-        GetSystem<Rendering::CubemapProvider>()->PostCreate();
+        GetSystem<TextureProvider>()->PostCreate();
+        GetSystem<CubemapProvider>()->PostCreate();
         
         //Load the app config set preferred FPS.
         m_appConfig->Load();
@@ -504,25 +504,25 @@ namespace CS
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    Rendering::Renderer* Application::GetRenderer()
+    Renderer* Application::GetRenderer()
     {
         return m_renderer;
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    const Rendering::Renderer* Application::GetRenderer() const
+    const Renderer* Application::GetRenderer() const
     {
         return m_renderer;
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    Rendering::RenderSystem* Application::GetRenderSystem()
+    RenderSystem* Application::GetRenderSystem()
     {
         return m_renderSystem;
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    const Rendering::RenderSystem* Application::GetRenderSystem() const
+    const RenderSystem* Application::GetRenderSystem() const
     {
         return m_renderSystem;
     }
@@ -600,13 +600,13 @@ namespace CS
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    UI::WidgetFactory* Application::GetWidgetFactory()
+    WidgetFactory* Application::GetWidgetFactory()
     {
         return m_widgetFactory;
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    const UI::WidgetFactory* Application::GetWidgetFactory() const
+    const WidgetFactory* Application::GetWidgetFactory() const
     {
         return m_widgetFactory;
     }

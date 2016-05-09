@@ -38,7 +38,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     namespace OAuth
     {
@@ -74,8 +74,8 @@ namespace CS
             {
                 static u32 s_nounceCounter = 0;
                 
-                std::string time = Core::ToString(in_timestamp);
-                std::string counter = Core::ToString(s_nounceCounter);
+                std::string time = ToString(in_timestamp);
+                std::string counter = ToString(s_nounceCounter);
                 
                 s_nounceCounter++;
                 return time + counter;
@@ -305,7 +305,7 @@ namespace CS
             //Generate nonce and timestamp if required
             TimeIntervalSecs timestamp = (TimeIntervalSecs)time(0);
             std::string nonce = GenerateNonce(timestamp);
-            std::string timestampString = Core::ToString(timestamp);
+            std::string timestampString = ToString(timestamp);
             
             //Build key-value pairs needed for OAuth request token, without signature
             BuildOAuthTokenKeyValuePairs(in_rawData, "", timestampString, nonce, in_consumerKey, in_oauthToken, in_oauthVerifier, urlParams);

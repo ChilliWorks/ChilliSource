@@ -40,7 +40,7 @@
 #include <CSBackend/Platform/Windows/Core/Image/PNGImageProvider.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     //-------------------------------------------------------

@@ -45,7 +45,7 @@ namespace CSBackend
 		///
 		/// @author Ian Copland
 		//----------------------------------------------------------------
-		class TextEntry final : public CSInput::TextEntry
+		class TextEntry final : public ChilliSource::TextEntry
 		{
 		public:
 
@@ -57,7 +57,7 @@ namespace CSBackend
             ///
             /// @return Whether this system implements the given inteface
             //-------------------------------------------------------
-            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// The system will now receive text input. This will also
             /// show the virtual keyboard if required
@@ -105,7 +105,7 @@ namespace CSBackend
 			~TextEntry();
 
 		private:
-			friend CSInput::TextEntryUPtr CSInput::TextEntry::Create();
+			friend ChilliSource::TextEntryUPtr ChilliSource::TextEntry::Create();
 
 			//-------------------------------------------------------
 			/// Constructor. Declared private to force the use of the

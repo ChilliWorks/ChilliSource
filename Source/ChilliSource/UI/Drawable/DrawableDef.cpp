@@ -34,7 +34,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -62,7 +62,7 @@ namespace CS
         DrawableType ParseDrawableType(const std::string& in_type)
         {
             std::string lowerCase = in_type;
-            Core::StringUtils::ToLowerCase(lowerCase);
+            StringUtils::ToLowerCase(lowerCase);
             
             if(lowerCase == "none") return DrawableType::k_none;
             if(lowerCase == "standard") return DrawableType::k_standard;
@@ -77,7 +77,7 @@ namespace CS
     CS_DEFINE_NAMEDTYPE(DrawableDef);
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    DrawableDefCUPtr DrawableDef::Create(const Json::Value& in_json, Core::StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+    DrawableDefCUPtr DrawableDef::Create(const Json::Value& in_json, StorageLocation in_defaultLocation, const std::string& in_defaultPath)
     {
         const char k_typeKey[] = "Type";
         

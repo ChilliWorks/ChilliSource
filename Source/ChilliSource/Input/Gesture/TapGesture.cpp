@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -51,7 +51,7 @@ namespace CS
         CS_ASSERT(m_requiredTapCount > 0, "Cannot have a tap gesture which requres 0 taps.");
         CS_ASSERT(m_requiredPointerCount > 0, "Cannot have a tap gesture which requres 0 pointers.");
         
-        Core::Screen* screen = Core::Application::Get()->GetScreen();
+        Screen* screen = Application::Get()->GetScreen();
         
         m_maxTapDisplacementSquared = (k_maxTapDisplacement * screen->GetDensityScale()) * (k_maxTapDisplacement * screen->GetDensityScale());
         m_maxRepeatTapDisplacementSquared = (k_maxRepeatTapDisplacement * screen->GetDensityScale()) * (k_maxRepeatTapDisplacement * screen->GetDensityScale());
@@ -59,7 +59,7 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    bool TapGesture::IsA(Core::InterfaceIDType in_gestureInterfaceId) const
+    bool TapGesture::IsA(InterfaceIDType in_gestureInterfaceId) const
     {
         return (Gesture::InterfaceID == in_gestureInterfaceId || TapGesture::InterfaceID == in_gestureInterfaceId);
     }
@@ -83,7 +83,7 @@ namespace CS
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    Core::IConnectableEvent<TapGesture::Delegate>& TapGesture::GetTappedEvent()
+    IConnectableEvent<TapGesture::Delegate>& TapGesture::GetTappedEvent()
     {
         return m_tappedEvent;
     }
@@ -137,7 +137,7 @@ namespace CS
             {
                 for (const auto& pointerInfo : m_firstTapPendingPointers)
                 {
-                    const Core::Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
+                    const Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
                     if (displacement.LengthSquared() <= m_maxRepeatTapDisplacementSquared)
                     {
                         tapValid = true;
@@ -192,7 +192,7 @@ namespace CS
             {
                 if (in_pointer.GetId() == pointerInfo.m_pointerId)
                 {
-                    const Core::Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
+                    const Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
                     if (displacement.LengthSquared() > m_maxTapDisplacementSquared)
                     {
                         shouldReset = true;
@@ -245,7 +245,7 @@ namespace CS
                     
                     if (m_tapCount == m_requiredTapCount)
                     {
-                        Core::Vector2 gesturePosition = Core::Vector2::k_zero;
+                        Vector2 gesturePosition = Vector2::k_zero;
                         for (auto& pointerInfo : m_firstTapPendingPointers)
                         {
                             gesturePosition += pointerInfo.m_initialPosition;

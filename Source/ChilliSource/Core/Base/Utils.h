@@ -37,7 +37,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     namespace Utils
     {

@@ -39,7 +39,7 @@
 #include <ck/ck.h>
 #include <ck/config.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(CricketAudioSystem);
     //------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool CricketAudioSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+    bool CricketAudioSystem::IsA(InterfaceIDType in_interfaceId) const
     {
         return (CricketAudioSystem::InterfaceID == in_interfaceId);
     }
@@ -58,7 +58,7 @@ namespace CS
     //------------------------------------------------------------------------------
     void CricketAudioSystem::Register(CkSound* in_ckAudio)
     {
-        CS_ASSERT(Core::VectorUtils::Contains(m_ckAudioList, in_ckAudio) == false, "The given CkSound is already registered with the CricketAudioSystem!");
+        CS_ASSERT(VectorUtils::Contains(m_ckAudioList, in_ckAudio) == false, "The given CkSound is already registered with the CricketAudioSystem!");
 
         m_ckAudioList.push_back(in_ckAudio);
     }
@@ -66,7 +66,7 @@ namespace CS
     //------------------------------------------------------------------------------
     void CricketAudioSystem::Deregister(CkSound* in_ckAudio)
     {
-        Core::VectorUtils::Remove(m_ckAudioList, in_ckAudio);
+        VectorUtils::Remove(m_ckAudioList, in_ckAudio);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

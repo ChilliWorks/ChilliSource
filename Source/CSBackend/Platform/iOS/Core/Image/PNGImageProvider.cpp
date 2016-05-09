@@ -58,7 +58,7 @@ namespace CSBackend
 			/// @param Image format
 			/// @param [Out] Image resource
             //-----------------------------------------------------------
-            void CreatePNGImageFromFile(const s8* in_data, u32 in_dataSize, CSCore::Image* out_image)
+            void CreatePNGImageFromFile(const s8* in_data, u32 in_dataSize, ChilliSource::Image* out_image)
             {
                 CFDataRef pData = CFDataCreateWithBytesNoCopy(nullptr, (u8*)in_data, in_dataSize, kCFAllocatorNull);
                 CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData(pData);
@@ -85,17 +85,17 @@ namespace CSBackend
                 CGColorSpaceRetain(ColorSpaceInfo);
                 
                 // Special case for GreyScale images
-                CSCore::ImageFormat format = CSCore::ImageFormat::k_RGBA8888;
+                ChilliSource::ImageFormat format = ChilliSource::ImageFormat::k_RGBA8888;
                 if(CGColorSpaceGetModel(ColorSpaceInfo) == kCGColorSpaceModelMonochrome)
                 {
                     if(bHasAlpha)
                     {
-                        format = CSCore::ImageFormat::k_LumA88;
+                        format = ChilliSource::ImageFormat::k_LumA88;
                         ColorSpaceInfo = CGColorSpaceCreateDeviceRGB();
                     }
                     else
                     {
-                        format = CSCore::ImageFormat::k_Lum8;
+                        format = ChilliSource::ImageFormat::k_Lum8;
                         ColorSpaceInfo = CGColorSpaceCreateDeviceRGB();
                     }
                 }
@@ -119,13 +119,13 @@ namespace CSBackend
                 CGDataProviderRelease(imgDataProvider);
                 CFRelease(pData);
 
-                CSCore::Image::Descriptor desc;
-                desc.m_compression = CSCore::ImageCompression::k_none;
+                ChilliSource::Image::Descriptor desc;
+                desc.m_compression = ChilliSource::ImageCompression::k_none;
                 desc.m_format = format;
                 desc.m_width = udwWidth;
                 desc.m_height = udwHeight;
                 desc.m_dataSize = dataSize;
-                out_image->Build(desc, CSCore::Image::ImageDataUPtr(pubyBitmapData8888));
+                out_image->Build(desc, ChilliSource::Image::ImageDataUPtr(pubyBitmapData8888));
             }
             //-----------------------------------------------------------
             /// Performs the heavy lifting for the 2 create methods
@@ -137,16 +137,16 @@ namespace CSBackend
             /// @param Completion delegate
             /// @param [Out] The output resource
             //-----------------------------------------------------------
-            void LoadImage(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource)
+            void LoadImage(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource)
             {
-                CSCore::FileStreamUPtr pImageFile = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_readBinary);
+                ChilliSource::FileStreamUPtr pImageFile = ChilliSource::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_readBinary);
                 
                 if(pImageFile == nullptr)
                 {
-                    out_resource->SetLoadState(CSCore::Resource::LoadState::k_failed);
+                    out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&) noexcept
                         {
                             in_delegate(out_resource);
                         });
@@ -157,14 +157,14 @@ namespace CSBackend
                 std::string abyData;
                 pImageFile->GetAll(abyData);
                 
-                CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "Image is too large. It cannot exceed " + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+                CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "Image is too large. It cannot exceed " + ChilliSource::ToString(std::numeric_limits<u32>::max()) + " bytes.");
                 u32 size = static_cast<u32>(abyData.size());
-                CreatePNGImageFromFile(abyData.data(), size, (CSCore::Image*)out_resource.get());
+                CreatePNGImageFromFile(abyData.data(), size, (ChilliSource::Image*)out_resource.get());
                 
-                out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+                out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)
                 {
-                    CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&) noexcept
                     {
                         in_delegate(out_resource);
                     });
@@ -174,15 +174,15 @@ namespace CSBackend
         CS_DEFINE_NAMEDTYPE(PNGImageProvider);
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool PNGImageProvider::IsA(CSCore::InterfaceIDType in_interaceId) const
+		bool PNGImageProvider::IsA(ChilliSource::InterfaceIDType in_interaceId) const
 		{
-			return (in_interaceId == CSCore::ResourceProvider::InterfaceID || in_interaceId == CSCore::PNGImageProvider::InterfaceID || in_interaceId == PNGImageProvider::InterfaceID);
+			return (in_interaceId == ChilliSource::ResourceProvider::InterfaceID || in_interaceId == ChilliSource::PNGImageProvider::InterfaceID || in_interaceId == PNGImageProvider::InterfaceID);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        CSCore::InterfaceIDType PNGImageProvider::GetResourceType() const
+        ChilliSource::InterfaceIDType PNGImageProvider::GetResourceType() const
         {
-            return CSCore::Image::InterfaceID;
+            return ChilliSource::Image::InterfaceID;
         }
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -192,15 +192,15 @@ namespace CSBackend
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void PNGImageProvider::CreateResourceFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceSPtr& out_resource)
+		void PNGImageProvider::CreateResourceFromFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceSPtr& out_resource)
 		{
             LoadImage(in_storageLocation, in_filePath, nullptr, out_resource);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        void PNGImageProvider::CreateResourceFromFileAsync(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource)
+        void PNGImageProvider::CreateResourceFromFileAsync(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource)
         {
-            CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_file, [=](const CSCore::TaskContext&) noexcept
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_file, [=](const ChilliSource::TaskContext&) noexcept
             {
                 LoadImage(in_storageLocation, in_filePath, in_delegate, out_resource);
             });

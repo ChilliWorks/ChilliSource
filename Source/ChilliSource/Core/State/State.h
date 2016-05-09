@@ -34,7 +34,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------------
     /// Manages the lifecycle of a user defined state. A state has its own
@@ -81,13 +81,13 @@ namespace CS
         ///
         /// @return A pointer to the UI canvas
         //----------------------------------------------------
-        UI::Canvas* GetUICanvas();
+        Canvas* GetUICanvas();
         //----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A const pointer to the UI canvas.
         //----------------------------------------------------
-        const UI::Canvas* GetUICanvas() const;
+        const Canvas* GetUICanvas() const;
         //----------------------------------------------------
         /// Searches the state systems and returns the first
         /// one that implements the named interface
@@ -331,7 +331,7 @@ namespace CS
         std::vector<StateSystemUPtr> m_systems;
         
         Scene* m_scene = nullptr;
-        UI::Canvas* m_canvas = nullptr;
+        Canvas* m_canvas = nullptr;
         bool m_canAddSystems = false;
         
         friend class StateManager;

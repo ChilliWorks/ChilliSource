@@ -38,7 +38,7 @@
 #include <limits>
 #include <atomic>
 
-namespace CS
+namespace ChilliSource
 {
     const u32 k_undefinedMaxResolution = std::numeric_limits<u32>::max();
     const f32 k_undefinedMaxDensity = std::numeric_limits<f32>::max();
@@ -248,27 +248,27 @@ namespace CS
         ///
         /// @return A pointer to the renderer.
         //-----------------------------------------------------
-        Rendering::Renderer* GetRenderer();
+        Renderer* GetRenderer();
         //-----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A const pointer to the renderer.
         //-----------------------------------------------------
-        const Rendering::Renderer* GetRenderer() const;
+        const Renderer* GetRenderer() const;
         //-----------------------------------------------------
         /// @author S Downie.
         ///
         /// @return A pointer to the platform specific render
         /// system
         //-----------------------------------------------------
-        Rendering::RenderSystem* GetRenderSystem();
+        RenderSystem* GetRenderSystem();
         //-----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A const pointer to the platform specific
         /// render system
         //-----------------------------------------------------
-        const Rendering::RenderSystem* GetRenderSystem() const;
+        const RenderSystem* GetRenderSystem() const;
         //-----------------------------------------------------
         /// @author I Copland
         ///
@@ -356,13 +356,13 @@ namespace CS
         ///
         /// @return A pointer to the widget factory system.
         //-----------------------------------------------------
-        UI::WidgetFactory* GetWidgetFactory();
+        WidgetFactory* GetWidgetFactory();
         //-----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A const pointer to the widget factory system.
         //-----------------------------------------------------
-        const UI::WidgetFactory* GetWidgetFactory() const;
+        const WidgetFactory* GetWidgetFactory() const;
         //----------------------------------------------------
         /// Initialises the application and kicks off the update
         /// loop. This should not be called by a users application.
@@ -522,14 +522,14 @@ namespace CS
         StateManager* m_stateManager = nullptr;
         TaskScheduler* m_taskScheduler = nullptr;
         Screen* m_screen = nullptr;
-        Rendering::Renderer* m_renderer = nullptr;
-        Rendering::RenderSystem* m_renderSystem = nullptr;
+        Renderer* m_renderer = nullptr;
+        RenderSystem* m_renderSystem = nullptr;
         PlatformSystem* m_platformSystem = nullptr;
         FileSystem* m_fileSystem = nullptr;
         TaggedFilePathResolver* m_taggedPathResolver = nullptr;
-        Input::PointerSystem* m_pointerSystem = nullptr;
+        PointerSystem* m_pointerSystem = nullptr;
         AppConfig* m_appConfig = nullptr;
-        UI::WidgetFactory* m_widgetFactory = nullptr;
+        WidgetFactory* m_widgetFactory = nullptr;
         
         std::atomic<u32> m_frameIndex;
         TimeIntervalSecs m_currentAppTime = 0;
@@ -629,6 +629,6 @@ namespace CS
 ///
 /// @return Instance of concrete CS application
 //--------------------------------------------------------
-CSCore::Application* CreateApplication();
+ChilliSource::Application* CreateApplication();
 
 #endif

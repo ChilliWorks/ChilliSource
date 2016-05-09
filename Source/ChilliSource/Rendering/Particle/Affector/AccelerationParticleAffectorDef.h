@@ -36,7 +36,7 @@
 
 #include <json/json.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// The definition for an acceleration particle affector. This describes 
@@ -62,7 +62,7 @@ namespace CS
         /// @param The property which describes the acceleration of a
         /// particle.
         //----------------------------------------------------------------
-        AccelerationParticleAffectorDef(ParticlePropertyUPtr<Core::Vector3> in_accelerationProperty);
+        AccelerationParticleAffectorDef(ParticlePropertyUPtr<Vector3> in_accelerationProperty);
         //----------------------------------------------------------------
         /// Constructor. Loads the params for the affector def from the 
         /// given param dictionary. If the async delegate is not null, then
@@ -89,7 +89,7 @@ namespace CS
         ///
         /// @return Whether or not the interface is implemented.
         //----------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------------
         /// Creates an instance of the particle affector described by this.
         ///
@@ -99,13 +99,13 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+        ParticleAffectorUPtr CreateInstance(dynamic_array<Particle>* in_particleArray) const override;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A property describing the acceleration.
         //----------------------------------------------------------------
-        const ParticleProperty<Core::Vector3>* GetAccelerationProperty() const;
+        const ParticleProperty<Vector3>* GetAccelerationProperty() const;
         //----------------------------------------------------------------
         /// Destructor
         ///
@@ -114,7 +114,7 @@ namespace CS
         virtual ~AccelerationParticleAffectorDef() {}
     private:
 
-        ParticlePropertyUPtr<Core::Vector3> m_accelerationProperty;
+        ParticlePropertyUPtr<Vector3> m_accelerationProperty;
     };
 }
 

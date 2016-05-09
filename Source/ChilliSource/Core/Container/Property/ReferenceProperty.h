@@ -31,7 +31,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/Property.h>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// A reference property. This does not contain a specific value for the
@@ -96,7 +96,7 @@ namespace CS
 //------------------------------------------------------------------------
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

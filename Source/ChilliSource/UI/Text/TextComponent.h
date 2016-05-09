@@ -43,7 +43,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// A component which can be added to a widget to provide text rendering
@@ -106,7 +106,7 @@ namespace CS
         ///
         /// @return The list of properties supported by text.
         //------------------------------------------------------------------------------
-        static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
+        static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not the component implements the interface
         /// associated with the given interface Id. Typically this won't be called
@@ -118,19 +118,19 @@ namespace CS
         ///
         /// @return Whether the object implements the given interface.
         //------------------------------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The font that will be used to render the text.
         //------------------------------------------------------------------------------
-        const Rendering::FontCSPtr& GetFont() const;
+        const FontCSPtr& GetFont() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The localised text resource that will be used to render text.
         //------------------------------------------------------------------------------
-        const Core::LocalisedTextCSPtr& GetLocalisedText() const;
+        const LocalisedTextCSPtr& GetLocalisedText() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -149,21 +149,21 @@ namespace CS
         ///
         /// @return The colour of the text.
         //------------------------------------------------------------------------------
-        const Core::Colour& GetTextColour() const;
+        const Colour& GetTextColour() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The horizontal justification of the text within the owning widget's
         /// bounds.
         //------------------------------------------------------------------------------
-        Rendering::HorizontalTextJustification GetHorizontalJustification() const;
+        HorizontalTextJustification GetHorizontalJustification() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The vertical justification of the text within the owning widget's
         /// bounds.
         //------------------------------------------------------------------------------
-        Rendering::VerticalTextJustification GetVerticalJustification() const;
+        VerticalTextJustification GetVerticalJustification() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -220,7 +220,7 @@ namespace CS
         ///
         /// @param The font.
         //------------------------------------------------------------------------------
-        void SetFont(const Rendering::FontCSPtr& in_font);
+        void SetFont(const FontCSPtr& in_font);
         //------------------------------------------------------------------------------
         /// Sets the localised text that should be used to render text. A valid
         /// localised text id should also be set.
@@ -229,7 +229,7 @@ namespace CS
         ///
         /// @param The localised text resource.
         //------------------------------------------------------------------------------
-        void SetLocalisedText(const Core::LocalisedTextCSPtr& in_localisedText);
+        void SetLocalisedText(const LocalisedTextCSPtr& in_localisedText);
         //------------------------------------------------------------------------------
         /// The Id of the entry in the localised text resource that should be used to
         /// render text.
@@ -260,7 +260,7 @@ namespace CS
         /// @param The image data dictionary which contains the values which should be
         /// used for each image in the string.
         //------------------------------------------------------------------------------
-        void SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData = TextIconDictionary());
+        void SetLocalisedTextId(const std::string& in_localisedTextId, const ParamDictionary& in_params, const TextIconDictionary& in_imageData = TextIconDictionary());
         //------------------------------------------------------------------------------
         /// Directly sets the text that will be rendered. This is not recommended,
         /// usually is it better to set the text using a localised text resource.
@@ -293,7 +293,7 @@ namespace CS
         ///
         /// @param The colour.
         //------------------------------------------------------------------------------
-        void SetTextColour(const Core::Colour& in_textColour);
+        void SetTextColour(const Colour& in_textColour);
         //------------------------------------------------------------------------------
         /// Sets the horizontal justification of the text within the owning widget's
         /// bounds.
@@ -302,7 +302,7 @@ namespace CS
         ///
         /// @param The justfication.
         //------------------------------------------------------------------------------
-        void SetHorizontalJustification(Rendering::HorizontalTextJustification in_horizontalJustification);
+        void SetHorizontalJustification(HorizontalTextJustification in_horizontalJustification);
         //------------------------------------------------------------------------------
         /// Sets the vertical justification of the text within the owning widget's
         /// bounds.
@@ -311,7 +311,7 @@ namespace CS
         ///
         /// @param The justification.
         //------------------------------------------------------------------------------
-        void SetVerticalJustification(Rendering::VerticalTextJustification in_verticalJustification);
+        void SetVerticalJustification(VerticalTextJustification in_verticalJustification);
         //------------------------------------------------------------------------------
         /// Sets the absolute pixel offset to the standard character spacing. This is
         /// used to increase of reduce the space between characters in the rendered text.
@@ -403,10 +403,10 @@ namespace CS
         //------------------------------------------------------------------------------
         struct TextIconCachedData final
         {
-            CSRendering::TextureCSPtr m_texture;
-            Core::Vector2 m_size;
-            Core::Vector2 m_offset;
-            Rendering::UVs m_uvs;
+            TextureCSPtr m_texture;
+            Vector2 m_size;
+            Vector2 m_offset;
+            UVs m_uvs;
         };
         //------------------------------------------------------------------------------
         /// Inserts variables into the given string with the values using basic markup.
@@ -430,7 +430,7 @@ namespace CS
         /// @param in_imageData - The image data dictionary which contains the values
         /// which should be used for each image in the string.
         //------------------------------------------------------------------------------
-        void ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData);
+        void ReplaceVariables(const std::string& in_text, const ParamDictionary& in_params, const TextIconDictionary& in_imageData);
         //------------------------------------------------------------------------------
         /// Adds the icon described by the [img] tag to the Text Icon Indices list. Also
         /// makes space in the rendered text string for the icon.
@@ -447,8 +447,8 @@ namespace CS
         ///
         /// @return The text replacement for the icon.
         //------------------------------------------------------------------------------
-        static std::string AddIcon(const Rendering::FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Rendering::Font::CharacterInfo& in_spaceInfo,
-                                   const Rendering::Font::CharacterInfo& in_markerInfo, u32& out_index, std::vector<TextIconIndex>& out_iconIndices);
+        static std::string AddIcon(const FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Font::CharacterInfo& in_spaceInfo,
+                                   const Font::CharacterInfo& in_markerInfo, u32& out_index, std::vector<TextIconIndex>& out_iconIndices);
         //------------------------------------------------------------------------------
         /// Builds the cachable Icon data from the list of icon indicies.
         ///
@@ -462,7 +462,7 @@ namespace CS
         ///
         /// @return The vector of cachable icon data.
         //------------------------------------------------------------------------------
-        static std::vector<TextIconCachedData> BuildIcons(const Rendering::FontCSPtr& in_font, const Rendering::CanvasRenderer::BuiltText& in_builtText, const std::vector<TextIconIndex>& in_iconIndices, f32 in_textScale);
+        static std::vector<TextIconCachedData> BuildIcons(const FontCSPtr& in_font, const CanvasRenderer::BuiltText& in_builtText, const std::vector<TextIconIndex>& in_iconIndices, f32 in_textScale);
         //------------------------------------------------------------------------------
         /// Constructor that builds the text from key-value properties. The properties
         /// used to create the text are described in the class documentation.
@@ -472,7 +472,7 @@ namespace CS
         /// @param The component name.
         /// @param The property map.
         //------------------------------------------------------------------------------
-        TextComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+        TextComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //------------------------------------------------------------------------------
         /// Render the text using the transform and size of the owning widget.
         ///
@@ -483,22 +483,22 @@ namespace CS
         /// @param The final screen space size.
         /// @param The final colour.
         //-------------------------------------------------------------------------------
-        void OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
+        void OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
         
-        Rendering::FontCSPtr m_font;
-        Core::LocalisedTextCSPtr m_localisedText;
+        FontCSPtr m_font;
+        LocalisedTextCSPtr m_localisedText;
         std::string m_localisedTextId;
         std::string m_text;
-        Rendering::CanvasRenderer::TextProperties m_textProperties;
-        Core::Colour m_textColour;
+        CanvasRenderer::TextProperties m_textProperties;
+        Colour m_textColour;
         std::vector<TextIconIndex> m_iconIndices;
         
         bool m_invalidateCache = true;
-        Core::Vector2 m_cachedSize;
-        Rendering::CanvasRenderer::BuiltText m_cachedText;
+        Vector2 m_cachedSize;
+        CanvasRenderer::BuiltText m_cachedText;
         std::vector<TextIconCachedData> m_cachedIcons;
         
-        CSCore::StringMarkupParser m_markupParser;
+        StringMarkupParser m_markupParser;
     };
 }
 

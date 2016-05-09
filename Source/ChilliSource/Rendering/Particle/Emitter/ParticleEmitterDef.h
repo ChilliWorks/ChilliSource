@@ -38,7 +38,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// A particle emitter def describes the properties that should be used 
@@ -69,7 +69,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //-----------------------------------------------------------------------
-    class ParticleEmitterDef : public Core::QueryableInterface
+    class ParticleEmitterDef : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleEmitterDef);
@@ -134,7 +134,7 @@ namespace CS
         ///
         /// @return the instance.
         //----------------------------------------------------------------
-        virtual ParticleEmitterUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const = 0;
+        virtual ParticleEmitterUPtr CreateInstance(dynamic_array<Particle>* in_particleArray) const = 0;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///

@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Input/Gesture/GestureSystem.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Gesture);
     //-------------------------------------------------------

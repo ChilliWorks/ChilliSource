@@ -53,20 +53,20 @@ namespace CSBackend
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool DialogueBoxSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        bool DialogueBoxSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
-            return (DialogueBoxSystem::InterfaceID == in_interfaceId || CSCore::DialogueBoxSystem::InterfaceID == in_interfaceId);
+            return (DialogueBoxSystem::InterfaceID == in_interfaceId || ChilliSource::DialogueBoxSystem::InterfaceID == in_interfaceId);
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
+        void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
         	m_dialogueBoxJI->ShowSystemDialogue(in_id, in_title, in_message, in_confirm);
             m_activeSysConfirmDelegate = in_delegate;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
+        void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
         	m_dialogueBoxJI->ShowSystemConfirmDialogue(in_id, in_title, in_message, in_confirm, in_cancel);
             m_activeSysConfirmDelegate = in_delegate;
@@ -79,7 +79,7 @@ namespace CSBackend
         }
         //------------------------------------------------------
         //------------------------------------------------------
-        void DialogueBoxSystem::OnSystemConfirmDialogueResult(u32 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result)
+        void DialogueBoxSystem::OnSystemConfirmDialogueResult(u32 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result)
         {
             if(m_activeSysConfirmDelegate)
         	{

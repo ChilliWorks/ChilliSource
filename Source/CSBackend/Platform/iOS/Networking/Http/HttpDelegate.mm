@@ -102,7 +102,7 @@
         if(currentSize + appendSize >= m_maxBufferSize)
         {
             std::string data(reinterpret_cast<const s8*>([m_data bytes]), (s32)[m_data length]);
-            m_flushedDelegate(CSNetworking::HttpResponse::Result::k_flushed, m_responseCode, data);
+            m_flushedDelegate(ChilliSource::HttpResponse::Result::k_flushed, m_responseCode, data);
             
             [m_data setLength:0];
         }
@@ -125,7 +125,7 @@
     [m_data release];
     m_data = nil;
     
-    m_completeDelegate(CSNetworking::HttpResponse::Result::k_completed, m_responseCode, data);
+    m_completeDelegate(ChilliSource::HttpResponse::Result::k_completed, m_responseCode, data);
 }
 //-----------------------------------------------------------------------------
 /// Called if a connection fails.
@@ -140,7 +140,7 @@
     std::string errorMessage = [NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]];
     CS_LOG_VERBOSE("HTTP Request error: " + errorMessage);
 
-    m_completeDelegate(CSNetworking::HttpResponse::Result::k_failed, m_responseCode, "");
+    m_completeDelegate(ChilliSource::HttpResponse::Result::k_failed, m_responseCode, "");
 }
 //-----------------------------------------------------------------------------
 /// Called to check how a response should be cached. We don't want to cache

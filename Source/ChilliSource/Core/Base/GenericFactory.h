@@ -38,7 +38,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A generic factory for creating concrete instances of an abstract class
@@ -52,7 +52,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    template <typename TAbstractType> class GenericFactory : public Core::AppSystem
+    template <typename TAbstractType> class GenericFactory : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(GenericFactory);
@@ -186,8 +186,8 @@ namespace CS
     //-----------------------------------------------------------------
     template <typename TAbstractType> template <typename TConcreteType> void GenericFactory<TAbstractType>::Register(const std::string& in_typeName)
     {
-        m_creatorDelegateMap.insert(std::make_pair(in_typeName, Core::MakeDelegate(this, &GenericFactory<TAbstractType>::CreateInstance<TConcreteType>)));
-        m_creatorAsyncDelegateMap.insert(std::make_pair(in_typeName, Core::MakeDelegate(this, &GenericFactory<TAbstractType>::CreateInstanceAsync<TConcreteType>)));
+        m_creatorDelegateMap.insert(std::make_pair(in_typeName, MakeDelegate(this, &GenericFactory<TAbstractType>::CreateInstance<TConcreteType>)));
+        m_creatorAsyncDelegateMap.insert(std::make_pair(in_typeName, MakeDelegate(this, &GenericFactory<TAbstractType>::CreateInstanceAsync<TConcreteType>)));
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

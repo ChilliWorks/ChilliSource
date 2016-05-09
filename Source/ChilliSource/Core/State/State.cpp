@@ -34,7 +34,7 @@
 #include <ChilliSource/Input/Gesture/GestureSystem.h>
 #include <ChilliSource/UI/Base/Canvas.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------
     //-----------------------------------------
@@ -44,8 +44,8 @@ namespace CS
         
         //Create the default systems
         m_scene = CreateSystem<Scene>();
-        m_canvas = CreateSystem<UI::Canvas>();
-        CreateSystem<CSInput::GestureSystem>();
+        m_canvas = CreateSystem<Canvas>();
+        CreateSystem<GestureSystem>();
         
         //create user systems.
         CreateSystems();
@@ -173,13 +173,13 @@ namespace CS
     }
     //------------------------------------------
     //------------------------------------------
-    UI::Canvas* State::GetUICanvas()
+    Canvas* State::GetUICanvas()
     {
         return m_canvas;
     }
     //------------------------------------------
     //------------------------------------------
-    const UI::Canvas* State::GetUICanvas() const
+    const Canvas* State::GetUICanvas() const
     {
         return m_canvas;
     }

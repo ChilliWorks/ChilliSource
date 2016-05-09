@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-namespace CS
+namespace ChilliSource
 {
     const Colour Colour::k_white(1.0f,1.0f,1.0f,1.0f);
     const Colour Colour::k_transparent(0.0f,0.0f,0.0f,0.0f);

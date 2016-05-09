@@ -51,10 +51,10 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     //---Matrix caches
-    Core::Matrix4 Renderer::matViewProjCache;
+    Matrix4 Renderer::matViewProjCache;
 
     typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
 
@@ -74,7 +74,7 @@ namespace CS
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool Renderer::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool Renderer::IsA(InterfaceIDType in_interfaceId) const
     {
         return (Renderer::InterfaceID == in_interfaceId);
     }
@@ -82,7 +82,7 @@ namespace CS
     //----------------------------------------------------------
     void Renderer::OnInit()
     {
-        m_canvas = Core::Application::Get()->GetSystem<CanvasRenderer>();
+        m_canvas = Application::Get()->GetSystem<CanvasRenderer>();
         CS_ASSERT(m_canvas != nullptr, "Renderer cannot have null canvas renderer");
 
         mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
@@ -91,7 +91,7 @@ namespace CS
         mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
         mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
 
-        auto materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
+        auto materialFactory = Application::Get()->GetSystem<MaterialFactory>();
         m_staticDirShadowMaterial = materialFactory->CreateStaticDirectionalShadowMap("_StaticDirShadowMap");
         m_animDirShadowMaterial = materialFactory->CreateAnimatedDirectionalShadowMap("_AnimDirShadowMap");
     }
@@ -133,14 +133,14 @@ namespace CS
     //----------------------------------------------------------
     /// Render To Screen
     //----------------------------------------------------------
-    void Renderer::RenderToScreen(Core::Scene* inpScene, UI::Canvas* in_canvas)
+    void Renderer::RenderToScreen(Scene* inpScene, Canvas* in_canvas)
     {
         RenderSceneToTarget(inpScene, in_canvas, nullptr);
     }
     //----------------------------------------------------------
     /// Render To Texture
     //----------------------------------------------------------
-    void Renderer::RenderToTexture(Core::Scene* inpScene, UI::Canvas* in_canvas, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
+    void Renderer::RenderToTexture(Scene* inpScene, Canvas* in_canvas, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
     {
         //get the width and height
         u32 udwWidth = 1;
@@ -164,7 +164,7 @@ namespace CS
     //----------------------------------------------------------
     /// Render Scene To Target
     //----------------------------------------------------------
-    void Renderer::RenderSceneToTarget(Core::Scene* inpScene, UI::Canvas* in_canvas, RenderTarget* inpRenderTarget)
+    void Renderer::RenderSceneToTarget(Scene* inpScene, Canvas* in_canvas, RenderTarget* inpRenderTarget)
     {
         //TODO: Remove old UI render code
         //Traverse the scene graph and get all renderable objects
@@ -274,7 +274,7 @@ namespace CS
     //----------------------------------------------------------
     /// Find Renderable Objects In Scene
     //----------------------------------------------------------
-    void Renderer::FindRenderableObjectsInScene(Core::Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
+    void Renderer::FindRenderableObjectsInScene(Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
                                       std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const
     {
         static std::vector<LightComponent*> aLightComponentCache;
@@ -332,7 +332,7 @@ namespace CS
         if(pOpaqueSort)
         {
             pOpaqueSort->PrepareForSort(&inaRenderables);
-            std::sort(inaRenderables.begin(), inaRenderables.end(), Core::MakeDelegate(pOpaqueSort.get(), &RendererSortPredicate::SortItem));
+            std::sort(inaRenderables.begin(), inaRenderables.end(), MakeDelegate(pOpaqueSort.get(), &RendererSortPredicate::SortItem));
         }
     }
     //----------------------------------------------------------
@@ -349,7 +349,7 @@ namespace CS
         if(pTransparentSort)
         {
             pTransparentSort->PrepareForSort(&inaRenderables);
-            std::sort(inaRenderables.begin(), inaRenderables.end(), Core::MakeDelegate(pTransparentSort.get(), &RendererSortPredicate::SortItem));
+            std::sort(inaRenderables.begin(), inaRenderables.end(), MakeDelegate(pTransparentSort.get(), &RendererSortPredicate::SortItem));
         }
     }
     //----------------------------------------------------------
@@ -411,9 +411,9 @@ namespace CS
     //----------------------------------------------------------
     /// Render UI
     //----------------------------------------------------------
-    void Renderer::RenderUI(UI::Canvas* in_canvas, const Core::Colour& in_clearColour)
+    void Renderer::RenderUI(Canvas* in_canvas, const Colour& in_clearColour)
     {
-        mpRenderSystem->ApplyCamera(Core::Vector3::k_zero, Core::Matrix4::k_identity, CreateOverlayProjection(in_canvas->GetSize()), in_clearColour);
+        mpRenderSystem->ApplyCamera(Vector3::k_zero, Matrix4::k_identity, CreateOverlayProjection(in_canvas->GetSize()), in_clearColour);
         m_canvas->Render(in_canvas);
     }
     //----------------------------------------------------------
@@ -455,13 +455,13 @@ namespace CS
         //Reserve estimated space
         outaRenderCache.reserve(inaRenderCache.size());
 
-        Core::Sphere aLightSphere;
+        Sphere aLightSphere;
         aLightSphere.vOrigin = inpLightComponent->GetWorldPosition();
         aLightSphere.fRadius = inpLightComponent->GetRangeOfInfluence();
 
         for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
         {
-            if(Core::ShapeIntersection::Intersects(aLightSphere, (*it)->GetBoundingSphere()) == true)
+            if(ShapeIntersection::Intersects(aLightSphere, (*it)->GetBoundingSphere()) == true)
             {
                 outaRenderCache.push_back(*it);
             }
@@ -502,12 +502,12 @@ namespace CS
     //----------------------------------------------------------
     /// Create Overlay Projection
     //----------------------------------------------------------
-    Core::Matrix4 Renderer::CreateOverlayProjection(const Core::Vector2& in_size) const
+    Matrix4 Renderer::CreateOverlayProjection(const Vector2& in_size) const
     {
         const f32 kfOverlayNear = 1.0f;
         const f32 kfOverlayFar = 5.0f;
 
-        return Core::Matrix4::CreateOrthographicProjectionLH(0, in_size.x, 0, in_size.y, kfOverlayNear, kfOverlayFar);
+        return Matrix4::CreateOrthographicProjectionLH(0, in_size.x, 0, in_size.y, kfOverlayNear, kfOverlayFar);
     }
     //------------------------------------------------
     //------------------------------------------------

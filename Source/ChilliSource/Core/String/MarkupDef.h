@@ -33,7 +33,7 @@
 
 #include <unordered_map>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Defines the markups

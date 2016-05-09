@@ -31,7 +31,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------
     /// Reverse iterator for the concurrent vector class that is read only

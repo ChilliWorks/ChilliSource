@@ -30,7 +30,7 @@
 
 #include <algorithm>
 
-namespace CS
+namespace ChilliSource
 {
     //----------------------------------------------------------------
     /// Constructor
@@ -49,20 +49,20 @@ namespace CS
     /// @param Look target
     /// @param Up direction
     //----------------------------------------------------------
-    void Transform::SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp)
+    void Transform::SetLookAt(const Vector3& invPos, const Vector3& invTarget, const Vector3& invUp)
     {
-        Core::Vector3 vUp(invUp);
+        Vector3 vUp(invUp);
         
-        Core::Vector3 vForward(invTarget - invPos);
+        Vector3 vForward(invTarget - invPos);
         vForward.Normalise();
         
-        Core::Vector3 vRight(Vector3::CrossProduct(vUp, vForward));
-        vUp = Core::Vector3::CrossProduct(vForward, vRight);
+        Vector3 vRight(Vector3::CrossProduct(vUp, vForward));
+        vUp = Vector3::CrossProduct(vForward, vRight);
         
         vUp.Normalise();
         vRight.Normalise();
         
-        Core::Quaternion cRot(vRight, vUp, vForward);
+        Quaternion cRot(vRight, vUp, vForward);
         cRot.Normalise();
         
         SetPositionScaleOrientation(invPos, mvScale, cRot);
@@ -180,7 +180,7 @@ namespace CS
     {
         if(mpParentTransform)
         {
-            mqWorldOrientation = Core::Quaternion(GetWorldTransform());
+            mqWorldOrientation = Quaternion(GetWorldTransform());
             return mqWorldOrientation;
         }
         
@@ -478,7 +478,7 @@ namespace CS
         //Change the local transform to match the given world matrix
         if (mpParentTransform)
         {
-            mmatTransform = inmatTransform * CSCore::Matrix4::Inverse(mpParentTransform->GetWorldTransform());
+            mmatTransform = inmatTransform * Matrix4::Inverse(mpParentTransform->GetWorldTransform());
         }
         else
         {

@@ -36,7 +36,7 @@
 #include <random>
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //-----------------------------------------------------------------------
     /// The base class for all particle emitters. Particle emitters are 
@@ -60,7 +60,7 @@ namespace CS
         /// @param The particle emitter definition.
         /// @param The particle array.
         //----------------------------------------------------------------
-        ParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+        ParticleEmitter(const ParticleEmitterDef* in_particleEmitter, dynamic_array<Particle>* in_particleArray);
         //----------------------------------------------------------------
         /// Tries to emit new particles if required. This will be called 
         /// as part of a background task.
@@ -76,7 +76,7 @@ namespace CS
         ///
         /// @return The list of newly emitted particle indices.
         //----------------------------------------------------------------
-        std::vector<u32> TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation, bool in_interpolateEmission);
+        std::vector<u32> TryEmit(f32 in_playbackTime, const Vector3& in_emitterPosition, const Vector3& in_emitterScale, const Quaternion& in_emitterOrientation, bool in_interpolateEmission);
         //----------------------------------------------------------------
         /// Destructor.
         ///
@@ -101,7 +101,7 @@ namespace CS
         /// @param [Out] The generated position in local space.
         /// @param [Out] The generate direction in local space.
         //----------------------------------------------------------------
-        virtual void GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) = 0;
+        virtual void GenerateEmission(f32 in_normalisedEmissionTime, Vector3& out_position, Vector3& out_direction) = 0;
     private:
         //----------------------------------------------------------------
         /// Tries to emit new particles in stream mode.
@@ -113,7 +113,7 @@ namespace CS
         /// @param The current world space scale of the emitter.
         /// @param The current world space orientation of the emitter.
         //----------------------------------------------------------------
-        std::vector<u32> TryEmitStream(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
+        std::vector<u32> TryEmitStream(f32 in_playbackTime, const Vector3& in_emitterPosition, const Vector3& in_emitterScale, const Quaternion& in_emitterOrientation);
         //----------------------------------------------------------------
         /// Tries to emit new particles in burst mode.
         ///
@@ -124,7 +124,7 @@ namespace CS
         /// @param The current world space scale of the emitter.
         /// @param The current world space orientation of the emitter.
         //----------------------------------------------------------------
-        std::vector<u32> TryEmitBurst(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
+        std::vector<u32> TryEmitBurst(f32 in_playbackTime, const Vector3& in_emitterPosition, const Vector3& in_emitterScale, const Quaternion& in_emitterOrientation);
         //----------------------------------------------------------------
         /// Emits a new particle if the next particle in the list is free
         /// to be emitted. 
@@ -143,14 +143,14 @@ namespace CS
         ///
         /// @param The index of the emitted particle. 
         //----------------------------------------------------------------
-        void Emit(f32 in_normalisedEmissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation, std::vector<u32>& inout_emittedParticles);
+        void Emit(f32 in_normalisedEmissionTime, const Vector3& in_emissionPosition, const Vector3& in_emissionScale, const Quaternion& in_emissionOrientation, std::vector<u32>& inout_emittedParticles);
 
         const ParticleEmitterDef* m_emitterDef = nullptr;
-        Core::dynamic_array<Particle>* m_particleArray = nullptr;
+        dynamic_array<Particle>* m_particleArray = nullptr;
 
-        Core::Vector3 m_emissionPosition;
-        Core::Vector3 m_emissionScale;
-        Core::Quaternion m_emissionOrientation;
+        Vector3 m_emissionPosition;
+        Vector3 m_emissionScale;
+        Quaternion m_emissionOrientation;
         f32 m_emissionTime = 0.0f;
         bool m_hasEmitted = false;
         u32 m_nextParticleIndex = 0;

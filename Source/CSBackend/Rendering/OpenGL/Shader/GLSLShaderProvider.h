@@ -43,7 +43,7 @@ namespace CSBackend
         ///
         /// @author S Downie
         //----------------------------------------------------------
-		class GLSLShaderProvider final : public CSCore::ResourceProvider
+		class GLSLShaderProvider final : public ChilliSource::ResourceProvider
 		{
 		public:
             
@@ -64,13 +64,13 @@ namespace CSBackend
             ///
 			/// @return Whether the object implements the given interface
 			//-------------------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The type of resource loaded by this provider
 			//----------------------------------------------------------------------------
-            CSCore::InterfaceIDType GetResourceType() const override;
+            ChilliSource::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -98,7 +98,7 @@ namespace CSBackend
             /// @param Options to customise the creation
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFile(ChilliSource::StorageLocation in_location, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceSPtr& out_resource) override;
             //----------------------------------------------------------------------------
 			/// Load the shader from the external file into a resource on a background
             /// thread. Delegate is called when the load is complete. Check resource
@@ -112,7 +112,7 @@ namespace CSBackend
             /// @param Completion delegate
 			/// @param [Out] Resource object
 			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(ChilliSource::StorageLocation in_location, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource) override;
 		};
 	}
 }

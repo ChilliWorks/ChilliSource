@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace CS
+namespace ChilliSource
 {
     //---------------------------------------------------------------
     /// Inherit from this class when you wish to implement

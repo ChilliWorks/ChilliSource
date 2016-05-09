@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace CS
+namespace ChilliSource
 {
     namespace
     {
@@ -130,7 +130,7 @@ namespace CS
             
             if(in_delegate != nullptr)
             {
-                Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
                 {
                     in_delegate(out_resource);
                 });

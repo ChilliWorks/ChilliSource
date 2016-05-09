@@ -28,7 +28,7 @@
 
 #include <ChilliSource/UI/Drawable/Drawable.h>
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Drawable);
 }

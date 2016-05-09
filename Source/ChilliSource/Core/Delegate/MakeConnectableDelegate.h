@@ -33,7 +33,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------
     /// Constructs a connectable delegate to a free function with a signature that

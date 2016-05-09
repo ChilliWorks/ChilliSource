@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace CS
+namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     /// Allows playback of a single peice of audio. This can play both audio streams
@@ -107,7 +107,7 @@ namespace CS
         /// @param The file path of the stream. If the stream doesn't exist the app is
         /// considered to be in an irrecoverable state and will terminate.
         //------------------------------------------------------------------------------
-        static CkSoundUPtr CreateFromStream(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
+        static CkSoundUPtr CreateFromStream(StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -236,7 +236,7 @@ namespace CS
         /// @param The file path of the stream. If the stream doesn't exist the app is
         /// considered to be in an irrecoverable state and will terminate.
         //------------------------------------------------------------------------------
-        CkSound(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
+        CkSound(StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
         //------------------------------------------------------------------------------
         /// Updates the playback state of the CkSound based on the current state of the
         /// underlying CkSound. This should only be called by CricketAudioSystem.

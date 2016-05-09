@@ -34,14 +34,14 @@
 #include <ChilliSource/Core/Resource/IResourceOptions.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Custom options for loading a texture
     ///
     /// @author S Downie
     //-------------------------------------------------------
-    class TextureResourceOptions final : public Core::IResourceOptions<Rendering::Texture>
+    class TextureResourceOptions final : public IResourceOptions<Texture>
     {
     public:
         //-------------------------------------------------------

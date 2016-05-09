@@ -46,7 +46,7 @@
 #include <CSBackend/Platform/Windows/Input/Pointer/PointerSystem.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(PointerSystem);
     //------------------------------------------------------------------------------
@@ -71,67 +71,67 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerAddedDelegate>& PointerSystem::GetPointerAddedEvent()
+    IConnectableEvent<PointerSystem::PointerAddedDelegate>& PointerSystem::GetPointerAddedEvent()
     {
         return m_pointerAddedEvent;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerDownDelegate>& PointerSystem::GetPointerDownEvent()
+    IConnectableEvent<PointerSystem::PointerDownDelegate>& PointerSystem::GetPointerDownEvent()
     {
         return m_pointerDownEvent;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerMovedDelegate>& PointerSystem::GetPointerMovedEvent()
+    IConnectableEvent<PointerSystem::PointerMovedDelegate>& PointerSystem::GetPointerMovedEvent()
     {
         return m_pointerMovedEvent;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerUpDelegate>& PointerSystem::GetPointerUpEvent()
+    IConnectableEvent<PointerSystem::PointerUpDelegate>& PointerSystem::GetPointerUpEvent()
     {
         return m_pointerUpEvent;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEvent()
+    IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEvent()
     {
         return m_pointerScrolledEvent;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerDownDelegate>& PointerSystem::GetPointerDownEventFiltered()
+    IConnectableEvent<PointerSystem::PointerDownDelegate>& PointerSystem::GetPointerDownEventFiltered()
     {
         return m_pointerDownEventFiltered;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerUpDelegate>& PointerSystem::GetPointerUpEventFiltered()
+    IConnectableEvent<PointerSystem::PointerUpDelegate>& PointerSystem::GetPointerUpEventFiltered()
     {
         return m_pointerUpEventFiltered;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEventFiltered()
+    IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEventFiltered()
     {
         return m_pointerScrolledEventFiltered;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerDownDelegateInternal>& PointerSystem::GetPointerDownEventInternal()
+    IConnectableEvent<PointerSystem::PointerDownDelegateInternal>& PointerSystem::GetPointerDownEventInternal()
     {
         return m_pointerDownEventInternal;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerScrollDelegateInternal>& PointerSystem::GetPointerScrollEventInternal()
+    IConnectableEvent<PointerSystem::PointerScrollDelegateInternal>& PointerSystem::GetPointerScrollEventInternal()
     {
         return m_pointerScrolledEventInternal;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Core::IConnectableEvent<PointerSystem::PointerRemovedDelegate>& PointerSystem::GetPointerRemovedEvent()
+    IConnectableEvent<PointerSystem::PointerRemovedDelegate>& PointerSystem::GetPointerRemovedEvent()
     {
         return m_pointerRemovedEvent;
     }
@@ -217,7 +217,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Pointer::Id PointerSystem::AddPointerCreateEvent(const Core::Vector2& in_position)
+    Pointer::Id PointerSystem::AddPointerCreateEvent(const Vector2& in_position)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         
@@ -242,14 +242,14 @@ namespace CS
         event.m_type = PointerEventType::k_down;
         event.m_pointerUniqueId = in_pointerUniqueId;
         event.m_InputType = in_inputType;
-        event.m_position = Core::Vector2::k_zero;
-        event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
+        event.m_position = Vector2::k_zero;
+        event.m_timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
         
         m_eventQueue.push(event);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void PointerSystem::AddPointerMovedEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_position)
+    void PointerSystem::AddPointerMovedEvent(Pointer::Id in_pointerUniqueId, const Vector2& in_position)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         
@@ -258,7 +258,7 @@ namespace CS
         event.m_pointerUniqueId = in_pointerUniqueId;
         event.m_InputType = Pointer::InputType::k_none;
         event.m_position = in_position;
-        event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
+        event.m_timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
         
         m_eventQueue.push(event);
     }
@@ -272,14 +272,14 @@ namespace CS
         event.m_type = PointerEventType::k_up;
         event.m_pointerUniqueId = in_pointerUniqueId;
         event.m_InputType = in_inputType;
-        event.m_position = Core::Vector2::k_zero;
-        event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
+        event.m_position = Vector2::k_zero;
+        event.m_timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
         
         m_eventQueue.push(event);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void PointerSystem::AddPointerScrollEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_delta)
+    void PointerSystem::AddPointerScrollEvent(Pointer::Id in_pointerUniqueId, const Vector2& in_delta)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         
@@ -287,7 +287,7 @@ namespace CS
         event.m_type = PointerEventType::k_scroll;
         event.m_pointerUniqueId = in_pointerUniqueId;
         event.m_InputType = Pointer::InputType::k_none;
-        event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
+        event.m_timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
         event.m_position = in_delta;
         
         m_eventQueue.push(event);
@@ -302,7 +302,7 @@ namespace CS
         event.m_type = PointerEventType::k_remove;
         event.m_pointerUniqueId = in_pointerUniqueId;
         event.m_InputType = Pointer::InputType::k_none;
-        event.m_position = Core::Vector2::k_zero;
+        event.m_position = Vector2::k_zero;
         event.m_timestamp = 0.0;
         
         m_eventQueue.push(event);
@@ -324,7 +324,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
-    void PointerSystem::CreatePointer(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_initialPosition)
+    void PointerSystem::CreatePointer(Pointer::Id in_uniqueId, f64 in_timestamp, const Vector2& in_initialPosition)
     {
         //Find the first free index
         u32 index = 0;
@@ -402,7 +402,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
-    void PointerSystem::PointerMoved(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition)
+    void PointerSystem::PointerMoved(Pointer::Id in_uniqueId, f64 in_timestamp, const Vector2& in_newPosition)
     {
         auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
         {
@@ -461,7 +461,7 @@ namespace CS
     }
     //------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
-    void PointerSystem::PointerScrolled(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_delta)
+    void PointerSystem::PointerScrolled(Pointer::Id in_uniqueId, f64 in_timestamp, const Vector2& in_delta)
     {
         auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
         {

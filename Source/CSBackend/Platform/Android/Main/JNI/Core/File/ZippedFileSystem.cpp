@@ -77,13 +77,13 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        CSCore::FileStreamUPtr ZippedFileSystem::CreateFileStream(const std::string& in_filePath, CSCore::FileMode in_fileMode) const
+        ChilliSource::FileStreamUPtr ZippedFileSystem::CreateFileStream(const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const
         {
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
             //Get the manifest item describing the location of the file within the zip.
             ManifestItem item;
-            if (TryGetManifestItem(CSCore::StringUtils::StandardiseFilePath(in_filePath), item) == false)
+            if (TryGetManifestItem(ChilliSource::StringUtils::StandardiseFilePath(in_filePath), item) == false)
             {
                 return nullptr;
             }
@@ -97,7 +97,7 @@ namespace CSBackend
             //read the contents of the zip file.
             std::unique_lock<std::mutex> lock(m_mutex);
 
-            CSCore::FileStreamUPtr output;
+            ChilliSource::FileStreamUPtr output;
 
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)
@@ -122,7 +122,7 @@ namespace CSBackend
 
             std::unique_ptr<u8[]> buffer(new u8[info.uncompressed_size]);
             unzReadCurrentFile(unzipper, (voidp)buffer.get(), info.uncompressed_size);
-            output = CSCore::FileStreamUPtr(new VirtualFileStream(std::move(buffer), info.uncompressed_size, in_fileMode));
+            output = ChilliSource::FileStreamUPtr(new VirtualFileStream(std::move(buffer), info.uncompressed_size, in_fileMode));
             if (output->IsValid() == false)
             {
                 output = nullptr;
@@ -151,7 +151,7 @@ namespace CSBackend
             unz_file_info info;
             for (const auto& unstandardisedFilePath : in_filePaths)
             {
-                auto filePath = CSCore::StringUtils::StandardiseFilePath(unstandardisedFilePath);
+                auto filePath = ChilliSource::StringUtils::StandardiseFilePath(unstandardisedFilePath);
                 if (TryGetManifestItem(filePath, item) == false)
                 {
                     success = false;
@@ -202,7 +202,7 @@ namespace CSBackend
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
             ManifestItem item;
-            if (TryGetManifestItem(CSCore::StringUtils::StandardiseFilePath(in_filePath), item) == true)
+            if (TryGetManifestItem(ChilliSource::StringUtils::StandardiseFilePath(in_filePath), item) == true)
             {
                 if (item.m_isFile == true)
                 {
@@ -219,7 +219,7 @@ namespace CSBackend
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
             ManifestItem item;
-            if (TryGetManifestItem(CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), item) == true)
+            if (TryGetManifestItem(ChilliSource::StringUtils::StandardiseDirectoryPath(in_directoryPath), item) == true)
             {
                 if (item.m_isFile == false)
                 {
@@ -236,10 +236,10 @@ namespace CSBackend
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
             std::vector<std::string> output;
-            auto directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+            auto directoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(in_directoryPath);
             for (const auto& item : m_manifestItems)
             {
-                if (item.m_isFile == true && CSCore::StringUtils::StartsWith(item.m_path, directoryPath, false) == true)
+                if (item.m_isFile == true && ChilliSource::StringUtils::StartsWith(item.m_path, directoryPath, false) == true)
                 {
                     auto relativeFilePath = item.m_path.substr(directoryPath.length());
                     if (in_recursive == true || relativeFilePath.find('/') == std::string::npos)
@@ -258,10 +258,10 @@ namespace CSBackend
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
             std::vector<std::string> output;
-            auto directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+            auto directoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(in_directoryPath);
             for (const auto& item : m_manifestItems)
             {
-                if (item.m_isFile == false && item.m_path != directoryPath && CSCore::StringUtils::StartsWith(item.m_path, directoryPath, false) == true)
+                if (item.m_isFile == false && item.m_path != directoryPath && ChilliSource::StringUtils::StartsWith(item.m_path, directoryPath, false) == true)
                 {
                     auto relativeDirectoryPath = item.m_path.substr(directoryPath.length());
                     if (in_recursive == true || relativeDirectoryPath.find('/') == relativeDirectoryPath.length() - 1)
@@ -281,7 +281,7 @@ namespace CSBackend
 
             //Get the manifest item describing the location of the file within the zip.
             ManifestItem item;
-            if (TryGetManifestItem(CSCore::StringUtils::StandardiseFilePath(in_filePath), item) == false)
+            if (TryGetManifestItem(ChilliSource::StringUtils::StandardiseFilePath(in_filePath), item) == false)
             {
                 return false;
             }
@@ -295,7 +295,7 @@ namespace CSBackend
             //read the contents of the zip file.
             std::unique_lock<std::mutex> lock(m_mutex);
 
-            CSCore::FileStreamUPtr output;
+            ChilliSource::FileStreamUPtr output;
 
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)
@@ -343,16 +343,16 @@ namespace CSBackend
             }
 
             char filePathBytes[k_filePathLength];
-            auto rootDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_rootDirectoryPath);
+            auto rootDirectoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(in_rootDirectoryPath);
 
             s32 status = unzGoToFirstFile(unzipper);
             while (status == UNZ_OK)
             {
                 unz_file_info info;
                 unzGetCurrentFileInfo(unzipper, &info, filePathBytes, k_filePathLength, nullptr, 0, nullptr, 0);
-                std::string filePath = CSCore::StringUtils::StandardiseFilePath(filePathBytes);
+                std::string filePath = ChilliSource::StringUtils::StandardiseFilePath(filePathBytes);
 
-                if (in_rootDirectoryPath.empty() == true || CSCore::StringUtils::StartsWith(filePath, rootDirectoryPath, false) == true)
+                if (in_rootDirectoryPath.empty() == true || ChilliSource::StringUtils::StartsWith(filePath, rootDirectoryPath, false) == true)
                 {
                     if (rootDirectoryPath.empty() == false)
                     {
@@ -379,19 +379,19 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void ZippedFileSystem::AddItemToManifest(const std::string& in_filePath, unz_file_pos in_zipPosition, bool in_isFile)
         {
-            std::string filePath = CSCore::StringUtils::StandardiseFilePath(in_filePath);
+            std::string filePath = ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
 
             std::string directoryPath, fileName;
-            CSCore::StringUtils::SplitFilename(filePath, fileName, directoryPath);
+            ChilliSource::StringUtils::SplitFilename(filePath, fileName, directoryPath);
 
-            std::vector<std::string> directoryPathSections = CSCore::StringUtils::Split(directoryPath, "/");
+            std::vector<std::string> directoryPathSections = ChilliSource::StringUtils::Split(directoryPath, "/");
             std::string currDirectoryPath;
             for (const auto& directorySection : directoryPathSections)
             {
-                currDirectoryPath += CSCore::StringUtils::StandardiseDirectoryPath(directorySection);
+                currDirectoryPath += ChilliSource::StringUtils::StandardiseDirectoryPath(directorySection);
                 if (currDirectoryPath.empty() == false)
                 {
-                    u32 currDirectoryHash = CSCore::HashCRC32::GenerateHashCode(currDirectoryPath);
+                    u32 currDirectoryHash = ChilliSource::HashCRC32::GenerateHashCode(currDirectoryPath);
 
                     //check to see if this directory has previously been seen. The usual
                     auto it = std::find_if(m_manifestItems.begin(), m_manifestItems.end(), [=](const ManifestItem& in_item)
@@ -413,7 +413,7 @@ namespace CSBackend
 
 			ManifestItem item;
 			item.m_path = filePath;
-			item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(item.m_path);
+			item.m_pathHash = ChilliSource::HashCRC32::GenerateHashCode(item.m_path);
 			item.m_isFile = in_isFile;
 			item.m_zipPosition = in_zipPosition;
 			m_manifestItems.push_back(item);
@@ -425,7 +425,7 @@ namespace CSBackend
             CS_ASSERT(IsValid() == true, "Cannot get manifest item before construction finishes as the manifest item list wont have been sorted yet.");
 
             ManifestItem searchItem;
-            searchItem.m_pathHash = CSCore::HashCRC32::GenerateHashCode(in_path);
+            searchItem.m_pathHash = ChilliSource::HashCRC32::GenerateHashCode(in_path);
 
             auto it = std::lower_bound(m_manifestItems.begin(), m_manifestItems.end(), searchItem, [](const ManifestItem& in_lhs, const ManifestItem& in_rhs)
             {

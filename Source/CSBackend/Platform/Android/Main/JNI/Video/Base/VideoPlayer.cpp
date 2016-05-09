@@ -72,7 +72,7 @@ void Java_com_chilliworks_chillisource_video_VideoPlayer_onUpdateSubtitles(JNIEn
 {
 	CS_ASSERT(g_activeVideoPlayer != nullptr, "No video player active!");
 
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 	{
 		g_activeVideoPlayer->OnUpdateSubtitles();
 	});
@@ -83,7 +83,7 @@ void Java_com_chilliworks_chillisource_video_VideoPlayer_onVideoComplete(JNIEnv*
 {
 	CS_ASSERT(g_activeVideoPlayer != nullptr, "No video player active!");
 
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 	{
 		g_activeVideoPlayer->OnVideoComplete();
 	});
@@ -106,9 +106,9 @@ namespace CSBackend
 			/// @param out_fileOffset - [Out] The output file offset.
 			/// @param out_fileLength - [Out] The output file length.
 			//------------------------------------------------------------------------------
-    		void CalcZippedVideoInfo(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, std::string& out_filePath, s32& out_fileOffset, s32& out_fileLength)
+    		void CalcZippedVideoInfo(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, std::string& out_filePath, s32& out_fileOffset, s32& out_fileLength)
     		{
-    			auto fileSystem = CSCore::Application::Get()->GetFileSystem()->Cast<FileSystem>();
+    			auto fileSystem = ChilliSource::Application::Get()->GetFileSystem()->Cast<FileSystem>();
     			CS_ASSERT(fileSystem != nullptr, "Could not cast to android file system.");
 
     			FileSystem::ZippedFileInfo zippedFileInfo;
@@ -130,14 +130,14 @@ namespace CSBackend
     	CS_DEFINE_NAMEDTYPE(VideoPlayer);
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		bool VideoPlayer::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool VideoPlayer::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
-			return (in_interfaceId == CSVideo::VideoPlayer::InterfaceID || in_interfaceId == VideoPlayer::InterfaceID);
+			return (in_interfaceId == ChilliSource::VideoPlayer::InterfaceID || in_interfaceId == VideoPlayer::InterfaceID);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-        void VideoPlayer::Present(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
-        		const CSCore::Colour& in_backgroundColour)
+        void VideoPlayer::Present(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
+        		const ChilliSource::Colour& in_backgroundColour)
         {
         	CS_ASSERT(g_activeVideoPlayer == nullptr, "A video player is already active!");
         	CS_ASSERT(m_isPlaying == false, "Cannot present a video while one is already playing.");
@@ -147,14 +147,14 @@ namespace CSBackend
 
             m_completionDelegateConnection = std::move(in_delegateConnection);
 
-            auto fileSystem = CSCore::Application::Get()->GetFileSystem();
-            auto taggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
+            auto fileSystem = ChilliSource::Application::Get()->GetFileSystem();
+            auto taggedFilePath = ChilliSource::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
 
 			bool inApk = false;
 			std::string absFilePath = absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
 			s32 fileOffset = -1;
 			s32 fileLength = -1;
-            if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package)
+            if (in_storageLocation == ChilliSource::StorageLocation::k_package || in_storageLocation == ChilliSource::StorageLocation::k_package)
             {
 #if defined(CS_ANDROIDFLAVOUR_GOOGLEPLAY)
 				CalcZippedVideoInfo(in_storageLocation, taggedFilePath, absFilePath, fileOffset, fileLength);
@@ -164,7 +164,7 @@ namespace CSBackend
 				CS_LOG_FATAL("This Android Flavour cannot play videos from this storage location.");
 #endif
             }
-            else if (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false)
+            else if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false)
             {
 #if defined(CS_ANDROIDFLAVOUR_GOOGLEPLAY)
 				CalcZippedVideoInfo(in_storageLocation, taggedFilePath, absFilePath, fileOffset, fileLength);
@@ -184,8 +184,8 @@ namespace CSBackend
         }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void VideoPlayer::PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
-                bool in_dismissWithTap, const CSCore::Colour& in_backgroundColour)
+		void VideoPlayer::PresentWithSubtitles(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
+                bool in_dismissWithTap, const ChilliSource::Colour& in_backgroundColour)
 		{
 			m_subtitles = in_subtitles;
 			Present(in_storageLocation, in_filePath, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
@@ -240,8 +240,8 @@ namespace CSBackend
 					if (mapEntry == m_subtitleMap.end())
 					{
 						const std::string& text = localisedText->GetText((*it)->m_localisedTextId);
-						const CSVideo::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
-						auto alignment = CSRendering::StringFromAlignmentAnchor(style->m_alignment);
+						const ChilliSource::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
+						auto alignment = ChilliSource::StringFromAlignmentAnchor(style->m_alignment);
 
 						jstring jText = JavaUtils::CreateJStringFromSTDString(text);
 						jstring jFontName = JavaUtils::CreateJStringFromSTDString(style->m_fontName);
@@ -279,9 +279,9 @@ namespace CSBackend
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void VideoPlayer::UpdateSubtitle(const CSVideo::Subtitles::Subtitle* in_subtitle, s64 in_subtitleID, TimeIntervalMs in_timeMS)
+		void VideoPlayer::UpdateSubtitle(const ChilliSource::Subtitles::Subtitle* in_subtitle, s64 in_subtitleID, TimeIntervalMs in_timeMS)
 		{
-			const CSVideo::Subtitles::Style* style = m_subtitles->GetStyleWithName(in_subtitle->m_styleName);
+			const ChilliSource::Subtitles::Style* style = m_subtitles->GetStyleWithName(in_subtitle->m_styleName);
 
 			f32 fade = 0.0f;
 			s64 relativeTime = ((s64)in_timeMS) - ((s64)in_subtitle->m_startTimeMS);

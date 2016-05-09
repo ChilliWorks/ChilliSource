@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 
-namespace CS
+namespace ChilliSource
 {
     class PointLightComponent : public LightComponent
     {
@@ -50,7 +50,7 @@ namespace CS
         /// @param Comparison Type
         /// @return Whether the class matches the comparison type
         //----------------------------------------------------------
-        bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+        bool IsA(InterfaceIDType inInterfaceID) const override;
         //----------------------------------------------------------
         /// Set Radius
         ///
@@ -130,7 +130,7 @@ namespace CS
         ///
         /// @return Matrix to transform into light space
         //----------------------------------------------------------
-        const Core::Matrix4& GetLightMatrix() const override;
+        const Matrix4& GetLightMatrix() const override;
         //----------------------------------------------------
         /// Triggered when the component is attached to
         /// an entity on the scene
@@ -162,7 +162,7 @@ namespace CS
         void CalculateLightingValues() override;
     private:
         
-        Core::EventConnectionUPtr m_transformChangedConnection;
+        EventConnectionUPtr m_transformChangedConnection;
         
         f32 mfConstantAttenuation;
         f32 mfLinearAttenuation;

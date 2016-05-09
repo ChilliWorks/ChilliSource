@@ -38,7 +38,7 @@
 
 #include <vector>
 
-namespace CS
+namespace ChilliSource
 {
     //-------------------------------------------------------------
     /// A resource that holds the description for defining new
@@ -51,7 +51,7 @@ namespace CS
     ///
     /// @author S Downie
     //-------------------------------------------------------------
-    class WidgetDef final : public Core::Resource
+    class WidgetDef final : public Resource
     {
     public:
         CS_DECLARE_NAMEDTYPE(WidgetDef);
@@ -64,7 +64,7 @@ namespace CS
         ///
         /// @return Whether the object is of given type
         //-------------------------------------------------------
-        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        bool IsA(InterfaceIDType in_interfaceId) const override;
         //-------------------------------------------------------
         /// Build the widget def resource, consisting of its
         /// default properties, components and children.
@@ -86,7 +86,7 @@ namespace CS
         /// @param The links between properties of the widget
         /// def and properties of internal children.
         //-------------------------------------------------------
-        void Build(const std::string& in_typeName, const Core::PropertyMap& in_defaultProperties, const std::vector<UIComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+        void Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<UIComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
                    const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks);
         //-------------------------------------------------------
         /// @author Ian Copland
@@ -102,7 +102,7 @@ namespace CS
         /// widgets have and linked properties. All values are
         /// set to their default value.
         //-------------------------------------------------------
-        const Core::PropertyMap& GetDefaultProperties() const;
+        const PropertyMap& GetDefaultProperties() const;
         //-------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -131,7 +131,7 @@ namespace CS
         const std::vector<PropertyLink>& GetChildPropertyLinks() const;
         
     private:
-        friend class Core::ResourcePool;
+        friend class ResourcePool;
         //-------------------------------------------------------
         /// Factory method
         ///
@@ -149,7 +149,7 @@ namespace CS
         
     private:
         std::string m_typeName;
-        Core::PropertyMap m_defaultProperties;
+        PropertyMap m_defaultProperties;
         std::vector<UIComponentDesc> m_componentDescs;
         std::vector<PropertyLink> m_componentPropertyLinks;
         std::vector<WidgetDesc> m_childDescs;

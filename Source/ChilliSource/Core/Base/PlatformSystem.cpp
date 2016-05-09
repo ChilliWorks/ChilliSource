@@ -40,7 +40,7 @@
 #include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 #endif
 
-namespace CS
+namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(PlatformSystem);
     //-----------------------------------------
