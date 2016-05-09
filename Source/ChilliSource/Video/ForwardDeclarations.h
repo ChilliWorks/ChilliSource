@@ -33,18 +33,15 @@
 
 #include <memory>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Video
-    {
-        //------------------------------------------------------
-        /// Base
-        //------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(CSSubtitlesProvider);
-        CS_FORWARDDECLARE_CLASS(Subtitles);
-        CS_FORWARDDECLARE_CLASS(SubtitlesManager);
-        CS_FORWARDDECLARE_CLASS(VideoPlayer);
-    }
+    //------------------------------------------------------
+    /// Base
+    //------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(CSSubtitlesProvider);
+    CS_FORWARDDECLARE_CLASS(Subtitles);
+    CS_FORWARDDECLARE_CLASS(SubtitlesManager);
+    CS_FORWARDDECLARE_CLASS(VideoPlayer);
 }
 
 #endif

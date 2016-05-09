@@ -36,24 +36,21 @@
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebView.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Web
+    CS_DEFINE_NAMEDTYPE(WebView);
+    
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    WebViewUPtr WebView::Create()
     {
-        CS_DEFINE_NAMEDTYPE(WebView);
-        
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        WebViewUPtr WebView::Create()
-        {
 #ifdef CS_TARGETPLATFORM_IOS
-            return WebViewUPtr(new CSBackend::iOS::WebView());
+        return WebViewUPtr(new CSBackend::iOS::WebView());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return WebViewUPtr(new CSBackend::Android::WebView());
+        return WebViewUPtr(new CSBackend::Android::WebView());
 #endif
-            return nullptr;
-        }
+        return nullptr;
     }
 }
 

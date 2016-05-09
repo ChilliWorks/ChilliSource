@@ -36,22 +36,19 @@
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayer.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Video
+    CS_DEFINE_NAMEDTYPE(VideoPlayer);
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    VideoPlayerUPtr VideoPlayer::Create()
     {
-		CS_DEFINE_NAMEDTYPE(VideoPlayer);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        VideoPlayerUPtr VideoPlayer::Create()
-        {
 #ifdef CS_TARGETPLATFORM_IOS
-            return VideoPlayerUPtr(new CSBackend::iOS::VideoPlayer());
+        return VideoPlayerUPtr(new CSBackend::iOS::VideoPlayer());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return VideoPlayerUPtr(new CSBackend::Android::VideoPlayer());
+        return VideoPlayerUPtr(new CSBackend::Android::VideoPlayer());
 #endif
-            return nullptr;
-        }
+        return nullptr;
     }
 }

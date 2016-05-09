@@ -33,15 +33,12 @@
 
 #include <memory>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Web
-    {
-        //---------------------------------------------------
-        /// Base
-        //---------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(WebView);
-    }
+    //---------------------------------------------------
+    /// Base
+    //---------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(WebView);
 }
 
 #endif
