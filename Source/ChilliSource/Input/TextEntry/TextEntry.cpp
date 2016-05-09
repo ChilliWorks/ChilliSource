@@ -40,26 +40,23 @@
 #include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Input
+    CS_DEFINE_NAMEDTYPE(TextEntry);
+    
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    TextEntryUPtr TextEntry::Create()
     {
-        CS_DEFINE_NAMEDTYPE(TextEntry);
-        
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        TextEntryUPtr TextEntry::Create()
-        {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return TextEntryUPtr(new CSBackend::Android::TextEntry());
+        return TextEntryUPtr(new CSBackend::Android::TextEntry());
 #elif defined CS_TARGETPLATFORM_IOS
-            return TextEntryUPtr(new CSBackend::iOS::TextEntry());
+        return TextEntryUPtr(new CSBackend::iOS::TextEntry());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return TextEntryUPtr(new CSBackend::Windows::TextEntry());
+        return TextEntryUPtr(new CSBackend::Windows::TextEntry());
 #else
-            return nullptr;
+        return nullptr;
 #endif
 
-        }
     }
 }

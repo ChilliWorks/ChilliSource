@@ -36,29 +36,26 @@
 #include <CSBackend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Input
-	{
-		CS_DEFINE_NAMEDTYPE(Accelerometer);
-        //----------------------------------------------------
-        //----------------------------------------------------
-        AccelerometerUPtr Accelerometer::Create()
-        {
+    CS_DEFINE_NAMEDTYPE(Accelerometer);
+    //----------------------------------------------------
+    //----------------------------------------------------
+    AccelerometerUPtr Accelerometer::Create()
+    {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return AccelerometerUPtr(new CSBackend::Android::Accelerometer());
+        return AccelerometerUPtr(new CSBackend::Android::Accelerometer());
 #elif defined CS_TARGETPLATFORM_IOS
-            if (CSBackend::iOS::Accelerometer::IsSupportedByDevice() == true)
-            {
-                return AccelerometerUPtr(new CSBackend::iOS::Accelerometer());
-            }
-            else
-            {
-                return nullptr;
-            }
-#else
-            return nullptr;
-#endif
+        if (CSBackend::iOS::Accelerometer::IsSupportedByDevice() == true)
+        {
+            return AccelerometerUPtr(new CSBackend::iOS::Accelerometer());
         }
-	}
+        else
+        {
+            return nullptr;
+        }
+#else
+        return nullptr;
+#endif
+    }
 }

@@ -36,79 +36,76 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Input
-	{
-		//------------------------------------------------------------
-		/// Listens to and stores the acceleration read from the
-        /// hardware accelerometer.
+    //------------------------------------------------------------
+    /// Listens to and stores the acceleration read from the
+    /// hardware accelerometer.
+    ///
+    /// @author S McGaw
+    //------------------------------------------------------------
+    class Accelerometer : public Core::AppSystem
+    {
+    public:
+        CS_DECLARE_NAMEDTYPE(Accelerometer);
+        //----------------------------------------------------
+        /// A delegate for receiving acceleratation updates
+        /// from the accerometer.
         ///
-        /// @author S McGaw
-		//------------------------------------------------------------
-		class Accelerometer : public Core::AppSystem
-		{
-		public:
-			CS_DECLARE_NAMEDTYPE(Accelerometer);
-            //----------------------------------------------------
-			/// A delegate for receiving acceleratation updates
-            /// from the accerometer.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The new acceleration. This wont neccessarily
-            /// have changed since the last update.
-			//----------------------------------------------------
-			typedef std::function<void(const Core::Vector3&)> AccelerationUpdatedDelegate;
-            //----------------------------------------------------
-			/// Creates a new platform specific instance of the
-            /// system.
-            ///
-            /// @author Ian Copland
-			//----------------------------------------------------
-			static AccelerometerUPtr Create();
-			//----------------------------------------------------
-            /// @author Ian Copland
-			///
-			/// @return whether or not the accelerometer is
-            /// currently updating.
-			//----------------------------------------------------
-			virtual bool IsUpdating() const = 0;
-            //----------------------------------------------------
-			/// Start listening for accelerometer changes.
-            ///
-            /// @author Ian Copland
-			//----------------------------------------------------
-			virtual void StartUpdating() = 0;
-			//----------------------------------------------------
-            /// @author Ian Copland
-            ///
-			/// @return The acceleration applied to the device
-			/// measured in "G"s.
-			//----------------------------------------------------
-			virtual Core::Vector3 GetAcceleration() const = 0;
-			//----------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return An event that is invoked every time the
-			/// acceleration is updated. The acceleration will not
-			/// necessarily have changed between updates.
-			//----------------------------------------------------
-			virtual Core::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() = 0;
-			//----------------------------------------------------
-			/// Stop listening for accelerometer changes.
-            ///
-            /// @author Ian Copland
-			//----------------------------------------------------
-			virtual void StopUpdating() = 0;
-			//----------------------------------------------------
-			/// Destructor
-            ///
-            /// @author Ian Copland
-			//----------------------------------------------------
-			virtual ~Accelerometer() {}
-		};
-	}
+        /// @author Ian Copland
+        ///
+        /// @param The new acceleration. This wont neccessarily
+        /// have changed since the last update.
+        //----------------------------------------------------
+        typedef std::function<void(const Core::Vector3&)> AccelerationUpdatedDelegate;
+        //----------------------------------------------------
+        /// Creates a new platform specific instance of the
+        /// system.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------
+        static AccelerometerUPtr Create();
+        //----------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return whether or not the accelerometer is
+        /// currently updating.
+        //----------------------------------------------------
+        virtual bool IsUpdating() const = 0;
+        //----------------------------------------------------
+        /// Start listening for accelerometer changes.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------
+        virtual void StartUpdating() = 0;
+        //----------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The acceleration applied to the device
+        /// measured in "G"s.
+        //----------------------------------------------------
+        virtual Core::Vector3 GetAcceleration() const = 0;
+        //----------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return An event that is invoked every time the
+        /// acceleration is updated. The acceleration will not
+        /// necessarily have changed between updates.
+        //----------------------------------------------------
+        virtual Core::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent() = 0;
+        //----------------------------------------------------
+        /// Stop listening for accelerometer changes.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------
+        virtual void StopUpdating() = 0;
+        //----------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------
+        virtual ~Accelerometer() {}
+    };
 }
 
 #endif

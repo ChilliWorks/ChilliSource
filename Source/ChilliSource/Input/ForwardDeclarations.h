@@ -33,48 +33,45 @@
 
 #include <memory>
 
-namespace ChilliSource 
+namespace CS
 {
-	namespace Input 
-	{
-        //--------------------------------------------------
-        /// Base
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Filter);
-        //--------------------------------------------------
-        /// Accelerometer
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Accelerometer);
-        //--------------------------------------------------
-        /// Device Buttons
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
-        //--------------------------------------------------
-        /// Gestures
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(DragGesture);
-        CS_FORWARDDECLARE_CLASS(HoldGesture);
-        CS_FORWARDDECLARE_CLASS(Gesture);
-        CS_FORWARDDECLARE_CLASS(GestureSystem);
-        CS_FORWARDDECLARE_CLASS(PinchGesture);
-        CS_FORWARDDECLARE_CLASS(RotationGesture);
-        CS_FORWARDDECLARE_CLASS(TapGesture);
-        //--------------------------------------------------
-        /// Keyboard
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Keyboard);
-        enum class KeyCode;
-        enum class ModifierKeyCode;
-        //--------------------------------------------------
-        /// Pointer
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Pointer);
-        CS_FORWARDDECLARE_CLASS(PointerSystem);
-        //--------------------------------------------------
-        /// Text Entry
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(TextEntry);
-	}
+    //--------------------------------------------------
+    /// Base
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(Filter);
+    //--------------------------------------------------
+    /// Accelerometer
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(Accelerometer);
+    //--------------------------------------------------
+    /// Device Buttons
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
+    //--------------------------------------------------
+    /// Gestures
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(DragGesture);
+    CS_FORWARDDECLARE_CLASS(HoldGesture);
+    CS_FORWARDDECLARE_CLASS(Gesture);
+    CS_FORWARDDECLARE_CLASS(GestureSystem);
+    CS_FORWARDDECLARE_CLASS(PinchGesture);
+    CS_FORWARDDECLARE_CLASS(RotationGesture);
+    CS_FORWARDDECLARE_CLASS(TapGesture);
+    //--------------------------------------------------
+    /// Keyboard
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(Keyboard);
+    enum class KeyCode;
+    enum class ModifierKeyCode;
+    //--------------------------------------------------
+    /// Pointer
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(Pointer);
+    CS_FORWARDDECLARE_CLASS(PointerSystem);
+    //--------------------------------------------------
+    /// Text Entry
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(TextEntry);
 }
 
 #endif

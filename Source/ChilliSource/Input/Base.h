@@ -31,6 +31,6 @@
 #define _CHILLISOURCE_INPUT_BASE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Input/Base/Filter.h>
+#include <ChilliSource/Input/Base/InputFilter.h>
 
 #endif

@@ -1,6 +1,4 @@
 //
-//  Filter.cpp
-//  Chilli Source
 //  Created by Scott Downie on 17/09/2014.
 //
 //  The MIT License (MIT)
@@ -26,23 +24,39 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Input/Base/Filter.h>
 
-namespace ChilliSource
+#ifndef _CHILLISOURCE_INPUT_BASE_INPUTFILTER_H_
+#define _CHILLISOURCE_INPUT_BASE_INPUTFILTER_H_
+
+namespace CS
 {
-    namespace Input
+    //------------------------------------------------------------------
+    /// Simple class that holds whether something has been filtered
+    /// and allows the filter flag to be set
+    ///
+    /// @author S Downie
+    //------------------------------------------------------------------
+    class InputFilter final
     {
+    public:
+        
         //--------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Filtered or not
         //--------------------------------------------------------------
-        bool Filter::IsFiltered() const
-        {
-            return m_isFiltered;
-        }
+        bool IsFiltered() const;
         //--------------------------------------------------------------
+        /// Flag as filtered
+        ///
+        /// @author S Downie
         //--------------------------------------------------------------
-        void Filter::SetFiltered()
-        {
-            m_isFiltered = true;
-        }
-    }
+        void SetFiltered();
+        
+    private:
+        
+        bool m_isFiltered = false;
+    };
 }
+
+#endif

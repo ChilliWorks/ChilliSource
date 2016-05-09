@@ -40,24 +40,21 @@
 #include <CSBackend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Input
-	{
-		CS_DEFINE_NAMEDTYPE(DeviceButtonSystem);
-        //----------------------------------------------------
-        //----------------------------------------------------
-        DeviceButtonSystemUPtr DeviceButtonSystem::Create()
-        {
+    CS_DEFINE_NAMEDTYPE(DeviceButtonSystem);
+    //----------------------------------------------------
+    //----------------------------------------------------
+    DeviceButtonSystemUPtr DeviceButtonSystem::Create()
+    {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return DeviceButtonSystemUPtr(new CSBackend::Android::DeviceButtonSystem());
+        return DeviceButtonSystemUPtr(new CSBackend::Android::DeviceButtonSystem());
 #elif defined CS_TARGETPLATFORM_IOS
-            return DeviceButtonSystemUPtr(new CSBackend::iOS::DeviceButtonSystem());
+        return DeviceButtonSystemUPtr(new CSBackend::iOS::DeviceButtonSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return DeviceButtonSystemUPtr(new CSBackend::Windows::DeviceButtonSystem());
+        return DeviceButtonSystemUPtr(new CSBackend::Windows::DeviceButtonSystem());
 #else
-            return nullptr;
+        return nullptr;
 #endif
-        }
-	}
+    }
 }

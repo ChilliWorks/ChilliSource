@@ -33,156 +33,153 @@
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Input
+    //------------------------------------------------------------
+    /// The base class for all input gestures that can be registered
+    /// with the gesture system.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------
+    class Gesture : public Core::QueryableInterface
     {
-        //------------------------------------------------------------
-        /// The base class for all input gestures that can be registered
-        /// with the gesture system.
+    public:
+        CS_DECLARE_NAMEDTYPE(Gesture);
+        CS_DECLARE_NOCOPY(Gesture);
+        //-------------------------------------------------------
+        /// Destructor
         ///
         /// @author Ian Copland
-        //------------------------------------------------------------
-        class Gesture : public Core::QueryableInterface
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(Gesture);
-            CS_DECLARE_NOCOPY(Gesture);
-            //-------------------------------------------------------
-            /// Destructor
-            ///
-            /// @author Ian Copland
-            //-------------------------------------------------------
-            virtual ~Gesture() {};
-            
-        protected:
-            //-------------------------------------------------------
-            /// Protected default constructor
-            ///
-            /// @author Ian Copland
-            //-------------------------------------------------------
-            Gesture() = default;
-            //-------------------------------------------------------
-            /// Queries for gesture conficts to see if this can
-            /// activate. If the gesture cannot activate no events
-            /// should be fired. All gestures must call this prior to
-            /// the first event in a gesture instance being called.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param Whether or not to set active.
-            //-------------------------------------------------------
-            bool ResolveConflicts();
-            //-------------------------------------------------------
-            /// Sets the gesture active. This should be set for any
-            /// gesture that will be active for a sustained time like
-            /// a drag gesture. Instantious gestures such as a tap
-            /// should not. This is used to flag conflicts between
-            /// different gestures.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param Whether or not to set active.
-            //-------------------------------------------------------
-            void SetActive(bool in_active);
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return Whether or not the gesture is currently
-            /// active. This will never be true for gestures that
-            /// are only active for a instant, such as a tap.
-            //-------------------------------------------------------
-            bool IsActive() const;
-            //--------------------------------------------------------
-            /// This will be called if the gesture is currently active
-            /// and conflict resolution deduces that it should end.
-            /// This will de-activate the current gesture and set all
-            /// pointers back to inactive.
-            ///
-            /// @author Ian Copland
-            //--------------------------------------------------------
-            virtual void Cancel() {}
-            //--------------------------------------------------------
-            /// This is called to reset the gesture back to its
-            /// intials state. If the gesture was active, it will be
-            /// reset. Any data keeping track of the current state of
-            /// the gesture should be reset. This is typically called
-            /// when transitioning scenes, to ensure the gesture is
-            /// not in an invalid state when transitioning back.
-            ///
-            /// @author Ian Copland
-            //--------------------------------------------------------
-            virtual void Reset() {}
-            //--------------------------------------------------------
-            /// A method that can optionally be implemented by the
-            /// implementing class to receive update events.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The delta time since the last update.
-            //--------------------------------------------------------
-            virtual void OnUpdate(f32 in_deltaTime) {};
-            //--------------------------------------------------------
-            /// A method that can optionally be implemented by the
-            /// implementing class to receive pointer down events.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The pointer.
-            /// @param The timestamp of the event.
-            /// @param The press type.
-            //--------------------------------------------------------
-            virtual void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType) {};
-            //--------------------------------------------------------
-            /// A method that can optionally be implemented by the
-            /// implementing class to receive pointer moved events.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The pointer
-            /// @param The timestamp of the event.
-            //--------------------------------------------------------
-            virtual void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp) {};
-            //--------------------------------------------------------
-            /// A method that can optionally be implemented by the
-            /// implementing class to receive pointer up events.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The pointer
-            /// @param The timestamp of the event.
-            /// @param The press type.
-            //--------------------------------------------------------
-            virtual void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType) {};
-            //--------------------------------------------------------
-            /// A method that can optionally be implemented by the
-            /// implementing class to receive pointer scrolled events.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The pointer
-            /// @param The timestamp of the event.
-            /// @param The scroll vector (x, y delta)
-            //--------------------------------------------------------
-            virtual void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta) {};
-            
-        private:
-            friend class GestureSystem;
-            //-------------------------------------------------------
-            /// Will be called by the gesture system when this is
-            /// added to it.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The gesture system. Can be null if removing
-            /// from a gesture system.
-            //-------------------------------------------------------
-            void SetGestureSystem(GestureSystem* in_gestureSystem);
-            
-            GestureSystem* m_gestureSystem = nullptr;
-            bool m_active = false;
-        };
-    }
+        //-------------------------------------------------------
+        virtual ~Gesture() {};
+        
+    protected:
+        //-------------------------------------------------------
+        /// Protected default constructor
+        ///
+        /// @author Ian Copland
+        //-------------------------------------------------------
+        Gesture() = default;
+        //-------------------------------------------------------
+        /// Queries for gesture conficts to see if this can
+        /// activate. If the gesture cannot activate no events
+        /// should be fired. All gestures must call this prior to
+        /// the first event in a gesture instance being called.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param Whether or not to set active.
+        //-------------------------------------------------------
+        bool ResolveConflicts();
+        //-------------------------------------------------------
+        /// Sets the gesture active. This should be set for any
+        /// gesture that will be active for a sustained time like
+        /// a drag gesture. Instantious gestures such as a tap
+        /// should not. This is used to flag conflicts between
+        /// different gestures.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param Whether or not to set active.
+        //-------------------------------------------------------
+        void SetActive(bool in_active);
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return Whether or not the gesture is currently
+        /// active. This will never be true for gestures that
+        /// are only active for a instant, such as a tap.
+        //-------------------------------------------------------
+        bool IsActive() const;
+        //--------------------------------------------------------
+        /// This will be called if the gesture is currently active
+        /// and conflict resolution deduces that it should end.
+        /// This will de-activate the current gesture and set all
+        /// pointers back to inactive.
+        ///
+        /// @author Ian Copland
+        //--------------------------------------------------------
+        virtual void Cancel() {}
+        //--------------------------------------------------------
+        /// This is called to reset the gesture back to its
+        /// intials state. If the gesture was active, it will be
+        /// reset. Any data keeping track of the current state of
+        /// the gesture should be reset. This is typically called
+        /// when transitioning scenes, to ensure the gesture is
+        /// not in an invalid state when transitioning back.
+        ///
+        /// @author Ian Copland
+        //--------------------------------------------------------
+        virtual void Reset() {}
+        //--------------------------------------------------------
+        /// A method that can optionally be implemented by the
+        /// implementing class to receive update events.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The delta time since the last update.
+        //--------------------------------------------------------
+        virtual void OnUpdate(f32 in_deltaTime) {};
+        //--------------------------------------------------------
+        /// A method that can optionally be implemented by the
+        /// implementing class to receive pointer down events.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The pointer.
+        /// @param The timestamp of the event.
+        /// @param The press type.
+        //--------------------------------------------------------
+        virtual void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType) {};
+        //--------------------------------------------------------
+        /// A method that can optionally be implemented by the
+        /// implementing class to receive pointer moved events.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The pointer
+        /// @param The timestamp of the event.
+        //--------------------------------------------------------
+        virtual void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp) {};
+        //--------------------------------------------------------
+        /// A method that can optionally be implemented by the
+        /// implementing class to receive pointer up events.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The pointer
+        /// @param The timestamp of the event.
+        /// @param The press type.
+        //--------------------------------------------------------
+        virtual void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType) {};
+        //--------------------------------------------------------
+        /// A method that can optionally be implemented by the
+        /// implementing class to receive pointer scrolled events.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The pointer
+        /// @param The timestamp of the event.
+        /// @param The scroll vector (x, y delta)
+        //--------------------------------------------------------
+        virtual void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta) {};
+        
+    private:
+        friend class GestureSystem;
+        //-------------------------------------------------------
+        /// Will be called by the gesture system when this is
+        /// added to it.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The gesture system. Can be null if removing
+        /// from a gesture system.
+        //-------------------------------------------------------
+        void SetGestureSystem(GestureSystem* in_gestureSystem);
+        
+        GestureSystem* m_gestureSystem = nullptr;
+        bool m_active = false;
+    };
 }
 
 #endif

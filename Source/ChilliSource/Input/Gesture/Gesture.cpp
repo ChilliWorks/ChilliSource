@@ -30,39 +30,36 @@
 
 #include <ChilliSource/Input/Gesture/GestureSystem.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Input
+    CS_DEFINE_NAMEDTYPE(Gesture);
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    bool Gesture::ResolveConflicts()
     {
-        CS_DEFINE_NAMEDTYPE(Gesture);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool Gesture::ResolveConflicts()
+        if (m_gestureSystem != nullptr)
         {
-            if (m_gestureSystem != nullptr)
-            {
-                return m_gestureSystem->ResolveConflicts(this);
-            }
-            
-            return false;
+            return m_gestureSystem->ResolveConflicts(this);
         }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void Gesture::SetActive(bool in_active)
-        {
-            m_active = in_active;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool Gesture::IsActive() const
-        {
-            return m_active;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void Gesture::SetGestureSystem(GestureSystem* in_gestureSystem)
-        {
-            m_gestureSystem = in_gestureSystem;
-        }
+        
+        return false;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    void Gesture::SetActive(bool in_active)
+    {
+        m_active = in_active;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    bool Gesture::IsActive() const
+    {
+        return m_active;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    void Gesture::SetGestureSystem(GestureSystem* in_gestureSystem)
+    {
+        m_gestureSystem = in_gestureSystem;
     }
 }

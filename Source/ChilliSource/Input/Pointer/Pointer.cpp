@@ -28,71 +28,68 @@
 
 #include <ChilliSource/Input/Pointer/Pointer.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Input
+    //----------------------------------------------------
+    //----------------------------------------------------
+    Pointer::InputType Pointer::GetDefaultInputType()
     {
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Pointer::InputType Pointer::GetDefaultInputType()
-        {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return Pointer::InputType::k_touch;
+        return Pointer::InputType::k_touch;
 #elif defined CS_TARGETPLATFORM_IOS
-            return Pointer::InputType::k_touch;
+        return Pointer::InputType::k_touch;
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return Pointer::InputType::k_leftMouseButton;
+        return Pointer::InputType::k_leftMouseButton;
 #else
-            return nullptr;
+        return nullptr;
 #endif
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Pointer::Pointer(Id in_uniqueId, u32 in_index, const Core::Vector2& in_initialPosition)
-        : m_uniqueId(in_uniqueId), m_index(in_index), m_position(in_initialPosition), m_previousPosition(in_initialPosition)
-        {
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Core::Vector2 Pointer::GetPosition() const
-        {
-            return m_position;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Core::Vector2 Pointer::GetPreviousPosition() const
-        {
-            return m_previousPosition;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        bool Pointer::IsInputDown(InputType in_type) const
-        {
-            return m_activeInput.find(in_type) != m_activeInput.end();
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        bool Pointer::IsInputUp(InputType in_type) const
-        {
-            return m_activeInput.find(in_type) == m_activeInput.end();
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Pointer::Id Pointer::GetId() const
-        {
-            return m_uniqueId;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        u32 Pointer::GetIndex() const
-        {
-            return m_index;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        const std::set<Pointer::InputType>& Pointer::GetActiveInputs() const
-        {
-            return m_activeInput;
-        }
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    Pointer::Pointer(Id in_uniqueId, u32 in_index, const Core::Vector2& in_initialPosition)
+    : m_uniqueId(in_uniqueId), m_index(in_index), m_position(in_initialPosition), m_previousPosition(in_initialPosition)
+    {
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    Core::Vector2 Pointer::GetPosition() const
+    {
+        return m_position;
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    Core::Vector2 Pointer::GetPreviousPosition() const
+    {
+        return m_previousPosition;
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    bool Pointer::IsInputDown(InputType in_type) const
+    {
+        return m_activeInput.find(in_type) != m_activeInput.end();
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    bool Pointer::IsInputUp(InputType in_type) const
+    {
+        return m_activeInput.find(in_type) == m_activeInput.end();
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    Pointer::Id Pointer::GetId() const
+    {
+        return m_uniqueId;
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    u32 Pointer::GetIndex() const
+    {
+        return m_index;
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    const std::set<Pointer::InputType>& Pointer::GetActiveInputs() const
+    {
+        return m_activeInput;
     }
 }

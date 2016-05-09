@@ -35,75 +35,72 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Input
-	{
-		//------------------------------------------------------------
-		/// A system that provides access to hard buttons on the device.
-        /// This includes buttons like the back button on Android
-        /// devices. Different devices and platforms may have different
-        /// sets of hard buttons meaning there is no guarantee that
-        /// an event for that button will ever be received.
+    //------------------------------------------------------------
+    /// A system that provides access to hard buttons on the device.
+    /// This includes buttons like the back button on Android
+    /// devices. Different devices and platforms may have different
+    /// sets of hard buttons meaning there is no guarantee that
+    /// an event for that button will ever be received.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------
+    class DeviceButtonSystem : public Core::AppSystem
+    {
+    public:
+        CS_DECLARE_NAMEDTYPE(DeviceButtons);
+        //----------------------------------------------------
+        /// An enum describing the possible Device Buttons.
         ///
         /// @author Ian Copland
-		//------------------------------------------------------------
-		class DeviceButtonSystem : public Core::AppSystem
-		{
-		public:
-			CS_DECLARE_NAMEDTYPE(DeviceButtons);
-            //----------------------------------------------------
-			/// An enum describing the possible Device Buttons.
-            ///
-            /// @author Ian Copland
-			//----------------------------------------------------
-            enum class DeviceButton
-            {
-                k_backButton
-            };
-            //----------------------------------------------------
-			/// A delegate which will be called when a device
-            /// button pressed event is received.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The received button.
-			//----------------------------------------------------
-            using TriggeredDelegate = std::function<void(DeviceButton)>;
-            //----------------------------------------------------
-			/// @author Ian Copland
-            ///
-            /// @return An event that will be called whenever a
-            /// device button is triggered.
-			//----------------------------------------------------
-            virtual Core::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() = 0;
-			//----------------------------------------------------
-			/// Destructor
-            ///
-            /// @author Ian Copland
-			//----------------------------------------------------
-			virtual ~DeviceButtonSystem(){}
-        protected:
-            friend class Core::Application;
-            
-            //----------------------------------------------------
-            /// Creates a new platfrom specific instance of pointer
-            /// system.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return The new system instance.
-            //----------------------------------------------------
-            static DeviceButtonSystemUPtr Create();
-            //----------------------------------------------------
-            /// Constructor. Declared protected to force the
-            /// use of the factory creation method.
-            ///
-            /// @author Ian Copland
-            //----------------------------------------------------
-            DeviceButtonSystem() = default;
-		};
-	}
+        //----------------------------------------------------
+        enum class DeviceButton
+        {
+            k_backButton
+        };
+        //----------------------------------------------------
+        /// A delegate which will be called when a device
+        /// button pressed event is received.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The received button.
+        //----------------------------------------------------
+        using TriggeredDelegate = std::function<void(DeviceButton)>;
+        //----------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return An event that will be called whenever a
+        /// device button is triggered.
+        //----------------------------------------------------
+        virtual Core::IConnectableEvent<TriggeredDelegate>& GetTriggeredEvent() = 0;
+        //----------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------
+        virtual ~DeviceButtonSystem(){}
+    protected:
+        friend class Core::Application;
+        
+        //----------------------------------------------------
+        /// Creates a new platfrom specific instance of pointer
+        /// system.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return The new system instance.
+        //----------------------------------------------------
+        static DeviceButtonSystemUPtr Create();
+        //----------------------------------------------------
+        /// Constructor. Declared protected to force the
+        /// use of the factory creation method.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------
+        DeviceButtonSystem() = default;
+    };
 }
 
 #endif
