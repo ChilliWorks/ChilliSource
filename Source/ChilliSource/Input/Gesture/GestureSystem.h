@@ -203,7 +203,7 @@ namespace CS
         /// @param The filter, allowing exclusion from the filtered
         /// input event.
         //--------------------------------------------------------
-        void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter);
+        void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, InputFilter& in_filter);
         //--------------------------------------------------------
         /// Called when a pointer moved event is received from the
         /// pointer system. This will be relayed onto each active
@@ -240,7 +240,7 @@ namespace CS
         /// @param The filter, allowing exclusion from the filtered
         /// input event.
         //--------------------------------------------------------
-        void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, Filter& in_filter);
+        void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, InputFilter& in_filter);
         //-------------------------------------------------------
         /// A proxy method for calling GestureSystem::OnPointerDown()
         /// using the old GUI consumption model. This simply relays

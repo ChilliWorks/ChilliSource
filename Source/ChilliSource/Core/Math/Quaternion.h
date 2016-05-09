@@ -371,7 +371,6 @@ namespace CS
     //-----------------------------------------------------
     template <typename TType> bool operator!=(const GenericQuaternion<TType>& in_a, const GenericQuaternion<TType>& in_b);
 }
-}
 
 //----------------------------------------------------
 // These are included here to avoid circular inclusion
@@ -383,9 +382,7 @@ namespace CS
 
 #include <cmath>
 
-namespace ChilliSource
-{
-namespace Core
+namespace CS
 {
     template <typename TType> const GenericQuaternion<TType> GenericQuaternion<TType>::k_identity(0, 0, 0, 1);
     

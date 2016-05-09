@@ -468,7 +468,7 @@ namespace CS
         /// @param in_inputType - The input type.
         /// @param in_filter - The filter.
         //------------------------------------------------------------------------------
-        using PointerDownDelegateInternal = std::function<void(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)>;
+        using PointerDownDelegateInternal = std::function<void(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, InputFilter& in_filter)>;
         //------------------------------------------------------------------------------
         /// A delegate that is used to receive pointer scroll events (i.e. mouse wheel).
         ///
@@ -479,7 +479,7 @@ namespace CS
         /// @param in_delta - The scroll vector (x, y delta)
         /// @param in_filter - Filter
         //------------------------------------------------------------------------------
-        using PointerScrollDelegateInternal = std::function<void(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, Filter& in_filter)>;
+        using PointerScrollDelegateInternal = std::function<void(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, InputFilter& in_filter)>;
         //------------------------------------------------------------------------------
         /// Event that is triggered when the pointer is first down.
         ///

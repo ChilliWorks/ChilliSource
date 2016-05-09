@@ -1629,7 +1629,7 @@ namespace ChilliSource
         /// external app. Input events are notified from the front most child widget to
         /// the back most and can be consumed.
         //------------------------------------------------------------------------------
-        void Widget::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter)
+        void Widget::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, InputFilter& in_filter)
         {
             if(m_isInputEnabled == false)
                 return;

@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
-#include <ChilliSource/Input/Base/Filter.h>
+#include <ChilliSource/Input/Base/InputFilter.h>
 #include <ChilliSource/Input/Gesture/Gesture.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
@@ -199,7 +199,7 @@ namespace CS
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
-    void GestureSystem::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
+    void GestureSystem::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, InputFilter& in_filter)
     {
         if (in_filter.IsFiltered() == false)
         {
@@ -244,7 +244,7 @@ namespace CS
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
-    void GestureSystem::OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, Filter& in_filter)
+    void GestureSystem::OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, InputFilter& in_filter)
     {
         if (in_filter.IsFiltered() == false)
         {
@@ -263,7 +263,7 @@ namespace CS
     //--------------------------------------------------------
     void GestureSystem::OnPointerDownLegacy(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType)
     {
-        Filter filter;
+        InputFilter filter;
         OnPointerDown(in_pointer, in_timestamp, in_inputType, filter);
     }
     //--------------------------------------------------------

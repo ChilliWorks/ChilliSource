@@ -29,7 +29,7 @@
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Input/Base/Filter.h>
+#include <ChilliSource/Input/Base/InputFilter.h>
 
 #include <thread>
 #include <algorithm>
@@ -376,7 +376,7 @@ namespace CS
             //Notify unfiltered connections
             m_pointerDownEvent.NotifyConnections(copy, in_timestamp, in_inputType);
             
-            Filter filter;
+            InputFilter filter;
             //Notify internal engine connections which can filter the input
             m_pointerDownEventInternal.NotifyConnections(copy, in_timestamp, in_inputType, filter);
             
@@ -475,7 +475,7 @@ namespace CS
             //Notify unfiltered connections
             m_pointerScrolledEvent.NotifyConnections(copy, in_timestamp, in_delta);
             
-            Filter filter;
+            InputFilter filter;
             //Notify internal engine connections which can filter the input
             m_pointerScrolledEventInternal.NotifyConnections(copy, in_timestamp, in_delta, filter);
             

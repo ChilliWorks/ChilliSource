@@ -38,7 +38,7 @@
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
-#include <ChilliSource/Input/Base/Filter.h>
+#include <ChilliSource/Input/Base/InputFilter.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/UI/Base/Component.h>
@@ -1188,7 +1188,7 @@ namespace ChilliSource
             /// @param in_filter - Filter object to check if the event has been filtered or
             /// to filter it
             //------------------------------------------------------------------------------
-            void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter);
+            void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, InputFilter& in_filter);
             //------------------------------------------------------------------------------
             /// Called when the canvas receives cursor/touch move input
             ///
