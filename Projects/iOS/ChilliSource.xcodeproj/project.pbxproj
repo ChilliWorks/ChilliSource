@@ -192,9 +192,9 @@
 		8158F7011C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4181C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp */; };
 		8158F7021C89D2AD00B13109 /* FacebookPostSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F41A1C89D2AD00B13109 /* FacebookPostSystem.cpp */; };
 		8158F7031C89D2AD00B13109 /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4201C89D2AD00B13109 /* Canvas.cpp */; };
-		8158F7041C89D2AD00B13109 /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4221C89D2AD00B13109 /* Component.cpp */; };
-		8158F7051C89D2AD00B13109 /* ComponentDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4241C89D2AD00B13109 /* ComponentDesc.cpp */; };
-		8158F7061C89D2AD00B13109 /* ComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4261C89D2AD00B13109 /* ComponentFactory.cpp */; };
+		8158F7041C89D2AD00B13109 /* UIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4221C89D2AD00B13109 /* UIComponent.cpp */; };
+		8158F7051C89D2AD00B13109 /* UIComponentDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4241C89D2AD00B13109 /* UIComponentDesc.cpp */; };
+		8158F7061C89D2AD00B13109 /* UIComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4261C89D2AD00B13109 /* UIComponentFactory.cpp */; };
 		8158F7071C89D2AD00B13109 /* PropertyLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4281C89D2AD00B13109 /* PropertyLink.cpp */; };
 		8158F7081C89D2AD00B13109 /* PropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F42A1C89D2AD00B13109 /* PropertyTypes.cpp */; };
 		8158F7091C89D2AD00B13109 /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F42C1C89D2AD00B13109 /* SizePolicy.cpp */; };
@@ -825,12 +825,12 @@
 		8158F41D1C89D2AD00B13109 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		8158F4201C89D2AD00B13109 /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		8158F4211C89D2AD00B13109 /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
-		8158F4221C89D2AD00B13109 /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Component.cpp; sourceTree = "<group>"; };
-		8158F4231C89D2AD00B13109 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Component.h; sourceTree = "<group>"; };
-		8158F4241C89D2AD00B13109 /* ComponentDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentDesc.cpp; sourceTree = "<group>"; };
-		8158F4251C89D2AD00B13109 /* ComponentDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentDesc.h; sourceTree = "<group>"; };
-		8158F4261C89D2AD00B13109 /* ComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentFactory.cpp; sourceTree = "<group>"; };
-		8158F4271C89D2AD00B13109 /* ComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentFactory.h; sourceTree = "<group>"; };
+		8158F4221C89D2AD00B13109 /* UIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIComponent.cpp; sourceTree = "<group>"; };
+		8158F4231C89D2AD00B13109 /* UIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIComponent.h; sourceTree = "<group>"; };
+		8158F4241C89D2AD00B13109 /* UIComponentDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIComponentDesc.cpp; sourceTree = "<group>"; };
+		8158F4251C89D2AD00B13109 /* UIComponentDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIComponentDesc.h; sourceTree = "<group>"; };
+		8158F4261C89D2AD00B13109 /* UIComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIComponentFactory.cpp; sourceTree = "<group>"; };
+		8158F4271C89D2AD00B13109 /* UIComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIComponentFactory.h; sourceTree = "<group>"; };
 		8158F4281C89D2AD00B13109 /* PropertyLink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyLink.cpp; sourceTree = "<group>"; };
 		8158F4291C89D2AD00B13109 /* PropertyLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyLink.h; sourceTree = "<group>"; };
 		8158F42A1C89D2AD00B13109 /* PropertyTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyTypes.cpp; sourceTree = "<group>"; };
@@ -2176,12 +2176,12 @@
 			children = (
 				8158F4201C89D2AD00B13109 /* Canvas.cpp */,
 				8158F4211C89D2AD00B13109 /* Canvas.h */,
-				8158F4221C89D2AD00B13109 /* Component.cpp */,
-				8158F4231C89D2AD00B13109 /* Component.h */,
-				8158F4241C89D2AD00B13109 /* ComponentDesc.cpp */,
-				8158F4251C89D2AD00B13109 /* ComponentDesc.h */,
-				8158F4261C89D2AD00B13109 /* ComponentFactory.cpp */,
-				8158F4271C89D2AD00B13109 /* ComponentFactory.h */,
+				8158F4221C89D2AD00B13109 /* UIComponent.cpp */,
+				8158F4231C89D2AD00B13109 /* UIComponent.h */,
+				8158F4241C89D2AD00B13109 /* UIComponentDesc.cpp */,
+				8158F4251C89D2AD00B13109 /* UIComponentDesc.h */,
+				8158F4261C89D2AD00B13109 /* UIComponentFactory.cpp */,
+				8158F4271C89D2AD00B13109 /* UIComponentFactory.h */,
 				8158F4281C89D2AD00B13109 /* PropertyLink.cpp */,
 				8158F4291C89D2AD00B13109 /* PropertyLink.h */,
 				8158F42A1C89D2AD00B13109 /* PropertyTypes.cpp */,
@@ -3040,7 +3040,7 @@
 				8158F6E21C89D2AD00B13109 /* StaticBillboardParticleDrawableDef.cpp in Sources */,
 				8158F6FF1C89D2AD00B13109 /* UVs.cpp in Sources */,
 				8158F6AF1C89D2AD00B13109 /* HorizontalTextJustification.cpp in Sources */,
-				8158F7051C89D2AD00B13109 /* ComponentDesc.cpp in Sources */,
+				8158F7051C89D2AD00B13109 /* UIComponentDesc.cpp in Sources */,
 				8158F6DF1C89D2AD00B13109 /* ParticleDrawableDef.cpp in Sources */,
 				8158F6B41C89D2AD00B13109 /* RenderComponentFactory.cpp in Sources */,
 				8158F6871C89D2AD00B13109 /* StateManager.cpp in Sources */,
@@ -3161,7 +3161,7 @@
 				8158F71E1C89D2AD00B13109 /* GridLayout.cpp in Sources */,
 				8158F65E1C89D2AD00B13109 /* BaseEncoding.cpp in Sources */,
 				8158F7101C89D2AD00B13109 /* WidgetTemplate.cpp in Sources */,
-				8158F7061C89D2AD00B13109 /* ComponentFactory.cpp in Sources */,
+				8158F7061C89D2AD00B13109 /* UIComponentFactory.cpp in Sources */,
 				8158F7D51C89D2AD00B13109 /* HttpDelegate.mm in Sources */,
 				8158F6951C89D2AD00B13109 /* XML.cpp in Sources */,
 				8158F6621C89D2AD00B13109 /* OAuth.cpp in Sources */,
@@ -3193,7 +3193,7 @@
 				8158F7C91C89D2AD00B13109 /* PNGImageProvider.cpp in Sources */,
 				8158F7301C89D2AD00B13109 /* VideoPlayer.cpp in Sources */,
 				8158F6711C89D2AD00B13109 /* Image.cpp in Sources */,
-				8158F7041C89D2AD00B13109 /* Component.cpp in Sources */,
+				8158F7041C89D2AD00B13109 /* UIComponent.cpp in Sources */,
 				8158F72F1C89D2AD00B13109 /* Subtitles.cpp in Sources */,
 				8158F7091C89D2AD00B13109 /* SizePolicy.cpp in Sources */,
 				8158F6AD1C89D2AD00B13109 /* CanvasRenderer.cpp in Sources */,

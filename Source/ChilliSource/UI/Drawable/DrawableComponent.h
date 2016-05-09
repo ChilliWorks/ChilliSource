@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Drawable/Drawable.h>
 
 namespace CS
@@ -56,7 +56,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class DrawableComponent final : public Component
+    class DrawableComponent final : public UIComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(DrawableComponent);
@@ -105,7 +105,7 @@ namespace CS
         void ApplyDrawableDef(const DrawableDefCSPtr& in_drawableDef);
         
     private:
-        friend class ComponentFactory;
+        friend class UIComponentFactory;
         //-------------------------------------------------------------------
         /// Constructor that builds the component from key-value properties.
         /// The properties used to create a drawable component are described

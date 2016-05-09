@@ -1,5 +1,5 @@
 //
-//  Component.h
+//  UIComponent.h
 //  Chilli Source
 //  Created by Ian Copland on 14/11/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_COMPONENT_H_
-#define _CHILLISOURCE_UI_BASE_COMPONENT_H_
+#ifndef _CHILLISOURCE_UI_BASE_UICOMPONENT_H_
+#define _CHILLISOURCE_UI_BASE_UICOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
@@ -47,11 +47,11 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------
-    class Component : public Core::QueryableInterface
+    class UIComponent : public Core::QueryableInterface
     {
     public:
-        CS_DECLARE_NAMEDTYPE(Component);
-        CS_DECLARE_NOCOPY(Component);
+        CS_DECLARE_NAMEDTYPE(UIComponent);
+        CS_DECLARE_NOCOPY(UIComponent);
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -127,7 +127,7 @@ namespace CS
         ///
         /// @author Ian Copland
         //----------------------------------------------------------------
-        virtual ~Component() {}
+        virtual ~UIComponent() {}
     protected:
         //----------------------------------------------------------------
         /// Constructor
@@ -136,7 +136,7 @@ namespace CS
         ///
         /// @param The name of the component instance.
         //----------------------------------------------------------------
-        Component(const std::string& in_name);
+        UIComponent(const std::string& in_name);
         //----------------------------------------------------------------
         /// This registers a property such that it can be called using the
         /// set property method. This takes two function pointers, one
@@ -290,9 +290,9 @@ namespace CS
     };
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    template <typename TPropertyType> TPropertyType Component::GetProperty(const std::string& in_propertyName) const
+    template <typename TPropertyType> TPropertyType UIComponent::GetProperty(const std::string& in_propertyName) const
     {
-        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot get a property on a UI::Component prior to property registration completion.");
+        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot get a property on a UI::UIComponent prior to property registration completion.");
         
         std::string lowerPropertyName = in_propertyName;
         Core::StringUtils::ToLowerCase(lowerPropertyName);
@@ -300,7 +300,7 @@ namespace CS
         auto it = m_properties.find(lowerPropertyName);
         if(it == m_properties.end())
         {
-            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
+            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::UIComponent.");
         }
         
         auto accessor = CS_SMARTCAST(const Core::Property<typename std::decay<TPropertyType>::type>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
@@ -308,9 +308,9 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    template <typename TPropertyType> void Component::SetProperty(const std::string& in_propertyName, TPropertyType&& in_propertyValue)
+    template <typename TPropertyType> void UIComponent::SetProperty(const std::string& in_propertyName, TPropertyType&& in_propertyValue)
     {
-        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::Component prior to property registration completion.");
+        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::UIComponent prior to property registration completion.");
         
         std::string lowerPropertyName = in_propertyName;
         Core::StringUtils::ToLowerCase(lowerPropertyName);
@@ -318,7 +318,7 @@ namespace CS
         auto it = m_properties.find(lowerPropertyName);
         if(it == m_properties.end())
         {
-            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
+            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::UIComponent.");
         }
         
         auto accessor = CS_SMARTCAST(Core::Property<typename std::decay<TPropertyType>::type>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
@@ -326,14 +326,14 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    template <typename TPropertyType> void Component::RegisterProperty(const Core::PropertyType<TPropertyType>* in_propertyType, const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter)
+    template <typename TPropertyType> void UIComponent::RegisterProperty(const Core::PropertyType<TPropertyType>* in_propertyType, const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter)
     {
-        CS_ASSERT(m_propertyRegistrationComplete == false, "UI::Component properties cannot be registered after property registration completion.");
+        CS_ASSERT(m_propertyRegistrationComplete == false, "UI::UIComponent properties cannot be registered after property registration completion.");
         
         std::string lowerPropertyName = in_name;
         Core::StringUtils::ToLowerCase(lowerPropertyName);
         
-        CS_ASSERT(m_properties.find(lowerPropertyName) == m_properties.end(), "Cannot register duplicate property name '" + in_name + "' in a UI::Component.");
+        CS_ASSERT(m_properties.find(lowerPropertyName) == m_properties.end(), "Cannot register duplicate property name '" + in_name + "' in a UI::UIComponent.");
         
         m_properties.emplace(lowerPropertyName, in_propertyType->CreateProperty(std::forward<std::function<TPropertyType()>>(in_getter), std::forward<std::function<void(TPropertyType)>>(in_setter)));
     }

@@ -217,7 +217,7 @@ namespace CS
         
     private:
         
-        ComponentFactory* m_componentFactory;
+        UIComponentFactory* m_componentFactory;
         std::unordered_map<std::string, WidgetDefCSPtr> m_widgetDefNameMap;
     };
 }

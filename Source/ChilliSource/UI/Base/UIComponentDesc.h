@@ -1,5 +1,5 @@
 //
-//  ComponentDesc.h
+//  UIComponentDesc.h
 //  Chilli Source
 //  Created by Ian Copland on 19/11/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_COMPONENTDESC_H_
-#define _CHILLISOURCE_UI_BASE_COMPONENTDESC_H_
+#ifndef _CHILLISOURCE_UI_BASE_UICOMPONENTDESC_H_
+#define _CHILLISOURCE_UI_BASE_UICOMPONENTDESC_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
@@ -35,7 +35,7 @@
 namespace CS
 {
     //--------------------------------------------------------------------------
-    /// A container for a description of a single component, comprising of a
+    /// A container for a description of a single UIComponent, comprising of a
     /// type and a map of properties for the given component type. Typically
     /// this is only used in the creation of a WidgetDef. In most cases a user
     /// will not need to deal with this directly, creating a WidgetDef from
@@ -44,7 +44,7 @@ namespace CS
     ///
     /// @param Ian Copland
     //--------------------------------------------------------------------------
-    class ComponentDesc final
+    class UIComponentDesc final
     {
     public:
         //------------------------------------------------------------------
@@ -52,7 +52,7 @@ namespace CS
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------
-        ComponentDesc() = default;
+        UIComponentDesc() = default;
         //------------------------------------------------------------------
         /// Constructor.
         ///
@@ -63,7 +63,7 @@ namespace CS
         /// @param The map of properties the component should be created
         /// with.
         //------------------------------------------------------------------
-        ComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap);
+        UIComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap);
         //------------------------------------------------------------------
         /// @author Ian Copland
         ///

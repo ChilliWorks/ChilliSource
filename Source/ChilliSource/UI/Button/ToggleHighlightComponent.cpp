@@ -70,7 +70,7 @@ namespace CS
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
     ToggleHighlightComponent::ToggleHighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-        : Component(in_componentName)
+        : UIComponent(in_componentName)
     {
         RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalOffDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetNormalOffDrawableDef), Core::MakeDelegate(this, &ToggleHighlightComponent::SetNormalOffDrawableDef));
         RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightOffDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffDrawableDef), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffDrawableDef));
@@ -85,7 +85,7 @@ namespace CS
     //-------------------------------------------------------------------
     bool ToggleHighlightComponent::IsA(Core::InterfaceIDType in_interfaceId) const
     {
-        return (Component::InterfaceID == in_interfaceId || ToggleHighlightComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || ToggleHighlightComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
@@ -348,7 +348,7 @@ namespace CS
     void ToggleHighlightComponent::OnInit()
     {
         m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
-        CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Toggle Highlight Component must also contain a Drawable Component.");
+        CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Toggle Highlight UIComponent must also contain a Drawable UIComponent.");
         
         if (IsToggledOn() == false)
         {

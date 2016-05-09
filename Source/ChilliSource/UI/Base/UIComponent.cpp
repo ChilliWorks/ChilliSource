@@ -1,5 +1,5 @@
 //
-//  Component.cpp
+//  UIComponent.cpp
 //  Chilli Source
 //  Created by Ian Copland on 14/11/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
@@ -38,22 +38,22 @@
 
 namespace CS
 {
-    CS_DEFINE_NAMEDTYPE(Component);
+    CS_DEFINE_NAMEDTYPE(UIComponent);
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    Component::Component(const std::string& in_name)
+    UIComponent::UIComponent(const std::string& in_name)
         : m_widget(nullptr), m_name(in_name)
     {
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    const std::string& Component::GetName() const
+    const std::string& UIComponent::GetName() const
     {
         return m_name;
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool Component::HasProperty(const std::string& in_propertyName) const
+    bool UIComponent::HasProperty(const std::string& in_propertyName) const
     {
         std::string lowerPropertyName = in_propertyName;
         Core::StringUtils::ToLowerCase(lowerPropertyName);
@@ -63,25 +63,25 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void Component::SetProperty(const std::string& in_propertyName, const char* in_propertyValue)
+    void UIComponent::SetProperty(const std::string& in_propertyName, const char* in_propertyValue)
     {
         SetProperty(in_propertyName, std::string(in_propertyValue));
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    Widget* Component::GetWidget()
+    Widget* UIComponent::GetWidget()
     {
         return m_widget;
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    const Widget* Component::GetWidget() const
+    const Widget* UIComponent::GetWidget() const
     {
         return m_widget;
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void Component::ApplyRegisteredProperties(const Core::PropertyMap& in_properties)
+    void UIComponent::ApplyRegisteredProperties(const Core::PropertyMap& in_properties)
     {
         CS_ASSERT(m_propertyRegistrationComplete == false, "Registered properties have already been applied.");
         
@@ -97,7 +97,7 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void Component::SetWidget(Widget* in_widget)
+    void UIComponent::SetWidget(Widget* in_widget)
     {
         CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot add component to a widget before property registration is complete.");
         CS_ASSERT(m_widget == nullptr, "Cannot change the owning widget on a component.");
@@ -106,9 +106,9 @@ namespace CS
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void Component::SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property)
+    void UIComponent::SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property)
     {
-        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::Component prior to property registration completion.");
+        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::UIComponent prior to property registration completion.");
         
         std::string lowerPropertyName = in_propertyName;
         Core::StringUtils::ToLowerCase(lowerPropertyName);
@@ -116,7 +116,7 @@ namespace CS
         auto it = m_properties.find(lowerPropertyName);
         if(it == m_properties.end())
         {
-            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
+            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::UIComponent.");
         }
         
         it->second->Set(in_property);

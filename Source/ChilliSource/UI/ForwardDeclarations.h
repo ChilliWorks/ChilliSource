@@ -39,9 +39,9 @@ namespace CS
     /// Base
     //---------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(Canvas);
-    CS_FORWARDDECLARE_CLASS(Component);
-    CS_FORWARDDECLARE_CLASS(ComponentDesc);
-    CS_FORWARDDECLARE_CLASS(ComponentFactory);
+    CS_FORWARDDECLARE_CLASS(UIComponent);
+    CS_FORWARDDECLARE_CLASS(UIComponentDesc);
+    CS_FORWARDDECLARE_CLASS(UIComponentFactory);
     CS_FORWARDDECLARE_CLASS(PropertyLink);
     CS_FORWARDDECLARE_CLASS(Widget);
     CS_FORWARDDECLARE_CLASS(WidgetDef);

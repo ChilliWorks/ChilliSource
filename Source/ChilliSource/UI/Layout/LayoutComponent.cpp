@@ -56,7 +56,7 @@ namespace CS
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
     LayoutComponent::LayoutComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-        : Component(in_componentName)
+        : UIComponent(in_componentName)
     {
         RegisterProperty<LayoutDefCSPtr>(PropertyTypes::LayoutDef(), k_layoutKey, Core::MakeDelegate(this, &LayoutComponent::GetLayoutDef), Core::MakeDelegate(this, &LayoutComponent::ApplyLayoutDef));
         ApplyRegisteredProperties(in_properties);

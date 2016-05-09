@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarType.h>
 
@@ -57,7 +57,7 @@ namespace CS
     /// fill progress bar will also alter the UVs of the widgets drawable
     /// such that it appears to reveal more of the bar as it progresses. This
     /// defaults to "Fill". If using Fill the underlying bar widget must
-    /// have a Drawable Component, otherwise the app is considered to be in an
+    /// have a Drawable UIComponent, otherwise the app is considered to be in an
     /// irrecoverable state and will terminate.
     ///
     /// "BarDirection": A string describing the direction of the progress bar.
@@ -72,7 +72,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class ProgressBarComponent final : public Component
+    class ProgressBarComponent final : public UIComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(ProgressBarComponent);
@@ -161,7 +161,7 @@ namespace CS
         void SetBarDirection(ProgressBarDirection in_direction);
 
     private:
-        friend class ComponentFactory;
+        friend class UIComponentFactory;
         //-------------------------------------------------------------------
         /// Constructor that builds the component from key-value properties.
         /// The properties used to create a progress bar component are described

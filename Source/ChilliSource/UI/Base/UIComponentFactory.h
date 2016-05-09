@@ -1,5 +1,5 @@
 //
-//  ComponentFactory.h
+//  UIComponentFactory.h
 //  Chilli Source
 //  Created by Ian Copland on 14/11/2014.
 //
@@ -26,14 +26,14 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_COMPONENTFACTORY_H_
-#define _CHILLISOURCE_UI_BASE_COMPONENTFACTORY_H_
+#ifndef _CHILLISOURCE_UI_BASE_UICOMPONENTFACTORY_H_
+#define _CHILLISOURCE_UI_BASE_UICOMPONENTFACTORY_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 
 #include <functional>
 #include <unordered_map>
@@ -41,10 +41,10 @@
 namespace CS
 {
     //--------------------------------------------------------------------------
-    /// A factory for creating new instances of Components from a string
-    /// identifier and a property factory. Component types must be registered
+    /// A factory for creating new instances of UIComponents from a string
+    /// identifier and a property factory. UIComponent types must be registered
     /// with the factory using the Register<>() method before they can be
-    /// used in a WidgetDef. Component implementations should provide a
+    /// used in a WidgetDef. UIComponent implementations should provide a
     /// constructor and a static method with the following signatures:
     ///
     /// TComponent(const std::string& in_name, const PropertyMap& in_propMap);
@@ -52,10 +52,10 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class ComponentFactory final : public Core::AppSystem
+    class UIComponentFactory final : public Core::AppSystem
     {
     public:
-        CS_DECLARE_NAMEDTYPE(ComponentFactory);
+        CS_DECLARE_NAMEDTYPE(UIComponentFactory);
         //-----------------------------------------------------------------
         /// Allows querying of whether or not the system implements the
         /// interface associated with the given interface Id.
@@ -108,7 +108,7 @@ namespace CS
         ///
         /// @return The new component instance.
         //-----------------------------------------------------------------
-        ComponentUPtr CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const;
+        UIComponentUPtr CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const;
     private:
         friend class Core::Application;
         //-----------------------------------------------------------------
@@ -118,7 +118,7 @@ namespace CS
         ///
         /// @return A new instance of the system.
         //-----------------------------------------------------------------
-        static ComponentFactoryUPtr Create();
+        static UIComponentFactoryUPtr Create();
         //-----------------------------------------------------------------
         /// A delegate which is used to instantiate the registered component
         /// types.
@@ -130,7 +130,7 @@ namespace CS
         ///
         /// @return The newly created component.
         //-----------------------------------------------------------------
-        using CreatorDelegate = std::function<ComponentUPtr(const std::string& in_name, const Core::PropertyMap& in_propertyMap)>;
+        using CreatorDelegate = std::function<UIComponentUPtr(const std::string& in_name, const Core::PropertyMap& in_propertyMap)>;
         //-----------------------------------------------------------------
         /// Creates a new instance of the given component type. This is the
         /// method referred to by the creator delegates.
@@ -162,14 +162,14 @@ namespace CS
     };
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    template <typename TComponentType> void ComponentFactory::Register(const std::string& in_componentTypeName)
+    template <typename TComponentType> void UIComponentFactory::Register(const std::string& in_componentTypeName)
     {
-        m_creatorDelegateMap.insert(std::make_pair(in_componentTypeName, Core::MakeDelegate(this, &ComponentFactory::CreateComponent<TComponentType>)));
+        m_creatorDelegateMap.insert(std::make_pair(in_componentTypeName, Core::MakeDelegate(this, &UIComponentFactory::CreateComponent<TComponentType>)));
         m_descsMap.insert(std::make_pair(in_componentTypeName, TComponentType::GetPropertyDescs()));
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    template <typename TComponentType> std::unique_ptr<TComponentType> ComponentFactory::CreateComponent(const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
+    template <typename TComponentType> std::unique_ptr<TComponentType> UIComponentFactory::CreateComponent(const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
     {
         return std::unique_ptr<TComponentType>(new TComponentType(in_name, in_propertyMap));
     }

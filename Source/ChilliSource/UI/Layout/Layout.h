@@ -37,7 +37,7 @@
 namespace CS
 {
     //------------------------------------------------------------------------------
-    /// Interface for laying out widgets. This is used by Layout Component to
+    /// Interface for laying out widgets. This is used by Layout UIComponent to
     /// apply the described layout.
     ///
     /// @author S Downie

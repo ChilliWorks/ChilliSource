@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/UI/Base/ComponentDesc.h>
+#include <ChilliSource/UI/Base/UIComponentDesc.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 
@@ -86,7 +86,7 @@ namespace CS
         /// @param The links between properties of the widget
         /// def and properties of internal children.
         //-------------------------------------------------------
-        void Build(const std::string& in_typeName, const Core::PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+        void Build(const std::string& in_typeName, const Core::PropertyMap& in_defaultProperties, const std::vector<UIComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
                    const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks);
         //-------------------------------------------------------
         /// @author Ian Copland
@@ -108,7 +108,7 @@ namespace CS
         ///
         /// @return The list of component descriptions.
         //-------------------------------------------------------
-        const std::vector<ComponentDesc>& GetComponentDescs() const;
+        const std::vector<UIComponentDesc>& GetComponentDescs() const;
         //-------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -150,7 +150,7 @@ namespace CS
     private:
         std::string m_typeName;
         Core::PropertyMap m_defaultProperties;
-        std::vector<ComponentDesc> m_componentDescs;
+        std::vector<UIComponentDesc> m_componentDescs;
         std::vector<PropertyLink> m_componentPropertyLinks;
         std::vector<WidgetDesc> m_childDescs;
         std::vector<PropertyLink> m_childPropertyLinks;

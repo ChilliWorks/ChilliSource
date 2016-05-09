@@ -55,7 +55,7 @@ namespace CS
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
     DrawableComponent::DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-        : Component(in_componentName)
+        : UIComponent(in_componentName)
     {
         RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawableDef), Core::MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
         ApplyRegisteredProperties(in_properties);
@@ -64,7 +64,7 @@ namespace CS
     //-------------------------------------------------------------------
     bool DrawableComponent::IsA(Core::InterfaceIDType in_interfaceId) const
     {
-        return (Component::InterfaceID == in_interfaceId || DrawableComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || DrawableComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------

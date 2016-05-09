@@ -72,7 +72,7 @@
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 
-#include <ChilliSource/UI/Base/ComponentFactory.h>
+#include <ChilliSource/UI/Base/UIComponentFactory.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
@@ -410,7 +410,7 @@ namespace CS
         CreateSystem<Rendering::ParticleEmitterDefFactory>();
         
         //UI
-        CreateSystem<UI::ComponentFactory>();
+        CreateSystem<UI::UIComponentFactory>();
         m_widgetFactory = CreateSystem<UI::WidgetFactory>();
         CreateSystem<UI::WidgetDefProvider>();
         CreateSystem<UI::WidgetTemplateProvider>();

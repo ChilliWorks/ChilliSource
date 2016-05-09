@@ -1,5 +1,5 @@
 //
-//  ComponentFactory.cpp
+//  UIComponentFactory.cpp
 //  Chilli Source
 //  Created by Ian Copland on 14/11/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/ComponentFactory.h>
+#include <ChilliSource/UI/Base/UIComponentFactory.h>
 
 #include <ChilliSource/UI/Button/HighlightComponent.h>
 #include <ChilliSource/UI/Button/ToggleHighlightComponent.h>
@@ -38,22 +38,22 @@
 
 namespace CS
 {
-    CS_DEFINE_NAMEDTYPE(ComponentFactory);
+    CS_DEFINE_NAMEDTYPE(UIComponentFactory);
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    ComponentFactoryUPtr ComponentFactory::Create()
+    UIComponentFactoryUPtr UIComponentFactory::Create()
     {
-        return ComponentFactoryUPtr(new ComponentFactory());
+        return UIComponentFactoryUPtr(new UIComponentFactory());
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    bool ComponentFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    bool UIComponentFactory::IsA(Core::InterfaceIDType in_interfaceId) const
     {
-        return (ComponentFactory::InterfaceID == in_interfaceId);
+        return (UIComponentFactory::InterfaceID == in_interfaceId);
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    std::vector<Core::PropertyMap::PropertyDesc> ComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
+    std::vector<Core::PropertyMap::PropertyDesc> UIComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
     {
         auto descsIt = m_descsMap.find(in_componentTypeName);
         CS_ASSERT(descsIt != m_descsMap.end(), "Could not get property descs for component with name: " + in_componentTypeName);
@@ -62,7 +62,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    ComponentUPtr ComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
+    UIComponentUPtr UIComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
     {
         auto delegateIt = m_creatorDelegateMap.find(in_componentTypeName);
         CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create component with name: " + in_componentTypeName);
@@ -71,7 +71,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    void ComponentFactory::OnInit()
+    void UIComponentFactory::OnInit()
     {
         Register<DrawableComponent>("Drawable");
         Register<LayoutComponent>("Layout");
@@ -83,7 +83,7 @@ namespace CS
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    void ComponentFactory::OnDestroy()
+    void UIComponentFactory::OnDestroy()
     {
         m_creatorDelegateMap.clear();
     }

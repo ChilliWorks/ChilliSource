@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Slider/SliderDirection.h>
 
 namespace CS
@@ -65,7 +65,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class SliderComponent final : public Component
+    class SliderComponent final : public UIComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(SliderComponent);
@@ -147,7 +147,7 @@ namespace CS
         void SetSliderDirection(SliderDirection in_direction);
 
     private:
-        friend class ComponentFactory;
+        friend class UIComponentFactory;
         //------------------------------------------------------------------------------
         /// Constructor that builds the component from key-value properties. The
         /// properties used to create a slider component are described in the class

@@ -1,5 +1,5 @@
 //
-//  ComponentDesc.cpp
+//  UIComponentDesc.cpp
 //  Chilli Source
 //  Created by Ian Copland on 19/11/2014.
 //
@@ -26,31 +26,31 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/ComponentDesc.h>
+#include <ChilliSource/UI/Base/UIComponentDesc.h>
 
 namespace CS
 {
     //------------------------------------------------------------------
     //------------------------------------------------------------------
-    ComponentDesc::ComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap)
+    UIComponentDesc::UIComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap)
         : m_type(in_type), m_name(in_name), m_propertyMap(in_propertyMap)
     {
     }
     //------------------------------------------------------------------
     //------------------------------------------------------------------
-    const std::string& ComponentDesc::GetType() const
+    const std::string& UIComponentDesc::GetType() const
     {
         return m_type;
     }
     //------------------------------------------------------------------
     //------------------------------------------------------------------
-    const std::string& ComponentDesc::GetName() const
+    const std::string& UIComponentDesc::GetName() const
     {
         return m_name;
     }
     //------------------------------------------------------------------
     //------------------------------------------------------------------
-    const Core::PropertyMap& ComponentDesc::GetProperties() const
+    const Core::PropertyMap& UIComponentDesc::GetProperties() const
     {
         return m_propertyMap;
     }

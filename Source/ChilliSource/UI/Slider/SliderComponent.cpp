@@ -66,7 +66,7 @@ namespace CS
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
     SliderComponent::SliderComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-        : Component(in_componentName)
+        : UIComponent(in_componentName)
     {
         RegisterProperty<f32>(Core::PropertyTypes::Float(), k_sliderSizeKey, CSCore::MakeDelegate(this, &SliderComponent::GetSliderSize), CSCore::MakeDelegate(this, &SliderComponent::SetSliderSize));
         RegisterProperty<f32>(Core::PropertyTypes::Float(), k_sliderPositionKey, CSCore::MakeDelegate(this, &SliderComponent::GetSliderPosition), CSCore::MakeDelegate(this, &SliderComponent::SetSliderPosition));
@@ -80,7 +80,7 @@ namespace CS
     //-------------------------------------------------------------------
     bool SliderComponent::IsA(Core::InterfaceIDType in_interfaceId) const
     {
-        return (Component::InterfaceID == in_interfaceId || SliderComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || SliderComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------

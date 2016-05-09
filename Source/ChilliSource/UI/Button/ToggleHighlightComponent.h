@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 
 namespace CS
 {
@@ -66,7 +66,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class ToggleHighlightComponent final : public Component
+    class ToggleHighlightComponent final : public UIComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(ToggleHighlightComponent);
@@ -197,7 +197,7 @@ namespace CS
         void SetToggleOn(bool in_toggleOn);
         
     private:
-        friend class ComponentFactory;
+        friend class UIComponentFactory;
         //-------------------------------------------------------------------
         /// An enum describing the current state of the toggle highlight.
         ///

@@ -41,7 +41,7 @@
 #include <ChilliSource/Input/Base/InputFilter.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
 
@@ -886,7 +886,7 @@ namespace CS
         /// @param The list of internal children.
         /// @param The list of internal children property links.
         //----------------------------------------------------------------------------------------
-        Widget(const Core::PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+        Widget(const Core::PropertyMap& in_properties, std::vector<UIComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
                const std::vector<PropertyLink>& in_childPropertyLinks);
         //----------------------------------------------------------------------------------------
         /// Initialises the internal mapping to base properties. This allows base properties,
@@ -904,7 +904,7 @@ namespace CS
         ///
         /// @param The list of components.
         //----------------------------------------------------------------------------------------
-        void InitComponents(std::vector<ComponentUPtr> in_components);
+        void InitComponents(std::vector<UIComponentUPtr> in_components);
         //----------------------------------------------------------------------------------------
         /// Adds all of the internal widgets. The given widgets must not already have a parent,
         /// if they do the app will be considered to be in an irrecoverable state and will
@@ -941,7 +941,7 @@ namespace CS
         /// @return The component with the given name. This will return nullptr is no component
         /// could be found.
         //----------------------------------------------------------------------------------------
-        Component* GetComponentWithName(const std::string& in_name);
+        UIComponent* GetComponentWithName(const std::string& in_name);
         //----------------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -950,7 +950,7 @@ namespace CS
         /// @return A const version of the component with the given name. This will return nullptr
         /// is no component could be found.
         //----------------------------------------------------------------------------------------
-        const Component* GetComponentWithName(const std::string& in_name) const;
+        const UIComponent* GetComponentWithName(const std::string& in_name) const;
         //----------------------------------------------------------------------------------------
         /// Set the pointer to the canvas
         ///
@@ -1219,7 +1219,7 @@ namespace CS
     private:
         
         std::unordered_map<std::string, CSCore::IPropertyUPtr> m_baseProperties;
-        std::unordered_map<std::string, std::pair<Component*, std::string>> m_componentPropertyLinks;
+        std::unordered_map<std::string, std::pair<UIComponent*, std::string>> m_componentPropertyLinks;
         std::unordered_map<std::string, std::pair<Widget*, std::string>> m_childPropertyLinks;
         
         std::unordered_map<Input::Pointer::Id, std::set<Input::Pointer::InputType>> m_pressedInput;
@@ -1253,7 +1253,7 @@ namespace CS
         
         std::string m_name;
         
-        std::vector<ComponentUPtr> m_components;
+        std::vector<UIComponentUPtr> m_components;
 
         LayoutComponent* m_layoutComponent = nullptr;
         

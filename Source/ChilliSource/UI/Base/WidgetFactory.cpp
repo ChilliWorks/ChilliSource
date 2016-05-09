@@ -34,8 +34,8 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/ComponentFactory.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
+#include <ChilliSource/UI/Base/UIComponentFactory.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
@@ -82,8 +82,8 @@ namespace CS
     //---------------------------------------------------------------------------
     void WidgetFactory::OnInit()
     {
-        m_componentFactory = Core::Application::Get()->GetSystem<ComponentFactory>();
-        CS_ASSERT(m_componentFactory != nullptr, "WidgetFactory is missing required system: ComponentFactory");
+        m_componentFactory = Core::Application::Get()->GetSystem<UIComponentFactory>();
+        CS_ASSERT(m_componentFactory != nullptr, "WidgetFactory is missing required system: UIComponentFactory");
         
         auto resPool = Core::Application::Get()->GetResourcePool();
 
@@ -231,7 +231,7 @@ namespace CS
     WidgetUPtr WidgetFactory::CreateRecursive(const WidgetDefCSPtr& in_widgetDef, const WidgetDesc& in_widgetDesc) const
     {
         //create the components
-        std::vector<ComponentUPtr> components;
+        std::vector<UIComponentUPtr> components;
         for (const auto& componentDesc : in_widgetDef->GetComponentDescs())
         {
             components.push_back(m_componentFactory->CreateComponent(componentDesc.GetType(), componentDesc.GetName(), componentDesc.GetProperties()));

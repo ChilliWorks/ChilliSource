@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/UI/Base/ComponentFactory.h>
+#include <ChilliSource/UI/Base/UIComponentFactory.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetParserUtils.h>
@@ -103,7 +103,7 @@ namespace CS
         ///
         /// @return The widget description with the given name.
         //-------------------------------------------------------
-        ComponentDesc GetComponentDescWithName(const std::vector<ComponentDesc>& in_componentDescs, const std::string& in_name)
+        UIComponentDesc GetComponentDescWithName(const std::vector<UIComponentDesc>& in_componentDescs, const std::string& in_name)
         {
             for (const auto& desc : in_componentDescs)
             {
@@ -114,7 +114,7 @@ namespace CS
             }
             
             CS_LOG_FATAL("Could not find component description with name: " + in_name);
-            return ComponentDesc();
+            return UIComponentDesc();
         }
         //-------------------------------------------------------
         /// Parses the given json to create a single component
@@ -132,12 +132,12 @@ namespace CS
         ///
         /// @return The output component description.
         //-------------------------------------------------------
-        ComponentDesc ParseComponent(const Json::Value& in_componentJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, ComponentFactory* in_componentFactory)
+        UIComponentDesc ParseComponent(const Json::Value& in_componentJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, UIComponentFactory* in_componentFactory)
         {
             CS_ASSERT(in_componentJson.isNull() == false, "Cannot parse null component json.");
-            CS_ASSERT(in_componentJson.isObject() == true, "Component json must be an object.");
-            CS_ASSERT(in_componentJson.isMember(k_componentTypeKey) == true, "Component json must contain a '" + std::string(k_componentTypeKey) + "' key.");
-            CS_ASSERT(in_componentJson.isMember(k_componentNameKey) == true, "Component json must contain a '" + std::string(k_componentNameKey) + "' key.");
+            CS_ASSERT(in_componentJson.isObject() == true, "UIComponent json must be an object.");
+            CS_ASSERT(in_componentJson.isMember(k_componentTypeKey) == true, "UIComponent json must contain a '" + std::string(k_componentTypeKey) + "' key.");
+            CS_ASSERT(in_componentJson.isMember(k_componentNameKey) == true, "UIComponent json must contain a '" + std::string(k_componentNameKey) + "' key.");
             
             Json::Value typeJson = in_componentJson.get(k_componentTypeKey, Json::nullValue);
             Json::Value nameJson = in_componentJson.get(k_componentNameKey, Json::nullValue);
@@ -167,7 +167,7 @@ namespace CS
                 
             }
             
-            return ComponentDesc(type, name, propertyMap);
+            return UIComponentDesc(type, name, propertyMap);
         }
         //-------------------------------------------------------
         /// Parses the given json to create a list of component
@@ -185,12 +185,12 @@ namespace CS
         ///
         /// @return The output component descriptions.
         //-------------------------------------------------------
-        std::vector<ComponentDesc> ParseComponents(const Json::Value& in_componentsJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, ComponentFactory* in_componentFactory)
+        std::vector<UIComponentDesc> ParseComponents(const Json::Value& in_componentsJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, UIComponentFactory* in_componentFactory)
         {
             CS_ASSERT(in_componentsJson.isNull() == false, "Cannot parse null components json.");
             CS_ASSERT(in_componentsJson.isArray() == true, "Components json must be an array.");
             
-            std::vector<ComponentDesc> output;
+            std::vector<UIComponentDesc> output;
             for(auto& componentJson : in_componentsJson)
             {
                 output.push_back(ParseComponent(componentJson, in_definitionLocation, in_definitionPath, in_componentFactory));
@@ -240,7 +240,7 @@ namespace CS
         ///
         /// @return The property map.
         //-------------------------------------------------------
-        Core::PropertyMap BuildPropertyMap(const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+        Core::PropertyMap BuildPropertyMap(const std::vector<UIComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
                                      const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks)
         {
             //define the properties.
@@ -313,7 +313,7 @@ namespace CS
         ///
         /// @return The list of component property links.
         //-------------------------------------------------------
-        std::vector<PropertyLink> ParseLinkedComponentProperties(const Json::Value& in_properties, const std::vector<ComponentDesc>& in_componentDescs)
+        std::vector<PropertyLink> ParseLinkedComponentProperties(const Json::Value& in_properties, const std::vector<UIComponentDesc>& in_componentDescs)
         {
             const char k_componentLinkTypeAllKey[] = "all";
             const char k_componentLinkTypeNoneKey[] = "none";
@@ -334,7 +334,7 @@ namespace CS
                     
                     if (lowerValue == k_componentLinkTypeAllKey)
                     {
-                        ComponentDesc componentDesc = GetComponentDescWithName(in_componentDescs, linkedComponentName);
+                        UIComponentDesc componentDesc = GetComponentDescWithName(in_componentDescs, linkedComponentName);
                         for (const auto& propertyName : componentDesc.GetProperties().GetKeys())
                         {
                             links.push_back(PropertyLink(propertyName, linkedComponentName, propertyName));
@@ -418,7 +418,7 @@ namespace CS
             const char k_widgetChildPropertiesKey[] = "ChildPropertyLinks";
             const char k_widgetPropertyDefaultsKey[] = "DefaultPropertyValues";
             
-            ComponentFactory* componentFactory = Core::Application::Get()->GetSystem<ComponentFactory>();
+            UIComponentFactory* componentFactory = Core::Application::Get()->GetSystem<UIComponentFactory>();
             
             //read the json
             Json::Value root;
@@ -448,7 +448,7 @@ namespace CS
             Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
         
             const Json::Value& componentsJson = root[k_widgetComponentsKey];
-            std::vector<ComponentDesc> componentDescs;
+            std::vector<UIComponentDesc> componentDescs;
             if(componentsJson.isNull() == false)
             {
                 componentDescs = ParseComponents(componentsJson, in_storageLocation, pathToDefinition, componentFactory);

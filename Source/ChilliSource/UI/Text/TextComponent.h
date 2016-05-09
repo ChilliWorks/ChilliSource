@@ -38,7 +38,7 @@
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Text/TextIcon.h>
 
 #include <vector>
@@ -91,7 +91,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class TextComponent final : public Component
+    class TextComponent final : public UIComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(TextComponent);
@@ -380,7 +380,7 @@ namespace CS
         void SetTextAutoScaleEnabled(bool in_enable);
         
     private:
-        friend class ComponentFactory;
+        friend class UIComponentFactory;
         //------------------------------------------------------------------------------
         /// A container for matching Text Icons to their position in the text string.
         ///

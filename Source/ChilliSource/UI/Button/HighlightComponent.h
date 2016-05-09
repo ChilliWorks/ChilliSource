@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
-#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
 
 namespace CS
 {
@@ -55,7 +55,7 @@ namespace CS
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class HighlightComponent final : public Component
+    class HighlightComponent final : public UIComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(HighlightComponent);
@@ -126,7 +126,7 @@ namespace CS
         void SetHighlightColour(const Core::Colour& in_colour);
         
     private:
-        friend class ComponentFactory;
+        friend class UIComponentFactory;
         //-------------------------------------------------------------------
         /// Constructor that builds the component from key-value properties.
         /// The properties used to create a highlight component are described

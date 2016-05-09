@@ -224,7 +224,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Widget::Widget(const Core::PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+    Widget::Widget(const Core::PropertyMap& in_properties, std::vector<UIComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
                    const std::vector<PropertyLink>& in_childPropertyLinks)
     {
         m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
@@ -269,7 +269,7 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void Widget::InitComponents(std::vector<ComponentUPtr> in_components)
+    void Widget::InitComponents(std::vector<UIComponentUPtr> in_components)
     {
         m_components = std::move(in_components);
         
@@ -321,7 +321,7 @@ namespace CS
             CS_ASSERT(m_componentPropertyLinks.find(link.GetLinkName()) == m_componentPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
             CS_ASSERT(m_childPropertyLinks.find(link.GetLinkName()) == m_childPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
             
-            Component* component = GetComponentWithName(link.GetLinkedOwner());
+            UIComponent* component = GetComponentWithName(link.GetLinkedOwner());
             CS_ASSERT(component != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' because target component '" + link.GetLinkedOwner() + "' doesn't exist.");
             CS_ASSERT(component->HasProperty(link.GetLinkName()) == true, "Cannot create property link for property '" + link.GetLinkName() + "' because target component '" +
                       link.GetLinkedOwner() + "' doesn't contain a property called '" + link.GetLinkedProperty() + "'.");
@@ -362,13 +362,13 @@ namespace CS
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Component* Widget::GetComponentWithName(const std::string& in_name)
+    UIComponent* Widget::GetComponentWithName(const std::string& in_name)
     {
         return Core::ConstMethodCast(this, &Widget::GetComponentWithName, in_name);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Component* Widget::GetComponentWithName(const std::string& in_name) const
+    const UIComponent* Widget::GetComponentWithName(const std::string& in_name) const
     {
         for (const auto& component : m_components)
         {

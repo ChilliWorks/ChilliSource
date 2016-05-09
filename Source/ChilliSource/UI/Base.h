@@ -32,9 +32,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/UI/Base/Canvas.h>
-#include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/ComponentDesc.h>
-#include <ChilliSource/UI/Base/ComponentFactory.h>
+#include <ChilliSource/UI/Base/UIComponent.h>
+#include <ChilliSource/UI/Base/UIComponentDesc.h>
+#include <ChilliSource/UI/Base/UIComponentFactory.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Base/Widget.h>

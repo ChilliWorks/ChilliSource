@@ -66,7 +66,7 @@ namespace CS
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
     ProgressBarComponent::ProgressBarComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-        : Component(in_componentName), m_relBarSize(1.0f, 1.0f)
+        : UIComponent(in_componentName), m_relBarSize(1.0f, 1.0f)
     {
         RegisterProperty<Core::Vector2>(Core::PropertyTypes::Vector2(), k_relBarSizeKey, CSCore::MakeDelegate(this, &ProgressBarComponent::GetRelativeBarSize), CSCore::MakeDelegate(this, &ProgressBarComponent::SetRelativeBarSize));
         RegisterProperty<f32>(Core::PropertyTypes::Float(), k_progressKey, CSCore::MakeDelegate(this, &ProgressBarComponent::GetProgress), CSCore::MakeDelegate(this, &ProgressBarComponent::SetProgress));
@@ -81,7 +81,7 @@ namespace CS
     //-------------------------------------------------------------------
     bool ProgressBarComponent::IsA(Core::InterfaceIDType in_interfaceId) const
     {
-        return (Component::InterfaceID == in_interfaceId || ProgressBarComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || ProgressBarComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------

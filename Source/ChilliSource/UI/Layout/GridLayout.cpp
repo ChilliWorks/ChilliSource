@@ -187,7 +187,7 @@ namespace CS
     //------------------------------------------------------------------------------
     void GridLayout::BuildLayout()
     {
-        CS_ASSERT(GetComponent()->GetWidget() != nullptr, "Cannot build layout when Layout Component is not attached to widget.");
+        CS_ASSERT(GetComponent()->GetWidget() != nullptr, "Cannot build layout when Layout UIComponent is not attached to widget.");
         
         //The list doesn't care about the widgets as the size and position of each cell
         //is only relative to the number of cells and the root widget size

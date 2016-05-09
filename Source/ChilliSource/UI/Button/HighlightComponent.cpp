@@ -64,7 +64,7 @@ namespace CS
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
     HighlightComponent::HighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-        : Component(in_componentName)
+        : UIComponent(in_componentName)
     {
         RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawableDef), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawableDef));
         RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawableDef), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawableDef));
@@ -75,7 +75,7 @@ namespace CS
     //-------------------------------------------------------------------
     bool HighlightComponent::IsA(Core::InterfaceIDType in_interfaceId) const
     {
-        return (Component::InterfaceID == in_interfaceId || HighlightComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || HighlightComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
@@ -168,7 +168,7 @@ namespace CS
     void HighlightComponent::OnInit()
     {
         m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
-        CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Highlight Component must also contain a Drawable Component.");
+        CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Highlight UIComponent must also contain a Drawable UIComponent.");
         
         if (m_highlighted == false)
         {
