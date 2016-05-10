@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_LAYOUTDEF_H_
-#define _CHILLISOURCE_UI_LAYOUT_LAYOUTDEF_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_UILAYOUTDEF_H_
+#define _CHILLISOURCE_UI_LAYOUT_UILAYOUTDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>

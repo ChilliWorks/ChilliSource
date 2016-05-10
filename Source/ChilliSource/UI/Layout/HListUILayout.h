@@ -1,7 +1,7 @@
 //
-//  VListLayout.h
+//  HListUILayout.h
 //  Chilli Source
-//  Created by Scott Downie on 23/04/2014.
+//  Created by Scott Downie on 09/06/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,30 +26,31 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_VLISTLAYOUT_H_
-#define _CHILLISOURCE_UI_LAYOUT_VLISTLAYOUT_H_
+
+#ifndef _CHILLISOURCE_UI_LAYOUT_HLISTUILAYOUT_H_
+#define _CHILLISOURCE_UI_LAYOUT_HLISTUILAYOUT_H_
 
 #include <ChilliSource/ChilliSource.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/UI/Layout/GridLayout.h>
+#include <ChilliSource/UI/Layout/GridUILayout.h>
 #include <ChilliSource/UI/Layout/UILayout.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    /// Lays out widgets in a vertical list where each widget has a single row. The
-    /// rows have spacing between them and the entire list has a surrounding margin.
-    /// The list is filled top to bottom.
+    /// Lays out widgets in a horizontal list where each widget has a single column.
+    /// The columns have spacing between them and the entire list has a surrounding
+    /// margin. The list is filled left to right.
     ///
     /// The list size is fixed and will not expand
     ///
     /// @author S Downie
     //------------------------------------------------------------------------------
-    class VListLayout final : public UILayout
+    class HListUILayout final : public UILayout
     {
     public:
-        CS_DECLARE_NAMEDTYPE(VListLayout);
+        CS_DECLARE_NAMEDTYPE(HListUILayout);
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not this system implements the interface
         /// described by the given interface Id. Typically this is not called directly
@@ -148,9 +149,9 @@ namespace ChilliSource
         void SetAbsoluteSpacing(f32 in_spacing);
         
     private:
-        friend class VListLayoutDef;
+        friend class HListUILayoutDef;
         //------------------------------------------------------------------------------
-        /// Constructor. Creates a vlist layout with the given properties.
+        /// Constructor. Creates a hlist layout with the given properties.
         ///
         /// @author Ian Copland
         ///
@@ -161,7 +162,7 @@ namespace ChilliSource
         /// @param The relative spacing.
         /// @param The absolute spacing.
         //------------------------------------------------------------------------------
-        VListLayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
+        HListUILayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
         //------------------------------------------------------------------------------
         /// Create the list layout sizes and positions based on the current layout
         /// properties and the owning widget.
@@ -180,8 +181,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         Vector2 GetSizeForIndex(u32 in_index) const override;
         //------------------------------------------------------------------------------
-        /// Get the local position of the widget that occupies the space at the given
-        /// index
+        /// Get the local position of the widget that occupies the space at the given index
         ///
         /// @author S Downie
         ///
@@ -191,7 +191,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         Vector2 GetPositionForIndex(u32 in_index) const override;
         
-        GridLayout m_gridLayout;
+        GridUILayout m_gridLayout;
     };
 }
 

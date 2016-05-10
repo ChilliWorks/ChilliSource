@@ -74,12 +74,12 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(UILayout);
     CS_FORWARDDECLARE_CLASS(LayoutComponent);
     CS_FORWARDDECLARE_CLASS(UILayoutDef);
-    CS_FORWARDDECLARE_CLASS(GridLayout);
-    CS_FORWARDDECLARE_CLASS(GridLayoutDef);
-    CS_FORWARDDECLARE_CLASS(HListLayout);
-    CS_FORWARDDECLARE_CLASS(HListLayoutDef);
-    CS_FORWARDDECLARE_CLASS(VListLayout);
-    CS_FORWARDDECLARE_CLASS(VListLayoutDef);
+    CS_FORWARDDECLARE_CLASS(GridUILayout);
+    CS_FORWARDDECLARE_CLASS(GridUILayoutDef);
+    CS_FORWARDDECLARE_CLASS(HListUILayout);
+    CS_FORWARDDECLARE_CLASS(HListUILayoutDef);
+    CS_FORWARDDECLARE_CLASS(VListUILayout);
+    CS_FORWARDDECLARE_CLASS(VListUILayoutDef);
     //---------------------------------------------------------
     /// Progress Bar
     //---------------------------------------------------------

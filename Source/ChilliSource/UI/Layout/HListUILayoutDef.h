@@ -1,5 +1,5 @@
 //
-//  HListLayoutDef.h
+//  HListUILayoutDef.h
 //  Chilli Source
 //  Created by Ian Copland on 07/01/2015.
 //
@@ -26,13 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_HLISTLAYOUTDEF_H_
-#define _CHILLISOURCE_UI_LAYOUT_HLISTLAYOUTDEF_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_HLISTUILAYOUTDEF_H_
+#define _CHILLISOURCE_UI_LAYOUT_HLISTUILAYOUTDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/UI/Layout/HListLayout.h>
+#include <ChilliSource/UI/Layout/HListUILayout.h>
 #include <ChilliSource/UI/Layout/UILayoutDef.h>
 
 namespace ChilliSource
@@ -56,16 +56,16 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class HListLayoutDef final : public UILayoutDef
+    class HListUILayoutDef final : public UILayoutDef
     {
     public:
-        CS_DECLARE_NAMEDTYPE(HListLayoutDef);
+        CS_DECLARE_NAMEDTYPE(HListUILayoutDef);
         //------------------------------------------------------------------------------
         /// Constructor. Creates an empty hlist layout definition.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        HListLayoutDef() = default;
+        HListUILayoutDef() = default;
         //------------------------------------------------------------------------------
         /// Constructor. Creates a standard hlist layout definition from json.
         ///
@@ -73,7 +73,7 @@ namespace ChilliSource
         ///
         /// @param The JSON object containing the drawable properties.
         //------------------------------------------------------------------------------
-        HListLayoutDef(const Json::Value& in_json);
+        HListUILayoutDef(const Json::Value& in_json);
         //------------------------------------------------------------------------------
         /// Constructor. Creates a hlist layout definition with the given properties.
         ///
@@ -86,7 +86,7 @@ namespace ChilliSource
         /// @param The relative spacing.
         /// @param The absolute spacing.
         //------------------------------------------------------------------------------
-        HListLayoutDef(u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
+        HListUILayoutDef(u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not this system implements the interface
         /// described by the given interface Id. Typically this is not called directly

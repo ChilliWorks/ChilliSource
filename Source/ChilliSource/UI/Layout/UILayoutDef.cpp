@@ -28,9 +28,9 @@
 
 #include <ChilliSource/UI/Layout/UILayoutDef.h>
 
-#include <ChilliSource/UI/Layout/GridLayoutDef.h>
-#include <ChilliSource/UI/Layout/HListLayoutDef.h>
-#include <ChilliSource/UI/Layout/VListLayoutDef.h>
+#include <ChilliSource/UI/Layout/GridUILayoutDef.h>
+#include <ChilliSource/UI/Layout/HListUILayoutDef.h>
+#include <ChilliSource/UI/Layout/VListUILayoutDef.h>
 
 #include <json/json.h>
 
@@ -92,11 +92,11 @@ namespace ChilliSource
         switch (type)
         {
             case LayoutType::k_grid:
-                return UILayoutDefCUPtr(new GridLayoutDef(in_json));
+                return UILayoutDefCUPtr(new GridUILayoutDef(in_json));
             case LayoutType::k_hList:
-                return UILayoutDefCUPtr(new HListLayoutDef(in_json));
+                return UILayoutDefCUPtr(new HListUILayoutDef(in_json));
             case LayoutType::k_vList:
-                return UILayoutDefCUPtr(new VListLayoutDef(in_json));
+                return UILayoutDefCUPtr(new VListUILayoutDef(in_json));
             default:
                 CS_LOG_FATAL("Invalid layout def type.");
                 return nullptr;

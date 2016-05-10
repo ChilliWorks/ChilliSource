@@ -42,9 +42,9 @@
 #include <ChilliSource/UI/Drawable/NinePatchUIDrawable.h>
 #include <ChilliSource/UI/Drawable/StandardUIDrawable.h>
 #include <ChilliSource/UI/Drawable/ThreePatchUIDrawable.h>
-#include <ChilliSource/UI/Layout/GridLayout.h>
-#include <ChilliSource/UI/Layout/HListLayout.h>
-#include <ChilliSource/UI/Layout/VListLayout.h>
+#include <ChilliSource/UI/Layout/GridUILayout.h>
+#include <ChilliSource/UI/Layout/HListUILayout.h>
+#include <ChilliSource/UI/Layout/VListUILayout.h>
 
 namespace ChilliSource
 {

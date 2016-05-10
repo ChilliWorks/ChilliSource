@@ -1,5 +1,5 @@
 //
-//  VListLayoutDef.cpp
+//  HListUILayoutDef.cpp
 //  Chilli Source
 //  Created by Ian Copland on 07/01/2015.
 //
@@ -26,20 +26,20 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Layout/VListLayoutDef.h>
+#include <ChilliSource/UI/Layout/HListUILayoutDef.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/UI/Layout/VListLayout.h>
+#include <ChilliSource/UI/Layout/HListUILayout.h>
 
 #include <json/json.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(VListLayoutDef);
+    CS_DEFINE_NAMEDTYPE(HListUILayoutDef);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    VListLayoutDef::VListLayoutDef(const Json::Value& in_json)
+    HListUILayoutDef::HListUILayoutDef(const Json::Value& in_json)
     {
         const char k_typeKey[] = "Type";
         const char k_numCellsKey[] = "NumCells";
@@ -87,50 +87,50 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    VListLayoutDef::VListLayoutDef(u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
-    : m_numCells(in_numCells), m_relativeMargins(in_relMargins), m_absoluteMargins(in_absMargins), m_relativeSpacing(in_relSpacing), m_absoluteSpacing(in_absSpacing)
+    HListUILayoutDef::HListUILayoutDef(u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
+        : m_numCells(in_numCells), m_relativeMargins(in_relMargins), m_absoluteMargins(in_absMargins), m_relativeSpacing(in_relSpacing), m_absoluteSpacing(in_absSpacing)
     {
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool VListLayoutDef::IsA(InterfaceIDType in_interfaceId) const
+    bool HListUILayoutDef::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UILayoutDef::InterfaceID == in_interfaceId || VListLayoutDef::InterfaceID == in_interfaceId);
+        return (UILayoutDef::InterfaceID == in_interfaceId || HListUILayoutDef::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    u32 VListLayoutDef::GetNumCells() const
+    u32 HListUILayoutDef::GetNumCells() const
     {
         return m_numCells;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector4 VListLayoutDef::GetRelativeMargins() const
+    Vector4 HListUILayoutDef::GetRelativeMargins() const
     {
         return m_relativeMargins;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector4 VListLayoutDef::GetAbsoluteMargins() const
+    Vector4 HListUILayoutDef::GetAbsoluteMargins() const
     {
         return m_absoluteMargins;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 VListLayoutDef::GetRelativeSpacing() const
+    f32 HListUILayoutDef::GetRelativeSpacing() const
     {
         return m_relativeSpacing;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 VListLayoutDef::GetAbsoluteSpacing() const
+    f32 HListUILayoutDef::GetAbsoluteSpacing() const
     {
         return m_absoluteSpacing;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    UILayoutUPtr VListLayoutDef::CreateLayout(LayoutComponent* in_owner) const
+    UILayoutUPtr HListUILayoutDef::CreateLayout(LayoutComponent* in_owner) const
     {
-        return UILayoutUPtr(new VListLayout(in_owner, m_numCells, m_relativeMargins, m_absoluteMargins, m_relativeSpacing, m_absoluteSpacing));
+        return UILayoutUPtr(new HListUILayout(in_owner, m_numCells, m_relativeMargins, m_absoluteMargins, m_relativeSpacing, m_absoluteSpacing));
     }
 }

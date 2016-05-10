@@ -1,5 +1,5 @@
 //
-//  GridLayoutDef.cpp
+//  GridUILayoutDef.cpp
 //  Chilli Source
 //  Created by Ian Copland on 07/01/2015.
 //
@@ -26,11 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Layout/GridLayoutDef.h>
+#include <ChilliSource/UI/Layout/GridUILayoutDef.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
-#include <ChilliSource/UI/Layout/GridLayout.h>
+#include <ChilliSource/UI/Layout/GridUILayout.h>
 
 #include <json/json.h>
 
@@ -48,7 +48,7 @@ namespace ChilliSource
         ///
         /// @return The parsed cell order.
         //------------------------------------------------------------------------------
-        GridLayout::CellOrder ParseCellOrder(const std::string& in_cellOrderString)
+        GridUILayout::CellOrder ParseCellOrder(const std::string& in_cellOrderString)
         {
             const char k_columnMajor[] = "colmajor";
             const char k_rowMajor[] = "rowmajor";
@@ -58,22 +58,22 @@ namespace ChilliSource
 
             if(cellOrderString == k_columnMajor)
             {
-                return GridLayout::CellOrder::k_colMajor;
+                return GridUILayout::CellOrder::k_colMajor;
             }
             else if(cellOrderString == k_rowMajor)
             {
-                return GridLayout::CellOrder::k_rowMajor;
+                return GridUILayout::CellOrder::k_rowMajor;
             }
             
-            CS_LOG_FATAL("Unknown GridLayout cell order: " + in_cellOrderString);
-            return GridLayout::CellOrder::k_colMajor;
+            CS_LOG_FATAL("Unknown GridUILayout cell order: " + in_cellOrderString);
+            return GridUILayout::CellOrder::k_colMajor;
         }
     }
     
-    CS_DEFINE_NAMEDTYPE(GridLayoutDef);
+    CS_DEFINE_NAMEDTYPE(GridUILayoutDef);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    GridLayoutDef::GridLayoutDef(const Json::Value& in_json)
+    GridUILayoutDef::GridUILayoutDef(const Json::Value& in_json)
     {
         const char k_typeKey[] = "Type";
         const char k_cellOrderKey[] = "CellOrder";
@@ -141,7 +141,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    GridLayoutDef::GridLayoutDef(GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
+    GridUILayoutDef::GridUILayoutDef(GridUILayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                   f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing)
         : m_cellOrder(in_cellOrder), m_numRows(in_numRows), m_numCols(in_numCols), m_relativeMargins(in_relMargins), m_absoluteMargins(in_absMargins), m_relativeHSpacing(in_relHorizSpacing),
           m_absoluteHSpacing(in_absHorizSpacing), m_relativeVSpacing(in_relVertSpacing), m_absoluteVSpacing(in_absVertSpacing)
@@ -149,68 +149,68 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool GridLayoutDef::IsA(InterfaceIDType in_interfaceId) const
+    bool GridUILayoutDef::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UILayoutDef::InterfaceID == in_interfaceId || GridLayoutDef::InterfaceID == in_interfaceId);
+        return (UILayoutDef::InterfaceID == in_interfaceId || GridUILayoutDef::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    u32 GridLayoutDef::GetNumRows() const
+    u32 GridUILayoutDef::GetNumRows() const
     {
         return m_numRows;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    u32 GridLayoutDef::GetNumCols() const
+    u32 GridUILayoutDef::GetNumCols() const
     {
         return m_numCols;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector4 GridLayoutDef::GetRelativeMargins() const
+    Vector4 GridUILayoutDef::GetRelativeMargins() const
     {
         return m_relativeMargins;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector4 GridLayoutDef::GetAbsoluteMargins() const
+    Vector4 GridUILayoutDef::GetAbsoluteMargins() const
     {
         return m_absoluteMargins;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 GridLayoutDef::GetRelativeHSpacing() const
+    f32 GridUILayoutDef::GetRelativeHSpacing() const
     {
         return m_relativeHSpacing;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 GridLayoutDef::GetAbsoluteHSpacing() const
+    f32 GridUILayoutDef::GetAbsoluteHSpacing() const
     {
         return m_absoluteHSpacing;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 GridLayoutDef::GetRelativeVSpacing() const
+    f32 GridUILayoutDef::GetRelativeVSpacing() const
     {
         return m_relativeVSpacing;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 GridLayoutDef::GetAbsoluteVSpacing() const
+    f32 GridUILayoutDef::GetAbsoluteVSpacing() const
     {
         return m_absoluteVSpacing;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    GridLayout::CellOrder GridLayoutDef::GetCellOrder() const
+    GridUILayout::CellOrder GridUILayoutDef::GetCellOrder() const
     {
         return m_cellOrder;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    UILayoutUPtr GridLayoutDef::CreateLayout(LayoutComponent* in_owner) const
+    UILayoutUPtr GridUILayoutDef::CreateLayout(LayoutComponent* in_owner) const
     {
-        return UILayoutUPtr(new GridLayout(in_owner, m_cellOrder, m_numRows, m_numCols, m_relativeMargins, m_absoluteMargins, m_relativeHSpacing, m_absoluteHSpacing, m_relativeVSpacing, m_absoluteVSpacing));
+        return UILayoutUPtr(new GridUILayout(in_owner, m_cellOrder, m_numRows, m_numCols, m_relativeMargins, m_absoluteMargins, m_relativeHSpacing, m_absoluteHSpacing, m_relativeVSpacing, m_absoluteVSpacing));
     }
 }

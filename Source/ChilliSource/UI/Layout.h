@@ -31,14 +31,14 @@
 #define _CHILLISOURCE_UI_LAYOUT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Layout/GridLayout.h>
-#include <ChilliSource/UI/Layout/GridLayoutDef.h>
-#include <ChilliSource/UI/Layout/HListLayout.h>
-#include <ChilliSource/UI/Layout/HListLayoutDef.h>
+#include <ChilliSource/UI/Layout/GridUILayout.h>
+#include <ChilliSource/UI/Layout/GridUILayoutDef.h>
+#include <ChilliSource/UI/Layout/HListUILayout.h>
+#include <ChilliSource/UI/Layout/HListUILayoutDef.h>
 #include <ChilliSource/UI/Layout/UILayout.h>
 #include <ChilliSource/UI/Layout/LayoutComponent.h>
 #include <ChilliSource/UI/Layout/UILayoutDef.h>
-#include <ChilliSource/UI/Layout/VListLayout.h>
-#include <ChilliSource/UI/Layout/VListLayoutDef.h>
+#include <ChilliSource/UI/Layout/VListUILayout.h>
+#include <ChilliSource/UI/Layout/VListUILayoutDef.h>
 
 #endif

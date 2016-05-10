@@ -218,15 +218,15 @@
 		8158F71B1C89D2AD00B13109 /* StandardUIDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4541C89D2AD00B13109 /* StandardUIDrawableDef.cpp */; };
 		8158F71C1C89D2AD00B13109 /* ThreePatchUIDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4561C89D2AD00B13109 /* ThreePatchUIDrawable.cpp */; };
 		8158F71D1C89D2AD00B13109 /* ThreePatchUIDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4581C89D2AD00B13109 /* ThreePatchUIDrawableDef.cpp */; };
-		8158F71E1C89D2AD00B13109 /* GridLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F45D1C89D2AD00B13109 /* GridLayout.cpp */; };
-		8158F71F1C89D2AD00B13109 /* GridLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F45F1C89D2AD00B13109 /* GridLayoutDef.cpp */; };
-		8158F7201C89D2AD00B13109 /* HListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4611C89D2AD00B13109 /* HListLayout.cpp */; };
-		8158F7211C89D2AD00B13109 /* HListLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4631C89D2AD00B13109 /* HListLayoutDef.cpp */; };
+		8158F71E1C89D2AD00B13109 /* GridUILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F45D1C89D2AD00B13109 /* GridUILayout.cpp */; };
+		8158F71F1C89D2AD00B13109 /* GridUILayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F45F1C89D2AD00B13109 /* GridUILayoutDef.cpp */; };
+		8158F7201C89D2AD00B13109 /* HListUILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4611C89D2AD00B13109 /* HListUILayout.cpp */; };
+		8158F7211C89D2AD00B13109 /* HListUILayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4631C89D2AD00B13109 /* HListUILayoutDef.cpp */; };
 		8158F7221C89D2AD00B13109 /* UILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4651C89D2AD00B13109 /* UILayout.cpp */; };
 		8158F7231C89D2AD00B13109 /* LayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */; };
 		8158F7241C89D2AD00B13109 /* UILayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */; };
-		8158F7251C89D2AD00B13109 /* VListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F46B1C89D2AD00B13109 /* VListLayout.cpp */; };
-		8158F7261C89D2AD00B13109 /* VListLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F46D1C89D2AD00B13109 /* VListLayoutDef.cpp */; };
+		8158F7251C89D2AD00B13109 /* VListUILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F46B1C89D2AD00B13109 /* VListUILayout.cpp */; };
+		8158F7261C89D2AD00B13109 /* VListUILayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F46D1C89D2AD00B13109 /* VListUILayoutDef.cpp */; };
 		8158F7271C89D2AD00B13109 /* ProgressBarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4711C89D2AD00B13109 /* ProgressBarComponent.cpp */; };
 		8158F7281C89D2AD00B13109 /* ProgressBarDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4731C89D2AD00B13109 /* ProgressBarDirection.cpp */; };
 		8158F7291C89D2AD00B13109 /* ProgressBarType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4751C89D2AD00B13109 /* ProgressBarType.cpp */; };
@@ -881,24 +881,24 @@
 		8158F4591C89D2AD00B13109 /* ThreePatchUIDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchUIDrawableDef.h; sourceTree = "<group>"; };
 		8158F45A1C89D2AD00B13109 /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
 		8158F45B1C89D2AD00B13109 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
-		8158F45D1C89D2AD00B13109 /* GridLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridLayout.cpp; sourceTree = "<group>"; };
-		8158F45E1C89D2AD00B13109 /* GridLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridLayout.h; sourceTree = "<group>"; };
-		8158F45F1C89D2AD00B13109 /* GridLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridLayoutDef.cpp; sourceTree = "<group>"; };
-		8158F4601C89D2AD00B13109 /* GridLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridLayoutDef.h; sourceTree = "<group>"; };
-		8158F4611C89D2AD00B13109 /* HListLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListLayout.cpp; sourceTree = "<group>"; };
-		8158F4621C89D2AD00B13109 /* HListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayout.h; sourceTree = "<group>"; };
-		8158F4631C89D2AD00B13109 /* HListLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListLayoutDef.cpp; sourceTree = "<group>"; };
-		8158F4641C89D2AD00B13109 /* HListLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayoutDef.h; sourceTree = "<group>"; };
+		8158F45D1C89D2AD00B13109 /* GridUILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridUILayout.cpp; sourceTree = "<group>"; };
+		8158F45E1C89D2AD00B13109 /* GridUILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridUILayout.h; sourceTree = "<group>"; };
+		8158F45F1C89D2AD00B13109 /* GridUILayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridUILayoutDef.cpp; sourceTree = "<group>"; };
+		8158F4601C89D2AD00B13109 /* GridUILayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridUILayoutDef.h; sourceTree = "<group>"; };
+		8158F4611C89D2AD00B13109 /* HListUILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListUILayout.cpp; sourceTree = "<group>"; };
+		8158F4621C89D2AD00B13109 /* HListUILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListUILayout.h; sourceTree = "<group>"; };
+		8158F4631C89D2AD00B13109 /* HListUILayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListUILayoutDef.cpp; sourceTree = "<group>"; };
+		8158F4641C89D2AD00B13109 /* HListUILayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListUILayoutDef.h; sourceTree = "<group>"; };
 		8158F4651C89D2AD00B13109 /* UILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayout.cpp; sourceTree = "<group>"; };
 		8158F4661C89D2AD00B13109 /* UILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILayout.h; sourceTree = "<group>"; };
 		8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutComponent.cpp; sourceTree = "<group>"; };
 		8158F4681C89D2AD00B13109 /* LayoutComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutComponent.h; sourceTree = "<group>"; };
 		8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayoutDef.cpp; sourceTree = "<group>"; };
 		8158F46A1C89D2AD00B13109 /* UILayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILayoutDef.h; sourceTree = "<group>"; };
-		8158F46B1C89D2AD00B13109 /* VListLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayout.cpp; sourceTree = "<group>"; };
-		8158F46C1C89D2AD00B13109 /* VListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayout.h; sourceTree = "<group>"; };
-		8158F46D1C89D2AD00B13109 /* VListLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayoutDef.cpp; sourceTree = "<group>"; };
-		8158F46E1C89D2AD00B13109 /* VListLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayoutDef.h; sourceTree = "<group>"; };
+		8158F46B1C89D2AD00B13109 /* VListUILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListUILayout.cpp; sourceTree = "<group>"; };
+		8158F46C1C89D2AD00B13109 /* VListUILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListUILayout.h; sourceTree = "<group>"; };
+		8158F46D1C89D2AD00B13109 /* VListUILayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListUILayoutDef.cpp; sourceTree = "<group>"; };
+		8158F46E1C89D2AD00B13109 /* VListUILayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListUILayoutDef.h; sourceTree = "<group>"; };
 		8158F46F1C89D2AD00B13109 /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.h; sourceTree = "<group>"; };
 		8158F4711C89D2AD00B13109 /* ProgressBarComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarComponent.cpp; sourceTree = "<group>"; };
 		8158F4721C89D2AD00B13109 /* ProgressBarComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarComponent.h; sourceTree = "<group>"; };
@@ -2249,24 +2249,24 @@
 		8158F45C1C89D2AD00B13109 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
-				8158F45D1C89D2AD00B13109 /* GridLayout.cpp */,
-				8158F45E1C89D2AD00B13109 /* GridLayout.h */,
-				8158F45F1C89D2AD00B13109 /* GridLayoutDef.cpp */,
-				8158F4601C89D2AD00B13109 /* GridLayoutDef.h */,
-				8158F4611C89D2AD00B13109 /* HListLayout.cpp */,
-				8158F4621C89D2AD00B13109 /* HListLayout.h */,
-				8158F4631C89D2AD00B13109 /* HListLayoutDef.cpp */,
-				8158F4641C89D2AD00B13109 /* HListLayoutDef.h */,
+				8158F45D1C89D2AD00B13109 /* GridUILayout.cpp */,
+				8158F45E1C89D2AD00B13109 /* GridUILayout.h */,
+				8158F45F1C89D2AD00B13109 /* GridUILayoutDef.cpp */,
+				8158F4601C89D2AD00B13109 /* GridUILayoutDef.h */,
+				8158F4611C89D2AD00B13109 /* HListUILayout.cpp */,
+				8158F4621C89D2AD00B13109 /* HListUILayout.h */,
+				8158F4631C89D2AD00B13109 /* HListUILayoutDef.cpp */,
+				8158F4641C89D2AD00B13109 /* HListUILayoutDef.h */,
 				8158F4651C89D2AD00B13109 /* UILayout.cpp */,
 				8158F4661C89D2AD00B13109 /* UILayout.h */,
 				8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */,
 				8158F4681C89D2AD00B13109 /* LayoutComponent.h */,
 				8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */,
 				8158F46A1C89D2AD00B13109 /* UILayoutDef.h */,
-				8158F46B1C89D2AD00B13109 /* VListLayout.cpp */,
-				8158F46C1C89D2AD00B13109 /* VListLayout.h */,
-				8158F46D1C89D2AD00B13109 /* VListLayoutDef.cpp */,
-				8158F46E1C89D2AD00B13109 /* VListLayoutDef.h */,
+				8158F46B1C89D2AD00B13109 /* VListUILayout.cpp */,
+				8158F46C1C89D2AD00B13109 /* VListUILayout.h */,
+				8158F46D1C89D2AD00B13109 /* VListUILayoutDef.cpp */,
+				8158F46E1C89D2AD00B13109 /* VListUILayoutDef.h */,
 			);
 			path = Layout;
 			sourceTree = "<group>";
@@ -3006,7 +3006,7 @@
 				8158F6C91C89D2AD00B13109 /* Mesh.cpp in Sources */,
 				8158F6671C89D2AD00B13109 /* Transform.cpp in Sources */,
 				8158F6DE1C89D2AD00B13109 /* ParticleDrawable.cpp in Sources */,
-				8158F71F1C89D2AD00B13109 /* GridLayoutDef.cpp in Sources */,
+				8158F71F1C89D2AD00B13109 /* GridUILayoutDef.cpp in Sources */,
 				8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */,
 				8158F6701C89D2AD00B13109 /* ETC1ImageProvider.cpp in Sources */,
 				8158F6B91C89D2AD00B13109 /* VerticalTextJustification.cpp in Sources */,
@@ -3073,11 +3073,11 @@
 				8158F72C1C89D2AD00B13109 /* TextComponent.cpp in Sources */,
 				8158F6FB1C89D2AD00B13109 /* TextureAtlas.cpp in Sources */,
 				8158F68C1C89D2AD00B13109 /* ToString.cpp in Sources */,
-				8158F7201C89D2AD00B13109 /* HListLayout.cpp in Sources */,
+				8158F7201C89D2AD00B13109 /* HListUILayout.cpp in Sources */,
 				8158F7C31C89D2AD00B13109 /* Device.mm in Sources */,
 				8158F72A1C89D2AD00B13109 /* SliderComponent.cpp in Sources */,
 				8158F6BC1C89D2AD00B13109 /* PerspectiveCameraComponent.cpp in Sources */,
-				8158F7211C89D2AD00B13109 /* HListLayoutDef.cpp in Sources */,
+				8158F7211C89D2AD00B13109 /* HListUILayoutDef.cpp in Sources */,
 				8158F6731C89D2AD00B13109 /* PNGImageProvider.cpp in Sources */,
 				8158F70F1C89D2AD00B13109 /* WidgetParserUtils.cpp in Sources */,
 				8158F7E01C89D2AD00B13109 /* SubtitlesRenderer.mm in Sources */,
@@ -3158,7 +3158,7 @@
 				8158F6971C89D2AD00B13109 /* Accelerometer.cpp in Sources */,
 				8158F7C41C89D2AD00B13109 /* PlatformSystem.mm in Sources */,
 				8158F69C1C89D2AD00B13109 /* GestureSystem.cpp in Sources */,
-				8158F71E1C89D2AD00B13109 /* GridLayout.cpp in Sources */,
+				8158F71E1C89D2AD00B13109 /* GridUILayout.cpp in Sources */,
 				8158F65E1C89D2AD00B13109 /* BaseEncoding.cpp in Sources */,
 				8158F7101C89D2AD00B13109 /* WidgetTemplate.cpp in Sources */,
 				8158F7061C89D2AD00B13109 /* UIComponentFactory.cpp in Sources */,
@@ -3178,7 +3178,7 @@
 				8158F71A1C89D2AD00B13109 /* StandardUIDrawable.cpp in Sources */,
 				8158F6531C89D2AD00B13109 /* ColourUtils.cpp in Sources */,
 				8158F7111C89D2AD00B13109 /* WidgetTemplateProvider.cpp in Sources */,
-				8158F7261C89D2AD00B13109 /* VListLayoutDef.cpp in Sources */,
+				8158F7261C89D2AD00B13109 /* VListUILayoutDef.cpp in Sources */,
 				8158F6591C89D2AD00B13109 /* ParamDictionary.cpp in Sources */,
 				8158F6B71C89D2AD00B13109 /* RenderSystem.cpp in Sources */,
 				8158F71C1C89D2AD00B13109 /* ThreePatchUIDrawable.cpp in Sources */,
@@ -3205,7 +3205,7 @@
 				8158F6C71C89D2AD00B13109 /* CSAnimProvider.cpp in Sources */,
 				8158F7CF1C89D2AD00B13109 /* Accelerometer.mm in Sources */,
 				8158F6A51C89D2AD00B13109 /* ContentManagementSystem.cpp in Sources */,
-				8158F7251C89D2AD00B13109 /* VListLayout.cpp in Sources */,
+				8158F7251C89D2AD00B13109 /* VListUILayout.cpp in Sources */,
 				8158F72D1C89D2AD00B13109 /* TextIcon.cpp in Sources */,
 				8158F66F1C89D2AD00B13109 /* CSImageProvider.cpp in Sources */,
 				8158F6801C89D2AD00B13109 /* NotificationManager.cpp in Sources */,

@@ -1,5 +1,5 @@
 //
-//  GridLayoutDef.h
+//  GridUILayoutDef.h
 //  Chilli Source
 //  Created by Ian Copland on 07/01/2015.
 //
@@ -26,13 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_GRIDLAYOUTDEF_H_
-#define _CHILLISOURCE_UI_LAYOUT_GRIDLAYOUTDEF_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_GRIDUILAYOUTDEF_H_
+#define _CHILLISOURCE_UI_LAYOUT_GRIDUILAYOUTDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/UI/Layout/GridLayout.h>
+#include <ChilliSource/UI/Layout/GridUILayout.h>
 #include <ChilliSource/UI/Layout/UILayoutDef.h>
 
 namespace ChilliSource
@@ -67,16 +67,16 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class GridLayoutDef final : public UILayoutDef
+    class GridUILayoutDef final : public UILayoutDef
     {
     public:
-        CS_DECLARE_NAMEDTYPE(GridLayoutDef);
+        CS_DECLARE_NAMEDTYPE(GridUILayoutDef);
         //------------------------------------------------------------------------------
         /// Constructor. Creates an empty grid layout definition.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        GridLayoutDef() = default;
+        GridUILayoutDef() = default;
         //------------------------------------------------------------------------------
         /// Constructor. Creates a standard grid layout definition from json.
         ///
@@ -84,7 +84,7 @@ namespace ChilliSource
         ///
         /// @param The JSON object containing the drawable properties.
         //------------------------------------------------------------------------------
-        GridLayoutDef(const Json::Value& in_json);
+        GridUILayoutDef(const Json::Value& in_json);
         //------------------------------------------------------------------------------
         /// Constructor. Creates a grid layout definition with the given properties.
         ///
@@ -100,7 +100,7 @@ namespace ChilliSource
         /// @param The relative vertical spacing.
         /// @param The absolute vertical spacing.
         //------------------------------------------------------------------------------
-        GridLayoutDef(GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
+        GridUILayoutDef(GridUILayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                       f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing);
         //------------------------------------------------------------------------------
         /// Allows querying of whether or not this system implements the interface
@@ -119,7 +119,7 @@ namespace ChilliSource
         ///
         /// @return the cell order to be row or column major.
         //------------------------------------------------------------------------------
-        GridLayout::CellOrder GetCellOrder() const;
+        GridUILayout::CellOrder GetCellOrder() const;
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -191,7 +191,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         UILayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
         
-        GridLayout::CellOrder m_cellOrder = GridLayout::CellOrder::k_rowMajor;
+        GridUILayout::CellOrder m_cellOrder = GridUILayout::CellOrder::k_rowMajor;
         u32 m_numRows = 1;
         u32 m_numCols = 1;
         Vector4 m_relativeMargins;

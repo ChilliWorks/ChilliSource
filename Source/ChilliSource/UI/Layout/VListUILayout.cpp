@@ -1,5 +1,5 @@
 //
-//  VListLayout.cpp
+//  VListUILayout.cpp
 //  Chilli Source
 //  Created by Scott Downie on 23/04/2014.
 //
@@ -26,103 +26,103 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Layout/VListLayout.h>
+#include <ChilliSource/UI/Layout/VListUILayout.h>
 
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(VListLayout);
+    CS_DEFINE_NAMEDTYPE(VListUILayout);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    VListLayout::VListLayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
-        : UILayout(in_layoutComponent), m_gridLayout(in_layoutComponent, GridLayout::CellOrder::k_colMajor, in_numCells, 1, in_relMargins, in_absMargins, 0.0f, 0.0f, in_relSpacing, in_absSpacing)
+    VListUILayout::VListUILayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
+        : UILayout(in_layoutComponent), m_gridLayout(in_layoutComponent, GridUILayout::CellOrder::k_colMajor, in_numCells, 1, in_relMargins, in_absMargins, 0.0f, 0.0f, in_relSpacing, in_absSpacing)
     {
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool VListLayout::IsA(InterfaceIDType in_interfaceId) const
+    bool VListUILayout::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UILayout::InterfaceID == in_interfaceId || VListLayout::InterfaceID == in_interfaceId);
+        return (UILayout::InterfaceID == in_interfaceId || VListUILayout::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    u32 VListLayout::GetNumCells() const
+    u32 VListUILayout::GetNumCells() const
     {
         return m_gridLayout.GetNumRows();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector4 VListLayout::GetRelativeMargins() const
+    Vector4 VListUILayout::GetRelativeMargins() const
     {
         return m_gridLayout.GetRelativeMargins();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector4 VListLayout::GetAbsoluteMargins() const
+    Vector4 VListUILayout::GetAbsoluteMargins() const
     {
         return m_gridLayout.GetAbsoluteMargins();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 VListLayout::GetRelativeSpacing() const
+    f32 VListUILayout::GetRelativeSpacing() const
     {
         return m_gridLayout.GetRelativeVSpacing();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 VListLayout::GetAbsoluteSpacing() const
+    f32 VListUILayout::GetAbsoluteSpacing() const
     {
         return m_gridLayout.GetAbsoluteVSpacing();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void VListLayout::SetNumCells(u32 in_numCells)
+    void VListUILayout::SetNumCells(u32 in_numCells)
     {
         CS_ASSERT(in_numCells > 0, "Cannot create a list with 0 cells");
         m_gridLayout.SetNumRows(in_numCells);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void VListLayout::SetRelativeMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
+    void VListUILayout::SetRelativeMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
     {
         m_gridLayout.SetRelativeMargins(in_top, in_right, in_bottom, in_left);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void VListLayout::SetAbsoluteMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
+    void VListUILayout::SetAbsoluteMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
     {
         m_gridLayout.SetAbsoluteMargins(in_top, in_right, in_bottom, in_left);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void VListLayout::SetRelativeSpacing(f32 in_spacing)
+    void VListUILayout::SetRelativeSpacing(f32 in_spacing)
     {
         m_gridLayout.SetRelativeVSpacing(in_spacing);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void VListLayout::SetAbsoluteSpacing(f32 in_spacing)
+    void VListUILayout::SetAbsoluteSpacing(f32 in_spacing)
     {
         m_gridLayout.SetAbsoluteVSpacing(in_spacing);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void VListLayout::BuildLayout()
+    void VListUILayout::BuildLayout()
     {
         m_gridLayout.BuildLayout();
     }
     //------------------------------------------------------------------------------
     /// The cell size if fixed and uniform so the index is not required
     //------------------------------------------------------------------------------
-    Vector2 VListLayout::GetSizeForIndex(u32 in_index) const
+    Vector2 VListUILayout::GetSizeForIndex(u32 in_index) const
     {
         return m_gridLayout.GetSizeForIndex(in_index);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector2 VListLayout::GetPositionForIndex(u32 in_index) const
+    Vector2 VListUILayout::GetPositionForIndex(u32 in_index) const
     {
         return m_gridLayout.GetPositionForIndex(in_index);
     }

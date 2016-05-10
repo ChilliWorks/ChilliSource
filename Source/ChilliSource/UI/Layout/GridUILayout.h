@@ -1,5 +1,5 @@
 //
-//  GridLayout.h
+//  GridUILayout.h
 //  Chilli Source
 //  Created by Scott Downie on 09/06/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_GRIDLAYOUT_H_
-#define _CHILLISOURCE_UI_LAYOUT_GRIDLAYOUT_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_GRIDUILAYOUT_H_
+#define _CHILLISOURCE_UI_LAYOUT_GRIDUILAYOUT_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -45,10 +45,10 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //------------------------------------------------------------------------------
-    class GridLayout final : public UILayout
+    class GridUILayout final : public UILayout
     {
     public:
-        CS_DECLARE_NAMEDTYPE(GridLayout);
+        CS_DECLARE_NAMEDTYPE(GridUILayout);
         //------------------------------------------------------------------------------
         /// Describes the increment order of the cells.
         ///
@@ -223,9 +223,9 @@ namespace ChilliSource
         void SetCellOrder(CellOrder in_order);
         
     private:
-        friend class GridLayoutDef;
-        friend class HListLayout;
-        friend class VListLayout;
+        friend class GridUILayoutDef;
+        friend class HListUILayout;
+        friend class VListUILayout;
         //------------------------------------------------------------------------------
         /// Constructor. Creates a grid layout with the given properties.
         ///
@@ -242,7 +242,7 @@ namespace ChilliSource
         /// @param The relative vertical spacing.
         /// @param The absolute vertical spacing.
         //------------------------------------------------------------------------------
-        GridLayout(LayoutComponent* in_layoutComponent, GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
+        GridUILayout(LayoutComponent* in_layoutComponent, GridUILayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                    f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing);
         //------------------------------------------------------------------------------
         /// Create the grid layout sizes and positions based on the current layout

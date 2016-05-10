@@ -1,5 +1,5 @@
 //
-//  GridLayout.cpp
+//  GridUILayout.cpp
 //  Chilli Source
 //  Created by Scott Downie on 09/06/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Layout/GridLayout.h>
+#include <ChilliSource/UI/Layout/GridUILayout.h>
 
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
@@ -34,10 +34,10 @@
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(GridLayout);
+    CS_DEFINE_NAMEDTYPE(GridUILayout);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    GridLayout::GridLayout(LayoutComponent* in_layoutComponent, GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
+    GridUILayout::GridUILayout(LayoutComponent* in_layoutComponent, GridUILayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                            f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing)
         : UILayout(in_layoutComponent), m_cellOrder(in_cellOrder), m_numRows(in_numRows), m_numCols(in_numCols), m_marginSizeTop(in_relMargins.x, in_absMargins.x), m_marginSizeRight(in_relMargins.y, in_absMargins.y),
         m_marginSizeBottom(in_relMargins.z, in_absMargins.z), m_marginSizeLeft(in_relMargins.w, in_absMargins.w), m_spacingSizeH(in_relHorizSpacing, in_absHorizSpacing), m_spacingSizeV(in_relVertSpacing, in_absVertSpacing)
@@ -45,67 +45,67 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool GridLayout::IsA(InterfaceIDType in_interfaceId) const
+    bool GridUILayout::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UILayout::InterfaceID == in_interfaceId || GridLayout::InterfaceID == in_interfaceId);
+        return (UILayout::InterfaceID == in_interfaceId || GridUILayout::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    u32 GridLayout::GetNumRows() const
+    u32 GridUILayout::GetNumRows() const
     {
         return m_numRows;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    u32 GridLayout::GetNumCols() const
+    u32 GridUILayout::GetNumCols() const
     {
         return m_numCols;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector4 GridLayout::GetRelativeMargins() const
+    Vector4 GridUILayout::GetRelativeMargins() const
     {
         return Vector4(m_marginSizeTop.x, m_marginSizeRight.x, m_marginSizeBottom.x, m_marginSizeLeft.x);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector4 GridLayout::GetAbsoluteMargins() const
+    Vector4 GridUILayout::GetAbsoluteMargins() const
     {
         return Vector4(m_marginSizeTop.y, m_marginSizeRight.y, m_marginSizeBottom.y, m_marginSizeLeft.y);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 GridLayout::GetRelativeHSpacing() const
+    f32 GridUILayout::GetRelativeHSpacing() const
     {
         return m_spacingSizeH.x;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 GridLayout::GetAbsoluteHSpacing() const
+    f32 GridUILayout::GetAbsoluteHSpacing() const
     {
         return m_spacingSizeH.y;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 GridLayout::GetRelativeVSpacing() const
+    f32 GridUILayout::GetRelativeVSpacing() const
     {
         return m_spacingSizeV.x;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 GridLayout::GetAbsoluteVSpacing() const
+    f32 GridUILayout::GetAbsoluteVSpacing() const
     {
         return m_spacingSizeV.y;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    GridLayout::CellOrder GridLayout::GetCellOrder() const
+    GridUILayout::CellOrder GridUILayout::GetCellOrder() const
     {
         return m_cellOrder;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetNumRows(u32 in_numRos)
+    void GridUILayout::SetNumRows(u32 in_numRos)
     {
         CS_ASSERT(in_numRos > 0, "Cannot create a grid with 0 rows");
         m_numRows = in_numRos;
@@ -114,7 +114,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetNumCols(u32 in_numCols)
+    void GridUILayout::SetNumCols(u32 in_numCols)
     {
         CS_ASSERT(in_numCols > 0, "Cannot create a grid with 0 columns");
         m_numCols = in_numCols;
@@ -123,7 +123,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetRelativeMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
+    void GridUILayout::SetRelativeMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
     {
         m_marginSizeTop.x = in_top;
         m_marginSizeRight.x = in_right;
@@ -134,7 +134,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetAbsoluteMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
+    void GridUILayout::SetAbsoluteMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
     {
         m_marginSizeTop.y = in_top;
         m_marginSizeRight.y = in_right;
@@ -145,7 +145,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetRelativeHSpacing(f32 in_spacing)
+    void GridUILayout::SetRelativeHSpacing(f32 in_spacing)
     {
         m_spacingSizeH.x = in_spacing;
         
@@ -153,7 +153,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetAbsoluteHSpacing(f32 in_spacing)
+    void GridUILayout::SetAbsoluteHSpacing(f32 in_spacing)
     {
         m_spacingSizeH.y = in_spacing;
         
@@ -161,7 +161,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetRelativeVSpacing(f32 in_spacing)
+    void GridUILayout::SetRelativeVSpacing(f32 in_spacing)
     {
         m_spacingSizeV.x = in_spacing;
         
@@ -169,7 +169,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetAbsoluteVSpacing(f32 in_spacing)
+    void GridUILayout::SetAbsoluteVSpacing(f32 in_spacing)
     {
         m_spacingSizeV.y = in_spacing;
         
@@ -177,7 +177,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::SetCellOrder(CellOrder in_order)
+    void GridUILayout::SetCellOrder(CellOrder in_order)
     {
         m_cellOrder = in_order;
         
@@ -185,7 +185,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void GridLayout::BuildLayout()
+    void GridUILayout::BuildLayout()
     {
         CS_ASSERT(GetComponent()->GetWidget() != nullptr, "Cannot build layout when UILayout UIComponent is not attached to widget.");
         
@@ -211,14 +211,14 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     /// The cell size if fixed and uniform so the index is not required
     //------------------------------------------------------------------------------
-    Vector2 GridLayout::GetSizeForIndex(u32 in_index) const
+    Vector2 GridUILayout::GetSizeForIndex(u32 in_index) const
     {
         CS_ASSERT(in_index < (m_numRows * m_numCols), "Cannot have more items in grid than number of cells(" + ToString(m_numRows * m_numCols) + ")");
         return m_cellSize;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector2 GridLayout::GetPositionForIndex(u32 in_index) const
+    Vector2 GridUILayout::GetPositionForIndex(u32 in_index) const
     {
         //Aligned to the middle centre in cell space
         CS_ASSERT(in_index < (m_numRows * m_numCols), "Cannot have more items in grid than number of cells(" + ToString(m_numRows * m_numCols) + ")");
