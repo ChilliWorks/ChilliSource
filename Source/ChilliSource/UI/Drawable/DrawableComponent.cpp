@@ -37,7 +37,7 @@ namespace ChilliSource
 {
     namespace
     {
-        const char k_drawableKey[] = "UIDrawable";
+        const char k_drawableKey[] = "Drawable";
         
         const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
