@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_TEXT_TEXTCOMPONENT_H_
-#define _CHILLISOURCE_UI_TEXT_TEXTCOMPONENT_H_
+#ifndef _CHILLISOURCE_UI_TEXT_TEXTUICOMPONENT_H_
+#define _CHILLISOURCE_UI_TEXT_TEXTUICOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>

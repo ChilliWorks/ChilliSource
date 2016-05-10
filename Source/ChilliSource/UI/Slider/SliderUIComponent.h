@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_SLIDER_SLIDERCOMPONENT_H_
-#define _CHILLISOURCE_UI_SLIDER_SLIDERCOMPONENT_H_
+#ifndef _CHILLISOURCE_UI_SLIDER_SLIDERUICOMPONENT_H_
+#define _CHILLISOURCE_UI_SLIDER_SLIDERUICOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
