@@ -1,5 +1,5 @@
 //
-//  SliderComponent.h
+//  SliderUIComponent.h
 //  Chilli Source
 //  Created by Ian Copland on 18/12/2014.
 //
@@ -65,10 +65,10 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class SliderComponent final : public UIComponent
+    class SliderUIComponent final : public UIComponent
     {
     public:
-        CS_DECLARE_NAMEDTYPE(SliderComponent);
+        CS_DECLARE_NAMEDTYPE(SliderUIComponent);
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -158,7 +158,7 @@ namespace ChilliSource
         /// @param The component name.
         /// @param The property map.
         //------------------------------------------------------------------------------
-        SliderComponent(const std::string& in_componentName, const PropertyMap& in_properties);
+        SliderUIComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //------------------------------------------------------------------------------
         /// Sets the name of the slider widget. This can only be called once, on
         /// construction. If this is called a second time the app is considered to be in

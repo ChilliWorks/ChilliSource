@@ -31,7 +31,7 @@
 #define _CHILLISOURCE_UI_PROGRESSBAR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/ProgressBar/ProgressBarComponent.h>
+#include <ChilliSource/UI/ProgressBar/ProgressBarUIComponent.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarType.h>
 

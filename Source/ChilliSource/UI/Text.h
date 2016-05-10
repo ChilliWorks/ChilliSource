@@ -31,7 +31,7 @@
 #define _CHILLISOURCE_UI_TEXT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Text/TextComponent.h>
+#include <ChilliSource/UI/Text/TextUIComponent.h>
 #include <ChilliSource/UI/Text/TextIcon.h>
 
 #endif

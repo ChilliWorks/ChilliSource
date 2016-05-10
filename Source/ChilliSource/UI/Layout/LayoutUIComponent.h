@@ -1,5 +1,5 @@
 //
-//  LayoutComponent.h
+//  LayoutUIComponent.h
 //  Chilli Source
 //  Created by Ian Copland on 07/01/2015.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_LAYOUTCOMPONENT_H_
-#define _CHILLISOURCE_UI_LAYOUT_LAYOUTCOMPONENT_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_LAYOUTUICOMPONENT_H_
+#define _CHILLISOURCE_UI_LAYOUT_LAYOUTUICOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
@@ -43,17 +43,17 @@ namespace ChilliSource
     /// A component for applying layouts to the children of the owning widget.
     /// There are 3 types of layout: Grid, HList and VList.
     ///
-    /// A LayoutComponent contains the following properties:
+    /// A LayoutUIComponent contains the following properties:
     ///
     /// "Layout": The definition of the layout that will be applied. The
     /// contents of a layout def are described in the layout def documentation.
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class LayoutComponent final : public UIComponent
+    class LayoutUIComponent final : public UIComponent
     {
     public:
-        CS_DECLARE_NAMEDTYPE(LayoutComponent);
+        CS_DECLARE_NAMEDTYPE(LayoutUIComponent);
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -143,7 +143,7 @@ namespace ChilliSource
         /// @param The component name.
         /// @param The property map.
         //------------------------------------------------------------------------------
-        LayoutComponent(const std::string& in_componentName, const PropertyMap& in_properties);
+        LayoutUIComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///

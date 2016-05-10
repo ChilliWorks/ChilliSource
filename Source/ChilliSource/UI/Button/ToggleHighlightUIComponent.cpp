@@ -1,5 +1,5 @@
 //
-//  ToggleHighlightComponent.cpp
+//  ToggleHighlightUIComponent.cpp
 //  Chilli Source
 //  Created by Ian Copland on 01/12/2014.
 //
@@ -26,14 +26,14 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Button/ToggleHighlightComponent.h>
+#include <ChilliSource/UI/Button/ToggleHighlightUIComponent.h>
 
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/Container/Property/PropertyTypes.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
-#include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableUIComponent.h>
 #include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
 namespace ChilliSource
@@ -60,78 +60,78 @@ namespace ChilliSource
         };
     }
     
-    CS_DEFINE_NAMEDTYPE(ToggleHighlightComponent);
+    CS_DEFINE_NAMEDTYPE(ToggleHighlightUIComponent);
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const std::vector<PropertyMap::PropertyDesc>& ToggleHighlightComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& ToggleHighlightUIComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    ToggleHighlightComponent::ToggleHighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+    ToggleHighlightUIComponent::ToggleHighlightUIComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalOffDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetNormalOffDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetNormalOffDrawableDef));
-        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightOffDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffDrawableDef));
-        RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightOffColourKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffColour), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffColour));
-        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalOnDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetNormalOnDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetNormalOnDrawableDef));
-        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightOnDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnDrawableDef));
-        RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightOnColourKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnColour), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnColour));
-        RegisterProperty<bool>(PropertyTypes::Bool(), k_toggledOnKey, MakeDelegate(this, &ToggleHighlightComponent::IsToggledOn), MakeDelegate(this, &ToggleHighlightComponent::SetToggleOn));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalOffDrawableKey, MakeDelegate(this, &ToggleHighlightUIComponent::GetNormalOffDrawableDef), MakeDelegate(this, &ToggleHighlightUIComponent::SetNormalOffDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightOffDrawableKey, MakeDelegate(this, &ToggleHighlightUIComponent::GetHighlightOffDrawableDef), MakeDelegate(this, &ToggleHighlightUIComponent::SetHighlightOffDrawableDef));
+        RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightOffColourKey, MakeDelegate(this, &ToggleHighlightUIComponent::GetHighlightOffColour), MakeDelegate(this, &ToggleHighlightUIComponent::SetHighlightOffColour));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalOnDrawableKey, MakeDelegate(this, &ToggleHighlightUIComponent::GetNormalOnDrawableDef), MakeDelegate(this, &ToggleHighlightUIComponent::SetNormalOnDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightOnDrawableKey, MakeDelegate(this, &ToggleHighlightUIComponent::GetHighlightOnDrawableDef), MakeDelegate(this, &ToggleHighlightUIComponent::SetHighlightOnDrawableDef));
+        RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightOnColourKey, MakeDelegate(this, &ToggleHighlightUIComponent::GetHighlightOnColour), MakeDelegate(this, &ToggleHighlightUIComponent::SetHighlightOnColour));
+        RegisterProperty<bool>(PropertyTypes::Bool(), k_toggledOnKey, MakeDelegate(this, &ToggleHighlightUIComponent::IsToggledOn), MakeDelegate(this, &ToggleHighlightUIComponent::SetToggleOn));
         ApplyRegisteredProperties(in_properties);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool ToggleHighlightComponent::IsA(InterfaceIDType in_interfaceId) const
+    bool ToggleHighlightUIComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIComponent::InterfaceID == in_interfaceId || ToggleHighlightComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || ToggleHighlightUIComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const UIDrawableDefCSPtr& ToggleHighlightComponent::GetNormalOffDrawableDef() const
+    const UIDrawableDefCSPtr& ToggleHighlightUIComponent::GetNormalOffDrawableDef() const
     {
         return m_normalOffDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const UIDrawableDefCSPtr& ToggleHighlightComponent::GetHighlightOffDrawableDef() const
+    const UIDrawableDefCSPtr& ToggleHighlightUIComponent::GetHighlightOffDrawableDef() const
     {
         return m_highlightOffDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const Colour& ToggleHighlightComponent::GetHighlightOffColour() const
+    const Colour& ToggleHighlightUIComponent::GetHighlightOffColour() const
     {
         return m_highlightOffColour;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const UIDrawableDefCSPtr& ToggleHighlightComponent::GetNormalOnDrawableDef() const
+    const UIDrawableDefCSPtr& ToggleHighlightUIComponent::GetNormalOnDrawableDef() const
     {
         return m_normalOnDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const UIDrawableDefCSPtr& ToggleHighlightComponent::GetHighlightOnDrawableDef() const
+    const UIDrawableDefCSPtr& ToggleHighlightUIComponent::GetHighlightOnDrawableDef() const
     {
         return m_normalOffDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const Colour& ToggleHighlightComponent::GetHighlightOnColour() const
+    const Colour& ToggleHighlightUIComponent::GetHighlightOnColour() const
     {
         return m_highlightOnColour;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool ToggleHighlightComponent::IsToggledOn() const
+    bool ToggleHighlightUIComponent::IsToggledOn() const
     {
         return (m_state == ToggleHighlightState::k_normalOn || m_state == ToggleHighlightState::k_highlightedOn);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetNormalOffDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
+    void ToggleHighlightUIComponent::SetNormalOffDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_normalOffDrawableDef = in_drawableDef;
         
@@ -142,7 +142,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetHighlightOffDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
+    void ToggleHighlightUIComponent::SetHighlightOffDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_highlightOffDrawableDef = in_drawableDef;
         
@@ -153,7 +153,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetHighlightOffColour(const Colour& in_colour)
+    void ToggleHighlightUIComponent::SetHighlightOffColour(const Colour& in_colour)
     {
         m_highlightOffColour = in_colour;
         
@@ -164,7 +164,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetNormalOnDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
+    void ToggleHighlightUIComponent::SetNormalOnDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_normalOnDrawableDef = in_drawableDef;
         
@@ -175,7 +175,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetHighlightOnDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
+    void ToggleHighlightUIComponent::SetHighlightOnDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_highlightOnDrawableDef = in_drawableDef;
         
@@ -186,7 +186,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetHighlightOnColour(const Colour& in_colour)
+    void ToggleHighlightUIComponent::SetHighlightOnColour(const Colour& in_colour)
     {
         m_highlightOnColour = in_colour;
         
@@ -197,7 +197,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetToggleOn(bool in_toggleOn)
+    void ToggleHighlightUIComponent::SetToggleOn(bool in_toggleOn)
     {
         if (in_toggleOn == true && m_state == ToggleHighlightState::k_normalOff)
         {
@@ -218,13 +218,13 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool ToggleHighlightComponent::IsHighlighted() const
+    bool ToggleHighlightUIComponent::IsHighlighted() const
     {
         return (m_state == ToggleHighlightState::k_highlightedOff || m_state == ToggleHighlightState::k_highlightedOn);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::Toggle()
+    void ToggleHighlightUIComponent::Toggle()
     {
         if (IsToggledOn() == true)
         {
@@ -237,7 +237,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::Highlight()
+    void ToggleHighlightUIComponent::Highlight()
     {
         switch (m_state)
         {
@@ -256,7 +256,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::Unhighlight()
+    void ToggleHighlightUIComponent::Unhighlight()
     {
         switch (m_state)
         {
@@ -275,7 +275,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::ApplyOffNormal()
+    void ToggleHighlightUIComponent::ApplyOffNormal()
     {
         m_state = ToggleHighlightState::k_normalOff;
         
@@ -286,7 +286,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::ApplyOffHighlighted()
+    void ToggleHighlightUIComponent::ApplyOffHighlighted()
     {
         m_state = ToggleHighlightState::k_highlightedOff;
         
@@ -310,7 +310,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::ApplyOnNormal()
+    void ToggleHighlightUIComponent::ApplyOnNormal()
     {
         m_state = ToggleHighlightState::k_normalOn;
         
@@ -321,7 +321,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::ApplyOnHightlighted()
+    void ToggleHighlightUIComponent::ApplyOnHightlighted()
     {
         m_state = ToggleHighlightState::k_highlightedOn;
         
@@ -345,9 +345,9 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::OnInit()
+    void ToggleHighlightUIComponent::OnInit()
     {
-        m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
+        m_drawableComponent = GetWidget()->GetComponent<DrawableUIComponent>();
         CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Toggle Highlight UIComponent must also contain a UIDrawable UIComponent.");
         
         if (IsToggledOn() == false)
@@ -359,15 +359,15 @@ namespace ChilliSource
             Highlight();
         }
         
-        m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightComponent::OnPressedInside));
-        m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightComponent::OnMoveEntered));
-        m_moveExitedConnection = GetWidget()->GetMoveExitedEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightComponent::OnMoveExited));
-        m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightComponent::OnReleasedInside));
-        m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightComponent::OnReleasedOutside));
+        m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightUIComponent::OnPressedInside));
+        m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightUIComponent::OnMoveEntered));
+        m_moveExitedConnection = GetWidget()->GetMoveExitedEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightUIComponent::OnMoveExited));
+        m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightUIComponent::OnReleasedInside));
+        m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(MakeDelegate(this, &ToggleHighlightUIComponent::OnReleasedOutside));
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
+    void ToggleHighlightUIComponent::OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
         if (in_inputType == Pointer::GetDefaultInputType())
         {
@@ -385,7 +385,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::OnMoveEntered(Widget* in_widget, const Pointer& in_pointer)
+    void ToggleHighlightUIComponent::OnMoveEntered(Widget* in_widget, const Pointer& in_pointer)
     {
         if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
@@ -401,7 +401,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::OnMoveExited(Widget* in_widget, const Pointer& in_pointer)
+    void ToggleHighlightUIComponent::OnMoveExited(Widget* in_widget, const Pointer& in_pointer)
     {
         if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
@@ -417,7 +417,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
+    void ToggleHighlightUIComponent::OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
         if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
@@ -435,7 +435,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
+    void ToggleHighlightUIComponent::OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
         if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
@@ -451,7 +451,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::OnDestroy()
+    void ToggleHighlightUIComponent::OnDestroy()
     {
         m_pressedInsideConnection.reset();
         m_moveEnteredConnection.reset();

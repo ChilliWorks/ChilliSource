@@ -73,7 +73,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         virtual ~UILayoutDef() {};
     protected:
-        friend class LayoutComponent;
+        friend class LayoutUIComponent;
         //------------------------------------------------------------------------------
         /// Creates a new instance of the layout described by this definition. This
         /// should typically only be called by a layout component.
@@ -84,7 +84,7 @@ namespace ChilliSource
         ///
         /// @return a new layout instance.
         //------------------------------------------------------------------------------
-        virtual UILayoutUPtr CreateLayout(LayoutComponent* in_owner) const = 0;
+        virtual UILayoutUPtr CreateLayout(LayoutUIComponent* in_owner) const = 0;
     };
 }
 

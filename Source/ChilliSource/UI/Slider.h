@@ -31,7 +31,7 @@
 #define _CHILLISOURCE_UI_SLIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Slider/SliderComponent.h>
+#include <ChilliSource/UI/Slider/SliderUIComponent.h>
 #include <ChilliSource/UI/Slider/SliderDirection.h>
 
 #endif

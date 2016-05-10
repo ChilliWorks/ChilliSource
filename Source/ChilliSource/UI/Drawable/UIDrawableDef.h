@@ -136,7 +136,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         virtual ~UIDrawableDef() {};
     protected:
-        friend class DrawableComponent;
+        friend class DrawableUIComponent;
         //--------------------------------------------------------------
         /// Creates a new instance of the drawable described by this
         /// definition. This should typically only be called by a

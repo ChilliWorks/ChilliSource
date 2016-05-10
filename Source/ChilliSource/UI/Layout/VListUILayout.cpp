@@ -36,7 +36,7 @@ namespace ChilliSource
     CS_DEFINE_NAMEDTYPE(VListUILayout);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    VListUILayout::VListUILayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
+    VListUILayout::VListUILayout(LayoutUIComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
         : UILayout(in_layoutComponent), m_gridLayout(in_layoutComponent, GridUILayout::CellOrder::k_colMajor, in_numCells, 1, in_relMargins, in_absMargins, 0.0f, 0.0f, in_relSpacing, in_absSpacing)
     {
     }

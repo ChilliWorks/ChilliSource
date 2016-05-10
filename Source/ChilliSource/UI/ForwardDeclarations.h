@@ -54,13 +54,13 @@ namespace ChilliSource
     //---------------------------------------------------------
     /// Button
     //---------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(HighlightComponent);
-    CS_FORWARDDECLARE_CLASS(ToggleHighlightComponent);
+    CS_FORWARDDECLARE_CLASS(HighlightUIComponent);
+    CS_FORWARDDECLARE_CLASS(ToggleHighlightUIComponent);
     //---------------------------------------------------------
     /// UIDrawable
     //---------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(UIDrawable);
-    CS_FORWARDDECLARE_CLASS(DrawableComponent);
+    CS_FORWARDDECLARE_CLASS(DrawableUIComponent);
     CS_FORWARDDECLARE_CLASS(UIDrawableDef);
     CS_FORWARDDECLARE_CLASS(NinePatchUIDrawable);
     CS_FORWARDDECLARE_CLASS(NinePatchUIDrawableDef);
@@ -72,7 +72,7 @@ namespace ChilliSource
     /// UILayout
     //---------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(UILayout);
-    CS_FORWARDDECLARE_CLASS(LayoutComponent);
+    CS_FORWARDDECLARE_CLASS(LayoutUIComponent);
     CS_FORWARDDECLARE_CLASS(UILayoutDef);
     CS_FORWARDDECLARE_CLASS(GridUILayout);
     CS_FORWARDDECLARE_CLASS(GridUILayoutDef);
@@ -83,18 +83,18 @@ namespace ChilliSource
     //---------------------------------------------------------
     /// Progress Bar
     //---------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(ProgressBarComponent);
+    CS_FORWARDDECLARE_CLASS(ProgressBarUIComponent);
     enum class ProgressBarDirection;
     enum class ProgressBarType;
     //---------------------------------------------------------
     /// Slider
     //---------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(SliderComponent);
+    CS_FORWARDDECLARE_CLASS(SliderUIComponent);
     enum class SliderDirection;
     //---------------------------------------------------------
     /// Text
     //---------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(TextComponent);
+    CS_FORWARDDECLARE_CLASS(TextUIComponent);
     CS_FORWARDDECLARE_CLASS(TextIcon);
 }
 

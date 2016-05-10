@@ -242,7 +242,7 @@ namespace ChilliSource
         /// @param The relative vertical spacing.
         /// @param The absolute vertical spacing.
         //------------------------------------------------------------------------------
-        GridUILayout(LayoutComponent* in_layoutComponent, GridUILayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
+        GridUILayout(LayoutUIComponent* in_layoutComponent, GridUILayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                    f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing);
         //------------------------------------------------------------------------------
         /// Create the grid layout sizes and positions based on the current layout

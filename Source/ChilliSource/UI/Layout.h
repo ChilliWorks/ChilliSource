@@ -36,7 +36,7 @@
 #include <ChilliSource/UI/Layout/HListUILayout.h>
 #include <ChilliSource/UI/Layout/HListUILayoutDef.h>
 #include <ChilliSource/UI/Layout/UILayout.h>
-#include <ChilliSource/UI/Layout/LayoutComponent.h>
+#include <ChilliSource/UI/Layout/LayoutUIComponent.h>
 #include <ChilliSource/UI/Layout/UILayoutDef.h>
 #include <ChilliSource/UI/Layout/VListUILayout.h>
 #include <ChilliSource/UI/Layout/VListUILayoutDef.h>

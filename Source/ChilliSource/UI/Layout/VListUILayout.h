@@ -161,7 +161,7 @@ namespace ChilliSource
         /// @param The relative spacing.
         /// @param The absolute spacing.
         //------------------------------------------------------------------------------
-        VListUILayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
+        VListUILayout(LayoutUIComponent* in_layoutComponent, u32 in_numCells, const Vector4& in_relMargins, const Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
         //------------------------------------------------------------------------------
         /// Create the list layout sizes and positions based on the current layout
         /// properties and the owning widget.

@@ -209,7 +209,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    UILayoutUPtr GridUILayoutDef::CreateLayout(LayoutComponent* in_owner) const
+    UILayoutUPtr GridUILayoutDef::CreateLayout(LayoutUIComponent* in_owner) const
     {
         return UILayoutUPtr(new GridUILayout(in_owner, m_cellOrder, m_numRows, m_numCols, m_relativeMargins, m_absoluteMargins, m_relativeHSpacing, m_absoluteHSpacing, m_relativeVSpacing, m_absoluteVSpacing));
     }

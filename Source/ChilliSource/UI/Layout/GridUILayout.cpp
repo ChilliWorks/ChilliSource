@@ -30,14 +30,14 @@
 
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Layout/LayoutComponent.h>
+#include <ChilliSource/UI/Layout/LayoutUIComponent.h>
 
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(GridUILayout);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    GridUILayout::GridUILayout(LayoutComponent* in_layoutComponent, GridUILayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
+    GridUILayout::GridUILayout(LayoutUIComponent* in_layoutComponent, GridUILayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                            f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing)
         : UILayout(in_layoutComponent), m_cellOrder(in_cellOrder), m_numRows(in_numRows), m_numCols(in_numCols), m_marginSizeTop(in_relMargins.x, in_absMargins.x), m_marginSizeRight(in_relMargins.y, in_absMargins.y),
         m_marginSizeBottom(in_relMargins.z, in_absMargins.z), m_marginSizeLeft(in_relMargins.w, in_absMargins.w), m_spacingSizeH(in_relHorizSpacing, in_absHorizSpacing), m_spacingSizeV(in_relVertSpacing, in_absVertSpacing)

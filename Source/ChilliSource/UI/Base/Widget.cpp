@@ -39,8 +39,8 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Drawable/UIDrawable.h>
-#include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Layout/LayoutComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableUIComponent.h>
+#include <ChilliSource/UI/Layout/LayoutUIComponent.h>
 
 namespace ChilliSource
 {
@@ -244,7 +244,7 @@ namespace ChilliSource
             component->OnInit();
         }
         
-        m_layoutComponent = GetComponent<LayoutComponent>();
+        m_layoutComponent = GetComponent<LayoutUIComponent>();
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -1219,7 +1219,7 @@ namespace ChilliSource
         //This should be improved to make the acquisition of preferred size from components
         //more generic, i.e handled via an interface. This will allow other component types
         //to also prefer sizes.
-        const DrawableComponent* drawableComponent = GetComponent<DrawableComponent>();
+        const DrawableUIComponent* drawableComponent = GetComponent<DrawableUIComponent>();
         if(drawableComponent != nullptr)
         {
             auto drawable = drawableComponent->GetDrawable();
@@ -1281,9 +1281,9 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    std::pair<LayoutComponent*, s32> Widget::GetLayoutForChild(const Widget* in_child)
+    std::pair<LayoutUIComponent*, s32> Widget::GetLayoutForChild(const Widget* in_child)
     {
-        LayoutComponent* layout = nullptr;
+        LayoutUIComponent* layout = nullptr;
         s32 childIndex = -1;
         
         if (m_layoutComponent != nullptr)

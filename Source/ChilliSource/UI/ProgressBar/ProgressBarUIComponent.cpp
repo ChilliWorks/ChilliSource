@@ -1,5 +1,5 @@
 //
-//  ProgressBarComponent.cpp
+//  ProgressBarUIComponent.cpp
 //  Chilli Source
 //  Created by Ian Copland on 01/12/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/ProgressBar/ProgressBarComponent.h>
+#include <ChilliSource/UI/ProgressBar/ProgressBarUIComponent.h>
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Container/Property/PropertyTypes.h>
@@ -34,7 +34,7 @@
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Drawable/UIDrawable.h>
-#include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableUIComponent.h>
 
 namespace ChilliSource
 {
@@ -56,66 +56,66 @@ namespace ChilliSource
         };
     }
     
-    CS_DEFINE_NAMEDTYPE(ProgressBarComponent);
+    CS_DEFINE_NAMEDTYPE(ProgressBarUIComponent);
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const std::vector<PropertyMap::PropertyDesc>& ProgressBarComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& ProgressBarUIComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    ProgressBarComponent::ProgressBarComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+    ProgressBarUIComponent::ProgressBarUIComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName), m_relBarSize(1.0f, 1.0f)
     {
-        RegisterProperty<Vector2>(PropertyTypes::Vector2(), k_relBarSizeKey, MakeDelegate(this, &ProgressBarComponent::GetRelativeBarSize), MakeDelegate(this, &ProgressBarComponent::SetRelativeBarSize));
-        RegisterProperty<f32>(PropertyTypes::Float(), k_progressKey, MakeDelegate(this, &ProgressBarComponent::GetProgress), MakeDelegate(this, &ProgressBarComponent::SetProgress));
-        RegisterProperty<ProgressBarType>(PropertyTypes::ProgressBarType(), k_barTypeKey, MakeDelegate(this, &ProgressBarComponent::GetBarType), MakeDelegate(this, &ProgressBarComponent::SetBarType));
-        RegisterProperty<ProgressBarDirection>(PropertyTypes::ProgressBarDirection(), k_barDirectionKey, MakeDelegate(this, &ProgressBarComponent::GetBarDirection), MakeDelegate(this, &ProgressBarComponent::SetBarDirection));
-        RegisterProperty<std::string>(PropertyTypes::String(), k_barWidgetName, MakeDelegate(this, &ProgressBarComponent::GetBarWidgetName), MakeDelegate(this, &ProgressBarComponent::SetBarWidgetName));
+        RegisterProperty<Vector2>(PropertyTypes::Vector2(), k_relBarSizeKey, MakeDelegate(this, &ProgressBarUIComponent::GetRelativeBarSize), MakeDelegate(this, &ProgressBarUIComponent::SetRelativeBarSize));
+        RegisterProperty<f32>(PropertyTypes::Float(), k_progressKey, MakeDelegate(this, &ProgressBarUIComponent::GetProgress), MakeDelegate(this, &ProgressBarUIComponent::SetProgress));
+        RegisterProperty<ProgressBarType>(PropertyTypes::ProgressBarType(), k_barTypeKey, MakeDelegate(this, &ProgressBarUIComponent::GetBarType), MakeDelegate(this, &ProgressBarUIComponent::SetBarType));
+        RegisterProperty<ProgressBarDirection>(PropertyTypes::ProgressBarDirection(), k_barDirectionKey, MakeDelegate(this, &ProgressBarUIComponent::GetBarDirection), MakeDelegate(this, &ProgressBarUIComponent::SetBarDirection));
+        RegisterProperty<std::string>(PropertyTypes::String(), k_barWidgetName, MakeDelegate(this, &ProgressBarUIComponent::GetBarWidgetName), MakeDelegate(this, &ProgressBarUIComponent::SetBarWidgetName));
         ApplyRegisteredProperties(in_properties);
         
         CS_ASSERT(m_barWidgetName.empty() == false, "Bar widget name must be set on a progress bar component.");
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool ProgressBarComponent::IsA(InterfaceIDType in_interfaceId) const
+    bool ProgressBarUIComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIComponent::InterfaceID == in_interfaceId || ProgressBarComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || ProgressBarUIComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const Vector2& ProgressBarComponent::GetRelativeBarSize() const
+    const Vector2& ProgressBarUIComponent::GetRelativeBarSize() const
     {
         return m_relBarSize;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    f32 ProgressBarComponent::GetProgress() const
+    f32 ProgressBarUIComponent::GetProgress() const
     {
         return m_progress;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    ProgressBarType ProgressBarComponent::GetBarType() const
+    ProgressBarType ProgressBarUIComponent::GetBarType() const
     {
         return m_barType;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    ProgressBarDirection ProgressBarComponent::GetBarDirection() const
+    ProgressBarDirection ProgressBarUIComponent::GetBarDirection() const
     {
         return m_direction;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const std::string& ProgressBarComponent::GetBarWidgetName() const
+    const std::string& ProgressBarUIComponent::GetBarWidgetName() const
     {
         return m_barWidgetName;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::SetRelativeBarSize(const Vector2& in_relSize)
+    void ProgressBarUIComponent::SetRelativeBarSize(const Vector2& in_relSize)
     {
         m_relBarSize = in_relSize;
         
@@ -123,7 +123,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::SetProgress(f32 in_progress)
+    void ProgressBarUIComponent::SetProgress(f32 in_progress)
     {
         CS_ASSERT(in_progress >= 0.0f && in_progress <= 1.0f, "Progress must be in the range: 0.0 - 1.0");
         
@@ -133,7 +133,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::SetBarType(ProgressBarType in_barType)
+    void ProgressBarUIComponent::SetBarType(ProgressBarType in_barType)
     {
         m_barType = in_barType;
         
@@ -141,7 +141,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::SetBarDirection(ProgressBarDirection in_direction)
+    void ProgressBarUIComponent::SetBarDirection(ProgressBarDirection in_direction)
     {
         m_direction = in_direction;
         
@@ -149,7 +149,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::SetBarWidgetName(const std::string& in_name)
+    void ProgressBarUIComponent::SetBarWidgetName(const std::string& in_name)
     {
         CS_ASSERT(m_barWidgetName.empty(), "Cannot change the bar widget on a progress bar component.");
         
@@ -159,7 +159,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::UpdateBar()
+    void ProgressBarUIComponent::UpdateBar()
     {
         if (m_barWidget != nullptr)
         {
@@ -175,7 +175,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::UpdateHorizontalBar()
+    void ProgressBarUIComponent::UpdateHorizontalBar()
     {
         Vector2 relBarPosition = Vector2(0.5f * (1.0f - m_relBarSize.x), 0.0f);
         Vector2 relBarSize = m_relBarSize;
@@ -202,7 +202,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::UpdateVerticalBar()
+    void ProgressBarUIComponent::UpdateVerticalBar()
     {
         Vector2 relBarPosition = Vector2(0.0f, 0.5f * (1.0f - m_relBarSize.y));
         Vector2 relBarSize = m_relBarSize;
@@ -229,18 +229,18 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::OnInit()
+    void ProgressBarUIComponent::OnInit()
     {
         m_barWidget = GetWidget()->GetInternalWidget(m_barWidgetName);
         CS_ASSERT(m_barWidget != nullptr, "Could not find bar widget with name: " + m_barWidgetName);
         
-        m_barDrawableComponent = m_barWidget->GetComponent<DrawableComponent>();
+        m_barDrawableComponent = m_barWidget->GetComponent<DrawableUIComponent>();
         
         UpdateBar();
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ProgressBarComponent::OnDestroy()
+    void ProgressBarUIComponent::OnDestroy()
     {
     }
 }

@@ -28,13 +28,13 @@
 
 #include <ChilliSource/UI/Base/UIComponentFactory.h>
 
-#include <ChilliSource/UI/Button/HighlightComponent.h>
-#include <ChilliSource/UI/Button/ToggleHighlightComponent.h>
-#include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Layout/LayoutComponent.h>
-#include <ChilliSource/UI/ProgressBar/ProgressBarComponent.h>
-#include <ChilliSource/UI/Slider/SliderComponent.h>
-#include <ChilliSource/UI/Text/TextComponent.h>
+#include <ChilliSource/UI/Button/HighlightUIComponent.h>
+#include <ChilliSource/UI/Button/ToggleHighlightUIComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableUIComponent.h>
+#include <ChilliSource/UI/Layout/LayoutUIComponent.h>
+#include <ChilliSource/UI/ProgressBar/ProgressBarUIComponent.h>
+#include <ChilliSource/UI/Slider/SliderUIComponent.h>
+#include <ChilliSource/UI/Text/TextUIComponent.h>
 
 namespace ChilliSource
 {
@@ -73,13 +73,13 @@ namespace ChilliSource
     //-----------------------------------------------------------------
     void UIComponentFactory::OnInit()
     {
-        Register<DrawableComponent>("Drawable");
-        Register<LayoutComponent>("Layout");
-        Register<HighlightComponent>("Highlight");
-        Register<ToggleHighlightComponent>("ToggleHighlight");
-        Register<TextComponent>("Text");
-        Register<ProgressBarComponent>("ProgressBar");
-        Register<SliderComponent>("Slider");
+        Register<DrawableUIComponent>("Drawable");
+        Register<LayoutUIComponent>("Layout");
+        Register<HighlightUIComponent>("Highlight");
+        Register<ToggleHighlightUIComponent>("ToggleHighlight");
+        Register<TextUIComponent>("Text");
+        Register<ProgressBarUIComponent>("ProgressBar");
+        Register<SliderUIComponent>("Slider");
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

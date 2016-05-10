@@ -54,7 +54,7 @@ namespace ChilliSource
         ///
         /// @param The layout component that owns this layout.
         //------------------------------------------------------------------------------
-        UILayout(LayoutComponent* in_layoutComponent);
+        UILayout(LayoutUIComponent* in_layoutComponent);
         //------------------------------------------------------------------------------
         /// Virtual destructor
         ///
@@ -68,10 +68,10 @@ namespace ChilliSource
         ///
         /// @return The owning component.
         //------------------------------------------------------------------------------
-        LayoutComponent* GetComponent();
+        LayoutUIComponent* GetComponent();
         
     private:
-        friend class LayoutComponent;
+        friend class LayoutUIComponent;
         //------------------------------------------------------------------------------
         /// Create the layout sizes and positions based on the current layout properties
         /// and the owning widget.
@@ -101,7 +101,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         virtual Vector2 GetPositionForIndex(u32 in_index) const = 0;
         
-        LayoutComponent* m_component = nullptr;
+        LayoutUIComponent* m_component = nullptr;
     };
 }
 

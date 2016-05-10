@@ -1041,7 +1041,7 @@ namespace ChilliSource
         /// @return A pair containing the layout and index. The layout can be null if the child
         /// is not in a layout.
         //----------------------------------------------------------------------------------------
-        std::pair<LayoutComponent*, s32> GetLayoutForChild(const Widget* in_child);
+        std::pair<LayoutUIComponent*, s32> GetLayoutForChild(const Widget* in_child);
         //----------------------------------------------------------------------------------------
         /// Sets the value of a property from another property. The given property must be of the
         /// same type as the given property or the app will be considered to be in an irrecoverable
@@ -1255,7 +1255,7 @@ namespace ChilliSource
         
         std::vector<UIComponentUPtr> m_components;
 
-        LayoutComponent* m_layoutComponent = nullptr;
+        LayoutUIComponent* m_layoutComponent = nullptr;
         
         Widget* m_parent = nullptr;
         const Widget* m_canvas = nullptr;

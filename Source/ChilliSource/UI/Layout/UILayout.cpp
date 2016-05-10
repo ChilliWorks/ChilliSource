@@ -33,14 +33,14 @@ namespace ChilliSource
     CS_DEFINE_NAMEDTYPE(UILayout);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    UILayout::UILayout(LayoutComponent* in_layoutComponent)
+    UILayout::UILayout(LayoutUIComponent* in_layoutComponent)
         : m_component(in_layoutComponent)
     {
         CS_ASSERT(m_component != nullptr, "A layout must have an owning component.");
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    LayoutComponent* UILayout::GetComponent()
+    LayoutUIComponent* UILayout::GetComponent()
     {
         return m_component;
     }

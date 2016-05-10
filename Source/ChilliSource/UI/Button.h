@@ -31,7 +31,7 @@
 #define _CHILLISOURCE_UI_BUTTON_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Button/HighlightComponent.h>
-#include <ChilliSource/UI/Button/ToggleHighlightComponent.h>
+#include <ChilliSource/UI/Button/HighlightUIComponent.h>
+#include <ChilliSource/UI/Button/ToggleHighlightUIComponent.h>
 
 #endif

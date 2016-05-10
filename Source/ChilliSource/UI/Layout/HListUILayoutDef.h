@@ -144,7 +144,7 @@ namespace ChilliSource
         ///
         /// @return a new layout instance.
         //------------------------------------------------------------------------------
-        UILayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
+        UILayoutUPtr CreateLayout(LayoutUIComponent* in_owner) const override;
         
         u32 m_numCells = 1;
         Vector4 m_relativeMargins;

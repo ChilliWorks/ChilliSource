@@ -1,5 +1,5 @@
 //
-//  DrawableComponent.cpp
+//  DrawableUIComponent.cpp
 //  Chilli Source
 //  Created by Ian Copland on 28/11/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableUIComponent.h>
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
@@ -45,42 +45,42 @@ namespace ChilliSource
         };
     }
     
-    CS_DEFINE_NAMEDTYPE(DrawableComponent);
+    CS_DEFINE_NAMEDTYPE(DrawableUIComponent);
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const std::vector<PropertyMap::PropertyDesc>& DrawableComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& DrawableUIComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    DrawableComponent::DrawableComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+    DrawableUIComponent::DrawableUIComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_drawableKey, MakeDelegate(this, &DrawableComponent::GetDrawableDef), MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_drawableKey, MakeDelegate(this, &DrawableUIComponent::GetDrawableDef), MakeDelegate(this, &DrawableUIComponent::ApplyDrawableDef));
         ApplyRegisteredProperties(in_properties);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool DrawableComponent::IsA(InterfaceIDType in_interfaceId) const
+    bool DrawableUIComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIComponent::InterfaceID == in_interfaceId || DrawableComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || DrawableUIComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    UIDrawable* DrawableComponent::GetDrawable()
-    {
-        return m_drawable.get();
-    }
-    //-------------------------------------------------------------------
-    //-------------------------------------------------------------------
-    const UIDrawable* DrawableComponent::GetDrawable() const
+    UIDrawable* DrawableUIComponent::GetDrawable()
     {
         return m_drawable.get();
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void DrawableComponent::ApplyDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
+    const UIDrawable* DrawableUIComponent::GetDrawable() const
+    {
+        return m_drawable.get();
+    }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    void DrawableUIComponent::ApplyDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_drawable.reset();
         m_drawableDef = in_drawableDef;
@@ -92,13 +92,13 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const UIDrawableDefCSPtr& DrawableComponent::GetDrawableDef() const
+    const UIDrawableDefCSPtr& DrawableUIComponent::GetDrawableDef() const
     {
         return m_drawableDef;
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void DrawableComponent::OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
+    void DrawableUIComponent::OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
         if (m_drawable != nullptr)
         {

@@ -1,5 +1,5 @@
 //
-//  TextComponent.cpp
+//  TextUIComponent.cpp
 //  Chilli Source
 //  Created by Ian Copland on 05/11/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Text/TextComponent.h>
+#include <ChilliSource/UI/Text/TextUIComponent.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/Property/PropertyTypes.h>
@@ -84,35 +84,35 @@ namespace ChilliSource
         };
     }
     
-    CS_DEFINE_NAMEDTYPE(TextComponent);
+    CS_DEFINE_NAMEDTYPE(TextUIComponent);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const std::vector<PropertyMap::PropertyDesc>& TextComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& TextUIComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    TextComponent::TextComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+    TextUIComponent::TextUIComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
         auto resourcePool = Application::Get()->GetResourcePool();
         SetFont(resourcePool->LoadResource<Font>(StorageLocation::k_chilliSource, "Fonts/CarlitoMed.csfont"));
         
-        RegisterProperty<FontCSPtr>(PropertyTypes::Font(), k_fontKey, MakeDelegate(this, &TextComponent::GetFont), MakeDelegate(this, &TextComponent::SetFont));
-        RegisterProperty<LocalisedTextCSPtr>(PropertyTypes::LocalisedText(), k_localisedTextKey, MakeDelegate(this, &TextComponent::GetLocalisedText), MakeDelegate(this, &TextComponent::SetLocalisedText));
-        RegisterProperty<std::string>(PropertyTypes::String(), k_localisedTextIdKey, MakeDelegate(this, &TextComponent::GetLocalisedTextId), MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetLocalisedTextId));
-        RegisterProperty<std::string>(PropertyTypes::String(), k_textKey, MakeDelegate(this, &TextComponent::GetText), MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetText));
-        RegisterProperty<Colour>(PropertyTypes::Colour(), k_textColourKey, MakeDelegate(this, &TextComponent::GetTextColour), MakeDelegate(this, &TextComponent::SetTextColour));
-        RegisterProperty<HorizontalTextJustification>(PropertyTypes::HorizontalTextJustification(), k_horizontalJustificationKey, MakeDelegate(this, &TextComponent::GetHorizontalJustification), MakeDelegate(this, &TextComponent::SetHorizontalJustification));
-        RegisterProperty<VerticalTextJustification>(PropertyTypes::VerticalTextJustification(), k_verticalJustificationKey, MakeDelegate(this, &TextComponent::GetVerticalJustification), MakeDelegate(this, &TextComponent::SetVerticalJustification));
-        RegisterProperty<f32>(PropertyTypes::Float(), k_absCharSpacingOffsetKey, MakeDelegate(this, &TextComponent::GetAbsoluteCharacterSpacingOffset), MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
-        RegisterProperty<f32>(PropertyTypes::Float(), k_absLineSpacingOffsetKey, MakeDelegate(this, &TextComponent::GetAbsoluteLineSpacingOffset), MakeDelegate(this, &TextComponent::SetAbsoluteLineSpacingOffset));
-        RegisterProperty<f32>(PropertyTypes::Float(), k_lineSpacingScaleKey, MakeDelegate(this, &TextComponent::GetLineSpacingScale), MakeDelegate(this, &TextComponent::SetLineSpacingScale));
-        RegisterProperty<s32>(PropertyTypes::Int(), k_maxNumberOfLinesKey, MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
-        RegisterProperty<f32>(PropertyTypes::Float(), k_textScaleKey, MakeDelegate(this, &TextComponent::GetTextScale), MakeDelegate(this, &TextComponent::SetTextScale));
-        RegisterProperty<f32>(PropertyTypes::Float(), k_minTextScaleKey, MakeDelegate(this, &TextComponent::GetMinAutoTextScale), MakeDelegate(this, &TextComponent::SetMinAutoTextScale));
-        RegisterProperty<bool>(PropertyTypes::Bool(), k_enableAutoScaledTextKey, MakeDelegate(this, &TextComponent::IsTextAutoScaleEnabled), MakeDelegate(this, &TextComponent::SetTextAutoScaleEnabled));
+        RegisterProperty<FontCSPtr>(PropertyTypes::Font(), k_fontKey, MakeDelegate(this, &TextUIComponent::GetFont), MakeDelegate(this, &TextUIComponent::SetFont));
+        RegisterProperty<LocalisedTextCSPtr>(PropertyTypes::LocalisedText(), k_localisedTextKey, MakeDelegate(this, &TextUIComponent::GetLocalisedText), MakeDelegate(this, &TextUIComponent::SetLocalisedText));
+        RegisterProperty<std::string>(PropertyTypes::String(), k_localisedTextIdKey, MakeDelegate(this, &TextUIComponent::GetLocalisedTextId), MakeDelegate<TextUIComponent, TextUIComponent, void, const std::string&>(this, &TextUIComponent::SetLocalisedTextId));
+        RegisterProperty<std::string>(PropertyTypes::String(), k_textKey, MakeDelegate(this, &TextUIComponent::GetText), MakeDelegate<TextUIComponent, TextUIComponent, void, const std::string&>(this, &TextUIComponent::SetText));
+        RegisterProperty<Colour>(PropertyTypes::Colour(), k_textColourKey, MakeDelegate(this, &TextUIComponent::GetTextColour), MakeDelegate(this, &TextUIComponent::SetTextColour));
+        RegisterProperty<HorizontalTextJustification>(PropertyTypes::HorizontalTextJustification(), k_horizontalJustificationKey, MakeDelegate(this, &TextUIComponent::GetHorizontalJustification), MakeDelegate(this, &TextUIComponent::SetHorizontalJustification));
+        RegisterProperty<VerticalTextJustification>(PropertyTypes::VerticalTextJustification(), k_verticalJustificationKey, MakeDelegate(this, &TextUIComponent::GetVerticalJustification), MakeDelegate(this, &TextUIComponent::SetVerticalJustification));
+        RegisterProperty<f32>(PropertyTypes::Float(), k_absCharSpacingOffsetKey, MakeDelegate(this, &TextUIComponent::GetAbsoluteCharacterSpacingOffset), MakeDelegate(this, &TextUIComponent::SetAbsoluteCharacterSpacingOffset));
+        RegisterProperty<f32>(PropertyTypes::Float(), k_absLineSpacingOffsetKey, MakeDelegate(this, &TextUIComponent::GetAbsoluteLineSpacingOffset), MakeDelegate(this, &TextUIComponent::SetAbsoluteLineSpacingOffset));
+        RegisterProperty<f32>(PropertyTypes::Float(), k_lineSpacingScaleKey, MakeDelegate(this, &TextUIComponent::GetLineSpacingScale), MakeDelegate(this, &TextUIComponent::SetLineSpacingScale));
+        RegisterProperty<s32>(PropertyTypes::Int(), k_maxNumberOfLinesKey, MakeDelegate(this, &TextUIComponent::GetMaxNumberOfLines), MakeDelegate(this, &TextUIComponent::SetMaxNumberOfLines));
+        RegisterProperty<f32>(PropertyTypes::Float(), k_textScaleKey, MakeDelegate(this, &TextUIComponent::GetTextScale), MakeDelegate(this, &TextUIComponent::SetTextScale));
+        RegisterProperty<f32>(PropertyTypes::Float(), k_minTextScaleKey, MakeDelegate(this, &TextUIComponent::GetMinAutoTextScale), MakeDelegate(this, &TextUIComponent::SetMinAutoTextScale));
+        RegisterProperty<bool>(PropertyTypes::Bool(), k_enableAutoScaledTextKey, MakeDelegate(this, &TextUIComponent::IsTextAutoScaleEnabled), MakeDelegate(this, &TextUIComponent::SetTextAutoScaleEnabled));
         
         ApplyRegisteredProperties(in_properties);
         
@@ -124,97 +124,97 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool TextComponent::IsA(InterfaceIDType in_interfaceId) const
+    bool TextUIComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIComponent::InterfaceID == in_interfaceId || TextComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || TextUIComponent::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const FontCSPtr& TextComponent::GetFont() const
+    const FontCSPtr& TextUIComponent::GetFont() const
     {
         return m_font;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const LocalisedTextCSPtr& TextComponent::GetLocalisedText() const
+    const LocalisedTextCSPtr& TextUIComponent::GetLocalisedText() const
     {
         return m_localisedText;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const std::string& TextComponent::GetLocalisedTextId() const
+    const std::string& TextUIComponent::GetLocalisedTextId() const
     {
         return m_localisedTextId;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const std::string& TextComponent::GetText() const
+    const std::string& TextUIComponent::GetText() const
     {
         return m_text;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Colour& TextComponent::GetTextColour() const
+    const Colour& TextUIComponent::GetTextColour() const
     {
         return m_textColour;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    HorizontalTextJustification TextComponent::GetHorizontalJustification() const
+    HorizontalTextJustification TextUIComponent::GetHorizontalJustification() const
     {
         return m_textProperties.m_horizontalJustification;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    VerticalTextJustification TextComponent::GetVerticalJustification() const
+    VerticalTextJustification TextUIComponent::GetVerticalJustification() const
     {
         return m_textProperties.m_verticalJustification;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 TextComponent::GetAbsoluteCharacterSpacingOffset() const
+    f32 TextUIComponent::GetAbsoluteCharacterSpacingOffset() const
     {
         return m_textProperties.m_absCharSpacingOffset;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 TextComponent::GetAbsoluteLineSpacingOffset() const
+    f32 TextUIComponent::GetAbsoluteLineSpacingOffset() const
     {
         return m_textProperties.m_absLineSpacingOffset;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 TextComponent::GetLineSpacingScale() const
+    f32 TextUIComponent::GetLineSpacingScale() const
     {
         return m_textProperties.m_lineSpacingScale;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    s32 TextComponent::GetMaxNumberOfLines() const
+    s32 TextUIComponent::GetMaxNumberOfLines() const
     {
         return m_textProperties.m_maxNumLines;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 TextComponent::GetTextScale() const
+    f32 TextUIComponent::GetTextScale() const
     {
         return m_textProperties.m_textScale;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    f32 TextComponent::GetMinAutoTextScale() const
+    f32 TextUIComponent::GetMinAutoTextScale() const
     {
         return m_textProperties.m_minTextScale;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool TextComponent::IsTextAutoScaleEnabled() const
+    bool TextUIComponent::IsTextAutoScaleEnabled() const
     {
         return m_textProperties.m_shouldAutoScale;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetFont(const FontCSPtr& in_font)
+    void TextUIComponent::SetFont(const FontCSPtr& in_font)
     {
         CS_ASSERT(in_font != nullptr, "Cannot set a null font on a Text UIDrawable.");
         CS_ASSERT(in_font->GetLoadState() == Resource::LoadState::k_loaded, "Cannot set an incomplete font on a Text UIDrawable.");
@@ -225,7 +225,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetLocalisedText(const LocalisedTextCSPtr& in_localisedText)
+    void TextUIComponent::SetLocalisedText(const LocalisedTextCSPtr& in_localisedText)
     {
 #ifdef CS_ENABLE_DEBUG
         if (in_localisedText != nullptr)
@@ -250,7 +250,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId)
+    void TextUIComponent::SetLocalisedTextId(const std::string& in_localisedTextId)
     {
         m_iconIndices.clear();
         m_localisedTextId = in_localisedTextId;
@@ -268,7 +268,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const ParamDictionary& in_params, const TextIconDictionary& in_imageData)
+    void TextUIComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const ParamDictionary& in_params, const TextIconDictionary& in_imageData)
     {
         CS_ASSERT(m_localisedText != nullptr, "Cannot set text using a null localised text.");
         
@@ -278,7 +278,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetText(const std::string& in_text)
+    void TextUIComponent::SetText(const std::string& in_text)
     {
         m_iconIndices.clear();
         m_text = in_text;
@@ -287,7 +287,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetText(const std::string& in_text, const TextIconDictionary& in_imageData)
+    void TextUIComponent::SetText(const std::string& in_text, const TextIconDictionary& in_imageData)
     {
         ReplaceVariables(in_text, {}, in_imageData);
         
@@ -295,13 +295,13 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetTextColour(const Colour& in_textColour)
+    void TextUIComponent::SetTextColour(const Colour& in_textColour)
     {
         m_textColour = in_textColour;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetHorizontalJustification(HorizontalTextJustification in_horizontalJustification)
+    void TextUIComponent::SetHorizontalJustification(HorizontalTextJustification in_horizontalJustification)
     {
         m_textProperties.m_horizontalJustification = in_horizontalJustification;
         
@@ -309,7 +309,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetVerticalJustification(VerticalTextJustification in_verticalJustification)
+    void TextUIComponent::SetVerticalJustification(VerticalTextJustification in_verticalJustification)
     {
         m_textProperties.m_verticalJustification = in_verticalJustification;
         
@@ -317,7 +317,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetAbsoluteCharacterSpacingOffset(f32 in_offset)
+    void TextUIComponent::SetAbsoluteCharacterSpacingOffset(f32 in_offset)
     {
         m_textProperties.m_absCharSpacingOffset = in_offset;
         
@@ -325,7 +325,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetAbsoluteLineSpacingOffset(f32 in_offset)
+    void TextUIComponent::SetAbsoluteLineSpacingOffset(f32 in_offset)
     {
         m_textProperties.m_absLineSpacingOffset = in_offset;
         
@@ -333,7 +333,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetLineSpacingScale(f32 in_scale)
+    void TextUIComponent::SetLineSpacingScale(f32 in_scale)
     {
         m_textProperties.m_lineSpacingScale = in_scale;
         
@@ -341,7 +341,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetMaxNumberOfLines(s32 in_numLines)
+    void TextUIComponent::SetMaxNumberOfLines(s32 in_numLines)
     {
         CS_ASSERT(in_numLines >= 0, "The maximum number of lines cannot be below 0.");
         
@@ -351,7 +351,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetTextScale(f32 in_scale)
+    void TextUIComponent::SetTextScale(f32 in_scale)
     {
         m_textProperties.m_textScale = in_scale;
         
@@ -359,7 +359,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetMinAutoTextScale(f32 in_scale)
+    void TextUIComponent::SetMinAutoTextScale(f32 in_scale)
     {
         m_textProperties.m_minTextScale = in_scale;
         
@@ -367,7 +367,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::SetTextAutoScaleEnabled(bool in_enable)
+    void TextUIComponent::SetTextAutoScaleEnabled(bool in_enable)
     {
         m_textProperties.m_shouldAutoScale = in_enable;
         
@@ -375,7 +375,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::ReplaceVariables(const std::string& in_text, const ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary)
+    void TextUIComponent::ReplaceVariables(const std::string& in_text, const ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary)
     {
         m_text.clear();
         m_text.shrink_to_fit();
@@ -409,14 +409,14 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    std::string TextComponent::AddIcon(const FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Font::CharacterInfo& in_spaceInfo,
+    std::string TextUIComponent::AddIcon(const FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Font::CharacterInfo& in_spaceInfo,
                                        const Font::CharacterInfo& in_markerInfo, u32& out_index, std::vector<TextIconIndex>& out_iconIndices)
     {
         std::string iconText;
         
         auto iconIt = in_iconDictionary.find(in_iconName);
         
-        CS_ASSERT(iconIt != in_iconDictionary.end(), "Unknown icon name in TextComponent: " + in_iconName);
+        CS_ASSERT(iconIt != in_iconDictionary.end(), "Unknown icon name in TextUIComponent: " + in_iconName);
         
         //Create the Text Icon Index entry.
         TextIconIndex iconIndex;
@@ -450,7 +450,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    std::vector<TextComponent::TextIconCachedData> TextComponent::BuildIcons(const FontCSPtr& in_font, const CanvasRenderer::BuiltText& in_builtText,
+    std::vector<TextUIComponent::TextIconCachedData> TextUIComponent::BuildIcons(const FontCSPtr& in_font, const CanvasRenderer::BuiltText& in_builtText,
                                                                              const std::vector<TextIconIndex>& in_iconIndices, f32 in_textScale)
     {
         std::vector<TextIconCachedData> output;
@@ -489,7 +489,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void TextComponent::OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
+    void TextUIComponent::OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
         if (m_cachedSize != in_absSize)
         {

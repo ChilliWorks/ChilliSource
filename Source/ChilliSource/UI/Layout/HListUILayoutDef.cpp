@@ -129,7 +129,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    UILayoutUPtr HListUILayoutDef::CreateLayout(LayoutComponent* in_owner) const
+    UILayoutUPtr HListUILayoutDef::CreateLayout(LayoutUIComponent* in_owner) const
     {
         return UILayoutUPtr(new HListUILayout(in_owner, m_numCells, m_relativeMargins, m_absoluteMargins, m_relativeSpacing, m_absoluteSpacing));
     }

@@ -189,7 +189,7 @@ namespace ChilliSource
         ///
         /// @return a new layout instance.
         //------------------------------------------------------------------------------
-        UILayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
+        UILayoutUPtr CreateLayout(LayoutUIComponent* in_owner) const override;
         
         GridUILayout::CellOrder m_cellOrder = GridUILayout::CellOrder::k_rowMajor;
         u32 m_numRows = 1;

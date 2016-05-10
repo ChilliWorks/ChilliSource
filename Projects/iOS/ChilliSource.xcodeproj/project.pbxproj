@@ -206,10 +206,10 @@
 		8158F70F1C89D2AD00B13109 /* WidgetParserUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4381C89D2AD00B13109 /* WidgetParserUtils.cpp */; };
 		8158F7101C89D2AD00B13109 /* WidgetTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F43A1C89D2AD00B13109 /* WidgetTemplate.cpp */; };
 		8158F7111C89D2AD00B13109 /* WidgetTemplateProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F43C1C89D2AD00B13109 /* WidgetTemplateProvider.cpp */; };
-		8158F7121C89D2AD00B13109 /* HighlightComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4401C89D2AD00B13109 /* HighlightComponent.cpp */; };
-		8158F7131C89D2AD00B13109 /* ToggleHighlightComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4421C89D2AD00B13109 /* ToggleHighlightComponent.cpp */; };
+		8158F7121C89D2AD00B13109 /* HighlightUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4401C89D2AD00B13109 /* HighlightUIComponent.cpp */; };
+		8158F7131C89D2AD00B13109 /* ToggleHighlightUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4421C89D2AD00B13109 /* ToggleHighlightUIComponent.cpp */; };
 		8158F7141C89D2AD00B13109 /* UIDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4461C89D2AD00B13109 /* UIDrawable.cpp */; };
-		8158F7151C89D2AD00B13109 /* DrawableComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4481C89D2AD00B13109 /* DrawableComponent.cpp */; };
+		8158F7151C89D2AD00B13109 /* DrawableUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4481C89D2AD00B13109 /* DrawableUIComponent.cpp */; };
 		8158F7161C89D2AD00B13109 /* UIDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44A1C89D2AD00B13109 /* UIDrawableDef.cpp */; };
 		8158F7171C89D2AD00B13109 /* UIDrawableUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */; };
 		8158F7181C89D2AD00B13109 /* NinePatchUIDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44E1C89D2AD00B13109 /* NinePatchUIDrawable.cpp */; };
@@ -223,16 +223,16 @@
 		8158F7201C89D2AD00B13109 /* HListUILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4611C89D2AD00B13109 /* HListUILayout.cpp */; };
 		8158F7211C89D2AD00B13109 /* HListUILayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4631C89D2AD00B13109 /* HListUILayoutDef.cpp */; };
 		8158F7221C89D2AD00B13109 /* UILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4651C89D2AD00B13109 /* UILayout.cpp */; };
-		8158F7231C89D2AD00B13109 /* LayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */; };
+		8158F7231C89D2AD00B13109 /* LayoutUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4671C89D2AD00B13109 /* LayoutUIComponent.cpp */; };
 		8158F7241C89D2AD00B13109 /* UILayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */; };
 		8158F7251C89D2AD00B13109 /* VListUILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F46B1C89D2AD00B13109 /* VListUILayout.cpp */; };
 		8158F7261C89D2AD00B13109 /* VListUILayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F46D1C89D2AD00B13109 /* VListUILayoutDef.cpp */; };
-		8158F7271C89D2AD00B13109 /* ProgressBarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4711C89D2AD00B13109 /* ProgressBarComponent.cpp */; };
+		8158F7271C89D2AD00B13109 /* ProgressBarUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4711C89D2AD00B13109 /* ProgressBarUIComponent.cpp */; };
 		8158F7281C89D2AD00B13109 /* ProgressBarDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4731C89D2AD00B13109 /* ProgressBarDirection.cpp */; };
 		8158F7291C89D2AD00B13109 /* ProgressBarType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4751C89D2AD00B13109 /* ProgressBarType.cpp */; };
-		8158F72A1C89D2AD00B13109 /* SliderComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4791C89D2AD00B13109 /* SliderComponent.cpp */; };
+		8158F72A1C89D2AD00B13109 /* SliderUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4791C89D2AD00B13109 /* SliderUIComponent.cpp */; };
 		8158F72B1C89D2AD00B13109 /* SliderDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F47B1C89D2AD00B13109 /* SliderDirection.cpp */; };
-		8158F72C1C89D2AD00B13109 /* TextComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F47F1C89D2AD00B13109 /* TextComponent.cpp */; };
+		8158F72C1C89D2AD00B13109 /* TextUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F47F1C89D2AD00B13109 /* TextUIComponent.cpp */; };
 		8158F72D1C89D2AD00B13109 /* TextIcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4811C89D2AD00B13109 /* TextIcon.cpp */; };
 		8158F72E1C89D2AD00B13109 /* CSSubtitlesProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4861C89D2AD00B13109 /* CSSubtitlesProvider.cpp */; };
 		8158F72F1C89D2AD00B13109 /* Subtitles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4881C89D2AD00B13109 /* Subtitles.cpp */; };
@@ -854,15 +854,15 @@
 		8158F43C1C89D2AD00B13109 /* WidgetTemplateProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetTemplateProvider.cpp; sourceTree = "<group>"; };
 		8158F43D1C89D2AD00B13109 /* WidgetTemplateProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetTemplateProvider.h; sourceTree = "<group>"; };
 		8158F43E1C89D2AD00B13109 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
-		8158F4401C89D2AD00B13109 /* HighlightComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HighlightComponent.cpp; sourceTree = "<group>"; };
-		8158F4411C89D2AD00B13109 /* HighlightComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighlightComponent.h; sourceTree = "<group>"; };
-		8158F4421C89D2AD00B13109 /* ToggleHighlightComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ToggleHighlightComponent.cpp; sourceTree = "<group>"; };
-		8158F4431C89D2AD00B13109 /* ToggleHighlightComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToggleHighlightComponent.h; sourceTree = "<group>"; };
+		8158F4401C89D2AD00B13109 /* HighlightUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HighlightUIComponent.cpp; sourceTree = "<group>"; };
+		8158F4411C89D2AD00B13109 /* HighlightUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighlightUIComponent.h; sourceTree = "<group>"; };
+		8158F4421C89D2AD00B13109 /* ToggleHighlightUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ToggleHighlightUIComponent.cpp; sourceTree = "<group>"; };
+		8158F4431C89D2AD00B13109 /* ToggleHighlightUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToggleHighlightUIComponent.h; sourceTree = "<group>"; };
 		8158F4441C89D2AD00B13109 /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.h; sourceTree = "<group>"; };
 		8158F4461C89D2AD00B13109 /* UIDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawable.cpp; sourceTree = "<group>"; };
 		8158F4471C89D2AD00B13109 /* UIDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawable.h; sourceTree = "<group>"; };
-		8158F4481C89D2AD00B13109 /* DrawableComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableComponent.cpp; sourceTree = "<group>"; };
-		8158F4491C89D2AD00B13109 /* DrawableComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableComponent.h; sourceTree = "<group>"; };
+		8158F4481C89D2AD00B13109 /* DrawableUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableUIComponent.cpp; sourceTree = "<group>"; };
+		8158F4491C89D2AD00B13109 /* DrawableUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableUIComponent.h; sourceTree = "<group>"; };
 		8158F44A1C89D2AD00B13109 /* UIDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawableDef.cpp; sourceTree = "<group>"; };
 		8158F44B1C89D2AD00B13109 /* UIDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawableDef.h; sourceTree = "<group>"; };
 		8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawableUtils.cpp; sourceTree = "<group>"; };
@@ -891,8 +891,8 @@
 		8158F4641C89D2AD00B13109 /* HListUILayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListUILayoutDef.h; sourceTree = "<group>"; };
 		8158F4651C89D2AD00B13109 /* UILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayout.cpp; sourceTree = "<group>"; };
 		8158F4661C89D2AD00B13109 /* UILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILayout.h; sourceTree = "<group>"; };
-		8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutComponent.cpp; sourceTree = "<group>"; };
-		8158F4681C89D2AD00B13109 /* LayoutComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutComponent.h; sourceTree = "<group>"; };
+		8158F4671C89D2AD00B13109 /* LayoutUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutUIComponent.cpp; sourceTree = "<group>"; };
+		8158F4681C89D2AD00B13109 /* LayoutUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutUIComponent.h; sourceTree = "<group>"; };
 		8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayoutDef.cpp; sourceTree = "<group>"; };
 		8158F46A1C89D2AD00B13109 /* UILayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILayoutDef.h; sourceTree = "<group>"; };
 		8158F46B1C89D2AD00B13109 /* VListUILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListUILayout.cpp; sourceTree = "<group>"; };
@@ -900,20 +900,20 @@
 		8158F46D1C89D2AD00B13109 /* VListUILayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListUILayoutDef.cpp; sourceTree = "<group>"; };
 		8158F46E1C89D2AD00B13109 /* VListUILayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListUILayoutDef.h; sourceTree = "<group>"; };
 		8158F46F1C89D2AD00B13109 /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.h; sourceTree = "<group>"; };
-		8158F4711C89D2AD00B13109 /* ProgressBarComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarComponent.cpp; sourceTree = "<group>"; };
-		8158F4721C89D2AD00B13109 /* ProgressBarComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarComponent.h; sourceTree = "<group>"; };
+		8158F4711C89D2AD00B13109 /* ProgressBarUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarUIComponent.cpp; sourceTree = "<group>"; };
+		8158F4721C89D2AD00B13109 /* ProgressBarUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarUIComponent.h; sourceTree = "<group>"; };
 		8158F4731C89D2AD00B13109 /* ProgressBarDirection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarDirection.cpp; sourceTree = "<group>"; };
 		8158F4741C89D2AD00B13109 /* ProgressBarDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarDirection.h; sourceTree = "<group>"; };
 		8158F4751C89D2AD00B13109 /* ProgressBarType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarType.cpp; sourceTree = "<group>"; };
 		8158F4761C89D2AD00B13109 /* ProgressBarType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarType.h; sourceTree = "<group>"; };
 		8158F4771C89D2AD00B13109 /* ProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBar.h; sourceTree = "<group>"; };
-		8158F4791C89D2AD00B13109 /* SliderComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliderComponent.cpp; sourceTree = "<group>"; };
-		8158F47A1C89D2AD00B13109 /* SliderComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderComponent.h; sourceTree = "<group>"; };
+		8158F4791C89D2AD00B13109 /* SliderUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliderUIComponent.cpp; sourceTree = "<group>"; };
+		8158F47A1C89D2AD00B13109 /* SliderUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderUIComponent.h; sourceTree = "<group>"; };
 		8158F47B1C89D2AD00B13109 /* SliderDirection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliderDirection.cpp; sourceTree = "<group>"; };
 		8158F47C1C89D2AD00B13109 /* SliderDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderDirection.h; sourceTree = "<group>"; };
 		8158F47D1C89D2AD00B13109 /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slider.h; sourceTree = "<group>"; };
-		8158F47F1C89D2AD00B13109 /* TextComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextComponent.cpp; sourceTree = "<group>"; };
-		8158F4801C89D2AD00B13109 /* TextComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextComponent.h; sourceTree = "<group>"; };
+		8158F47F1C89D2AD00B13109 /* TextUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextUIComponent.cpp; sourceTree = "<group>"; };
+		8158F4801C89D2AD00B13109 /* TextUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextUIComponent.h; sourceTree = "<group>"; };
 		8158F4811C89D2AD00B13109 /* TextIcon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextIcon.cpp; sourceTree = "<group>"; };
 		8158F4821C89D2AD00B13109 /* TextIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextIcon.h; sourceTree = "<group>"; };
 		8158F4831C89D2AD00B13109 /* Text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
@@ -2211,10 +2211,10 @@
 		8158F43F1C89D2AD00B13109 /* Button */ = {
 			isa = PBXGroup;
 			children = (
-				8158F4401C89D2AD00B13109 /* HighlightComponent.cpp */,
-				8158F4411C89D2AD00B13109 /* HighlightComponent.h */,
-				8158F4421C89D2AD00B13109 /* ToggleHighlightComponent.cpp */,
-				8158F4431C89D2AD00B13109 /* ToggleHighlightComponent.h */,
+				8158F4401C89D2AD00B13109 /* HighlightUIComponent.cpp */,
+				8158F4411C89D2AD00B13109 /* HighlightUIComponent.h */,
+				8158F4421C89D2AD00B13109 /* ToggleHighlightUIComponent.cpp */,
+				8158F4431C89D2AD00B13109 /* ToggleHighlightUIComponent.h */,
 			);
 			path = Button;
 			sourceTree = "<group>";
@@ -2224,8 +2224,8 @@
 			children = (
 				8158F4461C89D2AD00B13109 /* UIDrawable.cpp */,
 				8158F4471C89D2AD00B13109 /* UIDrawable.h */,
-				8158F4481C89D2AD00B13109 /* DrawableComponent.cpp */,
-				8158F4491C89D2AD00B13109 /* DrawableComponent.h */,
+				8158F4481C89D2AD00B13109 /* DrawableUIComponent.cpp */,
+				8158F4491C89D2AD00B13109 /* DrawableUIComponent.h */,
 				8158F44A1C89D2AD00B13109 /* UIDrawableDef.cpp */,
 				8158F44B1C89D2AD00B13109 /* UIDrawableDef.h */,
 				8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */,
@@ -2259,8 +2259,8 @@
 				8158F4641C89D2AD00B13109 /* HListUILayoutDef.h */,
 				8158F4651C89D2AD00B13109 /* UILayout.cpp */,
 				8158F4661C89D2AD00B13109 /* UILayout.h */,
-				8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */,
-				8158F4681C89D2AD00B13109 /* LayoutComponent.h */,
+				8158F4671C89D2AD00B13109 /* LayoutUIComponent.cpp */,
+				8158F4681C89D2AD00B13109 /* LayoutUIComponent.h */,
 				8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */,
 				8158F46A1C89D2AD00B13109 /* UILayoutDef.h */,
 				8158F46B1C89D2AD00B13109 /* VListUILayout.cpp */,
@@ -2274,8 +2274,8 @@
 		8158F4701C89D2AD00B13109 /* ProgressBar */ = {
 			isa = PBXGroup;
 			children = (
-				8158F4711C89D2AD00B13109 /* ProgressBarComponent.cpp */,
-				8158F4721C89D2AD00B13109 /* ProgressBarComponent.h */,
+				8158F4711C89D2AD00B13109 /* ProgressBarUIComponent.cpp */,
+				8158F4721C89D2AD00B13109 /* ProgressBarUIComponent.h */,
 				8158F4731C89D2AD00B13109 /* ProgressBarDirection.cpp */,
 				8158F4741C89D2AD00B13109 /* ProgressBarDirection.h */,
 				8158F4751C89D2AD00B13109 /* ProgressBarType.cpp */,
@@ -2287,8 +2287,8 @@
 		8158F4781C89D2AD00B13109 /* Slider */ = {
 			isa = PBXGroup;
 			children = (
-				8158F4791C89D2AD00B13109 /* SliderComponent.cpp */,
-				8158F47A1C89D2AD00B13109 /* SliderComponent.h */,
+				8158F4791C89D2AD00B13109 /* SliderUIComponent.cpp */,
+				8158F47A1C89D2AD00B13109 /* SliderUIComponent.h */,
 				8158F47B1C89D2AD00B13109 /* SliderDirection.cpp */,
 				8158F47C1C89D2AD00B13109 /* SliderDirection.h */,
 			);
@@ -2298,8 +2298,8 @@
 		8158F47E1C89D2AD00B13109 /* Text */ = {
 			isa = PBXGroup;
 			children = (
-				8158F47F1C89D2AD00B13109 /* TextComponent.cpp */,
-				8158F4801C89D2AD00B13109 /* TextComponent.h */,
+				8158F47F1C89D2AD00B13109 /* TextUIComponent.cpp */,
+				8158F4801C89D2AD00B13109 /* TextUIComponent.h */,
 				8158F4811C89D2AD00B13109 /* TextIcon.cpp */,
 				8158F4821C89D2AD00B13109 /* TextIcon.h */,
 			);
@@ -2993,8 +2993,8 @@
 			files = (
 				8158F67E1C89D2AD00B13109 /* AppNotificationSystem.cpp in Sources */,
 				8158F6CA1C89D2AD00B13109 /* MeshDescriptor.cpp in Sources */,
-				8158F7131C89D2AD00B13109 /* ToggleHighlightComponent.cpp in Sources */,
-				8158F7151C89D2AD00B13109 /* DrawableComponent.cpp in Sources */,
+				8158F7131C89D2AD00B13109 /* ToggleHighlightUIComponent.cpp in Sources */,
+				8158F7151C89D2AD00B13109 /* DrawableUIComponent.cpp in Sources */,
 				8158F67A1C89D2AD00B13109 /* Interpolate.cpp in Sources */,
 				8158F7CB1C89D2AD00B13109 /* LocalNotificationSystem.cpp in Sources */,
 				8158F6821C89D2AD00B13109 /* Resource.cpp in Sources */,
@@ -3027,7 +3027,7 @@
 				8158F6841C89D2AD00B13109 /* ResourceProvider.cpp in Sources */,
 				8158F66D1C89D2AD00B13109 /* FileSystem.cpp in Sources */,
 				8158F7FF1C89D2AD00B13109 /* Cubemap.cpp in Sources */,
-				8158F7231C89D2AD00B13109 /* LayoutComponent.cpp in Sources */,
+				8158F7231C89D2AD00B13109 /* LayoutUIComponent.cpp in Sources */,
 				8158F66A1C89D2AD00B13109 /* CSBinaryChunk.cpp in Sources */,
 				8158F6E31C89D2AD00B13109 /* CircleParticleEmitter.cpp in Sources */,
 				8158F7171C89D2AD00B13109 /* UIDrawableUtils.cpp in Sources */,
@@ -3070,12 +3070,12 @@
 				8158F6CF1C89D2AD00B13109 /* StaticMeshComponent.cpp in Sources */,
 				8158F6FC1C89D2AD00B13109 /* TextureAtlasProvider.cpp in Sources */,
 				8158F6B01C89D2AD00B13109 /* MeshBatch.cpp in Sources */,
-				8158F72C1C89D2AD00B13109 /* TextComponent.cpp in Sources */,
+				8158F72C1C89D2AD00B13109 /* TextUIComponent.cpp in Sources */,
 				8158F6FB1C89D2AD00B13109 /* TextureAtlas.cpp in Sources */,
 				8158F68C1C89D2AD00B13109 /* ToString.cpp in Sources */,
 				8158F7201C89D2AD00B13109 /* HListUILayout.cpp in Sources */,
 				8158F7C31C89D2AD00B13109 /* Device.mm in Sources */,
-				8158F72A1C89D2AD00B13109 /* SliderComponent.cpp in Sources */,
+				8158F72A1C89D2AD00B13109 /* SliderUIComponent.cpp in Sources */,
 				8158F6BC1C89D2AD00B13109 /* PerspectiveCameraComponent.cpp in Sources */,
 				8158F7211C89D2AD00B13109 /* HListUILayoutDef.cpp in Sources */,
 				8158F6731C89D2AD00B13109 /* PNGImageProvider.cpp in Sources */,
@@ -3167,7 +3167,7 @@
 				8158F6621C89D2AD00B13109 /* OAuth.cpp in Sources */,
 				8158F6C21C89D2AD00B13109 /* PointLightComponent.cpp in Sources */,
 				8158F6B51C89D2AD00B13109 /* Renderer.cpp in Sources */,
-				8158F7271C89D2AD00B13109 /* ProgressBarComponent.cpp in Sources */,
+				8158F7271C89D2AD00B13109 /* ProgressBarUIComponent.cpp in Sources */,
 				8158F6A21C89D2AD00B13109 /* Pointer.cpp in Sources */,
 				8158F6B11C89D2AD00B13109 /* MeshBuffer.cpp in Sources */,
 				8158F6A81C89D2AD00B13109 /* HttpResponse.cpp in Sources */,
@@ -3238,7 +3238,7 @@
 				8158F6D21C89D2AD00B13109 /* AccelerationParticleAffectorDef.cpp in Sources */,
 				8158F6741C89D2AD00B13109 /* PVRImageProvider.cpp in Sources */,
 				8158F70D1C89D2AD00B13109 /* WidgetDesc.cpp in Sources */,
-				8158F7121C89D2AD00B13109 /* HighlightComponent.cpp in Sources */,
+				8158F7121C89D2AD00B13109 /* HighlightUIComponent.cpp in Sources */,
 				8158F6DA1C89D2AD00B13109 /* ScaleOverLifetimeParticleAffector.cpp in Sources */,
 				8158F6501C89D2AD00B13109 /* Application.cpp in Sources */,
 				8158F7DC1C89D2AD00B13109 /* FacebookAppDelegate.mm in Sources */,

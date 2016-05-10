@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/UI/Drawable/UIDrawable.h>
-#include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableUIComponent.h>
 #include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 #include <ChilliSource/UI/Drawable/NinePatchUIDrawable.h>
 #include <ChilliSource/UI/Drawable/NinePatchUIDrawableDef.h>

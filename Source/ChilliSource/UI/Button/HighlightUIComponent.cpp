@@ -1,5 +1,5 @@
 //
-//  HighlightComponent.cpp
+//  HighlightUIComponent.cpp
 //  Chilli Source
 //  Created by Ian Copland on 28/11/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Button/HighlightComponent.h>
+#include <ChilliSource/UI/Button/HighlightUIComponent.h>
 
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
-#include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableUIComponent.h>
 #include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
 
@@ -54,50 +54,50 @@ namespace ChilliSource
         };
     }
     
-    CS_DEFINE_NAMEDTYPE(HighlightComponent);
+    CS_DEFINE_NAMEDTYPE(HighlightUIComponent);
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const std::vector<PropertyMap::PropertyDesc>& HighlightComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& HighlightUIComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    HighlightComponent::HighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+    HighlightUIComponent::HighlightUIComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalDrawableKey, MakeDelegate(this, &HighlightComponent::GetNormalDrawableDef), MakeDelegate(this, &HighlightComponent::SetNormalDrawableDef));
-        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightDrawableKey, MakeDelegate(this, &HighlightComponent::GetHighlightDrawableDef), MakeDelegate(this, &HighlightComponent::SetHighlightDrawableDef));
-        RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightColourKey, MakeDelegate(this, &HighlightComponent::GetHighlightColour), MakeDelegate(this, &HighlightComponent::SetHighlightColour));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalDrawableKey, MakeDelegate(this, &HighlightUIComponent::GetNormalDrawableDef), MakeDelegate(this, &HighlightUIComponent::SetNormalDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightDrawableKey, MakeDelegate(this, &HighlightUIComponent::GetHighlightDrawableDef), MakeDelegate(this, &HighlightUIComponent::SetHighlightDrawableDef));
+        RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightColourKey, MakeDelegate(this, &HighlightUIComponent::GetHighlightColour), MakeDelegate(this, &HighlightUIComponent::SetHighlightColour));
         ApplyRegisteredProperties(in_properties);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    bool HighlightComponent::IsA(InterfaceIDType in_interfaceId) const
+    bool HighlightUIComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIComponent::InterfaceID == in_interfaceId || HighlightComponent::InterfaceID == in_interfaceId);
+        return (UIComponent::InterfaceID == in_interfaceId || HighlightUIComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const UIDrawableDefCSPtr& HighlightComponent::GetNormalDrawableDef() const
+    const UIDrawableDefCSPtr& HighlightUIComponent::GetNormalDrawableDef() const
     {
         return m_normalDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const UIDrawableDefCSPtr& HighlightComponent::GetHighlightDrawableDef() const
+    const UIDrawableDefCSPtr& HighlightUIComponent::GetHighlightDrawableDef() const
     {
         return m_highlightDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const Colour& HighlightComponent::GetHighlightColour() const
+    const Colour& HighlightUIComponent::GetHighlightColour() const
     {
         return m_highlightColour;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::SetNormalDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
+    void HighlightUIComponent::SetNormalDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_normalDrawableDef = in_drawableDef;
         
@@ -108,7 +108,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::SetHighlightDrawableDef(const UIDrawableDefCSPtr& in_drawable)
+    void HighlightUIComponent::SetHighlightDrawableDef(const UIDrawableDefCSPtr& in_drawable)
     {
         m_highlightDrawableDef = in_drawable;
         
@@ -119,7 +119,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::SetHighlightColour(const Colour& in_colour)
+    void HighlightUIComponent::SetHighlightColour(const Colour& in_colour)
     {
         m_highlightColour = in_colour;
         
@@ -130,7 +130,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::Highlight()
+    void HighlightUIComponent::Highlight()
     {
         m_highlighted = true;
         
@@ -154,7 +154,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::Unhighlight()
+    void HighlightUIComponent::Unhighlight()
     {
         m_highlighted = false;
         
@@ -165,9 +165,9 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnInit()
+    void HighlightUIComponent::OnInit()
     {
-        m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
+        m_drawableComponent = GetWidget()->GetComponent<DrawableUIComponent>();
         CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Highlight UIComponent must also contain a UIDrawable UIComponent.");
         
         if (m_highlighted == false)
@@ -179,15 +179,15 @@ namespace ChilliSource
             Highlight();
         }
         
-        m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnPressedInside));
-        m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnMoveEntered));
-        m_moveExitedConnection = GetWidget()->GetMoveExitedEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnMoveExited));
-        m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnReleasedInside));
-        m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(MakeDelegate(this, &HighlightComponent::OnReleasedOutside));
+        m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(MakeDelegate(this, &HighlightUIComponent::OnPressedInside));
+        m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(MakeDelegate(this, &HighlightUIComponent::OnMoveEntered));
+        m_moveExitedConnection = GetWidget()->GetMoveExitedEvent().OpenConnection(MakeDelegate(this, &HighlightUIComponent::OnMoveExited));
+        m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(MakeDelegate(this, &HighlightUIComponent::OnReleasedInside));
+        m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(MakeDelegate(this, &HighlightUIComponent::OnReleasedOutside));
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
+    void HighlightUIComponent::OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
         if (in_inputType == Pointer::GetDefaultInputType())
         {
@@ -205,7 +205,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnMoveEntered(Widget* in_widget, const Pointer& in_pointer)
+    void HighlightUIComponent::OnMoveEntered(Widget* in_widget, const Pointer& in_pointer)
     {
         if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
@@ -221,7 +221,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnMoveExited(Widget* in_widget, const Pointer& in_pointer)
+    void HighlightUIComponent::OnMoveExited(Widget* in_widget, const Pointer& in_pointer)
     {
         if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
@@ -237,7 +237,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
+    void HighlightUIComponent::OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
         if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
@@ -254,7 +254,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
+    void HighlightUIComponent::OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType)
     {
         if (VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
         {
@@ -270,7 +270,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::OnDestroy()
+    void HighlightUIComponent::OnDestroy()
     {
         m_pressedInsideConnection.reset();
         m_moveEnteredConnection.reset();

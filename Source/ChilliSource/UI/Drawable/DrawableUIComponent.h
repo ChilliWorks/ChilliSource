@@ -1,5 +1,5 @@
 //
-//  DrawableComponent.h
+//  DrawableUIComponent.h
 //  Chilli Source
 //  Created by Ian Copland on 28/11/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLECOMPONENT_H_
-#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLECOMPONENT_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLEUICOMPONENT_H_
+#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLEUICOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
@@ -48,7 +48,7 @@ namespace ChilliSource
     /// texture or using a texture atlas, which describes the portion of a
     /// texture which should be rendered.
     ///
-    /// A DrawableComponent contains the following properties:
+    /// A DrawableUIComponent contains the following properties:
     ///
     /// "Drawable": The description of the drawable that will be rendered. The
     /// contents of a drawable are described in each of the drawable def types
@@ -56,10 +56,10 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class DrawableComponent final : public UIComponent
+    class DrawableUIComponent final : public UIComponent
     {
     public:
-        CS_DECLARE_NAMEDTYPE(DrawableComponent);
+        CS_DECLARE_NAMEDTYPE(DrawableUIComponent);
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -116,7 +116,7 @@ namespace ChilliSource
         /// @param The component name.
         /// @param The property map.
         //-------------------------------------------------------------------
-        DrawableComponent(const std::string& in_componentName, const PropertyMap& in_properties);
+        DrawableUIComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///

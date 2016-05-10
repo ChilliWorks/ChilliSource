@@ -1,5 +1,5 @@
 //
-//  LayoutComponent.cpp
+//  LayoutUIComponent.cpp
 //  Chilli Source
 //  Created by Ian Copland on 07/01/2015.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Layout/LayoutComponent.h>
+#include <ChilliSource/UI/Layout/LayoutUIComponent.h>
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
@@ -46,42 +46,42 @@ namespace ChilliSource
         };
     }
     
-    CS_DEFINE_NAMEDTYPE(LayoutComponent);
+    CS_DEFINE_NAMEDTYPE(LayoutUIComponent);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const std::vector<PropertyMap::PropertyDesc>& LayoutComponent::GetPropertyDescs()
+    const std::vector<PropertyMap::PropertyDesc>& LayoutUIComponent::GetPropertyDescs()
     {
         return k_propertyDescs;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    LayoutComponent::LayoutComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+    LayoutUIComponent::LayoutUIComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<UILayoutDefCSPtr>(PropertyTypes::UILayoutDef(), k_layoutKey, MakeDelegate(this, &LayoutComponent::GetLayoutDef), MakeDelegate(this, &LayoutComponent::ApplyLayoutDef));
+        RegisterProperty<UILayoutDefCSPtr>(PropertyTypes::UILayoutDef(), k_layoutKey, MakeDelegate(this, &LayoutUIComponent::GetLayoutDef), MakeDelegate(this, &LayoutUIComponent::ApplyLayoutDef));
         ApplyRegisteredProperties(in_properties);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    bool LayoutComponent::IsA(InterfaceIDType in_interfaceId) const
+    bool LayoutUIComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (LayoutComponent::InterfaceID == in_interfaceId);
+        return (LayoutUIComponent::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    UILayout* LayoutComponent::GetLayout()
-    {
-        return m_layout.get();
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    const UILayout* LayoutComponent::GetLayout() const
+    UILayout* LayoutUIComponent::GetLayout()
     {
         return m_layout.get();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void LayoutComponent::ApplyLayoutDef(const UILayoutDefCSPtr& in_layoutDef)
+    const UILayout* LayoutUIComponent::GetLayout() const
+    {
+        return m_layout.get();
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void LayoutUIComponent::ApplyLayoutDef(const UILayoutDefCSPtr& in_layoutDef)
     {
         CS_ASSERT(in_layoutDef != nullptr, "Cannot set null layout def on a layout component.");
         
@@ -92,31 +92,31 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void LayoutComponent::BuildLayout()
+    void LayoutUIComponent::BuildLayout()
     {
         m_layout->BuildLayout();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector2 LayoutComponent::GetSizeForIndex(u32 in_index) const
+    Vector2 LayoutUIComponent::GetSizeForIndex(u32 in_index) const
     {
         return m_layout->GetSizeForIndex(in_index);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Vector2 LayoutComponent::GetPositionForIndex(u32 in_index) const
+    Vector2 LayoutUIComponent::GetPositionForIndex(u32 in_index) const
     {
         return m_layout->GetPositionForIndex(in_index);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const UILayoutDefCSPtr& LayoutComponent::GetLayoutDef() const
+    const UILayoutDefCSPtr& LayoutUIComponent::GetLayoutDef() const
     {
         return m_layoutDef;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void LayoutComponent::OnLayoutChanged()
+    void LayoutUIComponent::OnLayoutChanged()
     {
         GetWidget()->ForceLayout();
     }

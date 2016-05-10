@@ -1,7 +1,7 @@
 //
-//  ProgressBarComponent.h
+//  HighlightUIComponent.h
 //  Chilli Source
-//  Created by Ian Copland on 01/12/2014.
+//  Created by Ian Copland on 28/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,60 +26,43 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_PROGRESSBAR_PROGRESSBARCOMPONENT_H_
-#define _CHILLISOURCE_UI_PROGRESSBAR_PROGRESSBARCOMPONENT_H_
+#ifndef _CHILLISOURCE_UI_BUTTON_HIGHLIGHTUICOMPONENT_H_
+#define _CHILLISOURCE_UI_BUTTON_HIGHLIGHTUICOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/UI/Base/UIComponent.h>
-#include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
-#include <ChilliSource/UI/ProgressBar/ProgressBarType.h>
 
 namespace ChilliSource
 {
     //--------------------------------------------------------------------------
-    /// A logic component for controlling a progress bar. This handles both
-    /// vertical and horizontal progress bar types.
+    /// A logic component for changing the drawable used to render a widget
+    /// when it has been pressed down. A highlight component has the following
+    /// properties:
     ///
-    /// "RelBarSize": A Vector2 describing the relative size of the bar when
-    /// progress is at 100%. This defaults to (1.0, 1.0).
+    /// "NormalDrawable": A description of the drawable that will be used when
+    /// the parent widget is not highlighted.
     ///
-    /// "Progress": A float describing the current progress of the bar. This
-    /// must be in the range 0.0-1.0. If a value outside this range is provided
-    /// the app is considered to be in an irrecoverable state and will terminate.
-    /// This defaults to 0.0.
+    /// "HighlightDrawable": A description of the drawable that will be used when
+    /// the parent widget is highlighted. If no highlight drawable is set the
+    /// normal drawable will be used instead.
     ///
-    /// "BarType": A string describing the type of progress bar. The possible
-    /// values for this are "Fill" or "Stretch". A stretch progress bar
-    /// simply changes the size of the bar widget as progress changes. A
-    /// fill progress bar will also alter the UVs of the widgets drawable
-    /// such that it appears to reveal more of the bar as it progresses. This
-    /// defaults to "Fill". If using Fill the underlying bar widget must
-    /// have a UIDrawable UIComponent, otherwise the app is considered to be in an
-    /// irrecoverable state and will terminate.
-    ///
-    /// "BarDirection": A string describing the direction of the progress bar.
-    /// The possible values are 'Horizontal' or 'Vertical' and defaults to
-    /// 'Horizontal'.
-    ///
-    /// "BarWidgetName": The name of the internal widget that should be used
-    /// as the progress bar. This cannot be changed after the initial creation
-    /// of the component. Attempting to set it using SetProperty will cause the
-    /// app to be in an irrecoverable state and terminate. Typically this is not
-    /// exposed to the user of the widget.
+    /// "HighlightColour": The colour that the widget will be set to while
+    /// highlighted. This defaults to white.
     ///
     /// @author Ian Copland
     //--------------------------------------------------------------------------
-    class ProgressBarComponent final : public UIComponent
+    class HighlightUIComponent final : public UIComponent
     {
     public:
-        CS_DECLARE_NAMEDTYPE(ProgressBarComponent);
+        CS_DECLARE_NAMEDTYPE(HighlightUIComponent);
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
-        /// @return The list of properties supported by a progress bar component.
+        /// @return The list of properties supported by a highlight component.
         //-------------------------------------------------------------------
         static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         //-------------------------------------------------------------------
@@ -98,73 +81,55 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
-        /// @param The relative size of the bar when it is at 100% progress.
+        /// @return the drawable that will be set on the owning widget when
+        /// it is not pressed.
         //-------------------------------------------------------------------
-        const Vector2& GetRelativeBarSize() const;
-        //-------------------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @param The current progress of the bar.
-        //-------------------------------------------------------------------
-        f32 GetProgress() const;
+        const UIDrawableDefCSPtr& GetNormalDrawableDef() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
-        /// @param The type of the progress bar: Fill or Stretch.
+        /// @return the drawable that will be set on the owning widget when
+        /// it is pressed.
         //-------------------------------------------------------------------
-        ProgressBarType GetBarType() const;
-        //-------------------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @param The direction of the progress bar: horizontal or vertical.
-        //-------------------------------------------------------------------
-        ProgressBarDirection GetBarDirection() const;
+        const UIDrawableDefCSPtr& GetHighlightDrawableDef() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
-        /// @return The name of the bar widget.
+        /// @return The highlight colour
         //-------------------------------------------------------------------
-        const std::string& GetBarWidgetName() const;
+        const Colour& GetHighlightColour() const;
         //-------------------------------------------------------------------
-        /// Sets the relative size of the bar when it is at 100% progress.
+        /// Sets the drawable that will be set on the owning widget when
+        /// it is not pressed.
         ///
         /// @author Ian Copland
         ///
-        /// @param The new relative size.
+        /// @param The drawable.
         //-------------------------------------------------------------------
-        void SetRelativeBarSize(const Vector2& in_relSize);
+        void SetNormalDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         //-------------------------------------------------------------------
-        /// Sets the current progress of the bar. This must be in the range
-        /// 0.0 to 1.0. If a value outside this range is provided the app
-        /// is considered to be in an irrecoverable state and will terminate.
+        /// Sets the drawable that will be set on the owning widget when
+        /// it is pressed.
         ///
         /// @author Ian Copland
         ///
-        /// @param The new progress.
+        /// @param The drawable.
         //-------------------------------------------------------------------
-        void SetProgress(f32 in_progress);
+        void SetHighlightDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         //-------------------------------------------------------------------
-        /// Sets the type of the progress bar: Fill or Stretch.
+        /// Sets the highlight colour.
         ///
         /// @author Ian Copland
         ///
-        /// @param The bar type.
+        /// @param The colour.
         //-------------------------------------------------------------------
-        void SetBarType(ProgressBarType in_barType);
-        //-------------------------------------------------------------------
-        /// Sets the direction of the progress bar: horizontal or vertical.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The direction.
-        //-------------------------------------------------------------------
-        void SetBarDirection(ProgressBarDirection in_direction);
-
+        void SetHighlightColour(const Colour& in_colour);
+        
     private:
         friend class UIComponentFactory;
         //-------------------------------------------------------------------
         /// Constructor that builds the component from key-value properties.
-        /// The properties used to create a progress bar component are described
+        /// The properties used to create a highlight component are described
         /// in the class documentation.
         ///
         /// @author Ian Copland
@@ -172,38 +137,19 @@ namespace ChilliSource
         /// @param The component name.
         /// @param The property map.
         //-------------------------------------------------------------------
-        ProgressBarComponent(const std::string& in_componentName, const PropertyMap& in_properties);
+        HighlightUIComponent(const std::string& in_componentName, const PropertyMap& in_properties);
         //-------------------------------------------------------------------
-        /// Sets the name of the bar widget. This can only be called once,
-        /// on construction. If this is called a second time the app is
-        /// considered to be in an irrecoverable state and will terminate.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return The name of the bar widget.
-        //-------------------------------------------------------------------
-        void SetBarWidgetName(const std::string& in_name);
-        //-------------------------------------------------------------------
-        /// Updates the size of the bar and applies fill if the bar is of
-        /// the "fill" type.
+        /// Enables the highlight on the owning widget.
         ///
         /// @author Ian Copland
         //-------------------------------------------------------------------
-        void UpdateBar();
+        void Highlight();
         //-------------------------------------------------------------------
-        /// Updates the size of the bar and applies fill if the bar is of
-        /// the "fill" type for horizontal bar types.
+        /// Enables the highlight on the owning widget.
         ///
         /// @author Ian Copland
         //-------------------------------------------------------------------
-        void UpdateHorizontalBar();
-        //-------------------------------------------------------------------
-        /// Updates the size of the bar and applies fill if the bar is of
-        /// the "fill" type for vertical bar types.
-        ///
-        /// @author Ian Copland
-        //-------------------------------------------------------------------
-        void UpdateVerticalBar();
+        void Unhighlight();
         //-------------------------------------------------------------------
         /// Called when the component is first added to the owning widget.
         ///
@@ -211,20 +157,84 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void OnInit() override;
         //-------------------------------------------------------------------
+        /// Called when a pointer is pressed inside the bounds of the owning
+        /// widget. This will enable the highlight.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The owning widget.
+        /// @param The pointer that was pressed.
+        /// @param The type of input.
+        //-------------------------------------------------------------------
+        void OnPressedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
+        //-------------------------------------------------------------------
+        /// Called when the owning widget receives an input move event within
+        /// its bounds having previously received one outside the bounds.
+        /// This will enable the highlight if the pointer was previously
+        /// pressed inside the widget.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The owning widget.
+        /// @param The pointer that was pressed.
+        //-------------------------------------------------------------------
+        void OnMoveEntered(Widget* in_widget, const Pointer& in_pointer);
+        //-------------------------------------------------------------------
+        /// Called when the owning widget receives an input move event outside
+        /// its bounds having previously received one inside the bounds.
+        /// This will disable the highlight if there are no other pointers
+        /// down on the widget.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The owning widget.
+        /// @param The pointer that was pressed.
+        //-------------------------------------------------------------------
+        void OnMoveExited(Widget* in_widget, const Pointer& in_pointer);
+        //-------------------------------------------------------------------
+        /// Called when a pointer is released inside the bounds of the owning
+        /// widget after having been pressed inside.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The owning widget.
+        /// @param The pointer that was pressed.
+        /// @param The type of input.
+        //-------------------------------------------------------------------
+        void OnReleasedInside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
+        //-------------------------------------------------------------------
+        /// Called when a pointer is released outside the bounds of the owning
+        /// widget after having been pressed inside.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The owning widget.
+        /// @param The pointer that was pressed.
+        /// @param The type of input.
+        //-------------------------------------------------------------------
+        void OnReleasedOutside(Widget* in_widget, const Pointer& in_pointer, Pointer::InputType in_inputType);
+        //-------------------------------------------------------------------
         /// Called when the owning widget is being destructed.
         ///
         /// @author Ian Copland
         //-------------------------------------------------------------------
         void OnDestroy() override;
         
-        Vector2 m_relBarSize;
-        f32 m_progress = 0.0f;
-        ProgressBarType m_barType = ProgressBarType::k_fill;
-        ProgressBarDirection m_direction = ProgressBarDirection::k_horizontal;
-        std::string m_barWidgetName;
+        UIDrawableDefCSPtr m_normalDrawableDef;
+        UIDrawableDefCSPtr m_highlightDrawableDef;
+        Colour m_highlightColour;
         
-        Widget* m_barWidget = nullptr;
-        DrawableComponent* m_barDrawableComponent = nullptr;
+        DrawableUIComponent* m_drawableComponent = nullptr;
+        
+        bool m_highlighted = false;
+        std::vector<Pointer::Id> m_activePointerIds;
+        std::vector<Pointer::Id> m_highlightingPointerIds;
+        
+        EventConnectionUPtr m_pressedInsideConnection;
+        EventConnectionUPtr m_moveEnteredConnection;
+        EventConnectionUPtr m_moveExitedConnection;
+        EventConnectionUPtr m_releasedInsideConnection;
+        EventConnectionUPtr m_releasedOutsideConnection;
     };
 }
 
