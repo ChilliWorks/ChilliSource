@@ -1,5 +1,5 @@
 //
-//  NinePatchDrawableDef.cpp
+//  NinePatchUIDrawableDef.cpp
 //  Chilli Source
 //  Created by Ian Copland on 15/12/2014.
 //
@@ -26,21 +26,21 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/NinePatchDrawableDef.h>
+#include <ChilliSource/UI/Drawable/NinePatchUIDrawableDef.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/NinePatchUIDrawable.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(NinePatchDrawableDef);
+    CS_DEFINE_NAMEDTYPE(NinePatchUIDrawableDef);
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    NinePatchDrawableDef::NinePatchDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+    NinePatchUIDrawableDef::NinePatchUIDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation, const std::string& in_defaultPath)
     {
         const char k_typeKey[] = "Type";
         const char k_textureLocationKey[] = "TextureLocation";
@@ -142,14 +142,14 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    NinePatchDrawableDef::NinePatchDrawableDef(const TextureCSPtr& in_texture, const Vector4& in_insets, const Colour& in_colour, const UVs& in_uvs)
+    NinePatchUIDrawableDef::NinePatchUIDrawableDef(const TextureCSPtr& in_texture, const Vector4& in_insets, const Colour& in_colour, const UVs& in_uvs)
         : m_texture(in_texture), m_insets(in_insets), m_colour(in_colour), m_uvs(in_uvs)
     {
         CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Nine-Patch UIDrawable Def.");
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    NinePatchDrawableDef::NinePatchDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Vector4& in_insets,
+    NinePatchUIDrawableDef::NinePatchUIDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Vector4& in_insets,
                                                const Colour& in_colour, const UVs& in_uvs)
         : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_insets(in_insets), m_colour(in_colour), m_uvs(in_uvs)
     {
@@ -159,59 +159,59 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    bool NinePatchDrawableDef::IsA(InterfaceIDType in_interfaceId) const
+    bool NinePatchUIDrawableDef::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIDrawableDef::InterfaceID == in_interfaceId || NinePatchDrawableDef::InterfaceID == in_interfaceId);
+        return (UIDrawableDef::InterfaceID == in_interfaceId || NinePatchUIDrawableDef::InterfaceID == in_interfaceId);
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const TextureCSPtr& NinePatchDrawableDef::GetTexture() const
+    const TextureCSPtr& NinePatchUIDrawableDef::GetTexture() const
     {
         return m_texture;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const TextureAtlasCSPtr& NinePatchDrawableDef::GetAtlas() const
+    const TextureAtlasCSPtr& NinePatchUIDrawableDef::GetAtlas() const
     {
         return m_atlas;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const std::string& NinePatchDrawableDef::GetAtlasId() const
+    const std::string& NinePatchUIDrawableDef::GetAtlasId() const
     {
         return m_atlasId;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const UVs& NinePatchDrawableDef::GetUVs() const
+    const UVs& NinePatchUIDrawableDef::GetUVs() const
     {
         return m_uvs;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const Colour& NinePatchDrawableDef::GetColour() const
+    const Colour& NinePatchUIDrawableDef::GetColour() const
     {
         return m_colour;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    const Vector4& NinePatchDrawableDef::GetInsets() const
+    const Vector4& NinePatchUIDrawableDef::GetInsets() const
     {
         return m_insets;
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    UIDrawableUPtr NinePatchDrawableDef::CreateDrawable() const
+    UIDrawableUPtr NinePatchUIDrawableDef::CreateDrawable() const
     {
-        NinePatchDrawableUPtr drawable;
+        NinePatchUIDrawableUPtr drawable;
         
         if (m_atlas != nullptr)
         {
-            drawable = NinePatchDrawableUPtr(new NinePatchDrawable(m_texture, m_atlas, m_atlasId, m_insets.x, m_insets.y, m_insets.z, m_insets.w));
+            drawable = NinePatchUIDrawableUPtr(new NinePatchUIDrawable(m_texture, m_atlas, m_atlasId, m_insets.x, m_insets.y, m_insets.z, m_insets.w));
         }
         else
         {
-            drawable = NinePatchDrawableUPtr(new NinePatchDrawable(m_texture, m_insets.x, m_insets.y, m_insets.z, m_insets.w));
+            drawable = NinePatchUIDrawableUPtr(new NinePatchUIDrawable(m_texture, m_insets.x, m_insets.y, m_insets.z, m_insets.w));
         }
         
         drawable->SetUVs(m_uvs);

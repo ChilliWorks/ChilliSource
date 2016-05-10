@@ -28,9 +28,9 @@
 
 #include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
-#include <ChilliSource/UI/Drawable/NinePatchDrawableDef.h>
-#include <ChilliSource/UI/Drawable/StandardDrawableDef.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawableDef.h>
+#include <ChilliSource/UI/Drawable/NinePatchUIDrawableDef.h>
+#include <ChilliSource/UI/Drawable/StandardUIDrawableDef.h>
+#include <ChilliSource/UI/Drawable/ThreePatchUIDrawableDef.h>
 
 #include <json/json.h>
 
@@ -91,11 +91,11 @@ namespace ChilliSource
         switch (type)
         {
             case DrawableType::k_standard:
-                return UIDrawableDefCUPtr(new StandardDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+                return UIDrawableDefCUPtr(new StandardUIDrawableDef(in_json, in_defaultLocation, in_defaultPath));
             case DrawableType::k_threePatch:
-                return UIDrawableDefCUPtr(new ThreePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+                return UIDrawableDefCUPtr(new ThreePatchUIDrawableDef(in_json, in_defaultLocation, in_defaultPath));
             case DrawableType::k_ninePatch:
-                return UIDrawableDefCUPtr(new NinePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+                return UIDrawableDefCUPtr(new NinePatchUIDrawableDef(in_json, in_defaultLocation, in_defaultPath));
             case DrawableType::k_none:
                 return nullptr;
             default:

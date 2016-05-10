@@ -1,5 +1,5 @@
 //
-//  ThreePatchDrawable.cpp
+//  ThreePatchUIDrawable.cpp
 //  Chilli Source
 //  Created by Scott Downie on 24/07/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/ThreePatchUIDrawable.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -65,9 +65,9 @@ namespace ChilliSource
         ///
         /// @return UVs for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<UVs, ThreePatchDrawable::k_numPatches> CalculateThreePatchUVsHorizontal(const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
+        std::array<UVs, ThreePatchUIDrawable::k_numPatches> CalculateThreePatchUVsHorizontal(const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
         {
-            std::array<UVs, ThreePatchDrawable::k_numPatches> result;
+            std::array<UVs, ThreePatchUIDrawable::k_numPatches> result;
             
             f32 uvWidth = (in_frame.m_originalSize.x/in_frame.m_croppedSize.x) * in_frame.m_uvs.m_s;
             
@@ -133,9 +133,9 @@ namespace ChilliSource
         ///
         /// @return UVs for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<UVs, ThreePatchDrawable::k_numPatches> CalculateThreePatchUVsVertical(const TextureAtlas::Frame& in_frame, f32 in_bottom, f32 in_top)
+        std::array<UVs, ThreePatchUIDrawable::k_numPatches> CalculateThreePatchUVsVertical(const TextureAtlas::Frame& in_frame, f32 in_bottom, f32 in_top)
         {
-            std::array<UVs, ThreePatchDrawable::k_numPatches> result;
+            std::array<UVs, ThreePatchUIDrawable::k_numPatches> result;
             
             f32 uvWidth = (in_frame.m_originalSize.x/in_frame.m_croppedSize.x) * in_frame.m_uvs.m_s;
             
@@ -204,9 +204,9 @@ namespace ChilliSource
         ///
         /// @return Sizes for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchSizesHorizontal(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
+        std::array<Vector2, ThreePatchUIDrawable::k_numPatches> CalculateThreePatchSizesHorizontal(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right)
         {
-            std::array<Vector2, ThreePatchDrawable::k_numPatches> result;
+            std::array<Vector2, ThreePatchUIDrawable::k_numPatches> result;
             
             f32 height = in_widgetSize.y/in_frame.m_originalSize.y * in_frame.m_croppedSize.y;
             Vector2 widgetSizeAspectMaintained = AspectRatioUtils::KeepOriginalHeightAdaptWidth(Vector2(in_frame.m_originalSize.x, height), in_frame.m_originalSize.x/in_frame.m_originalSize.y);
@@ -246,9 +246,9 @@ namespace ChilliSource
         ///
         /// @return Sizes for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchSizesVertical(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_bottom, f32 in_top)
+        std::array<Vector2, ThreePatchUIDrawable::k_numPatches> CalculateThreePatchSizesVertical(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_bottom, f32 in_top)
         {
-            std::array<Vector2, ThreePatchDrawable::k_numPatches> result;
+            std::array<Vector2, ThreePatchUIDrawable::k_numPatches> result;
             
             f32 width = in_widgetSize.x/in_frame.m_originalSize.x * in_frame.m_croppedSize.x;
             Vector2 widgetSizeAspectMaintained = AspectRatioUtils::KeepOriginalWidthAdaptHeight(Vector2(width, in_frame.m_originalSize.y), in_frame.m_originalSize.x/in_frame.m_originalSize.y);
@@ -285,9 +285,9 @@ namespace ChilliSource
         ///
         /// @return Sizes for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchPositionsHorizontal(const Vector2& in_widgetSize, const std::array<Vector2, ThreePatchDrawable::k_numPatches>& in_sizes)
+        std::array<Vector2, ThreePatchUIDrawable::k_numPatches> CalculateThreePatchPositionsHorizontal(const Vector2& in_widgetSize, const std::array<Vector2, ThreePatchUIDrawable::k_numPatches>& in_sizes)
         {
-            std::array<Vector2, ThreePatchDrawable::k_numPatches> result;
+            std::array<Vector2, ThreePatchUIDrawable::k_numPatches> result;
             
             Vector2 halfWidgetSize = in_widgetSize * 0.5f;
             Vector2 halfLeft = in_sizes[(u32)Patch::k_leftOrBottom] * 0.5f;
@@ -316,9 +316,9 @@ namespace ChilliSource
         ///
         /// @return Sizes for the 3 patches
         //----------------------------------------------------------------------------------------
-        std::array<Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchPositionsVertical(const Vector2& in_widgetSize, const std::array<Vector2, ThreePatchDrawable::k_numPatches>& in_sizes)
+        std::array<Vector2, ThreePatchUIDrawable::k_numPatches> CalculateThreePatchPositionsVertical(const Vector2& in_widgetSize, const std::array<Vector2, ThreePatchUIDrawable::k_numPatches>& in_sizes)
         {
-            std::array<Vector2, ThreePatchDrawable::k_numPatches> result;
+            std::array<Vector2, ThreePatchUIDrawable::k_numPatches> result;
             
             Vector2 halfWidgetSize = in_widgetSize * 0.5f;
             Vector2 halfTop = in_sizes[(u32)Patch::k_rightOrTop] * 0.5f;
@@ -432,10 +432,10 @@ namespace ChilliSource
         }
     }
     
-    CS_DEFINE_NAMEDTYPE(ThreePatchDrawable);
+    CS_DEFINE_NAMEDTYPE(ThreePatchUIDrawable);
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    ThreePatchDrawable::ThreePatchDrawable(const TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop)
+    ThreePatchUIDrawable::ThreePatchUIDrawable(const TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop)
     {
         switch (in_direction)
         {
@@ -458,7 +458,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    ThreePatchDrawable::ThreePatchDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction,
+    ThreePatchUIDrawable::ThreePatchUIDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction,
                                            f32 in_leftOrBottom, f32 in_rightOrTop)
     {
         CS_ASSERT(in_atlas != nullptr, "The given texture atlas cannot be null.");
@@ -488,43 +488,43 @@ namespace ChilliSource
     
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    bool ThreePatchDrawable::IsA(InterfaceIDType in_interfaceId) const
+    bool ThreePatchUIDrawable::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIDrawable::InterfaceID == in_interfaceId || ThreePatchDrawable::InterfaceID == in_interfaceId);
+        return (UIDrawable::InterfaceID == in_interfaceId || ThreePatchUIDrawable::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const TextureCSPtr& ThreePatchDrawable::GetTexture() const
+    const TextureCSPtr& ThreePatchUIDrawable::GetTexture() const
     {
         return m_texture;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const TextureAtlasCSPtr& ThreePatchDrawable::GetTextureAtlas() const
+    const TextureAtlasCSPtr& ThreePatchUIDrawable::GetTextureAtlas() const
     {
         return m_atlas;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const std::string& ThreePatchDrawable::GetTextureAtlasId() const
+    const std::string& ThreePatchUIDrawable::GetTextureAtlasId() const
     {
         return m_atlasId;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const UVs& ThreePatchDrawable::GetUVs() const
+    const UVs& ThreePatchUIDrawable::GetUVs() const
     {
         return m_uvs;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Colour& ThreePatchDrawable::GetColour() const
+    const Colour& ThreePatchUIDrawable::GetColour() const
     {
         return m_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetTexture(const TextureCSPtr& in_texture)
+    void ThreePatchUIDrawable::SetTexture(const TextureCSPtr& in_texture)
     {
         CS_ASSERT(in_texture != nullptr, "Cannot set a null texture on a drawable.");
         
@@ -535,7 +535,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
+    void ThreePatchUIDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
     {
         m_atlas = in_atlas;
         m_atlasId = "";
@@ -545,9 +545,9 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetTextureAtlasId(const std::string& in_atlasId)
+    void ThreePatchUIDrawable::SetTextureAtlasId(const std::string& in_atlasId)
     {
-        CS_ASSERT(m_atlas != nullptr, "ThreePatchDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
+        CS_ASSERT(m_atlas != nullptr, "ThreePatchUIDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
         
         m_atlasId = in_atlasId;
         
@@ -556,7 +556,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetUVs(const UVs& in_UVs)
+    void ThreePatchUIDrawable::SetUVs(const UVs& in_UVs)
     {
         m_uvs = in_UVs;
         
@@ -565,13 +565,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetColour(const Colour& in_colour)
+    void ThreePatchUIDrawable::SetColour(const Colour& in_colour)
     {
         m_colour = in_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::SetInsets(f32 in_leftOrBottom, f32 in_rightOrTop)
+    void ThreePatchUIDrawable::SetInsets(f32 in_leftOrBottom, f32 in_rightOrTop)
     {
         CS_ASSERT(in_leftOrBottom > 0.0f && in_rightOrTop > 0.0f, "Insets must be greater than 0");
         CS_ASSERT(in_leftOrBottom + in_rightOrTop <= 1.0f, "Insets must not overlap i.e. sum to more than 1");
@@ -583,15 +583,15 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Vector2 ThreePatchDrawable::GetPreferredSize() const
+    Vector2 ThreePatchUIDrawable::GetPreferredSize() const
     {
         return m_atlasFrame.m_originalSize;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
+    void ThreePatchUIDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
-        CS_ASSERT(m_texture != nullptr, "ThreePatchDrawable cannot draw without texture");
+        CS_ASSERT(m_texture != nullptr, "ThreePatchUIDrawable cannot draw without texture");
         
         if(m_cachedWidgetSize != in_absSize)
         {

@@ -1,5 +1,5 @@
 //
-//  NinePatchDrawableDef.h
+//  NinePatchUIDrawableDef.h
 //  Chilli Source
 //  Created by Ian Copland on 15/12/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_NINEDRAWABLEDEF_H_
-#define _CHILLISOURCE_UI_DRAWABLE_NINEDRAWABLEDEF_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_NINEPATCHUIDRAWABLEDEF_H_
+#define _CHILLISOURCE_UI_DRAWABLE_NINEPATCHUIDRAWABLEDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -51,16 +51,16 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
-    class NinePatchDrawableDef final : public UIDrawableDef
+    class NinePatchUIDrawableDef final : public UIDrawableDef
     {
     public:
-        CS_DECLARE_NAMEDTYPE(NinePatchDrawableDef);
+        CS_DECLARE_NAMEDTYPE(NinePatchUIDrawableDef);
         //--------------------------------------------------------------
         /// Constructor. Creates an empty standard drawable definition.
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------
-        NinePatchDrawableDef() = default;
+        NinePatchUIDrawableDef() = default;
         //--------------------------------------------------------------
         /// Constructor. Creates a standard drawable definition from
         /// json.
@@ -75,7 +75,7 @@ namespace ChilliSource
         /// there is no storage location specified in the json. Defaults
         /// to empty.
         //--------------------------------------------------------------
-        NinePatchDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation = StorageLocation::k_package, const std::string& in_defaultPath = "");
+        NinePatchUIDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation = StorageLocation::k_package, const std::string& in_defaultPath = "");
         //--------------------------------------------------------------
         /// Constructor. Creates a standard drawable definition from
         /// with just a texture.
@@ -87,7 +87,7 @@ namespace ChilliSource
         /// @param [Optional] The colour. Defaults to white.
         /// @param [Optional] The UVs. Defaults to (0, 0, 1, 1)
         //--------------------------------------------------------------
-        NinePatchDrawableDef(const TextureCSPtr& in_texture, const Vector4& in_insets, const Colour& in_colour = Colour::k_white, const UVs& in_uvs = UVs());
+        NinePatchUIDrawableDef(const TextureCSPtr& in_texture, const Vector4& in_insets, const Colour& in_colour = Colour::k_white, const UVs& in_uvs = UVs());
         //--------------------------------------------------------------
         /// Constructor. Creates a standard drawable definition from
         /// with a texture atlas.
@@ -101,7 +101,7 @@ namespace ChilliSource
         /// @param [Optional] The colour. Defaults to white.
         /// @param [Optional] The UVs. Defaults to (0, 0, 1, 1)
         //--------------------------------------------------------------
-        NinePatchDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Vector4& in_insets,
+        NinePatchUIDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Vector4& in_insets,
                              const Colour& in_colour = Colour::k_white, const UVs& in_uvs = UVs());
         //--------------------------------------------------------------
         /// Allows querying of whether or not the component implements

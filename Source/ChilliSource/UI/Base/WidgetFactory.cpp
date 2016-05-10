@@ -39,9 +39,9 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/StandardDrawable.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/NinePatchUIDrawable.h>
+#include <ChilliSource/UI/Drawable/StandardUIDrawable.h>
+#include <ChilliSource/UI/Drawable/ThreePatchUIDrawable.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>

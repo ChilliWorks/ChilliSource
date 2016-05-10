@@ -1,5 +1,5 @@
 //
-//  StandardDrawable.cpp
+//  StandardUIDrawable.cpp
 //  Chilli Source
 //  Created by Scott Downie on 17/04/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/StandardDrawable.h>
+#include <ChilliSource/UI/Drawable/StandardUIDrawable.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -37,16 +37,16 @@
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(StandardDrawable);
+    CS_DEFINE_NAMEDTYPE(StandardUIDrawable);
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    StandardDrawable::StandardDrawable(const TextureCSPtr& in_texture)
+    StandardUIDrawable::StandardUIDrawable(const TextureCSPtr& in_texture)
     {
         SetTexture(in_texture);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    StandardDrawable::StandardDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId)
+    StandardUIDrawable::StandardUIDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId)
     {
         CS_ASSERT(in_atlas != nullptr, "The given texture atlas cannot be null.");
         CS_ASSERT(in_atlas->HasFrameWithId(in_atlasId) == true, "The texture atlas id \"" + in_atlasId + "\" must exist in the atlas.");
@@ -57,43 +57,43 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    bool StandardDrawable::IsA(InterfaceIDType in_interfaceId) const
+    bool StandardUIDrawable::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIDrawable::InterfaceID == in_interfaceId || StandardDrawable::InterfaceID == in_interfaceId);
+        return (UIDrawable::InterfaceID == in_interfaceId || StandardUIDrawable::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const TextureCSPtr& StandardDrawable::GetTexture() const
+    const TextureCSPtr& StandardUIDrawable::GetTexture() const
     {
         return m_texture;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const TextureAtlasCSPtr& StandardDrawable::GetTextureAtlas() const
+    const TextureAtlasCSPtr& StandardUIDrawable::GetTextureAtlas() const
     {
         return m_atlas;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const std::string& StandardDrawable::GetTextureAtlasId() const
+    const std::string& StandardUIDrawable::GetTextureAtlasId() const
     {
         return m_atlasId;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const UVs& StandardDrawable::GetUVs() const
+    const UVs& StandardUIDrawable::GetUVs() const
     {
         return m_uvs;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Colour& StandardDrawable::GetColour() const
+    const Colour& StandardUIDrawable::GetColour() const
     {
         return m_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetTexture(const TextureCSPtr& in_texture)
+    void StandardUIDrawable::SetTexture(const TextureCSPtr& in_texture)
     {
         CS_ASSERT(in_texture != nullptr, "Cannot set a null texture on a drawable.");
         
@@ -103,7 +103,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
+    void StandardUIDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
     {
         m_atlas = in_atlas;
         m_atlasId = "";
@@ -112,9 +112,9 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetTextureAtlasId(const std::string& in_atlasId)
+    void StandardUIDrawable::SetTextureAtlasId(const std::string& in_atlasId)
     {
-        CS_ASSERT(m_atlas != nullptr, "StandardDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
+        CS_ASSERT(m_atlas != nullptr, "StandardUIDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
         
         m_atlasId = in_atlasId;
         
@@ -122,7 +122,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetUVs(const UVs& in_UVs)
+    void StandardUIDrawable::SetUVs(const UVs& in_UVs)
     {
         m_uvs = in_UVs;
         
@@ -130,21 +130,21 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::SetColour(const Colour& in_colour)
+    void StandardUIDrawable::SetColour(const Colour& in_colour)
     {
         m_colour = in_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Vector2 StandardDrawable::GetPreferredSize() const
+    Vector2 StandardUIDrawable::GetPreferredSize() const
     {
         return m_atlasFrame.m_originalSize;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
+    void StandardUIDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
-        CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot draw without texture");
+        CS_ASSERT(m_texture != nullptr, "StandardUIDrawable cannot draw without texture");
         
         //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the box.
         Vector2 offsetTL

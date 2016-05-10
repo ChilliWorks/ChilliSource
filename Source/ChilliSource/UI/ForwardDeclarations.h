@@ -62,12 +62,12 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(UIDrawable);
     CS_FORWARDDECLARE_CLASS(DrawableComponent);
     CS_FORWARDDECLARE_CLASS(UIDrawableDef);
-    CS_FORWARDDECLARE_CLASS(NinePatchDrawable);
-    CS_FORWARDDECLARE_CLASS(NinePatchDrawableDef);
-    CS_FORWARDDECLARE_CLASS(StandardDrawable);
-    CS_FORWARDDECLARE_CLASS(StandardDrawableDef);
-    CS_FORWARDDECLARE_CLASS(ThreePatchDrawable);
-    CS_FORWARDDECLARE_CLASS(ThreePatchDrawableDef);
+    CS_FORWARDDECLARE_CLASS(NinePatchUIDrawable);
+    CS_FORWARDDECLARE_CLASS(NinePatchUIDrawableDef);
+    CS_FORWARDDECLARE_CLASS(StandardUIDrawable);
+    CS_FORWARDDECLARE_CLASS(StandardUIDrawableDef);
+    CS_FORWARDDECLARE_CLASS(ThreePatchUIDrawable);
+    CS_FORWARDDECLARE_CLASS(ThreePatchUIDrawableDef);
     //---------------------------------------------------------
     /// Layout
     //---------------------------------------------------------

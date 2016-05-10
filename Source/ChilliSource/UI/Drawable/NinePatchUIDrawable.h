@@ -1,5 +1,5 @@
 //
-//  NinePatchDrawable.h
+//  NinePatchUIDrawable.h
 //  Chilli Source
 //  Created by Scott Downie on 24/07/2014.
 //
@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_NINEPATCHDRAWABLE_H_
-#define _CHILLISOURCE_UI_DRAWABLE_NINEPATCHDRAWABLE_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_NINEPATCHUIDRAWABLE_H_
+#define _CHILLISOURCE_UI_DRAWABLE_NINEPATCHUIDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -51,10 +51,10 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //----------------------------------------------------------------------------------------
-    class NinePatchDrawable final : public UIDrawable
+    class NinePatchUIDrawable final : public UIDrawable
     {
     public:
-        CS_DECLARE_NAMEDTYPE(NinePatchDrawable);
+        CS_DECLARE_NAMEDTYPE(NinePatchUIDrawable);
         
         static const u32 k_numPatches = 9;
         //----------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ namespace ChilliSource
         void Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
         
     private:
-        friend class NinePatchDrawableDef;
+        friend class NinePatchUIDrawableDef;
         //----------------------------------------------------------------------------------------
         /// Constructor
         ///
@@ -202,7 +202,7 @@ namespace ChilliSource
         /// @param The top inset.
         /// @param The bottom inset.
         //----------------------------------------------------------------------------------------
-        NinePatchDrawable(const TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
+        NinePatchUIDrawable(const TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
         //----------------------------------------------------------------------------------------
         /// Constructor
         ///
@@ -216,7 +216,7 @@ namespace ChilliSource
         /// @param The top inset.
         /// @param The bottom inset.
         //----------------------------------------------------------------------------------------
-        NinePatchDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
+        NinePatchUIDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
         
         TextureCSPtr m_texture;
         TextureAtlasCSPtr m_atlas;

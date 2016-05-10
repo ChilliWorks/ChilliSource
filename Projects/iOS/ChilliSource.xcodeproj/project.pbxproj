@@ -212,12 +212,12 @@
 		8158F7151C89D2AD00B13109 /* DrawableComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4481C89D2AD00B13109 /* DrawableComponent.cpp */; };
 		8158F7161C89D2AD00B13109 /* UIDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44A1C89D2AD00B13109 /* UIDrawableDef.cpp */; };
 		8158F7171C89D2AD00B13109 /* UIDrawableUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */; };
-		8158F7181C89D2AD00B13109 /* NinePatchDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44E1C89D2AD00B13109 /* NinePatchDrawable.cpp */; };
-		8158F7191C89D2AD00B13109 /* NinePatchDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4501C89D2AD00B13109 /* NinePatchDrawableDef.cpp */; };
-		8158F71A1C89D2AD00B13109 /* StandardDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4521C89D2AD00B13109 /* StandardDrawable.cpp */; };
-		8158F71B1C89D2AD00B13109 /* StandardDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4541C89D2AD00B13109 /* StandardDrawableDef.cpp */; };
-		8158F71C1C89D2AD00B13109 /* ThreePatchDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4561C89D2AD00B13109 /* ThreePatchDrawable.cpp */; };
-		8158F71D1C89D2AD00B13109 /* ThreePatchDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4581C89D2AD00B13109 /* ThreePatchDrawableDef.cpp */; };
+		8158F7181C89D2AD00B13109 /* NinePatchUIDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44E1C89D2AD00B13109 /* NinePatchUIDrawable.cpp */; };
+		8158F7191C89D2AD00B13109 /* NinePatchUIDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4501C89D2AD00B13109 /* NinePatchUIDrawableDef.cpp */; };
+		8158F71A1C89D2AD00B13109 /* StandardUIDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4521C89D2AD00B13109 /* StandardUIDrawable.cpp */; };
+		8158F71B1C89D2AD00B13109 /* StandardUIDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4541C89D2AD00B13109 /* StandardUIDrawableDef.cpp */; };
+		8158F71C1C89D2AD00B13109 /* ThreePatchUIDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4561C89D2AD00B13109 /* ThreePatchUIDrawable.cpp */; };
+		8158F71D1C89D2AD00B13109 /* ThreePatchUIDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4581C89D2AD00B13109 /* ThreePatchUIDrawableDef.cpp */; };
 		8158F71E1C89D2AD00B13109 /* GridLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F45D1C89D2AD00B13109 /* GridLayout.cpp */; };
 		8158F71F1C89D2AD00B13109 /* GridLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F45F1C89D2AD00B13109 /* GridLayoutDef.cpp */; };
 		8158F7201C89D2AD00B13109 /* HListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4611C89D2AD00B13109 /* HListLayout.cpp */; };
@@ -867,18 +867,18 @@
 		8158F44B1C89D2AD00B13109 /* UIDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawableDef.h; sourceTree = "<group>"; };
 		8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawableUtils.cpp; sourceTree = "<group>"; };
 		8158F44D1C89D2AD00B13109 /* UIDrawableUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawableUtils.h; sourceTree = "<group>"; };
-		8158F44E1C89D2AD00B13109 /* NinePatchDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchDrawable.cpp; sourceTree = "<group>"; };
-		8158F44F1C89D2AD00B13109 /* NinePatchDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchDrawable.h; sourceTree = "<group>"; };
-		8158F4501C89D2AD00B13109 /* NinePatchDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchDrawableDef.cpp; sourceTree = "<group>"; };
-		8158F4511C89D2AD00B13109 /* NinePatchDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchDrawableDef.h; sourceTree = "<group>"; };
-		8158F4521C89D2AD00B13109 /* StandardDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StandardDrawable.cpp; sourceTree = "<group>"; };
-		8158F4531C89D2AD00B13109 /* StandardDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandardDrawable.h; sourceTree = "<group>"; };
-		8158F4541C89D2AD00B13109 /* StandardDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StandardDrawableDef.cpp; sourceTree = "<group>"; };
-		8158F4551C89D2AD00B13109 /* StandardDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandardDrawableDef.h; sourceTree = "<group>"; };
-		8158F4561C89D2AD00B13109 /* ThreePatchDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreePatchDrawable.cpp; sourceTree = "<group>"; };
-		8158F4571C89D2AD00B13109 /* ThreePatchDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchDrawable.h; sourceTree = "<group>"; };
-		8158F4581C89D2AD00B13109 /* ThreePatchDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreePatchDrawableDef.cpp; sourceTree = "<group>"; };
-		8158F4591C89D2AD00B13109 /* ThreePatchDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchDrawableDef.h; sourceTree = "<group>"; };
+		8158F44E1C89D2AD00B13109 /* NinePatchUIDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchUIDrawable.cpp; sourceTree = "<group>"; };
+		8158F44F1C89D2AD00B13109 /* NinePatchUIDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchUIDrawable.h; sourceTree = "<group>"; };
+		8158F4501C89D2AD00B13109 /* NinePatchUIDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchUIDrawableDef.cpp; sourceTree = "<group>"; };
+		8158F4511C89D2AD00B13109 /* NinePatchUIDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchUIDrawableDef.h; sourceTree = "<group>"; };
+		8158F4521C89D2AD00B13109 /* StandardUIDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StandardUIDrawable.cpp; sourceTree = "<group>"; };
+		8158F4531C89D2AD00B13109 /* StandardUIDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandardUIDrawable.h; sourceTree = "<group>"; };
+		8158F4541C89D2AD00B13109 /* StandardUIDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StandardUIDrawableDef.cpp; sourceTree = "<group>"; };
+		8158F4551C89D2AD00B13109 /* StandardUIDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandardUIDrawableDef.h; sourceTree = "<group>"; };
+		8158F4561C89D2AD00B13109 /* ThreePatchUIDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreePatchUIDrawable.cpp; sourceTree = "<group>"; };
+		8158F4571C89D2AD00B13109 /* ThreePatchUIDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchUIDrawable.h; sourceTree = "<group>"; };
+		8158F4581C89D2AD00B13109 /* ThreePatchUIDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreePatchUIDrawableDef.cpp; sourceTree = "<group>"; };
+		8158F4591C89D2AD00B13109 /* ThreePatchUIDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchUIDrawableDef.h; sourceTree = "<group>"; };
 		8158F45A1C89D2AD00B13109 /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
 		8158F45B1C89D2AD00B13109 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		8158F45D1C89D2AD00B13109 /* GridLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridLayout.cpp; sourceTree = "<group>"; };
@@ -2230,18 +2230,18 @@
 				8158F44B1C89D2AD00B13109 /* UIDrawableDef.h */,
 				8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */,
 				8158F44D1C89D2AD00B13109 /* UIDrawableUtils.h */,
-				8158F44E1C89D2AD00B13109 /* NinePatchDrawable.cpp */,
-				8158F44F1C89D2AD00B13109 /* NinePatchDrawable.h */,
-				8158F4501C89D2AD00B13109 /* NinePatchDrawableDef.cpp */,
-				8158F4511C89D2AD00B13109 /* NinePatchDrawableDef.h */,
-				8158F4521C89D2AD00B13109 /* StandardDrawable.cpp */,
-				8158F4531C89D2AD00B13109 /* StandardDrawable.h */,
-				8158F4541C89D2AD00B13109 /* StandardDrawableDef.cpp */,
-				8158F4551C89D2AD00B13109 /* StandardDrawableDef.h */,
-				8158F4561C89D2AD00B13109 /* ThreePatchDrawable.cpp */,
-				8158F4571C89D2AD00B13109 /* ThreePatchDrawable.h */,
-				8158F4581C89D2AD00B13109 /* ThreePatchDrawableDef.cpp */,
-				8158F4591C89D2AD00B13109 /* ThreePatchDrawableDef.h */,
+				8158F44E1C89D2AD00B13109 /* NinePatchUIDrawable.cpp */,
+				8158F44F1C89D2AD00B13109 /* NinePatchUIDrawable.h */,
+				8158F4501C89D2AD00B13109 /* NinePatchUIDrawableDef.cpp */,
+				8158F4511C89D2AD00B13109 /* NinePatchUIDrawableDef.h */,
+				8158F4521C89D2AD00B13109 /* StandardUIDrawable.cpp */,
+				8158F4531C89D2AD00B13109 /* StandardUIDrawable.h */,
+				8158F4541C89D2AD00B13109 /* StandardUIDrawableDef.cpp */,
+				8158F4551C89D2AD00B13109 /* StandardUIDrawableDef.h */,
+				8158F4561C89D2AD00B13109 /* ThreePatchUIDrawable.cpp */,
+				8158F4571C89D2AD00B13109 /* ThreePatchUIDrawable.h */,
+				8158F4581C89D2AD00B13109 /* ThreePatchUIDrawableDef.cpp */,
+				8158F4591C89D2AD00B13109 /* ThreePatchUIDrawableDef.h */,
 			);
 			path = Drawable;
 			sourceTree = "<group>";
@@ -3022,7 +3022,7 @@
 				8158F6521C89D2AD00B13109 /* Colour.cpp in Sources */,
 				8158F6C61C89D2AD00B13109 /* AnimatedMeshComponent.cpp in Sources */,
 				8158F7011C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */,
-				8158F71B1C89D2AD00B13109 /* StandardDrawableDef.cpp in Sources */,
+				8158F71B1C89D2AD00B13109 /* StandardUIDrawableDef.cpp in Sources */,
 				8158F6561C89D2AD00B13109 /* PlatformSystem.cpp in Sources */,
 				8158F6841C89D2AD00B13109 /* ResourceProvider.cpp in Sources */,
 				8158F66D1C89D2AD00B13109 /* FileSystem.cpp in Sources */,
@@ -3082,7 +3082,7 @@
 				8158F70F1C89D2AD00B13109 /* WidgetParserUtils.cpp in Sources */,
 				8158F7E01C89D2AD00B13109 /* SubtitlesRenderer.mm in Sources */,
 				8158F67C1C89D2AD00B13109 /* Random.cpp in Sources */,
-				8158F7191C89D2AD00B13109 /* NinePatchDrawableDef.cpp in Sources */,
+				8158F7191C89D2AD00B13109 /* NinePatchUIDrawableDef.cpp in Sources */,
 				8158F6C31C89D2AD00B13109 /* Material.cpp in Sources */,
 				8158F64C1C89D2AD00B13109 /* CkBankProvider.cpp in Sources */,
 				8158F7FE1C89D2AD00B13109 /* Shader.cpp in Sources */,
@@ -3175,13 +3175,13 @@
 				8158F6A61C89D2AD00B13109 /* MoContentDownloader.cpp in Sources */,
 				8158F7161C89D2AD00B13109 /* UIDrawableDef.cpp in Sources */,
 				8158F7F71C89D2AD00B13109 /* ContextRestorer.cpp in Sources */,
-				8158F71A1C89D2AD00B13109 /* StandardDrawable.cpp in Sources */,
+				8158F71A1C89D2AD00B13109 /* StandardUIDrawable.cpp in Sources */,
 				8158F6531C89D2AD00B13109 /* ColourUtils.cpp in Sources */,
 				8158F7111C89D2AD00B13109 /* WidgetTemplateProvider.cpp in Sources */,
 				8158F7261C89D2AD00B13109 /* VListLayoutDef.cpp in Sources */,
 				8158F6591C89D2AD00B13109 /* ParamDictionary.cpp in Sources */,
 				8158F6B71C89D2AD00B13109 /* RenderSystem.cpp in Sources */,
-				8158F71C1C89D2AD00B13109 /* ThreePatchDrawable.cpp in Sources */,
+				8158F71C1C89D2AD00B13109 /* ThreePatchUIDrawable.cpp in Sources */,
 				8158F8011C89D2AD00B13109 /* TextureUnitSystem.cpp in Sources */,
 				8158F70E1C89D2AD00B13109 /* WidgetFactory.cpp in Sources */,
 				81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */,
@@ -3222,7 +3222,7 @@
 				8158F6851C89D2AD00B13109 /* Scene.cpp in Sources */,
 				8158F6E61C89D2AD00B13109 /* Cone2DParticleEmitterDef.cpp in Sources */,
 				8158F6DB1C89D2AD00B13109 /* ScaleOverLifetimeParticleAffectorDef.cpp in Sources */,
-				8158F7181C89D2AD00B13109 /* NinePatchDrawable.cpp in Sources */,
+				8158F7181C89D2AD00B13109 /* NinePatchUIDrawable.cpp in Sources */,
 				8158F68B1C89D2AD00B13109 /* StringUtils.cpp in Sources */,
 				8158F7D81C89D2AD00B13109 /* IAPSystem.mm in Sources */,
 				8158F6D61C89D2AD00B13109 /* ColourOverLifetimeParticleAffectorDef.cpp in Sources */,
@@ -3272,7 +3272,7 @@
 				8158F7CE1C89D2AD00B13109 /* NSStringUtils.mm in Sources */,
 				8158F7CC1C89D2AD00B13109 /* NSNotificationAdapter.mm in Sources */,
 				8158F7C21C89D2AD00B13109 /* CSGLViewController.mm in Sources */,
-				8158F71D1C89D2AD00B13109 /* ThreePatchDrawableDef.cpp in Sources */,
+				8158F71D1C89D2AD00B13109 /* ThreePatchUIDrawableDef.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

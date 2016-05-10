@@ -1,5 +1,5 @@
 //
-//  NinePatchDrawable.cpp
+//  NinePatchUIDrawable.cpp
 //  Chilli Source
 //  Created by Scott Downie on 24/07/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/NinePatchUIDrawable.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -72,9 +72,9 @@ namespace ChilliSource
         ///
         /// @return UVs for the 9 patches
         //----------------------------------------------------------------------------------------
-        std::array<UVs, NinePatchDrawable::k_numPatches> CalculateNinePatchUVs(const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+        std::array<UVs, NinePatchUIDrawable::k_numPatches> CalculateNinePatchUVs(const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
         {
-            std::array<UVs, NinePatchDrawable::k_numPatches> result;
+            std::array<UVs, NinePatchUIDrawable::k_numPatches> result;
             
             f32 uvWidth = (in_frame.m_originalSize.x/in_frame.m_croppedSize.x) * in_frame.m_uvs.m_s;
             
@@ -178,9 +178,9 @@ namespace ChilliSource
         ///
         /// @return Sizes for the 9 patches
         //----------------------------------------------------------------------------------------
-        std::array<Vector2, NinePatchDrawable::k_numPatches> CalculateNinePatchSizes(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+        std::array<Vector2, NinePatchUIDrawable::k_numPatches> CalculateNinePatchSizes(const Vector2& in_widgetSize, const TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
         {
-            std::array<Vector2, NinePatchDrawable::k_numPatches> result;
+            std::array<Vector2, NinePatchUIDrawable::k_numPatches> result;
             
             f32 widthImageLeft = in_frame.m_originalSize.x * in_left;
             f32 widthVisibleLeft = MathUtils::Clamp(-in_frame.m_offset.x + widthImageLeft, 0.0f, in_frame.m_croppedSize.x);
@@ -254,9 +254,9 @@ namespace ChilliSource
         ///
         /// @return Sizes for the 9 patches
         //----------------------------------------------------------------------------------------
-        std::array<Vector2, NinePatchDrawable::k_numPatches> CalculateNinePatchPositions(const Vector2& in_widgetSize, const std::array<Vector2, NinePatchDrawable::k_numPatches>& in_sizes)
+        std::array<Vector2, NinePatchUIDrawable::k_numPatches> CalculateNinePatchPositions(const Vector2& in_widgetSize, const std::array<Vector2, NinePatchUIDrawable::k_numPatches>& in_sizes)
         {
-            std::array<Vector2, NinePatchDrawable::k_numPatches> result;
+            std::array<Vector2, NinePatchUIDrawable::k_numPatches> result;
             
             Vector2 halfWidgetSize = in_widgetSize * 0.5f;
             Vector2 halfMiddleCentre = in_sizes[(u32)Patch::k_middleCentre] * 0.5f;
@@ -374,17 +374,17 @@ namespace ChilliSource
         }
     }
     
-    CS_DEFINE_NAMEDTYPE(NinePatchDrawable);
+    CS_DEFINE_NAMEDTYPE(NinePatchUIDrawable);
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    NinePatchDrawable::NinePatchDrawable(const TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset)
+    NinePatchUIDrawable::NinePatchUIDrawable(const TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset)
     {
         SetTexture(in_texture);
         SetInsets(in_leftInset, in_rightInset, in_topInset, in_bottomInset);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    NinePatchDrawable::NinePatchDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset,
+    NinePatchUIDrawable::NinePatchUIDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset,
                                          f32 in_topInset, f32 in_bottomInset)
     {
         CS_ASSERT(in_atlas != nullptr, "Texture atlas cannot be null.");
@@ -397,43 +397,43 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    bool NinePatchDrawable::IsA(InterfaceIDType in_interfaceId) const
+    bool NinePatchUIDrawable::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (UIDrawable::InterfaceID == in_interfaceId || NinePatchDrawable::InterfaceID == in_interfaceId);
+        return (UIDrawable::InterfaceID == in_interfaceId || NinePatchUIDrawable::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const TextureCSPtr& NinePatchDrawable::GetTexture() const
+    const TextureCSPtr& NinePatchUIDrawable::GetTexture() const
     {
         return m_texture;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const TextureAtlasCSPtr& NinePatchDrawable::GetTextureAtlas() const
+    const TextureAtlasCSPtr& NinePatchUIDrawable::GetTextureAtlas() const
     {
         return m_atlas;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const std::string& NinePatchDrawable::GetTextureAtlasId() const
+    const std::string& NinePatchUIDrawable::GetTextureAtlasId() const
     {
         return m_atlasId;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const UVs& NinePatchDrawable::GetUVs() const
+    const UVs& NinePatchUIDrawable::GetUVs() const
     {
         return m_uvs;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    const Colour& NinePatchDrawable::GetColour() const
+    const Colour& NinePatchUIDrawable::GetColour() const
     {
         return m_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetTexture(const TextureCSPtr& in_texture)
+    void NinePatchUIDrawable::SetTexture(const TextureCSPtr& in_texture)
     {
         CS_ASSERT(in_texture != nullptr, "Texture cannot be null in a nine-patch drawable.");
         
@@ -444,7 +444,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
+    void NinePatchUIDrawable::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
     {
         m_atlas = in_atlas;
         m_atlasId = "";
@@ -454,9 +454,9 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetTextureAtlasId(const std::string& in_atlasId)
+    void NinePatchUIDrawable::SetTextureAtlasId(const std::string& in_atlasId)
     {
-        CS_ASSERT(m_atlas != nullptr, "NinePatchDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
+        CS_ASSERT(m_atlas != nullptr, "NinePatchUIDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
         
         m_atlasId = in_atlasId;
         
@@ -465,7 +465,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetUVs(const UVs& in_UVs)
+    void NinePatchUIDrawable::SetUVs(const UVs& in_UVs)
     {
         m_uvs = in_UVs;
         
@@ -474,13 +474,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetColour(const Colour& in_colour)
+    void NinePatchUIDrawable::SetColour(const Colour& in_colour)
     {
         m_colour = in_colour;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::SetInsets(f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+    void NinePatchUIDrawable::SetInsets(f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
     {
         CS_ASSERT(in_left > 0.0f && in_right > 0.0f && in_top > 0.0f && in_bottom > 0.0f, "Insets must be greater than 0");
         CS_ASSERT(in_left + in_right <= 1.0f, "Insets must not overlap i.e. sum to more than 1");
@@ -495,15 +495,15 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    Vector2 NinePatchDrawable::GetPreferredSize() const
+    Vector2 NinePatchUIDrawable::GetPreferredSize() const
     {
         return m_atlasFrame.m_originalSize;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
+    void NinePatchUIDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
     {
-        CS_ASSERT(m_texture != nullptr, "NinePatchDrawable cannot draw without texture");
+        CS_ASSERT(m_texture != nullptr, "NinePatchUIDrawable cannot draw without texture");
         
         if(m_cachedWidgetSize != in_absSize)
         {

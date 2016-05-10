@@ -33,11 +33,11 @@
 #include <ChilliSource/UI/Drawable/UIDrawable.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 #include <ChilliSource/UI/Drawable/UIDrawableDef.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawableDef.h>
-#include <ChilliSource/UI/Drawable/StandardDrawable.h>
-#include <ChilliSource/UI/Drawable/StandardDrawableDef.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawableDef.h>
+#include <ChilliSource/UI/Drawable/NinePatchUIDrawable.h>
+#include <ChilliSource/UI/Drawable/NinePatchUIDrawableDef.h>
+#include <ChilliSource/UI/Drawable/StandardUIDrawable.h>
+#include <ChilliSource/UI/Drawable/StandardUIDrawableDef.h>
+#include <ChilliSource/UI/Drawable/ThreePatchUIDrawable.h>
+#include <ChilliSource/UI/Drawable/ThreePatchUIDrawableDef.h>
 
 #endif

@@ -1,5 +1,5 @@
 //
-//  ThreePatchDrawableDef.h
+//  StandardUIDrawableDef.h
 //  Chilli Source
 //  Created by Ian Copland on 15/12/2014.
 //
@@ -26,45 +26,36 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_THREEDRAWABLEDEF_H_
-#define _CHILLISOURCE_UI_DRAWABLE_THREEDRAWABLEDEF_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_STANDARDUIDRAWABLEDEF_H_
+#define _CHILLISOURCE_UI_DRAWABLE_STANDARDUIDRAWABLEDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Drawable/UIDrawableDef.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 
 namespace ChilliSource
 {
     //---------------------------------------------------------------------
-    /// A definition of a Three-Patch UIDrawable which can be built from a
-    /// json object. This is effectively an immutable container for the
-    /// properties of a Three-Patch UIDrawable.
+    /// A definition of a Standard UIDrawable which can be built from a json
+    /// object. This is effectively an immutable container for the
+    /// properties of a Standard UIDrawable.
     ///
-    /// A Three-Patch UIDrawable Def contains the following properties in
-    /// addition to those defined in the UIDrawable Def base class
-    /// documentation:
-    ///
-    /// "Insets": The insets from the edges of the stretchable portion of
-    /// the image. 
-    ///
-    /// "Direction": The direction the Three-Patch will stretch in:
-    /// horizontal or vertical. Defaults to horizontal.
+    /// A standard drawable def doesn't contain any additional properties
+    /// over those described in the UIDrawable Def base class documentation.
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
-    class ThreePatchDrawableDef final : public UIDrawableDef
+    class StandardUIDrawableDef final : public UIDrawableDef
     {
     public:
-        CS_DECLARE_NAMEDTYPE(ThreePatchDrawableDef);
+        CS_DECLARE_NAMEDTYPE(StandardUIDrawableDef);
         //--------------------------------------------------------------
         /// Constructor. Creates an empty standard drawable definition.
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------
-        ThreePatchDrawableDef() = default;
+        StandardUIDrawableDef() = default;
         //--------------------------------------------------------------
         /// Constructor. Creates a standard drawable definition from
         /// json.
@@ -79,7 +70,7 @@ namespace ChilliSource
         /// there is no storage location specified in the json. Defaults
         /// to empty.
         //--------------------------------------------------------------
-        ThreePatchDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation = StorageLocation::k_package, const std::string& in_defaultPath = "");
+        StandardUIDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation = StorageLocation::k_package, const std::string& in_defaultPath = "");
         //--------------------------------------------------------------
         /// Constructor. Creates a standard drawable definition from
         /// with just a texture.
@@ -87,13 +78,10 @@ namespace ChilliSource
         /// @author Ian Copland
         ///
         /// @param The texture.
-        /// @param The insets.
-        /// @param The stretch direction.
         /// @param [Optional] The colour. Defaults to white.
         /// @param [Optional] The UVs. Defaults to (0, 0, 1, 1)
         //--------------------------------------------------------------
-        ThreePatchDrawableDef(const TextureCSPtr& in_texture, const Vector2& in_insets, ThreePatchDrawable::Direction in_direction, const Colour& in_colour = Colour::k_white,
-                              const UVs& in_uvs = UVs());
+        StandardUIDrawableDef(const TextureCSPtr& in_texture, const Colour& in_colour = Colour::k_white, const UVs& in_uvs = UVs());
         //--------------------------------------------------------------
         /// Constructor. Creates a standard drawable definition from
         /// with a texture atlas.
@@ -103,13 +91,11 @@ namespace ChilliSource
         /// @param The texture.
         /// @param The texture atlas.
         /// @param The texture atlas id.
-        /// @param The insets.
-        /// @param The stretch direction.
         /// @param [Optional] The colour. Defaults to white.
         /// @param [Optional] The UVs. Defaults to (0, 0, 1, 1)
         //--------------------------------------------------------------
-        ThreePatchDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Vector2& in_insets,
-                              ThreePatchDrawable::Direction in_direction, const Colour& in_colour = Colour::k_white, const UVs& in_uvs = UVs());
+        StandardUIDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Colour& in_colour = Colour::k_white,
+                            const UVs& in_uvs = UVs());
         //--------------------------------------------------------------
         /// Allows querying of whether or not the component implements
         /// the interface associated with the given interface Id.
@@ -158,19 +144,6 @@ namespace ChilliSource
         /// @param The colour of the drawable.
         //--------------------------------------------------------------
         const Colour& GetColour() const override;
-        //--------------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @param The insets from the edges of the stretchable portion
-        /// of the image.
-        //--------------------------------------------------------------
-        const Vector2& GetInsets() const;
-        //--------------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @param The direction that a Three-Patch drawable will stretch.
-        //--------------------------------------------------------------
-        ThreePatchDrawable::Direction GetDirection() const;
         
     private:
         //--------------------------------------------------------------
@@ -189,8 +162,6 @@ namespace ChilliSource
         std::string m_atlasId;
         UVs m_uvs;
         Colour m_colour;
-        Vector2 m_insets;
-        ThreePatchDrawable::Direction m_direction;
     };
 }
 

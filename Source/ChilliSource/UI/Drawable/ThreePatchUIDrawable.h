@@ -1,7 +1,7 @@
 //
-//  StandardDrawable.h
+//  ThreePatchUIDrawable.h
 //  Chilli Source
-//  Created by Scott Downie on 17/04/2014.
+//  Created by Scott Downie on 24/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_STANADARDDRAWABLE_H_
-#define _CHILLISOURCE_UI_DRAWABLE_STANADARDDRAWABLE_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_THREEPATCHUIDRAWABLE_H_
+#define _CHILLISOURCE_UI_DRAWABLE_THREEPATCHUIDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -37,17 +37,36 @@
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Drawable/UIDrawable.h>
 
+#include <array>
+#include <functional>
+
 namespace ChilliSource
 {
     //----------------------------------------------------------------------------------------
-    /// Interface for rendering widget with a texture and UVs.
+    /// Interface for rendering widget with a texture and UVs as a 3 patch either horizontally
+    /// or vertically. This allows the widget to be scaled in one direction without distorting the edges.
+    /// The patches are specified by percentage insets from the edges of the widget
+    ///
+    /// The centre patch should be designed to stretch horizontally or vertically.
     ///
     /// @author S Downie
     //----------------------------------------------------------------------------------------
-    class StandardDrawable final : public UIDrawable
+    class ThreePatchUIDrawable final : public UIDrawable
     {
     public:
-        CS_DECLARE_NAMEDTYPE(StandardDrawable);
+        CS_DECLARE_NAMEDTYPE(ThreePatchUIDrawable);
+        
+        static const u32 k_numPatches = 3;
+        //----------------------------------------------------------------------------------------
+        /// The type of the 3-patch i.e. horizontal or vertical
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------------
+        enum class Direction
+        {
+            k_horizontal,
+            k_vertical
+        };
         //----------------------------------------------------------------------------------------
         /// Allows querying of whether or not the component implements the interface associated
         /// with the given interface Id. Typically this won't be called directly, instead the
@@ -146,6 +165,19 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void SetColour(const Colour& in_colour) override;
         //----------------------------------------------------------------------------------------
+        /// Set the UV insets that should be used to create the patches. Insets are from the edge
+        /// and therefore no negative numbers need to be specified for right and bottom insets.
+        ///
+        /// NOTE: Insets must compliment each other i.e. left and right cannot sum to more than 1.0
+        /// as they would overlap and insets cannot be zero or less.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Left inset if horizontal 3-patch bottom inset if vertical 3-patch (as normalised fraction 0 - 1)
+        /// @param Right inset if horizontal 3-patch top inset if vertical 3-patch (as normalised fraction 0 - 1)
+        //----------------------------------------------------------------------------------------
+        void SetInsets(f32 in_leftOrBottom, f32 in_rightOrTop);
+        //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The preferred size that the drawable wishes to de drawn at based on the
@@ -166,15 +198,71 @@ namespace ChilliSource
         void Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
         
     private:
-        friend class StandardDrawableDef;
+        friend class ThreePatchUIDrawableDef;
+        
+        //----------------------------------------------------------------------------------------
+        /// Calculates the UVs for each patch.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Image frame
+        /// @param Left inset if horizontal 3-patch bottom inset if vertical 3-patch (as normalised fraction 0 - 1)
+        /// @param Right inset if horizontal 3-patch top inset if vertical 3-patch (as normalised fraction 0 - 1)
+        ///
+        /// @return UVs for each patch
+        //----------------------------------------------------------------------------------------
+        using CalculateUVsDelegate = std::function<std::array<UVs, k_numPatches>(const TextureAtlas::Frame&, f32, f32)>;
+        //----------------------------------------------------------------------------------------
+        /// Calculates the sizes for each patch.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Widget absolute size
+        /// @param Image frame
+        /// @param Left inset if horizontal 3-patch bottom inset if vertical 3-patch (as normalised fraction 0 - 1)
+        /// @param Right inset if horizontal 3-patch top inset if vertical 3-patch (as normalised fraction 0 - 1)
+        ///
+        /// @return Size for each patch
+        //----------------------------------------------------------------------------------------
+        using CalculateSizesDelegate = std::function<std::array<Vector2, k_numPatches>(const Vector2&, const TextureAtlas::Frame&, f32, f32)>;
+        //----------------------------------------------------------------------------------------
+        /// Calculates the local space positions for each patch.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Widget absolute size
+        /// @param Patch sizes
+        ///
+        /// @return Positions for each patch
+        //----------------------------------------------------------------------------------------
+        using CalculatePositionsDelegate = std::function<std::array<Vector2, k_numPatches>(const Vector2&, const std::array<Vector2, k_numPatches>&)>;
+        //----------------------------------------------------------------------------------------
+        /// Calculate the offset for the patches that will position them as if they still had
+        /// their cropped space
+        ///
+        /// @author S Downie
+        ///
+        /// @param Widget absolute size
+        /// @param Image frame
+        /// @param Left inset if horizontal 3-patch bottom inset if vertical 3-patch (as normalised fraction 0 - 1)
+        /// @param Right inset if horizontal 3-patch top inset if vertical 3-patch (as normalised fraction 0 - 1)
+        ///
+        /// @return Offset from top left
+        //----------------------------------------------------------------------------------------
+        using CalculateOffsetDelegate = std::function<Vector2(const Vector2&, const TextureAtlas::Frame&, f32, f32)>;
         //----------------------------------------------------------------------------------------
         /// Constructor
         ///
         /// @author Ian Copland
         ///
         /// @param The texture.
+        /// @param The direction the drawable will stretch.
+        /// @param The left inset if a horizontal 3-patch or the bottom inset if a vertical
+        /// 3-patch. This should be provided as a normalised fraction, 0.0 - 1.0.
+        /// @param The right inset if a horizontal 3-patch or the top inset if a vertical 3-patch.
+        /// This should be provided as a normalised fraction, 0.0 - 1.0.
         //----------------------------------------------------------------------------------------
-        StandardDrawable(const TextureCSPtr& in_texture);
+        ThreePatchUIDrawable(const TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
         //----------------------------------------------------------------------------------------
         /// Constructor
         ///
@@ -183,8 +271,18 @@ namespace ChilliSource
         /// @param The texture.
         /// @param The texture atlas.
         /// @param The atlas id.
+        /// @param The direction the drawable will stretch.
+        /// @param The left inset if a horizontal 3-patch or the bottom inset if a vertical
+        /// 3-patch. This should be provided as a normalised fraction, 0.0 - 1.0.
+        /// @param The right inset if a horizontal 3-patch or the top inset if a vertical 3-patch.
+        /// This should be provided as a normalised fraction, 0.0 - 1.0.
         //----------------------------------------------------------------------------------------
-        StandardDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId);
+        ThreePatchUIDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
+        
+        CalculateUVsDelegate m_uvCalculationDelegate;
+        CalculateSizesDelegate m_sizeCalculationDelegate;
+        CalculatePositionsDelegate m_positionCalculationDelegate;
+        CalculateOffsetDelegate m_offsetCalculationDelegate;
         
         TextureCSPtr m_texture;
         TextureAtlasCSPtr m_atlas;
@@ -192,6 +290,17 @@ namespace ChilliSource
         UVs m_uvs;
         std::string m_atlasId;
         Colour m_colour;
+        
+        std::array<UVs, k_numPatches> m_cachedUvs;
+        std::array<Vector2, k_numPatches> m_cachedSizes;
+        std::array<Vector2, k_numPatches> m_cachedPositions;
+        Vector2 m_cachedOffsetTL;
+        Vector2 m_cachedWidgetSize;
+        
+        f32 m_leftOrBottomInset = 0.01f;
+        f32 m_rightOrTopInset = 0.01f;
+        
+        bool m_isPatchCatchValid = false;
     };
 }
 
