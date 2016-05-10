@@ -26,19 +26,19 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_SIZEPOLICY_H_
-#define _CHILLISOURCE_UI_BASE_SIZEPOLICY_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_SIZEPOLICY_H_
+#define _CHILLISOURCE_RENDERING_BASE_SIZEPOLICY_H_
 
 #include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    //----------------------------------------------------------------------------------------
-    /// Identifiers for functions that maintain the aspect ratio of the widget based on
-    /// current size and preferred size
+    //------------------------------------------------------------------------------
+    /// Identifiers for functions that maintain the aspect ratio of the widget based
+    /// on current size and preferred size
     ///
     /// @author S Downie
-    //----------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
     enum class SizePolicy
     {
         k_none,
@@ -49,7 +49,7 @@ namespace ChilliSource
         k_fillMaintainingAspect,
         k_totalNum
     };
-    //----------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
     /// Parse the string and return the size policy
     ///
     /// @author S Downie
@@ -57,7 +57,7 @@ namespace ChilliSource
     /// @param String
     ///
     /// @return Size policy
-    //----------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
     SizePolicy ParseSizePolicy(const std::string& in_policy);
 }
 

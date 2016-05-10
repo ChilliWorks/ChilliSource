@@ -67,7 +67,7 @@ namespace ChilliSource
         ///
         /// @return Ownership of new sprite component
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr CreateSpriteComponent(const Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy);
+        SpriteComponentUPtr CreateSpriteComponent(const Vector2& in_size, const MaterialCSPtr& in_material, SizePolicy in_sizePolicy);
         //---------------------------------------------------------------------------
         /// Creates a sprite component thats size and texture is based on the
         /// given material and texture atlas
@@ -83,7 +83,7 @@ namespace ChilliSource
         ///
         /// @return Ownership of new sprite component
         //---------------------------------------------------------------------------
-        SpriteComponentUPtr CreateSpriteComponent(const Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy);
+        SpriteComponentUPtr CreateSpriteComponent(const Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SizePolicy in_sizePolicy);
         //---------------------------------------------------------------------------
         /// Creates a static mesh component with the given material
         ///

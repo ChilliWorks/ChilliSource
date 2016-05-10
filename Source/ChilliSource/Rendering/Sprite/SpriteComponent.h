@@ -55,22 +55,6 @@ namespace ChilliSource
         
         CS_DECLARE_NAMEDTYPE(SpriteComponent);
         //----------------------------------------------------------------------------------------
-        /// Identifiers for functions that maintain the aspect ratio of the sprite based on
-        /// current size and preferred image size
-        ///
-        /// @author S Downie
-        //----------------------------------------------------------------------------------------
-        enum class SizePolicy
-        {
-            k_none,
-            k_usePreferredSize,
-            k_useWidthMaintainingAspect,
-            k_useHeightMaintainingAspect,
-            k_fitMaintainingAspect,
-            k_fillMaintainingAspect,
-            k_totalNum
-        };
-        //----------------------------------------------------------------------------------------
         /// Delegate for size policy functions.
         ///
         /// @author S Downie

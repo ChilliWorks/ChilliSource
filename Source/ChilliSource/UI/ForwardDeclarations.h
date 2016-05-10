@@ -50,7 +50,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(WidgetFactory);
     CS_FORWARDDECLARE_CLASS(WidgetTemplate);
     CS_FORWARDDECLARE_CLASS(WidgetTemplateProvider);
-    enum class SizePolicy;
     //---------------------------------------------------------
     /// Button
     //---------------------------------------------------------

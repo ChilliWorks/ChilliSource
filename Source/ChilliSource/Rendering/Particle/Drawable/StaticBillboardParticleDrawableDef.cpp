@@ -69,50 +69,6 @@ namespace ChilliSource
             return StaticBillboardParticleDrawableDef::ImageSelectionType::k_random;
         }
         //-----------------------------------------------------------------
-        /// Parse a size policy from the given string. This is case 
-        /// insensitive. If the string is not a valid size policy this will 
-        /// error.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The string to parse.
-        ///
-        /// @return the parsed size policy.
-        //-----------------------------------------------------------------
-        StaticBillboardParticleDrawableDef::SizePolicy ParseSizePolicy(const std::string& in_sizePolicyString)
-        {
-            std::string sizePolicyString = in_sizePolicyString;
-            StringUtils::ToLowerCase(sizePolicyString);
-
-            if (sizePolicyString == "fillmaintainingaspect")
-            {
-                return StaticBillboardParticleDrawableDef::SizePolicy::k_fillMaintainingAspect;
-            }
-            else if (sizePolicyString == "fitmaintainingaspect")
-            {
-                return StaticBillboardParticleDrawableDef::SizePolicy::k_fitMaintainingAspect;
-            }
-            else if (sizePolicyString == "none")
-            {
-                return StaticBillboardParticleDrawableDef::SizePolicy::k_none;
-            }
-            else if (sizePolicyString == "useheightmaintainingaspect")
-            {
-                return StaticBillboardParticleDrawableDef::SizePolicy::k_useHeightMaintainingAspect;
-            }
-            else if (sizePolicyString == "usepreferredsize")
-            {
-                return StaticBillboardParticleDrawableDef::SizePolicy::k_usePreferredSize;
-            }
-            else if (sizePolicyString == "usewidthmaintainingaspect")
-            {
-                return StaticBillboardParticleDrawableDef::SizePolicy::k_useWidthMaintainingAspect;
-            }
-
-            CS_LOG_FATAL("Invalid size policy: " + sizePolicyString);
-            return StaticBillboardParticleDrawableDef::SizePolicy::k_none;
-        }
-        //-----------------------------------------------------------------
         /// Parse a list of space separated strings.
         ///
         /// @author Ian Copland
@@ -235,7 +191,7 @@ namespace ChilliSource
     }
     //--------------------------------------------------
     //--------------------------------------------------
-    StaticBillboardParticleDrawableDef::SizePolicy StaticBillboardParticleDrawableDef::GetSizePolicy() const
+    SizePolicy StaticBillboardParticleDrawableDef::GetSizePolicy() const
     {
         return m_sizePolicy;
     }

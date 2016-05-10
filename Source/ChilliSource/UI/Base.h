@@ -36,7 +36,6 @@
 #include <ChilliSource/UI/Base/UIComponentDesc.h>
 #include <ChilliSource/UI/Base/UIComponentFactory.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
-#include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>

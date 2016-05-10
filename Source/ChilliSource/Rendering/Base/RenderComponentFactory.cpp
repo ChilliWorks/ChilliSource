@@ -69,7 +69,7 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Vector2& in_size, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
+    SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Vector2& in_size, const MaterialCSPtr& in_material, SizePolicy in_sizePolicy)
     {
         SpriteComponentUPtr pSprite(new SpriteComponent());
         pSprite->SetMaterial(in_material);
@@ -79,7 +79,7 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SpriteComponent::SizePolicy in_sizePolicy)
+    SpriteComponentUPtr RenderComponentFactory::CreateSpriteComponent(const Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SizePolicy in_sizePolicy)
     {
         SpriteComponentUPtr pSprite(new SpriteComponent());
         pSprite->SetMaterial(in_material);

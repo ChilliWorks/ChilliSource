@@ -41,9 +41,9 @@
 #include <ChilliSource/Input/Base/InputFilter.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
-#include <ChilliSource/UI/Base/SizePolicy.h>
 
 #include <cassert>
 #include <functional>

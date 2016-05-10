@@ -64,21 +64,21 @@ namespace ChilliSource
         ///
         /// @param The billboard size.
         //-----------------------------------------------------------------------------
-        Vector2 CalcBillboardSize(const Vector2& in_particleSize, const Vector2& in_imageSize, StaticBillboardParticleDrawableDef::SizePolicy in_sizePolicy)
+        Vector2 CalcBillboardSize(const Vector2& in_particleSize, const Vector2& in_imageSize, SizePolicy in_sizePolicy)
         {
             switch (in_sizePolicy)
             {
-            case StaticBillboardParticleDrawableDef::SizePolicy::k_none:
+            case SizePolicy::k_none:
                 return in_particleSize;
-            case StaticBillboardParticleDrawableDef::SizePolicy::k_usePreferredSize:
+            case SizePolicy::k_usePreferredSize:
                 return in_imageSize;
-            case StaticBillboardParticleDrawableDef::SizePolicy::k_useWidthMaintainingAspect:
+            case SizePolicy::k_useWidthMaintainingAspect:
                 return AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_particleSize, in_imageSize.x / in_imageSize.y);
-            case StaticBillboardParticleDrawableDef::SizePolicy::k_useHeightMaintainingAspect:
+            case SizePolicy::k_useHeightMaintainingAspect:
                 return AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_particleSize, in_imageSize.x / in_imageSize.y);
-            case StaticBillboardParticleDrawableDef::SizePolicy::k_fitMaintainingAspect:
+            case SizePolicy::k_fitMaintainingAspect:
                 return AspectRatioUtils::FitOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
-            case StaticBillboardParticleDrawableDef::SizePolicy::k_fillMaintainingAspect:
+            case SizePolicy::k_fillMaintainingAspect:
                 return AspectRatioUtils::FillOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
             default:
                 CS_LOG_FATAL("Invalid size policy.");

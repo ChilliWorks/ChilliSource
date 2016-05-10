@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDef.h>
 
 #include <json/json.h>
@@ -94,21 +95,6 @@ namespace ChilliSource
         {
             k_random,
             k_cycle
-        };
-        //----------------------------------------------------------------
-        /// Identifiers for functions that maintain the aspect ratio of the 
-        /// sprite based on current size and preferred image size
-        ///
-        /// @author Ian Copland
-        //----------------------------------------------------------------
-        enum class SizePolicy
-        {
-            k_none,
-            k_usePreferredSize,
-            k_useWidthMaintainingAspect,
-            k_useHeightMaintainingAspect,
-            k_fitMaintainingAspect,
-            k_fillMaintainingAspect
         };
         //----------------------------------------------------------------
         /// Constructor for creating a billboard particle drawable

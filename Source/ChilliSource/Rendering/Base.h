@@ -49,6 +49,7 @@
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
+#include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>

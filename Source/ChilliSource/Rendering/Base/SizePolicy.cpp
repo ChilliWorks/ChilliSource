@@ -1,6 +1,6 @@
 //
 //  SizePolicy.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 25/07/2014.
 //
 //  The MIT License (MIT)
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/SizePolicy.h>
+#include <ChilliSource/Rendering/Base/SizePolicy.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
 

@@ -28,7 +28,6 @@
 
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 
-#include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 #include <ChilliSource/UI/Layout/UILayoutDef.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
@@ -36,6 +35,7 @@
 #include <ChilliSource/UI/Slider/SliderDirection.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 
 namespace ChilliSource

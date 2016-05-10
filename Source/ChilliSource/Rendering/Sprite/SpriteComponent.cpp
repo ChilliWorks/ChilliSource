@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
@@ -138,7 +139,7 @@ namespace ChilliSource
             return AspectRatioUtils::FitOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
         }
         
-        const SpriteComponent::SizePolicyDelegate k_sizeDelegates[(u32)SpriteComponent::SizePolicy::k_totalNum] =
+        const SpriteComponent::SizePolicyDelegate k_sizeDelegates[(u32)SizePolicy::k_totalNum] =
         {
             UseOriginalSize,
             UsePreferredSize,

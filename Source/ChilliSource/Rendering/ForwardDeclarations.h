@@ -64,6 +64,7 @@ namespace ChilliSource
     enum class SurfaceFormat;
     enum class HorizontalTextJustification;
     enum class VerticalTextJustification;
+    enum class SizePolicy;
     //------------------------------------------------------------
     /// Camera
     //------------------------------------------------------------

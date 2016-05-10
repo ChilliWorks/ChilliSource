@@ -197,7 +197,6 @@
 		8158F7061C89D2AD00B13109 /* UIComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4261C89D2AD00B13109 /* UIComponentFactory.cpp */; };
 		8158F7071C89D2AD00B13109 /* PropertyLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4281C89D2AD00B13109 /* PropertyLink.cpp */; };
 		8158F7081C89D2AD00B13109 /* PropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F42A1C89D2AD00B13109 /* PropertyTypes.cpp */; };
-		8158F7091C89D2AD00B13109 /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F42C1C89D2AD00B13109 /* SizePolicy.cpp */; };
 		8158F70A1C89D2AD00B13109 /* Widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F42E1C89D2AD00B13109 /* Widget.cpp */; };
 		8158F70B1C89D2AD00B13109 /* WidgetDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4301C89D2AD00B13109 /* WidgetDef.cpp */; };
 		8158F70C1C89D2AD00B13109 /* WidgetDefProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4321C89D2AD00B13109 /* WidgetDefProvider.cpp */; };
@@ -316,6 +315,7 @@
 		81C7FFD71C89DDE300D306F9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */; };
 		81C7FFD81C89DDE300D306F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */; };
 		81C7FFD91C89DDE300D306F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC11C89DDE300D306F9 /* UIKit.framework */; };
+		81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -835,8 +835,6 @@
 		8158F4291C89D2AD00B13109 /* PropertyLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyLink.h; sourceTree = "<group>"; };
 		8158F42A1C89D2AD00B13109 /* PropertyTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyTypes.cpp; sourceTree = "<group>"; };
 		8158F42B1C89D2AD00B13109 /* PropertyTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyTypes.h; sourceTree = "<group>"; };
-		8158F42C1C89D2AD00B13109 /* SizePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SizePolicy.cpp; sourceTree = "<group>"; };
-		8158F42D1C89D2AD00B13109 /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
 		8158F42E1C89D2AD00B13109 /* Widget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Widget.cpp; sourceTree = "<group>"; };
 		8158F42F1C89D2AD00B13109 /* Widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Widget.h; sourceTree = "<group>"; };
 		8158F4301C89D2AD00B13109 /* WidgetDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetDef.cpp; sourceTree = "<group>"; };
@@ -1116,6 +1114,8 @@
 		81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		81C7FFC11C89DDE300D306F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SizePolicy.cpp; sourceTree = "<group>"; };
+		81E3AA971CE241F600DF7B4E /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1830,6 +1830,8 @@
 		8158F33D1C89D2AD00B13109 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */,
+				81E3AA971CE241F600DF7B4E /* SizePolicy.h */,
 				8158F33E1C89D2AD00B13109 /* AlignmentAnchors.cpp */,
 				8158F33F1C89D2AD00B13109 /* AlignmentAnchors.h */,
 				8158F3401C89D2AD00B13109 /* AspectRatioUtils.cpp */,
@@ -2186,8 +2188,6 @@
 				8158F4291C89D2AD00B13109 /* PropertyLink.h */,
 				8158F42A1C89D2AD00B13109 /* PropertyTypes.cpp */,
 				8158F42B1C89D2AD00B13109 /* PropertyTypes.h */,
-				8158F42C1C89D2AD00B13109 /* SizePolicy.cpp */,
-				8158F42D1C89D2AD00B13109 /* SizePolicy.h */,
 				8158F42E1C89D2AD00B13109 /* Widget.cpp */,
 				8158F42F1C89D2AD00B13109 /* Widget.h */,
 				8158F4301C89D2AD00B13109 /* WidgetDef.cpp */,
@@ -3057,6 +3057,7 @@
 				8158F6921C89D2AD00B13109 /* PerformanceTimer.cpp in Sources */,
 				8158F6C81C89D2AD00B13109 /* CSModelProvider.cpp in Sources */,
 				8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */,
+				81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */,
 				8158F6831C89D2AD00B13109 /* ResourcePool.cpp in Sources */,
 				8158F7E51C89D2AD00B13109 /* WebViewDelegate.mm in Sources */,
 				8158F7141C89D2AD00B13109 /* UIDrawable.cpp in Sources */,
@@ -3195,7 +3196,6 @@
 				8158F6711C89D2AD00B13109 /* Image.cpp in Sources */,
 				8158F7041C89D2AD00B13109 /* UIComponent.cpp in Sources */,
 				8158F72F1C89D2AD00B13109 /* Subtitles.cpp in Sources */,
-				8158F7091C89D2AD00B13109 /* SizePolicy.cpp in Sources */,
 				8158F6AD1C89D2AD00B13109 /* CanvasRenderer.cpp in Sources */,
 				8158F6F21C89D2AD00B13109 /* ParticlePropertyFactoryImpl.cpp in Sources */,
 				8158F6A01C89D2AD00B13109 /* TapGesture.cpp in Sources */,
