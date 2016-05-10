@@ -275,7 +275,7 @@ namespace ChilliSource
         EventConnectionUPtr m_pointerRemovedConnection;
         
         Screen* m_screen;
-		};
+	};
 }
 
 #endif
