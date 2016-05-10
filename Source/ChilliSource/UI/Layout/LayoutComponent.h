@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/UI/Base/UIComponent.h>
-#include <ChilliSource/UI/Layout/Layout.h>
+#include <ChilliSource/UI/Layout/UILayout.h>
 
 namespace ChilliSource
 {
@@ -79,22 +79,22 @@ namespace ChilliSource
         /// This can be changed directly, for example to increase the number of cells,
         /// etc.
         //------------------------------------------------------------------------------
-        Layout* GetLayout();
+        UILayout* GetLayout();
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A const pointer to the layout object that will be used to apply the
         /// layout to children.
         //------------------------------------------------------------------------------
-        const Layout* GetLayout() const;
+        const UILayout* GetLayout() const;
         //------------------------------------------------------------------------------
-        /// Applies a new Layout from the given layout definition.
+        /// Applies a new UILayout from the given layout definition.
         ///
         /// @author Ian Copland
         ///
         /// @param The layout defintion.
         //------------------------------------------------------------------------------
-        void ApplyLayoutDef(const LayoutDefCSPtr& in_layoutDef);
+        void ApplyLayoutDef(const UILayoutDefCSPtr& in_layoutDef);
         //------------------------------------------------------------------------------
         /// Create the grid layout sizes and positions based on the current layout
         /// properties and the owning widget.
@@ -150,10 +150,10 @@ namespace ChilliSource
         /// @return The layout definition that was used to create the underlying layout
         /// object.
         //------------------------------------------------------------------------------
-        const LayoutDefCSPtr& GetLayoutDef() const;
+        const UILayoutDefCSPtr& GetLayoutDef() const;
         
-        LayoutDefCSPtr m_layoutDef;
-        LayoutUPtr m_layout;
+        UILayoutDefCSPtr m_layoutDef;
+        UILayoutUPtr m_layout;
     };
 }
 

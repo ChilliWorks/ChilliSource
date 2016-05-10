@@ -88,7 +88,7 @@ namespace ChilliSource
 
         for(auto it = in_json.begin(); it != in_json.end(); ++it)
         {
-            CS_ASSERT((*it).isString() == true, "All properties in a Layout Def must be a string: " + std::string(it.memberName()));
+            CS_ASSERT((*it).isString() == true, "All properties in a UILayout Def must be a string: " + std::string(it.memberName()));
 
             std::string key = it.memberName();
             std::string value = (*it).asString();
@@ -151,7 +151,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool GridLayoutDef::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (LayoutDef::InterfaceID == in_interfaceId || GridLayoutDef::InterfaceID == in_interfaceId);
+        return (UILayoutDef::InterfaceID == in_interfaceId || GridLayoutDef::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -209,8 +209,8 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    LayoutUPtr GridLayoutDef::CreateLayout(LayoutComponent* in_owner) const
+    UILayoutUPtr GridLayoutDef::CreateLayout(LayoutComponent* in_owner) const
     {
-        return LayoutUPtr(new GridLayout(in_owner, m_cellOrder, m_numRows, m_numCols, m_relativeMargins, m_absoluteMargins, m_relativeHSpacing, m_absoluteHSpacing, m_relativeVSpacing, m_absoluteVSpacing));
+        return UILayoutUPtr(new GridLayout(in_owner, m_cellOrder, m_numRows, m_numCols, m_relativeMargins, m_absoluteMargins, m_relativeHSpacing, m_absoluteHSpacing, m_relativeVSpacing, m_absoluteVSpacing));
     }
 }

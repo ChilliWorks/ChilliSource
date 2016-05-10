@@ -1,5 +1,5 @@
 //
-//  Layout.h
+//  UILayout.h
 //  Chilli Source
 //  Created by Scott Downie on 18/04/2014.
 //
@@ -37,16 +37,16 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    /// Interface for laying out widgets. This is used by Layout UIComponent to
+    /// Interface for laying out widgets. This is used by UILayout UIComponent to
     /// apply the described layout.
     ///
     /// @author S Downie
     //------------------------------------------------------------------------------
-    class Layout : public QueryableInterface
+    class UILayout : public QueryableInterface
     {
     public:
         CS_DECLARE_NAMEDTYPE(ILayout);
-        CS_DECLARE_NOCOPY(Layout);
+        CS_DECLARE_NOCOPY(UILayout);
         //------------------------------------------------------------------------------
         /// Constructor
         ///
@@ -54,13 +54,13 @@ namespace ChilliSource
         ///
         /// @param The layout component that owns this layout.
         //------------------------------------------------------------------------------
-        Layout(LayoutComponent* in_layoutComponent);
+        UILayout(LayoutComponent* in_layoutComponent);
         //------------------------------------------------------------------------------
         /// Virtual destructor
         ///
         /// @author S Downie
         //------------------------------------------------------------------------------
-        virtual ~Layout() {}
+        virtual ~UILayout() {}
         
     protected:
         //------------------------------------------------------------------------------

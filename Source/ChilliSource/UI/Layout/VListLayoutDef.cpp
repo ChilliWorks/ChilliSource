@@ -50,7 +50,7 @@ namespace ChilliSource
         
         for(auto it = in_json.begin(); it != in_json.end(); ++it)
         {
-            CS_ASSERT((*it).isString() == true, "All properties in a Layout Description must be a string: " + std::string(it.memberName()));
+            CS_ASSERT((*it).isString() == true, "All properties in a UILayout Description must be a string: " + std::string(it.memberName()));
             
             std::string key = it.memberName();
             std::string value = (*it).asString();
@@ -95,7 +95,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool VListLayoutDef::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (LayoutDef::InterfaceID == in_interfaceId || VListLayoutDef::InterfaceID == in_interfaceId);
+        return (UILayoutDef::InterfaceID == in_interfaceId || VListLayoutDef::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -129,8 +129,8 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    LayoutUPtr VListLayoutDef::CreateLayout(LayoutComponent* in_owner) const
+    UILayoutUPtr VListLayoutDef::CreateLayout(LayoutComponent* in_owner) const
     {
-        return LayoutUPtr(new VListLayout(in_owner, m_numCells, m_relativeMargins, m_absoluteMargins, m_relativeSpacing, m_absoluteSpacing));
+        return UILayoutUPtr(new VListLayout(in_owner, m_numCells, m_relativeMargins, m_absoluteMargins, m_relativeSpacing, m_absoluteSpacing));
     }
 }

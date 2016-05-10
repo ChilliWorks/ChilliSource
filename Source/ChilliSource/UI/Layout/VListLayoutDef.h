@@ -33,15 +33,15 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
-#include <ChilliSource/UI/Layout/LayoutDef.h>
+#include <ChilliSource/UI/Layout/UILayoutDef.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    /// A definition of a VList Layout which can be built from a json object. This is
-    /// effectively an immutable container for the properties of a VList Layout.
+    /// A definition of a VList UILayout which can be built from a json object. This is
+    /// effectively an immutable container for the properties of a VList UILayout.
     ///
-    /// A VList Layout Def contains the following property in addition to those
+    /// A VList UILayout Def contains the following property in addition to those
     /// defined in the Layouy Def base class documentation:
     ///
     /// "NumCells": The number of cells.
@@ -56,7 +56,7 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class VListLayoutDef final : public LayoutDef
+    class VListLayoutDef final : public UILayoutDef
     {
     public:
         CS_DECLARE_NAMEDTYPE(VListLayoutDef);
@@ -144,7 +144,7 @@ namespace ChilliSource
         ///
         /// @return a new layout instance.
         //------------------------------------------------------------------------------
-        LayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
+        UILayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
         
         u32 m_numCells = 1;
         Vector4 m_relativeMargins;

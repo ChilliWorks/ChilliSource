@@ -44,7 +44,7 @@ namespace ChilliSource
         CS_DECLARE_PROPERTYTYPE(AlignmentAnchor, AlignmentAnchor);
         CS_DECLARE_PROPERTYTYPE(SizePolicy, SizePolicy);
         CS_DECLARE_PROPERTYTYPE(UIDrawableDefCSPtr, UIDrawableDef);
-        CS_DECLARE_PROPERTYTYPE(LayoutDefCSPtr, LayoutDef);
+        CS_DECLARE_PROPERTYTYPE(UILayoutDefCSPtr, UILayoutDef);
         CS_DECLARE_PROPERTYTYPE(TextureCSPtr, Texture);
         CS_DECLARE_PROPERTYTYPE(TextureAtlasCSPtr, TextureAtlas);
         CS_DECLARE_PROPERTYTYPE(FontCSPtr, Font);

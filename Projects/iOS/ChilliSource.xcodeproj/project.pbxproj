@@ -222,9 +222,9 @@
 		8158F71F1C89D2AD00B13109 /* GridLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F45F1C89D2AD00B13109 /* GridLayoutDef.cpp */; };
 		8158F7201C89D2AD00B13109 /* HListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4611C89D2AD00B13109 /* HListLayout.cpp */; };
 		8158F7211C89D2AD00B13109 /* HListLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4631C89D2AD00B13109 /* HListLayoutDef.cpp */; };
-		8158F7221C89D2AD00B13109 /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4651C89D2AD00B13109 /* Layout.cpp */; };
+		8158F7221C89D2AD00B13109 /* UILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4651C89D2AD00B13109 /* UILayout.cpp */; };
 		8158F7231C89D2AD00B13109 /* LayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */; };
-		8158F7241C89D2AD00B13109 /* LayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4691C89D2AD00B13109 /* LayoutDef.cpp */; };
+		8158F7241C89D2AD00B13109 /* UILayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */; };
 		8158F7251C89D2AD00B13109 /* VListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F46B1C89D2AD00B13109 /* VListLayout.cpp */; };
 		8158F7261C89D2AD00B13109 /* VListLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F46D1C89D2AD00B13109 /* VListLayoutDef.cpp */; };
 		8158F7271C89D2AD00B13109 /* ProgressBarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4711C89D2AD00B13109 /* ProgressBarComponent.cpp */; };
@@ -889,12 +889,12 @@
 		8158F4621C89D2AD00B13109 /* HListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayout.h; sourceTree = "<group>"; };
 		8158F4631C89D2AD00B13109 /* HListLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListLayoutDef.cpp; sourceTree = "<group>"; };
 		8158F4641C89D2AD00B13109 /* HListLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayoutDef.h; sourceTree = "<group>"; };
-		8158F4651C89D2AD00B13109 /* Layout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Layout.cpp; sourceTree = "<group>"; };
-		8158F4661C89D2AD00B13109 /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.h; sourceTree = "<group>"; };
+		8158F4651C89D2AD00B13109 /* UILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayout.cpp; sourceTree = "<group>"; };
+		8158F4661C89D2AD00B13109 /* UILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILayout.h; sourceTree = "<group>"; };
 		8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutComponent.cpp; sourceTree = "<group>"; };
 		8158F4681C89D2AD00B13109 /* LayoutComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutComponent.h; sourceTree = "<group>"; };
-		8158F4691C89D2AD00B13109 /* LayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutDef.cpp; sourceTree = "<group>"; };
-		8158F46A1C89D2AD00B13109 /* LayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutDef.h; sourceTree = "<group>"; };
+		8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILayoutDef.cpp; sourceTree = "<group>"; };
+		8158F46A1C89D2AD00B13109 /* UILayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILayoutDef.h; sourceTree = "<group>"; };
 		8158F46B1C89D2AD00B13109 /* VListLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayout.cpp; sourceTree = "<group>"; };
 		8158F46C1C89D2AD00B13109 /* VListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayout.h; sourceTree = "<group>"; };
 		8158F46D1C89D2AD00B13109 /* VListLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayoutDef.cpp; sourceTree = "<group>"; };
@@ -2257,12 +2257,12 @@
 				8158F4621C89D2AD00B13109 /* HListLayout.h */,
 				8158F4631C89D2AD00B13109 /* HListLayoutDef.cpp */,
 				8158F4641C89D2AD00B13109 /* HListLayoutDef.h */,
-				8158F4651C89D2AD00B13109 /* Layout.cpp */,
-				8158F4661C89D2AD00B13109 /* Layout.h */,
+				8158F4651C89D2AD00B13109 /* UILayout.cpp */,
+				8158F4661C89D2AD00B13109 /* UILayout.h */,
 				8158F4671C89D2AD00B13109 /* LayoutComponent.cpp */,
 				8158F4681C89D2AD00B13109 /* LayoutComponent.h */,
-				8158F4691C89D2AD00B13109 /* LayoutDef.cpp */,
-				8158F46A1C89D2AD00B13109 /* LayoutDef.h */,
+				8158F4691C89D2AD00B13109 /* UILayoutDef.cpp */,
+				8158F46A1C89D2AD00B13109 /* UILayoutDef.h */,
 				8158F46B1C89D2AD00B13109 /* VListLayout.cpp */,
 				8158F46C1C89D2AD00B13109 /* VListLayout.h */,
 				8158F46D1C89D2AD00B13109 /* VListLayoutDef.cpp */,
@@ -3062,7 +3062,7 @@
 				8158F7141C89D2AD00B13109 /* UIDrawable.cpp in Sources */,
 				8158F6861C89D2AD00B13109 /* State.cpp in Sources */,
 				8158F6D71C89D2AD00B13109 /* ParticleAffector.cpp in Sources */,
-				8158F7241C89D2AD00B13109 /* LayoutDef.cpp in Sources */,
+				8158F7241C89D2AD00B13109 /* UILayoutDef.cpp in Sources */,
 				8158F6F41C89D2AD00B13109 /* DynamicSpriteBatcher.cpp in Sources */,
 				8158F7FB1C89D2AD00B13109 /* RenderSystem.cpp in Sources */,
 				8158F6F01C89D2AD00B13109 /* ParticleEffect.cpp in Sources */,
@@ -3109,7 +3109,7 @@
 				8158F6BE1C89D2AD00B13109 /* FontProvider.cpp in Sources */,
 				8158F6771C89D2AD00B13109 /* LocalisedTextProvider.cpp in Sources */,
 				8158F6A71C89D2AD00B13109 /* HttpRequestSystem.cpp in Sources */,
-				8158F7221C89D2AD00B13109 /* Layout.cpp in Sources */,
+				8158F7221C89D2AD00B13109 /* UILayout.cpp in Sources */,
 				8158F7D01C89D2AD00B13109 /* DeviceButtonSystem.mm in Sources */,
 				8158F66B1C89D2AD00B13109 /* CSBinaryInputStream.cpp in Sources */,
 				8158F6641C89D2AD00B13109 /* Component.cpp in Sources */,

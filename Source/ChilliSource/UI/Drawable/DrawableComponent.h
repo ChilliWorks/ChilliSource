@@ -50,7 +50,7 @@ namespace ChilliSource
     ///
     /// A DrawableComponent contains the following properties:
     ///
-    /// "UIDrawable": The description of the drawable that will be rendered. The
+    /// "Drawable": The description of the drawable that will be rendered. The
     /// contents of a drawable are described in each of the drawable def types
     /// documentation.
     ///

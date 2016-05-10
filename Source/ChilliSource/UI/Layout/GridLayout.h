@@ -33,7 +33,7 @@
 
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/UI/Layout/Layout.h>
+#include <ChilliSource/UI/Layout/UILayout.h>
 
 namespace ChilliSource
 {
@@ -45,7 +45,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //------------------------------------------------------------------------------
-    class GridLayout final : public Layout
+    class GridLayout final : public UILayout
     {
     public:
         CS_DECLARE_NAMEDTYPE(GridLayout);

@@ -1,5 +1,5 @@
 //
-//  LayoutDef.cpp
+//  UILayoutDef.cpp
 //  Chilli Source
 //  Created by Ian Copland on 07/01/2015.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Layout/LayoutDef.h>
+#include <ChilliSource/UI/Layout/UILayoutDef.h>
 
 #include <ChilliSource/UI/Layout/GridLayoutDef.h>
 #include <ChilliSource/UI/Layout/HListLayoutDef.h>
@@ -75,28 +75,28 @@ namespace ChilliSource
         }
     }
     
-    CS_DEFINE_NAMEDTYPE(LayoutDef);
+    CS_DEFINE_NAMEDTYPE(UILayoutDef);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    LayoutDefCUPtr LayoutDef::Create(const Json::Value& in_json)
+    UILayoutDefCUPtr UILayoutDef::Create(const Json::Value& in_json)
     {
         const char k_typeKey[] = "Type";
         
-        CS_ASSERT(in_json.isObject() == true, "Layout Def must be created from a json value of type Object.");
+        CS_ASSERT(in_json.isObject() == true, "UILayout Def must be created from a json value of type Object.");
         
         const auto& typeJson = in_json.get(k_typeKey, Json::nullValue);
-        CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a Layout Def.");
+        CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a UILayout Def.");
         
         LayoutType type = ParseLayoutType(typeJson.asString());
         
         switch (type)
         {
             case LayoutType::k_grid:
-                return LayoutDefCUPtr(new GridLayoutDef(in_json));
+                return UILayoutDefCUPtr(new GridLayoutDef(in_json));
             case LayoutType::k_hList:
-                return LayoutDefCUPtr(new HListLayoutDef(in_json));
+                return UILayoutDefCUPtr(new HListLayoutDef(in_json));
             case LayoutType::k_vList:
-                return LayoutDefCUPtr(new VListLayoutDef(in_json));
+                return UILayoutDefCUPtr(new VListLayoutDef(in_json));
             default:
                 CS_LOG_FATAL("Invalid layout def type.");
                 return nullptr;

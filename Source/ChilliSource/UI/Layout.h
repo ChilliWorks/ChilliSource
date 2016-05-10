@@ -1,5 +1,5 @@
 //
-//  Layout.h
+//  UILayout.h
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -35,9 +35,9 @@
 #include <ChilliSource/UI/Layout/GridLayoutDef.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
 #include <ChilliSource/UI/Layout/HListLayoutDef.h>
-#include <ChilliSource/UI/Layout/Layout.h>
+#include <ChilliSource/UI/Layout/UILayout.h>
 #include <ChilliSource/UI/Layout/LayoutComponent.h>
-#include <ChilliSource/UI/Layout/LayoutDef.h>
+#include <ChilliSource/UI/Layout/UILayoutDef.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
 #include <ChilliSource/UI/Layout/VListLayoutDef.h>
 

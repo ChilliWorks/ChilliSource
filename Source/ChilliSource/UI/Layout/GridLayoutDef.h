@@ -33,16 +33,16 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
-#include <ChilliSource/UI/Layout/LayoutDef.h>
+#include <ChilliSource/UI/Layout/UILayoutDef.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    /// A definition of a Grid Layout which can be built from a json object. This is
-    /// effectively an immutable container for the properties of a Grid Layout.
+    /// A definition of a Grid UILayout which can be built from a json object. This is
+    /// effectively an immutable container for the properties of a Grid UILayout.
     ///
-    /// A Grid Layout Def contains the following property in addition to those
-    /// defined in the Layout Def base class documentation:
+    /// A Grid UILayout Def contains the following property in addition to those
+    /// defined in the UILayout Def base class documentation:
     ///
     /// "CellOrder": The order that cells will be placed: row or column major order.
     ///
@@ -67,7 +67,7 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class GridLayoutDef final : public LayoutDef
+    class GridLayoutDef final : public UILayoutDef
     {
     public:
         CS_DECLARE_NAMEDTYPE(GridLayoutDef);
@@ -189,7 +189,7 @@ namespace ChilliSource
         ///
         /// @return a new layout instance.
         //------------------------------------------------------------------------------
-        LayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
+        UILayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
         
         GridLayout::CellOrder m_cellOrder = GridLayout::CellOrder::k_rowMajor;
         u32 m_numRows = 1;

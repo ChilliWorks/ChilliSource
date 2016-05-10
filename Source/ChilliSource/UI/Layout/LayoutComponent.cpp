@@ -31,8 +31,8 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Layout/Layout.h>
-#include <ChilliSource/UI/Layout/LayoutDef.h>
+#include <ChilliSource/UI/Layout/UILayout.h>
+#include <ChilliSource/UI/Layout/UILayoutDef.h>
 
 namespace ChilliSource
 {
@@ -42,7 +42,7 @@ namespace ChilliSource
         
         const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            {PropertyTypes::LayoutDef(), k_layoutKey},
+            {PropertyTypes::UILayoutDef(), k_layoutKey},
         };
     }
     
@@ -58,7 +58,7 @@ namespace ChilliSource
     LayoutComponent::LayoutComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<LayoutDefCSPtr>(PropertyTypes::LayoutDef(), k_layoutKey, MakeDelegate(this, &LayoutComponent::GetLayoutDef), MakeDelegate(this, &LayoutComponent::ApplyLayoutDef));
+        RegisterProperty<UILayoutDefCSPtr>(PropertyTypes::UILayoutDef(), k_layoutKey, MakeDelegate(this, &LayoutComponent::GetLayoutDef), MakeDelegate(this, &LayoutComponent::ApplyLayoutDef));
         ApplyRegisteredProperties(in_properties);
     }
     //------------------------------------------------------------------------------
@@ -69,19 +69,19 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Layout* LayoutComponent::GetLayout()
+    UILayout* LayoutComponent::GetLayout()
     {
         return m_layout.get();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Layout* LayoutComponent::GetLayout() const
+    const UILayout* LayoutComponent::GetLayout() const
     {
         return m_layout.get();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void LayoutComponent::ApplyLayoutDef(const LayoutDefCSPtr& in_layoutDef)
+    void LayoutComponent::ApplyLayoutDef(const UILayoutDefCSPtr& in_layoutDef)
     {
         CS_ASSERT(in_layoutDef != nullptr, "Cannot set null layout def on a layout component.");
         
@@ -110,7 +110,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const LayoutDefCSPtr& LayoutComponent::GetLayoutDef() const
+    const UILayoutDefCSPtr& LayoutComponent::GetLayoutDef() const
     {
         return m_layoutDef;
     }

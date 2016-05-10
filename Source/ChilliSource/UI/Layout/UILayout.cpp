@@ -26,21 +26,21 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Layout/Layout.h>
+#include <ChilliSource/UI/Layout/UILayout.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(Layout);
+    CS_DEFINE_NAMEDTYPE(UILayout);
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    Layout::Layout(LayoutComponent* in_layoutComponent)
+    UILayout::UILayout(LayoutComponent* in_layoutComponent)
         : m_component(in_layoutComponent)
     {
         CS_ASSERT(m_component != nullptr, "A layout must have an owning component.");
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    LayoutComponent* Layout::GetComponent()
+    LayoutComponent* UILayout::GetComponent()
     {
         return m_component;
     }

@@ -39,7 +39,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     GridLayout::GridLayout(LayoutComponent* in_layoutComponent, GridLayout::CellOrder in_cellOrder, u32 in_numRows, u32 in_numCols, const Vector4& in_relMargins, const Vector4& in_absMargins,
                            f32 in_relHorizSpacing, f32 in_absHorizSpacing, f32 in_relVertSpacing, f32 in_absVertSpacing)
-        : Layout(in_layoutComponent), m_cellOrder(in_cellOrder), m_numRows(in_numRows), m_numCols(in_numCols), m_marginSizeTop(in_relMargins.x, in_absMargins.x), m_marginSizeRight(in_relMargins.y, in_absMargins.y),
+        : UILayout(in_layoutComponent), m_cellOrder(in_cellOrder), m_numRows(in_numRows), m_numCols(in_numCols), m_marginSizeTop(in_relMargins.x, in_absMargins.x), m_marginSizeRight(in_relMargins.y, in_absMargins.y),
         m_marginSizeBottom(in_relMargins.z, in_absMargins.z), m_marginSizeLeft(in_relMargins.w, in_absMargins.w), m_spacingSizeH(in_relHorizSpacing, in_absHorizSpacing), m_spacingSizeV(in_relVertSpacing, in_absVertSpacing)
     {
     }
@@ -47,7 +47,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool GridLayout::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (Layout::InterfaceID == in_interfaceId || GridLayout::InterfaceID == in_interfaceId);
+        return (UILayout::InterfaceID == in_interfaceId || GridLayout::InterfaceID == in_interfaceId);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -187,7 +187,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void GridLayout::BuildLayout()
     {
-        CS_ASSERT(GetComponent()->GetWidget() != nullptr, "Cannot build layout when Layout UIComponent is not attached to widget.");
+        CS_ASSERT(GetComponent()->GetWidget() != nullptr, "Cannot build layout when UILayout UIComponent is not attached to widget.");
         
         //The list doesn't care about the widgets as the size and position of each cell
         //is only relative to the number of cells and the root widget size

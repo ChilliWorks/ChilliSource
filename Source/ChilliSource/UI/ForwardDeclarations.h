@@ -69,11 +69,11 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ThreePatchUIDrawable);
     CS_FORWARDDECLARE_CLASS(ThreePatchUIDrawableDef);
     //---------------------------------------------------------
-    /// Layout
+    /// UILayout
     //---------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(Layout);
+    CS_FORWARDDECLARE_CLASS(UILayout);
     CS_FORWARDDECLARE_CLASS(LayoutComponent);
-    CS_FORWARDDECLARE_CLASS(LayoutDef);
+    CS_FORWARDDECLARE_CLASS(UILayoutDef);
     CS_FORWARDDECLARE_CLASS(GridLayout);
     CS_FORWARDDECLARE_CLASS(GridLayoutDef);
     CS_FORWARDDECLARE_CLASS(HListLayout);
