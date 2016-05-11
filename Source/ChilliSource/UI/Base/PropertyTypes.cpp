@@ -42,18 +42,18 @@ namespace ChilliSource
 {
     namespace PropertyTypes
     {
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::AlignmentAnchor, AlignmentAnchor, AlignmentAnchor::k_middleCentre, &ParseAlignmentAnchor);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::SizePolicy, SizePolicy, SizePolicy::k_none, &ParseSizePolicy);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::AlignmentAnchor, AlignmentAnchor, ChilliSource::AlignmentAnchor::k_middleCentre, &ParseAlignmentAnchor);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::SizePolicy, SizePolicy, ChilliSource::SizePolicy::k_none, &ParseSizePolicy);
         CS_DEFINE_PROPERTYTYPE(UIDrawableDefCSPtr, UIDrawableDef, nullptr, nullptr);
         CS_DEFINE_PROPERTYTYPE(UILayoutDefCSPtr, UILayoutDef, nullptr, nullptr);
         CS_DEFINE_PROPERTYTYPE(TextureCSPtr, Texture, nullptr, nullptr);
         CS_DEFINE_PROPERTYTYPE(TextureAtlasCSPtr, TextureAtlas, nullptr, nullptr);
         CS_DEFINE_PROPERTYTYPE(FontCSPtr, Font, nullptr, nullptr);
         CS_DEFINE_PROPERTYTYPE(LocalisedTextCSPtr, LocalisedText, nullptr, nullptr);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::HorizontalTextJustification, HorizontalTextJustification, HorizontalTextJustification::k_centre, &ParseHorizontalTextJustification);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::VerticalTextJustification, VerticalTextJustification, VerticalTextJustification::k_centre, &ParseVerticalTextJustification);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::SliderDirection, SliderDirection, SliderDirection::k_horizontal, &ParseSliderDirection);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::ProgressBarDirection, ProgressBarDirection, ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::ProgressBarType, ProgressBarType, ProgressBarType::k_stretch, &ParseProgressBarType);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::HorizontalTextJustification, HorizontalTextJustification, ChilliSource::HorizontalTextJustification::k_centre, &ParseHorizontalTextJustification);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::VerticalTextJustification, VerticalTextJustification, ChilliSource::VerticalTextJustification::k_centre, &ParseVerticalTextJustification);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::SliderDirection, SliderDirection, ChilliSource::SliderDirection::k_horizontal, &ParseSliderDirection);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::ProgressBarDirection, ProgressBarDirection, ChilliSource::ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::ProgressBarType, ProgressBarType, ChilliSource::ProgressBarType::k_stretch, &ParseProgressBarType);
     }
 }

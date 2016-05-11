@@ -53,7 +53,7 @@ namespace ChilliSource
         CS_DEFINE_PROPERTYTYPE(ChilliSource::Matrix4, Matrix4, ChilliSource::Matrix4(), &ParseMatrix4);
         CS_DEFINE_PROPERTYTYPE(ChilliSource::Quaternion, Quaternion, ChilliSource::Quaternion(), &ParseQuaternion);
         CS_DEFINE_PROPERTYTYPE(ChilliSource::Colour, Colour, ChilliSource::Colour(), &ParseColour);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::StorageLocation, StorageLocation, StorageLocation::k_package, &ParseStorageLocation);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::StorageLocation, StorageLocation, ChilliSource::StorageLocation::k_package, &ParseStorageLocation);
         CS_DEFINE_PROPERTYTYPE(std::string, String, "", [](const std::string& in_string){return in_string;});
     }
 }

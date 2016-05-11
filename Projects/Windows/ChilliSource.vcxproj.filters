@@ -513,9 +513,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Accelerometer\Accelerometer.cpp">
       <Filter>ChilliSource\Input\Accelerometer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Input\Base\Filter.cpp">
-      <Filter>ChilliSource\Input\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Input\DeviceButtons\DeviceButtonSystem.cpp">
       <Filter>ChilliSource\Input\DeviceButtons</Filter>
     </ClCompile>
@@ -578,135 +575,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Video\Base\VideoPlayer.cpp">
       <Filter>ChilliSource\Video\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Component.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\ComponentDesc.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\ComponentFactory.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Widget.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDef.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Button\HighlightComponent.cpp">
-      <Filter>ChilliSource\UI\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Button\ToggleHighlightComponent.cpp">
-      <Filter>ChilliSource\UI\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\Drawable.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableComponent.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableDef.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableDef.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawable.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawableDef.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableDef.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayoutDef.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayoutDef.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\Layout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutComponent.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutDef.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutDef.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextComponent.cpp">
-      <Filter>ChilliSource\UI\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextIcon.cpp">
-      <Filter>ChilliSource\UI\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Slider\SliderComponent.cpp">
-      <Filter>ChilliSource\UI\Slider</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Slider\SliderDirection.cpp">
-      <Filter>ChilliSource\UI\Slider</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarComponent.cpp">
-      <Filter>ChilliSource\UI\ProgressBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarDirection.cpp">
-      <Filter>ChilliSource\UI\ProgressBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarType.cpp">
-      <Filter>ChilliSource\UI\ProgressBar</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.cpp">
       <Filter>ChilliSource\Social\Communications</Filter>
@@ -1070,6 +938,138 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\UIComponent.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\UIComponentDesc.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\UIComponentFactory.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Widget.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDef.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Button\HighlightUIComponent.cpp">
+      <Filter>ChilliSource\UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Button\ToggleHighlightUIComponent.cpp">
+      <Filter>ChilliSource\UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUIComponent.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchUIDrawable.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchUIDrawableDef.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardUIDrawable.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardUIDrawableDef.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchUIDrawable.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchUIDrawableDef.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\UIDrawable.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\UIDrawableDef.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\UIDrawableUtils.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridUILayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridUILayoutDef.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListUILayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListUILayoutDef.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutUIComponent.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\UILayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\UILayoutDef.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListUILayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListUILayoutDef.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarDirection.cpp">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarType.cpp">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarUIComponent.cpp">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Slider\SliderDirection.cpp">
+      <Filter>ChilliSource\UI\Slider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Slider\SliderUIComponent.cpp">
+      <Filter>ChilliSource\UI\Slider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextIcon.cpp">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextUIComponent.cpp">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Base\InputFilter.cpp">
+      <Filter>ChilliSource\Input\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1556,9 +1556,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Accelerometer\Accelerometer.h">
       <Filter>ChilliSource\Input\Accelerometer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Input\Base\Filter.h">
-      <Filter>ChilliSource\Input\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\DeviceButtons\DeviceButtonSystem.h">
       <Filter>ChilliSource\Input\DeviceButtons</Filter>
     </ClInclude>
@@ -1681,135 +1678,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text.h">
       <Filter>ChilliSource\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Component.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\ComponentDesc.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\ComponentFactory.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Widget.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDef.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Button\HighlightComponent.h">
-      <Filter>ChilliSource\UI\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Button\ToggleHighlightComponent.h">
-      <Filter>ChilliSource\UI\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\Drawable.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableComponent.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableDef.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableDef.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawable.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawableDef.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableDef.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayoutDef.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayoutDef.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\Layout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutComponent.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutDef.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutDef.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextComponent.h">
-      <Filter>ChilliSource\UI\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextIcon.h">
-      <Filter>ChilliSource\UI\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Slider\SliderComponent.h">
-      <Filter>ChilliSource\UI\Slider</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Slider\SliderDirection.h">
-      <Filter>ChilliSource\UI\Slider</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarComponent.h">
-      <Filter>ChilliSource\UI\ProgressBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarDirection.h">
-      <Filter>ChilliSource\UI\ProgressBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarType.h">
-      <Filter>ChilliSource\UI\ProgressBar</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications.h">
       <Filter>ChilliSource\Social</Filter>
@@ -2275,6 +2143,144 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\Task.h">
       <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\UIComponent.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\UIComponentDesc.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\UIComponentFactory.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Widget.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDef.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Button\HighlightUIComponent.h">
+      <Filter>ChilliSource\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Button\ToggleHighlightUIComponent.h">
+      <Filter>ChilliSource\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUIComponent.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchUIDrawable.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchUIDrawableDef.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardUIDrawable.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardUIDrawableDef.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchUIDrawable.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchUIDrawableDef.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\UIDrawable.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\UIDrawableDef.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\UIDrawableUtils.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridUILayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridUILayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListUILayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListUILayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutUIComponent.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\UILayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\UILayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListUILayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListUILayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarDirection.h">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarType.h">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarUIComponent.h">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Slider\SliderDirection.h">
+      <Filter>ChilliSource\UI\Slider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Slider\SliderUIComponent.h">
+      <Filter>ChilliSource\UI\Slider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextComponent.h">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextIcon.h">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextUIComponent.h">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Base\InputFilter.h">
+      <Filter>ChilliSource\Input\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
