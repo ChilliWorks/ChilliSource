@@ -48,8 +48,11 @@ namespace CSBackend
             //----------------------------------------------------------
             bool CheckForOpenGLExtension(const std::string& in_extension)
             {
-                std::string extensions = (const char*)glGetString(GL_EXTENSIONS);
-                return extensions.find(in_extension) != extensions.npos;
+                //TODO: Re-add support for checking opengl extensions.
+                return false;
+                
+//                std::string extensions = (const char*)glGetString(GL_EXTENSIONS);
+//                return extensions.find(in_extension) != extensions.npos;
             }
         }
         

@@ -305,54 +305,56 @@ namespace CSBackend
         //--------------------------------------------------
         void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureDataEnabled)
         {
-            Destroy();
+            //TODO: Re-add building of textures
             
-            m_width = in_desc.m_width;
-            m_height = in_desc.m_height;
-            m_format = in_desc.m_format;
-            m_compression = in_desc.m_compression;
-            
-            CS_ASSERT(m_width <= m_renderCapabilities->GetMaxTextureSize() && m_height <= m_renderCapabilities->GetMaxTextureSize(),
-                      "OpenGL does not support textures of this size on this device (" + ChilliSource::ToString(m_width) + ", " + ChilliSource::ToString(m_height) + ")");
-            
-            glGenTextures(1, &m_texHandle);
-            Bind();
-            
-            u8* data = in_data.get();
-            
-			switch(m_compression)
-			{
-				case ChilliSource::ImageCompression::k_none:
-                    UploadImageDataNoCompression(m_format, m_width, m_height, data);
-					break;
-				case ChilliSource::ImageCompression::k_ETC1:
-                    UploadImageDataETC1(m_format, m_width, m_height, data, in_desc.m_dataSize);
-					break;
-				case ChilliSource::ImageCompression::k_PVR2Bpp:
-                    UploadImageDataPVR2(m_format, m_width, m_height, data, in_desc.m_dataSize);
-					break;
-				case ChilliSource::ImageCompression::k_PVR4Bpp:
-                    UploadImageDataPVR4(m_format, m_width, m_height, data, in_desc.m_dataSize);
-					break;
-			};
-            
-            if(in_mipMap == true)
-            {
-                glGenerateMipmap(GL_TEXTURE_2D);
-            }
-            
-            m_hasMipMaps = in_mipMap;
-            
-#ifdef CS_TARGETPLATFORM_ANDROID
-            if (GetStorageLocation() == ChilliSource::StorageLocation::k_none && in_restoreTextureDataEnabled == true)
-            {
-            	m_restoreTextureDataEnabled = true;
-                m_restorationDataSize = in_desc.m_dataSize;
-                m_restorationData = std::move(in_data);
-            }
-#endif
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
+//            Destroy();
+//            
+//            m_width = in_desc.m_width;
+//            m_height = in_desc.m_height;
+//            m_format = in_desc.m_format;
+//            m_compression = in_desc.m_compression;
+//            
+//            CS_ASSERT(m_width <= m_renderCapabilities->GetMaxTextureSize() && m_height <= m_renderCapabilities->GetMaxTextureSize(),
+//                      "OpenGL does not support textures of this size on this device (" + ChilliSource::ToString(m_width) + ", " + ChilliSource::ToString(m_height) + ")");
+//            
+//            glGenTextures(1, &m_texHandle);
+//            Bind();
+//            
+//            u8* data = in_data.get();
+//            
+//			switch(m_compression)
+//			{
+//				case ChilliSource::ImageCompression::k_none:
+//                    UploadImageDataNoCompression(m_format, m_width, m_height, data);
+//					break;
+//				case ChilliSource::ImageCompression::k_ETC1:
+//                    UploadImageDataETC1(m_format, m_width, m_height, data, in_desc.m_dataSize);
+//					break;
+//				case ChilliSource::ImageCompression::k_PVR2Bpp:
+//                    UploadImageDataPVR2(m_format, m_width, m_height, data, in_desc.m_dataSize);
+//					break;
+//				case ChilliSource::ImageCompression::k_PVR4Bpp:
+//                    UploadImageDataPVR4(m_format, m_width, m_height, data, in_desc.m_dataSize);
+//					break;
+//			};
+//            
+//            if(in_mipMap == true)
+//            {
+//                glGenerateMipmap(GL_TEXTURE_2D);
+//            }
+//            
+//            m_hasMipMaps = in_mipMap;
+//            
+//#ifdef CS_TARGETPLATFORM_ANDROID
+//            if (GetStorageLocation() == ChilliSource::StorageLocation::k_none && in_restoreTextureDataEnabled == true)
+//            {
+//            	m_restoreTextureDataEnabled = true;
+//                m_restorationDataSize = in_desc.m_dataSize;
+//                m_restorationData = std::move(in_data);
+//            }
+//#endif
+//            
+//            CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
         }
         //--------------------------------------------------
 		//--------------------------------------------------

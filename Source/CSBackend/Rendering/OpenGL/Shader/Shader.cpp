@@ -58,12 +58,14 @@ namespace CSBackend
         //----------------------------------------------------------
         void Shader::Build(const std::string& in_vs, const std::string& in_fs)
         {
-            Destroy();
+            //TODO: Re-add building of shaders
             
-            CompileShader(in_vs, GL_VERTEX_SHADER);
-            CompileShader(in_fs, GL_FRAGMENT_SHADER);
-            CreateProgram(m_vertexShaderId, m_fragmentShaderId);
-            PopulateAttributeHandles();
+//            Destroy();
+//            
+//            CompileShader(in_vs, GL_VERTEX_SHADER);
+//            CompileShader(in_fs, GL_FRAGMENT_SHADER);
+//            CreateProgram(m_vertexShaderId, m_fragmentShaderId);
+//            PopulateAttributeHandles();
         }
         //----------------------------------------------------------
         //----------------------------------------------------------

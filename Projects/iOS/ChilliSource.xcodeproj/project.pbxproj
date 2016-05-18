@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		811ECDFB1CEB28E900E07948 /* LifecycleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811ECDF91CEB28E900E07948 /* LifecycleManager.cpp */; };
 		8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8123B6781CE098BF008F8182 /* InputFilter.cpp */; };
 		814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814E92B31CB54F76004D6ADE /* TaskPool.cpp */; };
 		8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */; };
@@ -331,6 +332,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		811ECDF91CEB28E900E07948 /* LifecycleManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LifecycleManager.cpp; sourceTree = "<group>"; };
+		811ECDFA1CEB28E900E07948 /* LifecycleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LifecycleManager.h; sourceTree = "<group>"; };
 		8123B6781CE098BF008F8182 /* InputFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputFilter.cpp; sourceTree = "<group>"; };
 		814E92B31CB54F76004D6ADE /* TaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPool.cpp; sourceTree = "<group>"; };
 		814E92B41CB54F76004D6ADE /* TaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskPool.h; sourceTree = "<group>"; };
@@ -1292,6 +1295,8 @@
 				8158F2141C89D2AC00B13109 /* Device.cpp */,
 				8158F2151C89D2AC00B13109 /* Device.h */,
 				8158F2161C89D2AC00B13109 /* GenericFactory.h */,
+				811ECDF91CEB28E900E07948 /* LifecycleManager.cpp */,
+				811ECDFA1CEB28E900E07948 /* LifecycleManager.h */,
 				8158F2171C89D2AC00B13109 /* Logging.cpp */,
 				8158F2181C89D2AC00B13109 /* Logging.h */,
 				8158F2191C89D2AC00B13109 /* MakeSharedArray.h */,
@@ -3049,6 +3054,7 @@
 				8158F65F1C89D2AD00B13109 /* HashCRC32.cpp in Sources */,
 				8158F7291C89D2AD00B13109 /* ProgressBarType.cpp in Sources */,
 				8158F6ED1C89D2AD00B13109 /* PointParticleEmitterDef.cpp in Sources */,
+				811ECDFB1CEB28E900E07948 /* LifecycleManager.cpp in Sources */,
 				8158F7031C89D2AD00B13109 /* Canvas.cpp in Sources */,
 				8158F7E21C89D2AD00B13109 /* VideoPlayer.mm in Sources */,
 				8158F6631C89D2AD00B13109 /* DialogueBoxSystem.cpp in Sources */,
