@@ -39,7 +39,9 @@ namespace ChilliSource
     {
         m_filename = filePath;
         
-        m_fileStream.open(m_filename.c_str(), std::ios_base::in);
+        //Opening the file in binary mode as tellg does not function correctly on all platforms in ::in mode
+        //after a read is carried out on the stream
+        m_fileStream.open(m_filename.c_str(), std::ios_base::binary);
         
         m_isValid = m_fileStream.is_open() == true && m_fileStream.bad() == false && m_fileStream.fail() == false;
         
@@ -128,7 +130,7 @@ namespace ChilliSource
         return success;
     }
     //------------------------------------------------------------------------------
-    bool InputTextStream::Read(u32 length, std::string& readChars) noexcept
+    bool InputTextStream::Read(u64 length, std::string& readChars) noexcept
     {
         CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
         

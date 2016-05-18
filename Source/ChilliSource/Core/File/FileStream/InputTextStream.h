@@ -95,7 +95,7 @@ namespace ChilliSource
         ///
         /// @return If the read was successfull
         ///
-        bool Read(u32 length, std::string& readChars) noexcept override;
+        bool Read(u64 length, std::string& readChars) noexcept override;
         
     private:
         

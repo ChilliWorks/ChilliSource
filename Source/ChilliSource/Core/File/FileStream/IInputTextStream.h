@@ -77,7 +77,7 @@ namespace ChilliSource
         ///
         /// @return If the read was successfull
         ///
-        virtual bool Read(u32 length, std::string& readLine) noexcept = 0;
+        virtual bool Read(u64 length, std::string& readLine) noexcept = 0;
     };
 }
 
