@@ -400,6 +400,52 @@ namespace CSBackend
 
 			return nullptr;
 		}
+		//--------------------------------------------------------------
+        //--------------------------------------------------------------
+        ChilliSource::IInputTextStreamUPtr FileSystem::CreateInputTextStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        {
+        	ChilliSource::IInputTextStreamUPtr textInputStream = nullptr;
+
+        	switch (in_storageLocation)
+			{
+				case ChilliSource::StorageLocation::k_package:
+				case ChilliSource::StorageLocation::k_chilliSource:
+				{
+					CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == false, "Cannot open write mode file stream in read-only storage location.");
+
+					//TODO::Create virtual text input stream
+					break;
+				}
+				case ChilliSource::StorageLocation::k_DLC:
+				{
+					if (DoesFileExistInCachedDLC(in_filePath) == true)
+					{
+						auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
+						textInputStream = ChilliSource::IInputTextStreamUPtr(new ChilliSource::InputTextStream(absFilePath));
+					}
+					else
+					{
+						//TODO::Create virtual text input stream
+					}
+					break;
+				}
+				default:
+				{
+					auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
+					textInputStream = ChilliSource::IInputTextStreamUPtr(new ChilliSource::InputTextStream(absFilePath));
+					break;
+				}
+			}
+
+			if(textInputStream != nullptr && textInputStream->IsValid())
+			{
+				return textInputStream;
+			}
+			else 
+			{
+				return nullptr;
+			}
+        }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		bool FileSystem::CreateDirectoryPath(ChilliSource::StorageLocation in_storageLocation, const std::string& in_directory) const
