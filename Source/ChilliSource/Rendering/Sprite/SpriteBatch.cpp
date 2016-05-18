@@ -47,15 +47,16 @@ namespace ChilliSource
     SpriteBatch::SpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage) 
     : m_renderSystem(inpRenderSystem), mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
     {
-        BufferDescription desc;
-        desc.eUsageFlag = ineUsage;
-        desc.VertexDataCapacity = (inudwCapacity + 1) * k_numSpriteVerts * sizeof(SpriteVertex); 
-        desc.IndexDataCapacity  = (inudwCapacity + 1) * sizeof(u16) * k_numSpriteIndices;
-        desc.ePrimitiveType = PrimitiveType::k_tri;
-        desc.eAccessFlag = BufferAccess::k_read;
-        desc.VertexLayout = VertexLayout::kSprite;
-        
-        mpSpriteBuffer = m_renderSystem->CreateBuffer(desc);
+        //TODO: Re-add sprite batch init
+        //BufferDescription desc;
+        //desc.eUsageFlag = ineUsage;
+        //desc.VertexDataCapacity = (inudwCapacity + 1) * k_numSpriteVerts * sizeof(SpriteVertex); 
+        //desc.IndexDataCapacity  = (inudwCapacity + 1) * sizeof(u16) * k_numSpriteIndices;
+        //desc.ePrimitiveType = PrimitiveType::k_tri;
+        //desc.eAccessFlag = BufferAccess::k_read;
+        //desc.VertexLayout = VertexLayout::kSprite;
+        //
+        //mpSpriteBuffer = m_renderSystem->CreateBuffer(desc);
     }
     //------------------------------------------------------
     /// Build

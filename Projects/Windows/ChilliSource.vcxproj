@@ -30,6 +30,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Colour.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Device.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Logging.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Screen.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ConstMethodCast.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Device.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\GenericFactory.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Logging.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\MakeSharedArray.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.h" />

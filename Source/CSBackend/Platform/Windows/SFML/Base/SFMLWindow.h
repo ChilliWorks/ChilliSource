@@ -32,6 +32,7 @@
 
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/LifeCycleManager.h>
 #include <ChilliSource/Core/Base/Singleton.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -338,6 +339,8 @@ namespace CSBackend
 			bool m_isRunning = true;
 			bool m_isFocused = true;
 			DisplayMode m_displayMode = DisplayMode::k_windowed;
+
+            ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
 		};
 	}
 }

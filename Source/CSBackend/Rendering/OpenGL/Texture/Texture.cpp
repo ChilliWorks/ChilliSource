@@ -533,7 +533,8 @@ namespace CSBackend
 		//--------------------------------------------------
 		Texture::~Texture()
 		{
-            Destroy();
+            //TODO: Re-add texture cleanup
+            //Destroy();
 		}
 	}
 }

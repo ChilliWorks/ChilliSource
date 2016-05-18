@@ -26,6 +26,10 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+#   include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
+#endif
+
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
@@ -88,6 +92,10 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::ProcessMainThread() noexcept
     {
+#ifdef CS_TARGETPLATFORM_ANDROID
+        CSBackend::Android::JavaVirtualMachine::Get()->AttachCurrentThread();
+#endif
+
         while (true)
         {
             BlockIfInactive();
@@ -153,9 +161,13 @@ namespace ChilliSource
             if (shouldDestroy)
             {
                 m_application->Destroy();
-                return;
+                break;
             }
         }
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+        CSBackend::Android::JavaVirtualMachine::Get()->DetachCurrentThread();
+#endif
     }
     
     //------------------------------------------------------------------------------

@@ -33,6 +33,7 @@
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/AppConfig.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/LifecycleManager.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
@@ -424,10 +425,10 @@ namespace CSBackend
 			auto appStartTime = clock.getElapsedTime().asSeconds();
 			auto appPreviousTime = appStartTime;
 
-			ChilliSource::Application* app = CreateApplication();
-			app->Init();
-			app->Resume();
-			app->Foreground();
+			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication());
+            m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
+            m_lifecycleManager->Resume();
+            m_lifecycleManager->Foreground();
 
 			m_isRunning = true;
 			m_isFocused = true;
@@ -466,14 +467,14 @@ namespace CSBackend
 							if (m_isFocused == false)
 							{
 								m_isFocused = true;
-								app->Foreground();
+                                m_lifecycleManager->Foreground();
 							}
 							break;
 						case sf::Event::LostFocus:
 							if (m_isFocused == true)
 							{
 								m_isFocused = false;
-								app->Background();
+                                m_lifecycleManager->Background();
 							}
 							break;
 						case sf::Event::MouseButtonPressed:
@@ -509,11 +510,8 @@ namespace CSBackend
 				auto runningTime = (appPreviousTime - appStartTime);
 				appPreviousTime = appCurrentTime;
 
-				app->Update(deltaTime, TimeIntervalSecs(runningTime));
-				app->Render();
+                m_lifecycleManager->Render();
 			}
-
-			delete app;
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -527,12 +525,12 @@ namespace CSBackend
 		{
 			if (m_isFocused == true)
 			{
-				ChilliSource::Application::Get()->Background();
+                m_lifecycleManager->Background();
 				m_isFocused = false;
 			}
 
-			ChilliSource::Application::Get()->Suspend();
-			ChilliSource::Application::Get()->Destroy();
+            m_lifecycleManager->Suspend();
+            m_lifecycleManager.reset();
 
 			m_isRunning = false;
 		}

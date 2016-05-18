@@ -1071,6 +1071,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Base\InputFilter.cpp">
       <Filter>ChilliSource\Input\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2281,6 +2284,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\Base\InputFilter.h">
       <Filter>ChilliSource\Input\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.h">
+      <Filter>ChilliSource\Core\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

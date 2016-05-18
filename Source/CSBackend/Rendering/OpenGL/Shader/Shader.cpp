@@ -429,7 +429,8 @@ namespace CSBackend
 		//----------------------------------------------------------
 		Shader::~Shader()
 		{
-            Destroy();
+            //TODO: Re-add shader cleanup
+            //Destroy();
 		}
 	}
 }
