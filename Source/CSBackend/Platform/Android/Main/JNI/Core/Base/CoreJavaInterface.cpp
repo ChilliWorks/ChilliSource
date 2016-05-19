@@ -36,9 +36,10 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/Threading/MainThreadId.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/Pointer/TouchInputJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/LifecycleManager.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 //--------------------------------------------------------------------------------------
@@ -153,6 +154,7 @@ extern "C"
 	//--------------------------------------------------------------------------------------
     void Java_com_chilliworks_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* in_env, jobject in_this, jstring in_url);
 }
+
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this)
@@ -170,57 +172,49 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_create(JNIEnv* i
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(JNIEnv* in_env, jobject in_this)
 {
-	//get the java VM and init the Java Interface Manager
+	//setup legacy Java interface. Note: that all java interfaces are now legacy code, please use JavaClass instead.
 	JavaVM* javaVM;
 	in_env->GetJavaVM(&javaVM);
-
-	//create the MainThread
-	CSBackend::Android::MainThreadId::Create();
-
-	//create the application
-	ChilliSource::Application* pApplication = CreateApplication();
-	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->SetApplication(pApplication);
-
-	//setup other interfaces
 	CSBackend::Android::TouchInputJavaInterface::SetupJavaInterface(javaVM);
 	CSBackend::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
     
-	//run the application
-    pApplication->Init();
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->Init();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Application::Get()->Resume();
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->Resume();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Application::Get()->Foreground();
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->Foreground();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Application::Get()->Background();
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->Background();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Application::Get()->Suspend();
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->Suspend();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplication(JNIEnv* in_env, jobject in_this)
 {
-	CSBackend::Android::MainThreadId::Get()->SetCurrentThread();
-
-	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->DestroyApplication();
-
-	CSBackend::Android::MainThreadId::Destroy();
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->Destroy();
 
 	CSBackend::Android::JavaVirtualMachine::Destroy();
 }
@@ -228,15 +222,14 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplicati
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elapsedTime)
 {
-	//Create the message with the time between frames
-	ChilliSource::Application::Get()->Update(in_deltaTime, (u64)in_elapsedTime);
-	ChilliSource::Application::Get()->Render();
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->Render();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this)
 {
-	ChilliSource::Application::Get()->ApplicationMemoryWarning();
+	//TODO: Add memory warnings.
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
@@ -256,7 +249,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
 		CoreJavaInterface::CoreJavaInterface()
-		: m_application(nullptr), m_screenWidth(0), m_screenHeight(0), m_screenDensity(-0.1f), m_physicalScreenSize(-0.1f)
+		: m_application(nullptr), m_screenWidth(0), m_screenHeight(0), m_screenDensity(-0.1f), m_physicalScreenSize(-0.1f), m_isActive(false)
 		{
 			CreateNativeInterface("com/chilliworks/chillisource/core/CoreNativeInterface");
 			CreateMethodReference("getExternalStorageDirectory", "()Ljava/lang/String;");
@@ -278,25 +271,6 @@ namespace CSBackend
 		bool CoreJavaInterface::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == CoreJavaInterface::InterfaceID);
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		void CoreJavaInterface::SetApplication(ChilliSource::Application* in_application)
-		{
-			m_application = in_application;
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		void CoreJavaInterface::DestroyApplication()
-		{
-			m_application->Destroy();
-			CS_SAFEDELETE(m_application);
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		ChilliSource::Application* CoreJavaInterface::GetApplication()
-		{
-			return m_application;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -409,19 +383,69 @@ namespace CSBackend
 		}
         //-----------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------
-        void CoreJavaInterface::ForceQuit()
-        {
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("forceQuit"));
-        }
-        //-----------------------------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------------------------
         TimeIntervalMs CoreJavaInterface::GetSystemTimeInMilliseconds()
         {
         	TimeIntervalMs output = 0;
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			output = (TimeIntervalMs)env->CallLongMethod(GetJavaObject(), GetMethodID("getSystemTimeInMilliseconds"));
 			return output;
+        }
+
+        //-----------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------
+        void CoreJavaInterface::ForceQuit()
+        {
+			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			env->CallVoidMethod(GetJavaObject(), GetMethodID("forceQuit"));
+        }
+        //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
+        void CoreJavaInterface::Init() noexcept
+        {
+            m_application = ChilliSource::ApplicationUPtr(CreateApplication());
+            m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(m_application.get()));
+        }
+        //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
+        void CoreJavaInterface::Resume() noexcept
+        {
+            m_lifecycleManager->Resume();
+        	m_isActive = true;
+        }
+        //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
+        void CoreJavaInterface::Foreground() noexcept
+        {
+            m_lifecycleManager->Foreground();
+        }
+        //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
+        void CoreJavaInterface::Render() noexcept
+        {
+        	if (m_isActive)
+        	{
+            	m_lifecycleManager->Render();
+        	}
+        }
+        //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
+        void CoreJavaInterface::Background() noexcept
+        {
+            m_lifecycleManager->Background();
+        }
+        //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
+        void CoreJavaInterface::Suspend() noexcept
+        {
+        	m_isActive = false;
+            m_lifecycleManager->Suspend();
+        }
+        //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
+        void CoreJavaInterface::Destroy() noexcept
+        {
+            m_lifecycleManager.reset();
+            m_application.reset();
         }
 	}
 }

@@ -177,10 +177,8 @@ namespace ChilliSource
         std::mutex m_fileTaskMutex;
         bool m_isFileTaskRunning = false;
         std::deque<Task> m_fileTaskQueue;
-        
-#ifndef CS_TARGETPLATFORM_ANDROID
+
         std::thread::id m_mainThreadId;
-#endif
     };
 }
 

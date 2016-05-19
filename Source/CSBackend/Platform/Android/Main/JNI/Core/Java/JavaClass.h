@@ -93,7 +93,7 @@ namespace CSBackend
             /// @param in_object - Object instance whose type is defined by in_javaClassDef
             /// @param in_javaClassDef - The definition for this java class.
             //------------------------------------------------------------------------------
-            template <typename... TArgs> JavaClass(jobject in_object, const JavaClassDef& in_javaClassDef);
+            JavaClass(jobject in_object, const JavaClassDef& in_javaClassDef);
             //------------------------------------------------------------------------------
             /// Calls a void java method.
             ///
@@ -297,11 +297,12 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         template <typename... TArgs> JavaClass::JavaClass(const JavaClassDef& in_javaClassDef, TArgs&&... in_args)
         {
+            auto jvm = JavaVirtualMachine::Get();
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
 
             //Get the class
             m_className = in_javaClassDef.GetClassName();
-            jclass jClass = environment->FindClass(m_className.c_str());
+            jclass jClass = jvm->FindClass(m_className);
 
             CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
 
@@ -334,37 +335,6 @@ namespace CSBackend
             }
 
             environment->DeleteLocalRef(jClassInstance);
-            environment->DeleteLocalRef(jClass);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        template <typename... TArgs> JavaClass::JavaClass(jobject in_object, const JavaClassDef& in_javaClassDef)
-        {
-            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-
-            //Get the class
-            m_className = in_javaClassDef.GetClassName();
-            jclass jClass = environment->FindClass(m_className.c_str());
-
-            CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
-
-            m_javaObject = environment->NewGlobalRef(in_object);
-
-            //setup the method references
-            for (const auto& method : in_javaClassDef.GetMethods())
-            {
-                CS_ASSERT(m_methods.find(method.first) == m_methods.end(), "Method '" + method.first + "' has already been added to Java class '" + m_className + "'");
-
-                MethodInfo info;
-                info.m_returnType = JavaMethodSignature::CalcReturnType(method.second);
-                info.m_numArguments = JavaMethodSignature::CalcNumArguments(method.second);
-                info.m_methodId = environment->GetMethodID(jClass, method.first.c_str(), method.second.c_str());
-
-                CS_ASSERT(info.m_methodId != nullptr, "Could not find method '" + method.first + "' in Java Class '" + m_className + "'");
-
-                m_methods.emplace(method.first, info);
-            }
-
             environment->DeleteLocalRef(jClass);
         }
         //------------------------------------------------------------------------------

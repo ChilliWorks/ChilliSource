@@ -33,10 +33,6 @@
 #include <ChilliSource/Core/Threading/TaskContext.h>
 #include <ChilliSource/Core/Threading/TaskType.h>
 
-#ifdef CS_TARGETPLATFORM_ANDROID
-#   include <CSBackend/Platform/Android/Main/JNI/Core/Threading/MainThreadId.h>
-#endif
-
 #include <algorithm>
 
 namespace ChilliSource
@@ -64,11 +60,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool TaskScheduler::IsMainThread() const noexcept
     {
-#ifdef CS_TARGETPLATFORM_ANDROID
-        return CSBackend::Android::MainThreadId::Get()->GetId() == std::this_thread::get_id();
-#else
         return m_mainThreadId == std::this_thread::get_id();
-#endif
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -223,10 +215,8 @@ namespace ChilliSource
         m_smallTaskPool = TaskPoolUPtr(new TaskPool(TaskType::k_small, threadsPerPool));
         m_largeTaskPool = TaskPoolUPtr(new TaskPool(TaskType::k_large, threadsPerPool));
         m_mainThreadTaskPool = MainThreadTaskPoolUPtr(new MainThreadTaskPool());
-        
-#ifndef CS_TARGETPLATFORM_ANDROID
+
         m_mainThreadId = std::this_thread::get_id();
-#endif
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

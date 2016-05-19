@@ -397,8 +397,9 @@ namespace ChilliSource
     void Application::Resume() noexcept
     {
         CS_LOG_VERBOSE("App Resuming...");
-        
-        m_renderSystem->Resume();
+
+        //TODO: Remove?
+        //m_renderSystem->Resume();
         
         //resume all of the application systems
         for (const AppSystemUPtr& system : m_systems)

@@ -48,7 +48,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Resume() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "Invalid lifecycle state.");
         m_targetLifecycleState = LifecycleState::k_resumed;
         
         m_activeCondition.notify_one();
@@ -57,7 +57,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Foreground() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "Invalid lifecycle state.");
         m_targetLifecycleState = LifecycleState::k_foregrounded;
         
         m_activeCondition.notify_one();
@@ -66,7 +66,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Background() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_foregrounded, "");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_foregrounded, "Invalid lifecycle state.");
         m_targetLifecycleState = LifecycleState::k_resumed;
         
         m_activeCondition.notify_one();
@@ -75,7 +75,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Suspend() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "Invalid lifecycle state.");
         m_targetLifecycleState = LifecycleState::k_initialised;
         
         m_activeCondition.notify_one();
@@ -84,7 +84,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Render() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed || m_targetLifecycleState == LifecycleState::k_foregrounded, "");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed || m_targetLifecycleState == LifecycleState::k_foregrounded, "Invalid lifecycle state.");
         
         m_application->Render();
     }
@@ -183,7 +183,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     LifecycleManager::~LifecycleManager() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "Invalid lifecycle state.");
         m_targetLifecycleState = LifecycleState::k_uninitialised;
         
         m_activeCondition.notify_one();

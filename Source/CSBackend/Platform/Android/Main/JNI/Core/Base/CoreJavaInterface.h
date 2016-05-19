@@ -33,23 +33,27 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
-#include <ChilliSource/Core/Base/Application.h>
 
+#include <atomic>
 #include <jni.h>
 
 namespace CSBackend
 {
 	namespace Android
 	{
+	    //--------------------------------------------------------------------------------------
+	    /// This provides the main lifecycle events into an application, as well as some
+	    /// important information on the application, such as screen size.
+	    ///
+	    /// Note this is in a legacy format and should be updated such that it doesn't
+	    /// use IJavaInterface, and so that the lifecycle events and things such as screen
+	    /// size are handled by different classes.
+	    //--------------------------------------------------------------------------------------
 		class CoreJavaInterface : public IJavaInterface
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(CoreJavaInterface);
-			//--------------------------------------------------------------------------------------
-			/// Constructor
-			///
-			/// @author Ian Copland
-			//--------------------------------------------------------------------------------------
+
 			CoreJavaInterface();
 			//--------------------------------------------------------------------------------------
 			/// @author Ian Copland
@@ -60,38 +64,17 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//--------------------------------------------------------------------------------------
-			/// Sets the Chilli Source Application pointer.
-			///
-			/// @author Ian Copland
-			///
-			/// @param the application pointer.
-			//--------------------------------------------------------------------------------------
-			void SetApplication(ChilliSource::Application* in_application);
-			//--------------------------------------------------------------------------------------
-			/// Deletes the Chilli Source Application pointer.
-			///
-			/// @author Ian Copland
-			//--------------------------------------------------------------------------------------
-			void DestroyApplication();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the global instance of the Chilli Source application.
-			//--------------------------------------------------------------------------------------
-			ChilliSource::Application* GetApplication();
-			//------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
 			/// @return The current activity.
-			//------------------------------------------------------------------------------
+			//--------------------------------------------------------------------------------------
 			jobject GetActivity() const;
-			//-----------------------------------------
+			//--------------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
-			/// @param The maximum frames per second
-			/// to clamp to. This should be in multiples
+			/// @param The maximum frames per second to clamp to. This should be in multiples
 			/// of 15 (15, 30, 60)
-			//-----------------------------------------
+			//--------------------------------------------------------------------------------------
 			void SetPreferredFPS(u32 in_maxFPS);
 			//--------------------------------------------------------------------------------------
 			/// @author Ian Copland
@@ -156,26 +139,70 @@ namespace CSBackend
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			f32 GetScreenDensity();
-            //-----------------------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// Kill the application process
-            //-----------------------------------------------------------------------------------------------------
-            void ForceQuit();
-            //-----------------------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return the system time in milliseconds.
-            //-----------------------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             TimeIntervalMs GetSystemTimeInMilliseconds();
-            
+            //--------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// Kill the application process
+            //--------------------------------------------------------------------------------------
+            void ForceQuit();
+            //--------------------------------------------------------------------------------------
+            /// Sends the init lifecycle event.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------------------------------------
+            void Init() noexcept;
+            //--------------------------------------------------------------------------------------
+            /// Sends the resume lifecycle event.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------------------------------------
+            void Resume() noexcept;
+            //--------------------------------------------------------------------------------------
+            /// Sends the foreground lifecycle event.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------------------------------------
+            void Foreground() noexcept;
+            //--------------------------------------------------------------------------------------
+            /// Sends the render lifecycle event.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------------------------------------
+            void Render() noexcept;
+            //--------------------------------------------------------------------------------------
+            /// Sends the background lifecycle event.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------------------------------------
+            void Background() noexcept;
+            //--------------------------------------------------------------------------------------
+            /// Sends the suspend lifecycle event.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------------------------------------
+            void Suspend() noexcept;
+            //--------------------------------------------------------------------------------------
+            /// Sends the destroy lifecycle event.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------------------------------------
+            void Destroy() noexcept;
 		private:
 
-			ChilliSource::Application* m_application;
+			ChilliSource::ApplicationUPtr m_application;
+			ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
 			s32 m_screenWidth;
 			s32 m_screenHeight;
 			f32 m_screenDensity;
 			f32 m_physicalScreenSize;
+
+			std::atomic<bool> m_isActive;
 		};
 	}
 }
