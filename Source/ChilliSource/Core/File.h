@@ -37,7 +37,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/File/TaggedFilePathResolver.h>
-#include <ChilliSource/Core/File/FileStream/IInputTextStream.h>
-#include <ChilliSource/Core/File/FileStream/InputTextStream.h>
+#include <ChilliSource/Core/File/FileStream/ITextInputStream.h>
+#include <ChilliSource/Core/File/FileStream/TextInputStream.h>
 
 #endif
