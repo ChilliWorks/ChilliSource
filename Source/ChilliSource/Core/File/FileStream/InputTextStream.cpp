@@ -42,7 +42,7 @@ namespace ChilliSource
         
         m_isValid = m_fileStream.is_open() && !m_fileStream.bad() && !m_fileStream.fail();
         
-        if(m_isValid == true)
+        if(m_isValid)
         {
             m_fileStream.seekg(0, m_fileStream.end);
             m_length = m_fileStream.tellg();
@@ -65,20 +65,20 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     u64 InputTextStream::GetLength() const noexcept
     {
-        CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
 
         return m_length;
     }
     //------------------------------------------------------------------------------
     u64 InputTextStream::GetReadPosition() noexcept
     {
-        CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         return m_fileStream.tellg();
     }
     //------------------------------------------------------------------------------
     void InputTextStream::SetReadPosition(u64 readPosition) noexcept
     {
-        CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         CS_ASSERT(readPosition <= GetLength(), "Position out of bounds!");
 
         m_fileStream.seekg(readPosition);
@@ -86,7 +86,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     std::string InputTextStream::ReadAll() noexcept
     {
-        CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         
         //Reset the read position to the beginning
         SetReadPosition(0);
@@ -101,7 +101,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool InputTextStream::ReadLine(std::string& line) noexcept
     {
-        CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         
         if(m_fileStream.eof())
         {
@@ -126,7 +126,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool InputTextStream::Read(u64 length, std::string& readChars) noexcept
     {
-        CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         
         if(m_fileStream.eof())
         {
