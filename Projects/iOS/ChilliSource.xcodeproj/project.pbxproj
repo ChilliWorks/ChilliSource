@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8123B6781CE098BF008F8182 /* InputFilter.cpp */; };
 		814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814E92B31CB54F76004D6ADE /* TaskPool.cpp */; };
+		8151BF8C1CECB3A200E2FE5E /* OutputTextStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8151BF8A1CECB3A200E2FE5E /* OutputTextStream.cpp */; };
 		8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */; };
 		8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FB1C89D2AC00B13109 /* CkBank.cpp */; };
 		8158F64C1C89D2AD00B13109 /* CkBankProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FD1C89D2AC00B13109 /* CkBankProvider.cpp */; };
@@ -335,6 +336,8 @@
 		8123B6781CE098BF008F8182 /* InputFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputFilter.cpp; sourceTree = "<group>"; };
 		814E92B31CB54F76004D6ADE /* TaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPool.cpp; sourceTree = "<group>"; };
 		814E92B41CB54F76004D6ADE /* TaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskPool.h; sourceTree = "<group>"; };
+		8151BF8A1CECB3A200E2FE5E /* OutputTextStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OutputTextStream.cpp; sourceTree = "<group>"; };
+		8151BF8B1CECB3A200E2FE5E /* OutputTextStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputTextStream.h; sourceTree = "<group>"; };
 		8158F1EA1C89D27300B13109 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioPlayer.cpp; sourceTree = "<group>"; };
 		8158F1FA1C89D2AC00B13109 /* CkAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioPlayer.h; sourceTree = "<group>"; };
@@ -2946,6 +2949,8 @@
 				81CA60EB1CE5DFB500080533 /* InputTextStream.cpp */,
 				81CA60EC1CE5DFB500080533 /* InputTextStream.h */,
 				81CA60EE1CE604AB00080533 /* IInputTextStream.h */,
+				8151BF8A1CECB3A200E2FE5E /* OutputTextStream.cpp */,
+				8151BF8B1CECB3A200E2FE5E /* OutputTextStream.h */,
 			);
 			path = FileStream;
 			sourceTree = "<group>";
@@ -3185,6 +3190,7 @@
 				8158F6C21C89D2AD00B13109 /* PointLightComponent.cpp in Sources */,
 				8158F6B51C89D2AD00B13109 /* Renderer.cpp in Sources */,
 				8158F7271C89D2AD00B13109 /* ProgressBarUIComponent.cpp in Sources */,
+				8151BF8C1CECB3A200E2FE5E /* OutputTextStream.cpp in Sources */,
 				8158F6A21C89D2AD00B13109 /* Pointer.cpp in Sources */,
 				8158F6B11C89D2AD00B13109 /* MeshBuffer.cpp in Sources */,
 				8158F6A81C89D2AD00B13109 /* HttpResponse.cpp in Sources */,
