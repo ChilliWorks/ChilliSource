@@ -54,6 +54,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\CSBinaryChunk.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\TextInputStream.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\TaggedFilePathResolver.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Image\CSImageProvider.cpp" />
@@ -359,6 +360,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\CSBinaryChunk.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\ITextInputStream.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\TextInputStream.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\StorageLocation.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\TaggedFilePathResolver.h" />

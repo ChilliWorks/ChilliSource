@@ -114,6 +114,18 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         virtual FileStreamUPtr CreateFileStream(StorageLocation in_storageLocation, const std::string& in_filePath, FileMode in_fileMode) const = 0;
         //------------------------------------------------------------------------------
+        /// Creates a new input text stream to the given file in the given storage location.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @param in_storageLocation - The storage location.
+        /// @param in_filePath - The file path.
+        ///
+        /// @return The new file stream. If the stream cannot be created or is invalid,
+        /// null be returned.
+        //------------------------------------------------------------------------------
+        virtual ITextInputStreamUPtr CreateTextInputStream(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
+        //------------------------------------------------------------------------------
         /// Creates the given directory. The full directory hierarchy will be created.
         ///
         /// This is thread-safe.
