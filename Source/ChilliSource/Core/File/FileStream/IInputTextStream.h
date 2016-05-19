@@ -1,7 +1,4 @@
 //
-//  IInputTextStream.h
-//  ChilliSource
-//
 //  The MIT License (MIT)
 //
 //  Copyright © 2016 Tag Games. All rights reserved.
@@ -33,51 +30,78 @@
 
 namespace ChilliSource
 {
-    /// Interface for an input text stream
+    /// Interface for classes to provide textual read functionality for a file
+    ///
+    /// Implementations shoud be considered thread agnostic, but not thread-safe.
+    /// i.e. Instances can be used by one thread at a time. It doesn't matter
+    /// which thread as long as any previous threads are no longer accessing it
     ///
     class IInputTextStream
     {
     public:
         
-        /// Checks if this is a valid stream
+        /// Checks the status of the stream, if this returns false then the stream
+        /// can no longer be accessed.
         ///
-        /// @return If Valid
+        /// @return If the stream is valid and available for use.
         ///
         virtual bool IsValid() const noexcept = 0;
         
-        /// @return Length of stream
+        /// @return Length of stream in bytes.
         ///
         virtual u64 GetLength() const noexcept = 0;
         
-        /// @return The current position through the filestream
+        /// Gets the position from which the next read operation will begin. The position
+        /// is always specified relative to the start of the file
+        ///
+        /// @return The position from the start of the stream.
         ///
         virtual u64 GetReadPosition() noexcept = 0;
         
+        /// Sets the position through the stream from which the next read operation will
+        /// begin. The position is always specified relative to the start of the file. This does
+        /// not affect the output of ReadAll().
+        ///
         /// @param readPosition
-        ///     Sets the position to begin the next readLine/read from (ReadAll unaffected)
+        ///     The position from the start of the stream.
         ///
         virtual void SetReadPosition(u64 readPosition) noexcept = 0;
         
-        /// @return String containing all of the text file, including newlines
+        /// @return String containing the contents of the text file, including newlines
         ///
         virtual std::string ReadAll() noexcept = 0;
         
+        /// Reads from the current read position until the newline character ('\n') or EOF
+        /// is reached. If the current read position is at the end of the file on entrance
+        /// then this will return false
+        ///
         /// @param line
-        ///     String that the next line will populate, this will not contain newline characters
+        ///     String buffer that will be populated, this will not contain newline characters
         ///
         /// @return If a line was read successfully
         ///
         virtual bool ReadLine(std::string& line) noexcept = 0;
         
-        /// @param length
-        ///     Number of characters to read
+        /// Reads in a number of characters from the current read position and puts them
+        /// into the passed in string. If the length of the stream is overrun, readChars
+        /// will contain everything up to that point.
         ///
-        /// @param readLine
-        ///     String containing the next number of characters, including newlines
+        /// If the current read position is at the end of the file, this function will return
+        /// false.
+        ///
+        /// @param length
+        ///     The number of characters to read
+        ///
+        /// @param readChars
+        ///     A string to hold the read characters, including newlines
         ///
         /// @return If the read was successfull
         ///
         virtual bool Read(u64 length, std::string& readLine) noexcept = 0;
+        
+        /// Destructor
+        ///
+        virtual ~IInputTextStream() noexcept {};
     };
 }
 

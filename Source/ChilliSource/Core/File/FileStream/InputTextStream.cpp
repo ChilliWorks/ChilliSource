@@ -1,7 +1,4 @@
 //
-//  InputTextStream.cpp
-//  ChilliSource
-//
 //  The MIT License (MIT)
 //
 //  Copyright © 2016 Tag Games. All rights reserved.
@@ -35,26 +32,25 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    InputTextStream::InputTextStream(const std::string& filePath)
+    InputTextStream::InputTextStream(const std::string& filePath) noexcept
     {
         m_filename = filePath;
         
-        //Opening the file in binary mode as tellg does not function correctly on all platforms in ::in mode
-        //after a read is carried out on the stream
+        //Opening the file in binary mode as tellg does not function correctly on all platforms in
+        //::in mode after a read is carried out on the stream
         m_fileStream.open(m_filename.c_str(), std::ios_base::binary);
         
-        m_isValid = m_fileStream.is_open() == true && m_fileStream.bad() == false && m_fileStream.fail() == false;
+        m_isValid = m_fileStream.is_open() && !m_fileStream.bad() && !m_fileStream.fail();
         
         if(m_isValid == true)
         {
-            // get length of file:
             m_fileStream.seekg(0, m_fileStream.end);
             m_length = m_fileStream.tellg();
             m_fileStream.seekg(0, m_fileStream.beg);
         }
     }
     //------------------------------------------------------------------------------
-    InputTextStream::~InputTextStream()
+    InputTextStream::~InputTextStream() noexcept
     {
         if(m_fileStream.is_open())
         {
@@ -107,76 +103,55 @@ namespace ChilliSource
     {
         CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
         
-        bool success = false;
-        
-        if(!m_fileStream.eof())
+        if(m_fileStream.eof())
         {
-            std::getline(m_fileStream, line);
-            
-            if(m_fileStream.bad())
-            {
-                //If the badbit is set the stream is most likely in an invalid state
-                m_isValid = false;
-                
-                //if getline fails we check if the bad bit has been set, then print the error with perror
-                perror(("ReadLine failed on file " + m_filename).c_str());
-            }
-            else
-            {
-                success = true;
-            }
+            return false;
         }
         
-        return success;
+        std::getline(m_fileStream, line);
+        
+        //Shouldn't check fail here as the fail bit will be set on a read overrun, which we handle
+        CS_ASSERT(!m_fileStream.bad(), "Unexpected error occured in filestream");
+        
+        //Need to carry out another eof check here, as the check at the start of the function may
+        //not catch allcases. The EOF bit is only set when a read operation is attempted, not a seekg,
+        //so it may only be set after the above getline.
+        if(m_fileStream.eof())
+        {
+            return !line.empty();
+        }
+        
+        return true;
     }
     //------------------------------------------------------------------------------
     bool InputTextStream::Read(u64 length, std::string& readChars) noexcept
     {
         CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
         
-        bool success = false;
-        
-        if(!m_fileStream.eof())
+        if(m_fileStream.eof())
         {
-            //Ensure the outstring is big enough to store the result
-            if(readChars.size() < length)
-            {
-                readChars.resize(length, ' ');
-            }
-            
-            //If the length of the stream is overrun, readChars will contain everything up to that point and the EOF
-            //bit will be set
-            //Note::A string is guaranteed to be in contiguous memory in the c++11 standard, but not in c++03.
-            //this allows the below overwrite to work
-            m_fileStream.read(&readChars[0], length);
-    
-            if(m_fileStream.eof())
-            {
-                //If we prematurely reached the eof then we need to resize the string buffer to contain only
-                //the read characters, retrieved through gcount
-                u32 readCount = m_fileStream.gcount();
-                
-                if(readCount != readChars.size())
-                {
-                    readChars.resize(readCount);
-                }
-                
-                success = readChars.size() != 0;
-            }
-            else if(m_fileStream.bad())
-            {
-                //If the badbit is set the stream is most likely in an invalid state
-                m_isValid = false;
-                
-                //if getline fails we check if the bad bit has been set, then print the error with perror
-                perror(("ReadLine failed on file " + m_filename).c_str());
-            }
-            else
-            {
-                success = true;
-            }
+            return false;
         }
         
-        return success;
+        readChars.resize(length);
+        
+        //A string is guaranteed to be in contiguous memory in the c++11 standard, but not in c++03.
+        //this allows the below overwrite to work
+        m_fileStream.read(&readChars[0], length);
+        
+        //Shouldn't check fail here as the fail bit will be set on a read overrun, which we handle
+        CS_ASSERT(!m_fileStream.bad(), "Unexpected error occured in filestream");
+        
+        readChars.resize(m_fileStream.gcount());
+        
+        //Need to carry out another eof check here, as the check at the start of the function may
+        //not catch allcases. The EOF bit is only set when a read operation is attempted, not a seekg,
+        //so it may only be set after the above read.
+        if(m_fileStream.eof())
+        {
+            return m_fileStream.gcount() != 0;
+        }
+        
+        return true;
     }
 }
