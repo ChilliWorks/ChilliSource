@@ -315,7 +315,7 @@
 		81C7FFD71C89DDE300D306F9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */; };
 		81C7FFD81C89DDE300D306F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */; };
 		81C7FFD91C89DDE300D306F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC11C89DDE300D306F9 /* UIKit.framework */; };
-		81CA60ED1CE5DFB500080533 /* InputTextStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CA60EB1CE5DFB500080533 /* InputTextStream.cpp */; };
+		81CA60ED1CE5DFB500080533 /* TextInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CA60EB1CE5DFB500080533 /* TextInputStream.cpp */; };
 		81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */; };
 /* End PBXBuildFile section */
 
@@ -1115,9 +1115,9 @@
 		81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		81C7FFC11C89DDE300D306F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		81CA60EB1CE5DFB500080533 /* InputTextStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputTextStream.cpp; sourceTree = "<group>"; };
-		81CA60EC1CE5DFB500080533 /* InputTextStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputTextStream.h; sourceTree = "<group>"; };
-		81CA60EE1CE604AB00080533 /* IInputTextStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IInputTextStream.h; sourceTree = "<group>"; };
+		81CA60EB1CE5DFB500080533 /* TextInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextInputStream.cpp; sourceTree = "<group>"; };
+		81CA60EC1CE5DFB500080533 /* TextInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInputStream.h; sourceTree = "<group>"; };
+		81CA60EE1CE604AB00080533 /* ITextInputStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITextInputStream.h; sourceTree = "<group>"; };
 		81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SizePolicy.cpp; sourceTree = "<group>"; };
 		81E3AA971CE241F600DF7B4E /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2943,9 +2943,9 @@
 		81CA60EA1CE5DF9300080533 /* FileStream */ = {
 			isa = PBXGroup;
 			children = (
-				81CA60EB1CE5DFB500080533 /* InputTextStream.cpp */,
-				81CA60EC1CE5DFB500080533 /* InputTextStream.h */,
-				81CA60EE1CE604AB00080533 /* IInputTextStream.h */,
+				81CA60EB1CE5DFB500080533 /* TextInputStream.cpp */,
+				81CA60EC1CE5DFB500080533 /* TextInputStream.h */,
+				81CA60EE1CE604AB00080533 /* ITextInputStream.h */,
 			);
 			path = FileStream;
 			sourceTree = "<group>";
@@ -3134,7 +3134,7 @@
 				8158F6A41C89D2AD00B13109 /* TextEntry.cpp in Sources */,
 				8158F72B1C89D2AD00B13109 /* SliderDirection.cpp in Sources */,
 				8158F6EB1C89D2AD00B13109 /* ParticleEmitterDefFactory.cpp in Sources */,
-				81CA60ED1CE5DFB500080533 /* InputTextStream.cpp in Sources */,
+				81CA60ED1CE5DFB500080533 /* TextInputStream.cpp in Sources */,
 				8158F6781C89D2AD00B13109 /* ShapeIntersection.cpp in Sources */,
 				8158F65A1C89D2AD00B13109 /* ParamDictionarySerialiser.cpp in Sources */,
 				8158F7FD1C89D2AD00B13109 /* GLSLShaderProvider.cpp in Sources */,

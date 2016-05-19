@@ -316,7 +316,7 @@ namespace CSBackend
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        ChilliSource::IInputTextStreamUPtr FileSystem::CreateInputTextStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        ChilliSource::ITextInputStreamUPtr FileSystem::CreateTextInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
             std::string absFilePath = "";
             if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
@@ -328,7 +328,7 @@ namespace CSBackend
                 absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
             }
             
-            ChilliSource::IInputTextStreamUPtr output(new ChilliSource::InputTextStream(absFilePath));
+            ChilliSource::ITextInputStreamUPtr output(new ChilliSource::TextInputStream(absFilePath));
             if (output->IsValid() == true)
             {
                 return output;

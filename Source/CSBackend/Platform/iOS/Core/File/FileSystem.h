@@ -33,7 +33,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/File/FileStream/InputTextStream.h>
+#include <ChilliSource/Core/File/FileStream/TextInputStream.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 #include <string>
@@ -86,7 +86,7 @@ namespace CSBackend
             /// @return The new file stream. If the stream cannot be created or is invalid,
             /// null be returned.
             //------------------------------------------------------------------------------
-            ChilliSource::IInputTextStreamUPtr CreateInputTextStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+            ChilliSource::ITextInputStreamUPtr CreateTextInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
             //--------------------------------------------------------------
             /// Creates the given directory. The full directory hierarchy
             /// will be created.

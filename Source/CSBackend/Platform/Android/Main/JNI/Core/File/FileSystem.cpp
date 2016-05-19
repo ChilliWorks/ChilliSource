@@ -402,9 +402,9 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
         //--------------------------------------------------------------
-        ChilliSource::IInputTextStreamUPtr FileSystem::CreateInputTextStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        ChilliSource::ITextInputStreamUPtr FileSystem::CreateTextInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
-        	ChilliSource::IInputTextStreamUPtr textInputStream = nullptr;
+        	ChilliSource::ITextInputStreamUPtr textInputStream = nullptr;
 
         	switch (in_storageLocation)
 			{
@@ -421,7 +421,7 @@ namespace CSBackend
 					if (DoesFileExistInCachedDLC(in_filePath) == true)
 					{
 						auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
-						textInputStream = ChilliSource::IInputTextStreamUPtr(new ChilliSource::InputTextStream(absFilePath));
+						textInputStream = ChilliSource::ITextInputStreamUPtr(new ChilliSource::TextInputStream(absFilePath));
 					}
 					else
 					{
@@ -432,7 +432,7 @@ namespace CSBackend
 				default:
 				{
 					auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
-					textInputStream = ChilliSource::IInputTextStreamUPtr(new ChilliSource::InputTextStream(absFilePath));
+					textInputStream = ChilliSource::ITextInputStreamUPtr(new ChilliSource::TextInputStream(absFilePath));
 					break;
 				}
 			}
