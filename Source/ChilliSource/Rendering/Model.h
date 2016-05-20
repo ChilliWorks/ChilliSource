@@ -41,6 +41,5 @@
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
-#include <ChilliSource/Rendering/Model/SubMesh.h>
 
 #endif

@@ -135,7 +135,6 @@
 		8158F6CD1C89D2AD00B13109 /* SkinnedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3961C89D2AD00B13109 /* SkinnedAnimation.cpp */; };
 		8158F6CE1C89D2AD00B13109 /* SkinnedAnimationGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3981C89D2AD00B13109 /* SkinnedAnimationGroup.cpp */; };
 		8158F6CF1C89D2AD00B13109 /* StaticMeshComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F39A1C89D2AD00B13109 /* StaticMeshComponent.cpp */; };
-		8158F6D01C89D2AD00B13109 /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F39C1C89D2AD00B13109 /* SubMesh.cpp */; };
 		8158F6D11C89D2AD00B13109 /* AccelerationParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3A11C89D2AD00B13109 /* AccelerationParticleAffector.cpp */; };
 		8158F6D21C89D2AD00B13109 /* AccelerationParticleAffectorDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3A31C89D2AD00B13109 /* AccelerationParticleAffectorDef.cpp */; };
 		8158F6D31C89D2AD00B13109 /* AngularAccelerationParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3A51C89D2AD00B13109 /* AngularAccelerationParticleAffector.cpp */; };
@@ -687,8 +686,6 @@
 		8158F3991C89D2AD00B13109 /* SkinnedAnimationGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinnedAnimationGroup.h; sourceTree = "<group>"; };
 		8158F39A1C89D2AD00B13109 /* StaticMeshComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticMeshComponent.cpp; sourceTree = "<group>"; };
 		8158F39B1C89D2AD00B13109 /* StaticMeshComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticMeshComponent.h; sourceTree = "<group>"; };
-		8158F39C1C89D2AD00B13109 /* SubMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SubMesh.cpp; sourceTree = "<group>"; };
-		8158F39D1C89D2AD00B13109 /* SubMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubMesh.h; sourceTree = "<group>"; };
 		8158F39E1C89D2AD00B13109 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		8158F3A11C89D2AD00B13109 /* AccelerationParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AccelerationParticleAffector.cpp; sourceTree = "<group>"; };
 		8158F3A21C89D2AD00B13109 /* AccelerationParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationParticleAffector.h; sourceTree = "<group>"; };
@@ -1919,8 +1916,6 @@
 				8158F3991C89D2AD00B13109 /* SkinnedAnimationGroup.h */,
 				8158F39A1C89D2AD00B13109 /* StaticMeshComponent.cpp */,
 				8158F39B1C89D2AD00B13109 /* StaticMeshComponent.h */,
-				8158F39C1C89D2AD00B13109 /* SubMesh.cpp */,
-				8158F39D1C89D2AD00B13109 /* SubMesh.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3173,7 +3168,6 @@
 				8158F6D41C89D2AD00B13109 /* AngularAccelerationParticleAffectorDef.cpp in Sources */,
 				8158F70B1C89D2AD00B13109 /* WidgetDef.cpp in Sources */,
 				8158F7E11C89D2AD00B13109 /* VideoOverlayView.mm in Sources */,
-				8158F6D01C89D2AD00B13109 /* SubMesh.cpp in Sources */,
 				8158F6EA1C89D2AD00B13109 /* ParticleEmitterDef.cpp in Sources */,
 				8158F65B1C89D2AD00B13109 /* PropertyMap.cpp in Sources */,
 				8158F6A11C89D2AD00B13109 /* Keyboard.cpp in Sources */,

@@ -33,7 +33,6 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
-#include <ChilliSource/Rendering/Model/SubMesh.h>
 
 namespace ChilliSource
 {
@@ -90,37 +89,6 @@ namespace ChilliSource
         /// @return The skeleton
         //-----------------------------------------------------------------
         const Skeleton* GetSkeleton() const;
-        //-----------------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @return Number of sub meshes.
-        //-----------------------------------------------------------------
-        u32 GetNumSubMeshes() const;
-        //-----------------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @param Index
-        ///
-        /// @return Submesh or null
-        //-----------------------------------------------------------------
-        const SubMesh* GetSubMeshAtIndex(u32 in_index) const;
-        //-----------------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @param Index
-        //
-        /// @return Submesh or null
-        //-----------------------------------------------------------------
-        const SubMesh* GetSubMeshByName(const std::string& in_name) const;
-        //-----------------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @param name
-        ///
-        /// @return The index. This will return -1 if there is no mesh by the
-        /// given name.
-        //-----------------------------------------------------------------
-        s32 GetSubMeshIndexByName(const std::string& in_name) const;
   
     private:
         friend class ResourcePool;
@@ -139,15 +107,6 @@ namespace ChilliSource
         /// @author S Downie
         //-----------------------------------------------------------------
         Mesh();
-        //-----------------------------------------------------------------
-        /// Creates a new sub mesh with the given name.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param the name of the mesh.
-        /// @return The newly created sub-mesh.
-        //-----------------------------------------------------------------
-        SubMesh* CreateSubMesh(const std::string& in_name);
         //-----------------------------------------------------------------
         /// Creates the AABB for this mesh from minimum and maximum bounds
         /// vectors
@@ -172,7 +131,6 @@ namespace ChilliSource
         
     private:
         
-        std::vector<SubMeshUPtr> m_subMeshes;
         SkeletonUPtr m_skeleton;
         
         AABB m_aabb;

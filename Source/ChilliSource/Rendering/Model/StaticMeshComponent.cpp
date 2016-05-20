@@ -36,8 +36,6 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 
-#include <ChilliSource/Rendering/Model/SubMesh.h>
-
 #include <algorithm>
 #include <limits>
 
@@ -194,42 +192,47 @@ namespace ChilliSource
     //-----------------------------------------------------------
     void StaticMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName)
     {
-        if (nullptr != mpModel)
-        {
-            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
-            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
-            {
-                mMaterials[indwIndex] = inpMaterial;
-            }
-        }
+        //TODO: Implement using new system
+//        if (nullptr != mpModel)
+//        {
+//            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
+//            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
+//            {
+//                mMaterials[indwIndex] = inpMaterial;
+//            }
+//        }
     }
     //-----------------------------------------------------------
     /// Get Material Of Sub Mesh
     //-----------------------------------------------------------
     MaterialCSPtr StaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
     {
-        if (indwSubMeshIndex < mMaterials.size())
-        {
-            return mMaterials[indwSubMeshIndex];
-        }
-        
-        CS_LOG_ERROR("Failed to get material from sub mesh " + ToString(indwSubMeshIndex));
         return nullptr;
+        
+        //TODO: Implement using new system
+//        if (indwSubMeshIndex < mMaterials.size())
+//        {
+//            return mMaterials[indwSubMeshIndex];
+//        }
+//        
+//        CS_LOG_ERROR("Failed to get material from sub mesh " + ToString(indwSubMeshIndex));
+//        return nullptr;
     }
     //-----------------------------------------------------------
     /// Get Material Of Sub Mesh
     //-----------------------------------------------------------
     MaterialCSPtr StaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
     {
-        if (nullptr != mpModel)
-        {
-            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
-        
-            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
-            {
-                return mMaterials[indwIndex];
-            }
-        }
+        //TODO: Implement using new system
+//        if (nullptr != mpModel)
+//        {
+//            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
+//        
+//            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
+//            {
+//                return mMaterials[indwIndex];
+//            }
+//        }
         
         CS_LOG_ERROR("Failed to get material from sub mesh " + instrSubMeshName);
         return nullptr;
