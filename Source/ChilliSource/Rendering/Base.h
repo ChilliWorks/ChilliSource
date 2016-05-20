@@ -36,14 +36,12 @@
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
-#include <ChilliSource/Rendering/Base/CullingPredicates.h>
 #include <ChilliSource/Rendering/Base/DepthTestComparison.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/MeshBatch.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
-#include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
