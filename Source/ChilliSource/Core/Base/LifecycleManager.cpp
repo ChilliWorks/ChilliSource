@@ -48,7 +48,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Resume() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "Invalid lifecycle state.");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "Cannot resume as target lifecycle state is invalid.");
         m_targetLifecycleState = LifecycleState::k_resumed;
         
         m_activeCondition.notify_one();
@@ -57,7 +57,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Foreground() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "Invalid lifecycle state.");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "Cannot foreground as target lifecycle state is invalid.");
         m_targetLifecycleState = LifecycleState::k_foregrounded;
         
         m_activeCondition.notify_one();
@@ -66,7 +66,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Background() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_foregrounded, "Invalid lifecycle state.");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_foregrounded, "Cannot background as target lifecycle state is invalid.");
         m_targetLifecycleState = LifecycleState::k_resumed;
         
         m_activeCondition.notify_one();
@@ -75,7 +75,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Suspend() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "Invalid lifecycle state.");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "Cannot suspend as target lifecycle state is invalid.");
         m_targetLifecycleState = LifecycleState::k_initialised;
         
         m_activeCondition.notify_one();
@@ -84,9 +84,53 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::Render() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed || m_targetLifecycleState == LifecycleState::k_foregrounded, "Invalid lifecycle state.");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed || m_targetLifecycleState == LifecycleState::k_foregrounded, "Cannot render as target lifecycle state is invalid.");
         
         m_application->Render();
+    }
+    
+    //------------------------------------------------------------------------------
+    constexpr bool LifecycleManager::ShouldInit(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    {
+        return (currentLifecycleState == LifecycleState::k_uninitialised && targetLifecycleState != LifecycleState::k_uninitialised);
+    }
+    
+    //------------------------------------------------------------------------------
+    constexpr bool LifecycleManager::ShouldResume(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    {
+        return ((currentLifecycleState == LifecycleState::k_uninitialised || currentLifecycleState == LifecycleState::k_initialised) &&
+                (targetLifecycleState == LifecycleState::k_resumed || targetLifecycleState == LifecycleState::k_foregrounded));
+    }
+    
+    //------------------------------------------------------------------------------
+    constexpr bool LifecycleManager::ShouldForeground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    {
+        return (m_currentLifecycleState != LifecycleState::k_foregrounded && targetLifecycleState == LifecycleState::k_foregrounded);
+    }
+    
+    //------------------------------------------------------------------------------
+    constexpr bool LifecycleManager::ShouldUpdate(LifecycleState targetLifecycleState) const noexcept
+    {
+        return (targetLifecycleState == LifecycleState::k_resumed || targetLifecycleState == LifecycleState::k_foregrounded);
+    }
+    
+    //------------------------------------------------------------------------------
+    constexpr bool LifecycleManager::ShouldBackground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    {
+        return (currentLifecycleState == LifecycleState::k_foregrounded && targetLifecycleState != LifecycleState::k_foregrounded);
+    }
+    
+    //------------------------------------------------------------------------------
+    constexpr bool LifecycleManager::ShouldSuspend(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    {
+        return ((currentLifecycleState == LifecycleState::k_foregrounded || currentLifecycleState == LifecycleState::k_resumed) &&
+                (targetLifecycleState == LifecycleState::k_initialised || targetLifecycleState == LifecycleState::k_uninitialised));
+    }
+    
+    //------------------------------------------------------------------------------
+    constexpr bool LifecycleManager::ShouldDestroy(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    {
+        return (currentLifecycleState != LifecycleState::k_uninitialised && targetLifecycleState == LifecycleState::k_uninitialised);
     }
 
     //------------------------------------------------------------------------------
@@ -100,17 +144,17 @@ namespace ChilliSource
         {
             BlockIfInactive();
             
+            auto currentLifecycleState = m_currentLifecycleState;
             LifecycleState targetLifecycleState = m_targetLifecycleState;
-            auto shouldInit = (m_currentLifecycleState == LifecycleState::k_uninitialised && targetLifecycleState != LifecycleState::k_uninitialised);
-            auto shouldResume = ((m_currentLifecycleState == LifecycleState::k_uninitialised || m_currentLifecycleState == LifecycleState::k_initialised) &&
-                                 (targetLifecycleState == LifecycleState::k_resumed || targetLifecycleState == LifecycleState::k_foregrounded));
-            auto shouldForeground = (m_currentLifecycleState != LifecycleState::k_foregrounded && targetLifecycleState == LifecycleState::k_foregrounded);
-            auto shouldUpdate = (m_targetLifecycleState == LifecycleState::k_resumed || m_targetLifecycleState == LifecycleState::k_foregrounded);
-            auto shouldBackground = (m_currentLifecycleState == LifecycleState::k_foregrounded && targetLifecycleState != LifecycleState::k_foregrounded);
-            auto shouldSuspend = ((m_currentLifecycleState == LifecycleState::k_foregrounded || m_currentLifecycleState == LifecycleState::k_resumed) &&
-                                  (targetLifecycleState == LifecycleState::k_initialised || targetLifecycleState == LifecycleState::k_uninitialised));
-            auto shouldDestroy = (m_currentLifecycleState != LifecycleState::k_uninitialised && targetLifecycleState == LifecycleState::k_uninitialised);
             m_currentLifecycleState = targetLifecycleState;
+            
+            auto shouldInit = ShouldInit(currentLifecycleState, targetLifecycleState);
+            auto shouldResume = ShouldResume(currentLifecycleState, targetLifecycleState);
+            auto shouldForeground = ShouldForeground(currentLifecycleState, targetLifecycleState);
+            auto shouldUpdate = ShouldUpdate(targetLifecycleState);
+            auto shouldBackground = ShouldBackground(currentLifecycleState, targetLifecycleState);
+            auto shouldSuspend = ShouldSuspend(currentLifecycleState, targetLifecycleState);
+            auto shouldDestroy = ShouldDestroy(currentLifecycleState, targetLifecycleState);
             
             if (shouldInit)
             {
@@ -183,7 +227,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     LifecycleManager::~LifecycleManager() noexcept
     {
-        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "Invalid lifecycle state.");
+        CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "Cannot destroy as target lifecycle state is invalid.");
         m_targetLifecycleState = LifecycleState::k_uninitialised;
         
         m_activeCondition.notify_one();
