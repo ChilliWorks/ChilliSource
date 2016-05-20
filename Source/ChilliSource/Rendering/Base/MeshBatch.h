@@ -108,9 +108,6 @@ namespace ChilliSource
         //The shared material
         MaterialCSPtr mpMaterial;
         
-        //---Render Buffer
-        MeshBuffer* mpMeshBuffer;
-        
         //List of sprites in the batch
         typedef std::unordered_map<StaticMeshComponentSPtr, Matrix4> MapMeshToTransform;
         MapMeshToTransform mmapMeshCache;

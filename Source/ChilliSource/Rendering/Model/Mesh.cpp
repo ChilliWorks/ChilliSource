@@ -29,7 +29,6 @@
 #include <ChilliSource/Rendering/Model/Mesh.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 

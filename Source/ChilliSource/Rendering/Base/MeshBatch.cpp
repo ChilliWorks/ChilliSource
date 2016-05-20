@@ -30,7 +30,6 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/MeshBatch.h>
-#include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
 namespace ChilliSource
@@ -40,7 +39,7 @@ namespace ChilliSource
     ///
     /// Default
     //------------------------------------------------------
-    MeshBatch::MeshBatch() : mpMeshBuffer(nullptr), mudwVertexCount(0), mudwIndexCount(0), mdwTag(0)
+    MeshBatch::MeshBatch() : mudwVertexCount(0), mudwIndexCount(0), mdwTag(0)
     {
 
     }
@@ -64,119 +63,120 @@ namespace ChilliSource
     //------------------------------------------------------
     void MeshBatch::Build()
     {
-        //Sanity check
-        if(mmapMeshCache.empty() || !mpMeshBuffer) return;
-        
-        mpMeshBuffer->Bind();
-        
-        mpMeshBuffer->SetVertexCount(mudwVertexCount);
-        mpMeshBuffer->SetIndexCount(mudwIndexCount);
-        
-        //Get the buffer locations
-        MeshBatchVertex* pVBatchBuffer = nullptr;
-        mpMeshBuffer->LockVertex((f32**)&pVBatchBuffer, 0, 0);
-        u16* pIBatchBuffer = nullptr;
-        mpMeshBuffer->LockIndex(&pIBatchBuffer, 0, 0);
-        
-        MeshBatchVertex sTempVert;
-        u32 VertexStride = sizeof(MeshBatchVertex);
-        u32 IndexStride = sizeof(u16);
-        
-        u32 udwIndexOffset = 0;
-        
-        //---------------------------------------------------
-        // Meshes
-        //---------------------------------------------------
-        //Load the mesh data into the buffer and offset the indices
-        for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
-        {
-            //build the normal matrix. NOTE: This normal matrix will NOT work if there is a scale component to the transform.
-            Matrix4 NormalMatrix = it->second;
-            NormalMatrix.m[12] = 0.0f;
-            NormalMatrix.m[13] = 0.0f;
-            NormalMatrix.m[14] = 0.0f;
-            
-            
-            //---------------------------------------------------
-            // Sub-Meshes
-            //---------------------------------------------------
-            for(auto jt = it->first->GetMesh()->m_subMeshes.begin(); jt != it->first->GetMesh()->m_subMeshes.end(); ++jt)
-            {
-                MeshBuffer* pSubBuffer = (*jt)->GetInternalMeshBuffer();
-                pSubBuffer->Bind();
-                
-                //----------------------------------
-                // Vertices
-                //----------------------------------
-                //Loop round each vertex in the mesh and store it in the temp so we can manipulate it
-                u32 NumVerts = pSubBuffer->GetVertexCount();
-                
-                //Copy the vertex data into the buffer
-                MeshBatchVertex* _pVSubBuffer = nullptr;
-                pSubBuffer->LockVertex((f32**)&_pVSubBuffer, 0, 0);
-                
-                //Get the vertex data and transform it before we load it into the batch buffer
-                for(u32 i=0; i<NumVerts; ++i)
-                {
-                    //Grab the vertex
-                    memcpy(&sTempVert, _pVSubBuffer + i, VertexStride);
-                    
-                    //Transform the vertex
-                    sTempVert.Pos = sTempVert.Pos * it->second;
-                    sTempVert.Norm = sTempVert.Norm * NormalMatrix;
-                    
-                    //Copy the vertex into our new buffer
-                    memcpy(pVBatchBuffer, &sTempVert, VertexStride);
-                    pVBatchBuffer++;
-                }
-                
-                pSubBuffer->UnlockVertex();
-                //----------------------------------
-                //----------------------------------
-                
-                //----------------------------------
-                // Indices
-                //----------------------------------
-                //Loop round each index in the mesh and store it in the temp so we can manipulate it
-                u32 NumIndices = pSubBuffer->GetIndexCount();
-                
-                //Lock the data we need to copy
-                u16* _pISubBuffer = nullptr;
-                pSubBuffer->LockIndex(&_pISubBuffer, 0, 0);
-                
-                //Get the index data and offset it before we load it into the batch buffer
-                for(u32 i=0; i<NumIndices; ++i)
-                {
-                    u16 Index = 0;
-                    
-                    //Grab the index
-                    memcpy(&Index, _pISubBuffer +  i, IndexStride);
-                    
-                    //Offset the index
-                    Index += udwIndexOffset;
-                    
-                    //Copy the index into our new buffer
-                    memcpy(pIBatchBuffer, &Index, IndexStride);
-                    pIBatchBuffer++;
-                }
-                
-                udwIndexOffset += NumVerts;
-                
-                //Unlock and offset the new buffer
-                pSubBuffer->UnlockIndex();
-                //----------------------------------
-                //----------------------------------
-            }
-        }
-        
-        //---End mapping - Vertex
-        mpMeshBuffer->UnlockVertex();
-        
-        //---End mapping - Index
-        mpMeshBuffer->UnlockIndex();
-        
-        //We can now ditch our local meshes
-        mmapMeshCache.clear();
+        //TODO: Re-implement in new system.
+//        //Sanity check
+//        if(mmapMeshCache.empty() || !mpMeshBuffer) return;
+//        
+//        mpMeshBuffer->Bind();
+//        
+//        mpMeshBuffer->SetVertexCount(mudwVertexCount);
+//        mpMeshBuffer->SetIndexCount(mudwIndexCount);
+//        
+//        //Get the buffer locations
+//        MeshBatchVertex* pVBatchBuffer = nullptr;
+//        mpMeshBuffer->LockVertex((f32**)&pVBatchBuffer, 0, 0);
+//        u16* pIBatchBuffer = nullptr;
+//        mpMeshBuffer->LockIndex(&pIBatchBuffer, 0, 0);
+//        
+//        MeshBatchVertex sTempVert;
+//        u32 VertexStride = sizeof(MeshBatchVertex);
+//        u32 IndexStride = sizeof(u16);
+//        
+//        u32 udwIndexOffset = 0;
+//        
+//        //---------------------------------------------------
+//        // Meshes
+//        //---------------------------------------------------
+//        //Load the mesh data into the buffer and offset the indices
+//        for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
+//        {
+//            //build the normal matrix. NOTE: This normal matrix will NOT work if there is a scale component to the transform.
+//            Matrix4 NormalMatrix = it->second;
+//            NormalMatrix.m[12] = 0.0f;
+//            NormalMatrix.m[13] = 0.0f;
+//            NormalMatrix.m[14] = 0.0f;
+//            
+//            
+//            //---------------------------------------------------
+//            // Sub-Meshes
+//            //---------------------------------------------------
+//            for(auto jt = it->first->GetMesh()->m_subMeshes.begin(); jt != it->first->GetMesh()->m_subMeshes.end(); ++jt)
+//            {
+//                MeshBuffer* pSubBuffer = (*jt)->GetInternalMeshBuffer();
+//                pSubBuffer->Bind();
+//                
+//                //----------------------------------
+//                // Vertices
+//                //----------------------------------
+//                //Loop round each vertex in the mesh and store it in the temp so we can manipulate it
+//                u32 NumVerts = pSubBuffer->GetVertexCount();
+//                
+//                //Copy the vertex data into the buffer
+//                MeshBatchVertex* _pVSubBuffer = nullptr;
+//                pSubBuffer->LockVertex((f32**)&_pVSubBuffer, 0, 0);
+//                
+//                //Get the vertex data and transform it before we load it into the batch buffer
+//                for(u32 i=0; i<NumVerts; ++i)
+//                {
+//                    //Grab the vertex
+//                    memcpy(&sTempVert, _pVSubBuffer + i, VertexStride);
+//                    
+//                    //Transform the vertex
+//                    sTempVert.Pos = sTempVert.Pos * it->second;
+//                    sTempVert.Norm = sTempVert.Norm * NormalMatrix;
+//                    
+//                    //Copy the vertex into our new buffer
+//                    memcpy(pVBatchBuffer, &sTempVert, VertexStride);
+//                    pVBatchBuffer++;
+//                }
+//                
+//                pSubBuffer->UnlockVertex();
+//                //----------------------------------
+//                //----------------------------------
+//                
+//                //----------------------------------
+//                // Indices
+//                //----------------------------------
+//                //Loop round each index in the mesh and store it in the temp so we can manipulate it
+//                u32 NumIndices = pSubBuffer->GetIndexCount();
+//                
+//                //Lock the data we need to copy
+//                u16* _pISubBuffer = nullptr;
+//                pSubBuffer->LockIndex(&_pISubBuffer, 0, 0);
+//                
+//                //Get the index data and offset it before we load it into the batch buffer
+//                for(u32 i=0; i<NumIndices; ++i)
+//                {
+//                    u16 Index = 0;
+//                    
+//                    //Grab the index
+//                    memcpy(&Index, _pISubBuffer +  i, IndexStride);
+//                    
+//                    //Offset the index
+//                    Index += udwIndexOffset;
+//                    
+//                    //Copy the index into our new buffer
+//                    memcpy(pIBatchBuffer, &Index, IndexStride);
+//                    pIBatchBuffer++;
+//                }
+//                
+//                udwIndexOffset += NumVerts;
+//                
+//                //Unlock and offset the new buffer
+//                pSubBuffer->UnlockIndex();
+//                //----------------------------------
+//                //----------------------------------
+//            }
+//        }
+//        
+//        //---End mapping - Vertex
+//        mpMeshBuffer->UnlockVertex();
+//        
+//        //---End mapping - Index
+//        mpMeshBuffer->UnlockIndex();
+//        
+//        //We can now ditch our local meshes
+//        mmapMeshCache.clear();
     }
     //------------------------------------------------------
     /// Get Material
@@ -220,6 +220,5 @@ namespace ChilliSource
     //------------------------------------------------------
     MeshBatch::~MeshBatch() 
     {
-        CS_SAFEDELETE(mpMeshBuffer)
     }
 }

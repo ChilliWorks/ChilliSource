@@ -30,7 +30,6 @@
 #define _CHILLISOURCE_RENDERING_SUB_MESH_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
@@ -56,12 +55,6 @@ namespace ChilliSource
         
         virtual ~SubMesh();
         
-        //-----------------------------------------------------------------
-        /// Get Internal Mesh Buffer
-        ///
-        /// @return Mesh buffer containing the vertex data
-        //-----------------------------------------------------------------
-        MeshBuffer* GetInternalMeshBuffer() const;
         //-----------------------------------------------------------------
         /// Get AABB
         ///
@@ -128,9 +121,6 @@ namespace ChilliSource
         
         std::string mstrName;
         AABB mBoundingBox;
-        
-        //We own this!!!
-        MeshBuffer* mpMeshBuffer;
         
         InverseBindPosePtr mpInverseBindPose;
     };

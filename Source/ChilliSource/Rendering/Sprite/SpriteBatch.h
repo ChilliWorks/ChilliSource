@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/Rendering/Base/MeshBuffer.h>
+#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
 namespace ChilliSource
 {
@@ -153,9 +153,6 @@ namespace ChilliSource
         u32 mudwNumSpritesBuiltIndicesFor;
         
         s32 mdwTag;
-        
-        //---Render Buffer
-        MeshBuffer* mpSpriteBuffer;
     };
 }
 

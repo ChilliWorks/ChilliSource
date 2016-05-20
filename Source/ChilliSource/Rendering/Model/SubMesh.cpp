@@ -42,16 +42,9 @@ namespace ChilliSource
     //--------------------------------------------------------------------
     /// Constructor
     //--------------------------------------------------------------------
-    SubMesh::SubMesh(const std::string& instrName) : mstrName(instrName), mpMeshBuffer(nullptr)
+    SubMesh::SubMesh(const std::string& instrName) : mstrName(instrName)
     {
         
-    }
-    //-----------------------------------------------------------------
-    /// Get Internal Mesh Buffer
-    //-----------------------------------------------------------------
-    MeshBuffer* SubMesh::GetInternalMeshBuffer() const
-    {
-        return mpMeshBuffer;
     }
     //-----------------------------------------------------------------
     /// Get AABB
@@ -72,20 +65,24 @@ namespace ChilliSource
     //-----------------------------------------------------------------
     u32 SubMesh::GetNumVerts() const
     {
-        if (mpMeshBuffer != nullptr)
-            return mpMeshBuffer->GetVertexCount();
-        else
-            return 0;
+        return 0;
+        //TODO: Re-implement in new system
+//        if (mpMeshBuffer != nullptr)
+//            return mpMeshBuffer->GetVertexCount();
+//        else
+//            return 0;
     }
     //-----------------------------------------------------------------
     /// Get Number of Indices
     //-----------------------------------------------------------------
     u32 SubMesh::GetNumIndices() const
     {
-        if (mpMeshBuffer != nullptr)
-            return mpMeshBuffer->GetIndexCount();
-        else
-            return 0;
+        return 0;
+        //TODO: Re-implement in new system
+//        if (mpMeshBuffer != nullptr)
+//            return mpMeshBuffer->GetIndexCount();
+//        else
+//            return 0;
     }
     //-----------------------------------------------------------------
     /// Alter Buffer Declaration
@@ -161,6 +158,5 @@ namespace ChilliSource
     //-----------------------------------------------------------------
     SubMesh::~SubMesh()
     {
-        CS_SAFEDELETE(mpMeshBuffer);
     }
 }
