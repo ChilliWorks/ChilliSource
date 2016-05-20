@@ -73,26 +73,8 @@ namespace CSBackend
             /// @author S Downie
             //-----------------------------------------------------
             void Restore();
-            //-----------------------------------------------------
-            /// Add a mesh buffer to be backed up and restored
-            ///
-            /// @author S Downie
-            ///
-            /// @param Mesh buffer
-            //-----------------------------------------------------
-            void AddMeshBuffer(MeshBuffer* in_meshBuffer);
-            //-----------------------------------------------------
-            /// Remove a mesh buffer so it is no longer backed
-            /// up or restored
-            ///
-            /// @author S Downie
-            ///
-            /// @param Mesh buffer
-            //-----------------------------------------------------
-            void RemoveMeshBuffer(MeshBuffer* in_meshBuffer);
         private:
             
-            std::vector<MeshBuffer*> m_meshBuffers;
             bool m_hasContextBeenBackedUp = false;
         };
     }

@@ -597,34 +597,16 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBuffer.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponent.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RendererSortPredicates.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSystem.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp">
@@ -697,9 +679,6 @@
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SubMesh.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp">
@@ -900,13 +879,7 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\MeshBuffer.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderSystem.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp">
@@ -1718,9 +1691,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
@@ -1730,25 +1700,10 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBuffer.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponent.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RendererSortPredicates.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderSystem.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h">
@@ -1866,9 +1821,6 @@
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SubMesh.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h">
@@ -2102,13 +2054,7 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLIncludes.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\MeshBuffer.h">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderSystem.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h">

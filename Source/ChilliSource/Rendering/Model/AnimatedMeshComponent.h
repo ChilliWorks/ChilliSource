@@ -425,12 +425,11 @@ namespace ChilliSource
         /// to start a new animation.
         //----------------------------------------------------------
         void Reset();
-        //----------------------------------------------------
-        /// On Added To Entity
+        //----------------------------------------------------------
+        /// Triggered when the component is added to the scene.
         ///
-        /// Triggered when the component is attached to
-        /// an entity on the scene
-        //----------------------------------------------------
+        /// @author Ian Copland
+        //----------------------------------------------------------
         void OnAddedToScene() override;
         //----------------------------------------------------------
         /// Update
@@ -440,12 +439,11 @@ namespace ChilliSource
         /// @param The delta time.
         //----------------------------------------------------------
         void OnUpdate(f32 infDeltaTime) override;
-        //----------------------------------------------------
-        /// On Removed From Entity
+        //----------------------------------------------------------
+        /// Triggered when the component is removed to the scene.
         ///
-        /// Triggered when the component is detached from
-        /// an entity on the scene
-        //----------------------------------------------------
+        /// @author Ian Copland
+        //----------------------------------------------------------
         void OnRemovedFromScene() override;
         
     private:
