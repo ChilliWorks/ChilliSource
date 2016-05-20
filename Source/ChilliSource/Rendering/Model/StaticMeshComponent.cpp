@@ -29,7 +29,6 @@
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 
 #include <ChilliSource/Core/Base/Application.h>
@@ -293,26 +292,6 @@ namespace ChilliSource
     const MeshCSPtr& StaticMeshComponent::GetMesh() const
     {
         return mpModel;
-    }
-    //----------------------------------------------------------
-    /// Render
-    //----------------------------------------------------------
-    void StaticMeshComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
-    {
-        if(IsTransparent())
-        {
-            //Flush the sprite cache to maintain order
-            inpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
-        }
-        
-        mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, ineShaderPass);
-    }
-    //----------------------------------------------------------
-    /// Render Shadow Map
-    //----------------------------------------------------------
-    void StaticMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap)
-    {
-        mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_staticShadowMap}, ShaderPass::k_ambient);
     }
     //----------------------------------------------------
     //----------------------------------------------------

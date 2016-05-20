@@ -27,7 +27,6 @@
 //
 
 #include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
-#include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
 
 #include <ChilliSource/Core/Entity/Entity.h>
@@ -37,18 +36,19 @@ namespace ChilliSource
 {
     void BackToFrontSortPredicate::PrepareForSort(std::vector<RenderComponent*> * inpRenderable)
     {
-        mCameraViewProj = Renderer::matViewProjCache;
-        
-        Matrix4 matViewTrans;
-        Matrix4 matWorld;
-        
-        for(u32 i = 0; i < inpRenderable->size(); ++i)
-        {
-            Matrix4 matLocalTrans = Matrix4::CreateTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntity()->GetTransform().GetWorldPosition());
-            matWorld = (*inpRenderable)[i]->GetTransformationMatrix() * matLocalTrans;
-            matViewTrans = matWorld * mCameraViewProj;
-            (*inpRenderable)[i]->SetSortValue(matViewTrans.GetTranslation().z);
-        }
+        //TODO: Handle
+//        mCameraViewProj = Renderer::matViewProjCache;
+//        
+//        Matrix4 matViewTrans;
+//        Matrix4 matWorld;
+//        
+//        for(u32 i = 0; i < inpRenderable->size(); ++i)
+//        {
+//            Matrix4 matLocalTrans = Matrix4::CreateTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntity()->GetTransform().GetWorldPosition());
+//            matWorld = (*inpRenderable)[i]->GetTransformationMatrix() * matLocalTrans;
+//            matViewTrans = matWorld * mCameraViewProj;
+//            (*inpRenderable)[i]->SetSortValue(matViewTrans.GetTranslation().z);
+//        }
     }
     
     bool BackToFrontSortPredicate::SortItem(const RenderComponent* p1, const RenderComponent* p2) const

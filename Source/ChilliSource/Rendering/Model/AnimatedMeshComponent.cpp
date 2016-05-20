@@ -33,7 +33,6 @@
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 
 #include <ChilliSource/Core/Entity/Entity.h>
@@ -598,58 +597,6 @@ namespace ChilliSource
     void AnimatedMeshComponent::OnRemovedFromScene()
     {
         DetatchAllEntities();
-    }
-    //----------------------------------------------------------
-    /// Render
-    //----------------------------------------------------------
-    void AnimatedMeshComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
-    {
-        if (nullptr != mActiveAnimationGroup)
-        {
-            if (mbAnimationDataDirty == true)
-            {
-                UpdateAnimation(0.0f);
-            }
-            
-            if(IsTransparent())
-            {
-                //Flush the sprite cache to maintain order
-                inpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
-            }
-            
-            //render the model with the animation data.
-            if (mActiveAnimationGroup->IsPrepared() == true)
-            {
-                mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials,ineShaderPass, mActiveAnimationGroup);
-            }
-            else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
-            {
-                mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, ineShaderPass, mFadingAnimationGroup);
-            }
-        }
-    }
-    //-----------------------------------------------------
-    /// Render Shadow Map
-    //-----------------------------------------------------
-    void AnimatedMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap)
-    {
-        if (nullptr != mActiveAnimationGroup)
-        {
-            if (mbAnimationDataDirty == true)
-            {
-                UpdateAnimation(0.0f);
-            }
-            
-            //render the model with the animation data.
-            if (mActiveAnimationGroup->IsPrepared() == true)
-            {
-                mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_animShadowMap}, ShaderPass::k_ambient, mActiveAnimationGroup);
-            }
-            else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
-            {
-                mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_animShadowMap}, ShaderPass::k_ambient, mFadingAnimationGroup);
-            }
-        }
     }
     //----------------------------------------------------------
     /// Update Animation

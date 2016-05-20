@@ -342,29 +342,6 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void UpdateStoppingState(f32 in_deltaTime);
         //----------------------------------------------------------------
-        /// Called when the component should render all particles.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The render system.
-        /// @param The active camera component.
-        /// @param The current shader pass.
-        //----------------------------------------------------------------
-        void Render(RenderSystem* in_renderSystem, CameraComponent* in_camera, ShaderPass in_shaderPass) override;
-        //----------------------------------------------------------------
-        /// Called when the component should render to the shadow map. 
-        /// Particles will never render to the shadow map so this does 
-        /// nothing.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The render system.
-        /// @param The active camera component.
-        /// @param The material to render static shadows with.
-        /// @param The material to render skinned shadows with.
-        //----------------------------------------------------------------
-        void RenderShadowMap(RenderSystem* in_renderSystem, CameraComponent* in_camera, const MaterialCSPtr& in_staticShadowMat, const MaterialCSPtr& in_animShadowMat) override {};
-        //----------------------------------------------------------------
         /// Called when the entities transform changes. This invalidates
         /// the bounding shape cache.
         ///
@@ -372,7 +349,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void OnEntityTransformChanged();
         //----------------------------------------------------------------
-        /// Called either when this is removed from an entity that is 
+        /// Called either when this is removed from an entity that is
         /// attached to the scene or when an entity this is attached to is 
         /// removed from the scene. This will stop the particle effect 
         /// playing and reset all active particles.

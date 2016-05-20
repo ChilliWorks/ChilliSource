@@ -53,10 +53,8 @@
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-#include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Font/FontProvider.h>
@@ -178,30 +176,6 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    Renderer* Application::GetRenderer() noexcept
-    {
-        return m_renderer;
-    }
-    
-    //------------------------------------------------------------------------------
-    const Renderer* Application::GetRenderer() const noexcept
-    {
-        return m_renderer;
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderSystem* Application::GetRenderSystem() noexcept
-    {
-        return m_renderSystem;
-    }
-    
-    //------------------------------------------------------------------------------
-    const RenderSystem* Application::GetRenderSystem() const noexcept
-    {
-        return m_renderSystem;
-    }
-    
-    //------------------------------------------------------------------------------
     FileSystem* Application::GetFileSystem() noexcept
     {
         return m_fileSystem;
@@ -313,8 +287,6 @@ namespace ChilliSource
         
         //Rendering
         RenderCapabilities* renderCapabilities = CreateSystem<RenderCapabilities>();
-        m_renderSystem = CreateSystem<RenderSystem>(renderCapabilities);
-        m_renderer = CreateSystem<Renderer>(m_renderSystem);
         CreateSystem<CanvasRenderer>();
         CreateSystem<MaterialFactory>(renderCapabilities);
         CreateSystem<MaterialProvider>(renderCapabilities);
@@ -522,7 +494,8 @@ namespace ChilliSource
             (*it)->OnSuspend();
         }
         
-        m_renderSystem->Suspend();
+        //TODO: Re-implementing using new system
+        //m_renderSystem->Suspend();
         
         CS_LOG_VERBOSE("App Finished Suspending...");
     }
@@ -542,7 +515,8 @@ namespace ChilliSource
             (*it)->OnDestroy();
         }
         
-        m_renderSystem->Destroy();
+        //TODO: Re-implementing using new system
+//        m_renderSystem->Destroy();
         m_resourcePool->Destroy();
         
         m_systems.clear();

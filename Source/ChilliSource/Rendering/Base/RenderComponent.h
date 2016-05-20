@@ -117,28 +117,6 @@ namespace ChilliSource
         /// @return Objects transform
         //-----------------------------------------------------
         const Matrix4& GetTransformationMatrix();
-        //-----------------------------------------------------
-        /// Render 
-        ///
-        /// Purely abstract method that render components
-        /// overload in order to draw themselves. 
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param The current shader pass.
-        //-----------------------------------------------------
-        virtual void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass inePass) = 0;
-        //-----------------------------------------------------
-        /// Render Shadow Map
-        ///
-        /// Render the mesh to the shadow map
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param Material to render static shadows with
-        /// @param Material to render skinned shadows with
-        //-----------------------------------------------------
-        virtual void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) = 0;
         //-----------------------------------------------------------
         /// Set Material
         ///

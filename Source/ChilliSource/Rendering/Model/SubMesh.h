@@ -91,24 +91,6 @@ namespace ChilliSource
         //Only the mesh can create this
         SubMesh(const std::string& instrName);
         //-----------------------------------------------------------------
-        /// Prepare
-        ///
-        /// Prepares the sub mesh for use by setting up the mesh buffer, 
-        /// vertex declaration, and capacities. This must be called prior 
-        /// to using the mesh or calling build.
-        ///
-        /// @param The render system.
-        /// @param the vertex declaration.
-        /// @param the size of an index in byte. only 2 and 4 are supported.
-        /// @param the capacity of the vertex buffer in bytes.
-        /// @param the capacity of the index buffer in bytes.
-        /// @param the buffer access flag. defaults to "READ".			
-        /// @param the primitive type. defaults to "TRIS".
-        //-----------------------------------------------------------------
-        void Prepare(RenderSystem* inpRenderSystem, const VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
-                     u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag = BufferAccess::k_read,
-                     PrimitiveType inPrimativeType = PrimitiveType::k_tri);
-        //-----------------------------------------------------------------
         /// Alter Buffer Declaration
         ///
         /// Changes the vertex declaration in the mesh buffer. This should
@@ -139,16 +121,6 @@ namespace ChilliSource
         /// @param the new InverseBindPose
         //-----------------------------------------------------------------
         void SetInverseBindPose(const InverseBindPosePtr& inpInverseBindPose);
-        //-----------------------------------------------------------------
-        /// Render
-        ///
-        /// Render the contents of the mesh buffer and invoke render
-        /// on any sub meshes
-        ///
-        /// @param the render system.
-        /// @param World transform matrix
-        //-----------------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, const Matrix4 &inmatWorld, const MaterialCSPtr& inpMaterial, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
         
         friend class Mesh;
         

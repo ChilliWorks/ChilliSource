@@ -30,7 +30,6 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 #include <CSBackend/Rendering/OpenGL/Base/RenderCapabilities.h>
-#include <CSBackend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
@@ -500,34 +499,35 @@ namespace CSBackend
         //--------------------------------------------------
         void Texture::Destroy()
         {
-            m_width = 0;
-            m_height = 0;
-            
-            m_hasFilterModeChanged = true;
-            m_hasWrapModeChanged = true;
-            m_hasMipMaps = false;
-            
-            m_filterMode = FilterMode::k_bilinear;
-            m_sWrapMode = WrapMode::k_clamp;
-            m_tWrapMode = WrapMode::k_clamp;
-            
-            //If the context has already been destroyed then the cubemap has already been destroyed
-            bool hasContext = static_cast<RenderSystem*>(ChilliSource::Application::Get()->GetRenderSystem())->HasContext();
-            if(hasContext == true && m_texHandle > 0)
-            {
-                Unbind();
-                glDeleteTextures(1, &m_texHandle);
-            }
-            
-            m_texHandle = 0;
-            
-#ifdef CS_TARGETPLATFORM_ANDROID
-            m_restoreTextureDataEnabled = false;
-            m_restorationDataSize = 0;
-            m_restorationData.reset();
-#endif
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying texture.");
+            //TODO: Re-implement in new system
+//            m_width = 0;
+//            m_height = 0;
+//            
+//            m_hasFilterModeChanged = true;
+//            m_hasWrapModeChanged = true;
+//            m_hasMipMaps = false;
+//            
+//            m_filterMode = FilterMode::k_bilinear;
+//            m_sWrapMode = WrapMode::k_clamp;
+//            m_tWrapMode = WrapMode::k_clamp;
+//            
+//            //If the context has already been destroyed then the cubemap has already been destroyed
+//            bool hasContext = static_cast<RenderSystem*>(ChilliSource::Application::Get()->GetRenderSystem())->HasContext();
+//            if(hasContext == true && m_texHandle > 0)
+//            {
+//                Unbind();
+//                glDeleteTextures(1, &m_texHandle);
+//            }
+//            
+//            m_texHandle = 0;
+//            
+//#ifdef CS_TARGETPLATFORM_ANDROID
+//            m_restoreTextureDataEnabled = false;
+//            m_restorationDataSize = 0;
+//            m_restorationData.reset();
+//#endif
+//            
+//            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying texture.");
         }
 		//--------------------------------------------------
 		//--------------------------------------------------

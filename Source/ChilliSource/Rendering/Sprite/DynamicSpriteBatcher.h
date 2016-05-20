@@ -59,7 +59,7 @@ namespace ChilliSource
     class DynamicSpriteBatch
     {
     public:
-        DynamicSpriteBatch(RenderSystem* inpRenderSystem);
+        DynamicSpriteBatch();
         ~DynamicSpriteBatch();
         
         //-------------------------------------------------------
@@ -128,8 +128,6 @@ namespace ChilliSource
         
         u32 mudwCurrentRenderSpriteBatch;
         u32 mudwSpriteCommandCounter;
-        
-        RenderSystem* m_renderSystem;
     };
 }
 

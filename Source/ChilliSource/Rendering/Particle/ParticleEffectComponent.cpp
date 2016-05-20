@@ -634,17 +634,6 @@ namespace ChilliSource
             }
         }
     }
-    //-------------------------------------------------------
-    //-------------------------------------------------------
-    void ParticleEffectComponent::Render(RenderSystem* in_renderSystem, CameraComponent* in_camera, ShaderPass in_shaderPass)
-    {
-        if (m_particleEffect != nullptr && (m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping))
-        {
-            CS_ASSERT(m_drawable != nullptr, "Cannot render without a drawable.");
-
-            m_drawable->Draw(in_camera);
-        }
-    }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
     void ParticleEffectComponent::OnEntityTransformChanged()

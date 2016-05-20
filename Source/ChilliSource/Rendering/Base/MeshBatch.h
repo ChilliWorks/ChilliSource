@@ -79,15 +79,6 @@ namespace ChilliSource
         //------------------------------------------------------
         const MaterialCSPtr& GetMaterial() const;
         //------------------------------------------------------
-        /// Render
-        ///
-        /// Draw the contents of the mesh buffer
-        ///
-        /// @param Active render system
-        /// @param Shader pass
-        //------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, ShaderPass in_shaderPass) const;
-        //------------------------------------------------------
         /// Get Tag
         ///
         /// Associated data usually used to determine layer
@@ -99,15 +90,6 @@ namespace ChilliSource
         /// Associated data usually used to determine layer
         //------------------------------------------------------
         void SetTag(s32 indwValue);
-        //------------------------------------------------------
-        /// Create Static Buffer
-        ///
-        /// Get the render system to build a static mesh
-        /// buffer.
-        ///
-        /// @param Render system
-        //------------------------------------------------------
-        void CreateStaticBuffer(RenderSystem* inpRenderSystem);
         //------------------------------------------------------
         /// Build
         ///

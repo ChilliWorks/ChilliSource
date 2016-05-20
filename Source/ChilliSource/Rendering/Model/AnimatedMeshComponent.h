@@ -402,27 +402,6 @@ namespace ChilliSource
         //----------------------------------------------------
         void OnRemovedFromScene() override;
         //----------------------------------------------------------
-        /// Render
-        ///
-        /// NotifyConnections render on objects mesh
-        ///
-        /// @param Render system visitor
-        /// @param Active camera component
-        /// @param The current shader pass.
-        //----------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
-        //-----------------------------------------------------
-        /// Render Shadow Map
-        ///
-        /// Render the mesh to the shadow map
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param Material to render static shadows with
-        /// @param Material to render skinned shadows with
-        //-----------------------------------------------------
-        void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override;
-        //----------------------------------------------------------
         /// Update Animation
         ///
         /// Updates the animation, rebuilding the animation matrices.

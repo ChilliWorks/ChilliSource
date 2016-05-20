@@ -31,7 +31,6 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/MeshBatch.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
 namespace ChilliSource
@@ -44,54 +43,6 @@ namespace ChilliSource
     MeshBatch::MeshBatch() : mpMeshBuffer(nullptr), mudwVertexCount(0), mudwIndexCount(0), mdwTag(0)
     {
 
-    }
-    //------------------------------------------------------
-    /// Create Static Buffer
-    ///
-    /// Get the render system to build a static mesh
-    /// buffer.
-    ///
-    /// @param Render system
-    //------------------------------------------------------
-    void MeshBatch::CreateStaticBuffer(RenderSystem* inpRenderSystem)
-    {
-        //Sum up the total number of vertices
-        u32 VBufferSize	= 0;
-        u32 IBufferSize	= 0;
-        
-        for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
-        {
-            MeshCSPtr pMesh = it->first->GetMesh();
-            
-            for (u32 i = 0; i < pMesh->GetNumSubMeshes(); i++)
-            {
-                const SubMesh* pSubMesh = pMesh->GetSubMeshAtIndex(i);
-                VBufferSize += pSubMesh->GetInternalMeshBuffer()->GetVertexCapacity();
-                IBufferSize += pSubMesh->GetInternalMeshBuffer()->GetIndexCapacity();
-                
-                //insure this is using the correct vertex declaration.
-                VertexDeclaration declaration = pSubMesh->GetInternalMeshBuffer()->GetVertexDeclaration();
-                if (!(declaration == VertexLayout::kMesh))
-                    CS_LOG_ERROR("Mesh in mesh batch is not using the correct vertex layout!");
-            }
-            
-            mudwVertexCount += pMesh->GetNumVerts();
-            mudwIndexCount += pMesh->GetNumIndices();
-        }
-        
-        BufferDescription desc;
-        desc.eUsageFlag = BufferUsage::k_static;
-        desc.VertexDataCapacity = VBufferSize; 
-        desc.IndexDataCapacity  = IBufferSize;
-        desc.ePrimitiveType = PrimitiveType::k_tri;
-        desc.eAccessFlag = BufferAccess::k_read;
-        desc.VertexLayout = VertexLayout::kMesh;
-        desc.IndexSize = 2;
-        
-        mpMeshBuffer = inpRenderSystem->CreateBuffer(desc);
-        
-        //Fill the mesh buffer with the vertex data
-        Build();
     }
     //------------------------------------------------------
     /// Add Mesh
@@ -226,19 +177,6 @@ namespace ChilliSource
         
         //We can now ditch our local meshes
         mmapMeshCache.clear();
-    }
-    
-    //------------------------------------------------------
-    //------------------------------------------------------
-    void MeshBatch::Render(RenderSystem* inpRenderSystem, ShaderPass in_shaderPass) const
-    {
-        //If we own the mesh buffer then the batcher won't be calling bind for us.
-        mpMeshBuffer->Bind();
-    
-        //Tell the render system to draw the contents of the buffer
-        inpRenderSystem->ApplyMaterial(mpMaterial, in_shaderPass);
-
-        inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Matrix4::k_identity);
     }
     //------------------------------------------------------
     /// Get Material

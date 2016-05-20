@@ -250,29 +250,6 @@ namespace ChilliSource
         AlignmentAnchor GetOriginAlignment() const;
         
     private:
-        //-----------------------------------------------------------
-        /// Render
-        ///
-        /// Visited by the render system so we can add ourself
-        /// to the sprite batch for rendering and flush the
-        /// batch if we have a different material
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param The current shader pass.
-        //-----------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
-        //-----------------------------------------------------
-        /// Render Shadow Map
-        ///
-        /// Render the mesh to the shadow map
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param Material to render static shadows with
-        /// @param Material to render skinned shadows with
-        //-----------------------------------------------------
-        void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override {};
         //----------------------------------------------------
         /// Triggered when the component is attached to
         /// an entity on the scene

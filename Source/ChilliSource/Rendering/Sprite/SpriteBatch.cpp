@@ -30,7 +30,6 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 
 namespace ChilliSource
 {
@@ -44,8 +43,8 @@ namespace ChilliSource
     ///
     /// Default
     //------------------------------------------------------
-    SpriteBatch::SpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage) 
-    : m_renderSystem(inpRenderSystem), mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
+    SpriteBatch::SpriteBatch(u32 inudwCapacity, BufferUsage ineUsage)
+    : mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
     {
         //TODO: Re-add sprite batch init
         //BufferDescription desc;
@@ -167,15 +166,16 @@ namespace ChilliSource
     //------------------------------------------------------
     void SpriteBatch::Render(const MaterialCSPtr& inMaterial, u32 inudwOffset, u32 inudwStride) const
     {
-        if(inudwStride > 0)
-        {
-            mpSpriteBuffer->Bind();
-        
-            //Tell the render system to draw the contents of the buffer
-            m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
-
-            m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Matrix4::k_identity);
-        }
+        //TODO: Re-implement in new system
+//        if(inudwStride > 0)
+//        {
+//            mpSpriteBuffer->Bind();
+//        
+//            //Tell the render system to draw the contents of the buffer
+//            m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
+//
+//            m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Matrix4::k_identity);
+//        }
     }
     //------------------------------------------------------
     /// Render
@@ -186,15 +186,16 @@ namespace ChilliSource
     //------------------------------------------------------
     void SpriteBatch::Render(const MaterialCSPtr& inMaterial) const
     {
-        if(mpSpriteBuffer->GetIndexCount() > 0)
-        {
-            mpSpriteBuffer->Bind();
-            
-            //Tell the render system to draw the contents of the buffer
-            m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
-
-            m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Matrix4::k_identity);
-        }
+        //TODO: Re-implement in new system
+//        if(mpSpriteBuffer->GetIndexCount() > 0)
+//        {
+//            mpSpriteBuffer->Bind();
+//            
+//            //Tell the render system to draw the contents of the buffer
+//            m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
+//
+//            m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Matrix4::k_identity);
+//        }
     }
     //------------------------------------------------------
     /// Get Tag

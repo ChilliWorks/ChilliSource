@@ -121,20 +121,8 @@ namespace ChilliSource
         /// given name.
         //-----------------------------------------------------------------
         s32 GetSubMeshIndexByName(const std::string& in_name) const;
-        //-----------------------------------------------------------------
-        /// Render the contents of any sub meshes
-        ///
-        /// @author S Downie
-        ///
-        /// @param the render system.
-        /// @param World transform matrix
-        /// @param The array of materials.
-        /// @param Shader pass
-        /// @param Skinned animation group
-        //-----------------------------------------------------------------
-        void Render(RenderSystem* in_renderSystem, const Matrix4& in_worldMat, const std::vector<MaterialCSPtr>& in_materials, ShaderPass in_shaderPass, const SkinnedAnimationGroupSPtr& in_animGroup = SkinnedAnimationGroupSPtr()) const;
+  
     private:
-        
         friend class ResourcePool;
         //---------------------------------------------------------------------
         /// Factory method for creating mesh resource instance. Only accessed

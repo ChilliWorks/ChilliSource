@@ -29,7 +29,6 @@
 #include <CSBackend/Rendering/OpenGL/Base/MeshBuffer.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
-#include <CSBackend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
@@ -50,60 +49,61 @@ namespace CSBackend
         : ChilliSource::MeshBuffer(inBuffDesc), mVertexBuffer(0), mIndexBuffer(0), mBufferUsage(0), mBufferAccess(0),
           mpVertexData(nullptr), mpIndexData(nullptr), mpVertexDataBackup(nullptr), mpIndexDataBackup(nullptr), mbMapBufferAvailable(false), mbCacheValid(false)
 		{
-            mbMapBufferAvailable = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>()->IsMapBufferSupported();
-            
-			glGenBuffers(1, &mVertexBuffer);
-            
-            if(mBufferDesc.IndexDataCapacity > 0)
-                glGenBuffers(1, &mIndexBuffer);
-			
-			switch(mBufferDesc.eUsageFlag)
-			{
-				case ChilliSource::BufferUsage::k_dynamic:
-					mBufferUsage = GL_DYNAMIC_DRAW;
-					break;
-				case ChilliSource::BufferUsage::k_static:
-					mBufferUsage = GL_STATIC_DRAW;
-					break;
-			};
-			switch(mBufferDesc.eAccessFlag)
-			{
-				case ChilliSource::BufferAccess::k_write:
-#ifdef CS_OPENGLVERSION_STANDARD
-					mBufferAccess = GL_WRITE_ONLY;
-#elif defined CS_OPENGLVERSION_ES
-					mBufferAccess = GL_WRITE_ONLY_OES;
-#endif
-					break;
-				case ChilliSource::BufferAccess::k_read:
-#ifdef CS_OPENGLVERSION_STANDARD
-					mBufferAccess = GL_WRITE_ONLY;
-#elif defined CS_OPENGLVERSION_ES
-					mBufferAccess = GL_WRITE_ONLY_OES;
-#endif
-					break;
-				case ChilliSource::BufferAccess::k_readWrite:
-				default:
-#ifdef CS_OPENGLVERSION_STANDARD
-					mBufferAccess = GL_WRITE_ONLY;
-#elif defined CS_OPENGLVERSION_ES
-					mBufferAccess = GL_WRITE_ONLY_OES;
-#endif
-					break;
-			};
-			
-			glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
-			glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
-            
-            if(mIndexBuffer != 0)
-            {
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, nullptr, mBufferUsage);
-            }
-            
-            MeshBuffer::pCurrentlyBoundBuffer = this;
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating mesh buffer.");
+            //TODO: Re-implement in new system
+//            mbMapBufferAvailable = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>()->IsMapBufferSupported();
+//            
+//			glGenBuffers(1, &mVertexBuffer);
+//            
+//            if(mBufferDesc.IndexDataCapacity > 0)
+//                glGenBuffers(1, &mIndexBuffer);
+//			
+//			switch(mBufferDesc.eUsageFlag)
+//			{
+//				case ChilliSource::BufferUsage::k_dynamic:
+//					mBufferUsage = GL_DYNAMIC_DRAW;
+//					break;
+//				case ChilliSource::BufferUsage::k_static:
+//					mBufferUsage = GL_STATIC_DRAW;
+//					break;
+//			};
+//			switch(mBufferDesc.eAccessFlag)
+//			{
+//				case ChilliSource::BufferAccess::k_write:
+//#ifdef CS_OPENGLVERSION_STANDARD
+//					mBufferAccess = GL_WRITE_ONLY;
+//#elif defined CS_OPENGLVERSION_ES
+//					mBufferAccess = GL_WRITE_ONLY_OES;
+//#endif
+//					break;
+//				case ChilliSource::BufferAccess::k_read:
+//#ifdef CS_OPENGLVERSION_STANDARD
+//					mBufferAccess = GL_WRITE_ONLY;
+//#elif defined CS_OPENGLVERSION_ES
+//					mBufferAccess = GL_WRITE_ONLY_OES;
+//#endif
+//					break;
+//				case ChilliSource::BufferAccess::k_readWrite:
+//				default:
+//#ifdef CS_OPENGLVERSION_STANDARD
+//					mBufferAccess = GL_WRITE_ONLY;
+//#elif defined CS_OPENGLVERSION_ES
+//					mBufferAccess = GL_WRITE_ONLY_OES;
+//#endif
+//					break;
+//			};
+//			
+//			glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+//			glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
+//            
+//            if(mIndexBuffer != 0)
+//            {
+//                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+//                glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, nullptr, mBufferUsage);
+//            }
+//            
+//            MeshBuffer::pCurrentlyBoundBuffer = this;
+//            
+//            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating mesh buffer.");
 		}
 		//-----------------------------------------------------
 		/// Bind
@@ -112,15 +112,16 @@ namespace CSBackend
 		//-----------------------------------------------------
 		void MeshBuffer::Bind()
 		{
-            if(MeshBuffer::pCurrentlyBoundBuffer != this)
-            {
-                glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
-                
-                MeshBuffer::pCurrentlyBoundBuffer = this;
-            }
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding mesh buffer.");
+            //TODO: Re-implement in new system
+//            if(MeshBuffer::pCurrentlyBoundBuffer != this)
+//            {
+//                glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+//                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+//                
+//                MeshBuffer::pCurrentlyBoundBuffer = this;
+//            }
+//            
+//            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding mesh buffer.");
 		}
 		//-----------------------------------------------------
 		/// Lock Vertex
@@ -134,33 +135,36 @@ namespace CSBackend
 		//-----------------------------------------------------
 		bool MeshBuffer::LockVertex(f32** outppBuffer, u32 inDataOffset, u32 inDataStride)
 		{
-			if(mbMapBufferAvailable)
-			{
-				if (mBufferDesc.eUsageFlag == ChilliSource::BufferUsage::k_dynamic)
-				{
-					glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
-				}
-
-#ifdef CS_OPENGLVERSION_STANDARD
-				(*outppBuffer) = static_cast<f32*>(glMapBuffer(GL_ARRAY_BUFFER, mBufferAccess));
-#elif defined CS_OPENGLVERSION_ES
-				(*outppBuffer) = static_cast<f32*>(glMapBufferOES(GL_ARRAY_BUFFER, mBufferAccess));
-#endif
-				mpVertexData = (*outppBuffer);
-			}
-			else
-			{
-				if(!mpVertexData)
-				{
-					mpVertexData = (f32*)new u8[mBufferDesc.VertexDataCapacity];
-				}
-
-				(*outppBuffer) = mpVertexData;
-			}
+            return false;
             
-            mbCacheValid = false;
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while locking vertex buffer.");
-			return ((*outppBuffer) != nullptr);
+            //TODO: Re-implement in new system
+//			if(mbMapBufferAvailable)
+//			{
+//				if (mBufferDesc.eUsageFlag == ChilliSource::BufferUsage::k_dynamic)
+//				{
+//					glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
+//				}
+//
+//#ifdef CS_OPENGLVERSION_STANDARD
+//				(*outppBuffer) = static_cast<f32*>(glMapBuffer(GL_ARRAY_BUFFER, mBufferAccess));
+//#elif defined CS_OPENGLVERSION_ES
+//				(*outppBuffer) = static_cast<f32*>(glMapBufferOES(GL_ARRAY_BUFFER, mBufferAccess));
+//#endif
+//				mpVertexData = (*outppBuffer);
+//			}
+//			else
+//			{
+//				if(!mpVertexData)
+//				{
+//					mpVertexData = (f32*)new u8[mBufferDesc.VertexDataCapacity];
+//				}
+//
+//				(*outppBuffer) = mpVertexData;
+//			}
+//            
+//            mbCacheValid = false;
+//            CS_ASSERT_NOGLERROR("An OpenGL error occurred while locking vertex buffer.");
+//			return ((*outppBuffer) != nullptr);
 		}
 		//-----------------------------------------------------
 		/// Lock Index
@@ -174,34 +178,36 @@ namespace CSBackend
 		//-----------------------------------------------------
 		bool MeshBuffer::LockIndex(u16** outppBuffer, u32 inDataOffset, u32 inDataStride)
 		{
-            if(!mIndexBuffer)
-            {
-                (*outppBuffer) = nullptr;
-                return false;
-            }
-            
-			if(mbMapBufferAvailable)
-			{
-#ifdef CS_OPENGLVERSION_STANDARD
-				(*outppBuffer) = static_cast<u16*>(glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferAccess));
-#elif defined CS_OPENGLVERSION_ES
-				(*outppBuffer) = static_cast<u16*>(glMapBufferOES(GL_ELEMENT_ARRAY_BUFFER, mBufferAccess));
-#endif
-                mpIndexData = (*outppBuffer);
-			}
-			else
-			{
-				if(!mpIndexData)
-				{
-					mpIndexData = (u16*)new u8[mBufferDesc.IndexDataCapacity];
-				}
-
-				(*outppBuffer) = mpIndexData;
-			}
-            
-            mbCacheValid = false;
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while locking index buffer.");
-            return ((*outppBuffer) != nullptr);
+            return false;
+            //TODO: Re-implement in new system
+//            if(!mIndexBuffer)
+//            {
+//                (*outppBuffer) = nullptr;
+//                return false;
+//            }
+//            
+//			if(mbMapBufferAvailable)
+//			{
+//#ifdef CS_OPENGLVERSION_STANDARD
+//				(*outppBuffer) = static_cast<u16*>(glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferAccess));
+//#elif defined CS_OPENGLVERSION_ES
+//				(*outppBuffer) = static_cast<u16*>(glMapBufferOES(GL_ELEMENT_ARRAY_BUFFER, mBufferAccess));
+//#endif
+//                mpIndexData = (*outppBuffer);
+//			}
+//			else
+//			{
+//				if(!mpIndexData)
+//				{
+//					mpIndexData = (u16*)new u8[mBufferDesc.IndexDataCapacity];
+//				}
+//
+//				(*outppBuffer) = mpIndexData;
+//			}
+//            
+//            mbCacheValid = false;
+//            CS_ASSERT_NOGLERROR("An OpenGL error occurred while locking index buffer.");
+//            return ((*outppBuffer) != nullptr);
 		}
 		//-----------------------------------------------------
 		/// Unlock Vertex
@@ -211,24 +217,26 @@ namespace CSBackend
 		//-----------------------------------------------------
 		bool MeshBuffer::UnlockVertex()
 		{
-			if(mbMapBufferAvailable)
-			{
-				mpVertexData = nullptr;
-                bool success = false;
-#ifdef CS_OPENGLVERSION_STANDARD
-				success = (glUnmapBuffer(GL_ARRAY_BUFFER) == GL_TRUE);
-#elif defined CS_OPENGLVERSION_ES
-				success = (glUnmapBufferOES(GL_ARRAY_BUFFER) == GL_TRUE);
-#endif
-                CS_ASSERT_NOGLERROR("An OpenGL error occurred while unlocking vertex buffer.");
-                return success;
-			}
-			else
-			{
-				glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, mpVertexData, mBufferUsage);
-                CS_ASSERT_NOGLERROR("An OpenGL error occurred while unlocking vertex buffer.");
-				return true;
-			}
+            return false;
+            //TODO: Re-implement in new system
+//			if(mbMapBufferAvailable)
+//			{
+//				mpVertexData = nullptr;
+//                bool success = false;
+//#ifdef CS_OPENGLVERSION_STANDARD
+//				success = (glUnmapBuffer(GL_ARRAY_BUFFER) == GL_TRUE);
+//#elif defined CS_OPENGLVERSION_ES
+//				success = (glUnmapBufferOES(GL_ARRAY_BUFFER) == GL_TRUE);
+//#endif
+//                CS_ASSERT_NOGLERROR("An OpenGL error occurred while unlocking vertex buffer.");
+//                return success;
+//			}
+//			else
+//			{
+//				glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, mpVertexData, mBufferUsage);
+//                CS_ASSERT_NOGLERROR("An OpenGL error occurred while unlocking vertex buffer.");
+//				return true;
+//			}
 		}
 		//-----------------------------------------------------
 		/// Unlock Index
@@ -238,27 +246,29 @@ namespace CSBackend
 		//-----------------------------------------------------
 		bool MeshBuffer::UnlockIndex()
 		{
-            if(!mIndexBuffer)
-                return false;
-            
-			if(mbMapBufferAvailable)
-			{
-				mpIndexData = nullptr;
-                bool success = false;
-#ifdef CS_OPENGLVERSION_STANDARD
-				success = (glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
-#elif defined CS_OPENGLVERSION_ES
-				success = (glUnmapBufferOES(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
-#endif
-                CS_ASSERT_NOGLERROR("An OpenGL error occurred while unlocking vertex buffer.");
-                return success;
-			}
-			else
-			{
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, mpIndexData, mBufferUsage);
-                CS_ASSERT_NOGLERROR("An OpenGL error occurred while unlocking vertex buffer.");
-				return true;
-			}
+            return false;
+            //TODO: Re-implement in new system
+//            if(!mIndexBuffer)
+//                return false;
+//            
+//			if(mbMapBufferAvailable)
+//			{
+//				mpIndexData = nullptr;
+//                bool success = false;
+//#ifdef CS_OPENGLVERSION_STANDARD
+//				success = (glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
+//#elif defined CS_OPENGLVERSION_ES
+//				success = (glUnmapBufferOES(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
+//#endif
+//                CS_ASSERT_NOGLERROR("An OpenGL error occurred while unlocking vertex buffer.");
+//                return success;
+//			}
+//			else
+//			{
+//				glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, mpIndexData, mBufferUsage);
+//                CS_ASSERT_NOGLERROR("An OpenGL error occurred while unlocking vertex buffer.");
+//				return true;
+//			}
 		}
 		//-----------------------------------------------------
 		/// Backup
@@ -268,38 +278,39 @@ namespace CSBackend
 		//-----------------------------------------------------
 		void MeshBuffer::Backup()
 		{
-			if(!mpIndexDataBackup)
-			{
-				mpIndexDataBackup = (u16*)new u8[mBufferDesc.IndexDataCapacity];
-			}
-
-			//Fill the backup
-			Bind();
-
-            
-			if(!mpVertexDataBackup)
-			{
-				mpVertexDataBackup = (f32*)new u8[mBufferDesc.VertexDataCapacity];
-			}
-			f32* pVBuffer = nullptr;
-			LockVertex(&pVBuffer, 0, 0);
-			memcpy(mpVertexDataBackup, pVBuffer, GetVertexCapacity());
-			UnlockVertex();
-
-            if(mIndexBuffer != 0)
-            {
-                if(!mpIndexDataBackup)
-                {
-                    mpIndexDataBackup = (u16*)new u8[mBufferDesc.IndexDataCapacity];
-                }
-                u16* pIBuffer = nullptr;
-                LockIndex(&pIBuffer, 0, 0);
-                memcpy(mpIndexDataBackup, pIBuffer, GetIndexCapacity());
-                UnlockIndex();
-            }
-            
-            mVertexBuffer = 0;
-			mIndexBuffer = 0;
+            //TODO: Re-implement in new system
+//			if(!mpIndexDataBackup)
+//			{
+//				mpIndexDataBackup = (u16*)new u8[mBufferDesc.IndexDataCapacity];
+//			}
+//
+//			//Fill the backup
+//			Bind();
+//
+//            
+//			if(!mpVertexDataBackup)
+//			{
+//				mpVertexDataBackup = (f32*)new u8[mBufferDesc.VertexDataCapacity];
+//			}
+//			f32* pVBuffer = nullptr;
+//			LockVertex(&pVBuffer, 0, 0);
+//			memcpy(mpVertexDataBackup, pVBuffer, GetVertexCapacity());
+//			UnlockVertex();
+//
+//            if(mIndexBuffer != 0)
+//            {
+//                if(!mpIndexDataBackup)
+//                {
+//                    mpIndexDataBackup = (u16*)new u8[mBufferDesc.IndexDataCapacity];
+//                }
+//                u16* pIBuffer = nullptr;
+//                LockIndex(&pIBuffer, 0, 0);
+//                memcpy(mpIndexDataBackup, pIBuffer, GetIndexCapacity());
+//                UnlockIndex();
+//            }
+//            
+//            mVertexBuffer = 0;
+//			mIndexBuffer = 0;
 		}
 		//-----------------------------------------------------
 		/// Restore
@@ -309,45 +320,46 @@ namespace CSBackend
 		//-----------------------------------------------------
 		void MeshBuffer::Restore()
 		{
-            //Force bind as we may have been bound from before context destruction
-            MeshBuffer::pCurrentlyBoundBuffer = nullptr;
-            
-            if(mpVertexDataBackup == nullptr)
-            {
-                return;
-            }
-            
-            //Check for backups
-            if(mpVertexDataBackup)
-            {
-               glGenBuffers(1, &mVertexBuffer); 
-            }
-            if(mpIndexDataBackup)
-            {
-                glGenBuffers(1, &mIndexBuffer);
-            }
-
-            Bind();
-            
-            glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
-			f32* pVBuffer = nullptr;
-			LockVertex(&pVBuffer, 0, 0);
-			memcpy(pVBuffer, mpVertexDataBackup, GetVertexCapacity());
-			UnlockVertex();
-
-            if(mIndexBuffer != 0)
-            {
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, nullptr, mBufferUsage);
-                u16* pIBuffer = nullptr;
-                LockIndex(&pIBuffer, 0, 0);
-                memcpy(pIBuffer, mpIndexDataBackup, GetIndexCapacity());
-                UnlockIndex();
-            }
-
-            CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
-			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while restoring mesh buffer.");
+            //TODO: Re-implement in new system
+//            //Force bind as we may have been bound from before context destruction
+//            MeshBuffer::pCurrentlyBoundBuffer = nullptr;
+//            
+//            if(mpVertexDataBackup == nullptr)
+//            {
+//                return;
+//            }
+//            
+//            //Check for backups
+//            if(mpVertexDataBackup)
+//            {
+//               glGenBuffers(1, &mVertexBuffer); 
+//            }
+//            if(mpIndexDataBackup)
+//            {
+//                glGenBuffers(1, &mIndexBuffer);
+//            }
+//
+//            Bind();
+//            
+//            glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
+//			f32* pVBuffer = nullptr;
+//			LockVertex(&pVBuffer, 0, 0);
+//			memcpy(pVBuffer, mpVertexDataBackup, GetVertexCapacity());
+//			UnlockVertex();
+//
+//            if(mIndexBuffer != 0)
+//            {
+//                glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, nullptr, mBufferUsage);
+//                u16* pIBuffer = nullptr;
+//                LockIndex(&pIBuffer, 0, 0);
+//                memcpy(pIBuffer, mpIndexDataBackup, GetIndexCapacity());
+//                UnlockIndex();
+//            }
+//
+//            CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
+//			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
+//            
+//            CS_ASSERT_NOGLERROR("An OpenGL error occurred while restoring mesh buffer.");
 		}
 		//-----------------------------------------------------
 		/// Set Owning Render System
@@ -390,31 +402,32 @@ namespace CSBackend
 		//-----------------------------------------------------
 		MeshBuffer::~MeshBuffer()
 		{
-			if(mpRenderSystem)
-			{
-				mpRenderSystem->RemoveBuffer(this);
-			}
-
-            if(MeshBuffer::pCurrentlyBoundBuffer == this)
-            {
-                MeshBuffer::pCurrentlyBoundBuffer = nullptr;
-            }
-            
-			glDeleteBuffers(1, &mVertexBuffer);
-            if(mIndexBuffer != 0)
-            {
-                glDeleteBuffers(1, &mIndexBuffer);
-            }
-			
-			mVertexBuffer = 0;
-			mIndexBuffer  = 0;
-
-			CS_SAFEDELETE_ARRAY(mpVertexData);
-			CS_SAFEDELETE_ARRAY(mpIndexData);
-			CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
-			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
-            
-            //CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying mesh buffer.");
+            //TODO: Re-implement in new system
+//			if(mpRenderSystem)
+//			{
+//				mpRenderSystem->RemoveBuffer(this);
+//			}
+//
+//            if(MeshBuffer::pCurrentlyBoundBuffer == this)
+//            {
+//                MeshBuffer::pCurrentlyBoundBuffer = nullptr;
+//            }
+//            
+//			glDeleteBuffers(1, &mVertexBuffer);
+//            if(mIndexBuffer != 0)
+//            {
+//                glDeleteBuffers(1, &mIndexBuffer);
+//            }
+//			
+//			mVertexBuffer = 0;
+//			mIndexBuffer  = 0;
+//
+//			CS_SAFEDELETE_ARRAY(mpVertexData);
+//			CS_SAFEDELETE_ARRAY(mpIndexData);
+//			CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
+//			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
+//            
+//            //CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying mesh buffer.");
 		}
 	}
 }

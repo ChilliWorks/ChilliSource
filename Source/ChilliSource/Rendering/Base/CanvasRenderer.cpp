@@ -707,8 +707,9 @@ namespace ChilliSource
         m_resourcePool = Application::Get()->GetResourcePool();
         CS_ASSERT(m_resourcePool != nullptr, "Must have a resource pool");
 
-        RenderSystem* renderSystem = Application::Get()->GetRenderSystem();
-        CS_ASSERT(renderSystem != nullptr, "Canvas renderer cannot find render system");
+        //TODO: Re-implement in new system
+//        RenderSystem* renderSystem = Application::Get()->GetRenderSystem();
+//        CS_ASSERT(renderSystem != nullptr, "Canvas renderer cannot find render system");
 
         m_screen = Application::Get()->GetSystem<Screen>();
         CS_ASSERT(m_screen != nullptr, "Canvas renderer cannot find screen system");
@@ -717,7 +718,9 @@ namespace ChilliSource
         CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
         
         m_materialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory));
-        m_overlayBatcher = DynamicSpriteBatchUPtr(new DynamicSpriteBatch(renderSystem));
+        
+        //TODO: Re-implement in new system
+//        m_overlayBatcher = DynamicSpriteBatchUPtr(new DynamicSpriteBatch(renderSystem));
     }
     //----------------------------------------------------------
     //----------------------------------------------------------

@@ -79,7 +79,7 @@ namespace ChilliSource
             MaterialCSPtr pMaterial;
         };
         
-        SpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage);
+        SpriteBatch(u32 inudwCapacity, BufferUsage ineUsage);
         ~SpriteBatch();
         //------------------------------------------------------
         /// Build
@@ -156,8 +156,6 @@ namespace ChilliSource
         
         //---Render Buffer
         MeshBuffer* mpSpriteBuffer;
-        
-        RenderSystem* m_renderSystem;
     };
 }
 
