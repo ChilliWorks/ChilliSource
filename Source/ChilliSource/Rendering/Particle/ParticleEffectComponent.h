@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawable.h>
 
 #include <atomic>
@@ -46,7 +46,7 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //-----------------------------------------------------------------------
-    class ParticleEffectComponent final : public RenderComponent
+    class ParticleEffectComponent final : public VolumeComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleEffectComponent);
@@ -162,6 +162,18 @@ namespace ChilliSource
         /// @param The world space bounding sphere of the effect.
         //----------------------------------------------------------------
         const Sphere& GetBoundingSphere() override;
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @return Whether or not to render
+        //----------------------------------------------------
+        bool IsVisible() const override { return m_isVisible; }
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @param in_isVisible - Whether or not to render
+        //----------------------------------------------------
+        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //----------------------------------------------------------------
         /// Sets a new particle effect for the component to play. If the
         /// component was playing, it will start playing the new effect
@@ -342,29 +354,6 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void UpdateStoppingState(f32 in_deltaTime);
         //----------------------------------------------------------------
-        /// Called when the component should render all particles.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The render system.
-        /// @param The active camera component.
-        /// @param The current shader pass.
-        //----------------------------------------------------------------
-        void Render(RenderSystem* in_renderSystem, CameraComponent* in_camera, ShaderPass in_shaderPass) override;
-        //----------------------------------------------------------------
-        /// Called when the component should render to the shadow map. 
-        /// Particles will never render to the shadow map so this does 
-        /// nothing.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The render system.
-        /// @param The active camera component.
-        /// @param The material to render static shadows with.
-        /// @param The material to render skinned shadows with.
-        //----------------------------------------------------------------
-        void RenderShadowMap(RenderSystem* in_renderSystem, CameraComponent* in_camera, const MaterialCSPtr& in_staticShadowMat, const MaterialCSPtr& in_animShadowMat) override {};
-        //----------------------------------------------------------------
         /// Called when the entities transform changes. This invalidates
         /// the bounding shape cache.
         ///
@@ -372,7 +361,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void OnEntityTransformChanged();
         //----------------------------------------------------------------
-        /// Called either when this is removed from an entity that is 
+        /// Called either when this is removed from an entity that is
         /// attached to the scene or when an entity this is attached to is 
         /// removed from the scene. This will stop the particle effect 
         /// playing and reset all active particles.
@@ -406,6 +395,12 @@ namespace ChilliSource
         Sphere m_localBoundingSphere;
         bool m_invalidateBoundingShapeCache = true;
         EventConnectionUPtr m_entityTransformConnection;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        MaterialCSPtr mpMaterial;
+        bool m_isVisible = true;
     };
 }
 

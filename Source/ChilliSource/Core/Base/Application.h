@@ -214,34 +214,6 @@ namespace ChilliSource
         /// This is thread-safe as long as it is called between the init and
         /// destroy application lifecycle events, inclusive.
         ///
-        /// @return A pointer to the renderer.
-        ///
-        Renderer* GetRenderer() noexcept;
-        
-        /// This is thread-safe as long as it is called between the init and
-        /// destroy application lifecycle events, inclusive.
-        ///
-        /// @return A const pointer to the renderer.
-        ///
-        const Renderer* GetRenderer() const noexcept;
-
-        /// This is thread-safe as long as it is called between the init and
-        /// destroy application lifecycle events, inclusive.
-        ///
-        /// @return A pointer to the platform specific render system
-        ///
-        RenderSystem* GetRenderSystem() noexcept;
-
-        /// This is thread-safe as long as it is called between the init and
-        /// destroy application lifecycle events, inclusive.
-        ///
-        /// @return A const pointer to the platform specific render system
-        ///
-        const RenderSystem* GetRenderSystem() const noexcept;
-
-        /// This is thread-safe as long as it is called between the init and
-        /// destroy application lifecycle events, inclusive.
-        ///
         /// @return A pointer to the file system.
         ///
         FileSystem* GetFileSystem() noexcept;
@@ -459,8 +431,6 @@ namespace ChilliSource
         StateManager* m_stateManager = nullptr;
         TaskScheduler* m_taskScheduler = nullptr;
         Screen* m_screen = nullptr;
-        Renderer* m_renderer = nullptr;
-        RenderSystem* m_renderSystem = nullptr;
         PlatformSystem* m_platformSystem = nullptr;
         FileSystem* m_fileSystem = nullptr;
         TaggedFilePathResolver* m_taggedPathResolver = nullptr;

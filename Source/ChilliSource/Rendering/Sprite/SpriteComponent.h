@@ -32,8 +32,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
@@ -49,7 +50,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class SpriteComponent final : public RenderComponent
+    class SpriteComponent final : public VolumeComponent
     {
     public: 
         
@@ -111,6 +112,18 @@ namespace ChilliSource
         /// @return world space bounding sphere
         //----------------------------------------------------
         const Sphere& GetBoundingSphere() override;
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @return Whether or not to render
+        //----------------------------------------------------
+        bool IsVisible() const override { return m_isVisible; }
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @param in_isVisible - Whether or not to render
+        //----------------------------------------------------
+        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -139,6 +152,20 @@ namespace ChilliSource
         /// @return Size after the size policy has been applied
         //-----------------------------------------------------------
         Vector2 GetSize() const;
+        //-----------------------------------------------------------
+        /// Sets the material
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_material - The material
+        //-----------------------------------------------------------
+        void SetMaterial(const MaterialCSPtr& in_material);
+        //-----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The material
+        //-----------------------------------------------------------
+        const MaterialCSPtr& GetMaterial() const;
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -250,29 +277,6 @@ namespace ChilliSource
         AlignmentAnchor GetOriginAlignment() const;
         
     private:
-        //-----------------------------------------------------------
-        /// Render
-        ///
-        /// Visited by the render system so we can add ourself
-        /// to the sprite batch for rendering and flush the
-        /// batch if we have a different material
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param The current shader pass.
-        //-----------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
-        //-----------------------------------------------------
-        /// Render Shadow Map
-        ///
-        /// Render the mesh to the shadow map
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param Material to render static shadows with
-        /// @param Material to render skinned shadows with
-        //-----------------------------------------------------
-        void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override {};
         //----------------------------------------------------
         /// Triggered when the component is attached to
         /// an entity on the scene
@@ -369,6 +373,12 @@ namespace ChilliSource
         bool m_isBSValid = false;
         bool m_isAABBValid = false;
         bool m_isOOBBValid = false;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        MaterialCSPtr mpMaterial;
+        bool m_isVisible = true;
     };
 }
 

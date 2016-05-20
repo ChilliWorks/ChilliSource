@@ -30,13 +30,27 @@
 #define _CHILLISOURCE_RENDERING_MESHDESCRIPTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
 {
+    enum class PrimitiveType	{k_tri, k_triStrip, k_line};
+    enum class BufferUsage	{k_static, k_dynamic};
+    enum class BufferAccess	{k_read, k_write, k_readWrite, k_writeDiscard, k_writeNoOverwrite};
+    
+    struct BufferDescription
+    {
+        u32 VertexDataCapacity;
+        u32 IndexDataCapacity;
+        PrimitiveType ePrimitiveType;
+        BufferAccess eAccessFlag;
+        BufferUsage eUsageFlag;
+        VertexDeclaration VertexLayout;
+        u32 IndexSize;
+    };
+    
     //-------------------------------------------------------------------------
     /// Describes the features used in this mesh.
     //-------------------------------------------------------------------------

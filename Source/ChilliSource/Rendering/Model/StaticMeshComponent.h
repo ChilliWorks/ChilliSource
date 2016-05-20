@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_RENDERING_STATIC_MESH_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 
 namespace ChilliSource
@@ -41,7 +41,7 @@ namespace ChilliSource
     /// A static mesh component. This defines a 3D mesh that can
     /// be manipulated, textured but not animated.
     //===============================================================
-    class StaticMeshComponent : public RenderComponent
+    class StaticMeshComponent : public VolumeComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(StaticMeshComponent);
@@ -82,14 +82,18 @@ namespace ChilliSource
         /// @return bounding sphere
         //----------------------------------------------------
         const Sphere& GetBoundingSphere() override;
-        //-----------------------------------------------------------
-        /// Is Transparent
+        //----------------------------------------------------
+        /// Is Visible
         ///
-        /// Returns whether or not this component has any transparency
+        /// @return Whether or not to render
+        //----------------------------------------------------
+        bool IsVisible() const override { return m_isVisible; }
+        //----------------------------------------------------
+        /// Is Visible
         ///
-        /// @return whether or not this has transparency
-        //-----------------------------------------------------------
-        bool IsTransparent() override;
+        /// @param in_isVisible - Whether or not to render
+        //----------------------------------------------------
+        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //-----------------------------------------------------------
         /// Set Material
         ///
@@ -98,7 +102,7 @@ namespace ChilliSource
         ///
         /// @param Handle to material
         //-----------------------------------------------------------
-        void SetMaterial(const MaterialCSPtr& inpMaterial) override;
+        void SetMaterial(const MaterialCSPtr& inpMaterial);
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         ///
@@ -156,29 +160,20 @@ namespace ChilliSource
         /// @return The components internal mesh
         //----------------------------------------------------------
         const MeshCSPtr& GetMesh() const;
+        //-----------------------------------------------------
+        /// Set Shadow Casting Enabled
+        ///
+        /// @param Whether the render component casts shadows
+        //-----------------------------------------------------
+        void SetShadowCastingEnabled(bool inbEnabled);
+        //-----------------------------------------------------
+        /// Is Shadow Casting Enabled
+        ///
+        /// @return Whether the render component casts shadows
+        //-----------------------------------------------------
+        bool IsShadowCastingEnabled() const;
         
     private:
-        //----------------------------------------------------------
-        /// Render
-        ///
-        /// NotifyConnections render on objects mesh
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param The current shader pass.
-        //----------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
-        //-----------------------------------------------------
-        /// Render Shadow Map
-        ///
-        /// Render the mesh to the shadow map
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param Material to render static shadows with
-        /// @param Material to render skinned shadows with
-        //-----------------------------------------------------
-        void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override;
         //----------------------------------------------------
         /// Triggered when the component is attached to
         /// an entity on the scene
@@ -211,6 +206,12 @@ namespace ChilliSource
         bool m_isBSValid;
         bool m_isAABBValid;
         bool m_isOOBBValid;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        bool m_shadowCastingEnabled = true;
+        bool m_isVisible = true;
     };
 }
 

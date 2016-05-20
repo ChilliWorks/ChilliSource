@@ -44,16 +44,12 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ViewportCullPredicate);
     CS_FORWARDDECLARE_CLASS(FrustumCullPredicate);
     CS_FORWARDDECLARE_CLASS(MeshBatch);
-    CS_FORWARDDECLARE_CLASS(MeshBuffer);
     CS_FORWARDDECLARE_CLASS(RenderCapabilities);
-    CS_FORWARDDECLARE_CLASS(RenderComponent);
     CS_FORWARDDECLARE_CLASS(RenderComponentFactory);
-    CS_FORWARDDECLARE_CLASS(Renderer);
     CS_FORWARDDECLARE_CLASS(RendererSortPredicate);
     CS_FORWARDDECLARE_CLASS(NullSortPredicate);
     CS_FORWARDDECLARE_CLASS(BackToFrontSortPredicate);
     CS_FORWARDDECLARE_CLASS(MaterialSortPredicate);
-    CS_FORWARDDECLARE_CLASS(RenderSystem);
     CS_FORWARDDECLARE_CLASS(RenderTarget);
     CS_FORWARDDECLARE_CLASS(VertexDeclaration);
     enum class AlignmentAnchor;
@@ -106,7 +102,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_STRUCT(SkeletonNode);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimationGroup);
     CS_FORWARDDECLARE_CLASS(StaticMeshComponent);
-    CS_FORWARDDECLARE_CLASS(SubMesh);
     //------------------------------------------------------------
     /// Particle
     //------------------------------------------------------------

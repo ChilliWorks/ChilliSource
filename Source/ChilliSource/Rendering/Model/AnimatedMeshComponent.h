@@ -30,11 +30,11 @@
 #define _CHILLISOURCE_RENDERING_ANIMATED_MESH_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
-#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
 
 #include <functional>
 
@@ -65,7 +65,7 @@ namespace ChilliSource
     /// An animated mesh component. This defines a 3D mesh that can
     /// be manipulated, textured and animated.
     //===============================================================
-    class AnimatedMeshComponent : public RenderComponent
+    class AnimatedMeshComponent : public VolumeComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(AnimatedMeshComponent);
@@ -107,14 +107,18 @@ namespace ChilliSource
         /// @return bounding sphere
         //----------------------------------------------------
         const Sphere& GetBoundingSphere() override;
-        //-----------------------------------------------------------
-        /// Is Transparent
+        //----------------------------------------------------
+        /// Is Visible
         ///
-        /// Returns whether or not this component has any transparency
+        /// @return Whether or not to render
+        //----------------------------------------------------
+        bool IsVisible() const override { return m_isVisible; }
+        //----------------------------------------------------
+        /// Is Visible
         ///
-        /// @return whether or not this has transparency
-        //-----------------------------------------------------------
-        bool IsTransparent() override;
+        /// @param in_isVisible - Whether or not to render
+        //----------------------------------------------------
+        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //-----------------------------------------------------------
         /// Set Material
         ///
@@ -123,7 +127,7 @@ namespace ChilliSource
         ///
         /// @param Handle to material
         //-----------------------------------------------------------
-        void SetMaterial(const MaterialCSPtr& inpMaterial) override;
+        void SetMaterial(const MaterialCSPtr& inpMaterial);
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         ///
@@ -377,51 +381,20 @@ namespace ChilliSource
         /// @return whether or not the animation has finished.
         //----------------------------------------------------------
         bool HasFinished() const;
-        //----------------------------------------------------------
-        /// Update
+        //-----------------------------------------------------
+        /// Set Shadow Casting Enabled
         ///
-        /// Updates the animation.
+        /// @param Whether the render component casts shadows
+        //-----------------------------------------------------
+        void SetShadowCastingEnabled(bool inbEnabled);
+        //-----------------------------------------------------
+        /// Is Shadow Casting Enabled
         ///
-        /// @param The delta time.
-        //----------------------------------------------------------
-        void OnUpdate(f32 infDeltaTime) override;
+        /// @return Whether the render component casts shadows
+        //-----------------------------------------------------
+        bool IsShadowCastingEnabled() const;
         
     private:
-        //----------------------------------------------------
-        /// On Added To Entity
-        ///
-        /// Triggered when the component is attached to
-        /// an entity on the scene
-        //----------------------------------------------------
-        void OnAddedToScene() override;
-        //----------------------------------------------------
-        /// On Removed From Entity
-        ///
-        /// Triggered when the component is detached from
-        /// an entity on the scene
-        //----------------------------------------------------
-        void OnRemovedFromScene() override;
-        //----------------------------------------------------------
-        /// Render
-        ///
-        /// NotifyConnections render on objects mesh
-        ///
-        /// @param Render system visitor
-        /// @param Active camera component
-        /// @param The current shader pass.
-        //----------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
-        //-----------------------------------------------------
-        /// Render Shadow Map
-        ///
-        /// Render the mesh to the shadow map
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param Material to render static shadows with
-        /// @param Material to render skinned shadows with
-        //-----------------------------------------------------
-        void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override;
         //----------------------------------------------------------
         /// Update Animation
         ///
@@ -452,6 +425,26 @@ namespace ChilliSource
         /// to start a new animation.
         //----------------------------------------------------------
         void Reset();
+        //----------------------------------------------------------
+        /// Triggered when the component is added to the scene.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------
+        void OnAddedToScene() override;
+        //----------------------------------------------------------
+        /// Update
+        ///
+        /// Updates the animation.
+        ///
+        /// @param The delta time.
+        //----------------------------------------------------------
+        void OnUpdate(f32 infDeltaTime) override;
+        //----------------------------------------------------------
+        /// Triggered when the component is removed to the scene.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------
+        void OnRemovedFromScene() override;
         
     private:
         typedef std::vector<std::pair<EntityWPtr, s32> > AttachedEntityList;
@@ -475,6 +468,12 @@ namespace ChilliSource
         AnimationCompletionEvent mAnimationCompletionEvent;
         AnimationLoopedEvent mAnimationLoopedEvent;
         AnimationChangedEvent mAnimationChangedEvent;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        bool m_shadowCastingEnabled = true;
+        bool m_isVisible = true;
     };
 }
 

@@ -33,7 +33,6 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
@@ -163,9 +162,7 @@ namespace ChilliSource
     //----------------------------------------------------------
     bool SpriteComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return  (in_interfaceId == SpriteComponent::InterfaceID) ||
-                (in_interfaceId == RenderComponent::InterfaceID) ||
-                (in_interfaceId == VolumeComponent::InterfaceID);
+        return  (in_interfaceId == VolumeComponent::InterfaceID || in_interfaceId == SpriteComponent::InterfaceID);
     }
     //----------------------------------------------------
     //----------------------------------------------------
@@ -290,6 +287,18 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
+    void SpriteComponent::SetMaterial(const MaterialCSPtr& in_material)
+    {
+        mpMaterial = in_material;
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    const MaterialCSPtr& SpriteComponent::GetMaterial() const
+    {
+        return mpMaterial;
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
     void SpriteComponent::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
     {
         OnTransformChanged();
@@ -389,33 +398,6 @@ namespace ChilliSource
     AlignmentAnchor SpriteComponent::GetOriginAlignment() const
     {
         return m_originAlignment;
-    }
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    void SpriteComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
-    {
-        if (ineShaderPass == ShaderPass::k_ambient)
-        {
-            if(IsTextureSizeCacheValid() == false)
-            {
-                OnTransformChanged();
-                SetTextureSizeCacheValid();
-            }
-            
-            if(m_vertexPositionsValid == false)
-            {
-                //We have been transformed so we need to recalculate our vertices
-                UpdateVertexPositions();
-                m_vertexPositionsValid = true;
-            }
-            
-            m_spriteData.pMaterial = mpMaterial;
-            
-            //Add us to the render systems dynamic batch
-            //If we force a batch flush here then the previous sprites
-            //will be rendered.
-            inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(m_spriteData);
-        }
     }
     //------------------------------------------------------------
     //------------------------------------------------------------

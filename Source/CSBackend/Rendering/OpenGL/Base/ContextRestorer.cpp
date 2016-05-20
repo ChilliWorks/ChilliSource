@@ -30,7 +30,6 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/ContextRestorer.h>
 
-#include <CSBackend/Rendering/OpenGL/Base/MeshBuffer.h>
 #include <CSBackend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <CSBackend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -47,15 +46,16 @@ namespace CSBackend
         //-----------------------------------------------------
         void ContextRestorer::Backup()
         {
-            if(m_hasContextBeenBackedUp == false)
-            {
-                for(auto& buffer : m_meshBuffers)
-                {
-                    buffer->Backup();
-                }
-                
-                m_hasContextBeenBackedUp = true;
-            }
+            //TODO: Re-implement in new system
+//            if(m_hasContextBeenBackedUp == false)
+//            {
+//                for(auto& buffer : m_meshBuffers)
+//                {
+//                    buffer->Backup();
+//                }
+//                
+//                m_hasContextBeenBackedUp = true;
+//            }
         }
         //-----------------------------------------------------
         /// Rebuild the shaders and textures from file. Re-upload
@@ -63,70 +63,51 @@ namespace CSBackend
         //-----------------------------------------------------
         void ContextRestorer::Restore()
         {
-            if(m_hasContextBeenBackedUp == true)
-            {
-                ChilliSource::ResourcePool* resourcePool = ChilliSource::Application::Get()->GetResourcePool();
-                
-                //---Shaders
-                auto allShaders = resourcePool->GetAllResources<ChilliSource::Shader>();
-                for (const auto& shader : allShaders)
-                {
-                	CS_ASSERT(shader->GetStorageLocation() != ChilliSource::StorageLocation::k_none, "Cannot restore Shader because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
-                }
-                resourcePool->RefreshResources<ChilliSource::Shader>();
-                
-                //---Textures
-                auto allTextures = resourcePool->GetAllResources<ChilliSource::Texture>();
-                for (const auto& texture : allTextures)
-				{
-                    if (texture->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
-                    {
-                        Texture* glTexture = static_cast<Texture*>(const_cast<ChilliSource::Texture*>(texture.get()));
-                        glTexture->Restore();
-                    }
-                }
-                resourcePool->RefreshResources<ChilliSource::Texture>();
-                
-                //---Cubemaps
-                auto allCubemaps = resourcePool->GetAllResources<ChilliSource::Cubemap>();
-                for (const auto& cubemap : allCubemaps)
-				{
-					if (cubemap->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
-                    {
-                        Cubemap* glCubemap = static_cast<Cubemap*>(const_cast<ChilliSource::Cubemap*>(cubemap.get()));
-                        glCubemap->Restore();
-                    }
-                }
-                resourcePool->RefreshResources<ChilliSource::Cubemap>();
-                
-                //---Meshes
-                for(auto& buffer : m_meshBuffers)
-                {
-                    buffer->Restore();
-                }
-                
-                m_hasContextBeenBackedUp = false;
-            }
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        void ContextRestorer::AddMeshBuffer(MeshBuffer* in_meshBuffer)
-        {
-            m_meshBuffers.push_back(in_meshBuffer);
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        void ContextRestorer::RemoveMeshBuffer(MeshBuffer* in_meshBuffer)
-        {
-            for(u32 i=0; i<m_meshBuffers.size(); ++i)
-            {
-                if(m_meshBuffers[i] == in_meshBuffer)
-                {
-                    m_meshBuffers[i] = m_meshBuffers.back();
-                    m_meshBuffers.pop_back();
-                    return;
-                }
-            }
+            //TODO: Re-implement in new system
+//            if(m_hasContextBeenBackedUp == true)
+//            {
+//                ChilliSource::ResourcePool* resourcePool = ChilliSource::Application::Get()->GetResourcePool();
+//                
+//                //---Shaders
+//                auto allShaders = resourcePool->GetAllResources<ChilliSource::Shader>();
+//                for (const auto& shader : allShaders)
+//                {
+//                	CS_ASSERT(shader->GetStorageLocation() != ChilliSource::StorageLocation::k_none, "Cannot restore Shader because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
+//                }
+//                resourcePool->RefreshResources<ChilliSource::Shader>();
+//                
+//                //---Textures
+//                auto allTextures = resourcePool->GetAllResources<ChilliSource::Texture>();
+//                for (const auto& texture : allTextures)
+//				{
+//                    if (texture->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
+//                    {
+//                        Texture* glTexture = static_cast<Texture*>(const_cast<ChilliSource::Texture*>(texture.get()));
+//                        glTexture->Restore();
+//                    }
+//                }
+//                resourcePool->RefreshResources<ChilliSource::Texture>();
+//                
+//                //---Cubemaps
+//                auto allCubemaps = resourcePool->GetAllResources<ChilliSource::Cubemap>();
+//                for (const auto& cubemap : allCubemaps)
+//				{
+//					if (cubemap->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
+//                    {
+//                        Cubemap* glCubemap = static_cast<Cubemap*>(const_cast<ChilliSource::Cubemap*>(cubemap.get()));
+//                        glCubemap->Restore();
+//                    }
+//                }
+//                resourcePool->RefreshResources<ChilliSource::Cubemap>();
+//                
+//                //---Meshes
+//                for(auto& buffer : m_meshBuffers)
+//                {
+//                    buffer->Restore();
+//                }
+//                
+//                m_hasContextBeenBackedUp = false;
+//            }
         }
     }
 }
