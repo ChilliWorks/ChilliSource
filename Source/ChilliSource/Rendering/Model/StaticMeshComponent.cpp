@@ -48,16 +48,14 @@ namespace ChilliSource
     StaticMeshComponent::StaticMeshComponent()
     : m_isBSValid(false), m_isAABBValid(false), m_isOOBBValid(false)
     {
-        mMaterials.push_back(mpMaterial);
+        mMaterials.push_back(nullptr);
     }
     //----------------------------------------------------------
     /// Is A
     //----------------------------------------------------------
     bool StaticMeshComponent::IsA(InterfaceIDType inInterfaceID) const
     {
-        return  (inInterfaceID == StaticMeshComponent::InterfaceID) || 
-                (inInterfaceID == RenderComponent::InterfaceID) ||
-                (inInterfaceID == VolumeComponent::InterfaceID);
+        return  (inInterfaceID == StaticMeshComponent::InterfaceID);
     }
     //----------------------------------------------------
     /// Get Axis Aligned Bounding Box
@@ -172,28 +170,13 @@ namespace ChilliSource
         return mBoundingSphere;
     }
     //-----------------------------------------------------------
-    /// Is Transparent
-    //-----------------------------------------------------------
-    bool StaticMeshComponent::IsTransparent()
-    {
-        for (u32 i = 0; i < mMaterials.size(); ++i)
-        {
-            if (mMaterials[i]->IsTransparencyEnabled() == true)
-                return true;
-        }
-        return false;
-    }
-    //-----------------------------------------------------------
     /// Set Material
     //-----------------------------------------------------------
     void StaticMeshComponent::SetMaterial(const MaterialCSPtr& inpMaterial)
     {
-        mpMaterial = inpMaterial;
-        
-        //apply to all materials
         for (u32 i = 0; i < mMaterials.size(); i++)
         {
-            mMaterials[i] = mpMaterial;
+            mMaterials[i] = inpMaterial;
         }
     }
     //-----------------------------------------------------------
@@ -204,11 +187,6 @@ namespace ChilliSource
         if (indwSubMeshIndex < mMaterials.size())
         {
             mMaterials[indwSubMeshIndex] = inpMaterial;
-            
-            if (indwSubMeshIndex == 0)
-            {
-                mpMaterial = inpMaterial;
-            }
         }
     }
     //-----------------------------------------------------------
@@ -222,11 +200,6 @@ namespace ChilliSource
             if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
             {
                 mMaterials[indwIndex] = inpMaterial;
-                
-                if (indwIndex == 0)
-                {
-                    mpMaterial = inpMaterial;
-                }
             }
         }
     }
@@ -278,7 +251,6 @@ namespace ChilliSource
     void StaticMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
     {
         mpModel = inpModel;
-        mpMaterial = inpMaterial;
         
         // Update OOBB
         mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
@@ -292,6 +264,18 @@ namespace ChilliSource
     const MeshCSPtr& StaticMeshComponent::GetMesh() const
     {
         return mpModel;
+    }
+    //-----------------------------------------------------
+    //-----------------------------------------------------
+    void StaticMeshComponent::SetShadowCastingEnabled(bool inbEnabled)
+    {
+        m_shadowCastingEnabled = inbEnabled;
+    }
+    //-----------------------------------------------------
+    //-----------------------------------------------------
+    bool StaticMeshComponent::IsShadowCastingEnabled() const
+    {
+        return m_shadowCastingEnabled;
     }
     //----------------------------------------------------
     //----------------------------------------------------

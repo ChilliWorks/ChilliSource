@@ -45,7 +45,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(FrustumCullPredicate);
     CS_FORWARDDECLARE_CLASS(MeshBatch);
     CS_FORWARDDECLARE_CLASS(RenderCapabilities);
-    CS_FORWARDDECLARE_CLASS(RenderComponent);
     CS_FORWARDDECLARE_CLASS(RenderComponentFactory);
     CS_FORWARDDECLARE_CLASS(RendererSortPredicate);
     CS_FORWARDDECLARE_CLASS(NullSortPredicate);

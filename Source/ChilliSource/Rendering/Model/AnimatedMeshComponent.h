@@ -30,11 +30,11 @@
 #define _CHILLISOURCE_RENDERING_ANIMATED_MESH_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
-#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
 
 #include <functional>
 
@@ -65,7 +65,7 @@ namespace ChilliSource
     /// An animated mesh component. This defines a 3D mesh that can
     /// be manipulated, textured and animated.
     //===============================================================
-    class AnimatedMeshComponent : public RenderComponent
+    class AnimatedMeshComponent : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(AnimatedMeshComponent);
@@ -88,7 +88,7 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return Axis aligned bounding box
         //----------------------------------------------------
-        const AABB& GetAABB() override;
+        const AABB& GetAABB();
         //----------------------------------------------------
         /// Get Object Oriented Bounding Box
         ///
@@ -97,7 +97,7 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return OOBB
         //----------------------------------------------------
-        const OOBB& GetOOBB() override;
+        const OOBB& GetOOBB();
         //----------------------------------------------------
         /// Get Bounding Sphere
         ///
@@ -106,15 +106,7 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return bounding sphere
         //----------------------------------------------------
-        const Sphere& GetBoundingSphere() override;
-        //-----------------------------------------------------------
-        /// Is Transparent
-        ///
-        /// Returns whether or not this component has any transparency
-        ///
-        /// @return whether or not this has transparency
-        //-----------------------------------------------------------
-        bool IsTransparent() override;
+        const Sphere& GetBoundingSphere();
         //-----------------------------------------------------------
         /// Set Material
         ///
@@ -123,7 +115,7 @@ namespace ChilliSource
         ///
         /// @param Handle to material
         //-----------------------------------------------------------
-        void SetMaterial(const MaterialCSPtr& inpMaterial) override;
+        void SetMaterial(const MaterialCSPtr& inpMaterial);
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         ///
@@ -377,30 +369,20 @@ namespace ChilliSource
         /// @return whether or not the animation has finished.
         //----------------------------------------------------------
         bool HasFinished() const;
-        //----------------------------------------------------------
-        /// Update
+        //-----------------------------------------------------
+        /// Set Shadow Casting Enabled
         ///
-        /// Updates the animation.
+        /// @param Whether the render component casts shadows
+        //-----------------------------------------------------
+        void SetShadowCastingEnabled(bool inbEnabled);
+        //-----------------------------------------------------
+        /// Is Shadow Casting Enabled
         ///
-        /// @param The delta time.
-        //----------------------------------------------------------
-        void OnUpdate(f32 infDeltaTime) override;
+        /// @return Whether the render component casts shadows
+        //-----------------------------------------------------
+        bool IsShadowCastingEnabled() const;
         
     private:
-        //----------------------------------------------------
-        /// On Added To Entity
-        ///
-        /// Triggered when the component is attached to
-        /// an entity on the scene
-        //----------------------------------------------------
-        void OnAddedToScene() override;
-        //----------------------------------------------------
-        /// On Removed From Entity
-        ///
-        /// Triggered when the component is detached from
-        /// an entity on the scene
-        //----------------------------------------------------
-        void OnRemovedFromScene() override;
         //----------------------------------------------------------
         /// Update Animation
         ///
@@ -431,6 +413,28 @@ namespace ChilliSource
         /// to start a new animation.
         //----------------------------------------------------------
         void Reset();
+        //----------------------------------------------------
+        /// On Added To Entity
+        ///
+        /// Triggered when the component is attached to
+        /// an entity on the scene
+        //----------------------------------------------------
+        void OnAddedToScene() override;
+        //----------------------------------------------------------
+        /// Update
+        ///
+        /// Updates the animation.
+        ///
+        /// @param The delta time.
+        //----------------------------------------------------------
+        void OnUpdate(f32 infDeltaTime) override;
+        //----------------------------------------------------
+        /// On Removed From Entity
+        ///
+        /// Triggered when the component is detached from
+        /// an entity on the scene
+        //----------------------------------------------------
+        void OnRemovedFromScene() override;
         
     private:
         typedef std::vector<std::pair<EntityWPtr, s32> > AttachedEntityList;
@@ -454,6 +458,11 @@ namespace ChilliSource
         AnimationCompletionEvent mAnimationCompletionEvent;
         AnimationLoopedEvent mAnimationLoopedEvent;
         AnimationChangedEvent mAnimationChangedEvent;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        bool m_shadowCastingEnabled = true;
     };
 }
 

@@ -30,8 +30,8 @@
 #define _CHILLISOURCE_RENDERING_PARTICLE_PARTICLEEFFECTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawable.h>
 
 #include <atomic>
@@ -46,7 +46,7 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //-----------------------------------------------------------------------
-    class ParticleEffectComponent final : public RenderComponent
+    class ParticleEffectComponent final : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleEffectComponent);
@@ -149,19 +149,19 @@ namespace ChilliSource
         ///
         /// @return The world space AABB of the effect.
         //----------------------------------------------------------------
-        const AABB& GetAABB() override;
+        const AABB& GetAABB();
         //----------------------------------------------------------------
         /// @author Ian Copland
         /// 
         /// @return The world space OBB of the effect.
         //----------------------------------------------------------------
-        const OOBB& GetOOBB() override;
+        const OOBB& GetOOBB();
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The world space bounding sphere of the effect.
         //----------------------------------------------------------------
-        const Sphere& GetBoundingSphere() override;
+        const Sphere& GetBoundingSphere();
         //----------------------------------------------------------------
         /// Sets a new particle effect for the component to play. If the
         /// component was playing, it will start playing the new effect
@@ -383,6 +383,11 @@ namespace ChilliSource
         Sphere m_localBoundingSphere;
         bool m_invalidateBoundingShapeCache = true;
         EventConnectionUPtr m_entityTransformConnection;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        MaterialCSPtr mpMaterial;
     };
 }
 

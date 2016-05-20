@@ -31,9 +31,10 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
@@ -49,7 +50,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class SpriteComponent final : public RenderComponent
+    class SpriteComponent final : public Component
     {
     public: 
         
@@ -89,7 +90,7 @@ namespace ChilliSource
         ///
         /// @return AABB in world space
         //----------------------------------------------------
-        const AABB& GetAABB() override;
+        const AABB& GetAABB();
         //----------------------------------------------------
         /// The object oriented bounding box complete with transform to
         /// transform from local space to world space. This is cached
@@ -99,7 +100,7 @@ namespace ChilliSource
         ///
         /// @return OOBB in local space with world transform
         //----------------------------------------------------
-        const OOBB& GetOOBB() override;
+        const OOBB& GetOOBB();
         //----------------------------------------------------
         /// All render objects have an bounding sphere for
         /// culling. This is cached and recomputed when tranform
@@ -110,7 +111,7 @@ namespace ChilliSource
         ///
         /// @return world space bounding sphere
         //----------------------------------------------------
-        const Sphere& GetBoundingSphere() override;
+        const Sphere& GetBoundingSphere();
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -139,6 +140,20 @@ namespace ChilliSource
         /// @return Size after the size policy has been applied
         //-----------------------------------------------------------
         Vector2 GetSize() const;
+        //-----------------------------------------------------------
+        /// Sets the material
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_material - The material
+        //-----------------------------------------------------------
+        void SetMaterial(const MaterialCSPtr& in_material);
+        //-----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The material
+        //-----------------------------------------------------------
+        const MaterialCSPtr& GetMaterial() const;
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -346,6 +361,11 @@ namespace ChilliSource
         bool m_isBSValid = false;
         bool m_isAABBValid = false;
         bool m_isOOBBValid = false;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        MaterialCSPtr mpMaterial;
     };
 }
 

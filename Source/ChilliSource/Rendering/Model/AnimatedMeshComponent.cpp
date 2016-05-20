@@ -56,16 +56,14 @@ namespace ChilliSource
     meBlendType(AnimationBlendType::k_linear), mePlaybackType(AnimationPlaybackType::k_once), meFadeType(AnimationBlendType::k_linear), mfFadeTimer(0.0f), mfFadeMaxTime(0.0f), mfFadePlaybackPosition(0.0f),
     mfFadeBlendlinePosition(0.0f), mbFinished(false), mbAnimationDataDirty(true)
     {
-        mMaterials.push_back(mpMaterial);
+        mMaterials.push_back(nullptr);
     }
     //----------------------------------------------------------
     /// Is A
     //----------------------------------------------------------
     bool AnimatedMeshComponent::IsA(InterfaceIDType inInterfaceID) const
     {
-        return  (inInterfaceID == AnimatedMeshComponent::InterfaceID) ||
-                (inInterfaceID == RenderComponent::InterfaceID) ||
-                (inInterfaceID == VolumeComponent::InterfaceID);
+        return  (inInterfaceID == AnimatedMeshComponent::InterfaceID);
     }
     //----------------------------------------------------
     /// Get Axis Aligned Bounding Box
@@ -174,28 +172,13 @@ namespace ChilliSource
         return mBoundingSphere;
     }
     //-----------------------------------------------------------
-    /// Is Transparent
-    //-----------------------------------------------------------
-    bool AnimatedMeshComponent::IsTransparent()
-    {
-        for (u32 i = 0; i < mMaterials.size(); ++i)
-        {
-            if (mMaterials[i]->IsTransparencyEnabled() == true)
-                return true;
-        }
-        return false;
-    }
-    //-----------------------------------------------------------
     /// Set Material
     //-----------------------------------------------------------
     void AnimatedMeshComponent::SetMaterial(const MaterialCSPtr& inpMaterial)
     {
-        mpMaterial = inpMaterial;
-        
-        //apply to all materials
         for (u32 i = 0; i < mMaterials.size(); i++)
         {
-            mMaterials[i] = mpMaterial;
+            mMaterials[i] = inpMaterial;
         }
     }
     //-----------------------------------------------------------
@@ -206,11 +189,6 @@ namespace ChilliSource
         if (indwSubMeshIndex < mMaterials.size())
         {
             mMaterials[indwSubMeshIndex] = inpMaterial;
-            
-            if (indwSubMeshIndex == 0)
-            {
-                mpMaterial = inpMaterial;
-            }
         }
     }
     //-----------------------------------------------------------
@@ -224,11 +202,6 @@ namespace ChilliSource
             if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
             {
                 mMaterials[indwIndex] = inpMaterial;
-                
-                if (indwIndex == 0)
-                {
-                    mpMaterial = inpMaterial;
-                }
             }
         }
     }
@@ -285,7 +258,6 @@ namespace ChilliSource
     void AnimatedMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
     {
         mpModel = inpModel;
-        mpMaterial = inpMaterial;
         
         // Update OOBB
         mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
@@ -572,6 +544,18 @@ namespace ChilliSource
     bool AnimatedMeshComponent::HasFinished() const
     {
         return mbFinished;
+    }
+    //-----------------------------------------------------
+    //-----------------------------------------------------
+    void AnimatedMeshComponent::SetShadowCastingEnabled(bool inbEnabled)
+    {
+        m_shadowCastingEnabled = inbEnabled;
+    }
+    //-----------------------------------------------------
+    //-----------------------------------------------------
+    bool AnimatedMeshComponent::IsShadowCastingEnabled() const
+    {
+        return m_shadowCastingEnabled;
     }
     //----------------------------------------------------------
     /// Update

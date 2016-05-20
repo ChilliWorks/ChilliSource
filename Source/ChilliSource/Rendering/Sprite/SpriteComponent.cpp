@@ -162,9 +162,7 @@ namespace ChilliSource
     //----------------------------------------------------------
     bool SpriteComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return  (in_interfaceId == SpriteComponent::InterfaceID) ||
-                (in_interfaceId == RenderComponent::InterfaceID) ||
-                (in_interfaceId == VolumeComponent::InterfaceID);
+        return  (in_interfaceId == SpriteComponent::InterfaceID);
     }
     //----------------------------------------------------
     //----------------------------------------------------
@@ -286,6 +284,18 @@ namespace ChilliSource
     {
         Vector2 preferredSize = GetPreferredSize();
         return m_sizePolicyDelegate(m_originalSize, preferredSize);
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    void SpriteComponent::SetMaterial(const MaterialCSPtr& in_material)
+    {
+        mpMaterial = in_material;
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    const MaterialCSPtr& SpriteComponent::GetMaterial() const
+    {
+        return mpMaterial;
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------

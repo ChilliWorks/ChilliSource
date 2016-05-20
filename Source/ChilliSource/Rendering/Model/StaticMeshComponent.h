@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_RENDERING_STATIC_MESH_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
+#include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 
 namespace ChilliSource
@@ -41,7 +41,7 @@ namespace ChilliSource
     /// A static mesh component. This defines a 3D mesh that can
     /// be manipulated, textured but not animated.
     //===============================================================
-    class StaticMeshComponent : public RenderComponent
+    class StaticMeshComponent : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(StaticMeshComponent);
@@ -63,7 +63,7 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return Axis aligned bounding box
         //----------------------------------------------------
-        const AABB& GetAABB() override;
+        const AABB& GetAABB();
         //----------------------------------------------------
         /// Get Object Oriented Bounding Box
         ///
@@ -72,7 +72,7 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return OOBB
         //----------------------------------------------------
-        const OOBB& GetOOBB() override;
+        const OOBB& GetOOBB();
         //----------------------------------------------------
         /// Get Bounding Sphere
         ///
@@ -81,15 +81,7 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return bounding sphere
         //----------------------------------------------------
-        const Sphere& GetBoundingSphere() override;
-        //-----------------------------------------------------------
-        /// Is Transparent
-        ///
-        /// Returns whether or not this component has any transparency
-        ///
-        /// @return whether or not this has transparency
-        //-----------------------------------------------------------
-        bool IsTransparent() override;
+        const Sphere& GetBoundingSphere();
         //-----------------------------------------------------------
         /// Set Material
         ///
@@ -98,7 +90,7 @@ namespace ChilliSource
         ///
         /// @param Handle to material
         //-----------------------------------------------------------
-        void SetMaterial(const MaterialCSPtr& inpMaterial) override;
+        void SetMaterial(const MaterialCSPtr& inpMaterial);
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         ///
@@ -156,6 +148,18 @@ namespace ChilliSource
         /// @return The components internal mesh
         //----------------------------------------------------------
         const MeshCSPtr& GetMesh() const;
+        //-----------------------------------------------------
+        /// Set Shadow Casting Enabled
+        ///
+        /// @param Whether the render component casts shadows
+        //-----------------------------------------------------
+        void SetShadowCastingEnabled(bool inbEnabled);
+        //-----------------------------------------------------
+        /// Is Shadow Casting Enabled
+        ///
+        /// @return Whether the render component casts shadows
+        //-----------------------------------------------------
+        bool IsShadowCastingEnabled() const;
         
     private:
         //----------------------------------------------------
@@ -190,6 +194,11 @@ namespace ChilliSource
         bool m_isBSValid;
         bool m_isAABBValid;
         bool m_isOOBBValid;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        bool m_shadowCastingEnabled = true;
     };
 }
 
