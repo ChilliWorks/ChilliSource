@@ -53,7 +53,7 @@ namespace ChilliSource
     //----------------------------------------------------------
     bool StaticMeshComponent::IsA(InterfaceIDType inInterfaceID) const
     {
-        return  (inInterfaceID == StaticMeshComponent::InterfaceID);
+        return  (inInterfaceID == VolumeComponent::InterfaceID || inInterfaceID == StaticMeshComponent::InterfaceID);
     }
     //----------------------------------------------------
     /// Get Axis Aligned Bounding Box

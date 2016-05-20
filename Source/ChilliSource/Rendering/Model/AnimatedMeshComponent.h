@@ -30,9 +30,9 @@
 #define _CHILLISOURCE_RENDERING_ANIMATED_MESH_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 
@@ -65,7 +65,7 @@ namespace ChilliSource
     /// An animated mesh component. This defines a 3D mesh that can
     /// be manipulated, textured and animated.
     //===============================================================
-    class AnimatedMeshComponent : public Component
+    class AnimatedMeshComponent : public VolumeComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(AnimatedMeshComponent);
@@ -88,7 +88,7 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return Axis aligned bounding box
         //----------------------------------------------------
-        const AABB& GetAABB();
+        const AABB& GetAABB() override;
         //----------------------------------------------------
         /// Get Object Oriented Bounding Box
         ///
@@ -97,7 +97,7 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return OOBB
         //----------------------------------------------------
-        const OOBB& GetOOBB();
+        const OOBB& GetOOBB() override;
         //----------------------------------------------------
         /// Get Bounding Sphere
         ///
@@ -106,7 +106,19 @@ namespace ChilliSource
         /// recomputed when required.
         /// @return bounding sphere
         //----------------------------------------------------
-        const Sphere& GetBoundingSphere();
+        const Sphere& GetBoundingSphere() override;
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @return Whether or not to render
+        //----------------------------------------------------
+        bool IsVisible() const override { return m_isVisible; }
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @param in_isVisible - Whether or not to render
+        //----------------------------------------------------
+        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //-----------------------------------------------------------
         /// Set Material
         ///
@@ -463,6 +475,7 @@ namespace ChilliSource
         OOBB mOBBoundingBox;
         Sphere mBoundingSphere;
         bool m_shadowCastingEnabled = true;
+        bool m_isVisible = true;
     };
 }
 

@@ -162,7 +162,7 @@ namespace ChilliSource
     //----------------------------------------------------------
     bool SpriteComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return  (in_interfaceId == SpriteComponent::InterfaceID);
+        return  (in_interfaceId == VolumeComponent::InterfaceID || in_interfaceId == SpriteComponent::InterfaceID);
     }
     //----------------------------------------------------
     //----------------------------------------------------

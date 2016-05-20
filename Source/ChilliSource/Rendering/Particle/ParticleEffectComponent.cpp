@@ -216,7 +216,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     bool ParticleEffectComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (ParticleEffectComponent::InterfaceID == in_interfaceId);
+        return (VolumeComponent::InterfaceID == in_interfaceId || ParticleEffectComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------
     //-------------------------------------------------------

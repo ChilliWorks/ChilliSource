@@ -30,8 +30,8 @@
 #define _CHILLISOURCE_RENDERING_PARTICLE_PARTICLEEFFECTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Event/Event.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawable.h>
 
 #include <atomic>
@@ -46,7 +46,7 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //-----------------------------------------------------------------------
-    class ParticleEffectComponent final : public Component
+    class ParticleEffectComponent final : public VolumeComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(ParticleEffectComponent);
@@ -149,19 +149,31 @@ namespace ChilliSource
         ///
         /// @return The world space AABB of the effect.
         //----------------------------------------------------------------
-        const AABB& GetAABB();
+        const AABB& GetAABB() override;
         //----------------------------------------------------------------
         /// @author Ian Copland
         /// 
         /// @return The world space OBB of the effect.
         //----------------------------------------------------------------
-        const OOBB& GetOOBB();
+        const OOBB& GetOOBB() override;
         //----------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @param The world space bounding sphere of the effect.
         //----------------------------------------------------------------
-        const Sphere& GetBoundingSphere();
+        const Sphere& GetBoundingSphere() override;
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @return Whether or not to render
+        //----------------------------------------------------
+        bool IsVisible() const override { return m_isVisible; }
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @param in_isVisible - Whether or not to render
+        //----------------------------------------------------
+        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //----------------------------------------------------------------
         /// Sets a new particle effect for the component to play. If the
         /// component was playing, it will start playing the new effect
@@ -388,6 +400,7 @@ namespace ChilliSource
         OOBB mOBBoundingBox;
         Sphere mBoundingSphere;
         MaterialCSPtr mpMaterial;
+        bool m_isVisible = true;
     };
 }
 

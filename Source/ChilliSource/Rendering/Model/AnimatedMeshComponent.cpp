@@ -60,7 +60,7 @@ namespace ChilliSource
     //----------------------------------------------------------
     bool AnimatedMeshComponent::IsA(InterfaceIDType inInterfaceID) const
     {
-        return  (inInterfaceID == AnimatedMeshComponent::InterfaceID);
+        return  (inInterfaceID == VolumeComponent::InterfaceID || inInterfaceID == AnimatedMeshComponent::InterfaceID);
     }
     //----------------------------------------------------
     /// Get Axis Aligned Bounding Box

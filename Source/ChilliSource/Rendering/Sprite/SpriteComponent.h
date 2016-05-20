@@ -31,9 +31,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
@@ -50,7 +50,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class SpriteComponent final : public Component
+    class SpriteComponent final : public VolumeComponent
     {
     public: 
         
@@ -90,7 +90,7 @@ namespace ChilliSource
         ///
         /// @return AABB in world space
         //----------------------------------------------------
-        const AABB& GetAABB();
+        const AABB& GetAABB() override;
         //----------------------------------------------------
         /// The object oriented bounding box complete with transform to
         /// transform from local space to world space. This is cached
@@ -100,7 +100,7 @@ namespace ChilliSource
         ///
         /// @return OOBB in local space with world transform
         //----------------------------------------------------
-        const OOBB& GetOOBB();
+        const OOBB& GetOOBB() override;
         //----------------------------------------------------
         /// All render objects have an bounding sphere for
         /// culling. This is cached and recomputed when tranform
@@ -111,7 +111,19 @@ namespace ChilliSource
         ///
         /// @return world space bounding sphere
         //----------------------------------------------------
-        const Sphere& GetBoundingSphere();
+        const Sphere& GetBoundingSphere() override;
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @return Whether or not to render
+        //----------------------------------------------------
+        bool IsVisible() const override { return m_isVisible; }
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @param in_isVisible - Whether or not to render
+        //----------------------------------------------------
+        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -366,6 +378,7 @@ namespace ChilliSource
         OOBB mOBBoundingBox;
         Sphere mBoundingSphere;
         MaterialCSPtr mpMaterial;
+        bool m_isVisible = true;
     };
 }
 
