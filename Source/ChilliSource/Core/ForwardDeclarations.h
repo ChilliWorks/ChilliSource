@@ -93,6 +93,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(FileStream);
     CS_FORWARDDECLARE_CLASS(ITextInputStream);
     CS_FORWARDDECLARE_CLASS(TextInputStream);
+    CS_FORWARDDECLARE_CLASS(TextOutputStream);
     CS_FORWARDDECLARE_CLASS(FileSystem);
     CS_FORWARDDECLARE_CLASS(AppDataStore);
     CS_FORWARDDECLARE_CLASS(TaggedFilePathResolver);

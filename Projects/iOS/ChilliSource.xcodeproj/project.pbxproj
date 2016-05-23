@@ -317,6 +317,7 @@
 		81C7FFD91C89DDE300D306F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC11C89DDE300D306F9 /* UIKit.framework */; };
 		81CA60ED1CE5DFB500080533 /* TextInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CA60EB1CE5DFB500080533 /* TextInputStream.cpp */; };
 		81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */; };
+		81EA870A1CEE1AB400DB798C /* TextOutputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81EA87081CEE1AB400DB798C /* TextOutputStream.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1120,6 +1121,8 @@
 		81CA60EE1CE604AB00080533 /* ITextInputStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITextInputStream.h; sourceTree = "<group>"; };
 		81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SizePolicy.cpp; sourceTree = "<group>"; };
 		81E3AA971CE241F600DF7B4E /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
+		81EA87081CEE1AB400DB798C /* TextOutputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextOutputStream.cpp; sourceTree = "<group>"; };
+		81EA87091CEE1AB400DB798C /* TextOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextOutputStream.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2943,6 +2946,8 @@
 		81CA60EA1CE5DF9300080533 /* FileStream */ = {
 			isa = PBXGroup;
 			children = (
+				81EA87081CEE1AB400DB798C /* TextOutputStream.cpp */,
+				81EA87091CEE1AB400DB798C /* TextOutputStream.h */,
 				81CA60EB1CE5DFB500080533 /* TextInputStream.cpp */,
 				81CA60EC1CE5DFB500080533 /* TextInputStream.h */,
 				81CA60EE1CE604AB00080533 /* ITextInputStream.h */,
@@ -3217,6 +3222,7 @@
 				8158F6A01C89D2AD00B13109 /* TapGesture.cpp in Sources */,
 				8158F6EE1C89D2AD00B13109 /* SphereParticleEmitter.cpp in Sources */,
 				8158F6CC1C89D2AD00B13109 /* Skeleton.cpp in Sources */,
+				81EA870A1CEE1AB400DB798C /* TextOutputStream.cpp in Sources */,
 				8158F7D61C89D2AD00B13109 /* HttpRequest.mm in Sources */,
 				8158F6C71C89D2AD00B13109 /* CSAnimProvider.cpp in Sources */,
 				8158F7CF1C89D2AD00B13109 /* Accelerometer.mm in Sources */,

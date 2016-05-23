@@ -1,7 +1,4 @@
 //
-//  OutputTextStream.h
-//  ChilliSource
-//
 //  The MIT License (MIT)
 //
 //  Copyright © 2016 Tag Games. All rights reserved.
@@ -36,13 +33,19 @@
 namespace ChilliSource
 {
     /// Class to provide textual write functionality for a file
+	///
+	/// Calling Write() on this stream will not cause a flush to disk, this will
+	/// only occur when the destructer is called.
+	///
+	/// If a TextOutputStream is created with an existing file, that file will
+	/// be overwritten, regardless of whether or not a Write() was carried out
     ///
     /// OutputTextStream is thread agnostic, but not thread-safe.
     /// i.e. Instances can used by one thread at a time. It
     /// doesn't matter which thread as long as any previous threads
     /// are no longer accessing it
     ///
-    class OutputTextStream final
+    class TextOutputStream final
     {
     public:
         
@@ -54,7 +57,7 @@ namespace ChilliSource
         /// @param filepath
         ///     The absolute path to a file
         ///
-        OutputTextStream(const std::string& filePath) noexcept;
+        TextOutputStream(const std::string& filePath) noexcept;
         
         /// Checks the status of the stream, if this returns false then the stream
         /// can no longer be accessed.
@@ -63,11 +66,21 @@ namespace ChilliSource
         ///
         bool IsValid() const noexcept;
         
-        /// Writes some string data to the stream
+        /// Writes string data to the stream. This will not effect contents
+		/// on disk.
+		/// 
+		/// Multiple calls to this function will append to any contents already 
+		/// written.
         ///
-        /// @return If the stream is valid and available for use
+        /// @param data
+		///		The string data to write to the stream
         ///
         void Write(const std::string& data) noexcept;
+        
+        /// This will write any pending data written to this stream to disk
+        /// and close the stream
+        ///
+        ~TextOutputStream() noexcept;
         
     private:
         

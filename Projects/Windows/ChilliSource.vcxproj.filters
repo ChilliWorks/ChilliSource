@@ -1074,6 +1074,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\TextInputStream.cpp">
       <Filter>ChilliSource\Core\File</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\TextOutputStream.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2289,6 +2292,9 @@
       <Filter>ChilliSource\Core\File</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\ITextInputStream.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\TextOutputStream.h">
       <Filter>ChilliSource\Core\File</Filter>
     </ClInclude>
   </ItemGroup>
