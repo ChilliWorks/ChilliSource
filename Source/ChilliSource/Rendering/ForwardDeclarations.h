@@ -80,6 +80,9 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(DirectionalLightComponent);
     CS_FORWARDDECLARE_CLASS(LightComponent);
     CS_FORWARDDECLARE_CLASS(PointLightComponent);
+    CS_FORWARDDECLARE_CLASS(RenderAmbientLight);
+    CS_FORWARDDECLARE_CLASS(RenderDirectionalLight);
+    CS_FORWARDDECLARE_CLASS(RenderPointLight);
     //------------------------------------------------------------
     /// Material
     //------------------------------------------------------------
@@ -149,6 +152,12 @@ namespace ChilliSource
     template <typename TPropertyType> class CurveParticleProperty;
     template <typename TPropertyType> class RandomCurveParticleProperty;
     template <typename TPropertyType> class ComponentwiseRandomCurveParticleProperty;
+    //------------------------------------------------------------
+    /// Render Command
+    //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
+    CS_FORWARDDECLARE_CLASS(RenderCommand);
+    CS_FORWARDDECLARE_CLASS(RenderCommandList);
     //------------------------------------------------------------
     /// Shader
     //------------------------------------------------------------

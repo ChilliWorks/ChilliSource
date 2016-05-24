@@ -31,7 +31,7 @@
 namespace ChilliSource
 {
     /// A standard-layout container for data which the renderer requires that relates to a camera,
-    /// such as the projection and view matrices.
+    /// such as the projection and view matrices, as well as the screen resolution.
     ///
     /// This is immutable and therefore thread safe.
     ///
@@ -43,12 +43,14 @@ namespace ChilliSource
         /// Constructs a new instance of the container with the given camera world and projection
         /// matrices.
         ///
+        /// @param viewportResolution
+        ///     The viewport resolution.
         /// @param worldMatrix
         ///     The world matrix of the camera. The view matrix will be derrived from this.
         /// @param projectionMatrix
         ///     The projection matrix of the camera.
         ///
-        RenderCamera(const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept;
+        RenderCamera(const Integer2& viewportResolution, const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept;
         
         /// @return The world matrix of the camera.
         ///
@@ -67,6 +69,7 @@ namespace ChilliSource
         const Matrix4& GetViewProjectionMatrix() const noexcept { return m_viewProjectionMatrix; }
         
     private:
+        Integer2 m_viewportResolution;
         Matrix4 m_worldMatrix;
         Matrix4 m_projectionMatrix;
         Matrix4 m_viewMatrix;

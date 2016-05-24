@@ -22,12 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
-
-#endif
+namespace ChilliSource
+{
+    //------------------------------------------------------------------------------
+    RenderSnapshot::RenderSnapshot(const Colour& clearColour) noexcept
+    : m_clearColour(clearColour)
+    {
+    }
+};

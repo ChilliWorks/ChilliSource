@@ -58,7 +58,7 @@ namespace ChilliSource
         
     private:
         std::vector<const RenderCommand*> m_orderedCommands;
-        std::vector<LoadTextureRenderCommand> m_loadTextureRenderCommands;
+        std::vector<LoadTextureRenderCommandUPtr> m_loadTextureRenderCommands;
     };
 }
 
