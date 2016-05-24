@@ -285,6 +285,7 @@
 		81A125EA1CF4614C0010853A /* RenderCommandList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125E81CF4614C0010853A /* RenderCommandList.cpp */; };
 		81A125EE1CF464480010853A /* LoadTextureRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125EC1CF464480010853A /* LoadTextureRenderCommand.cpp */; };
 		81A125F11CF46A840010853A /* RenderSnapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125EF1CF46A840010853A /* RenderSnapshot.cpp */; };
+		81A125F41CF4A7350010853A /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125F21CF4A7350010853A /* Renderer.cpp */; };
 		81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */; };
 		81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
@@ -1027,6 +1028,8 @@
 		81A125ED1CF464480010853A /* LoadTextureRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadTextureRenderCommand.h; sourceTree = "<group>"; };
 		81A125EF1CF46A840010853A /* RenderSnapshot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderSnapshot.cpp; sourceTree = "<group>"; };
 		81A125F01CF46A840010853A /* RenderSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderSnapshot.h; sourceTree = "<group>"; };
+		81A125F21CF4A7350010853A /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
+		81A125F31CF4A7350010853A /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		81C26AF51CB7F3410079A113 /* Task.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskScheduler.cpp; sourceTree = "<group>"; };
 		81C58C211CB3C57000EA58A0 /* TaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskScheduler.h; sourceTree = "<group>"; };
@@ -1864,6 +1867,8 @@
 				8158F3641C89D2AD00B13109 /* VerticalTextJustification.h */,
 				81A125EF1CF46A840010853A /* RenderSnapshot.cpp */,
 				81A125F01CF46A840010853A /* RenderSnapshot.h */,
+				81A125F21CF4A7350010853A /* Renderer.cpp */,
+				81A125F31CF4A7350010853A /* Renderer.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -3150,6 +3155,7 @@
 				8158F6E41C89D2AD00B13109 /* CircleParticleEmitterDef.cpp in Sources */,
 				8158F6571C89D2AD00B13109 /* Screen.cpp in Sources */,
 				8158F70A1C89D2AD00B13109 /* Widget.cpp in Sources */,
+				81A125F41CF4A7350010853A /* Renderer.cpp in Sources */,
 				8158F6761C89D2AD00B13109 /* LocalisedText.cpp in Sources */,
 				81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */,
 				8158F6D31C89D2AD00B13109 /* AngularAccelerationParticleAffector.cpp in Sources */,

@@ -41,6 +41,7 @@
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -55,6 +56,8 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Font/FontProvider.h>
@@ -286,6 +289,7 @@ namespace ChilliSource
         CreateSystem<TextEntry>();
         
         //Rendering
+        m_renderer = CreateSystem<Renderer>();
         RenderCapabilities* renderCapabilities = CreateSystem<RenderCapabilities>();
         CreateSystem<CanvasRenderer>();
         CreateSystem<MaterialFactory>(renderCapabilities);
@@ -337,6 +341,20 @@ namespace ChilliSource
         //Load the app config set preferred FPS.
         m_appConfig->Load();
         m_platformSystem->SetPreferredFPS(m_appConfig->GetPreferredFPS());
+    }
+    
+    //------------------------------------------------------------------------------
+    void Application::ProcessRenderSnapshotEvent() noexcept
+    {
+        RenderSnapshot renderSnapshot(m_stateManager->GetActiveState()->GetScene()->GetClearColour());
+        for (const AppSystemUPtr& system : m_systems)
+        {
+            system->OnRenderSnapshot(renderSnapshot);
+        }
+        
+        m_stateManager->RenderSnapshotStates(renderSnapshot);
+        
+        m_renderer->ProcessRenderSnapshot(renderSnapshot);
     }
     
     //------------------------------------------------------------------------------
@@ -445,6 +463,8 @@ namespace ChilliSource
         m_stateManager->UpdateStates(deltaTime);
         
         m_taskScheduler->ExecuteMainThreadTasks();
+        
+        ProcessRenderSnapshotEvent();
         
         ++m_frameIndex;
     }

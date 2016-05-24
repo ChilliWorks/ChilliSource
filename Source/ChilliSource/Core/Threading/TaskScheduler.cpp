@@ -205,7 +205,7 @@ namespace ChilliSource
     void TaskScheduler::OnInit() noexcept
     {
         constexpr s32 k_minThreadsPerPool = 2;
-        constexpr s32 k_namedThreads = 1; //The main thread.
+        constexpr s32 k_namedThreads = 2; //The main thread and render (system) thread.
         
         Device* device = Application::Get()->GetSystem<Device>();
         

@@ -357,6 +357,12 @@ namespace ChilliSource
         ///
         void PostCreateSystems() noexcept;
         
+        /// Sends the render snapshot event to all active systems and components
+        /// that are current in the scene to generate the render snapshot. This
+        /// snapshot is then passed to the render pipeline for processing.
+        ///
+        void ProcessRenderSnapshotEvent() noexcept;
+        
         /// Initialises the application, creating all systems and sending the init
         /// lifecycle event to all systems.
         ///
@@ -430,6 +436,7 @@ namespace ChilliSource
         ResourcePool* m_resourcePool = nullptr;
         StateManager* m_stateManager = nullptr;
         TaskScheduler* m_taskScheduler = nullptr;
+        Renderer* m_renderer = nullptr;
         Screen* m_screen = nullptr;
         PlatformSystem* m_platformSystem = nullptr;
         FileSystem* m_fileSystem = nullptr;

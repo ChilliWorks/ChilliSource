@@ -41,6 +41,8 @@
 #include <ChilliSource/Rendering/Base/MeshBatch.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
