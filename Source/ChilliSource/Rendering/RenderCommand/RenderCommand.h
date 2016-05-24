@@ -58,7 +58,7 @@ namespace ChilliSource
             k_unloadMaterial,
             k_unloadShader,
             k_unloadTexture
-        }
+        };
         
         /// @return The type of render command that this is.
         ///

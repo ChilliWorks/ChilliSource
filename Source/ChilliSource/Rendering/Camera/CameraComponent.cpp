@@ -160,42 +160,6 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const RendererSortPredicateSPtr& CameraComponent::GetOpaqueSortPredicate() const
-    {
-        return m_opaqueSortPredicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    const RendererSortPredicateSPtr& CameraComponent::GetTransparentSortPredicate() const
-    {
-        return m_transparentSortPredicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    void CameraComponent::SetOpaqueSortPredicate(const RendererSortPredicateSPtr& in_predicate)
-    {
-        m_opaqueSortPredicate = in_predicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    void CameraComponent::SetTransparentSortPredicate(const RendererSortPredicateSPtr& in_predicate)
-    {
-        m_transparentSortPredicate = in_predicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    const ICullingPredicateSPtr& CameraComponent::GetCullingPredicate() const
-    {
-        return m_cullPredicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    void CameraComponent::SetCullingPredicate(const ICullingPredicateSPtr& in_predicate)
-    {
-        m_cullPredicate = in_predicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
     void CameraComponent::OnAddedToEntity()
     {
         m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection([=]()

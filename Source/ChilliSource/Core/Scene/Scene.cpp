@@ -95,6 +95,15 @@ namespace ChilliSource
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
+    void Scene::RenderSnapshotEntities(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        for(u32 i=0; i<m_entities.size(); ++i)
+        {
+            m_entities[i]->OnRenderSnapshot(in_renderSnapshot);
+        }
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
     void Scene::BackgroundEntities()
     {
         CS_ASSERT(m_entitiesForegrounded == true, "Received background entities event while entities are already backgrounded.")

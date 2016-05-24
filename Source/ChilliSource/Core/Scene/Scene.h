@@ -138,6 +138,16 @@ namespace ChilliSource
         //-------------------------------------------------------
         void FixedUpdateEntities(f32 in_timeSinceLastUpdate);
         //-------------------------------------------------------
+        /// Sends the render snapshot event to all entities in
+        /// the scene.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render snapshot object
+        /// which contains all snapshotted data.
+        //-------------------------------------------------------
+        void RenderSnapshotEntities(RenderSnapshot& in_renderSnapshot) noexcept;
+        //-------------------------------------------------------
         /// Sends the background event on to the entities.
         ///
         /// @author Ian Copland

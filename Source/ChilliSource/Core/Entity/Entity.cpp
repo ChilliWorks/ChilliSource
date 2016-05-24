@@ -441,6 +441,15 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------
     //-------------------------------------------------------------
+    void Entity::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        for(u32 i=0; i<m_components.size(); ++i)
+        {
+            m_components[i]->OnRenderSnapshot(in_renderSnapshot);
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
     void Entity::OnBackground()
     {
         CS_ASSERT(m_appForegrounded == true, "Entity: Received background while already backgrounded.");

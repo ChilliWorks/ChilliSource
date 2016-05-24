@@ -27,8 +27,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderCamera::RenderCamera(const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept
-    : m_worldMatrix(worldMatrix), m_projectionMatrix(projectionMatrix)
+    RenderCamera::RenderCamera(const Integer2& viewportResolution, const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept
+    : m_viewportResolution(viewportResolution), m_worldMatrix(worldMatrix), m_projectionMatrix(projectionMatrix)
     {
         m_viewMatrix = Matrix4::Inverse(m_worldMatrix);
         m_viewProjectionMatrix = m_viewMatrix * m_projectionMatrix;

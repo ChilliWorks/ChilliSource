@@ -50,7 +50,7 @@ namespace ChilliSource
 //            mpBatch[i] = new SpriteBatch(kudwMaxSpritesInDynamicBatch, inpRenderSystem, BufferUsage::k_dynamic);
 //        }
 //        
-//        maRenderCommands.reserve(50);
+//        maSpriteRenderCommands.reserve(50);
     }
     //-------------------------------------------------------
     /// Render
@@ -93,9 +93,9 @@ namespace ChilliSource
     {
         InsertDrawCommand();
         
-        maRenderCommands.resize(maRenderCommands.size() + 1);
+        maSpriteRenderCommands.resize(maSpriteRenderCommands.size() + 1);
         
-        RenderCommand &sLastCommand = maRenderCommands.back();
+        SpriteRenderCommand &sLastCommand = maSpriteRenderCommands.back();
         sLastCommand.m_type = CommandType::k_scissorOn;
         sLastCommand.m_scissorPos = in_pos;
         sLastCommand.m_scissorSize = in_size;
@@ -106,9 +106,9 @@ namespace ChilliSource
     {
         InsertDrawCommand();
         
-        maRenderCommands.resize(maRenderCommands.size() + 1);
+        maSpriteRenderCommands.resize(maSpriteRenderCommands.size() + 1);
         
-        RenderCommand &sLastCommand = maRenderCommands.back();
+        SpriteRenderCommand &sLastCommand = maSpriteRenderCommands.back();
         sLastCommand.m_type = CommandType::k_scissorOff;
     }
     //-------------------------------------------------------
@@ -117,9 +117,9 @@ namespace ChilliSource
     {
         if(!maSpriteCache.empty())
         {
-            maRenderCommands.resize(maRenderCommands.size() + 1);
+            maSpriteRenderCommands.resize(maSpriteRenderCommands.size() + 1);
             
-            RenderCommand &sLastCommand = maRenderCommands.back();
+            SpriteRenderCommand &sLastCommand = maSpriteRenderCommands.back();
             
             sLastCommand.m_type = CommandType::k_draw;
             sLastCommand.m_material = mpLastMaterial;
@@ -171,7 +171,7 @@ namespace ChilliSource
 //        }   
 //        
 //        //Loop round all the render commands and draw the sections of the buffer with the correct material
-//        for(auto it = maRenderCommands.begin(); it != maRenderCommands.end(); ++it)
+//        for(auto it = maSpriteRenderCommands.begin(); it != maSpriteRenderCommands.end(); ++it)
 //        {
 //            switch(it->m_type)
 //            {
@@ -190,7 +190,7 @@ namespace ChilliSource
 //
 //        }
 //            
-//        maRenderCommands.clear();
+//        maSpriteRenderCommands.clear();
 //        mpLastMaterial.reset();
 //            
 //        //Swap the buffers

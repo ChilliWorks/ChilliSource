@@ -26,7 +26,7 @@
 #define _CHILLISOURCE_RENDERING_RENDERCOMMAND_RENDERCOMMANDLIST_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 #include <vector>
 
@@ -54,11 +54,11 @@ namespace ChilliSource
         
         /// @return The ordered list of render commands.
         ///
-        const std::vector<const RenderCommand*>& GetOrderedList() const noexcept;
+        const std::vector<const RenderCommand*>& GetOrderedList() const noexcept { return m_orderedCommands; };
         
     private:
         std::vector<const RenderCommand*> m_orderedCommands;
-        std::vector<LoadTextureRenderCommandUPtr> m_loadTextureRenderCommands;
+        std::vector<RenderCommandUPtr> m_renderCommands;
     };
 }
 

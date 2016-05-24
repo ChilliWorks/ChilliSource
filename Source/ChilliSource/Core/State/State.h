@@ -202,6 +202,18 @@ namespace ChilliSource
         //-----------------------------------------
         void FixedUpdate(f32 in_fixedTimeSinceLastUpdate);
         //-----------------------------------------
+        /// Sends the render snapshot event onto
+        /// the state, all state systems and any
+        /// entities currently in the scene.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render
+        /// snapshot object which contains all
+        /// snapshotted data.
+        //-----------------------------------------
+        void RenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept;
+        //-----------------------------------------
         /// Triggered when a state is the
         /// active state in the state manager and
         /// the application is no longer at the
@@ -295,6 +307,19 @@ namespace ChilliSource
         /// @param Fixed time since last update (Secs)
         //-----------------------------------------
         virtual void OnFixedUpdate(f32 in_deltaTime){};
+        //-----------------------------------------
+        /// The render snapshot event can be
+        /// implemented by a state to allow it to
+        /// snapshot any data which pertains to the
+        /// renderer.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render
+        /// snapshot object which contains all
+        /// snapshotted data.
+        //-----------------------------------------
+        virtual void OnRenderSnapshot(class RenderSnapshot& in_renderSnapshot) noexcept {};
         //-----------------------------------------
         /// Triggered when a state is the
         /// active state in the state manager and

@@ -43,7 +43,7 @@ namespace ChilliSource
         k_scissorOff
     };
     
-    struct RenderCommand
+    struct SpriteRenderCommand
     {
         MaterialCSPtr m_material;
         
@@ -122,7 +122,7 @@ namespace ChilliSource
     
         SpriteBatch* mpBatch[kudwNumBuffers];
         std::vector<SpriteBatch::SpriteData> maSpriteCache;
-        std::vector<RenderCommand> maRenderCommands;
+        std::vector<SpriteRenderCommand> maSpriteRenderCommands;
         
         MaterialCSPtr mpLastMaterial;
         
