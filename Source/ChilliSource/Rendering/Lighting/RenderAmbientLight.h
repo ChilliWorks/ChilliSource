@@ -1,11 +1,7 @@
 //
-//  Camera.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +22,33 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_CAMERA_H_
-#define _CHILLISOURCE_RENDERING_CAMERA_H_
+#ifndef _CHILLISOURCE_RENDERING_LIGHTING_RENDERAMBIENTLIGHT_H_
+#define _CHILLISOURCE_RENDERING_LIGHTING_RENDERAMBIENTLIGHT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Camera/CameraComponent.h>
-#include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
-#include <ChilliSource/Rendering/Camera/PerspectiveCameraComponent.h>
-#include <ChilliSource/Rendering/Camera/RenderCamera.h>
+#include <ChilliSource/Core/Base/Colour.h>
+
+namespace ChilliSource
+{
+    /// A standard-layout container for data the renderer needs which pertains to a single
+    /// ambient light, such as the colour.
+    class RenderAmbientLight final
+    {
+    public:
+        /// Creates a new instance of the container with the given light colour.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        ///
+        RenderAmbientLight(const Colour& colour) noexcept;
+        
+        /// @return The colour of the light.
+        ///
+        const Colour& GetColour() const noexcept { return m_colour; }
+        
+    private:
+        Colour m_colour;
+    };
+}
 
 #endif

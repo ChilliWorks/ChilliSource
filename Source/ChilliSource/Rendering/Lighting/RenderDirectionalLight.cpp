@@ -1,11 +1,7 @@
 //
-//  Camera.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +22,19 @@
 //  THE SOFTWARE.
 //
 
+#include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
 
-#ifndef _CHILLISOURCE_RENDERING_CAMERA_H_
-#define _CHILLISOURCE_RENDERING_CAMERA_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Camera/CameraComponent.h>
-#include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
-#include <ChilliSource/Rendering/Camera/PerspectiveCameraComponent.h>
-#include <ChilliSource/Rendering/Camera/RenderCamera.h>
-
-#endif
+namespace ChilliSource
+{
+    //------------------------------------------------------------------------------
+    RenderDirectionalLight::RenderDirectionalLight(const Colour& colour, const Vector3& direction) noexcept
+        : m_colour(colour), m_direction(direction)
+    {
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderDirectionalLight::RenderDirectionalLight(const Colour& colour, const Vector3& direction, const Matrix4& lightMatrix, f32 shadowTolerance/*, const RenderTexture* shadowMapTexture*/) noexcept
+        : m_colour(colour), m_direction(direction), m_lightMatrix(lightMatrix), m_shadowTolerance(shadowTolerance)//, m_shadowMapTexture(shadowMapTexture)
+    {
+    }
+}

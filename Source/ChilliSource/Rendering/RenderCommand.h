@@ -1,5 +1,5 @@
 //
-//  Camera.h
+//  Particle.h
 //  Chilli Source
 //  Created by Ian Copland on 07/07/2014.
 //
@@ -26,14 +26,10 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_CAMERA_H_
-#define _CHILLISOURCE_RENDERING_CAMERA_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Camera/CameraComponent.h>
-#include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
-#include <ChilliSource/Rendering/Camera/PerspectiveCameraComponent.h>
-#include <ChilliSource/Rendering/Camera/RenderCamera.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 #endif

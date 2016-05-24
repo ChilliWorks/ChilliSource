@@ -67,6 +67,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(CameraComponent);
     CS_FORWARDDECLARE_CLASS(OrthographicCameraComponent);
     CS_FORWARDDECLARE_CLASS(PerspectiveCameraComponent);
+    CS_FORWARDDECLARE_CLASS(RenderCamera);
     //------------------------------------------------------------
     /// Font
     //------------------------------------------------------------
