@@ -29,9 +29,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     TextOutputStream::TextOutputStream(const std::string& filePath) noexcept
     {
-        m_filename = filePath;
-        
-        m_fileStream.open(m_filename.c_str(), std::ofstream::out | std::ofstream::binary);
+        m_fileStream.open(filePath.c_str(), std::ofstream::out | std::ofstream::binary);
 		m_isValid = m_fileStream.is_open() && !m_fileStream.bad() && !m_fileStream.fail();
     }
     //------------------------------------------------------------------------------

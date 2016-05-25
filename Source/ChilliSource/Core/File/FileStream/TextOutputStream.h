@@ -40,10 +40,9 @@ namespace ChilliSource
 	/// If a TextOutputStream is created with an existing file, that file will
 	/// be overwritten, regardless of whether or not a Write() was carried out
     ///
-    /// OutputTextStream is thread agnostic, but not thread-safe.
-    /// i.e. Instances can used by one thread at a time. It
-    /// doesn't matter which thread as long as any previous threads
-    /// are no longer accessing it
+    /// OutputTextStream is thread agnostic, but not thread-safe. i.e. Instances
+    /// can used by one thread at a time. It doesn't matter which thread as long
+    /// as any previous threads are no longer accessing it
     ///
     class TextOutputStream final
     {
@@ -85,7 +84,6 @@ namespace ChilliSource
     private:
         
         bool m_isValid = false;
-        std::string m_filename;
         std::ofstream m_fileStream;
     };
 }
