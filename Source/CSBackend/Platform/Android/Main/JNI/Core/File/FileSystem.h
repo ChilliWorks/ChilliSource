@@ -35,6 +35,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/ZippedFileSystem.h>
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/FileStream/BinaryInputStream.h>
 #include <ChilliSource/Core/File/FileStream/TextInputStream.h>
 #include <ChilliSource/Core/File/FileStream/TextOutputStream.h>
 #include <ChilliSource/Core/File/FileSystem.h>
@@ -114,6 +115,18 @@ namespace CSBackend
             /// null be returned.
             //------------------------------------------------------------------------------
             ChilliSource::ITextInputStreamUPtr CreateTextInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+            //------------------------------------------------------------------------------
+            /// Creates a new input binary stream to the given file in the given storage location.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_storageLocation - The storage location.
+            /// @param in_filePath - The file path.
+            ///
+            /// @return The new file stream. If the stream cannot be created or is invalid,
+            /// null be returned.
+            //------------------------------------------------------------------------------
+            ChilliSource::IBinaryInputStreamUPtr CreateBinaryInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
 			//------------------------------------------------------------------------------
             /// Creates a new output text stream to the given file in the given storage location.
             ///

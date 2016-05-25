@@ -23,8 +23,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_OUTPUTTEXTSTREAM_H_
-#define _CHILLISOURCE_CORE_FILE_FILESTREAM_OUTPUTTEXTSTREAM_H_
+#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_TEXTOUTPUTSTREAM_H_
+#define _CHILLISOURCE_CORE_FILE_FILESTREAM_TEXTOUTPUTSTREAM_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -47,7 +47,9 @@ namespace ChilliSource
     class TextOutputStream final
     {
     public:
-        
+
+		CS_DECLARE_NOCOPY(TextOutputStream);
+
         /// This will create the filestream from the path passed in and evaluate if
         /// the stream is valid. After construction, IsValid() should be called to
         /// ensure the stream was created without errors before proceeding to call

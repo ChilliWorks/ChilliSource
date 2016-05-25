@@ -22,29 +22,28 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_TEXTINPUTSTREAM_H_
-#define _CHILLISOURCE_CORE_FILE_FILESTREAM_TEXTINPUTSTREAM_H_
+#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_BINARYINPUTSTREAM_H_
+#define _CHILLISOURCE_CORE_FILE_FILESTREAM_BINARYINPUTSTREAM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/File/FileStream/ITextInputStream.h>
+#include <ChilliSource/Core/File/FileStream/IBinaryInputStream.h>
 
 #include <fstream>
 
 namespace ChilliSource
 {
-    /// Class to provide textual read functionality for a file
+    /// Class to provide binary read functionality for a file
     ///
     /// TextInputStream is thread agnostic, but not thread-safe.
     /// i.e. Instances can be used by one thread at a time. It doesn't matter
     /// which thread as long as any previous threads are no longer accessing it
     ///
-    class TextInputStream final : public ITextInputStream
+    class BinaryInputStream final : public IBinaryInputStream
     {
     public:
-
-		CS_DECLARE_NOCOPY(TextInputStream);
-
+        
+        CS_DECLARE_NOCOPY(BinaryInputStream);
+        
         /// This will create the filestream from the path passed in and evaluate if
         /// the stream is valid. After construction, IsValid() should be called to
         /// ensure the stream was created without errors before proceeding to call
@@ -53,16 +52,16 @@ namespace ChilliSource
         /// @param filepath
         ///     The absolute path to a file
         ///
-        TextInputStream(const std::string& filePath) noexcept;
+        BinaryInputStream(const std::string& filePath) noexcept;
         
         /// Checks the status of the stream, if this returns false then the stream
         /// can no longer be accessed.
         ///
-        /// @return If the stream is valid and available for use
+        /// @return If the stream is valid and available for use.
         ///
         bool IsValid() const noexcept override;
         
-        /// @return The Length of stream in bytes
+        /// @return Length of stream in bytes.
         ///
         u64 GetLength() const noexcept override;
         
@@ -82,48 +81,34 @@ namespace ChilliSource
         ///
         void SetReadPosition(u64 readPosition) noexcept override;
         
-        /// @return String containing the contents of the text file, including newlines
+        /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object. This
+        ///     will be nullptr for empty files
         ///
-        std::string ReadAll() noexcept override;
-        
-        /// Reads from the current read position until the newline character ('\n') or EOF
-        /// is reached. If the current read position is at the end of the file on entrance
-        /// then this will return false
-        ///
-        /// @param line
-        ///     String buffer that will be populated, this will not contain newline characters
-        ///
-        /// @return If a line was read successfully
-        ///
-        bool ReadLine(std::string& line) noexcept override;
+        ByteBufferUPtr ReadAll() noexcept override;
         
         /// Reads in a number of characters from the current read position and puts them
-        /// into the passed in string. If the length of the stream is overrun, readChars
+        /// into a BinaryStreamBuffer. If the length of the stream is overrun, the buffer
         /// will contain everything up to that point.
         ///
         /// If the current read position is at the end of the file, this function will return
-        /// false.
+        /// nullptr.
         ///
         /// @param length
         ///     The number of characters to read
         ///
-        /// @param readChars
-        ///     A string to hold the read characters, including newlines
+        /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object
         ///
-        /// @return If the read was successfull
-        ///
-        bool Read(u64 length, std::string& readChars) noexcept override;
+        ByteBufferUPtr Read(u64 length) noexcept override;
         
         /// Destructor
         ///
-        ~TextInputStream() noexcept;
+        ~BinaryInputStream() noexcept;
         
     private:
         
-        u64 m_length = 0;
         bool m_isValid = false;
-        std::string m_filename;
         std::ifstream m_fileStream;
+        u64 m_length = 0;
     };
 }
 

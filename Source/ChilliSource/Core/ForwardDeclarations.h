@@ -39,6 +39,7 @@ namespace ChilliSource
     /// Base
     //---------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(Application);
+    CS_FORWARDDECLARE_CLASS(ByteBuffer);
     CS_FORWARDDECLARE_CLASS(Colour);
     CS_FORWARDDECLARE_CLASS(Device);
     CS_FORWARDDECLARE_CLASS(IInformationProvider);
@@ -91,6 +92,8 @@ namespace ChilliSource
     /// File
     //---------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(FileStream);
+    CS_FORWARDDECLARE_CLASS(IBinaryInputStream);
+    CS_FORWARDDECLARE_CLASS(BinaryInputStream);
     CS_FORWARDDECLARE_CLASS(ITextInputStream);
     CS_FORWARDDECLARE_CLASS(TextInputStream);
     CS_FORWARDDECLARE_CLASS(TextOutputStream);
