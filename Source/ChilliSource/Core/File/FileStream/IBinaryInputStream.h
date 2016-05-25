@@ -69,7 +69,8 @@ namespace ChilliSource
         ///
         virtual void SetReadPosition(u64 readPosition) noexcept = 0;
         
-        /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object
+        /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object. This
+        ///     will be nullptr for empty files
         ///
         virtual ByteBufferUPtr ReadAll() noexcept = 0;
         

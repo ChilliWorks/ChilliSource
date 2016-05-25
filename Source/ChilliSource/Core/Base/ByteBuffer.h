@@ -29,7 +29,7 @@
 
 namespace ChilliSource
 {
-    /// Class to store results of a binary read operation.
+    /// Class to store a data pointer and size
     ///
     /// Class will take ownership of any data passed and data will
     /// be destroyed with this instance
