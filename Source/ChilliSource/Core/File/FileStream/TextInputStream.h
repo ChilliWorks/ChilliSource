@@ -41,10 +41,10 @@ namespace ChilliSource
     ///
     class TextInputStream final : public ITextInputStream
     {
-        CS_DECLARE_NOCOPY(TextInputStream);
-        
     public:
-        
+
+		CS_DECLARE_NOCOPY(TextInputStream);
+
         /// This will create the filestream from the path passed in and evaluate if
         /// the stream is valid. After construction, IsValid() should be called to
         /// ensure the stream was created without errors before proceeding to call

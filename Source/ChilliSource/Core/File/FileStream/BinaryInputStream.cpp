@@ -24,7 +24,7 @@
 
 #include <ChilliSource/Core/File/FileStream/BinaryInputStream.h>
 
-#include <ChilliSource/Core/File/FileStream/BinaryStreamBuffer.h>
+#include <ChilliSource/Core/Base/ByteBuffer.h>
 
 #include <algorithm>
 #include <memory>
@@ -74,7 +74,7 @@ namespace ChilliSource
         m_fileStream.seekg(readPosition);
     }
     //------------------------------------------------------------------------------
-    BinaryStreamBufferUPtr BinaryInputStream::ReadAll() noexcept
+    ByteBufferUPtr BinaryInputStream::ReadAll() noexcept
     {
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         
@@ -84,7 +84,7 @@ namespace ChilliSource
         return Read(m_length);
     }
     //------------------------------------------------------------------------------
-    BinaryStreamBufferUPtr BinaryInputStream::Read(u64 length) noexcept
+    ByteBufferUPtr BinaryInputStream::Read(u64 length) noexcept
     {
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         
@@ -109,7 +109,7 @@ namespace ChilliSource
 
         std::unique_ptr<u8> uniqueData(reinterpret_cast<u8*>(data));
         
-        return BinaryStreamBufferUPtr(new BinaryStreamBuffer(std::move(uniqueData), maxValidLength));
+        return ByteBufferUPtr(new ByteBuffer(std::move(uniqueData), maxValidLength));
     }
     //------------------------------------------------------------------------------
     BinaryInputStream::~BinaryInputStream() noexcept

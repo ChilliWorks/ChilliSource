@@ -40,9 +40,9 @@ namespace ChilliSource
     ///
     class BinaryInputStream final : public IBinaryInputStream
     {
-        CS_DECLARE_NOCOPY(BinaryInputStream);
-        
     public:
+        
+        CS_DECLARE_NOCOPY(BinaryInputStream);
         
         /// This will create the filestream from the path passed in and evaluate if
         /// the stream is valid. After construction, IsValid() should be called to
@@ -81,9 +81,10 @@ namespace ChilliSource
         ///
         void SetReadPosition(u64 readPosition) noexcept override;
         
-        /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object
+        /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object. This
+        ///     will be nullptr for empty files
         ///
-        BinaryStreamBufferUPtr ReadAll() noexcept override;
+        ByteBufferUPtr ReadAll() noexcept override;
         
         /// Reads in a number of characters from the current read position and puts them
         /// into a BinaryStreamBuffer. If the length of the stream is overrun, the buffer
@@ -97,7 +98,7 @@ namespace ChilliSource
         ///
         /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object
         ///
-        BinaryStreamBufferUPtr Read(u64 length) noexcept override;
+        ByteBufferUPtr Read(u64 length) noexcept override;
         
         /// Destructor
         ///

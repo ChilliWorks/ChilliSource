@@ -22,23 +22,23 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/File/FileStream/BinaryStreamBuffer.h>
+#include <ChilliSource/Core/Base/ByteBuffer.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    BinaryStreamBuffer::BinaryStreamBuffer(std::unique_ptr<u8> data, u64 length) noexcept
+    ByteBuffer::ByteBuffer(std::unique_ptr<u8> data, u64 length) noexcept
+    :m_data(std::move(data))
+    ,m_length(length)
     {
-        m_data = std::move(data);
-        m_length = length;
     }
     //------------------------------------------------------------------------------
-    const u8* BinaryStreamBuffer::GetData() const noexcept
+    const u8* ByteBuffer::GetData() const noexcept
     {
         return m_data.get();
     }
     //------------------------------------------------------------------------------
-    const u64 BinaryStreamBuffer::GetLength() const noexcept
+    u64 ByteBuffer::GetLength() const noexcept
     {
         return m_length;
     }

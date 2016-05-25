@@ -48,6 +48,9 @@ namespace ChilliSource
     class TextOutputStream final
     {
     public:
+
+		CS_DECLARE_NOCOPY(TextOutputStream);
+
         
         /// This will create the filestream from the path passed in and evaluate if
         /// the stream is valid. After construction, IsValid() should be called to

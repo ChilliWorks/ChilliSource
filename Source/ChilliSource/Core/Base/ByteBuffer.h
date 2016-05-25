@@ -22,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_BINARYSTREAMBUFFER_H_
-#define _CHILLISOURCE_CORE_FILE_FILESTREAM_BINARYSTREAMBUFFER_H_
+#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_BYTEBUFFER_H_
+#define _CHILLISOURCE_CORE_FILE_FILESTREAM_BYTEBUFFER_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -34,12 +34,12 @@ namespace ChilliSource
     /// Class will take ownership of any data passed and data will
     /// be destroyed with this instance
     ///
-    class BinaryStreamBuffer final
+    class ByteBuffer final
     {
-        CS_DECLARE_NOCOPY(BinaryStreamBuffer);
-        
     public:
-        
+
+		CS_DECLARE_NOCOPY(ByteBuffer);
+
         /// Constructor
         ///
         /// @param data
@@ -47,7 +47,7 @@ namespace ChilliSource
         /// @param length
         ///     The length of the data
         ///
-        BinaryStreamBuffer(std::unique_ptr<u8> data, u64 length) noexcept;
+        ByteBuffer(std::unique_ptr<u8> data, u64 length) noexcept;
         
         /// Gets the pointer to the start of the data.
         /// This should never be modified directly.
@@ -58,7 +58,7 @@ namespace ChilliSource
         
         /// @return The length of the data stored
         ///
-        const u64 GetLength() const noexcept;
+        u64 GetLength() const noexcept;
         
     private:
         

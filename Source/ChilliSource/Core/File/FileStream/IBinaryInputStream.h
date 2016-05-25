@@ -71,7 +71,7 @@ namespace ChilliSource
         
         /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object
         ///
-        virtual BinaryStreamBufferUPtr ReadAll() noexcept = 0;
+        virtual ByteBufferUPtr ReadAll() noexcept = 0;
         
         /// Reads in a number of characters from the current read position and puts them
         /// into a BinaryStreamBuffer. If the length of the stream is overrun, the buffer
@@ -85,7 +85,7 @@ namespace ChilliSource
         ///
         /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object
         ///
-        virtual BinaryStreamBufferUPtr Read(u64 length) noexcept = 0;
+        virtual ByteBufferUPtr Read(u64 length) noexcept = 0;
         
         /// Destructor
         ///
