@@ -22,30 +22,47 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/File/FileStream/TextOutputStream.h>
+#include <ChilliSource/Core/File/FileStream/BinaryOutputStream.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    TextOutputStream::TextOutputStream(const std::string& filePath) noexcept
+    BinaryOutputStream::BinaryOutputStream(const std::string& filePath) noexcept
     {
         m_fileStream.open(filePath.c_str(), std::ofstream::out | std::ofstream::binary);
-		m_isValid = m_fileStream.is_open() && !m_fileStream.bad() && !m_fileStream.fail();
+        m_isValid = m_fileStream.is_open() && !m_fileStream.bad() && !m_fileStream.fail();
     }
     //------------------------------------------------------------------------------
-    bool TextOutputStream::IsValid() const noexcept
+    bool BinaryOutputStream::IsValid() const noexcept
     {
         return m_isValid;
     }
     //------------------------------------------------------------------------------
-    void TextOutputStream::Write(const std::string& data) noexcept
+    void BinaryOutputStream::Write(void* data, u64 length) noexcept
     {
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
-        m_fileStream.write(data.c_str(), data.length());
+        m_fileStream.write(static_cast<s8*>(data), length);
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
     }
     //------------------------------------------------------------------------------
-    TextOutputStream::~TextOutputStream() noexcept
+    void BinaryOutputStream::Write(const ByteBufferUPtr& byteBuffer) noexcept
+    {
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
+        m_fileStream.write(reinterpret_cast<const s8*>(byteBuffer->GetData()), byteBuffer->GetLength());
+        CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
+    }
+    //------------------------------------------------------------------------------
+    template<typename T>
+    void BinaryOutputStream::Write(T data) noexcept
+    {
+        static_assert(std::is_pod<T>::value, "T must be POD");
+        
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
+        m_fileStream.write(reinterpret_cast<const s8*>(data), sizeof(T));
+        CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
+    }
+    //------------------------------------------------------------------------------
+    BinaryOutputStream::~BinaryOutputStream() noexcept
     {
         if(m_fileStream.is_open())
         {

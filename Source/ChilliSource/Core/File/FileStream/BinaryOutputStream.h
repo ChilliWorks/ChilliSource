@@ -22,35 +22,34 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_TEXTOUTPUTSTREAM_H_
-#define _CHILLISOURCE_CORE_FILE_FILESTREAM_TEXTOUTPUTSTREAM_H_
+#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_BINARYOUTPUTSTREAM_H_
+#define _CHILLISOURCE_CORE_FILE_FILESTREAM_BINARYOUTPUTSTREAM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/ByteBuffer.h>
 
 #include <fstream>
 
 namespace ChilliSource
 {
-    /// Class to provide textual write functionality for a file
-	///
-	/// Calling Write() on this stream will not cause a flush to disk, this will
-	/// only occur when the destructer is called.
-	///
-	/// If a TextOutputStream is created with an existing file, that file will
-	/// be overwritten, regardless of whether or not a Write() was carried out
+    /// Class to provide binary write functionality for a file
     ///
-    /// OutputTextStream is thread agnostic, but not thread-safe.
+    /// Calling Write() on this stream will not cause a flush to disk, this will
+    /// only occur when the destructer is called.
+    ///
+    /// If a BinaryOutputStream is created with an existing file, that file will
+    /// be overwritten, regardless of whether or not a Write() was carried out
+    ///
+    /// BinaryOutputStream is thread agnostic, but not thread-safe.
     /// i.e. Instances can used by one thread at a time. It
     /// doesn't matter which thread as long as any previous threads
     /// are no longer accessing it
     ///
-    class TextOutputStream final
+    class BinaryOutputStream final
     {
     public:
-
-		CS_DECLARE_NOCOPY(TextOutputStream);
-
+        
+        CS_DECLARE_NOCOPY(BinaryOutputStream);
         
         /// This will create the filestream from the path passed in and evaluate if
         /// the stream is valid. After construction, IsValid() should be called to
@@ -60,7 +59,7 @@ namespace ChilliSource
         /// @param filepath
         ///     The absolute path to a file
         ///
-        TextOutputStream(const std::string& filePath) noexcept;
+        BinaryOutputStream(const std::string& filePath) noexcept;
         
         /// Checks the status of the stream, if this returns false then the stream
         /// can no longer be accessed.
@@ -69,21 +68,48 @@ namespace ChilliSource
         ///
         bool IsValid() const noexcept;
         
-        /// Writes string data to the stream. This will not effect contents
-		/// on disk.
-		/// 
-		/// Multiple calls to this function will append to any contents already 
-		/// written.
+        /// Writes byte data to the stream. This will not effect contents
+        /// on disk.
+        ///
+        /// Multiple calls to this function will append to any contents already
+        /// written.
         ///
         /// @param data
-		///		The string data to write to the stream
+        ///		The string data to write to the stream
+        /// @param length
+        ///     The length of the data to write
         ///
-        void Write(const std::string& data) noexcept;
+        void Write(void* data, u64 length) noexcept;
+        
+        /// Writes ByteBuffer data to the stream. This will not effect contents
+        /// on disk.
+        ///
+        /// Multiple calls to this function will append to any contents already
+        /// written.
+        ///
+        /// @param data
+        ///		The string data to write to the stream
+        /// @param length
+        ///     The length of the data to write
+        ///
+        void Write(const ByteBufferUPtr& byteBuffer) noexcept;
+        
+        /// Writes ByteBuffer data to the stream. This will not effect contents
+        /// on disk.
+        ///
+        /// Multiple calls to this function will append to any contents already
+        /// written.
+        ///
+        /// @param data
+        ///		The string data to write to the stream
+        ///
+        template<typename T>
+        void Write(T data) noexcept;
         
         /// This will write any pending data written to this stream to disk
         /// and close the stream
         ///
-        ~TextOutputStream() noexcept;
+        ~BinaryOutputStream() noexcept;
         
     private:
         
