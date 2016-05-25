@@ -22,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERSNAPSHOTDESC_H_
-#define _CHILLISOURCE_RENDERING_BASE_RENDERSNAPSHOTDESC_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERSNAPSHOT_H_
+#define _CHILLISOURCE_RENDERING_BASE_RENDERSNAPSHOT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -68,87 +68,87 @@ namespace ChilliSource
         /// @param renderCamera
         ///     The main camera that will be used to render the scene.
         ///
-        void SetRenderCamera(const RenderCamera& renderCamera) noexcept { m_renderCamera = renderCamera; }
+        void SetRenderCamera(const RenderCamera& renderCamera) noexcept;
         
         /// Adds an ambient light to the render snapshot.
         ///
         /// @param renderAmbientLight
         ///     The ambient light which should be added.
         ///
-        void AddRenderAmbientLight(const RenderAmbientLight& renderAmbientLight) noexcept { m_renderAmbientLights.push_back(renderAmbientLight); }
+        void AddRenderAmbientLight(const RenderAmbientLight& renderAmbientLight) noexcept;
         
         /// Adds a directional light to the render snapshot.
         ///
         /// @param renderDirectionalLight
         ///     The directional light which should be added.
         ///
-        void AddRenderDirectionalLight(const RenderDirectionalLight& renderDirectionalLight) noexcept { m_renderDirectionalLights.push_back(renderDirectionalLight); }
+        void AddRenderDirectionalLight(const RenderDirectionalLight& renderDirectionalLight) noexcept;
         
         /// Adds a point light to the render snapshot.
         ///
         /// @param renderPointLight
         ///     The point light which should be added.
         ///
-        void AddRenderPointLight(const RenderPointLight& renderPointLight) noexcept { m_renderPointLights.push_back(renderPointLight); }
+        void AddRenderPointLight(const RenderPointLight& renderPointLight) noexcept;
         
         /// Adds an object to the render snapshot.
         ///
         /// @param renderObject
         ///     The object which should be added.
         ///
-        void AddRenderObject(const RenderObject& renderObject) noexcept { m_renderObjects.push_back(renderObject); }
+        void AddRenderObject(const RenderObject& renderObject) noexcept;
         
         /// @return A modifiable version of the pre render command list. This can be used to populate
         ///     The list with additional commands.
         ///
-        RenderCommandList* GetPreRenderCommandList() noexcept { return m_preRenderCommandList.get(); }
+        RenderCommandList* GetPreRenderCommandList() noexcept;
         
         /// @return A modifiable version of the post render command list. This can be used to
         ///     populate the list with additional commands.
         ///
-        RenderCommandList* GetPostRenderCommandList() noexcept { return m_postRenderCommandList.get(); }
+        RenderCommandList* GetPostRenderCommandList() noexcept;
         
         /// Moves the camera from the snapshot to a new external owner.
         ///
         /// @return The moved render camera.
         ///
-        RenderCamera ClaimRenderCamera() noexcept { return std::move(m_renderCamera); }
+        RenderCamera ClaimRenderCamera() noexcept;
         
         /// Moves the list of ambient lights to a new external owner.
         ///
         /// @return The moved list of ambient lights.
         ///
-        std::vector<RenderAmbientLight> ClaimRenderAmbientLights() noexcept { return std::move(m_renderAmbientLights); }
+        std::vector<RenderAmbientLight> ClaimRenderAmbientLights() noexcept;
         
         /// Moves the list of directional lights to a new external owner.
         ///
         /// @return The moved list of directional lights.
         ///
-        std::vector<RenderDirectionalLight> ClaimRenderDirectionalLights() noexcept { return std::move(m_renderDirectionalLights); }
+        std::vector<RenderDirectionalLight> ClaimRenderDirectionalLights() noexcept;
         
         /// Moves the list of point lights to a new external owner.
         ///
         /// @return The moved list of point lights.
         ///
-        std::vector<RenderPointLight> ClaimRenderPointLights() noexcept { return std::move(m_renderPointLights); }
+        std::vector<RenderPointLight> ClaimRenderPointLights() noexcept;
         
         /// Moves the list of objects to a new external owner.
         ///
         /// @return The moved list of objects.
         ///
-        std::vector<RenderObject> ClaimRenderObjects() noexcept { return std::move(m_renderObjects); }
+        std::vector<RenderObject> ClaimRenderObjects() noexcept;
         
         /// Moves the pre render command list to a new external owner.
         ///
         /// @return The moved pre render command list.
         ///
-        RenderCommandListUPtr ClaimPreRenderCommandList() noexcept { return std::move(m_preRenderCommandList); }
+        RenderCommandListUPtr ClaimPreRenderCommandList() noexcept;
     
         /// Moves the post render command list to a new external owner.
         ///
         /// @return The moved post render command list.
         ///
-        RenderCommandListUPtr ClaimPostRenderCommandList() noexcept { return std::move(m_postRenderCommandList); }
+        RenderCommandListUPtr ClaimPostRenderCommandList() noexcept;
         
     private:
         Colour m_clearColour;
@@ -159,6 +159,12 @@ namespace ChilliSource
         std::vector<RenderObject> m_renderObjects;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
+        
+        bool m_renderCameraClaimed = false;
+        bool m_renderAmbientLightsClaimed = false;
+        bool m_renderDirectionalLightsClaimed = false;
+        bool m_renderPointLightsClaimed = false;
+        bool m_renderObjectsClaimed = false;
     };
 };
 

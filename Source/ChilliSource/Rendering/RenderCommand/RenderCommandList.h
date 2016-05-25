@@ -41,7 +41,7 @@ namespace ChilliSource
     class RenderCommandList final
     {
     public:
-        /// Creates and adds a new load texture command tothe render command list.
+        /// Creates and adds a new load texture command to the render command list.
         ///
         /// @param renderTexture
         ///     The render texture that should be loaded.
