@@ -448,6 +448,25 @@ namespace CSBackend
         }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
+        ChilliSource::TextOutputStreamUPtr FileSystem::CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        {
+        	CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+
+            if (IsStorageLocationWritable(in_storageLocation))
+            {
+            	std::string absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+
+            	ChilliSource::TextOutputStreamUPtr output(new ChilliSource::TextOutputStream(absFilePath));
+            	if (output->IsValid() == true)
+            	{
+            		return output;
+            	}
+            }
+
+            return nullptr;
+        }
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		bool FileSystem::CreateDirectoryPath(ChilliSource::StorageLocation in_storageLocation, const std::string& in_directory) const
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == true, "Cannot create directory in read-only storage location.");
