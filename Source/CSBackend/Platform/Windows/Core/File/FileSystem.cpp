@@ -331,6 +331,30 @@ namespace CSBackend
         }
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
+		ChilliSource::IBinaryInputStreamUPtr FileSystem::CreateBinaryInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+		{
+			std::string absFilePath = "";
+			if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
+			{
+				absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + in_filePath;
+			}
+			else
+			{
+				absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+			}
+
+			ChilliSource::IBinaryInputStreamUPtr output(new ChilliSource::BinaryInputStream(absFilePath));
+			if (output->IsValid() == true)
+			{
+				return output;
+			}
+			else
+			{
+				return nullptr;
+			}
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
 		ChilliSource::TextOutputStreamUPtr FileSystem::CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");

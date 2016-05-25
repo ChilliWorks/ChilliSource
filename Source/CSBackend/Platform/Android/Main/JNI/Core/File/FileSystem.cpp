@@ -411,8 +411,6 @@ namespace CSBackend
 				case ChilliSource::StorageLocation::k_package:
 				case ChilliSource::StorageLocation::k_chilliSource:
 				{
-					CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == false, "Cannot open write mode file stream in read-only storage location.");
-
 					//TODO::Create virtual text input stream
 					break;
 				}
@@ -445,6 +443,50 @@ namespace CSBackend
 			{
 				return nullptr;
 			}
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        ChilliSource::IBinaryInputStreamUPtr FileSystem::CreateBinaryInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        {
+        	ChilliSource::IBinaryInputStreamUPtr binaryInputStream = nullptr;
+
+        	switch (in_storageLocation)
+        	{
+        		case ChilliSource::StorageLocation::k_package:
+        		case ChilliSource::StorageLocation::k_chilliSource:
+        		{
+        			//TODO::Create virtual text input stream
+        			break;
+        		}
+        		case ChilliSource::StorageLocation::k_DLC:
+        		{
+        			if (DoesFileExistInCachedDLC(in_filePath) == true)
+        			{
+        				auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
+        				binaryInputStream = ChilliSource::IBinaryInputStreamUPtr(new ChilliSource::BinaryInputStream(absFilePath));
+        			}
+        			else
+        			{
+        				//TODO::Create virtual text input stream
+        			}
+        			break;
+        		}
+        		default:
+        		{
+        			auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
+        			binaryInputStream = ChilliSource::IBinaryInputStreamUPtr(new ChilliSource::BinaryInputStream(absFilePath));
+        			break;
+        		}
+        	}
+
+        	if(binaryInputStream != nullptr && binaryInputStream->IsValid())
+        	{
+        		return binaryInputStream;
+        	}
+        	else
+        	{
+        		return nullptr;
+        	}
         }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------

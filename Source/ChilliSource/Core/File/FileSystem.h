@@ -126,6 +126,18 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         virtual ITextInputStreamUPtr CreateTextInputStream(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
         //------------------------------------------------------------------------------
+        /// Creates a new input binary stream to the given file in the given storage location.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @param in_storageLocation - The storage location.
+        /// @param in_filePath - The file path.
+        ///
+        /// @return The new file stream. If the stream cannot be created or is invalid,
+        /// null be returned.
+        //------------------------------------------------------------------------------
+        virtual IBinaryInputStreamUPtr CreateBinaryInputStream(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
+        //------------------------------------------------------------------------------
         /// Creates a new output text stream to the given file in the given storage location.
         ///
         /// @author HMcLaughlin
