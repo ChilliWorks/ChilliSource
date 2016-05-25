@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
 #include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
 #include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
@@ -50,7 +51,6 @@ namespace ChilliSource
     class RenderSnapshot final
     {
     public:
-        
         /// Creates a new instance with the given clear colour.
         ///
         /// @param clearColour
@@ -96,7 +96,7 @@ namespace ChilliSource
         /// @param renderObject
         ///     The object which should be added.
         ///
-        //void AddRenderObject(const RenderObject& renderObject) noexcept { m_renderObjects.push_back(renderObject); }
+        void AddRenderObject(const RenderObject& renderObject) noexcept { m_renderObjects.push_back(renderObject); }
         
         /// @return A modifiable version of the pre render command list. This can be used to populate
         ///     The list with additional commands.
@@ -136,7 +136,7 @@ namespace ChilliSource
         ///
         /// @return The moved list of objects.
         ///
-        //std::vector<RenderObject> ClaimRenderObjects() noexcept { return std::move(m_renderObjects); }
+        std::vector<RenderObject> ClaimRenderObjects() noexcept { return std::move(m_renderObjects); }
         
         /// Moves the pre render command list to a new external owner.
         ///
@@ -156,7 +156,7 @@ namespace ChilliSource
         std::vector<RenderAmbientLight> m_renderAmbientLights;
         std::vector<RenderDirectionalLight> m_renderDirectionalLights;
         std::vector<RenderPointLight> m_renderPointLights;
-        //std::vector<RenderObject> m_renderObjects;
+        std::vector<RenderObject> m_renderObjects;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
     };

@@ -42,6 +42,9 @@
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
+#include <ChilliSource/Rendering/Base/RenderFrame.h>
+#include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
+#include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Base/ShaderPass.h>

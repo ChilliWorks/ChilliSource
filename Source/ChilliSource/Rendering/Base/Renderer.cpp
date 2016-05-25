@@ -24,6 +24,11 @@
 
 #include <ChilliSource/Rendering/Base/Renderer.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
+
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Renderer);
@@ -47,9 +52,26 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::ProcessRenderSnapshot(const RenderSnapshot& renderSnapshot) noexcept
+    void Renderer::ProcessRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
     {
-        //TODO: Process render snapshot.
+        // claim data from the render snapshot to ensure that it can't be externally modified when passed
+        // to background tasks.
+        auto clearColour = renderSnapshot.GetClearColour();
+        auto renderCamera = renderSnapshot.ClaimRenderCamera();
+        auto renderAmbientLights = renderSnapshot.ClaimRenderAmbientLights();
+        auto renderDirectionalLights = renderSnapshot.ClaimRenderDirectionalLights();
+        auto renderPointLights = renderSnapshot.ClaimRenderPointLights();
+        auto renderObjects = renderSnapshot.ClaimRenderObjects();
+        auto preRenderCommandList = renderSnapshot.ClaimPreRenderCommandList();
+        auto postRenderCommandList = renderSnapshot.ClaimPostRenderCommandList();
+        
+        auto taskScheduler = Application::Get()->GetTaskScheduler();
+        taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
+        {
+            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
+            
+            //TODO: Process the rest of the render pipeline.
+        });
     }
     
     //------------------------------------------------------------------------------

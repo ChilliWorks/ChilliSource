@@ -87,9 +87,10 @@ namespace ChilliSource
         ///
         /// @param renderSnapshot
         ///     The render snapshot to process. This should have already been populated by passing it
-        ///     to each system and component in the scene.
+        ///     to each system and component in the scene. This will be modified internally and should
+        ///     not be reused.
         ///
-        void ProcessRenderSnapshot(const RenderSnapshot& renderSnapshot) noexcept;
+        void ProcessRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept;
         
         /// Processes the next render command queue. If there is no render command queue ready to be
         /// processed then this will block until there is.
