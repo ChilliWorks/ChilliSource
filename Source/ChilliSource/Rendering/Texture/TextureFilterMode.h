@@ -22,13 +22,24 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#ifndef _CHILLISOURCE_RENDERING_TEXTURE_TEXTUREFILTERMODE_H_
+#define _CHILLISOURCE_RENDERING_TEXTURE_TEXTUREFILTERMODE_H_
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
-        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize)
+    /// The filter mode for determining how to sample texels based on nearby texels in
+    /// order to reduce texture aliasing.
+    ///
+    /// * Nearest: Fastest method. Chooses the closest texel
+    /// * Bilinear: Samples from 4 texels and uses weighted average
+    ///
+    enum class TextureFilterMode
     {
-    }
+        k_nearest,
+        k_bilinear
+    };
 }
+
+#endif

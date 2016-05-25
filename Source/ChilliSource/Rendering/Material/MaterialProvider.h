@@ -69,9 +69,9 @@ namespace ChilliSource
             std::string m_filePath;
             StorageLocation m_location;
             bool m_shouldMipMap;
-            Texture::WrapMode m_wrapModeU;
-            Texture::WrapMode m_wrapModeV;
-            Texture::FilterMode m_filterMode;
+            TextureWrapMode m_wrapModeU;
+            TextureWrapMode m_wrapModeV;
+            TextureFilterMode m_filterMode;
         };
         //-------------------------------------------------------------------------
         /// Factory method

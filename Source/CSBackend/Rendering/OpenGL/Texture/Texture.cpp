@@ -35,6 +35,8 @@
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormatConverter.h>
+#include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
+#include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
 
 namespace CSBackend
 {
@@ -51,23 +53,23 @@ namespace CSBackend
             /// @param Horizontal wrap mode
             /// @param Vertical wrap mode
             //---------------------------------------------------
-            void ApplyWrapMode(ChilliSource::Texture::WrapMode in_smode, ChilliSource::Texture::WrapMode in_tmode)
+            void ApplyWrapMode(ChilliSource::TextureWrapMode in_smode, ChilliSource::TextureWrapMode in_tmode)
             {
                 switch(in_smode)
                 {
-                    case ChilliSource::Texture::WrapMode::k_clamp:
+                    case ChilliSource::TextureWrapMode::k_clamp:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
                         break;
-                    case ChilliSource::Texture::WrapMode::k_repeat:
+                    case ChilliSource::TextureWrapMode::k_repeat:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
                         break;
                 };
                 switch(in_tmode)
                 {
-                    case ChilliSource::Texture::WrapMode::k_clamp:
+                    case ChilliSource::TextureWrapMode::k_clamp:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                         break;
-                    case ChilliSource::Texture::WrapMode::k_repeat:
+                    case ChilliSource::TextureWrapMode::k_repeat:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
                         break;
                 };
@@ -83,17 +85,17 @@ namespace CSBackend
             /// @param Filter mode
             /// @param Whether mip-mapping is enabled
             //---------------------------------------------------
-            void ApplyFilterMode(ChilliSource::Texture::FilterMode in_mode, bool in_hasMipMaps)
+            void ApplyFilterMode(ChilliSource::TextureFilterMode in_mode, bool in_hasMipMaps)
             {
                 if(in_hasMipMaps == false)
                 {
                     switch(in_mode)
                     {
-                        case ChilliSource::Texture::FilterMode::k_nearestNeighbour:
+                        case ChilliSource::TextureFilterMode::k_nearest:
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                             break;
-                        case ChilliSource::Texture::FilterMode::k_bilinear:
+                        case ChilliSource::TextureFilterMode::k_bilinear:
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             break;
@@ -103,11 +105,11 @@ namespace CSBackend
                 {
                     switch(in_mode)
                     {
-                        case ChilliSource::Texture::FilterMode::k_nearestNeighbour:
+                        case ChilliSource::TextureFilterMode::k_nearest:
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                             break;
-                        case ChilliSource::Texture::FilterMode::k_bilinear:
+                        case ChilliSource::TextureFilterMode::k_bilinear:
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             break;
@@ -393,7 +395,7 @@ namespace CSBackend
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void Texture::SetFilterMode(FilterMode in_mode)
+		void Texture::SetFilterMode(TextureFilterMode in_mode)
 		{
             m_filterMode = in_mode;
 
@@ -401,7 +403,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void Texture::SetWrapMode(WrapMode in_smode, WrapMode in_tmode)
+		void Texture::SetWrapMode(TextureWrapMode in_smode, TextureWrapMode in_tmode)
 		{
 			m_sWrapMode = in_smode;
 			m_tWrapMode = in_tmode;

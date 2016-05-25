@@ -22,13 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
-        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize)
+    UnloadTextureRenderCommand::UnloadTextureRenderCommand(RenderTextureUPtr renderTexture) noexcept
+        : RenderCommand(Type::k_unloadTexture), m_renderTexture(std::move(renderTexture))
     {
     }
 }

@@ -101,7 +101,7 @@ namespace CSBackend
             ///
             /// @param Filter mode
             //--------------------------------------------------------------
-            void SetFilterMode(FilterMode in_mode) override;
+            void SetFilterMode(ChilliSource::TextureFilterMode in_mode) override;
             //--------------------------------------------------------------
             /// Future sampling of the texture will use the given wrap mode
             ///
@@ -110,7 +110,7 @@ namespace CSBackend
             /// @param Horizontal wrapping
             /// @param Vertical wrapping
             //--------------------------------------------------------------
-			void SetWrapMode(WrapMode in_sMode, WrapMode in_tMode) override;
+            void SetWrapMode(ChilliSource::TextureWrapMode in_sMode, ChilliSource::TextureWrapMode in_tMode) override;
 			//--------------------------------------------------
 			/// @author S Downie
 			///

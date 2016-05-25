@@ -13,6 +13,9 @@
 		8153A2FE1CF5A22A002AC919 /* RenderFrameCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A2FC1CF5A22A002AC919 /* RenderFrameCompiler.cpp */; };
 		8153A3011CF5A4AB002AC919 /* RenderObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A2FF1CF5A4AB002AC919 /* RenderObject.cpp */; };
 		8153A3041CF5A764002AC919 /* RenderFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A3021CF5A764002AC919 /* RenderFrame.cpp */; };
+		8153A3071CF5DD32002AC919 /* RenderTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A3051CF5DD32002AC919 /* RenderTexture.cpp */; };
+		8153A30A1CF5DDB5002AC919 /* RenderTextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A3081CF5DDB5002AC919 /* RenderTextureManager.cpp */; };
+		8153A30F1CF60025002AC919 /* UnloadTextureRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A30D1CF60025002AC919 /* UnloadTextureRenderCommand.cpp */; };
 		8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */; };
 		8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FB1C89D2AC00B13109 /* CkBank.cpp */; };
 		8158F64C1C89D2AD00B13109 /* CkBankProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FD1C89D2AC00B13109 /* CkBankProvider.cpp */; };
@@ -345,6 +348,14 @@
 		8153A3001CF5A4AB002AC919 /* RenderObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderObject.h; sourceTree = "<group>"; };
 		8153A3021CF5A764002AC919 /* RenderFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderFrame.cpp; sourceTree = "<group>"; };
 		8153A3031CF5A764002AC919 /* RenderFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderFrame.h; sourceTree = "<group>"; };
+		8153A3051CF5DD32002AC919 /* RenderTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTexture.cpp; sourceTree = "<group>"; };
+		8153A3061CF5DD32002AC919 /* RenderTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTexture.h; sourceTree = "<group>"; };
+		8153A3081CF5DDB5002AC919 /* RenderTextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTextureManager.cpp; sourceTree = "<group>"; };
+		8153A3091CF5DDB5002AC919 /* RenderTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTextureManager.h; sourceTree = "<group>"; };
+		8153A30B1CF5E086002AC919 /* TextureFilterMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextureFilterMode.h; sourceTree = "<group>"; };
+		8153A30C1CF5E1B6002AC919 /* TextureWrapMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextureWrapMode.h; sourceTree = "<group>"; };
+		8153A30D1CF60025002AC919 /* UnloadTextureRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnloadTextureRenderCommand.cpp; sourceTree = "<group>"; };
+		8153A30E1CF60025002AC919 /* UnloadTextureRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnloadTextureRenderCommand.h; sourceTree = "<group>"; };
 		8158F1EA1C89D27300B13109 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioPlayer.cpp; sourceTree = "<group>"; };
 		8158F1FA1C89D2AC00B13109 /* CkAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioPlayer.h; sourceTree = "<group>"; };
@@ -2122,16 +2133,22 @@
 				8158F4021C89D2AD00B13109 /* CubemapProvider.h */,
 				8158F4031C89D2AD00B13109 /* CubemapResourceOptions.cpp */,
 				8158F4041C89D2AD00B13109 /* CubemapResourceOptions.h */,
+				8153A3051CF5DD32002AC919 /* RenderTexture.cpp */,
+				8153A3061CF5DD32002AC919 /* RenderTexture.h */,
+				8153A3081CF5DDB5002AC919 /* RenderTextureManager.cpp */,
+				8153A3091CF5DDB5002AC919 /* RenderTextureManager.h */,
 				8158F4051C89D2AD00B13109 /* Texture.cpp */,
 				8158F4061C89D2AD00B13109 /* Texture.h */,
 				8158F4071C89D2AD00B13109 /* TextureAtlas.cpp */,
 				8158F4081C89D2AD00B13109 /* TextureAtlas.h */,
 				8158F4091C89D2AD00B13109 /* TextureAtlasProvider.cpp */,
 				8158F40A1C89D2AD00B13109 /* TextureAtlasProvider.h */,
+				8153A30B1CF5E086002AC919 /* TextureFilterMode.h */,
 				8158F40B1C89D2AD00B13109 /* TextureProvider.cpp */,
 				8158F40C1C89D2AD00B13109 /* TextureProvider.h */,
 				8158F40D1C89D2AD00B13109 /* TextureResourceOptions.cpp */,
 				8158F40E1C89D2AD00B13109 /* TextureResourceOptions.h */,
+				8153A30C1CF5E1B6002AC919 /* TextureWrapMode.h */,
 				8158F40F1C89D2AD00B13109 /* UVs.cpp */,
 				8158F4101C89D2AD00B13109 /* UVs.h */,
 			);
@@ -2726,6 +2743,8 @@
 			children = (
 				81A125EC1CF464480010853A /* LoadTextureRenderCommand.cpp */,
 				81A125ED1CF464480010853A /* LoadTextureRenderCommand.h */,
+				8153A30D1CF60025002AC919 /* UnloadTextureRenderCommand.cpp */,
+				8153A30E1CF60025002AC919 /* UnloadTextureRenderCommand.h */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -3093,6 +3112,7 @@
 				8158F6D51C89D2AD00B13109 /* ColourOverLifetimeParticleAffector.cpp in Sources */,
 				8158F7D11C89D2AD00B13109 /* PointerSystem.mm in Sources */,
 				8158F6921C89D2AD00B13109 /* PerformanceTimer.cpp in Sources */,
+				8153A3071CF5DD32002AC919 /* RenderTexture.cpp in Sources */,
 				8158F6C81C89D2AD00B13109 /* CSModelProvider.cpp in Sources */,
 				8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */,
 				81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */,
@@ -3155,6 +3175,7 @@
 				81A125EE1CF464480010853A /* LoadTextureRenderCommand.cpp in Sources */,
 				8158F6641C89D2AD00B13109 /* Component.cpp in Sources */,
 				8158F7C11C89D2AD00B13109 /* CSAppDelegate.mm in Sources */,
+				8153A30F1CF60025002AC919 /* UnloadTextureRenderCommand.cpp in Sources */,
 				8158F69B1C89D2AD00B13109 /* Gesture.cpp in Sources */,
 				8158F6A41C89D2AD00B13109 /* TextEntry.cpp in Sources */,
 				8158F72B1C89D2AD00B13109 /* SliderDirection.cpp in Sources */,
@@ -3311,6 +3332,7 @@
 				8158F7CC1C89D2AD00B13109 /* NSNotificationAdapter.mm in Sources */,
 				8158F7C21C89D2AD00B13109 /* CSGLViewController.mm in Sources */,
 				8158F71D1C89D2AD00B13109 /* ThreePatchUIDrawableDef.cpp in Sources */,
+				8153A30A1CF5DDB5002AC919 /* RenderTextureManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

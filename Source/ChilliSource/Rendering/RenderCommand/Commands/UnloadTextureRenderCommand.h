@@ -22,51 +22,41 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_RENDERCOMMANDLIST_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_RENDERCOMMANDLIST_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADTEXTURERENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADTEXTURERENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
-#include <vector>
-
 namespace ChilliSource
 {
-    /// Provides the ability to create an ordered list of render commands. Commands are
-    /// created contiguously in memory to improve cache locality and reduce fragmentation.
+    
+    /// A render command which unloads the texture data for a single render texture from
+    /// render memory.
     ///
-    /// This is not thread-safe and therefore should only be accessed from one thread
-    /// at a time.
+    /// This must be instantiated via a RenderCommandList.
     ///
-    class RenderCommandList final
+    /// This is immutable and therefore thread-safe.
+    ///
+    class UnloadTextureRenderCommand final : public RenderCommand
     {
     public:
-        /// Creates and adds a new load texture command to the render command list.
+        /// @return The render texture that should be unloaded.
         ///
-        /// @param renderTexture
-        ///     The render texture that should be loaded.
-        /// @param textureData
-        ///     The data describing the texture.
-        /// @param textureDataSize
-        ///     The size of the texture data in bytes.
-        ///
-        void AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
-        
-        /// Creates and adds a new unload texture command to the render command list.
-        ///
-        /// @param renderTexture
-        ///     The render texture that should be loaded.
-        ///
-        void AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept;
-        
-        /// @return The ordered list of render commands.
-        ///
-        const std::vector<const RenderCommand*>& GetOrderedList() const noexcept { return m_orderedCommands; };
-        
+        RenderTexture* GetRenderTexture() const noexcept { return m_renderTexture.get(); };
+    
     private:
-        std::vector<const RenderCommand*> m_orderedCommands;
-        std::vector<RenderCommandUPtr> m_renderCommands; //TODO: This should be changed to a series of pools of individial render command types.
+        friend class RenderCommandList;
+        
+        /// Constructs a new instance with the given render texture and texture data.
+        ///
+        /// @param renderTexture
+        ///     The render texture that should be loaded.
+        ///
+        UnloadTextureRenderCommand(RenderTextureUPtr renderTexture) noexcept;
+        
+        RenderTextureUPtr m_renderTexture;
     };
 }
 

@@ -22,13 +22,24 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#ifndef _CHILLISOURCE_RENDERING_TEXTURE_TEXTUREWRAPMODE_H_
+#define _CHILLISOURCE_RENDERING_TEXTURE_TEXTUREWRAPMODE_H_
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
-        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize)
+    /// The wrap mode for determining how a texel should be sampled if the texture
+    /// coordinates exceed the bounds
+    ///
+    /// * Clamp: Clamps the texcoord between 0 and 1
+    /// * Wrap: Tex coord > 1 will wrap to be (x - 1) and vice-versa
+    ///
+    enum class TextureWrapMode
     {
-    }
+        k_clamp,
+        k_repeat
+    };
 }
+
+#endif

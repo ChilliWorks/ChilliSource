@@ -22,13 +22,14 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
-        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize)
+    RenderTexture::RenderTexture(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression, TextureFilterMode filterMode, TextureWrapMode wrapModeS,  TextureWrapMode wrapModeT,
+                                 bool isMipmapped) noexcept
+        : m_dimensions(dimensions), m_imageFormat(imageFormat), m_imageCompression(imageCompression), m_filterMode(filterMode), m_wrapModeS(wrapModeS), m_wrapModeT(wrapModeT), m_isMipmapped(isMipmapped)
     {
     }
 }

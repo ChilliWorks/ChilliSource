@@ -34,6 +34,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
+#include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
+#include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
 
 namespace CSBackend
 {
@@ -50,23 +52,23 @@ namespace CSBackend
             /// @param Horizontal wrap mode
             /// @param Vertical wrap mode
             //---------------------------------------------------
-            void ApplyWrapMode(ChilliSource::Texture::WrapMode in_smode, ChilliSource::Texture::WrapMode in_tmode)
+            void ApplyWrapMode(ChilliSource::TextureWrapMode in_smode, ChilliSource::TextureWrapMode in_tmode)
             {
                 switch(in_smode)
                 {
-                    case ChilliSource::Texture::WrapMode::k_clamp:
+                    case ChilliSource::TextureWrapMode::k_clamp:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
                         break;
-                    case ChilliSource::Texture::WrapMode::k_repeat:
+                    case ChilliSource::TextureWrapMode::k_repeat:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
                         break;
                 };
                 switch(in_tmode)
                 {
-                    case ChilliSource::Texture::WrapMode::k_clamp:
+                    case ChilliSource::TextureWrapMode::k_clamp:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                         break;
-                    case ChilliSource::Texture::WrapMode::k_repeat:
+                    case ChilliSource::TextureWrapMode::k_repeat:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
                         break;
                 };
@@ -82,17 +84,17 @@ namespace CSBackend
             /// @param Filter mode
             /// @param Whether mip-mapping is enabled
             //---------------------------------------------------
-            void ApplyFilterMode(ChilliSource::Texture::FilterMode in_mode, bool in_hasMipMaps)
+            void ApplyFilterMode(ChilliSource::TextureFilterMode in_mode, bool in_hasMipMaps)
             {
                 if(in_hasMipMaps == false)
                 {
                     switch(in_mode)
                     {
-                        case ChilliSource::Texture::FilterMode::k_nearestNeighbour:
+                        case ChilliSource::TextureFilterMode::k_nearest:
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                             break;
-                        case ChilliSource::Texture::FilterMode::k_bilinear:
+                        case ChilliSource::TextureFilterMode::k_bilinear:
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             break;
@@ -102,11 +104,11 @@ namespace CSBackend
                 {
                     switch(in_mode)
                     {
-                        case ChilliSource::Texture::FilterMode::k_nearestNeighbour:
+                        case ChilliSource::TextureFilterMode::k_nearest:
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                             break;
-                        case ChilliSource::Texture::FilterMode::k_bilinear:
+                        case ChilliSource::TextureFilterMode::k_bilinear:
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             break;
@@ -387,7 +389,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void Cubemap::SetFilterMode(ChilliSource::Texture::FilterMode in_mode)
+		void Cubemap::SetFilterMode(ChilliSource::TextureFilterMode in_mode)
 		{
             m_filterMode = in_mode;
             
@@ -395,7 +397,7 @@ namespace CSBackend
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void Cubemap::SetWrapMode(ChilliSource::Texture::WrapMode in_smode, ChilliSource::Texture::WrapMode in_tmode)
+		void Cubemap::SetWrapMode(ChilliSource::TextureWrapMode in_smode, ChilliSource::TextureWrapMode in_tmode)
 		{
 			m_sWrapMode = in_smode;
 			m_tWrapMode = in_tmode;
@@ -419,9 +421,9 @@ namespace CSBackend
                 descs[i].m_dataSize = m_restorationDataSizes[i];
             }
             
-            ChilliSource::Texture::WrapMode sWrap = m_sWrapMode;
-            ChilliSource::Texture::WrapMode tWrap = m_tWrapMode;
-            ChilliSource::Texture::FilterMode filterMode = m_filterMode;
+            ChilliSource::TextureWrapMode sWrap = m_sWrapMode;
+            ChilliSource::TextureWrapMode tWrap = m_tWrapMode;
+            ChilliSource::TextureFilterMode filterMode = m_filterMode;
             
             Build(descs, std::move(m_restorationDatas), m_hasMipMaps, m_restoreCubemapDataEnabled);
             SetWrapMode(sWrap, tWrap);
@@ -437,8 +439,8 @@ namespace CSBackend
 //            m_hasWrapModeChanged = true;
 //            m_hasMipMaps = false;
 //            
-//            m_sWrapMode = ChilliSource::Texture::WrapMode::k_clamp;
-//            m_tWrapMode = ChilliSource::Texture::WrapMode::k_clamp;
+//            m_sWrapMode = ChilliSource::TextureWrapMode::k_clamp;
+//            m_tWrapMode = ChilliSource::TextureWrapMode::k_clamp;
 //            
 //            //If the context has already been destroyed then the cubemap has already been destroyed
 //            bool hasContext = static_cast<RenderSystem*>(ChilliSource::Application::Get()->GetRenderSystem())->HasContext();

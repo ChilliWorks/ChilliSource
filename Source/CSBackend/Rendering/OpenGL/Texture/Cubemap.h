@@ -109,7 +109,7 @@ namespace CSBackend
             ///
             /// @param Filter mode
             //--------------------------------------------------------------
-            void SetFilterMode(ChilliSource::Texture::FilterMode in_mode) override;
+            void SetFilterMode(ChilliSource::TextureFilterMode in_mode) override;
             //--------------------------------------------------------------
             /// Future sampling of the cubemap will use the given wrap mode
             ///
@@ -118,7 +118,7 @@ namespace CSBackend
             /// @param Horizontal wrapping
             /// @param Vertical wrapping
             //--------------------------------------------------------------
-			void SetWrapMode(ChilliSource::Texture::WrapMode in_sMode, ChilliSource::Texture::WrapMode in_tMode) override;
+			void SetWrapMode(ChilliSource::TextureWrapMode in_sMode, ChilliSource::TextureWrapMode in_tMode) override;
 			//--------------------------------------------------
 			/// @author S Downie
 			///
@@ -187,9 +187,9 @@ namespace CSBackend
             
             GLuint m_cubemapHandle = 0;
             
-            ChilliSource::Texture::FilterMode m_filterMode = ChilliSource::Texture::FilterMode::k_bilinear;
-            ChilliSource::Texture::WrapMode m_sWrapMode = ChilliSource::Texture::WrapMode::k_clamp;
-            ChilliSource::Texture::WrapMode m_tWrapMode = ChilliSource::Texture::WrapMode::k_clamp;
+            ChilliSource::TextureFilterMode m_filterMode = ChilliSource::TextureFilterMode::k_bilinear;
+            ChilliSource::TextureWrapMode m_sWrapMode = ChilliSource::TextureWrapMode::k_clamp;
+            ChilliSource::TextureWrapMode m_tWrapMode = ChilliSource::TextureWrapMode::k_clamp;
             
             std::array<u32, 6> m_widths;
             std::array<u32, 6> m_heights;

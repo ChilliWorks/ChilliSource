@@ -63,34 +63,6 @@ namespace ChilliSource
             u32 m_dataSize;
         };
         //--------------------------------------------------------------
-        /// The filter mode for determining how to sample texels based
-        /// on nearby texels in order to reduce texture aliasing.
-        ///
-        /// * Nearest neighbour - Fastest method. Chooses the closest texel
-        /// * Bilinear - Samples from 4 texels and uses weighted average
-        ///
-        /// @author S Downie
-        //--------------------------------------------------------------
-        enum class FilterMode
-        {
-            k_nearestNeighbour,
-            k_bilinear
-        };
-        //--------------------------------------------------------------
-        /// The wrap mode for determining how a texel should be sampled
-        /// if the texture coordinates exceed the bounds
-        ///
-        /// * Clamp - Clamps the texcoord between 0 and 1
-        /// * Wrap - Tex coord > 1 will wrap to be (x - 1) and vice-versa
-        ///
-        /// @author S Downie
-        //--------------------------------------------------------------
-        enum class WrapMode
-        {
-            k_clamp,
-            k_repeat
-        };
-        //--------------------------------------------------------------
         /// Construct the texture from the given image data. The texture
         /// will take ownership of the image data.
         ///
@@ -133,7 +105,7 @@ namespace ChilliSource
         ///
         /// @param Filter mode
         //--------------------------------------------------------------
-        virtual void SetFilterMode(FilterMode in_mode) = 0;
+        virtual void SetFilterMode(TextureFilterMode in_mode) = 0;
         //--------------------------------------------------------------
         /// Future sampling of the texture will use the given wrap mode
         ///
@@ -142,7 +114,7 @@ namespace ChilliSource
         /// @param Horizontal wrapping
         /// @param Vertical wrapping
         //--------------------------------------------------------------
-        virtual void SetWrapMode(WrapMode in_sMode, WrapMode in_tMode) = 0;
+        virtual void SetWrapMode(TextureWrapMode in_sMode, TextureWrapMode in_tMode) = 0;
         //--------------------------------------------------------------
         /// @author S Downie
         ///

@@ -27,6 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
+#include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
 namespace ChilliSource
 {
@@ -44,7 +45,7 @@ namespace ChilliSource
         
         /// @return The render texture that should be loaded.
         ///
-        //RenderTexture* GetRenderTexture() const noexcept { return m_renderTexture };
+        RenderTexture* GetRenderTexture() const noexcept { return m_renderTexture; };
         
         /// @return The data describing the texture.
         ///
@@ -66,9 +67,9 @@ namespace ChilliSource
         /// @param textureDataSize
         ///     The size of the texture data in bytes.
         ///
-        LoadTextureRenderCommand(/*RenderTexture* renderTexture, */std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
+        LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
         
-        //RenderTexture* m_renderTexture;
+        RenderTexture* m_renderTexture;
         std::unique_ptr<const u8[]> m_textureData;
         u32 m_textureDataSize;
     };

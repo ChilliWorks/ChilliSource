@@ -70,9 +70,9 @@ namespace ChilliSource
             StorageLocation m_location;
             ShaderPass m_pass;
             bool m_shouldMipMap;
-            Texture::FilterMode m_filterMode;
-            Texture::WrapMode m_wrapModeU;
-            Texture::WrapMode m_wrapModeV;
+            TextureFilterMode m_filterMode;
+            TextureWrapMode m_wrapModeU;
+            TextureWrapMode m_wrapModeV;
         };
         //----------------------------------------------------------------------------
         /// @author S Downie
@@ -116,22 +116,22 @@ namespace ChilliSource
         /// @return The wrap mode. If the string was not a valid wrap mode this will
         /// default to clamp.
         //----------------------------------------------------------------------------
-        Texture::WrapMode ConvertStringToWrapMode(const std::string& in_wrapModeString)
+        TextureWrapMode ConvertStringToWrapMode(const std::string& in_wrapModeString)
         {
             std::string lowerWrapModeString = in_wrapModeString;
             StringUtils::ToLowerCase(lowerWrapModeString);
             
             if(lowerWrapModeString == "clamp")
             {
-                return Texture::WrapMode::k_clamp;
+                return TextureWrapMode::k_clamp;
             }
             if(lowerWrapModeString == "repeat")
             {
-                return Texture::WrapMode::k_repeat;
+                return TextureWrapMode::k_repeat;
             }
             
             CS_LOG_ERROR("Invalid WrapMode: " + in_wrapModeString);
-            return Texture::WrapMode::k_clamp;
+            return TextureWrapMode::k_clamp;
         }
         //----------------------------------------------------------------------------
         /// @author Ian Copland
@@ -141,22 +141,22 @@ namespace ChilliSource
         /// @return The filter mode. If the string was not a valid filter mode this will
         /// default to bilinear.
         //----------------------------------------------------------------------------
-        Texture::FilterMode ConvertStringToFilterMode(const std::string& in_filterModeString)
+        TextureFilterMode ConvertStringToFilterMode(const std::string& in_filterModeString)
         {
             std::string lowerFilterModeString = in_filterModeString;
             StringUtils::ToLowerCase(lowerFilterModeString);
             
             if(lowerFilterModeString == "nearestneighbour")
             {
-                return Texture::FilterMode::k_nearestNeighbour;
+                return TextureFilterMode::k_nearest;
             }
             if(lowerFilterModeString == "bilinear")
             {
-                return Texture::FilterMode::k_bilinear;
+                return TextureFilterMode::k_bilinear;
             }
             
             CS_LOG_ERROR("Invalid FilterMode: " + in_filterModeString);
-            return Texture::FilterMode::k_bilinear;
+            return TextureFilterMode::k_bilinear;
         }
         //----------------------------------------------------------------------------
         /// Each material type has associated shaders. This function will build a
