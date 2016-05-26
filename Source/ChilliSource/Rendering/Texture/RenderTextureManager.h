@@ -83,6 +83,8 @@ namespace ChilliSource
         /// @param isMipmapped
         ///     Whether or not mipmaps are generated for the texture.
         ///
+        /// @return The new render texture instance.
+        ///
         const RenderTexture* CreateRenderTexture(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
                                            TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped) noexcept;
         

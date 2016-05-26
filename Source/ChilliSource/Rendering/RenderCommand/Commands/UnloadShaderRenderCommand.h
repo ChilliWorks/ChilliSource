@@ -22,15 +22,40 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADSHADERRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADSHADERRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/Shader/RenderShader.h>
+
+namespace ChilliSource
+{
+    /// A render command which unloads a single shader.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class UnloadShaderRenderCommand final : public RenderCommand
+    {
+    public:
+        /// @return The render shader that should be unloaded.
+        ///
+        const RenderShader* GetRenderShader() const noexcept { return m_renderShader.get(); };
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Constructs a new instance with the render shader.
+        ///
+        /// @param renderShader
+        ///     The render shader that should be unloaded.
+        ///
+        UnloadShaderRenderCommand(RenderShaderUPtr renderShader) noexcept;
+        
+        RenderShaderUPtr m_renderShader;
+    };
+}
 
 #endif

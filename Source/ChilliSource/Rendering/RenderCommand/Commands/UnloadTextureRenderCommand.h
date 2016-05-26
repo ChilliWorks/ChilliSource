@@ -31,7 +31,6 @@
 
 namespace ChilliSource
 {
-    
     /// A render command which unloads the texture data for a single render texture from
     /// render memory.
     ///
@@ -44,15 +43,15 @@ namespace ChilliSource
     public:
         /// @return The render texture that should be unloaded.
         ///
-        RenderTexture* GetRenderTexture() const noexcept { return m_renderTexture.get(); };
+        const RenderTexture* GetRenderTexture() const noexcept { return m_renderTexture.get(); };
     
     private:
         friend class RenderCommandList;
         
-        /// Constructs a new instance with the given render texture and texture data.
+        /// Constructs a new instance with the given render texture.
         ///
         /// @param renderTexture
-        ///     The render texture that should be loaded.
+        ///     The render texture that should be unloaded.
         ///
         UnloadTextureRenderCommand(RenderTextureUPtr renderTexture) noexcept;
         

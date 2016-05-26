@@ -42,6 +42,17 @@ namespace ChilliSource
     class RenderCommandList final
     {
     public:
+        /// Creates and adds a new shader texture command to the render command list.
+        ///
+        /// @param renderShader
+        ///     The render shader that should be loaded.
+        /// @param vertexShader
+        ///     The vertex shader string.
+        /// @param fragmentShader
+        ///     The fragment shader string
+        ///
+        void AddLoadShaderCommand(RenderShader* renderShader, const std::string& vertexShader, const std::string& fragmentShader) noexcept;
+        
         /// Creates and adds a new load texture command to the render command list.
         ///
         /// @param renderTexture
@@ -53,10 +64,17 @@ namespace ChilliSource
         ///
         void AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
         
+        /// Creates and adds a new unload shader command to the render command list.
+        ///
+        /// @param renderShader
+        ///     The render shader that should be unloaded.
+        ///
+        void AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept;
+        
         /// Creates and adds a new unload texture command to the render command list.
         ///
         /// @param renderTexture
-        ///     The render texture that should be loaded.
+        ///     The render texture that should be unloaded.
         ///
         void AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept;
         

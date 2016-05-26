@@ -152,12 +152,18 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Render Command
     //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(LoadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandList);
+    CS_FORWARDDECLARE_CLASS(UnloadShaderRenderCommand);
+    CS_FORWARDDECLARE_CLASS(UnloadTextureRenderCommand);
     //------------------------------------------------------------
     /// Shader
     //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(CSShaderProvider);
+    CS_FORWARDDECLARE_CLASS(RenderShader);
+    CS_FORWARDDECLARE_CLASS(RenderShaderManager);
     CS_FORWARDDECLARE_CLASS(Shader);
     //------------------------------------------------------------
     /// Sprite

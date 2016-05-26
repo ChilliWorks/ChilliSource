@@ -22,54 +22,53 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_LOADTEXTURERENDERCOMMAND_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_LOADTEXTURERENDERCOMMAND_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_LOADSHADERRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_LOADSHADERRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/Texture/RenderTexture.h>
+#include <ChilliSource/Rendering/Shader/RenderShader.h>
 
 namespace ChilliSource
 {
-    /// A render command which loads the texture data pertaining to a single render texture into
-    /// render memory.
+    /// A render command which loads a single shader.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///
     /// This is immutable and therefore thread-safe.
     ///
-    class LoadTextureRenderCommand final : public RenderCommand
+    class LoadShaderRenderCommand final : public RenderCommand
     {
     public:
-        /// @return The render texture that should be loaded.
+        /// @return The render shader that should be loaded.
         ///
-        RenderTexture* GetRenderTexture() const noexcept { return m_renderTexture; };
+        RenderShader* GetRenderShader() const noexcept { return m_renderShader; };
         
-        /// @return The data describing the texture.
+        /// @return The vertex shader string.
         ///
-        const u8* GetTextureData() const noexcept { return m_textureData.get(); }
+        const std::string& GetVertexShader() const noexcept { return m_vertexShader; }
         
-        /// @return The size of the texture data in bytes.
+        /// @return The fragment shader string.
         ///
-        u32 GetTextureDataSize() const noexcept { return m_textureDataSize; }
+        const std::string& GetFragmentShader() const noexcept { return m_fragmentShader; }
         
     private:
         friend class RenderCommandList;
         
-        /// Constructs a new instance with the given render texture and texture data.
+        /// Constructs a new instance with the given vertex and fragment shader.
         ///
-        /// @param renderTexture
-        ///     The render texture that should be loaded.
-        /// @param textureData
-        ///     The data describing the texture.
-        /// @param textureDataSize
-        ///     The size of the texture data in bytes.
+        /// @param renderShader
+        ///     The render shader that should be loaded.
+        /// @param vertexShader
+        ///     The vertex shader string.
+        /// @param fragmentShader
+        ///     The fragment shader string.
         ///
-        LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
+        LoadShaderRenderCommand(RenderShader* renderShader, const std::string& vertexShader, const std::string& fragmentShader) noexcept;
         
-        RenderTexture* m_renderTexture;
-        std::unique_ptr<const u8[]> m_textureData;
-        u32 m_textureDataSize;
+        RenderShader* m_renderShader;
+        std::string m_vertexShader;
+        std::string m_fragmentShader;
     };
 }
 

@@ -58,7 +58,7 @@ namespace ChilliSource
         bool IsA(InterfaceIDType interfaceId) const noexcept override;
         
         /// Construct the texture from the given image data. The texture will take ownership of
-        /// the image data.
+        /// the image data. The texture must not already be in the loaded state.
         ///
         /// @param textureData
         ///     The texture data buffer.

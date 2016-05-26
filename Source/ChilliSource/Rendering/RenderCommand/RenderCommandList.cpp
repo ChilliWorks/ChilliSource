@@ -24,15 +24,35 @@
 
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
+    void RenderCommandList::AddLoadShaderCommand(RenderShader* renderShader, const std::string& vertexShader, const std::string& fragmentShader) noexcept
+    {
+        RenderCommandUPtr renderCommand(new LoadShaderRenderCommand(renderShader, vertexShader, fragmentShader));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
     void RenderCommandList::AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
     {
         RenderCommandUPtr renderCommand(new LoadTextureRenderCommand(renderTexture, std::move(textureData), textureDataSize));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept
+    {
+        RenderCommandUPtr renderCommand(new UnloadShaderRenderCommand(std::move(renderShader)));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));

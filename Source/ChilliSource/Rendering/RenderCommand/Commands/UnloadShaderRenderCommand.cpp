@@ -22,15 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
 
-#endif
+namespace ChilliSource
+{
+    //------------------------------------------------------------------------------
+    UnloadShaderRenderCommand::UnloadShaderRenderCommand(RenderShaderUPtr renderShader) noexcept
+        : RenderCommand(Type::k_unloadShader), m_renderShader(std::move(renderShader))
+    {
+    }
+}

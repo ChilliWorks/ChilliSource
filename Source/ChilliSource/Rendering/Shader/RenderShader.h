@@ -22,15 +22,42 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
+#ifndef _CHILLISOURCE_RENDERING_SHADER_RENDERSHADER_H_
+#define _CHILLISOURCE_RENDERING_SHADER_RENDERSHADER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+
+namespace ChilliSource
+{
+    /// A standard-layout container which acts as a handle which the underlying render system
+    /// can use to reference a specific shader.
+    ///
+    /// This is immutable and therefore thread-safe, aside from the extra data pointer
+    /// which should only be accessed on the render thread.
+    ///
+    class RenderShader final
+    {
+    public:
+        CS_DECLARE_NOCOPY(RenderShader);
+
+        RenderShader() = default;
+        
+        /// This is not thread safe and should only be called from the render thread.
+        ///
+        /// @return A pointer to render system specific additional information.
+        ///
+        void* GetExtraData() const noexcept { return m_extraData; }
+        
+        /// This is not thread safe and should only be called from the render thread.
+        ///
+        /// @param extraData
+        ///     A pointer to render system specific additional information.
+        ///
+        void SetExtraData(void* extraData) noexcept { m_extraData = extraData; }
+        
+    private:
+        void* m_extraData = nullptr;
+    };
+}
 
 #endif
