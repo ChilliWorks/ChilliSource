@@ -30,7 +30,6 @@
 
 #include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
-#include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #define WIN32_LEAN_AND_MEAN
@@ -64,7 +63,6 @@ namespace CSBackend
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(ChilliSource::Application* in_application)
 		{
-			in_application->CreateSystem<CSBackend::OpenGL::GLSLShaderProvider>();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------

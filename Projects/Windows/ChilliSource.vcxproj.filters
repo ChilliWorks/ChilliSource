@@ -277,9 +277,6 @@
     <Filter Include="CSBackend\Rendering\OpenGL\Base">
       <UniqueIdentifier>{08762056-5867-44b3-9835-f4c7c835ae00}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CSBackend\Rendering\OpenGL\Shader">
-      <UniqueIdentifier>{740a34f1-13b9-47d8-a6ab-a65cbad9155a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CSBackend\Rendering\OpenGL\Texture">
       <UniqueIdentifier>{b9c298b4-86f6-42f4-b08b-cccf39ca0284}</UniqueIdentifier>
     </Filter>
@@ -861,12 +858,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLSLShaderProvider.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\Shader.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
@@ -1090,6 +1081,18 @@
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\CSShaderProvider.cpp">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderManager.cpp">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadShaderRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2054,12 +2057,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLSLShaderProvider.h">
-      <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\Shader.h">
-      <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
@@ -2322,6 +2319,21 @@
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\CSShaderProvider.h">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShader.h">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderManager.h">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadShaderRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.h">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
   </ItemGroup>
