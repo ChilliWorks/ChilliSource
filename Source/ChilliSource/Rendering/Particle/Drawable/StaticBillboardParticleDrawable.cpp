@@ -232,7 +232,7 @@ namespace ChilliSource
 
             m_billboards = std::unique_ptr<dynamic_array<BillboardData>>(new dynamic_array<BillboardData>(1));
 
-            Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), Vector2(f32(texture->GetWidth()), f32(texture->GetHeight())),
+            Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), Vector2(f32(texture->GetDimensions().x), f32(texture->GetDimensions().y)),
                 m_billboardDrawableDef->GetSizePolicy());
 
             BillboardData& billboardData = m_billboards->at(0);

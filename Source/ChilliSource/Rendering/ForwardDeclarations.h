@@ -174,6 +174,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(Texture);
     CS_FORWARDDECLARE_CLASS(TextureAtlas);
     CS_FORWARDDECLARE_CLASS(TextureAtlasProvider);
+    CS_FORWARDDECLARE_CLASS(TextureDesc);
     CS_FORWARDDECLARE_CLASS(TextureProvider);
     CS_FORWARDDECLARE_CLASS(CubemapProvider);
     CS_FORWARDDECLARE_CLASS(UVs);

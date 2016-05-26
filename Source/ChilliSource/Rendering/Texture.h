@@ -39,6 +39,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
+#include <ChilliSource/Rendering/Texture/TextureDesc.h>
 #include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>

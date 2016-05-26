@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureDesc.h>
 #include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
 
 namespace ChilliSource
@@ -161,39 +162,35 @@ namespace ChilliSource
         
         if(in_delegate == nullptr)
         {
-            Texture* texture = (Texture*)out_resource.get();
-            const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
+            auto texture = static_cast<Texture*>(out_resource.get());
+            auto options = static_cast<const TextureResourceOptions*>(in_options.get());
             
-            Texture::Descriptor desc;
-            desc.m_width = image->GetWidth();
-            desc.m_height = image->GetHeight();
-            desc.m_format = image->GetFormat();
-            desc.m_compression = image->GetCompression();
-            desc.m_dataSize = image->GetDataSize();
+            TextureDesc desc(Integer2(image->GetWidth(), image->GetHeight()), image->GetFormat(), image->GetCompression());
+            desc.SetFilterMode(options->GetFilterMode());
+            desc.SetWrapModeS(options->GetWrapModeS());
+            desc.SetWrapModeT(options->GetWrapModeT());
+            desc.SetMipmappingEnabled(options->IsMipMapsEnabled());
+            desc.SetTextureDataRestoreEnabled(options->IsRestoreTextureDataEnabled());
 
-            texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled(), options->IsRestoreTextureDataEnabled());
-            texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
-            texture->SetFilterMode(options->GetFilterMode());
-            out_resource->SetLoadState(Resource::LoadState::k_loaded);
+            texture->Build(Texture::DataUPtr(image->MoveData()), image->GetDataSize(), desc);
+            texture->SetLoadState(Resource::LoadState::k_loaded);
         }
         else
         {
             Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
             {
-                Texture* texture = (Texture*)out_resource.get();
-                const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
+                auto texture = static_cast<Texture*>(out_resource.get());
+                auto options = static_cast<const TextureResourceOptions*>(in_options.get());
 
-                Texture::Descriptor desc;
-                desc.m_width = image->GetWidth();
-                desc.m_height = image->GetHeight();
-                desc.m_format = image->GetFormat();
-                desc.m_compression = image->GetCompression();
-                desc.m_dataSize = image->GetDataSize();
+                TextureDesc desc(Integer2(image->GetWidth(), image->GetHeight()), image->GetFormat(), image->GetCompression());
+                desc.SetFilterMode(options->GetFilterMode());
+                desc.SetWrapModeS(options->GetWrapModeS());
+                desc.SetWrapModeT(options->GetWrapModeT());
+                desc.SetMipmappingEnabled(options->IsMipMapsEnabled());
+                desc.SetTextureDataRestoreEnabled(options->IsRestoreTextureDataEnabled());
 
-                texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled(), options->IsRestoreTextureDataEnabled());
-                texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
-                texture->SetFilterMode(options->GetFilterMode());
-                out_resource->SetLoadState(Resource::LoadState::k_loaded);
+                texture->Build(Texture::DataUPtr(image->MoveData()), image->GetDataSize(), desc);
+                texture->SetLoadState(Resource::LoadState::k_loaded);
                 in_delegate(out_resource);
             });
         }

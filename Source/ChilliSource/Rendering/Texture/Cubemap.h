@@ -85,7 +85,7 @@ namespace ChilliSource
         /// disk. This will only work for RGBA8888, RGB888, RGBA4444
         /// and RGB565 cubemaps.
         //--------------------------------------------------
-        virtual void Build(const std::array<Texture::Descriptor, 6>& in_descs, std::array<Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled) = 0;
+        //virtual void Build(const std::array<Texture::Descriptor, 6>& in_descs, std::array<Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled) = 0;
         //--------------------------------------------------------------
         /// Binds this cubemap to the given texture unit allowing it to
         /// be accessed by the shaders and operations to be performed on it

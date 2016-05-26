@@ -22,28 +22,34 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/Texture/TextureDesc.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    void RenderCommandList::AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
+    namespace
     {
-        RenderCommandUPtr renderCommand(new LoadTextureRenderCommand(renderTexture, std::move(textureData), textureDataSize));
-        
-        m_orderedCommands.push_back(renderCommand.get());
-        m_renderCommands.push_back(std::move(renderCommand));
+        /// @param imageFormat
+        ///     The image format to check.
+        ///
+        /// @return Whether or not the given image format can be restored.
+        ///
+        constexpr bool IsImageFormatRestorable(ImageFormat imageFormat) noexcept
+        {
+            return (imageFormat == ImageFormat::k_RGBA8888 || imageFormat == ImageFormat::k_RGB888 || imageFormat == ImageFormat::k_RGBA4444 || imageFormat == ImageFormat::k_RGB565);
+        }
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept
+    TextureDesc::TextureDesc(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression) noexcept
+        : m_dimensions(dimensions), m_imageFormat(imageFormat), m_imageCompression(imageCompression)
     {
-        RenderCommandUPtr renderCommand(new UnloadTextureRenderCommand(std::move(renderTexture)));
+    }
+
+    //------------------------------------------------------------------------------
+    void TextureDesc::SetTextureDataRestoreEnabled(bool restoreTextureDataEnabled) noexcept
+    {
+        CS_ASSERT(restoreTextureDataEnabled == false || IsImageFormatRestorable(m_imageFormat), "Only RGBA8888, RGB888, RGBA4444 and RGB565 image formats can have their data restored.");
         
-        m_orderedCommands.push_back(renderCommand.get());
-        m_renderCommands.push_back(std::move(renderCommand));
+        m_restoreTextureDataEnabled = restoreTextureDataEnabled;
     }
 }

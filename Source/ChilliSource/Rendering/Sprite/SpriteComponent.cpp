@@ -251,7 +251,7 @@ namespace ChilliSource
         else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            return Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight());
+            return Vector2((f32)texture->GetDimensions().x, (f32)texture->GetDimensions().y);
         }
         
         return Vector2::k_one;
@@ -417,7 +417,7 @@ namespace ChilliSource
             if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
             {
                 auto texture = mpMaterial->GetTexture().get();
-                Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
+                Vector2 texSize((f32)texture->GetDimensions().x, (f32)texture->GetDimensions().y);
                 
                 return texSize == m_cachedTextureSize;
             }
@@ -432,7 +432,7 @@ namespace ChilliSource
         if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
+            Vector2 texSize((f32)texture->GetDimensions().x, (f32)texture->GetDimensions().y);
             m_cachedTextureSize = texSize;
         }
     }
@@ -467,7 +467,7 @@ namespace ChilliSource
         else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            frameSize = m_sizePolicyDelegate(m_originalSize, Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight()));
+            frameSize = m_sizePolicyDelegate(m_originalSize, Vector2((f32)texture->GetDimensions().x, (f32)texture->GetDimensions().y));
         }
         
         const Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();

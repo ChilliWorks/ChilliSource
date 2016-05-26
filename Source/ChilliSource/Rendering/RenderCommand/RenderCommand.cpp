@@ -1,11 +1,7 @@
 //
-//  ForwardDeclarations.h
-//  Chilli Source
-//  Created by Scott Downie on 25/01/2012.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2012 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,30 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_FORWARDDECLARATIONS_H_
-#define _CSBACKEND_RENDERING_OPENGL_FORWARDDECLARATIONS_H_
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
-#include <ChilliSource/Core/Base/StandardMacros.h>
-
-#include <memory>
-
-namespace CSBackend
+namespace ChilliSource
 {
-    namespace OpenGL
+    //------------------------------------------------------------------------------
+    RenderCommand::RenderCommand(Type type) noexcept
+        : m_type(type)
     {
-        //----------------------------------------------------
-        /// Base
-        //----------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(MeshBuffer);
-        CS_FORWARDDECLARE_CLASS(RenderCapabilities);
-        CS_FORWARDDECLARE_CLASS(RenderSystem);
-        CS_FORWARDDECLARE_CLASS(RenderTarget);
-        //----------------------------------------------------
-        /// Shader
-        //----------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Shader);
-        CS_FORWARDDECLARE_CLASS(GLSLShaderProvider);
     }
 }
-
-#endif

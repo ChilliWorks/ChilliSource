@@ -29,7 +29,13 @@
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderTextureManager);
-        
+    
+    //------------------------------------------------------------------------------
+    RenderTextureManagerUPtr RenderTextureManager::Create() noexcept
+    {
+        return RenderTextureManagerUPtr(new RenderTextureManager());
+    }
+    
     //------------------------------------------------------------------------------
     bool RenderTextureManager::IsA(InterfaceIDType interfaceId) const noexcept
     {

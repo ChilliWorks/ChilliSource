@@ -42,8 +42,8 @@ namespace ChilliSource
     {
         CS_ASSERT(in_texture != nullptr, "Need to provide a texture for a Text Icon");
         
-        m_originalSize.x = m_croppedSize.x = f32(m_texture->GetWidth());
-        m_originalSize.y = m_croppedSize.y = f32(m_texture->GetHeight());
+        m_originalSize.x = m_croppedSize.x = f32(m_texture->GetDimensions().x);
+        m_originalSize.y = m_croppedSize.y = f32(m_texture->GetDimensions().y);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

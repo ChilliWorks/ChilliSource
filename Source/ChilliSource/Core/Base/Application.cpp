@@ -70,6 +70,7 @@
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDefFactory.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDefFactory.h>
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
+#include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 
@@ -290,6 +291,7 @@ namespace ChilliSource
         
         //Rendering
         m_renderer = CreateSystem<Renderer>();
+        CreateSystem<RenderTextureManager>();
         RenderCapabilities* renderCapabilities = CreateSystem<RenderCapabilities>();
         CreateSystem<CanvasRenderer>();
         CreateSystem<MaterialFactory>(renderCapabilities);
