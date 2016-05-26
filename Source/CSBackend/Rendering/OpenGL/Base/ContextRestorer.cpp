@@ -30,8 +30,6 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/ContextRestorer.h>
 
-#include <CSBackend/Rendering/OpenGL/Texture/Cubemap.h>
-#include <CSBackend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>

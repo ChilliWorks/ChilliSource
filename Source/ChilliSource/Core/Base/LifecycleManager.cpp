@@ -90,45 +90,45 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    constexpr bool LifecycleManager::ShouldInit(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    constexpr bool LifecycleManager::ShouldInit(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept
     {
         return (currentLifecycleState == LifecycleState::k_uninitialised && targetLifecycleState != LifecycleState::k_uninitialised);
     }
     
     //------------------------------------------------------------------------------
-    constexpr bool LifecycleManager::ShouldResume(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    constexpr bool LifecycleManager::ShouldResume(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept
     {
         return ((currentLifecycleState == LifecycleState::k_uninitialised || currentLifecycleState == LifecycleState::k_initialised) &&
                 (targetLifecycleState == LifecycleState::k_resumed || targetLifecycleState == LifecycleState::k_foregrounded));
     }
     
     //------------------------------------------------------------------------------
-    constexpr bool LifecycleManager::ShouldForeground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    constexpr bool LifecycleManager::ShouldForeground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept
     {
-        return (m_currentLifecycleState != LifecycleState::k_foregrounded && targetLifecycleState == LifecycleState::k_foregrounded);
+        return (currentLifecycleState != LifecycleState::k_foregrounded && targetLifecycleState == LifecycleState::k_foregrounded);
     }
     
     //------------------------------------------------------------------------------
-    constexpr bool LifecycleManager::ShouldUpdate(LifecycleState targetLifecycleState) const noexcept
+    constexpr bool LifecycleManager::ShouldUpdate(LifecycleState targetLifecycleState) noexcept
     {
         return (targetLifecycleState == LifecycleState::k_resumed || targetLifecycleState == LifecycleState::k_foregrounded);
     }
     
     //------------------------------------------------------------------------------
-    constexpr bool LifecycleManager::ShouldBackground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    constexpr bool LifecycleManager::ShouldBackground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept
     {
         return (currentLifecycleState == LifecycleState::k_foregrounded && targetLifecycleState != LifecycleState::k_foregrounded);
     }
     
     //------------------------------------------------------------------------------
-    constexpr bool LifecycleManager::ShouldSuspend(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    constexpr bool LifecycleManager::ShouldSuspend(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept
     {
         return ((currentLifecycleState == LifecycleState::k_foregrounded || currentLifecycleState == LifecycleState::k_resumed) &&
                 (targetLifecycleState == LifecycleState::k_initialised || targetLifecycleState == LifecycleState::k_uninitialised));
     }
     
     //------------------------------------------------------------------------------
-    constexpr bool LifecycleManager::ShouldDestroy(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept
+    constexpr bool LifecycleManager::ShouldDestroy(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept
     {
         return (currentLifecycleState != LifecycleState::k_uninitialised && targetLifecycleState == LifecycleState::k_uninitialised);
     }

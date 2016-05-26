@@ -111,7 +111,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not an init event should occur.
         ///
-        constexpr bool ShouldInit(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept;
+        static constexpr bool ShouldInit(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept;
         
         /// Evaluates whether or not a resume event should occur by comparing the
         /// current and target lifecycle states.
@@ -123,7 +123,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not a resume event should occur.
         ///
-        constexpr bool ShouldResume(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept;
+        static constexpr bool ShouldResume(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept;
         
         /// Evaluates whether or not a foreground event should occur by comparing the
         /// current and target lifecycle states.
@@ -135,7 +135,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not a foreground event should occur.
         ///
-        constexpr bool ShouldForeground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept;
+        static constexpr bool ShouldForeground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept;
         
         /// Evaluates whether or not an update event should occur by checking the
         /// target lifecycle is either active or foregrounded.
@@ -147,7 +147,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not an update event should occur.
         ///
-        constexpr bool ShouldUpdate(LifecycleState targetLifecycleState) const noexcept;
+        static constexpr bool ShouldUpdate(LifecycleState targetLifecycleState) noexcept;
         
         /// Evaluates whether or not a background event should occur by comparing the
         /// current and target lifecycle states.
@@ -159,7 +159,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not a background event should occur.
         ///
-        constexpr bool ShouldBackground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept;
+        static constexpr bool ShouldBackground(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept;
         
         /// Evaluates whether or not a suspend event should occur by comparing the
         /// current and target lifecycle states.
@@ -171,7 +171,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not a suspend event should occur.
         ///
-        constexpr bool ShouldSuspend(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept;
+        static constexpr bool ShouldSuspend(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept;
         
         /// Evaluates whether or not a destroy event should occur by comparing the
         /// current and target lifecycle states.
@@ -183,7 +183,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not a destroy event should occur.
         ///
-        constexpr bool ShouldDestroy(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) const noexcept;
+        static constexpr bool ShouldDestroy(LifecycleState currentLifecycleState, LifecycleState targetLifecycleState) noexcept;
         
         /// Processes the main thread lifecycle events which have been received. If
         /// the app is currently resumed or foregrounded, then update will be called,

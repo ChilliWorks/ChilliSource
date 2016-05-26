@@ -283,6 +283,12 @@
     <Filter Include="CSBackend\Rendering\OpenGL\Texture">
       <UniqueIdentifier>{b9c298b4-86f6-42f4-b08b-cccf39ca0284}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Rendering\RenderCommand">
+      <UniqueIdentifier>{aae3135a-a8b7-4dd6-9c9b-96d29c2c54a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\RenderCommand\Commands">
+      <UniqueIdentifier>{c2eb53b5-a623-49e1-806b-44d9d1f2417c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -585,36 +591,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.cpp">
       <Filter>ChilliSource\Social\Facebook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.cpp">
       <Filter>ChilliSource\Rendering\Camera</Filter>
     </ClCompile>
@@ -885,15 +861,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\Cubemap.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\Texture.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitSystem.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLSLShaderProvider.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
     </ClCompile>
@@ -911,9 +878,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
@@ -1046,6 +1010,87 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.cpp">
       <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\RenderCamera.cpp">
+      <Filter>ChilliSource\Rendering\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderAmbientLight.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderDirectionalLight.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderPointLight.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTexture.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTextureManager.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureDesc.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandList.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1673,57 +1718,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.h">
       <Filter>ChilliSource\Social\Facebook</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\BlendMode.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ShaderPass.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexLayouts.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base.h">
       <Filter>ChilliSource\Rendering</Filter>
     </ClInclude>
@@ -2060,15 +2054,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\Cubemap.h">
-      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\Texture.h">
-      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitSystem.h">
-      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLSLShaderProvider.h">
       <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
     </ClInclude>
@@ -2092,9 +2077,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\Task.h">
       <Filter>ChilliSource\Core\Threading</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h">
       <Filter>ChilliSource\UI\Base</Filter>
@@ -2233,6 +2215,114 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.h">
       <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\BlendMode.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ShaderPass.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexLayouts.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\RenderCamera.h">
+      <Filter>ChilliSource\Rendering\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderAmbientLight.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderDirectionalLight.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderPointLight.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTexture.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTextureManager.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureDesc.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureFilterMode.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureWrapMode.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandList.h">
+      <Filter>ChilliSource\Rendering\RenderCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

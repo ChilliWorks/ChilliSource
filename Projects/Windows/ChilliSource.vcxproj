@@ -126,18 +126,27 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\RenderCamera.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Font\Font.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Font\FontProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\AmbientLightComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderAmbientLight.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderDirectionalLight.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderPointLight.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\Material.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.cpp" />
@@ -185,6 +194,10 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffect.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandList.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.cpp" />
@@ -192,9 +205,12 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTexture.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTextureManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlas.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlasProvider.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureDesc.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.cpp" />
@@ -270,9 +286,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLSLShaderProvider.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\Shader.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\Cubemap.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\Texture.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio.h" />
@@ -481,6 +494,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ShaderPass.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h" />
@@ -492,6 +510,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\RenderCamera.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font\Font.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font\FontProvider.h" />
@@ -501,6 +520,9 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderAmbientLight.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderDirectionalLight.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderPointLight.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\Material.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.h" />
@@ -560,6 +582,10 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomConstantParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomCurveParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandList.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite.h" />
@@ -570,11 +596,16 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTexture.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTextureManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlas.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlasProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureDesc.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureFilterMode.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureWrapMode.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.h" />
@@ -667,9 +698,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLSLShaderProvider.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\Shader.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\Cubemap.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\Texture.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitSystem.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{09108227-056C-4A6F-9A74-1C3ECA245C3F}</ProjectGuid>
