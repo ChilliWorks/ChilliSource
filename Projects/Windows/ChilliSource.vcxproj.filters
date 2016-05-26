@@ -1083,6 +1083,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ByteBuffer.cpp">
       <Filter>ChilliSource\Core\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryOutputStream.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2311,6 +2314,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ByteBuffer.h">
       <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryOutputStream.h">
+      <Filter>ChilliSource\Core\File</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

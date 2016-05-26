@@ -72,7 +72,7 @@ namespace ChilliSource
         /// on disk.
         ///
         /// Multiple calls to this function will append to any contents already
-        /// written.
+        /// written to the buffer.
         ///
         /// @param data
         ///		The string data to write to the stream
@@ -85,27 +85,26 @@ namespace ChilliSource
         /// on disk.
         ///
         /// Multiple calls to this function will append to any contents already
-        /// written.
+        /// written to the buffer.
         ///
-        /// @param data
-        ///		The string data to write to the stream
-        /// @param length
-        ///     The length of the data to write
+        /// @param byteBuffer
+        ///		The ByteBuffer object to write to the stream
         ///
         void Write(const ByteBufferUPtr& byteBuffer) noexcept;
         
-        /// Writes ByteBuffer data to the stream. This will not effect contents
+        /// Writes POD data to the stream. This will not effect contents
         /// on disk.
         ///
+        /// This will static_assert if TType is not a POD type
+        ///
         /// Multiple calls to this function will append to any contents already
-        /// written.
+        /// written to the buffer.
         ///
         /// @param data
-        ///		The string data to write to the stream
+        ///		The POD data to write to the stream
         ///
-        template<typename T>
-        void Write(T data) noexcept;
-        
+        template<typename TType> void Write(TType data) noexcept;
+
         /// This will write any pending data written to this stream to disk
         /// and close the stream
         ///
@@ -116,6 +115,15 @@ namespace ChilliSource
         bool m_isValid = false;
         std::ofstream m_fileStream;
     };
+    //------------------------------------------------------------------------------
+    template<typename TType> void BinaryOutputStream::Write(TType data) noexcept
+    {
+        static_assert(std::is_pod<TType>::value, "T must be POD type");
+        
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
+        Write(&data, sizeof(TType));
+        CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
+    }
 }
 
 #endif

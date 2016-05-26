@@ -28,6 +28,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <ChilliSource/Core/Base/ByteBuffer.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 
 namespace ChilliSource
@@ -88,10 +89,42 @@ namespace ChilliSource
         ///
         virtual ByteBufferUPtr Read(u64 length) noexcept = 0;
         
+        /// Reads in the next number of bytes, specified by size of TType, and returns the data
+        /// as that type.
+        ///
+        /// If the buffer overruns before the end of the POD can be reached or the current position
+        /// is already at the EOF, an assert will be triggered.
+        ///
+        /// TType must be a POD type.
+        ///
+        /// @return The resulting bytes cast as TType
+        ///
+        template<typename TType> TType Read() noexcept;
+        
         /// Destructor
         ///
         virtual ~IBinaryInputStream() noexcept {};
     };
+    //------------------------------------------------------------------------------
+    template<typename TType> TType IBinaryInputStream::Read() noexcept
+    {
+        static_assert(std::is_pod<TType>::value, "T must be POD type.");
+        
+        const auto readData = Read(sizeof(TType));
+        
+        CS_ASSERT(readData, "Could not read any data from the stream.");
+        CS_ASSERT(readData->GetLength() == sizeof(TType), "Could not read the correct size, Type data could not be read.");
+        
+        //Only try to cast to the result type if the size read is valid
+        if(readData && readData->GetLength() == sizeof(TType))
+        {
+            return *reinterpret_cast<const TType*>(readData->GetData());
+        }
+        else
+        {
+            return TType();
+        }
+    }
 }
 
 #endif

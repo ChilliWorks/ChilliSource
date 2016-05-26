@@ -52,16 +52,6 @@ namespace ChilliSource
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
     }
     //------------------------------------------------------------------------------
-    template<typename T>
-    void BinaryOutputStream::Write(T data) noexcept
-    {
-        static_assert(std::is_pod<T>::value, "T must be POD");
-        
-        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
-        m_fileStream.write(reinterpret_cast<const s8*>(data), sizeof(T));
-        CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
-    }
-    //------------------------------------------------------------------------------
     BinaryOutputStream::~BinaryOutputStream() noexcept
     {
         if(m_fileStream.is_open())
