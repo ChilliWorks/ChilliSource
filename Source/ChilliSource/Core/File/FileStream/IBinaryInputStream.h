@@ -95,35 +95,26 @@ namespace ChilliSource
         /// If the buffer overruns before the end of the POD can be reached or the current position
         /// is already at the EOF, an assert will be triggered.
         ///
-        /// TType must be a POD type.
+        /// TType must be a standard layout type.
         ///
         /// @return The resulting bytes cast as TType
         ///
         template<typename TType> TType Read() noexcept;
         
-        /// Destructor
-        ///
         virtual ~IBinaryInputStream() noexcept {};
     };
     //------------------------------------------------------------------------------
     template<typename TType> TType IBinaryInputStream::Read() noexcept
     {
-        static_assert(std::is_pod<TType>::value, "T must be POD type.");
+        static_assert(std::is_standard_layout<TType>::value, "TType must be standard layout data type");
+        static_assert(!std::is_pointer<TType>::value, "TType cannot be a pointer");
         
         const auto readData = Read(sizeof(TType));
         
         CS_ASSERT(readData, "Could not read any data from the stream.");
         CS_ASSERT(readData->GetLength() == sizeof(TType), "Could not read the correct size, Type data could not be read.");
         
-        //Only try to cast to the result type if the size read is valid
-        if(readData && readData->GetLength() == sizeof(TType))
-        {
-            return *reinterpret_cast<const TType*>(readData->GetData());
-        }
-        else
-        {
-            return TType();
-        }
+        return *reinterpret_cast<const TType*>(readData->GetData());
     }
 }
 

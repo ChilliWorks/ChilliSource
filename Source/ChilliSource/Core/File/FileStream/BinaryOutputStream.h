@@ -68,8 +68,8 @@ namespace ChilliSource
         ///
         bool IsValid() const noexcept;
         
-        /// Writes byte data to the stream. This will not effect contents
-        /// on disk.
+        /// Writes byte data to the stream. It may not write out to file yet, but
+        /// if the buffer is full it'll flush.
         ///
         /// Multiple calls to this function will append to any contents already
         /// written to the buffer.
@@ -81,8 +81,8 @@ namespace ChilliSource
         ///
         void Write(void* data, u64 length) noexcept;
         
-        /// Writes ByteBuffer data to the stream. This will not effect contents
-        /// on disk.
+        /// Writes ByteBuffer data to the stream. It may not write out to file yet,
+        /// but if the buffer is full it'll flush.
         ///
         /// Multiple calls to this function will append to any contents already
         /// written to the buffer.
@@ -92,16 +92,16 @@ namespace ChilliSource
         ///
         void Write(const ByteBufferUPtr& byteBuffer) noexcept;
         
-        /// Writes POD data to the stream. This will not effect contents
-        /// on disk.
+        /// Writes a standard layout data type to the stream. It may not write out
+        /// to file yet, but if the buffer is full it'll flush.
         ///
-        /// This will static_assert if TType is not a POD type
+        /// This will static_assert if TType is not a standard layout type
         ///
         /// Multiple calls to this function will append to any contents already
         /// written to the buffer.
         ///
         /// @param data
-        ///		The POD data to write to the stream
+        ///		The data to write to the stream
         ///
         template<typename TType> void Write(TType data) noexcept;
 
@@ -118,7 +118,8 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     template<typename TType> void BinaryOutputStream::Write(TType data) noexcept
     {
-        static_assert(std::is_pod<TType>::value, "T must be POD type");
+        static_assert(std::is_standard_layout<TType>::value, "TType must be standard layout data type");
+        static_assert(!std::is_pointer<TType>::value, "TType cannot be a pointer");
         
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         Write(&data, sizeof(TType));

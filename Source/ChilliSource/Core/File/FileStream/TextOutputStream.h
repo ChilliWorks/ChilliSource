@@ -68,8 +68,8 @@ namespace ChilliSource
         ///
         bool IsValid() const noexcept;
         
-        /// Writes string data to the stream. This will not effect contents
-		/// on disk.
+        /// Writes string data to the stream. It may not write out to file yet, but
+        /// if the buffer is full it'll flush.
 		/// 
 		/// Multiple calls to this function will append to any contents already 
 		/// written.
