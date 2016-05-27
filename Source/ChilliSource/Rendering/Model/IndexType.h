@@ -1,11 +1,7 @@
 //
-//  Model.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +22,23 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_MODEL_H_
-#define _CHILLISOURCE_RENDERING_MODEL_H_
+#ifndef _CHILLISOURCE_RENDERING_MODEL_POLYGONTYPE_H_
+#define _CHILLISOURCE_RENDERING_MODEL_POLYGONTYPE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
-#include <ChilliSource/Rendering/Model/CSAnimProvider.h>
-#include <ChilliSource/Rendering/Model/CSModelProvider.h>
-#include <ChilliSource/Rendering/Model/IndexType.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
-#include <ChilliSource/Rendering/Model/PolygonType.h>
-#include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
-#include <ChilliSource/Rendering/Model/RenderMesh.h>
-#include <ChilliSource/Rendering/Model/RenderMeshManager.h>
-#include <ChilliSource/Rendering/Model/Skeleton.h>
-#include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
-#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
-#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+
+namespace ChilliSource
+{
+    /// An enum describing the type used to describe indices.
+    ///
+    /// Currently the only supported type is Short, which allows for an index range of
+    /// 0 - 65535.
+    ///
+    ///
+    enum class PolygonType
+    {
+        k_short
+    };
+}
 
 #endif

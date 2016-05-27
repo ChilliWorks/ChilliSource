@@ -293,6 +293,9 @@
 		81A125F41CF4A7350010853A /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125F21CF4A7350010853A /* Renderer.cpp */; };
 		81A4DC4B1CF6F65F00E820EE /* TextureDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A4DC491CF6F65F00E820EE /* TextureDesc.cpp */; };
 		81A4DC4E1CF70C5100E820EE /* RenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A4DC4D1CF70C5100E820EE /* RenderCommand.cpp */; };
+		81BF7B7D1CF84AFD00DBC80B /* RenderMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */; };
+		81BF7B811CF84CA600DBC80B /* RenderMeshManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B801CF84CA600DBC80B /* RenderMeshManager.cpp */; };
+		81BF7B851CF8552000DBC80B /* LoadMeshRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B831CF8552000DBC80B /* LoadMeshRenderCommand.cpp */; };
 		81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */; };
 		81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
@@ -1053,6 +1056,14 @@
 		81A4DC491CF6F65F00E820EE /* TextureDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureDesc.cpp; sourceTree = "<group>"; };
 		81A4DC4A1CF6F65F00E820EE /* TextureDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureDesc.h; sourceTree = "<group>"; };
 		81A4DC4D1CF70C5100E820EE /* RenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommand.cpp; sourceTree = "<group>"; };
+		81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderMesh.cpp; sourceTree = "<group>"; };
+		81BF7B7C1CF84AFD00DBC80B /* RenderMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderMesh.h; sourceTree = "<group>"; };
+		81BF7B7E1CF84B3300DBC80B /* PolygonType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PolygonType.h; sourceTree = "<group>"; };
+		81BF7B7F1CF84C9700DBC80B /* RenderMeshManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RenderMeshManager.h; sourceTree = "<group>"; };
+		81BF7B801CF84CA600DBC80B /* RenderMeshManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderMeshManager.cpp; sourceTree = "<group>"; };
+		81BF7B821CF84DED00DBC80B /* IndexType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexType.h; sourceTree = "<group>"; };
+		81BF7B831CF8552000DBC80B /* LoadMeshRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadMeshRenderCommand.cpp; sourceTree = "<group>"; };
+		81BF7B841CF8552000DBC80B /* LoadMeshRenderCommand.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LoadMeshRenderCommand.hpp; sourceTree = "<group>"; };
 		81C26AF51CB7F3410079A113 /* Task.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskScheduler.cpp; sourceTree = "<group>"; };
 		81C58C211CB3C57000EA58A0 /* TaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskScheduler.h; sourceTree = "<group>"; };
@@ -1975,8 +1986,13 @@
 				8158F38F1C89D2AD00B13109 /* Mesh.h */,
 				8158F3901C89D2AD00B13109 /* MeshDescriptor.cpp */,
 				8158F3911C89D2AD00B13109 /* MeshDescriptor.h */,
+				81BF7B7E1CF84B3300DBC80B /* PolygonType.h */,
 				8158F3921C89D2AD00B13109 /* PrimitiveModelFactory.cpp */,
 				8158F3931C89D2AD00B13109 /* PrimitiveModelFactory.h */,
+				81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */,
+				81BF7B7C1CF84AFD00DBC80B /* RenderMesh.h */,
+				81BF7B801CF84CA600DBC80B /* RenderMeshManager.cpp */,
+				81BF7B7F1CF84C9700DBC80B /* RenderMeshManager.h */,
 				8158F3941C89D2AD00B13109 /* Skeleton.cpp */,
 				8158F3951C89D2AD00B13109 /* Skeleton.h */,
 				8158F3961C89D2AD00B13109 /* SkinnedAnimation.cpp */,
@@ -1985,6 +2001,7 @@
 				8158F3991C89D2AD00B13109 /* SkinnedAnimationGroup.h */,
 				8158F39A1C89D2AD00B13109 /* StaticMeshComponent.cpp */,
 				8158F39B1C89D2AD00B13109 /* StaticMeshComponent.h */,
+				81BF7B821CF84DED00DBC80B /* IndexType.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2734,6 +2751,8 @@
 				816D96B71CF73CB600D23969 /* LoadShaderRenderCommand.h */,
 				816D96B91CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp */,
 				816D96BA1CF73E6B00D23969 /* UnloadShaderRenderCommand.h */,
+				81BF7B831CF8552000DBC80B /* LoadMeshRenderCommand.cpp */,
+				81BF7B841CF8552000DBC80B /* LoadMeshRenderCommand.hpp */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -3090,6 +3109,7 @@
 				8158F7CD1C89D2AD00B13109 /* RemoteNotificationSystem.cpp in Sources */,
 				8158F7D91C89D2AD00B13109 /* StoreKitIAPSystem.mm in Sources */,
 				8158F65F1C89D2AD00B13109 /* HashCRC32.cpp in Sources */,
+				81BF7B811CF84CA600DBC80B /* RenderMeshManager.cpp in Sources */,
 				8158F7291C89D2AD00B13109 /* ProgressBarType.cpp in Sources */,
 				8158F6ED1C89D2AD00B13109 /* PointParticleEmitterDef.cpp in Sources */,
 				811ECDFB1CEB28E900E07948 /* LifecycleManager.cpp in Sources */,
@@ -3107,6 +3127,7 @@
 				8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */,
 				81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */,
 				8158F6831C89D2AD00B13109 /* ResourcePool.cpp in Sources */,
+				81BF7B851CF8552000DBC80B /* LoadMeshRenderCommand.cpp in Sources */,
 				8158F7E51C89D2AD00B13109 /* WebViewDelegate.mm in Sources */,
 				81A125E41CF45B400010853A /* RenderPointLight.cpp in Sources */,
 				8158F7141C89D2AD00B13109 /* UIDrawable.cpp in Sources */,
@@ -3182,6 +3203,7 @@
 				8158F6571C89D2AD00B13109 /* Screen.cpp in Sources */,
 				8158F70A1C89D2AD00B13109 /* Widget.cpp in Sources */,
 				81A125F41CF4A7350010853A /* Renderer.cpp in Sources */,
+				81BF7B7D1CF84AFD00DBC80B /* RenderMesh.cpp in Sources */,
 				8158F6761C89D2AD00B13109 /* LocalisedText.cpp in Sources */,
 				81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */,
 				8158F6D31C89D2AD00B13109 /* AngularAccelerationParticleAffector.cpp in Sources */,

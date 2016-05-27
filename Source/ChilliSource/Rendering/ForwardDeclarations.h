@@ -98,11 +98,15 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(CSAnimProvider);
     CS_FORWARDDECLARE_CLASS(CSModelProvider);
     CS_FORWARDDECLARE_CLASS(PrimitiveModelFactory);
+    CS_FORWARDDECLARE_CLASS(RenderMesh);
+    CS_FORWARDDECLARE_CLASS(RenderMeshManager);
     CS_FORWARDDECLARE_CLASS(Skeleton);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
     CS_FORWARDDECLARE_STRUCT(SkeletonNode);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimationGroup);
     CS_FORWARDDECLARE_CLASS(StaticMeshComponent);
+    enum class IndexType;
+    enum class PolygonType;
     //------------------------------------------------------------
     /// Particle
     //------------------------------------------------------------
