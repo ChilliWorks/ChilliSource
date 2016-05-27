@@ -94,6 +94,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(FileStream);
     CS_FORWARDDECLARE_CLASS(IBinaryInputStream);
     CS_FORWARDDECLARE_CLASS(BinaryInputStream);
+    CS_FORWARDDECLARE_CLASS(BinaryOutputStream);
     CS_FORWARDDECLARE_CLASS(ITextInputStream);
     CS_FORWARDDECLARE_CLASS(TextInputStream);
     CS_FORWARDDECLARE_CLASS(TextOutputStream);

@@ -22,24 +22,42 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Base/ByteBuffer.h>
+#include <ChilliSource/Core/File/FileStream/BinaryOutputStream.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ByteBuffer::ByteBuffer(std::unique_ptr<const u8> data, u64 length) noexcept
-    :m_data(std::move(data))
-    ,m_length(length)
+    BinaryOutputStream::BinaryOutputStream(const std::string& filePath) noexcept
     {
+        m_fileStream.open(filePath.c_str(), std::ofstream::out | std::ofstream::binary);
+        m_isValid = m_fileStream.is_open() && !m_fileStream.bad() && !m_fileStream.fail();
     }
     //------------------------------------------------------------------------------
-    const u8* ByteBuffer::GetData() const noexcept
+    bool BinaryOutputStream::IsValid() const noexcept
     {
-        return m_data.get();
+        return m_isValid;
     }
     //------------------------------------------------------------------------------
-    u64 ByteBuffer::GetLength() const noexcept
+    void BinaryOutputStream::Write(void* data, u64 length) noexcept
     {
-        return m_length;
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
+        m_fileStream.write(static_cast<s8*>(data), length);
+        CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
+    }
+    //------------------------------------------------------------------------------
+    void BinaryOutputStream::Write(const ByteBufferUPtr& byteBuffer) noexcept
+    {
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
+        m_fileStream.write(reinterpret_cast<const s8*>(byteBuffer->GetData()), byteBuffer->GetLength());
+        CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
+    }
+    //------------------------------------------------------------------------------
+    BinaryOutputStream::~BinaryOutputStream() noexcept
+    {
+        if(m_fileStream.is_open())
+        {
+            //Close also flushes the changes to disk
+            m_fileStream.close();
+        }
     }
 }

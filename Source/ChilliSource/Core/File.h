@@ -39,6 +39,7 @@
 #include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/File/FileStream/IBinaryInputStream.h>
 #include <ChilliSource/Core/File/FileStream/BinaryInputStream.h>
+#include <ChilliSource/Core/File/FileStream/BinaryOutputStream.h>
 #include <ChilliSource/Core/File/FileStream/ITextInputStream.h>
 #include <ChilliSource/Core/File/FileStream/TextInputStream.h>
 #include <ChilliSource/Core/File/FileStream/TextOutputStream.h>
