@@ -22,14 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    LoadMeshRenderCommand::LoadMeshRenderCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
-        : RenderCommand(Type::k_loadMesh), m_renderMesh(renderMesh), m_vertexData(std::move(vertexData)), m_vertexDataSize(vertexDataSize), m_indexData(std::move(indexData)), m_indexDataSize(indexDataSize)
+    UnloadMeshRenderCommand::UnloadMeshRenderCommand(RenderMeshUPtr renderMesh) noexcept
+        : RenderCommand(Type::k_unloadMesh), m_renderMesh(std::move(renderMesh))
     {
     }
 }

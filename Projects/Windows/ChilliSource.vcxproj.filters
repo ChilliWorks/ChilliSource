@@ -1095,6 +1095,18 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadMeshRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2335,6 +2347,24 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.h">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadMeshRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\IndexType.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PolygonType.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -296,6 +296,7 @@
 		81BF7B7D1CF84AFD00DBC80B /* RenderMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */; };
 		81BF7B811CF84CA600DBC80B /* RenderMeshManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B801CF84CA600DBC80B /* RenderMeshManager.cpp */; };
 		81BF7B851CF8552000DBC80B /* LoadMeshRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B831CF8552000DBC80B /* LoadMeshRenderCommand.cpp */; };
+		81BF7B881CF87BF700DBC80B /* UnloadMeshRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B861CF87BF700DBC80B /* UnloadMeshRenderCommand.cpp */; };
 		81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */; };
 		81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
@@ -1063,7 +1064,9 @@
 		81BF7B801CF84CA600DBC80B /* RenderMeshManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderMeshManager.cpp; sourceTree = "<group>"; };
 		81BF7B821CF84DED00DBC80B /* IndexType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexType.h; sourceTree = "<group>"; };
 		81BF7B831CF8552000DBC80B /* LoadMeshRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadMeshRenderCommand.cpp; sourceTree = "<group>"; };
-		81BF7B841CF8552000DBC80B /* LoadMeshRenderCommand.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LoadMeshRenderCommand.hpp; sourceTree = "<group>"; };
+		81BF7B841CF8552000DBC80B /* LoadMeshRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMeshRenderCommand.h; sourceTree = "<group>"; };
+		81BF7B861CF87BF700DBC80B /* UnloadMeshRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnloadMeshRenderCommand.cpp; sourceTree = "<group>"; };
+		81BF7B871CF87BF700DBC80B /* UnloadMeshRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnloadMeshRenderCommand.h; sourceTree = "<group>"; };
 		81C26AF51CB7F3410079A113 /* Task.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskScheduler.cpp; sourceTree = "<group>"; };
 		81C58C211CB3C57000EA58A0 /* TaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskScheduler.h; sourceTree = "<group>"; };
@@ -2752,7 +2755,9 @@
 				816D96B91CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp */,
 				816D96BA1CF73E6B00D23969 /* UnloadShaderRenderCommand.h */,
 				81BF7B831CF8552000DBC80B /* LoadMeshRenderCommand.cpp */,
-				81BF7B841CF8552000DBC80B /* LoadMeshRenderCommand.hpp */,
+				81BF7B841CF8552000DBC80B /* LoadMeshRenderCommand.h */,
+				81BF7B861CF87BF700DBC80B /* UnloadMeshRenderCommand.cpp */,
+				81BF7B871CF87BF700DBC80B /* UnloadMeshRenderCommand.h */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -3248,6 +3253,7 @@
 				8158F6A61C89D2AD00B13109 /* MoContentDownloader.cpp in Sources */,
 				8158F7161C89D2AD00B13109 /* UIDrawableDef.cpp in Sources */,
 				8158F7F71C89D2AD00B13109 /* ContextRestorer.cpp in Sources */,
+				81BF7B881CF87BF700DBC80B /* UnloadMeshRenderCommand.cpp in Sources */,
 				8158F71A1C89D2AD00B13109 /* StandardUIDrawable.cpp in Sources */,
 				8158F6531C89D2AD00B13109 /* ColourUtils.cpp in Sources */,
 				8158F7111C89D2AD00B13109 /* WidgetTemplateProvider.cpp in Sources */,

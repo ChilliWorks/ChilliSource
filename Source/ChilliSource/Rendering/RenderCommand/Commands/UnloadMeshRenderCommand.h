@@ -22,14 +22,41 @@
 //  THE SOFTWARE.
 //
 
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMESHRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMESHRENDERCOMMAND_H_
+
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
+#include <ChilliSource/Rendering/Model/RenderMesh.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    LoadMeshRenderCommand::LoadMeshRenderCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
-        : RenderCommand(Type::k_loadMesh), m_renderMesh(renderMesh), m_vertexData(std::move(vertexData)), m_vertexDataSize(vertexDataSize), m_indexData(std::move(indexData)), m_indexDataSize(indexDataSize)
+    /// A render command which unloads the mesh data pertaining to a single render mesh from
+    /// render memory.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class UnloadMeshRenderCommand final : public RenderCommand
     {
-    }
+    public:
+        /// @return The render mesh that should be unloaded.
+        ///
+        const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh.get(); }
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Constructs a new instance with the given render mesh.
+        ///
+        /// @param renderMesh
+        ///     The render mesh that should be unloaded.
+        ///
+        UnloadMeshRenderCommand(RenderMeshUPtr renderMesh) noexcept;
+        
+        RenderMeshUPtr m_renderMesh;
+    };
 }
+
+#endif

@@ -77,7 +77,7 @@ namespace ChilliSource
             }
         }
         
-        CS_LOG_FATAL("Render texture does not exist.");
+        CS_LOG_FATAL("RenderShader does not exist.");
     }
     
     //------------------------------------------------------------------------------

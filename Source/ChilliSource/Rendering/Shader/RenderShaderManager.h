@@ -71,6 +71,7 @@ namespace ChilliSource
         ///     The fragment shader string.
         ///
         /// @return The render shader instance.
+        ///
         const RenderShader* CreateRenderShader(const std::string& vertexShader, const std::string& fragmentShader) noexcept;
         
         /// Removes the render shader from the manager and queues an UnloadShaderRenderCommand for

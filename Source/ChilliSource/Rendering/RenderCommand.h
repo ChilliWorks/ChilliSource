@@ -28,8 +28,10 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
 
