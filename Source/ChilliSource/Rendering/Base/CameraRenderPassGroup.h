@@ -47,9 +47,9 @@ namespace ChilliSource
             
             ///
             /// @param camera
-            ///     The light to use for this pass
+            ///     The camera to use for this pass
             /// @param renderPasses
-            ///     The list of render passes to carry out with the passed camera
+            ///     The list of render passes to carry out with the camera
             ///
             CameraRenderPassGroup(const RenderCamera& camera, const std::vector<RenderPass>& renderPasses) noexcept;
             
