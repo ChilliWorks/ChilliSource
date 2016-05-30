@@ -48,7 +48,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderObject);
     CS_FORWARDDECLARE_CLASS(RenderSnapshot);
     CS_FORWARDDECLARE_CLASS(RenderTarget);
-    CS_FORWARDDECLARE_CLASS(VertexDeclaration);
+    CS_FORWARDDECLARE_CLASS(VertexFormat);
     enum class AlignmentAnchor;
     enum class ShaderPass;
     enum class BlendMode;
@@ -86,6 +86,9 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(Material);
     CS_FORWARDDECLARE_CLASS(MaterialFactory);
     CS_FORWARDDECLARE_CLASS(MaterialProvider);
+    CS_FORWARDDECLARE_CLASS(RenderMaterial);
+    CS_FORWARDDECLARE_CLASS(RenderMaterialGroup);
+    CS_FORWARDDECLARE_CLASS(RenderMaterialGroupManager);
     //------------------------------------------------------------
     /// Model
     //------------------------------------------------------------

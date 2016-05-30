@@ -36,13 +36,13 @@ namespace ChilliSource
     /// Manages the lifecycle of all RenderMesh instances.
     ///
     /// On creation of a RenderMesh a LoadMeshRenderCommand is queued for the next render
-    /// snapshot phase, ensuring that related shader data is processed before the RenderMesh
+    /// snapshot phase, ensuring that related mesh data is processed before the RenderMesh
     /// is used.
     ///
     /// On deletion an UnloadMeshRenderCommand is queued and given ownership of the
     /// RenderMesh. The RenderMesh is then deleted once the command has been processed.
     ///
-    /// This is thead-safe and can be called from any thread. If it is called on a background
+    /// This is thread-safe and can be called from any thread. If it is called on a background
     /// thread, care needs to be taken to ensure any created RenderMeshes are not used prior
     /// to being loaded.
     ///
@@ -67,8 +67,8 @@ namespace ChilliSource
         ///
         /// @param polygonType
         ///     The type of polygon the mesh uses.
-        /// @param vertexDeclaration
-        ///     The vertex declaration.
+        /// @param vertexFormat
+        ///     The vertex format declaration.
         /// @param indexType
         ///     The type of index.
         /// @param numVertices
@@ -88,7 +88,7 @@ namespace ChilliSource
         ///
         /// @return The RenderMesh instance.
         ///
-        const RenderMesh* CreateRenderMesh(PolygonType polygonType, const VertexDeclaration& vertexDeclaration, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+        const RenderMesh* CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
                                            std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
         
         /// Removes the RenderMesh from the manager and queues an UnloadMeshRenderCommand for the

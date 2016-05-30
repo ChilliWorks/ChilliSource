@@ -47,8 +47,8 @@ namespace ChilliSource
         struct Vertex
         {
             Vector4 m_position;
-            Vector2 m_texCoord;
             Vector3 m_normal;
+            Vector2 m_texCoord;
         };
         //------------------------------------------------------------------------------
         /// Creates a new mesh descriptor describing a plane model.
@@ -69,16 +69,7 @@ namespace ChilliSource
             meshDescriptor.mFeatures.mbHasMaterial = false;
             meshDescriptor.mFeatures.mbHasAnimationData = false;
             meshDescriptor.mudwIndexSize = sizeof(u16);
-            
-            //Setup vertex description
-            VertexElement vertexDec[3];
-            vertexDec[0].eType = VertexDataType::k_float4;
-            vertexDec[0].eSemantic = VertexDataSemantic::k_position;
-            vertexDec[1].eType = VertexDataType::k_float2;
-            vertexDec[1].eSemantic = VertexDataSemantic::k_uv;
-            vertexDec[2].eType = VertexDataType::k_float3;
-            vertexDec[2].eSemantic = VertexDataSemantic::k_normal;
-            meshDescriptor.mVertexDeclaration = VertexDeclaration(3, vertexDec);
+            meshDescriptor.mVertexFormat = VertexFormat::k_staticMesh;
             
             //setup sub mesh
             SubMeshDescriptor subMesh;
@@ -93,10 +84,10 @@ namespace ChilliSource
             Vertex* vertices = new Vertex[subMesh.mudwNumVertices];
             subMesh.mpVertexData = reinterpret_cast<u8*>(vertices);
             
-            vertices[0] = { Vector4(-halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[1] = { Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[2] = { Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[3] = { Vector4(halfSize.x, 0.0f, halfSize.y, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 1.0f, 0.0f) };
+            vertices[0] = { Vector4(-halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[1] = { Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[2] = { Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[3] = { Vector4(halfSize.x, 0.0f, halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //Indices
             u16 *indices(new u16[subMesh.mudwNumIndices]);
@@ -139,16 +130,7 @@ namespace ChilliSource
             meshDescriptor.mFeatures.mbHasMaterial = true;
             meshDescriptor.mFeatures.mbHasAnimationData = false;
             meshDescriptor.mudwIndexSize = sizeof(u16);
-            
-            //Setup vertex description
-            VertexElement vertexDec[3];
-            vertexDec[0].eType = VertexDataType::k_float4;
-            vertexDec[0].eSemantic = VertexDataSemantic::k_position;
-            vertexDec[1].eType = VertexDataType::k_float2;
-            vertexDec[1].eSemantic = VertexDataSemantic::k_uv;
-            vertexDec[2].eType = VertexDataType::k_float3;
-            vertexDec[2].eSemantic = VertexDataSemantic::k_normal;
-            meshDescriptor.mVertexDeclaration = VertexDeclaration(3, vertexDec);
+            meshDescriptor.mVertexFormat = VertexFormat::k_staticMesh;
             
             //setup sub mesh
             SubMeshDescriptor subMesh;
@@ -166,40 +148,40 @@ namespace ChilliSource
             float normalDir = (in_flipNormals == false) ? 1.0f : -1.0f;
             
             //bottom
-            vertices[0] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[1] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[2] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[3] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, -normalDir, 0.0f) };
+            vertices[0] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, -normalDir, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[1] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, -normalDir, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[2] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, -normalDir, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[3] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, -normalDir, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //top
-            vertices[4] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, normalDir, 0.0f) };
-            vertices[5] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, normalDir, 0.0f) };
-            vertices[6] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, normalDir, 0.0f) };
-            vertices[7] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, normalDir, 0.0f) };
+            vertices[4] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, normalDir, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[5] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, normalDir, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[6] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, normalDir, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[7] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, normalDir, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //left
-            vertices[8] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[9] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[10] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[11] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(-normalDir, 0.0f, 0.0f) };
+            vertices[8] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(-normalDir, 0.0f, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[9] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(-normalDir, 0.0f, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[10] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(-normalDir, 0.0f, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[11] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(-normalDir, 0.0f, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //right
-            vertices[12] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[13] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[14] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[15] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(normalDir, 0.0f, 0.0f) };
+            vertices[12] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(normalDir, 0.0f, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[13] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(normalDir, 0.0f, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[14] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(normalDir, 0.0f, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[15] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(normalDir, 0.0f, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //front
-            vertices[16] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[17] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[18] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[19] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 0.0f, -normalDir) };
+            vertices[16] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, 0.0f, -normalDir), Vector2(0.0f, 0.0f) };
+            vertices[17] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, 0.0f, -normalDir), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[18] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, 0.0f, -normalDir), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[19] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, 0.0f, -normalDir), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //back
-            vertices[20] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 0.0f, normalDir) };
-            vertices[21] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 0.0f, normalDir) };
-            vertices[22] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 0.0f, normalDir) };
-            vertices[23] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 0.0f, normalDir) };
+            vertices[20] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, 0.0f, normalDir), Vector2(0.0f, 0.0f) };
+            vertices[21] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, 0.0f, normalDir), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[22] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, 0.0f, normalDir), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[23] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, 0.0f, normalDir), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //Indices
             u16 *indices(new u16[subMesh.mudwNumIndices]);

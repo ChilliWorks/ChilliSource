@@ -1,11 +1,7 @@
 //
-//  Material.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +22,17 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_MATERIAL_H_
-#define _CHILLISOURCE_RENDERING_MATERIAL_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/RenderMaterial.h>
-#include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
-#include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
 
-#endif
+namespace ChilliSource
+{
+    //------------------------------------------------------------------------------
+    RenderMaterial::RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
+                                   bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& ambientColour,
+                                   const Colour& diffuseColour, const Colour& specularColour) noexcept
+        : m_renderShader(renderShader), m_renderTextures(renderTextures), m_isTransparencyEnabled(isTransparencyEnabled), m_isColourWriteEnabled(isColourWriteEnabled), m_isDepthWriteEnabled(isDepthWriteEnabled),
+        m_isDepthTestEnabled(isDepthTestEnabled), m_isFaceCullingEnabled(isFaceCullingEnabled), m_sourceBlendMode(sourceBlendMode), m_destinationBlendMode(destinationBlendMode), m_cullFace(cullFace),
+        m_ambientColour(ambientColour), m_diffuseColour(diffuseColour), m_specularColour(specularColour)
+    {
+    }
+}

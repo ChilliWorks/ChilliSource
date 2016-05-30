@@ -27,7 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-#include <ChilliSource/Rendering/Base/VertexDeclaration.h>
+#include <ChilliSource/Rendering/Base/VertexFormat.h>
 
 namespace ChilliSource
 {
@@ -47,8 +47,8 @@ namespace ChilliSource
         ///
         /// @param polygonType
         ///     The type of polygon the mesh uses.
-        /// @param vertexDeclaration
-        ///     The vertex declaration.
+        /// @param vertexFormat
+        ///     The vertex format declaration.
         /// @param indexType
         ///     The type of index.
         /// @param numVertices
@@ -58,15 +58,15 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     A local space sphere enclosing the mesh.
         ///
-        RenderMesh(PolygonType polygonType, const VertexDeclaration& vertexDeclaration, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept;
+        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept;
         
         /// @return The type of polygon the mesh uses.
         ///
         PolygonType GetPolygonType() const noexcept { return m_polygonType; }
         
-        /// @return The vertex declaration.
+        /// @return The vertex format declaration.
         ///
-        const VertexDeclaration& GetVertexDeclaration() const noexcept { return m_vertexDeclaration; }
+        const VertexFormat& GetVertexFormat() const noexcept { return m_vertexFormat; }
         
         /// @return The type of index.
         ///
@@ -99,7 +99,7 @@ namespace ChilliSource
         
     private:
         PolygonType m_polygonType;
-        VertexDeclaration m_vertexDeclaration;
+        VertexFormat m_vertexFormat;
         IndexType m_indexType;
         u32 m_numVertices;
         u32 m_numIndices;

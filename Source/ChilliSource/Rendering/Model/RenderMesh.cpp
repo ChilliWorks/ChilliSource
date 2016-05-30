@@ -27,8 +27,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderMesh::RenderMesh(PolygonType polygonType, const VertexDeclaration& vertexDeclaration, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept
-        : m_polygonType(polygonType), m_vertexDeclaration(vertexDeclaration), m_indexType(indexType), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere)
+    RenderMesh::RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept
+        : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexType(indexType), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere)
     {
     }
 }
