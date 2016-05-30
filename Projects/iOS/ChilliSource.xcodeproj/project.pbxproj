@@ -10,6 +10,8 @@
 		811ECDFB1CEB28E900E07948 /* LifecycleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811ECDF91CEB28E900E07948 /* LifecycleManager.cpp */; };
 		8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8123B6781CE098BF008F8182 /* InputFilter.cpp */; };
 		814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814E92B31CB54F76004D6ADE /* TaskPool.cpp */; };
+		81527D381CF8A83000EA13A4 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81527D341CF8A83000EA13A4 /* RenderPass.cpp */; };
+		81527D391CF8A83000EA13A4 /* RenderPassObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81527D361CF8A83000EA13A4 /* RenderPassObject.cpp */; };
 		8153A2FE1CF5A22A002AC919 /* RenderFrameCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A2FC1CF5A22A002AC919 /* RenderFrameCompiler.cpp */; };
 		8153A3011CF5A4AB002AC919 /* RenderObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A2FF1CF5A4AB002AC919 /* RenderObject.cpp */; };
 		8153A3041CF5A764002AC919 /* RenderFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A3021CF5A764002AC919 /* RenderFrame.cpp */; };
@@ -283,6 +285,8 @@
 		816D96B51CF73AA500D23969 /* RenderShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816D96B31CF73AA500D23969 /* RenderShaderManager.cpp */; };
 		816D96B81CF73CB600D23969 /* LoadShaderRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816D96B61CF73CB600D23969 /* LoadShaderRenderCommand.cpp */; };
 		816D96BB1CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816D96B91CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp */; };
+		819775761CFC39DC0008C0E0 /* CameraRenderPassGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819775741CFC39DC0008C0E0 /* CameraRenderPassGroup.cpp */; };
+		819775791CFC4C400008C0E0 /* TargetRenderPassGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819775771CFC4C400008C0E0 /* TargetRenderPassGroup.cpp */; };
 		81A125DB1CF44E490010853A /* RenderCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125D91CF44E490010853A /* RenderCamera.cpp */; };
 		81A125DE1CF454200010853A /* RenderAmbientLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125DC1CF454200010853A /* RenderAmbientLight.cpp */; };
 		81A125E11CF456340010853A /* RenderDirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125DF1CF456340010853A /* RenderDirectionalLight.cpp */; };
@@ -343,6 +347,10 @@
 		8123B6781CE098BF008F8182 /* InputFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputFilter.cpp; sourceTree = "<group>"; };
 		814E92B31CB54F76004D6ADE /* TaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPool.cpp; sourceTree = "<group>"; };
 		814E92B41CB54F76004D6ADE /* TaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskPool.h; sourceTree = "<group>"; };
+		81527D341CF8A83000EA13A4 /* RenderPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPass.cpp; sourceTree = "<group>"; };
+		81527D351CF8A83000EA13A4 /* RenderPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPass.h; sourceTree = "<group>"; };
+		81527D361CF8A83000EA13A4 /* RenderPassObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPassObject.cpp; sourceTree = "<group>"; };
+		81527D371CF8A83000EA13A4 /* RenderPassObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPassObject.h; sourceTree = "<group>"; };
 		8153A2FC1CF5A22A002AC919 /* RenderFrameCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderFrameCompiler.cpp; sourceTree = "<group>"; };
 		8153A2FD1CF5A22A002AC919 /* RenderFrameCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderFrameCompiler.h; sourceTree = "<group>"; };
 		8153A2FF1CF5A4AB002AC919 /* RenderObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderObject.cpp; sourceTree = "<group>"; };
@@ -1032,6 +1040,11 @@
 		816D96B71CF73CB600D23969 /* LoadShaderRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadShaderRenderCommand.h; sourceTree = "<group>"; };
 		816D96B91CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnloadShaderRenderCommand.cpp; sourceTree = "<group>"; };
 		816D96BA1CF73E6B00D23969 /* UnloadShaderRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnloadShaderRenderCommand.h; sourceTree = "<group>"; };
+		819775741CFC39DC0008C0E0 /* CameraRenderPassGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraRenderPassGroup.cpp; sourceTree = "<group>"; };
+		819775751CFC39DC0008C0E0 /* CameraRenderPassGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraRenderPassGroup.h; sourceTree = "<group>"; };
+		819775771CFC4C400008C0E0 /* TargetRenderPassGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargetRenderPassGroup.cpp; sourceTree = "<group>"; };
+		819775781CFC4C400008C0E0 /* TargetRenderPassGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetRenderPassGroup.h; sourceTree = "<group>"; };
+		8197757A1CFC542C0008C0E0 /* IRenderPassCompiler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IRenderPassCompiler.h; sourceTree = "<group>"; };
 		81A125D91CF44E490010853A /* RenderCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCamera.cpp; sourceTree = "<group>"; };
 		81A125DA1CF44E490010853A /* RenderCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCamera.h; sourceTree = "<group>"; };
 		81A125DC1CF454200010853A /* RenderAmbientLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderAmbientLight.cpp; sourceTree = "<group>"; };
@@ -1864,6 +1877,8 @@
 				8158F3401C89D2AD00B13109 /* AspectRatioUtils.cpp */,
 				8158F3411C89D2AD00B13109 /* AspectRatioUtils.h */,
 				8158F3421C89D2AD00B13109 /* BlendMode.h */,
+				819775741CFC39DC0008C0E0 /* CameraRenderPassGroup.cpp */,
+				819775751CFC39DC0008C0E0 /* CameraRenderPassGroup.h */,
 				8158F3431C89D2AD00B13109 /* CanvasMaterialPool.cpp */,
 				8158F3441C89D2AD00B13109 /* CanvasMaterialPool.h */,
 				8158F3451C89D2AD00B13109 /* CanvasRenderer.cpp */,
@@ -1886,6 +1901,10 @@
 				8153A2FD1CF5A22A002AC919 /* RenderFrameCompiler.h */,
 				8153A2FF1CF5A4AB002AC919 /* RenderObject.cpp */,
 				8153A3001CF5A4AB002AC919 /* RenderObject.h */,
+				81527D341CF8A83000EA13A4 /* RenderPass.cpp */,
+				81527D351CF8A83000EA13A4 /* RenderPass.h */,
+				81527D361CF8A83000EA13A4 /* RenderPassObject.cpp */,
+				81527D371CF8A83000EA13A4 /* RenderPassObject.h */,
 				81A125EF1CF46A840010853A /* RenderSnapshot.cpp */,
 				81A125F01CF46A840010853A /* RenderSnapshot.h */,
 				8158F35D1C89D2AD00B13109 /* RenderTarget.h */,
@@ -1898,6 +1917,9 @@
 				8158F3621C89D2AD00B13109 /* VertexLayouts.h */,
 				8158F3631C89D2AD00B13109 /* VerticalTextJustification.cpp */,
 				8158F3641C89D2AD00B13109 /* VerticalTextJustification.h */,
+				819775771CFC4C400008C0E0 /* TargetRenderPassGroup.cpp */,
+				819775781CFC4C400008C0E0 /* TargetRenderPassGroup.h */,
+				8197757A1CFC542C0008C0E0 /* IRenderPassCompiler.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -3073,10 +3095,12 @@
 				8158F6E31C89D2AD00B13109 /* CircleParticleEmitter.cpp in Sources */,
 				8158F7171C89D2AD00B13109 /* UIDrawableUtils.cpp in Sources */,
 				8158F7311C89D2AD00B13109 /* WebView.cpp in Sources */,
+				819775761CFC39DC0008C0E0 /* CameraRenderPassGroup.cpp in Sources */,
 				8158F68A1C89D2AD00B13109 /* StringParser.cpp in Sources */,
 				8158F6BA1C89D2AD00B13109 /* CameraComponent.cpp in Sources */,
 				8158F7D71C89D2AD00B13109 /* HttpRequestSystem.mm in Sources */,
 				8158F7E41C89D2AD00B13109 /* WebView.mm in Sources */,
+				81527D391CF8A83000EA13A4 /* RenderPassObject.cpp in Sources */,
 				8158F70C1C89D2AD00B13109 /* WidgetDefProvider.cpp in Sources */,
 				8158F6E21C89D2AD00B13109 /* StaticBillboardParticleDrawableDef.cpp in Sources */,
 				8158F6FF1C89D2AD00B13109 /* UVs.cpp in Sources */,
@@ -3232,6 +3256,7 @@
 				8158F7261C89D2AD00B13109 /* VListUILayoutDef.cpp in Sources */,
 				8158F6591C89D2AD00B13109 /* ParamDictionary.cpp in Sources */,
 				8158F71C1C89D2AD00B13109 /* ThreePatchUIDrawable.cpp in Sources */,
+				819775791CFC4C400008C0E0 /* TargetRenderPassGroup.cpp in Sources */,
 				8158F70E1C89D2AD00B13109 /* WidgetFactory.cpp in Sources */,
 				81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */,
 				8158F7071C89D2AD00B13109 /* PropertyLink.cpp in Sources */,
@@ -3284,6 +3309,7 @@
 				8153A3041CF5A764002AC919 /* RenderFrame.cpp in Sources */,
 				8158F7D41C89D2AD00B13109 /* Main.cpp in Sources */,
 				8158F6DC1C89D2AD00B13109 /* ConcurrentParticleData.cpp in Sources */,
+				81527D381CF8A83000EA13A4 /* RenderPass.cpp in Sources */,
 				8158F6D21C89D2AD00B13109 /* AccelerationParticleAffectorDef.cpp in Sources */,
 				8158F6741C89D2AD00B13109 /* PVRImageProvider.cpp in Sources */,
 				8158F70D1C89D2AD00B13109 /* WidgetDesc.cpp in Sources */,
