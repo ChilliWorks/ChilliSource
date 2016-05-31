@@ -25,6 +25,7 @@
 #include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
 
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Material/ForwardRenderMaterialGroupManager.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
 namespace ChilliSource
@@ -34,8 +35,8 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     RenderMaterialGroupManagerUPtr RenderMaterialGroupManager::Create() noexcept
     {
-        //TODO: Handle creation of deferred and forward rendering versions of the render material group manager.
-        return nullptr;
+        //TODO: Handle creation of deferred rendering version of the manager
+        return RenderMaterialGroupManagerUPtr(new ForwardRenderMaterialGroupManager());
     }
     
     //------------------------------------------------------------------------------

@@ -29,7 +29,15 @@
 
 namespace ChilliSource
 {
-    /// An enum describing each of the passes in the forward renderer.
+    /// An enum describing each of the passes in the multi-pass forward renderer. This consists of
+    ///
+    /// * The base pass. This renders all opaque objects to the scene with only ambient lighting.
+    /// * The directional light pass. For each directional light in the scene, a pass over all lit,
+    ///   opaque objects in the scene is performed. This renders the applied lighting additively to
+    ///   the base pass and does not write to the depth buffer.
+    /// * The transparent pass. This render all transparent objects in the scene with only ambient
+    ///   lighting. The depth buffer is not written to; the objects are first sorted to ensure no
+    ///   artefacts occur.
     ///
     enum class ForwardRenderPasses
     {

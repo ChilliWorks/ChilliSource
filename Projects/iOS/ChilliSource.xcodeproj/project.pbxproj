@@ -296,6 +296,7 @@
 		81A4DC4E1CF70C5100E820EE /* RenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A4DC4D1CF70C5100E820EE /* RenderCommand.cpp */; };
 		81A55DFB1CFD8AD600C9F0D6 /* LoadMaterialGroupRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A55DF91CFD8AD600C9F0D6 /* LoadMaterialGroupRenderCommand.cpp */; };
 		81A55DFE1CFD8BA400C9F0D6 /* UnloadMaterialGroupRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A55DFC1CFD8BA400C9F0D6 /* UnloadMaterialGroupRenderCommand.cpp */; };
+		81A55E031CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A55E011CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.cpp */; };
 		81BF7B7D1CF84AFD00DBC80B /* RenderMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */; };
 		81BF7B811CF84CA600DBC80B /* RenderMeshManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B801CF84CA600DBC80B /* RenderMeshManager.cpp */; };
 		81BF7B851CF8552000DBC80B /* LoadMeshRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B831CF8552000DBC80B /* LoadMeshRenderCommand.cpp */; };
@@ -1068,6 +1069,8 @@
 		81A55DFC1CFD8BA400C9F0D6 /* UnloadMaterialGroupRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnloadMaterialGroupRenderCommand.cpp; sourceTree = "<group>"; };
 		81A55DFD1CFD8BA400C9F0D6 /* UnloadMaterialGroupRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnloadMaterialGroupRenderCommand.h; sourceTree = "<group>"; };
 		81A55E001CFD8FFF00C9F0D6 /* ForwardRenderPasses.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ForwardRenderPasses.h; sourceTree = "<group>"; };
+		81A55E011CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ForwardRenderMaterialGroupManager.cpp; sourceTree = "<group>"; };
+		81A55E021CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardRenderMaterialGroupManager.h; sourceTree = "<group>"; };
 		81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderMesh.cpp; sourceTree = "<group>"; };
 		81BF7B7C1CF84AFD00DBC80B /* RenderMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderMesh.h; sourceTree = "<group>"; };
 		81BF7B7E1CF84B3300DBC80B /* PolygonType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PolygonType.h; sourceTree = "<group>"; };
@@ -1981,6 +1984,8 @@
 		8158F37F1C89D2AD00B13109 /* Material */ = {
 			isa = PBXGroup;
 			children = (
+				81A55E011CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.cpp */,
+				81A55E021CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.h */,
 				8158F3801C89D2AD00B13109 /* Material.cpp */,
 				8158F3811C89D2AD00B13109 /* Material.h */,
 				8158F3821C89D2AD00B13109 /* MaterialFactory.cpp */,
@@ -3115,6 +3120,7 @@
 				8158F7011C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */,
 				8158F71B1C89D2AD00B13109 /* StandardUIDrawableDef.cpp in Sources */,
 				8158F6561C89D2AD00B13109 /* PlatformSystem.cpp in Sources */,
+				81A55E031CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.cpp in Sources */,
 				8158F6841C89D2AD00B13109 /* ResourceProvider.cpp in Sources */,
 				8158F66D1C89D2AD00B13109 /* FileSystem.cpp in Sources */,
 				8158F7231C89D2AD00B13109 /* LayoutUIComponent.cpp in Sources */,

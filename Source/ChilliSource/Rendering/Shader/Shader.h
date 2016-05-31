@@ -62,7 +62,7 @@ namespace ChilliSource
         
         /// @return The underlying RenderShader used by the render system.
         ///
-        const RenderShader* GetRenderTexture() const noexcept;
+        const RenderShader* GetRenderShader() const noexcept;
         
         ~Shader() noexcept;
         

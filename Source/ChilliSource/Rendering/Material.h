@@ -31,6 +31,7 @@
 #define _CHILLISOURCE_RENDERING_MATERIAL_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Material/ForwardRenderMaterialGroupManager.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>

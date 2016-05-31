@@ -50,14 +50,15 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderTarget);
     CS_FORWARDDECLARE_CLASS(VertexFormat);
     enum class AlignmentAnchor;
-    enum class ShaderPass;
     enum class BlendMode;
     enum class CullFace;
     enum class DepthTestComparison;
-    enum class SurfaceFormat;
+    enum class ForwardRenderPasses;
     enum class HorizontalTextJustification;
-    enum class VerticalTextJustification;
+    enum class ShaderPass;
     enum class SizePolicy;
+    enum class SurfaceFormat;
+    enum class VerticalTextJustification;
     //------------------------------------------------------------
     /// Camera
     //------------------------------------------------------------
@@ -83,6 +84,7 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Material
     //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(ForwardRenderMaterialGroupManager);
     CS_FORWARDDECLARE_CLASS(Material);
     CS_FORWARDDECLARE_CLASS(MaterialFactory);
     CS_FORWARDDECLARE_CLASS(MaterialProvider);
