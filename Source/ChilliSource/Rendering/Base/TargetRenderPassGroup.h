@@ -45,7 +45,6 @@ namespace ChilliSource
         {
         public:
             
-            ///
             /// @param renderTarget
             ///     The render target to render the group to
             /// @param cameraRenderPassGroups
@@ -53,12 +52,10 @@ namespace ChilliSource
             ///
             TargetRenderPassGroup(const RenderTarget& renderTarget, const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept;
             
-            ///
             /// @return The render target to use for rendering the group
             ///
             const RenderTarget& GetRenderTarget() const noexcept { return m_renderTarget; }
             
-            ///
             /// @return The list of render camera groups
             ///
             const std::vector<CameraRenderPassGroup>& GetRenderCameraGroups() const noexcept { return m_renderCameraGroups; }

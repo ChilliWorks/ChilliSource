@@ -45,7 +45,6 @@ namespace ChilliSource
         {
         public:
             
-            ///
             /// @param camera
             ///     The camera to use for this pass
             /// @param renderPasses
@@ -53,12 +52,10 @@ namespace ChilliSource
             ///
             CameraRenderPassGroup(const RenderCamera& camera, const std::vector<RenderPass>& renderPasses) noexcept;
             
-            ///
             /// @return The camera to use for rendering the group
             ///
             const RenderCamera& GetCamera() const noexcept { return m_camera; }
             
-            ///
             /// @return The list of render passes in this group
             ///
             const std::vector<RenderPass>& GetRenderPasses() const noexcept { return m_renderPasses; }

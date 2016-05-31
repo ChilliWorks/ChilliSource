@@ -48,7 +48,7 @@ namespace ChilliSource
             ///
             /// @return The list of target render pass groups
             ///
-            virtual std::vector<TargetRenderPassGroup> CompileRenderPasses(const CSCore::TaskContext& in_outerTaskContext, const RenderFrame& in_renderFrame) noexcept = 0;
+            virtual std::vector<TargetRenderPassGroup> CompileRenderPasses(const CS::TaskContext& in_outerTaskContext, const RenderFrame& in_renderFrame) noexcept = 0;
             
             virtual ~IRenderPassCompiler() noexcept {};
             

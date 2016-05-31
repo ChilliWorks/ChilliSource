@@ -37,6 +37,12 @@ namespace ChilliSource
     class RenderPointLight final
     {
     public:
+        
+        /// Creates a new instance of the container with default black colour with
+        /// position and attenuation zeroed.
+        ///
+        RenderPointLight() noexcept;
+        
         /// Creates a new instance of the container with the given light colour and position.
         ///
         /// @param colour

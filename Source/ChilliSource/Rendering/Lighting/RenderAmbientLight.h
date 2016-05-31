@@ -35,6 +35,11 @@ namespace ChilliSource
     class RenderAmbientLight final
     {
     public:
+        
+        /// Creates a new instance of the container with default black colour.
+        ///
+        RenderAmbientLight() noexcept;
+        
         /// Creates a new instance of the container with the given light colour.
         ///
         /// @param colour

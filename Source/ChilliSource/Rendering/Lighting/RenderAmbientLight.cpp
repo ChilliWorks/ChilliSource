@@ -27,6 +27,11 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
+    RenderAmbientLight::RenderAmbientLight() noexcept
+        : m_colour(Colour::k_black)
+    {
+    }
+    //------------------------------------------------------------------------------
     RenderAmbientLight::RenderAmbientLight(const Colour& colour) noexcept
         : m_colour(colour)
     {

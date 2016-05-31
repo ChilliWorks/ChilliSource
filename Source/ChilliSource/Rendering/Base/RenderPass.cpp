@@ -29,11 +29,52 @@ namespace ChilliSource
     namespace Rendering
     {
         //------------------------------------------------------------------------------
-        RenderPass::RenderPass(const RenderLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
-        :m_light(light)
-        ,m_renderPassObjects(renderPassObjects)
+        RenderPass::RenderPass(const std::vector<RenderPassObject>& renderPassObjects) noexcept
+        :m_renderPassObjects(renderPassObjects)
+        ,m_lightType(k_none)
         {
+        }
+        //------------------------------------------------------------------------------
+        RenderPass::RenderPass(const RenderAmbientLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
+        :m_ambientLight(light)
+        ,m_renderPassObjects(renderPassObjects)
+        ,m_lightType(k_ambient)
+        {
+        }
+        //------------------------------------------------------------------------------
+        RenderPass::RenderPass(const RenderPointLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
+        :m_pointLight(light)
+        ,m_renderPassObjects(renderPassObjects)
+        ,m_lightType(k_point)
+        {
+        }
+        //------------------------------------------------------------------------------
+        RenderPass::RenderPass(const RenderDirectionalLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
+        :m_directionalLight(light)
+        ,m_renderPassObjects(renderPassObjects)
+        ,m_lightType(k_directional)
+        {
+        }
+        //------------------------------------------------------------------------------
+        const RenderAmbientLight& RenderPass::GetAmbientLight() const noexcept
+        {
+            CS_ASSERT(m_lightType == k_ambient, "Ambient light not set for pass");
             
+            return m_ambientLight;
+        }
+        //------------------------------------------------------------------------------
+        const RenderPointLight& RenderPass::GetPointLight() const noexcept
+        {
+            CS_ASSERT(m_lightType == k_point, "Point light not set for pass");
+            
+            return m_pointLight;
+        }
+        //------------------------------------------------------------------------------
+        const RenderDirectionalLight& RenderPass::GetDirectionalLight() const noexcept
+        {
+            CS_ASSERT(m_lightType == k_directional, "Ambient light not set for pass");
+            
+            return m_directionalLight;
         }
     }
 }

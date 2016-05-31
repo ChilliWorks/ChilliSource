@@ -27,6 +27,11 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Rendering/Base/RenderPassObject.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
+#include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
+#include <ChilliSource/Rendering/Lighting/RenderPointLight.h>
 
 #include <vector>
 
@@ -34,10 +39,6 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        //TODO:Remove these when implemented
-        class RenderLight {};
-        class RenderPassObject {};
-
         /// Provides the ability to store a number of render pass objecs to render
         /// with a single light source.
         ///
@@ -47,29 +48,80 @@ namespace ChilliSource
         {
         public:
             
+            /// Enum describing the light types a pass can hold
+            ///
+            enum RenderLightType
+            {
+                k_none,
+                k_ambient,
+                k_directional,
+                k_point
+            };
+            
             RenderPass() = default;
             
-            ///
-            /// @param light
-            ///     The light to use for this pass
             /// @param renderPassObjects
             ///     The list of render pass objects for this pass
             ///
-            RenderPass(const RenderLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
+            RenderPass(const std::vector<RenderPassObject>& renderPassObjects) noexcept;
             
+            /// @param light
+            ///     The ambient light to use for this pass
+            /// @param renderPassObjects
+            ///     The list of render pass objects for this pass
             ///
-            /// @return The light to use for this pass
-            ///
-            const RenderLight& GetLight() const noexcept { return m_light; }
+            RenderPass(const RenderAmbientLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
             
+            /// @param light
+            ///     The point light to use for this pass
+            /// @param renderPassObjects
+            ///     The list of render pass objects for this pass
             ///
+            RenderPass(const RenderPointLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
+            
+            /// @param light
+            ///     The directional light to use for this pass
+            /// @param renderPassObjects
+            ///     The list of render pass objects for this pass
+            ///
+            RenderPass(const RenderDirectionalLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
+            
+            /// @return The light type set for this pass
+            ///
+            RenderLightType GetLightType() const noexcept { return m_lightType; }
+            
+            /// Return the ambient light for this pass, if set. GetLightType() should be used
+            /// to determine if this is set, if not this function will assert
+            ///
+            /// @return The ambient light to use for this pass
+            ///
+            const RenderAmbientLight& GetAmbientLight() const noexcept;
+            
+            /// Return the point light for this pass, if set. GetLightType() should be used
+            /// to determine if this is set, if not this function will assert
+            ///
+            /// @return The ambient light to use for this pass
+            ///
+            const RenderPointLight& GetPointLight() const noexcept;
+            
+            /// Return the directional light for this pass, if set. GetLightType() should be used
+            /// to determine if this is set, if not this function will assert
+            ///
+            /// @return The ambient light to use for this pass
+            ///
+            const RenderDirectionalLight& GetDirectionalLight() const noexcept;
+            
             /// @return The list of render pass objects for this pass
             ///
             const std::vector<RenderPassObject>& GetRenderPassObjects() const noexcept { return m_renderPassObjects; }
             
         private:
-            RenderLight m_light;
+            RenderAmbientLight m_ambientLight;
+            RenderPointLight m_pointLight;
+            RenderDirectionalLight m_directionalLight;
+            
             std::vector<RenderPassObject> m_renderPassObjects;
+            RenderLightType m_lightType = k_none;
         };
     }
 }

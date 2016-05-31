@@ -27,6 +27,12 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
+    RenderDirectionalLight::RenderDirectionalLight() noexcept
+        : m_colour(Colour::k_black), m_direction(Vector3::k_unitNegativeY)
+    {
+    }
+    
+    //------------------------------------------------------------------------------
     RenderDirectionalLight::RenderDirectionalLight(const Colour& colour, const Vector3& direction) noexcept
         : m_colour(colour), m_direction(direction)
     {

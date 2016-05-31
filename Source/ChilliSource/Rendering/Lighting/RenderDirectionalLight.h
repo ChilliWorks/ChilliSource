@@ -37,6 +37,12 @@ namespace ChilliSource
     class RenderDirectionalLight final
     {
     public:
+        
+        /// Creates a new instance of the container with default black colour and v-down direction
+        /// with no shadow map.
+        ///
+        RenderDirectionalLight() noexcept;
+        
         /// Creates a new instance of the container with the given light colour and direction
         /// with no shadow map.
         ///
