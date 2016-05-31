@@ -50,16 +50,17 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderPassObject);
     CS_FORWARDDECLARE_CLASS(RenderSnapshot);
     CS_FORWARDDECLARE_CLASS(RenderTarget);
-    CS_FORWARDDECLARE_CLASS(VertexDeclaration);
+    CS_FORWARDDECLARE_CLASS(VertexFormat);
     enum class AlignmentAnchor;
-    enum class ShaderPass;
     enum class BlendMode;
     enum class CullFace;
     enum class DepthTestComparison;
-    enum class SurfaceFormat;
+    enum class ForwardRenderPasses;
     enum class HorizontalTextJustification;
-    enum class VerticalTextJustification;
+    enum class ShaderPass;
     enum class SizePolicy;
+    enum class SurfaceFormat;
+    enum class VerticalTextJustification;
     //------------------------------------------------------------
     /// Camera
     //------------------------------------------------------------
@@ -85,9 +86,13 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Material
     //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(ForwardRenderMaterialGroupManager);
     CS_FORWARDDECLARE_CLASS(Material);
     CS_FORWARDDECLARE_CLASS(MaterialFactory);
     CS_FORWARDDECLARE_CLASS(MaterialProvider);
+    CS_FORWARDDECLARE_CLASS(RenderMaterial);
+    CS_FORWARDDECLARE_CLASS(RenderMaterialGroup);
+    CS_FORWARDDECLARE_CLASS(RenderMaterialGroupManager);
     //------------------------------------------------------------
     /// Model
     //------------------------------------------------------------
@@ -100,11 +105,15 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(CSAnimProvider);
     CS_FORWARDDECLARE_CLASS(CSModelProvider);
     CS_FORWARDDECLARE_CLASS(PrimitiveModelFactory);
+    CS_FORWARDDECLARE_CLASS(RenderMesh);
+    CS_FORWARDDECLARE_CLASS(RenderMeshManager);
     CS_FORWARDDECLARE_CLASS(Skeleton);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
     CS_FORWARDDECLARE_STRUCT(SkeletonNode);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimationGroup);
     CS_FORWARDDECLARE_CLASS(StaticMeshComponent);
+    enum class IndexType;
+    enum class PolygonType;
     //------------------------------------------------------------
     /// Particle
     //------------------------------------------------------------
@@ -154,10 +163,14 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Render Command
     //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(LoadMaterialGroupRenderCommand);
+    CS_FORWARDDECLARE_CLASS(LoadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandList);
+    CS_FORWARDDECLARE_CLASS(UnloadMaterialGroupRenderCommand);
+    CS_FORWARDDECLARE_CLASS(UnloadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadTextureRenderCommand);
     //------------------------------------------------------------

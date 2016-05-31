@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,41 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderPassObject.h>
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMESHRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMESHRENDERCOMMAND_H_
 
-#include <ChilliSource/Rendering/Material/RenderMaterial.h>
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
 namespace ChilliSource
 {
-    namespace Rendering
+    /// A render command which unloads the mesh data pertaining to a single render mesh from
+    /// render memory.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class UnloadMeshRenderCommand final : public RenderCommand
     {
-        //------------------------------------------------------------------------------
-        RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept
-        :m_renderMaterial(renderMaterial)
-        ,m_renderMesh(renderMesh)
-        ,m_worldMatrix(worldMatrix)
-        { 
-        }
-    }
+    public:
+        /// @return The render mesh that should be unloaded.
+        ///
+        const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh.get(); }
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Constructs a new instance with the given render mesh.
+        ///
+        /// @param renderMesh
+        ///     The render mesh that should be unloaded.
+        ///
+        UnloadMeshRenderCommand(RenderMeshUPtr renderMesh) noexcept;
+        
+        RenderMeshUPtr m_renderMesh;
+    };
 }
+
+#endif

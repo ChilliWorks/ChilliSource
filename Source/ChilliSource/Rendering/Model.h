@@ -34,9 +34,13 @@
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 #include <ChilliSource/Rendering/Model/CSAnimProvider.h>
 #include <ChilliSource/Rendering/Model/CSModelProvider.h>
+#include <ChilliSource/Rendering/Model/IndexType.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
+#include <ChilliSource/Rendering/Model/PolygonType.h>
 #include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
+#include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/Model/RenderMeshManager.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>

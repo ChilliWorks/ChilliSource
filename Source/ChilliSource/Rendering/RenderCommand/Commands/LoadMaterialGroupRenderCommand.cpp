@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderPassObject.h>
-
-#include <ChilliSource/Rendering/Material/RenderMaterial.h>
-#include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 
 namespace ChilliSource
 {
-    namespace Rendering
+    //------------------------------------------------------------------------------
+    LoadMaterialGroupRenderCommand::LoadMaterialGroupRenderCommand(RenderMaterialGroup* renderMaterialGroup) noexcept
+        : RenderCommand(Type::k_loadMaterialGroup), m_renderMaterialGroup(renderMaterialGroup)
     {
-        //------------------------------------------------------------------------------
-        RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept
-        :m_renderMaterial(renderMaterial)
-        ,m_renderMesh(renderMesh)
-        ,m_worldMatrix(worldMatrix)
-        { 
-        }
     }
-}
+}   

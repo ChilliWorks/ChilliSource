@@ -27,15 +27,12 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
     namespace Rendering
     {
-        //TODO::Remove these when implemented
-        class RenderMaterial {};
-        class RenderMesh {};
-        
         /// A standard-layout container for data which the renderer requires that relates to a single render
         /// pass for a single object in the scene, such as mesh data, material and transform data.
         /// While a RenderObject contains a material group that has materials for all render passes, this

@@ -41,7 +41,7 @@ namespace ChilliSource
     /// On deletion an UnloadTextureRenderCommand is queued and given ownership of the
     /// RenderTexture. The render texture is then deleted once the command has been processed.
     ///
-    /// This is thead-safe and can be called from any thread. If it is called on a background
+    /// This is thread-safe and can be called from any thread. If it is called on a background
     /// thread, care needs to be taken to ensure any created RenderTextures are not used prior
     /// to being loaded.
     ///

@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,23 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderPassObject.h>
+#ifndef _CHILLISOURCE_RENDERING_MODEL_POLYGONTYPE_H_
+#define _CHILLISOURCE_RENDERING_MODEL_POLYGONTYPE_H_
 
-#include <ChilliSource/Rendering/Material/RenderMaterial.h>
-#include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    namespace Rendering
+    /// An enum describing the type used to describe indices.
+    ///
+    /// Currently the only supported type is Short, which allows for an index range of
+    /// 0 - 65535.
+    ///
+    ///
+    enum class PolygonType
     {
-        //------------------------------------------------------------------------------
-        RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept
-        :m_renderMaterial(renderMaterial)
-        ,m_renderMesh(renderMesh)
-        ,m_worldMatrix(worldMatrix)
-        { 
-        }
-    }
+        k_short
+    };
 }
+
+#endif

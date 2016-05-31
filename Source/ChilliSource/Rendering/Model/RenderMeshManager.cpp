@@ -22,66 +22,71 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
+#include <ChilliSource/Rendering/Model/RenderMeshManager.h>
 
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 
+#include <mutex>
+
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(RenderShaderManager);
-    
+    CS_DEFINE_NAMEDTYPE(RenderMeshManager);
+
     //------------------------------------------------------------------------------
-    RenderShaderManagerUPtr RenderShaderManager::Create() noexcept
+    RenderMeshManagerUPtr RenderMeshManager::Create() noexcept
     {
-        return RenderShaderManagerUPtr(new RenderShaderManager());
+        return RenderMeshManagerUPtr(new RenderMeshManager());
     }
-    
+
     //------------------------------------------------------------------------------
-    bool RenderShaderManager::IsA(InterfaceIDType interfaceId) const noexcept
+    bool RenderMeshManager::IsA(InterfaceIDType interfaceId) const noexcept
     {
-        return (RenderShaderManager::InterfaceID == interfaceId);
+        return (RenderMeshManager::InterfaceID == interfaceId);
     }
-    
+
     //------------------------------------------------------------------------------
-    const RenderShader* RenderShaderManager::CreateRenderShader(const std::string& vertexShader, const std::string& fragmentShader) noexcept
+    const RenderMesh* RenderMeshManager::CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+                                                          std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
     {
-        RenderShaderUPtr renderShader(new RenderShader());
-        auto rawRenderShader = renderShader.get();
+        RenderMeshUPtr renderMesh(new RenderMesh(polygonType, vertexFormat, indexType, numVertices, numIndices, boundingSphere));
+        auto rawRenderMesh = renderMesh.get();
         
         PendingLoadCommand loadCommand;
-        loadCommand.m_vertexShader = vertexShader;
-        loadCommand.m_fragmentShader = fragmentShader;
-        loadCommand.m_renderShader = rawRenderShader;
+        loadCommand.m_renderMesh = rawRenderMesh;
+        loadCommand.m_vertexData = std::move(vertexData);
+        loadCommand.m_vertexDataSize = vertexDataSize;
+        loadCommand.m_indexData = std::move(indexData);
+        loadCommand.m_indexDataSize = indexDataSize;
         
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_renderShaders.push_back(std::move(renderShader));
+        m_renderMeshes.push_back(std::move(renderMesh));
         m_pendingLoadCommands.push_back(std::move(loadCommand));
         
-        return rawRenderShader;
+        return rawRenderMesh;
     }
-    
+
     //------------------------------------------------------------------------------
-    void RenderShaderManager::DestroyRenderShader(const RenderShader* renderShader) noexcept
+    void RenderMeshManager::DestroyRenderMesh(const RenderMesh* renderMesh) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         
-        for (auto it = m_renderShaders.begin(); it != m_renderShaders.end(); ++it)
+        for (auto it = m_renderMeshes.begin(); it != m_renderMeshes.end(); ++it)
         {
-            if (it->get() == renderShader)
+            if (it->get() == renderMesh)
             {
                 m_pendingUnloadCommands.push_back(std::move(*it));
                 
-                it->swap(m_renderShaders.back());
-                m_renderShaders.pop_back();
+                it->swap(m_renderMeshes.back());
+                m_renderMeshes.pop_back();
                 return;
             }
         }
         
-        CS_LOG_FATAL("RenderShader does not exist.");
+        CS_LOG_FATAL("RenderMesh does not exist.");
     }
-    
+
     //------------------------------------------------------------------------------
-    void RenderShaderManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void RenderMeshManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
     {
         auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
         auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
@@ -90,13 +95,13 @@ namespace ChilliSource
         
         for (auto& loadCommand : m_pendingLoadCommands)
         {
-            preRenderCommandList->AddLoadShaderCommand(loadCommand.m_renderShader, loadCommand.m_vertexShader, loadCommand.m_fragmentShader);
+            preRenderCommandList->AddLoadMeshCommand(loadCommand.m_renderMesh, std::move(loadCommand.m_vertexData), loadCommand.m_vertexDataSize, std::move(loadCommand.m_indexData), loadCommand.m_indexDataSize);
         }
         m_pendingLoadCommands.clear();
         
         for (auto& unloadCommand : m_pendingUnloadCommands)
         {
-            postRenderCommandList->AddUnloadShaderCommand(std::move(unloadCommand));
+            postRenderCommandList->AddUnloadMeshCommand(std::move(unloadCommand));
         }
         m_pendingUnloadCommands.clear();
     }

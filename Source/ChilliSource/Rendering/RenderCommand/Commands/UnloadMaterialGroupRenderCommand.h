@@ -22,19 +22,40 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMATERIALGROUPRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMATERIALGROUPRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
+
+namespace ChilliSource
+{
+    /// A render command which unloads the data pertaining to a single render material group.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class UnloadMaterialGroupRenderCommand final : public RenderCommand
+    {
+    public:
+        /// @return The render material that should be unloaded.
+        ///
+        RenderMaterialGroup* GetRenderMaterialGroup() const noexcept { return m_renderMaterialGroup.get(); }
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Constructs a new instance with the given render render material group.
+        ///
+        /// @param renderMaterialGroup
+        ///     The render material group that should be unloaded.
+        ///
+        UnloadMaterialGroupRenderCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept;
+        
+        RenderMaterialGroupUPtr m_renderMaterialGroup;
+    };
+}
 
 #endif

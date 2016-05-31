@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderPassObject.h>
-
-#include <ChilliSource/Rendering/Material/RenderMaterial.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
 namespace ChilliSource
 {
-    namespace Rendering
+    //------------------------------------------------------------------------------
+    RenderMesh::RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept
+        : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexType(indexType), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere)
     {
-        //------------------------------------------------------------------------------
-        RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept
-        :m_renderMaterial(renderMaterial)
-        ,m_renderMesh(renderMesh)
-        ,m_worldMatrix(worldMatrix)
-        { 
-        }
     }
 }

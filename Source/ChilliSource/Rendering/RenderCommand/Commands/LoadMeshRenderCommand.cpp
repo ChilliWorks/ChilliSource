@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,14 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderPassObject.h>
-
-#include <ChilliSource/Rendering/Material/RenderMaterial.h>
-#include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 
 namespace ChilliSource
 {
-    namespace Rendering
+    //------------------------------------------------------------------------------
+    LoadMeshRenderCommand::LoadMeshRenderCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
+        : RenderCommand(Type::k_loadMesh), m_renderMesh(renderMesh), m_vertexData(std::move(vertexData)), m_vertexDataSize(vertexDataSize), m_indexData(std::move(indexData)), m_indexDataSize(indexDataSize)
     {
-        //------------------------------------------------------------------------------
-        RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept
-        :m_renderMaterial(renderMaterial)
-        ,m_renderMesh(renderMesh)
-        ,m_worldMatrix(worldMatrix)
-        { 
-        }
     }
 }

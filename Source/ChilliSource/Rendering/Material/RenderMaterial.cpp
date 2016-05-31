@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,17 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderPassObject.h>
-
 #include <ChilliSource/Rendering/Material/RenderMaterial.h>
-#include <ChilliSource/Rendering/Model/RenderMesh.h>
 
 namespace ChilliSource
 {
-    namespace Rendering
+    //------------------------------------------------------------------------------
+    RenderMaterial::RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
+                                   bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour,
+                                   const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour) noexcept
+        : m_renderShader(renderShader), m_renderTextures(renderTextures), m_isTransparencyEnabled(isTransparencyEnabled), m_isColourWriteEnabled(isColourWriteEnabled), m_isDepthWriteEnabled(isDepthWriteEnabled),
+        m_isDepthTestEnabled(isDepthTestEnabled), m_isFaceCullingEnabled(isFaceCullingEnabled), m_sourceBlendMode(sourceBlendMode), m_destinationBlendMode(destinationBlendMode), m_cullFace(cullFace),
+        m_emissiveColour(emissiveColour), m_ambientColour(ambientColour), m_diffuseColour(diffuseColour), m_specularColour(specularColour)
     {
-        //------------------------------------------------------------------------------
-        RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept
-        :m_renderMaterial(renderMaterial)
-        ,m_renderMesh(renderMesh)
-        ,m_worldMatrix(worldMatrix)
-        { 
-        }
     }
 }

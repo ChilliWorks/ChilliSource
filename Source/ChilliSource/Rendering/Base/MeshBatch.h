@@ -30,7 +30,6 @@
 #define _CHILLISOURCE_RENDERING_MESH_BATCH_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/VertexLayouts.h>
 
 namespace ChilliSource
 {
