@@ -29,7 +29,7 @@ namespace ChilliSource
     namespace Rendering
     {
         //------------------------------------------------------------------------------
-        RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const CS::Matrix4& worldMatrix) noexcept
+        RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept
         :m_renderMaterial(renderMaterial)
         ,m_renderMesh(renderMesh)
         ,m_worldMatrix(worldMatrix)

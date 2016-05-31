@@ -36,7 +36,10 @@ namespace ChilliSource
         class RenderMaterial {};
         class RenderMesh {};
         
-        /// A container for everything needed to render an object.
+        /// A standard-layout container for data which the renderer requires that relates to a single render
+        /// pass for a single object in the scene, such as mesh data, material and transform data.
+        /// While a RenderObject contains a material group that has materials for all render passes, this
+        /// only contains a single material for the pass this object is be created for.
         ///
         /// This is immutable and therefore thread-safe
         ///
@@ -44,7 +47,6 @@ namespace ChilliSource
         {
         public:
             
-            ///
             /// @param renderMaterial
             ///     The material to use
             /// @param renderMesh
@@ -52,27 +54,24 @@ namespace ChilliSource
             /// @param worldMatrix
             ///     The transform to render at
             ///
-            RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const CS::Matrix4& worldMatrix) noexcept;
+            RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept;
             
-            ///
             /// @return The RenderMaterial to use
             ///
             const RenderMaterial* GetRenderMaterial() const noexcept { return m_renderMaterial; }
             
-            ///
             /// @return The RenderMesh to use
             ///
             const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
             
-            ///
             /// @return The WorldMatrix to use
             ///
-            const CS::Matrix4& GetWorldMatrix() const noexcept { return m_worldMatrix; }
+            const Matrix4& GetWorldMatrix() const noexcept { return m_worldMatrix; }
             
         private:
             const RenderMaterial* m_renderMaterial;
             const RenderMesh* m_renderMesh;
-            CS::Matrix4 m_worldMatrix;
+            Matrix4 m_worldMatrix;
         };
     }
 }

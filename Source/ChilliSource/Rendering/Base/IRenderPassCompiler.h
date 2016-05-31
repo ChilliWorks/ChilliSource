@@ -33,7 +33,12 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        /// Provides an interface for a render compiler
+        /// Provides an interface for a render compiler. A render compiler breaks the RenderFrame down
+        /// into a series of RenderPasses ensuring each pass only contains the relevant objects by
+        /// filtering for material type and visibility. Objects within a render pass are also sorted
+        /// into an appropriate order for the type of pass. These render passes are contained by a
+        /// TargetRenderPassGroup, which groups passes based on the framebuffer they are targetting.
+        /// All this is processed in a series of background tasks.
         ///
         class IRenderPassCompiler
         {
@@ -48,7 +53,7 @@ namespace ChilliSource
             ///
             /// @return The list of target render pass groups
             ///
-            virtual std::vector<TargetRenderPassGroup> CompileRenderPasses(const CS::TaskContext& in_outerTaskContext, const RenderFrame& in_renderFrame) noexcept = 0;
+            virtual std::vector<TargetRenderPassGroup> CompileRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept = 0;
             
             virtual ~IRenderPassCompiler() noexcept {};
             

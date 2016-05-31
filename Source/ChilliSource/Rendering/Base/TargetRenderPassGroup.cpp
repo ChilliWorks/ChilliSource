@@ -29,9 +29,8 @@ namespace ChilliSource
     namespace Rendering
     {
         //------------------------------------------------------------------------------
-        TargetRenderPassGroup::TargetRenderPassGroup(const RenderTarget& renderTarget, const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept
-        :m_renderTarget(renderTarget)
-        ,m_renderCameraGroups(cameraRenderPassGroups)
+        TargetRenderPassGroup::TargetRenderPassGroup(const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept
+            : m_renderCameraGroups(cameraRenderPassGroups)
         {
         }
     }
