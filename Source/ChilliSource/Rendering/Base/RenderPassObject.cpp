@@ -24,6 +24,9 @@
 
 #include <ChilliSource/Rendering/Base/RenderPassObject.h>
 
+#include <ChilliSource/Rendering/Material/RenderMaterial.h>
+#include <ChilliSource/Rendering/Model/RenderMesh.h>
+
 namespace ChilliSource
 {
     namespace Rendering
