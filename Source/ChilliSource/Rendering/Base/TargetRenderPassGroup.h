@@ -22,38 +22,39 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_LIGHTING_RENDERAMBIENTLIGHT_H_
-#define _CHILLISOURCE_RENDERING_LIGHTING_RENDERAMBIENTLIGHT_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_TARGETRENDERPASSGROUP_H_
+#define _CHILLISOURCE_RENDERING_BASE_TARGETRENDERPASSGROUP_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/Colour.h>
+
+#include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 
 namespace ChilliSource
 {
-    /// A standard-layout container for data the renderer needs which pertains to a single
-    /// ambient light, such as the colour.
-    class RenderAmbientLight final
+    namespace Rendering
     {
-    public:
-        
-        /// Creates a new instance of the container with default black colour.
+        /// Provides the ability to group a number of camera render pass groups based on
+        /// them sharing the same render target
         ///
-        RenderAmbientLight() noexcept;
-        
-        /// Creates a new instance of the container with the given light colour.
+        /// This is immutable and therefore thread-safe
         ///
-        /// @param colour
-        ///     The colour of the light.
-        ///
-        RenderAmbientLight(const Colour& colour) noexcept;
-        
-        /// @return The colour of the light.
-        ///
-        const Colour& GetColour() const noexcept { return m_colour; }
-        
-    private:
-        Colour m_colour;
-    };
+        class TargetRenderPassGroup final
+        {
+        public:
+            
+            /// @param cameraRenderPassGroups
+            ///     The list of camera render pass groups to render to the target
+            ///
+            TargetRenderPassGroup(const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept;
+            
+            /// @return The list of render camera groups
+            ///
+            const std::vector<CameraRenderPassGroup>& GetRenderCameraGroups() const noexcept { return m_renderCameraGroups; }
+            
+        private:
+            std::vector<CameraRenderPassGroup> m_renderCameraGroups;
+        };
+    }
 }
 
 #endif

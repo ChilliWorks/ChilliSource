@@ -27,6 +27,11 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
+    RenderPointLight::RenderPointLight() noexcept
+        : m_colour(Colour::k_black), m_position(Vector3::k_zero), m_attenuation(1.0f, 0.0f, 0.0f)
+    {
+    }
+    //------------------------------------------------------------------------------
     RenderPointLight::RenderPointLight(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept
         : m_colour(colour), m_position(position), m_attenuation(attenuation)
     {
