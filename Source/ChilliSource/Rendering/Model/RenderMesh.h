@@ -48,7 +48,7 @@ namespace ChilliSource
         /// @param polygonType
         ///     The type of polygon the mesh uses.
         /// @param vertexFormat
-        ///     The vertex format declaration.
+        ///     The vertex format.
         /// @param indexType
         ///     The type of index.
         /// @param numVertices
@@ -64,7 +64,7 @@ namespace ChilliSource
         ///
         PolygonType GetPolygonType() const noexcept { return m_polygonType; }
         
-        /// @return The vertex format declaration.
+        /// @return The vertex format.
         ///
         const VertexFormat& GetVertexFormat() const noexcept { return m_vertexFormat; }
         

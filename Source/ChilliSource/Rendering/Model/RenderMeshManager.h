@@ -68,7 +68,7 @@ namespace ChilliSource
         /// @param polygonType
         ///     The type of polygon the mesh uses.
         /// @param vertexFormat
-        ///     The vertex format declaration.
+        ///     The vertex format.
         /// @param indexType
         ///     The type of index.
         /// @param numVertices

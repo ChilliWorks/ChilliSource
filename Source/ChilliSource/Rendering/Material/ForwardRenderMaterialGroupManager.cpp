@@ -73,8 +73,6 @@ namespace ChilliSource
         AddRenderMaterialGroup(std::move(renderMaterialGroup));
         
         return renderMaterialGroupRaw;
-        
-        return nullptr;
     }
     
     //------------------------------------------------------------------------------
@@ -105,8 +103,6 @@ namespace ChilliSource
         AddRenderMaterialGroup(std::move(renderMaterialGroup));
         
         return renderMaterialGroupRaw;
-        
-        return nullptr;
     }
     
     //------------------------------------------------------------------------------
