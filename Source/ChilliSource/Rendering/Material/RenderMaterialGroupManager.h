@@ -29,6 +29,8 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
 
+#include <mutex>
+
 namespace ChilliSource
 {
     /// Manages the lifecycle of all RenderMaterialGroup instances.

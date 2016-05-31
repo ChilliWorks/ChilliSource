@@ -55,34 +55,36 @@ namespace ChilliSource
             }
         }
         
-        CS_LOG_FATAL("RenderMesh does not exist.");
+        CS_LOG_FATAL("RenderMaterialGroup does not exist.");
     }
     
     //------------------------------------------------------------------------------
     void RenderMaterialGroupManager::AddRenderMaterialGroup(RenderMaterialGroupUPtr renderMaterialGroup) noexcept
     {
-        //TODO: Add RenderMaterialGroup
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
+        m_pendingLoadCommands.push_back(renderMaterialGroup.get());
+        m_renderMaterialGroups.push_back(std::move(renderMaterialGroup));
     }
     
     //------------------------------------------------------------------------------
     void RenderMaterialGroupManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
     {
-        //TODO: Continue
-//        auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
-//        auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
-//        
-//        std::unique_lock<std::mutex> lock(m_mutex);
-//        
-//        for (auto& loadCommand : m_pendingLoadCommands)
-//        {
-//            preRenderCommandList->AddLoadMaterialGroupCommand(loadCommand);
-//        }
-//        m_pendingLoadCommands.clear();
-//        
-//        for (auto& unloadCommand : m_pendingUnloadCommands)
-//        {
-//            postRenderCommandList->AddLoadMaterialGroupCommand(std::move(unloadCommand));
-//        }
-//        m_pendingUnloadCommands.clear();
+        auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
+        auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
+        
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
+        for (auto& loadCommand : m_pendingLoadCommands)
+        {
+            preRenderCommandList->AddLoadMaterialGroupCommand(loadCommand);
+        }
+        m_pendingLoadCommands.clear();
+        
+        for (auto& unloadCommand : m_pendingUnloadCommands)
+        {
+            postRenderCommandList->AddUnloadMaterialGroupCommand(std::move(unloadCommand));
+        }
+        m_pendingUnloadCommands.clear();
     }
 }

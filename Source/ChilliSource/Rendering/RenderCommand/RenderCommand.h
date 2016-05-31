@@ -48,14 +48,14 @@ namespace ChilliSource
         {
             k_loadTexture,
             k_loadShader,
-            k_loadMaterial,
+            k_loadMaterialGroup,
             k_loadMesh,
             k_beginRender,
             k_applyLight,
             k_applyMesh,
             k_renderInstance,
             k_unloadMesh,
-            k_unloadMaterial,
+            k_unloadMaterialGroup,
             k_unloadShader,
             k_unloadTexture
         };

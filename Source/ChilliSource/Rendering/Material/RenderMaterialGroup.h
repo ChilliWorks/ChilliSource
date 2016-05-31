@@ -52,7 +52,7 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(RenderMaterialGroup);
         
-        static constexpr u32 k_maxPasses = 5;
+        static constexpr u32 k_maxPasses = 3;
         
         /// A collection of RenderMaterials for a single vertex format.
         ///
@@ -90,10 +90,12 @@ namespace ChilliSource
         
         /// Creates a new instance with the given collections of RenderMaterials.
         ///
+        /// @param renderMaterials
+        ///     The list of all materials in the group.
         /// @param collections
         ///     The list of material collections.
         ///
-        RenderMaterialGroup(std::vector<RenderMaterialGroupUPtr>, const std::vector<Collection> collections) noexcept;
+        RenderMaterialGroup(std::vector<RenderMaterialUPtr> renderMaterials, const std::vector<Collection>& collections) noexcept;
         
         /// Looks up the render material for the given vertex format and pass index.
         ///
@@ -106,6 +108,9 @@ namespace ChilliSource
         ///
         const RenderMaterial* GetRenderMaterial(const VertexFormat& vertexFormat, u32 passIndex) const noexcept;
         
+        /// Exposes the render materials so their extra data can be set during loading
+        /// and unloading.
+        ///
         /// @return An unsorted list of all RenderMaterials in the group.
         ///
         const std::vector<RenderMaterial*>& GetRenderMaterials() noexcept { return m_renderMaterialsRaw; }

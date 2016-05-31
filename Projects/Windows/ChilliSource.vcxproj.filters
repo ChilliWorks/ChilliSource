@@ -1044,9 +1044,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
@@ -1106,6 +1103,24 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterial.cpp">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroup.cpp">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroupManager.cpp">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadMaterialGroupRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexFormat.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2285,12 +2300,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexLayouts.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
@@ -2365,6 +2374,27 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterial.h">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroup.h">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroupManager.h">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadMaterialGroupRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexFormat.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

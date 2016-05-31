@@ -22,19 +22,21 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_FORWARDRENDERPASSES_H_
+#define _CHILLISOURCE_RENDERING_BASE_FORWARDRENDERPASSES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+
+namespace ChilliSource
+{
+    /// An enum describing each of the passes in the forward renderer.
+    ///
+    enum class ForwardRenderPasses
+    {
+        k_base,
+        k_directionalLight,
+        k_transparent
+    };
+}
 
 #endif

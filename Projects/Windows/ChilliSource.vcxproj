@@ -132,7 +132,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexFormat.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.cpp" />
@@ -150,6 +150,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\Material.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterial.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroup.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroupManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.cpp" />
@@ -196,9 +199,11 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffect.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadMaterialGroupRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadMeshRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadShaderRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.cpp" />
@@ -496,6 +501,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h" />
@@ -509,8 +515,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ShaderPass.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexLayouts.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexFormat.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.h" />
@@ -533,6 +538,9 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\Material.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterial.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroup.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroupManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h" />
@@ -592,9 +600,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomConstantParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomCurveParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadMaterialGroupRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadMeshRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadShaderRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.h" />

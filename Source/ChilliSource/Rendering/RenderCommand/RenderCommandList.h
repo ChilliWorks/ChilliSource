@@ -27,7 +27,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
 #include <vector>
 
@@ -42,6 +41,13 @@ namespace ChilliSource
     class RenderCommandList final
     {
     public:
+        /// Creates and adds a new load material group command to the render command list.
+        ///
+        /// @param renderMaterialGroup
+        ///     The RenderMaterialGroup that should be loaded.
+        ///
+        void AddLoadMaterialGroupCommand(RenderMaterialGroup* renderMaterialGroup) noexcept;
+        
         /// Creates and adds a new load mesh command to the render command list.
         ///
         /// @param renderMesh
@@ -78,6 +84,13 @@ namespace ChilliSource
         ///     The size of the texture data in bytes.
         ///
         void AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
+        
+        /// Creates and adds a new unload material group command to the render command list.
+        ///
+        /// @param renderMaterialGroup
+        ///     The render material group that should be unloaded.
+        ///
+        void AddUnloadMaterialGroupCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept;
         
         /// Creates and adds a new unload mesh command to the render command list.
         ///
