@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_RENDERING_MESHDESCRIPTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/VertexDeclaration.h>
+#include <ChilliSource/Rendering/Base/VertexFormat.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
@@ -47,7 +47,7 @@ namespace ChilliSource
         PrimitiveType ePrimitiveType;
         BufferAccess eAccessFlag;
         BufferUsage eUsageFlag;
-        VertexDeclaration VertexLayout;
+        VertexFormat VertexLayout;
         u32 IndexSize;
     };
     
@@ -98,7 +98,7 @@ namespace ChilliSource
         SkeletonDescriptor m_skeletonDesc;
         MeshFeatureDescriptor mFeatures;
         std::vector<SubMeshDescriptor> mMeshes;
-        VertexDeclaration mVertexDeclaration;
+        VertexFormat mVertexFormat;
         Vector3 mvMinBounds;
         Vector3 mvMaxBounds;
         u32 mudwIndexSize;

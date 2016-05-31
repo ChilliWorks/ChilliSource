@@ -126,7 +126,7 @@ namespace ChilliSource
             //build the vertex declaration from the file
             u8 numVertexElements = ReadValue<u8>(in_meshStream);
             
-            VertexElement* vertexElements = new VertexElement[numVertexElements];
+            std::vector<VertexFormat::Element> elements;
             for (int i = 0; i < numVertexElements; ++i)
             {
                 u8 vertexAttrib = ReadValue<u8>(in_meshStream);
@@ -137,34 +137,27 @@ namespace ChilliSource
                         CS_LOG_ERROR("Unknown vertex type in vertex declaration!");
                         break;
                     case VertexAttribute::k_position:
-                        vertexElements[i].eType = VertexDataType::k_float4;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_position;
+                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_float4, VertexFormat::Semantic::k_position));
                         break;
                     case VertexAttribute::k_normal:
-                        vertexElements[i].eType = VertexDataType::k_float3;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_normal;
+                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_float3, VertexFormat::Semantic::k_normal));
                         break;
                     case VertexAttribute::k_texcoord:
-                        vertexElements[i].eType = VertexDataType::k_float2;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_uv;
+                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_float2, VertexFormat::Semantic::k_uv));
                         break;
                     case VertexAttribute::k_colour:
-                        vertexElements[i].eType = VertexDataType::k_byte4;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_colour;
+                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_byte4, VertexFormat::Semantic::k_colour));
                         break;
                     case VertexAttribute::k_weights:
-                        vertexElements[i].eType = VertexDataType::k_float4;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_weight;
+                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_float4, VertexFormat::Semantic::k_weight));
                         break;
                     case VertexAttribute::k_jointIndices:
-                        vertexElements[i].eType = VertexDataType::k_byte4;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_jointIndex;
+                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_byte4, VertexFormat::Semantic::k_jointIndex));
                         break;
                 }
             }
             
-            out_meshDesc.mVertexDeclaration = VertexDeclaration(numVertexElements, vertexElements);
-            delete[] vertexElements;
+            out_meshDesc.mVertexFormat = VertexFormat(elements);
         }
         //-----------------------------------------------------------------------------
         /// Read the mesh section of the file
@@ -189,8 +182,8 @@ namespace ChilliSource
             }
             
             //read the vertex data
-            out_subMeshDesc.mpVertexData = new u8[in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices];
-            in_meshStream->Read((s8*)out_subMeshDesc.mpVertexData, in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices);
+            out_subMeshDesc.mpVertexData = new u8[in_meshDesc.mVertexFormat.GetSize() * out_subMeshDesc.mudwNumVertices];
+            in_meshStream->Read((s8*)out_subMeshDesc.mpVertexData, in_meshDesc.mVertexFormat.GetSize() * out_subMeshDesc.mudwNumVertices);
             
             //read the index data
             out_subMeshDesc.mpIndexData = new u8[in_meshDesc.mudwIndexSize * out_subMeshDesc.mudwNumIndices];

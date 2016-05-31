@@ -22,66 +22,54 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
+#include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
 
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Material/ForwardRenderMaterialGroupManager.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(RenderShaderManager);
-    
+    CS_DEFINE_NAMEDTYPE(RenderMaterialGroupManager);
+
     //------------------------------------------------------------------------------
-    RenderShaderManagerUPtr RenderShaderManager::Create() noexcept
+    RenderMaterialGroupManagerUPtr RenderMaterialGroupManager::Create() noexcept
     {
-        return RenderShaderManagerUPtr(new RenderShaderManager());
+        //TODO: Handle creation of deferred rendering version of the manager
+        return RenderMaterialGroupManagerUPtr(new ForwardRenderMaterialGroupManager());
     }
     
     //------------------------------------------------------------------------------
-    bool RenderShaderManager::IsA(InterfaceIDType interfaceId) const noexcept
-    {
-        return (RenderShaderManager::InterfaceID == interfaceId);
-    }
-    
-    //------------------------------------------------------------------------------
-    const RenderShader* RenderShaderManager::CreateRenderShader(const std::string& vertexShader, const std::string& fragmentShader) noexcept
-    {
-        RenderShaderUPtr renderShader(new RenderShader());
-        auto rawRenderShader = renderShader.get();
-        
-        PendingLoadCommand loadCommand;
-        loadCommand.m_vertexShader = vertexShader;
-        loadCommand.m_fragmentShader = fragmentShader;
-        loadCommand.m_renderShader = rawRenderShader;
-        
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_renderShaders.push_back(std::move(renderShader));
-        m_pendingLoadCommands.push_back(std::move(loadCommand));
-        
-        return rawRenderShader;
-    }
-    
-    //------------------------------------------------------------------------------
-    void RenderShaderManager::DestroyRenderShader(const RenderShader* renderShader) noexcept
+    void RenderMaterialGroupManager::DestroyRenderMaterialGroup(const RenderMaterialGroup* renderMaterial) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         
-        for (auto it = m_renderShaders.begin(); it != m_renderShaders.end(); ++it)
+        for (auto it = m_renderMaterialGroups.begin(); it != m_renderMaterialGroups.end(); ++it)
         {
-            if (it->get() == renderShader)
+            if (it->get() == renderMaterial)
             {
                 m_pendingUnloadCommands.push_back(std::move(*it));
                 
-                it->swap(m_renderShaders.back());
-                m_renderShaders.pop_back();
+                it->swap(m_renderMaterialGroups.back());
+                m_renderMaterialGroups.pop_back();
                 return;
             }
         }
         
-        CS_LOG_FATAL("RenderShader does not exist.");
+        CS_LOG_FATAL("RenderMaterialGroup does not exist.");
     }
     
     //------------------------------------------------------------------------------
-    void RenderShaderManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void RenderMaterialGroupManager::AddRenderMaterialGroup(RenderMaterialGroupUPtr renderMaterialGroup) noexcept
+    {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
+        m_pendingLoadCommands.push_back(renderMaterialGroup.get());
+        m_renderMaterialGroups.push_back(std::move(renderMaterialGroup));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderMaterialGroupManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
     {
         auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
         auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
@@ -90,13 +78,13 @@ namespace ChilliSource
         
         for (auto& loadCommand : m_pendingLoadCommands)
         {
-            preRenderCommandList->AddLoadShaderCommand(loadCommand.m_renderShader, loadCommand.m_vertexShader, loadCommand.m_fragmentShader);
+            preRenderCommandList->AddLoadMaterialGroupCommand(loadCommand);
         }
         m_pendingLoadCommands.clear();
         
         for (auto& unloadCommand : m_pendingUnloadCommands)
         {
-            postRenderCommandList->AddUnloadShaderCommand(std::move(unloadCommand));
+            postRenderCommandList->AddUnloadMaterialGroupCommand(std::move(unloadCommand));
         }
         m_pendingUnloadCommands.clear();
     }

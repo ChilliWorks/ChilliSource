@@ -50,8 +50,7 @@
 #include <ChilliSource/Rendering/Base/ShaderPass.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
-#include <ChilliSource/Rendering/Base/VertexDeclaration.h>
-#include <ChilliSource/Rendering/Base/VertexLayouts.h>
+#include <ChilliSource/Rendering/Base/VertexFormat.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 
 #endif

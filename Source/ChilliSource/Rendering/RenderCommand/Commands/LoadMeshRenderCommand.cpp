@@ -1,11 +1,7 @@
 //
-//  Material.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +22,14 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_MATERIAL_H_
-#define _CHILLISOURCE_RENDERING_MATERIAL_H_
-
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Material/ForwardRenderMaterialGroupManager.h>
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Material/MaterialProvider.h>
-#include <ChilliSource/Rendering/Material/RenderMaterial.h>
-#include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
-#include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 
-#endif
+namespace ChilliSource
+{
+    //------------------------------------------------------------------------------
+    LoadMeshRenderCommand::LoadMeshRenderCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
+        : RenderCommand(Type::k_loadMesh), m_renderMesh(renderMesh), m_vertexData(std::move(vertexData)), m_vertexDataSize(vertexDataSize), m_indexData(std::move(indexData)), m_indexDataSize(indexDataSize)
+    {
+    }
+}

@@ -1,11 +1,7 @@
 //
-//  Material.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +22,13 @@
 //  THE SOFTWARE.
 //
 
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 
-#ifndef _CHILLISOURCE_RENDERING_MATERIAL_H_
-#define _CHILLISOURCE_RENDERING_MATERIAL_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Material/ForwardRenderMaterialGroupManager.h>
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Material/MaterialProvider.h>
-#include <ChilliSource/Rendering/Material/RenderMaterial.h>
-#include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
-#include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
-
-#endif
+namespace ChilliSource
+{
+    //------------------------------------------------------------------------------
+    UnloadMeshRenderCommand::UnloadMeshRenderCommand(RenderMeshUPtr renderMesh) noexcept
+        : RenderCommand(Type::k_unloadMesh), m_renderMesh(std::move(renderMesh))
+    {
+    }
+}

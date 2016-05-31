@@ -59,7 +59,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    const RenderShader* Shader::GetRenderTexture() const noexcept
+    const RenderShader* Shader::GetRenderShader() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access shader before it is loaded.");
         CS_ASSERT(m_renderShader, "Cannot access shader which has not been built.");

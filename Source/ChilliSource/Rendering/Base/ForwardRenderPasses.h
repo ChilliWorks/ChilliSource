@@ -1,11 +1,7 @@
 //
-//  Material.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +22,29 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_MATERIAL_H_
-#define _CHILLISOURCE_RENDERING_MATERIAL_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_FORWARDRENDERPASSES_H_
+#define _CHILLISOURCE_RENDERING_BASE_FORWARDRENDERPASSES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Material/ForwardRenderMaterialGroupManager.h>
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Material/MaterialProvider.h>
-#include <ChilliSource/Rendering/Material/RenderMaterial.h>
-#include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
-#include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
+
+namespace ChilliSource
+{
+    /// An enum describing each of the passes in the multi-pass forward renderer. This consists of
+    ///
+    /// * The base pass. This renders all opaque objects to the scene with only ambient lighting.
+    /// * The directional light pass. For each directional light in the scene, a pass over all lit,
+    ///   opaque objects in the scene is performed. This renders the applied lighting additively to
+    ///   the base pass and does not write to the depth buffer.
+    /// * The transparent pass. This render all transparent objects in the scene with only ambient
+    ///   lighting. The depth buffer is not written to; the objects are first sorted to ensure no
+    ///   artefacts occur.
+    ///
+    enum class ForwardRenderPasses
+    {
+        k_base,
+        k_directionalLight,
+        k_transparent
+    };
+}
 
 #endif

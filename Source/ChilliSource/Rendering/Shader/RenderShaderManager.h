@@ -42,7 +42,7 @@ namespace ChilliSource
     /// On deletion an UnloadShaderRenderCommand is queued and given ownership of the
     /// RenderShader. The render shader is then deleted once the command has been processed.
     ///
-    /// This is thead-safe and can be called from any thread. If it is called on a background
+    /// This is thread-safe and can be called from any thread. If it is called on a background
     /// thread, care needs to be taken to ensure any created RenderShaders are not used prior
     /// to being loaded.
     ///
@@ -71,6 +71,7 @@ namespace ChilliSource
         ///     The fragment shader string.
         ///
         /// @return The render shader instance.
+        ///
         const RenderShader* CreateRenderShader(const std::string& vertexShader, const std::string& fragmentShader) noexcept;
         
         /// Removes the render shader from the manager and queues an UnloadShaderRenderCommand for

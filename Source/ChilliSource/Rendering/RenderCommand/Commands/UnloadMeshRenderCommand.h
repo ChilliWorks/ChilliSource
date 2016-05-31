@@ -22,19 +22,41 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
-#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMESHRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMESHRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/Model/RenderMesh.h>
+
+namespace ChilliSource
+{
+    /// A render command which unloads the mesh data pertaining to a single render mesh from
+    /// render memory.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class UnloadMeshRenderCommand final : public RenderCommand
+    {
+    public:
+        /// @return The render mesh that should be unloaded.
+        ///
+        const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh.get(); }
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Constructs a new instance with the given render mesh.
+        ///
+        /// @param renderMesh
+        ///     The render mesh that should be unloaded.
+        ///
+        UnloadMeshRenderCommand(RenderMeshUPtr renderMesh) noexcept;
+        
+        RenderMeshUPtr m_renderMesh;
+    };
+}
 
 #endif
