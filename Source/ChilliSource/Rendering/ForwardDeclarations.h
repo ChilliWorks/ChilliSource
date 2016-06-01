@@ -108,7 +108,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_STRUCT(SkeletonNode);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimationGroup);
-    CS_FORWARDDECLARE_CLASS(StaticMeshComponent);
+    CS_FORWARDDECLARE_CLASS(StaticModelComponent);
     enum class IndexFormat;
     enum class PolygonType;
     //------------------------------------------------------------

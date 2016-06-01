@@ -60,6 +60,8 @@ namespace ChilliSource
         {
             auto& meshDesc = modelDesc.GetMeshDesc(meshIndex);
             
+            m_meshNames.push_back(meshDesc.GetName());
+            
             auto poylgonType = meshDesc.GetPolygonType();
             auto vertexFormat = meshDesc.GetVertexFormat();
             auto indexFormat = meshDesc.GetIndexFormat();
@@ -92,5 +94,52 @@ namespace ChilliSource
         CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
         
         return m_skeleton;
+    }
+    
+    //------------------------------------------------------------------------------
+    u32 Model::GetNumMeshes() const noexcept
+    {
+        CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access a model before it is loaded.");
+        CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
+        
+        return m_meshNames.size();
+    }
+    
+    //------------------------------------------------------------------------------
+    const std::string& Model::GetMeshName(u32 index) const noexcept
+    {
+        CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access a model before it is loaded.");
+        CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
+        CS_ASSERT(index < m_meshNames.size(), "Index is out of bounds.");
+        
+        return m_meshNames[index];
+    }
+    
+    //------------------------------------------------------------------------------
+    const u32 Model::GetMeshIndex(const std::string& name) const noexcept
+    {
+        CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access a model before it is loaded.");
+        CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
+        
+        for (u32 index = 0; index < m_meshNames.size(); ++index)
+        {
+            if (m_meshNames[index] == name)
+            {
+                return index;
+            }
+        }
+        
+        CS_LOG_FATAL("Could not find mesh name with name '" + name + "' in model.");
+        return 0;
+    }
+    
+    //------------------------------------------------------------------------------
+    const RenderMesh* Model::GetRenderMesh(u32 index) const noexcept
+    {
+        CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access a model before it is loaded.");
+        CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
+        CS_ASSERT(index < m_meshNames.size(), "Index is out of bounds.");
+        
+        return m_renderMeshes[index];
     }
 }

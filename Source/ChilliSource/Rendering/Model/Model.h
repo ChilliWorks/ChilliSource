@@ -62,13 +62,58 @@ namespace ChilliSource
         ///
         void Build(ModelDesc modelDesc) noexcept;
         
+        /// This must not be called until the model is build and loaded.
+        ///
         /// @return The local space axis-aligned bounding box of the Model.
         ///
         const AABB& GetAABB() const noexcept;
         
+        /// This must not be called until the model is build and loaded.
+        ///
         /// @return The skeleton.
         ///
         const Skeleton& GetSkeleton() const noexcept;
+        
+        /// This must not be called until the model is build and loaded.
+        ///
+        /// @return The number of meshes that make up the model.
+        ///
+        u32 GetNumMeshes() const noexcept;
+        
+        /// Looks up the name of the mesh with the given index. If the index is out of bounds, this will
+        /// assert.
+        ///
+        /// This must not be called until the model is build and loaded.
+        ///
+        /// @param index
+        ///     The index of the mesh.
+        ///
+        /// @return The name of the mesh.
+        ///
+        const std::string& GetMeshName(u32 index) const noexcept;
+        
+        /// Looks up the index of the mesh with the given name. If the name doesn't exist, this will assert.
+        ///
+        /// This must not be called until the model is build and loaded.
+        ///
+        /// @param name
+        ///     The name of the mesh.
+        ///
+        /// @return The index of the mesh with the given name.
+        ///
+        const u32 GetMeshIndex(const std::string& name) const noexcept;
+        
+        /// Looks up the RenderMesh of the mesh with the given index. If the index is out of bounds, this will
+        /// assert.
+        ///
+        /// This must not be called until the model is build and loaded.
+        ///
+        /// @param index
+        ///     The index of the mesh.
+        ///
+        /// @return The render mesh.
+        ///
+        const RenderMesh* GetRenderMesh(u32 index) const noexcept;
         
     private:
         friend class ResourcePool;
@@ -84,6 +129,7 @@ namespace ChilliSource
         
         Model() = default;
 
+        std::vector<std::string> m_meshNames;
         std::vector<const RenderMesh*> m_renderMeshes;
         Skeleton m_skeleton;
         AABB m_aabb;

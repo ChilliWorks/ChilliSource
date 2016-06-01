@@ -170,7 +170,7 @@ namespace ChilliSource
         /// Attach a mesh to this component
         /// @param Model object
         //----------------------------------------------------------
-        void AttachMesh(const ModelCSPtr& inpModel);
+        void SetModel(const ModelCSPtr& inpModel);
         //----------------------------------------------------------
         /// Attach Model
         ///
@@ -178,13 +178,13 @@ namespace ChilliSource
         /// material
         /// @param Model object
         //----------------------------------------------------------
-        void AttachMesh(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial);
+        void SetModel(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial);
         //----------------------------------------------------------
         /// Get Model
         ///
         /// @return The components internal mesh
         //----------------------------------------------------------
-        const ModelCSPtr& GetMesh() const;
+        const ModelCSPtr& GetModel() const;
         //----------------------------------------------------------
         /// Attach Animation
         ///

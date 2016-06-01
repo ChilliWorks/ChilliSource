@@ -1,5 +1,5 @@
 //
-//  StaticMeshComponent.h
+//  StaticModelComponent.h
 //  Chilli Source
 //  Created by Scott Downie on 07/10/2010.
 //
@@ -41,12 +41,12 @@ namespace ChilliSource
     /// A static mesh component. This defines a 3D mesh that can
     /// be manipulated, textured but not animated.
     //===============================================================
-    class StaticMeshComponent : public VolumeComponent
+    class StaticModelComponent : public VolumeComponent
     {
     public:
-        CS_DECLARE_NAMEDTYPE(StaticMeshComponent);
+        CS_DECLARE_NAMEDTYPE(StaticModelComponent);
         
-        StaticMeshComponent();
+        StaticModelComponent();
         //----------------------------------------------------------
         /// Is A
         ///
@@ -145,7 +145,7 @@ namespace ChilliSource
         /// Attach a mesh to this component
         /// @param Model object
         //----------------------------------------------------------
-        void AttachMesh(const ModelCSPtr& inpModel);
+        void SetModel(const ModelCSPtr& inpModel);
         //----------------------------------------------------------
         /// Attach Model
         ///
@@ -153,13 +153,13 @@ namespace ChilliSource
         /// material
         /// @param Model object
         //----------------------------------------------------------
-        void AttachMesh(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial);
+        void SetModel(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial);
         //----------------------------------------------------------
         /// Get Model
         ///
         /// @return The components internal mesh
         //----------------------------------------------------------
-        const ModelCSPtr& GetMesh() const;
+        const ModelCSPtr& GetModel() const;
         //-----------------------------------------------------
         /// Set Shadow Casting Enabled
         ///
@@ -188,6 +188,15 @@ namespace ChilliSource
         /// changes. This is used to dirty the bounding volumes
         //----------------------------------------------------
         void OnEntityTransformChanged();
+        //----------------------------------------------------
+        /// Called during the render snapshot phase. Adds
+        /// render objects to the scene describing the model.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render snapshot.
+        //----------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
         //----------------------------------------------------
         /// Triggered when the component is removed from
         /// an entity on the scene

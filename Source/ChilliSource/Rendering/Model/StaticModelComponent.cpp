@@ -1,5 +1,5 @@
 //
-//  StaticMeshComponent.cpp
+//  StaticModelComponent.cpp
 //  Chilli Source
 //  Created by Scott Downie on 07/10/2010.
 //
@@ -26,24 +26,24 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
 
 #include <algorithm>
 #include <limits>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(StaticMeshComponent);
+    CS_DEFINE_NAMEDTYPE(StaticModelComponent);
     
-    StaticMeshComponent::StaticMeshComponent()
+    StaticModelComponent::StaticModelComponent()
     : m_isBSValid(false), m_isAABBValid(false), m_isOOBBValid(false)
     {
         mMaterials.push_back(nullptr);
@@ -51,14 +51,14 @@ namespace ChilliSource
     //----------------------------------------------------------
     /// Is A
     //----------------------------------------------------------
-    bool StaticMeshComponent::IsA(InterfaceIDType inInterfaceID) const
+    bool StaticModelComponent::IsA(InterfaceIDType inInterfaceID) const
     {
-        return  (inInterfaceID == VolumeComponent::InterfaceID || inInterfaceID == StaticMeshComponent::InterfaceID);
+        return  (inInterfaceID == VolumeComponent::InterfaceID || inInterfaceID == StaticModelComponent::InterfaceID);
     }
     //----------------------------------------------------
     /// Get Axis Aligned Bounding Box
     //----------------------------------------------------
-    const AABB& StaticMeshComponent::GetAABB()
+    const AABB& StaticModelComponent::GetAABB()
     {
         if(GetEntity() && !m_isAABBValid)
         {
@@ -141,21 +141,21 @@ namespace ChilliSource
     //----------------------------------------------------
     /// Get Object Oriented Bounding Box
     //----------------------------------------------------
-    const OOBB& StaticMeshComponent::GetOOBB()
+    const OOBB& StaticModelComponent::GetOOBB()
     {
         if(GetEntity() && !m_isOOBBValid)
         {
             m_isOOBBValid = true;
             
             mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
-            // Origin and Size updated in AttachMesh
+            // Origin and Size updated in SetModel
         }
         return mOBBoundingBox;
     }
     //----------------------------------------------------
     /// Get Bounding Sphere
     //----------------------------------------------------
-    const Sphere& StaticMeshComponent::GetBoundingSphere()
+    const Sphere& StaticModelComponent::GetBoundingSphere()
     {
         if(GetEntity() && !m_isBSValid)
         {
@@ -170,7 +170,7 @@ namespace ChilliSource
     //-----------------------------------------------------------
     /// Set Material
     //-----------------------------------------------------------
-    void StaticMeshComponent::SetMaterial(const MaterialCSPtr& inpMaterial)
+    void StaticModelComponent::SetMaterial(const MaterialCSPtr& inpMaterial)
     {
         for (u32 i = 0; i < mMaterials.size(); i++)
         {
@@ -180,82 +180,66 @@ namespace ChilliSource
     //-----------------------------------------------------------
     /// Set Material For Sub Model
     //-----------------------------------------------------------
-    void StaticMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex)
+    void StaticModelComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex)
     {
-        if (indwSubMeshIndex < mMaterials.size())
-        {
-            mMaterials[indwSubMeshIndex] = inpMaterial;
-        }
+        CS_ASSERT(mpModel, "Cannot set material without a model.");
+        CS_ASSERT(indwSubMeshIndex < s32(mMaterials.size()), "Invalid mesh index.");
+        
+        mMaterials[indwSubMeshIndex] = inpMaterial;
     }
     //-----------------------------------------------------------
     /// Set Material For Sub Model
     //-----------------------------------------------------------
-    void StaticMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName)
+    void StaticModelComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName)
     {
-        //TODO: Implement using new system
-//        if (nullptr != mpModel)
-//        {
-//            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
-//            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
-//            {
-//                mMaterials[indwIndex] = inpMaterial;
-//            }
-//        }
+        CS_ASSERT(mpModel, "Cannot set material without a model.");
+        
+        auto meshIndex = mpModel->GetMeshIndex(instrSubMeshName);
+        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(mMaterials.size()), "Invalid mesh index.");
+        
+        mMaterials[meshIndex] = inpMaterial;
     }
     //-----------------------------------------------------------
     /// Get Material Of Sub Model
     //-----------------------------------------------------------
-    MaterialCSPtr StaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
+    MaterialCSPtr StaticModelComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
     {
-        return nullptr;
+        CS_ASSERT(mpModel, "Cannot set material without a model.");
+        CS_ASSERT(indwSubMeshIndex < s32(mMaterials.size()), "Invalid mesh index.");
         
-        //TODO: Implement using new system
-//        if (indwSubMeshIndex < mMaterials.size())
-//        {
-//            return mMaterials[indwSubMeshIndex];
-//        }
-//        
-//        CS_LOG_ERROR("Failed to get material from sub mesh " + ToString(indwSubMeshIndex));
-//        return nullptr;
+        return mMaterials[indwSubMeshIndex];
     }
     //-----------------------------------------------------------
     /// Get Material Of Sub Model
     //-----------------------------------------------------------
-    MaterialCSPtr StaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
+    MaterialCSPtr StaticModelComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
     {
-        //TODO: Implement using new system
-//        if (nullptr != mpModel)
-//        {
-//            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
-//        
-//            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
-//            {
-//                return mMaterials[indwIndex];
-//            }
-//        }
+        CS_ASSERT(mpModel, "Cannot get material without a model.");
         
-        CS_LOG_ERROR("Failed to get material from sub mesh " + instrSubMeshName);
-        return nullptr;
+        auto meshIndex = mpModel->GetMeshIndex(instrSubMeshName);
+        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(mMaterials.size()), "Invalid mesh index.");
+        
+        return mMaterials[meshIndex];
     }
     //----------------------------------------------------------
     /// Attach Model
     //----------------------------------------------------------
-    void StaticMeshComponent::AttachMesh(const ModelCSPtr& inpModel)
+    void StaticModelComponent::SetModel(const ModelCSPtr& inpModel)
     {
         mpModel = inpModel;
+        mMaterials.resize(mpModel->GetNumMeshes());
         
-        // Update OOBB
         mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
         mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
     }
     //----------------------------------------------------------
     /// Attach Model
     //----------------------------------------------------------
-    void StaticMeshComponent::AttachMesh(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
+    void StaticModelComponent::SetModel(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
     {
         mpModel = inpModel;
+        mMaterials.resize(mpModel->GetNumMeshes());
         
-        // Update OOBB
         mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
         mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
         
@@ -264,34 +248,33 @@ namespace ChilliSource
     //----------------------------------------------------------
     /// Get Model
     //----------------------------------------------------------
-    const ModelCSPtr& StaticMeshComponent::GetMesh() const
+    const ModelCSPtr& StaticModelComponent::GetModel() const
     {
         return mpModel;
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    void StaticMeshComponent::SetShadowCastingEnabled(bool inbEnabled)
+    void StaticModelComponent::SetShadowCastingEnabled(bool inbEnabled)
     {
         m_shadowCastingEnabled = inbEnabled;
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
-    bool StaticMeshComponent::IsShadowCastingEnabled() const
+    bool StaticModelComponent::IsShadowCastingEnabled() const
     {
         return m_shadowCastingEnabled;
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    void StaticMeshComponent::OnAddedToScene()
+    void StaticModelComponent::OnAddedToScene()
     {
-        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged));
+        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &StaticModelComponent::OnEntityTransformChanged));
         
         OnEntityTransformChanged();
     }
     //----------------------------------------------------
-    /// On Entity Transform Changed
     //----------------------------------------------------
-    void StaticMeshComponent::OnEntityTransformChanged()
+    void StaticModelComponent::OnEntityTransformChanged()
     {
         m_isBSValid = false;
         m_isAABBValid = false;
@@ -299,7 +282,25 @@ namespace ChilliSource
     }
     //----------------------------------------------------
     //----------------------------------------------------
-    void StaticMeshComponent::OnRemovedFromScene()
+    void StaticModelComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        //TODO: Re-add once materials have been set up.
+//        CS_ASSERT(mpModel, "Static model component should not be in scene without a model set.");
+//        CS_ASSERT(mpModel->GetNumMeshes() == mMaterials.size(), "Invalid number of materials.");
+//        
+//        for (u32 index = 0; index < mpModel->GetNumMeshes(); ++index)
+//        {
+//            CS_ASSERT(mMaterials[index], "Material cannot be null.");
+//            
+//            auto renderMaterialGroup = mMaterials[index]->GetRenderMaterialGroup();
+//            auto renderMesh = mpModel->GetRenderMesh(index);
+//            
+//            in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform()));
+//        }
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    void StaticModelComponent::OnRemovedFromScene()
     {
         m_transformChangedConnection = nullptr;
     }

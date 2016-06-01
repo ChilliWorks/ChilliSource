@@ -36,7 +36,7 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Model.h>
-#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 #include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 

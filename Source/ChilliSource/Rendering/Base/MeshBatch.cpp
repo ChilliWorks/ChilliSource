@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/MeshBatch.h>
@@ -99,7 +99,7 @@ namespace ChilliSource
 //            //---------------------------------------------------
 //            // Sub-Meshes
 //            //---------------------------------------------------
-//            for(auto jt = it->first->GetMesh()->m_subMeshes.begin(); jt != it->first->GetMesh()->m_subMeshes.end(); ++jt)
+//            for(auto jt = it->first->GetModel()->m_subMeshes.begin(); jt != it->first->GetModel()->m_subMeshes.end(); ++jt)
 //            {
 //                MeshBuffer* pSubBuffer = (*jt)->GetInternalMeshBuffer();
 //                pSubBuffer->Bind();
