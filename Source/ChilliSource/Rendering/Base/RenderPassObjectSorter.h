@@ -47,7 +47,7 @@ namespace ChilliSource
         
         /// Collection of sort functions for render pass objects
         ///
-        namespace RenderSortUtils
+        namespace RenderPassObjectSorter
     	{
             /// Sorts a collection of opaque RenderPassObjects based on if they share a material
             /// and then by z position (Front to back)

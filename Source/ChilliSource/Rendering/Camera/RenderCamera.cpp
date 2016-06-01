@@ -32,5 +32,6 @@ namespace ChilliSource
     {
         m_viewMatrix = Matrix4::Inverse(m_worldMatrix);
         m_viewProjectionMatrix = m_viewMatrix * m_projectionMatrix;
+        m_frustrum.CalculateClippingPlanes(m_viewProjectionMatrix);
     }
 }

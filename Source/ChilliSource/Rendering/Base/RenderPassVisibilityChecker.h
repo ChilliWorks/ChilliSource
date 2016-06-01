@@ -28,7 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 
 #include <ChilliSource/Rendering/Base/RenderPass.h>
-#include <ChilliSource/Rendering/Base/RenderSortUtils.h>
+#include <ChilliSource/Rendering/Base/RenderPassObjectSorter.h>
 
 #include <vector>
 
@@ -38,7 +38,7 @@ namespace ChilliSource
     {
         /// Collection of functions for render pass objects
         ///
-    	namespace RenderPassUtils
+    	namespace RenderPassVisibilityChecker
     	{
             /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
             /// each RenderObject that has a Base pass defined.
@@ -49,9 +49,50 @@ namespace ChilliSource
             /// @return A collection of RenderPassObjects, one for each RenderObject Base pass
             ///
             std::vector<RenderPassObject> GetBaseRenderPassObjects(const std::vector<RenderObject>& renderObjects) noexcept;
-            std::vector<RenderPassObject> GetDirectionalLightRenderPassObjects(const std::vector<RenderObject>& in_renderObjects) noexcept;
-            std::vector<RenderPassObject> GetTransparentRenderPassObjects(const std::vector<RenderObject>& in_renderObjects) noexcept;
-            bool IsRenderObjectVisible(const RenderCamera& in_camera, const RenderPassObject& in_renderPassObject) noexcept;
+            
+            /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
+            /// each RenderObject that has a Directional pass defined.
+            ///
+            /// @param renderObjects
+            ///     A list of RenderObjects to parse
+            ///
+            /// @return A collection of RenderPassObjects, one for each RenderObject Directional pass
+            ///
+            std::vector<RenderPassObject> GetDirectionalLightRenderPassObjects(const std::vector<RenderObject>& renderObjects) noexcept;
+            
+            /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
+            /// each RenderObject that has a Transparent pass defined.
+            ///
+            /// @param renderObjects
+            ///     A list of RenderObjects to parse
+            ///
+            /// @return A collection of RenderPassObjects, one for each RenderObject Transparent pass
+            ///
+            std::vector<RenderPassObject> GetTransparentRenderPassObjects(const std::vector<RenderObject>& renderObjects) noexcept;
+            
+            /// Checks if the RenderPassObject is contained in the camera view frustrum.
+            ///
+            /// @param camera
+            ///     The camera who will decide the objects visibility
+            /// @param renderPassObject
+            ///     The RenderPassObject whos visibility is to be checked
+            ///
+            /// @return If the RenderPassObject is considered to be visible
+            ///
+            bool IsRenderObjectVisible(const RenderCamera& camera, const RenderPassObject& renderPassObject) noexcept;
+            
+            /// Parses a collection of RenderPassObjects and generates a list of them that are considered
+            /// to be visible and within the passed camera's view frustrum.
+            ///
+            /// @param outerTaskContext
+            ///     Context to manage any spawned tasks
+            /// @param camera
+            ///     The camera who will decide the objects visibility
+            /// @param renderPassObjects
+            ///     The collection of RenderPassObjects whos visibility is to be checked
+            ///
+            /// @return Collection of visible RenderPassObjects
+            ///
             std::vector<RenderPassObject> CalculateVisibleObjects(const TaskContext& outerTaskContext, const RenderCamera& camera, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
             
             /// Gather all sorted visible RenderPassObjects into a RenderPass with the passed in light source.

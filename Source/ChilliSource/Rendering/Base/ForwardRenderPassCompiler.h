@@ -29,6 +29,7 @@
 
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
+
 namespace ChilliSource
 {
     namespace Rendering
@@ -56,7 +57,30 @@ namespace ChilliSource
             
         private:
             
-            std::vector<CameraRenderPassGroup> CompileLightRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept;
+            /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
+            /// into a TargetRenderPassGroup.
+            ///
+            /// @param outerTaskContext
+            ///     Context to manage any spawned tasks
+            /// @param renderFrame
+            ///     Current frame data
+            ///
+            /// @return The TargetRenderPassGroup
+            ///
+            TargetRenderPassGroup CompileMainRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept;
+            
+            /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
+            /// and parse them into different RenderPasses for each light source plus the required Base and
+            /// Transparent passes. These passes are then compiled into a CameraRenderPassGroup.
+            ///
+            /// @param outerTaskContext
+            ///     Context to manage any spawned tasks
+            /// @param renderFrame
+            ///     Current frame data
+            ///
+            /// @return The CameraRenderPassGroup
+            ///
+            CameraRenderPassGroup CompileSceneRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept;
     	};
     }
 }

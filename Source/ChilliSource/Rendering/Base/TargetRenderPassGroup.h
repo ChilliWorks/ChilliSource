@@ -42,6 +42,8 @@ namespace ChilliSource
         {
         public:
             
+            TargetRenderPassGroup() = default;
+            
             /// @param cameraRenderPassGroups
             ///     The list of camera render pass groups to render to the target
             ///
