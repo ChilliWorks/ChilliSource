@@ -22,13 +22,32 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Model/RenderMesh.h>
+#ifndef _CHILLISOURCE_RENDERING_MODEL_INDEXFORMAT_H_
+#define _CHILLISOURCE_RENDERING_MODEL_INDEXFORMAT_H_
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    RenderMesh::RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept
-        : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere)
+    /// An enum describing the type used to describe indices.
+    ///
+    /// Currently the only supported type is Short, which allows for an index range of
+    /// 0 - 65535.
+    ///
+    ///
+    enum class IndexFormat
     {
-    }
+        k_short
+    };
+    
+    /// Gets the size of the given index format in bytes.
+    ///
+    /// @param indexFormat
+    ///     The index format.
+    ///
+    /// @return The size of the index format in bytes.
+    ///
+    u32 GetIndexSize(IndexFormat indexFormat) noexcept;
 }
+
+#endif

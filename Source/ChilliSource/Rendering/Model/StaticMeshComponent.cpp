@@ -178,7 +178,7 @@ namespace ChilliSource
         }
     }
     //-----------------------------------------------------------
-    /// Set Material For Sub Mesh
+    /// Set Material For Sub Model
     //-----------------------------------------------------------
     void StaticMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex)
     {
@@ -188,7 +188,7 @@ namespace ChilliSource
         }
     }
     //-----------------------------------------------------------
-    /// Set Material For Sub Mesh
+    /// Set Material For Sub Model
     //-----------------------------------------------------------
     void StaticMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName)
     {
@@ -203,7 +203,7 @@ namespace ChilliSource
 //        }
     }
     //-----------------------------------------------------------
-    /// Get Material Of Sub Mesh
+    /// Get Material Of Sub Model
     //-----------------------------------------------------------
     MaterialCSPtr StaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
     {
@@ -219,7 +219,7 @@ namespace ChilliSource
 //        return nullptr;
     }
     //-----------------------------------------------------------
-    /// Get Material Of Sub Mesh
+    /// Get Material Of Sub Model
     //-----------------------------------------------------------
     MaterialCSPtr StaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
     {
@@ -238,9 +238,9 @@ namespace ChilliSource
         return nullptr;
     }
     //----------------------------------------------------------
-    /// Attach Mesh
+    /// Attach Model
     //----------------------------------------------------------
-    void StaticMeshComponent::AttachMesh(const MeshCSPtr& inpModel)
+    void StaticMeshComponent::AttachMesh(const ModelCSPtr& inpModel)
     {
         mpModel = inpModel;
         
@@ -249,9 +249,9 @@ namespace ChilliSource
         mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
     }
     //----------------------------------------------------------
-    /// Attach Mesh
+    /// Attach Model
     //----------------------------------------------------------
-    void StaticMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
+    void StaticMeshComponent::AttachMesh(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
     {
         mpModel = inpModel;
         
@@ -262,9 +262,9 @@ namespace ChilliSource
         SetMaterial(inpMaterial);
     }
     //----------------------------------------------------------
-    /// Get Mesh
+    /// Get Model
     //----------------------------------------------------------
-    const MeshCSPtr& StaticMeshComponent::GetMesh() const
+    const ModelCSPtr& StaticMeshComponent::GetMesh() const
     {
         return mpModel;
     }

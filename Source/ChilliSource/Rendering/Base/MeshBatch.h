@@ -34,7 +34,7 @@
 namespace ChilliSource
 {
     //--------------------------------------------------------------
-    /// Vertex format for mesh batches. Mesh batches must be in this
+    /// Vertex format for mesh batches. Model batches must be in this
     /// format.
     //--------------------------------------------------------------
     struct MeshBatchVertex
@@ -57,7 +57,7 @@ namespace ChilliSource
         MeshBatch();
         ~MeshBatch();
         //------------------------------------------------------
-        /// Add Mesh
+        /// Add Model
         ///
         /// Insert a mesh into this batch.
         ///

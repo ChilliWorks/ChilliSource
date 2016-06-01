@@ -22,13 +22,14 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/Model/SkeletonDesc.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderMesh::RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept
-        : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere)
+    SkeletonDesc::SkeletonDesc(const std::vector<std::string>& nodeNames, const std::vector<s32>& parentNodeIndices, const std::vector<s32>& jointIndices) noexcept
+        : m_nodeNames(nodeNames), m_parentNodeIndices(parentNodeIndices), m_jointIndices(jointIndices)
     {
+        CS_ASSERT(m_nodeNames.size() == m_parentNodeIndices.size() == m_jointIndices.size(), "Provided skeleton data is invalid.");
     }
 }

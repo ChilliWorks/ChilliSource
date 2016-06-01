@@ -79,7 +79,7 @@ namespace ChilliSource
         ///
         /// @return The plane model.
         //------------------------------------------------------------------------------
-        MeshCSPtr CreatePlane(const Vector2& in_size, const Vector2& in_textureRepeat = Vector2::k_one) const;
+        ModelCSPtr CreatePlane(const Vector2& in_size, const Vector2& in_textureRepeat = Vector2::k_one) const;
         //------------------------------------------------------------------------------
         /// Creates a box model of the given size. If an identical box already exists
         /// it will be returned instead of creating a new instance.
@@ -94,7 +94,7 @@ namespace ChilliSource
         ///
         /// @return The plane model.
         //------------------------------------------------------------------------------
-        MeshCSPtr CreateBox(const Vector3& in_size, const Vector2& in_textureRepeat = Vector2::k_one, bool in_flipNormals = false) const;
+        ModelCSPtr CreateBox(const Vector3& in_size, const Vector2& in_textureRepeat = Vector2::k_one, bool in_flipNormals = false) const;
         
     private:
         friend class Application;

@@ -92,7 +92,7 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshCSPtr& in_model, const MaterialCSPtr& in_material)
+    StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
     {
         StaticMeshComponentUPtr pResult(new StaticMeshComponent());
         pResult->AttachMesh(in_model, in_material);
@@ -100,7 +100,7 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshCSPtr& in_model, const MaterialCSPtr& in_material)
+    AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
     {
         AnimatedMeshComponentUPtr pResult(new AnimatedMeshComponent());
         pResult->AttachMesh(in_model, in_material);

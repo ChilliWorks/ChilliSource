@@ -43,7 +43,7 @@ namespace ChilliSource
 
     }
     //------------------------------------------------------
-    /// Add Mesh
+    /// Add Model
     ///
     /// Insert a mesh into this batch.
     ///

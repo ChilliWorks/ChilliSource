@@ -35,7 +35,7 @@
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Model/Model.h>
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
 #include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
@@ -61,7 +61,7 @@ namespace ChilliSource
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        MeshCSPtr mesh = m_primitiveModelFactory->CreatePlane(in_size);
+        ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(in_size);
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
         
         StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
@@ -78,7 +78,7 @@ namespace ChilliSource
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        MeshCSPtr mesh = m_primitiveModelFactory->CreateBox(in_size);
+        ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(in_size);
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
         
         StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
