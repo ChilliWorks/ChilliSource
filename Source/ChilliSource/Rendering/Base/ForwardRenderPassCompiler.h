@@ -32,57 +32,30 @@
 
 namespace ChilliSource
 {
-    namespace Rendering
+    /// Compiles the RenderPasses required when forward rendering. See ForwardRenderPasses.h for more
+    /// information on these passes.
+    ///
+    /// This breaks the RenderFrame down into a series of RenderPasses ensuring each pass only contains
+    /// the relevant objects by filtering for material type and visibility. Objects within a render pass
+    /// are also sorted into an appropriate order for the type of pass. These render passes are contained
+    /// by a TargetRenderPassGroup, which groups passes based on the framebuffer they are targetting.
+    /// All this is processed in a series of background tasks.
+    ///
+    class ForwardRenderPassCompiler final : public IRenderPassCompiler
     {
-        /// This breaks the RenderFrame down into a series of RenderPasses ensuring each pass only contains
-        /// the relevant objects by filtering for material type and visibility. Objects within a render pass
-        /// are also sorted into an appropriate order for the type of pass. These render passes are contained
-        /// by a TargetRenderPassGroup, which groups passes based on the framebuffer they are targetting.
-        /// All this is processed in a series of background tasks.
+    public:
+        
+        /// Gather all render objects in the frame into a list of target render pass groups.
         ///
-        class ForwardRenderPassCompiler final : public IRenderPassCompiler
-    	{
-        public:
-            
-            /// Gather all render objects in the frame into a list of target render pass groups.
-            ///
-            /// @param outerTaskContext
-            ///     Context to manage any spawned tasks
-            /// @param renderFrame
-            ///     Current frame data
-            ///
-            /// @return The list of target render pass groups
-            ///
-            std::vector<TargetRenderPassGroup> CompileRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept override;
-            
-        private:
-            
-            /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
-            /// into a TargetRenderPassGroup.
-            ///
-            /// @param outerTaskContext
-            ///     Context to manage any spawned tasks
-            /// @param renderFrame
-            ///     Current frame data
-            ///
-            /// @return The TargetRenderPassGroup
-            ///
-            TargetRenderPassGroup CompileMainRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept;
-            
-            /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
-            /// and parse them into different RenderPasses for each light source plus the required Base and
-            /// Transparent passes. These passes are then compiled into a CameraRenderPassGroup.
-            ///
-            /// @param outerTaskContext
-            ///     Context to manage any spawned tasks
-            /// @param renderFrame
-            ///     Current frame data
-            ///
-            /// @return The CameraRenderPassGroup
-            ///
-            CameraRenderPassGroup CompileSceneRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept;
-    	};
-    }
+        /// @param taskContext
+        ///     Context to manage any spawned tasks
+        /// @param renderFrame
+        ///     Current frame data
+        ///
+        /// @return The list of target render pass groups
+        ///
+        std::vector<TargetRenderPassGroup> CompileTargetRenderPassGroups(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept override;
+    };
 }
 
 #endif

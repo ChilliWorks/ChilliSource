@@ -34,37 +34,34 @@
 
 namespace ChilliSource
 {
-    namespace Rendering
+    /// Provides the ability to group a number of render passes based on them sharing
+    /// the same camera
+    ///
+    /// This is immutable and therefore thread-safe
+    ///
+    class CameraRenderPassGroup final
     {
-        /// Provides the ability to group a number of render passes based on them sharing
-        /// the same camera
+    public:
+        
+        /// @param camera
+        ///     The camera to use for this pass
+        /// @param renderPasses
+        ///     The list of render passes to carry out with the camera
         ///
-        /// This is immutable and therefore thread-safe
+        CameraRenderPassGroup(const RenderCamera& camera, const std::vector<RenderPass>& renderPasses) noexcept;
+        
+        /// @return The camera to use for rendering the group
         ///
-        class CameraRenderPassGroup final
-        {
-        public:
-            
-            /// @param camera
-            ///     The camera to use for this pass
-            /// @param renderPasses
-            ///     The list of render passes to carry out with the camera
-            ///
-            CameraRenderPassGroup(const RenderCamera& camera, const std::vector<RenderPass>& renderPasses) noexcept;
-            
-            /// @return The camera to use for rendering the group
-            ///
-            const RenderCamera& GetCamera() const noexcept { return m_camera; }
-            
-            /// @return The list of render passes in this group
-            ///
-            const std::vector<RenderPass>& GetRenderPasses() const noexcept { return m_renderPasses; }
-            
-        private:
-            RenderCamera m_camera;
-            std::vector<RenderPass> m_renderPasses;
-        };
-    }
+        const RenderCamera& GetCamera() const noexcept { return m_camera; }
+        
+        /// @return The list of render passes in this group
+        ///
+        const std::vector<RenderPass>& GetRenderPasses() const noexcept { return m_renderPasses; }
+        
+    private:
+        RenderCamera m_camera;
+        std::vector<RenderPass> m_renderPasses;
+    };
 }
 
 #endif

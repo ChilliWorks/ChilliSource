@@ -27,6 +27,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -110,6 +112,10 @@ namespace ChilliSource
         static RendererUPtr Create() noexcept;
         
         Renderer() noexcept;
+        
+    private:
+        
+        IRenderPassCompilerUPtr m_renderPassCompiler;
     };
 }
 

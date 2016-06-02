@@ -33,58 +33,56 @@
 
 namespace ChilliSource
 {
-    namespace Rendering
+    namespace RenderPassVisibilityChecker
     {
-        namespace RenderPassVisibilityChecker
+        namespace
         {
-            namespace
-            {
-                constexpr u32 k_objectsPerVisibilityBatch = 50;
-            }
+            constexpr u32 k_objectsPerVisibilityBatch = 50;
             
             //------------------------------------------------------------------------------
             bool IsRenderObjectVisible(const RenderCamera& camera, const RenderPassObject& renderPassObject) noexcept
             {
                 return camera.GetFrustrum().SphereCullTest(renderPassObject.GetRenderMesh()->GetBoundingSphere());
             }
-            //------------------------------------------------------------------------------
-            std::vector<RenderPassObject> CalculateVisibleObjects(const TaskContext& outerTaskContext, const RenderCamera& camera, const std::vector<RenderPassObject>& renderPassObjects) noexcept
+        }
+        
+        //------------------------------------------------------------------------------
+        std::vector<RenderPassObject> CalculateVisibleObjects(const TaskContext& taskContext, const RenderCamera& camera, const std::vector<RenderPassObject>& renderPassObjects) noexcept
+        {
+            std::mutex visibleObjectsMutex;
+            std::vector<RenderPassObject> visibleRenderPassObjects;
+            
+            u32 numTasks = 1 + (u32(renderPassObjects.size()) / k_objectsPerVisibilityBatch);
+            std::vector<Task> tasks;
+            for (u32 taskIndex = 0; taskIndex < numTasks; ++taskIndex)
             {
-                std::mutex visibleObjectsMutex;
-                std::vector<RenderPassObject> visibleRenderPassObjects;
-                
-                u32 numTasks = 1 + (u32(renderPassObjects.size()) / k_objectsPerVisibilityBatch);
-                std::vector<Task> tasks;
-                for (u32 taskIndex = 0; taskIndex < numTasks; ++taskIndex)
+                tasks.push_back([=, &camera, &renderPassObjects, &visibleObjectsMutex, &visibleRenderPassObjects](const TaskContext& innerTaskContext)
                 {
-                    tasks.push_back([=, &camera, &renderPassObjects, &visibleObjectsMutex, &visibleRenderPassObjects](const TaskContext& innerTaskContext)
+                    std::vector<RenderPassObject> taskVisiblePassObjects;
+                    for(u32 objectIndex = 0; objectIndex < k_objectsPerVisibilityBatch; ++objectIndex)
                     {
-                        std::vector<RenderPassObject> taskVisiblePassObjects;
-                        for(u32 objectIndex = 0; objectIndex < k_objectsPerVisibilityBatch; ++objectIndex)
+                        u32 index = taskIndex * k_objectsPerVisibilityBatch + objectIndex;
+                        if (index >= renderPassObjects.size())
                         {
-                            u32 index = taskIndex * k_objectsPerVisibilityBatch + objectIndex;
-                            if (index >= renderPassObjects.size())
-                            {
-                                break;
-                            }
-                            
-                            const auto& renderPassObject = renderPassObjects[index];
-                            
-                            if (IsRenderObjectVisible(camera, renderPassObject))
-                            {
-                                taskVisiblePassObjects.push_back(renderPassObject);
-                            }
+                            break;
                         }
                         
-                        std::unique_lock<std::mutex> lock(visibleObjectsMutex);
-                        visibleRenderPassObjects.insert(visibleRenderPassObjects.end(), taskVisiblePassObjects.begin(), taskVisiblePassObjects.end());
-                    });
-                }
-                
-                outerTaskContext.ProcessChildTasks(tasks);
-                
-                return visibleRenderPassObjects;
+                        const auto& renderPassObject = renderPassObjects[index];
+                        
+                        if (IsRenderObjectVisible(camera, renderPassObject))
+                        {
+                            taskVisiblePassObjects.push_back(renderPassObject);
+                        }
+                    }
+                    
+                    std::unique_lock<std::mutex> lock(visibleObjectsMutex);
+                    visibleRenderPassObjects.insert(visibleRenderPassObjects.end(), taskVisiblePassObjects.begin(), taskVisiblePassObjects.end());
+                });
             }
+            
+            taskContext.ProcessChildTasks(tasks);
+            
+            return visibleRenderPassObjects;
         }
     }
 } 

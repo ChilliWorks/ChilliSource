@@ -35,8 +35,12 @@
 
 namespace ChilliSource
 {
-    namespace Rendering
+    /// Collection of sort functions for render pass objects
+    ///
+    class RenderPassObjectSorter
     {
+    public:
+        
         /// Defines a delegate to allow for custom render sorting
         ///
         /// @param camera
@@ -44,33 +48,28 @@ namespace ChilliSource
         /// @param renderPassObjects
         ///     The list of render pass objects to sort
         ///
-        using RenderSortFunc = std::function<void(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects)>;
+        using SortFunc = std::function<void(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects)>;
+    
         
-        /// Collection of sort functions for render pass objects
+        /// Sorts a collection of opaque RenderPassObjects based on if they share a material
+        /// and then by z position (Front to back)
         ///
-        class RenderPassObjectSorter
-    	{
-        public:
-            /// Sorts a collection of opaque RenderPassObjects based on if they share a material
-            /// and then by z position (Front to back)
-            ///
-            /// @param camera
-            ///     The camera to use to determine z-distance
-            /// @param renderPassObjects
-            ///     The list of render pass objects to sort
-            ///
-            static void OpaqueSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
-            
-            /// Sorts a collection of transparent RenderPassObjects based on their z position (Back to front)
-            ///
-            /// @param camera
-            ///     The camera to use to determine z-distance
-            /// @param renderPassObjects
-            ///     The list of render pass objects to sort
-            ///
-            static void TransparentSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
-        };
-    }
+        /// @param camera
+        ///     The camera to use to determine z-distance
+        /// @param renderPassObjects
+        ///     The list of render pass objects to sort
+        ///
+        static void OpaqueSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        
+        /// Sorts a collection of transparent RenderPassObjects based on their z position (Back to front)
+        ///
+        /// @param camera
+        ///     The camera to use to determine z-distance
+        /// @param renderPassObjects
+        ///     The list of render pass objects to sort
+        ///
+        static void TransparentSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
+    };
 }
 
 #endif

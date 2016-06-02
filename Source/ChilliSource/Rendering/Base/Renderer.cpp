@@ -26,6 +26,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
 
@@ -42,7 +43,9 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
     {
-        //TODO: Create Render Pass Compiler & RenderCommandProcessor.
+        //TODO: Decide which rendering backend to use
+        m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
+        //TODO: RenderCommandProcessor.
     }
     
     //------------------------------------------------------------------------------
@@ -69,9 +72,12 @@ namespace ChilliSource
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
             auto renderFrame = RenderFrameCompiler::CompileRenderFrame(renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
-            
+            auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
             //TODO: Process the rest of the render pipeline.
         });
+        
+        //TODO: Remove this when locking in place
+        std::this_thread::sleep_for(std::chrono::milliseconds(17));
     }
     
     //------------------------------------------------------------------------------
