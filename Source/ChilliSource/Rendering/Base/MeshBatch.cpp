@@ -50,7 +50,7 @@ namespace ChilliSource
     /// @param Static mesh component
     /// @param Transform
     //------------------------------------------------------
-    void MeshBatch::AddMesh(const StaticMeshComponentSPtr &inpMesh, const Matrix4& inmatTransform)
+    void MeshBatch::AddMesh(const StaticModelComponentSPtr &inpMesh, const Matrix4& inmatTransform)
     {
         mmapMeshCache.insert(std::make_pair(inpMesh, inmatTransform));
     }

@@ -92,10 +92,9 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
+    StaticModelComponentUPtr RenderComponentFactory::CreateStaticModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
     {
-        StaticMeshComponentUPtr pResult(new StaticModelComponent());
-        pResult->SetModel(in_model, in_material);
+        StaticModelComponentUPtr pResult(new StaticModelComponent(in_model, in_material));
         return pResult;
     }
     //---------------------------------------------------------------------------

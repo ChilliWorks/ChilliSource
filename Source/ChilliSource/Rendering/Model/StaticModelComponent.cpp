@@ -43,29 +43,53 @@ namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(StaticModelComponent);
     
-    StaticModelComponent::StaticModelComponent()
-    : m_isBSValid(false), m_isAABBValid(false), m_isOOBBValid(false)
+    //------------------------------------------------------------------------------
+    StaticModelComponent::StaticModelComponent(const ModelCSPtr& model, const MaterialCSPtr& material) noexcept
+    : m_model(model)
     {
-        mMaterials.push_back(nullptr);
+        CS_ASSERT(m_model, "Model cannot be null");
+        CS_ASSERT(m_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(material, "Material cannot be null");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        
+        m_materials.resize(model->GetNumMeshes());
+        
+        for (u32 i = 0; i < u32(m_materials.size()); ++i)
+        {
+            m_materials[i] = material;
+        }
     }
-    //----------------------------------------------------------
-    /// Is A
-    //----------------------------------------------------------
-    bool StaticModelComponent::IsA(InterfaceIDType inInterfaceID) const
+    
+    //------------------------------------------------------------------------------
+    StaticModelComponent::StaticModelComponent(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials) noexcept
+    : m_model(model), m_materials(materials)
     {
-        return  (inInterfaceID == VolumeComponent::InterfaceID || inInterfaceID == StaticModelComponent::InterfaceID);
+        CS_ASSERT(m_model, "Model cannot be null");
+        CS_ASSERT(m_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(m_materials.size() == m_model->GetNumMeshes(), "Model component must have the same number of materials as there are meshes in the model.");
+        
+        for (const auto& material : m_materials)
+        {
+            CS_ASSERT(material, "Material cannot be null");
+            CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        }
     }
-    //----------------------------------------------------
-    /// Get Axis Aligned Bounding Box
-    //----------------------------------------------------
-    const AABB& StaticModelComponent::GetAABB()
+    
+    //------------------------------------------------------------------------------
+    bool StaticModelComponent::IsA(InterfaceIDType interfaceId) const noexcept
+    {
+        return  (interfaceId == VolumeComponent::InterfaceID || interfaceId == StaticModelComponent::InterfaceID);
+    }
+    
+    //------------------------------------------------------------------------------
+    const AABB& StaticModelComponent::GetAABB() noexcept
     {
         if(GetEntity() && !m_isAABBValid)
         {
             m_isAABBValid = true;
             
             //Rebuild the box
-            const AABB& cAABB = mpModel->GetAABB();
+            const AABB& cAABB = m_model->GetAABB();
             const Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
             Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
             Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
@@ -132,156 +156,161 @@ namespace ChilliSource
             vMax.z = std::max(vMax.z, vFrontTopLeft.z);
             vMax.z = std::max(vMax.z, vFrontTopRight.z);
             
-            mBoundingBox.SetSize( vMax - vMin );
-            mBoundingBox.SetOrigin( cAABB.Centre() * matWorld);
+            m_aabb.SetSize( vMax - vMin );
+            m_aabb.SetOrigin( cAABB.Centre() * matWorld);
         }
 
-        return mBoundingBox;
+        return m_aabb;
     }
-    //----------------------------------------------------
-    /// Get Object Oriented Bounding Box
-    //----------------------------------------------------
-    const OOBB& StaticModelComponent::GetOOBB()
+    
+    //------------------------------------------------------------------------------
+    const OOBB& StaticModelComponent::GetOOBB() noexcept
     {
         if(GetEntity() && !m_isOOBBValid)
         {
             m_isOOBBValid = true;
             
-            mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
+            m_oobb.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
             // Origin and Size updated in SetModel
         }
-        return mOBBoundingBox;
+        return m_oobb;
     }
-    //----------------------------------------------------
-    /// Get Bounding Sphere
-    //----------------------------------------------------
-    const Sphere& StaticModelComponent::GetBoundingSphere()
+    
+    //------------------------------------------------------------------------------
+    const Sphere& StaticModelComponent::GetBoundingSphere() noexcept
     {
-        if(GetEntity() && !m_isBSValid)
+        if(GetEntity() && !m_isBoundingSphereValid)
         {
-            m_isBSValid = true;
+            m_isBoundingSphereValid = true;
             
             const AABB& sAABB = GetAABB();
-            mBoundingSphere.vOrigin = sAABB.GetOrigin();
-            mBoundingSphere.fRadius = (sAABB.BackTopRight() - sAABB.FrontBottomLeft()).Length() * 0.5f;
+            m_boundingSphere.vOrigin = sAABB.GetOrigin();
+            m_boundingSphere.fRadius = (sAABB.BackTopRight() - sAABB.FrontBottomLeft()).Length() * 0.5f;
         }
-        return mBoundingSphere;
+        return m_boundingSphere;
     }
-    //-----------------------------------------------------------
-    /// Set Material
-    //-----------------------------------------------------------
-    void StaticModelComponent::SetMaterial(const MaterialCSPtr& inpMaterial)
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetMaterial(const MaterialCSPtr& material) noexcept
     {
-        for (u32 i = 0; i < mMaterials.size(); i++)
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        
+        for (u32 i = 0; i < m_materials.size(); i++)
         {
-            mMaterials[i] = inpMaterial;
+            m_materials[i] = material;
         }
     }
-    //-----------------------------------------------------------
-    /// Set Material For Sub Model
-    //-----------------------------------------------------------
-    void StaticModelComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex)
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetMaterialForMesh(const MaterialCSPtr& material, u32 meshIndex) noexcept
     {
-        CS_ASSERT(mpModel, "Cannot set material without a model.");
-        CS_ASSERT(indwSubMeshIndex < s32(mMaterials.size()), "Invalid mesh index.");
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        CS_ASSERT(meshIndex < s32(m_materials.size()), "Invalid mesh index.");
         
-        mMaterials[indwSubMeshIndex] = inpMaterial;
+        m_materials[meshIndex] = material;
     }
-    //-----------------------------------------------------------
-    /// Set Material For Sub Model
-    //-----------------------------------------------------------
-    void StaticModelComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName)
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetMaterialForMesh(const MaterialCSPtr& material, const std::string& meshName) noexcept
     {
-        CS_ASSERT(mpModel, "Cannot set material without a model.");
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
         
-        auto meshIndex = mpModel->GetMeshIndex(instrSubMeshName);
-        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(mMaterials.size()), "Invalid mesh index.");
+        auto meshIndex = m_model->GetMeshIndex(meshName);
+        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
         
-        mMaterials[meshIndex] = inpMaterial;
+        m_materials[meshIndex] = material;
     }
-    //-----------------------------------------------------------
-    /// Get Material Of Sub Model
-    //-----------------------------------------------------------
-    MaterialCSPtr StaticModelComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
+    
+    //------------------------------------------------------------------------------
+    const MaterialCSPtr& StaticModelComponent::GetMaterialForMesh(u32 meshIndex) const noexcept
     {
-        CS_ASSERT(mpModel, "Cannot set material without a model.");
-        CS_ASSERT(indwSubMeshIndex < s32(mMaterials.size()), "Invalid mesh index.");
+        CS_ASSERT(meshIndex < s32(m_materials.size()), "Invalid mesh index.");
         
-        return mMaterials[indwSubMeshIndex];
+        return m_materials[meshIndex];
     }
-    //-----------------------------------------------------------
-    /// Get Material Of Sub Model
-    //-----------------------------------------------------------
-    MaterialCSPtr StaticModelComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
+    
+    //------------------------------------------------------------------------------
+    const MaterialCSPtr& StaticModelComponent::GetMaterialForMesh(const std::string& meshName) const noexcept
     {
-        CS_ASSERT(mpModel, "Cannot get material without a model.");
+        auto meshIndex = m_model->GetMeshIndex(meshName);
+        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
         
-        auto meshIndex = mpModel->GetMeshIndex(instrSubMeshName);
-        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(mMaterials.size()), "Invalid mesh index.");
-        
-        return mMaterials[meshIndex];
+        return m_materials[meshIndex];
     }
-    //----------------------------------------------------------
-    /// Attach Model
-    //----------------------------------------------------------
-    void StaticModelComponent::SetModel(const ModelCSPtr& inpModel)
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetModel(const ModelCSPtr& model) noexcept
     {
-        mpModel = inpModel;
-        mMaterials.resize(mpModel->GetNumMeshes());
+        CS_ASSERT(model, "Cannot set null model.");
+        CS_ASSERT(model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
         
-        mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
-        mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
-    }
-    //----------------------------------------------------------
-    /// Attach Model
-    //----------------------------------------------------------
-    void StaticModelComponent::SetModel(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
-    {
-        mpModel = inpModel;
-        mMaterials.resize(mpModel->GetNumMeshes());
+        m_model = model;
+        m_materials.resize(model->GetNumMeshes());
         
-        mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
-        mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
+        m_oobb.SetSize(m_model->GetAABB().GetSize());
+        m_oobb.SetOrigin(m_model->GetAABB().GetOrigin());
         
-        SetMaterial(inpMaterial);
+        SetMaterial(GetMaterialForMesh(0));
     }
-    //----------------------------------------------------------
-    /// Get Model
-    //----------------------------------------------------------
-    const ModelCSPtr& StaticModelComponent::GetModel() const
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetModel(const ModelCSPtr& model, const MaterialCSPtr& material) noexcept
     {
-        return mpModel;
+        CS_ASSERT(model, "Cannot set null model.");
+        CS_ASSERT(model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        
+        m_model = model;
+        m_materials.resize(m_model->GetNumMeshes());
+        
+        m_oobb.SetSize(m_model->GetAABB().GetSize());
+        m_oobb.SetOrigin(m_model->GetAABB().GetOrigin());
+        
+        SetMaterial(material);
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    void StaticModelComponent::SetShadowCastingEnabled(bool inbEnabled)
+    
+    //------------------------------------------------------------------------------
+    const ModelCSPtr& StaticModelComponent::GetModel() const noexcept
     {
-        m_shadowCastingEnabled = inbEnabled;
+        return m_model;
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    bool StaticModelComponent::IsShadowCastingEnabled() const
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetShadowCastingEnabled(bool enabled) noexcept
+    {
+        m_shadowCastingEnabled = enabled;
+    }
+    
+    //------------------------------------------------------------------------------
+    bool StaticModelComponent::IsShadowCastingEnabled() const noexcept
     {
         return m_shadowCastingEnabled;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void StaticModelComponent::OnAddedToScene()
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::OnAddedToScene() noexcept
     {
         m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &StaticModelComponent::OnEntityTransformChanged));
         
         OnEntityTransformChanged();
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void StaticModelComponent::OnEntityTransformChanged()
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::OnEntityTransformChanged() noexcept
     {
-        m_isBSValid = false;
         m_isAABBValid = false;
         m_isOOBBValid = false;
+        m_isBoundingSphereValid = false;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
+    
+    //------------------------------------------------------------------------------
     void StaticModelComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
     {
         //TODO: Re-add once materials have been set up.
@@ -298,10 +327,10 @@ namespace ChilliSource
 //            in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform()));
 //        }
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void StaticModelComponent::OnRemovedFromScene()
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::OnRemovedFromScene() noexcept
     {
-        m_transformChangedConnection = nullptr;
+        m_transformChangedConnection.reset();
     }
 }

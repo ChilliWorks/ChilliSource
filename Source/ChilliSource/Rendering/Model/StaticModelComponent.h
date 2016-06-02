@@ -1,8 +1,4 @@
 //
-//  StaticModelComponent.h
-//  Chilli Source
-//  Created by Scott Downie on 07/10/2010.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2010 Tag Games Limited
@@ -26,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_STATIC_MESH_COMPONENT_H_
-#define _CHILLISOURCE_RENDERING_STATIC_MESH_COMPONENT_H_
+#ifndef _CHILLISOURCE_RENDERING_MODEL_STATICMODELCOMPONENT_H_
+#define _CHILLISOURCE_RENDERING_MODEL_STATICMODELCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
@@ -35,192 +31,184 @@
 
 namespace ChilliSource
 {
-    //===============================================================
-    /// Description:
+    /// A static model component. This defines a 3D model that can be manipulated, textured
+    /// but not animated.
     ///
-    /// A static mesh component. This defines a 3D mesh that can
-    /// be manipulated, textured but not animated.
-    //===============================================================
-    class StaticModelComponent : public VolumeComponent
+    /// This is not thread safe and should not be used on multiple threads at once.
+    ///
+    class StaticModelComponent final : public VolumeComponent
     {
     public:
         CS_DECLARE_NAMEDTYPE(StaticModelComponent);
         
-        StaticModelComponent();
-        //----------------------------------------------------------
-        /// Is A
+        /// Creates a new static model component with the given model and material. The
+        /// material will be applied to all meshes in the model.
         ///
-        /// Returns if it is of the type given
-        /// @param Comparison Type
-        /// @return Whether the class matches the comparison type
-        //----------------------------------------------------------
-        bool IsA(InterfaceIDType inInterfaceID) const override;
-        //----------------------------------------------------
-        /// Get Axis Aligned Bounding Box
+        /// @param model
+        ///     The model that should be used.
+        /// @param material
+        ///     The material that should be applied to each mesh in the model.
         ///
-        /// All render components have a box used for culling
-        /// and coarse intersections. This is cached and 
+        StaticModelComponent(const ModelCSPtr& model, const MaterialCSPtr& material) noexcept;
+        
+        /// Creates a new static model component with the given model and a list of materials,
+        /// one for each mesh in the model. If the number of materials and meshes is not the
+        /// same, this will assert.
+        ///
+        /// @param model
+        ///     The model that should be used.
+        /// @param materials
+        ///     The list of materials for each mesh in the model.
+        ///
+        StaticModelComponent(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials) noexcept;
+
+        /// Allows querying of whether or not this component implements the interface described
+        /// by the given interface Id. Typically this is not called directly as the templated
+        /// equivalent IsA<Interface>() is preferred.
+        ///
+        /// @param interfaceId
+        ///     The Id of the interface.
+        ///
+        /// @return Whether or not the interface is implemented.
+        ///
+        bool IsA(InterfaceIDType interfaceId) const noexcept override;
+
+        /// Calculates and returns the world space AABB of the model. This is cached and only
         /// recomputed when required.
-        /// @return Axis aligned bounding box
-        //----------------------------------------------------
-        const AABB& GetAABB() override;
-        //----------------------------------------------------
-        /// Get Object Oriented Bounding Box
         ///
-        /// All render objects have an OOBB for
-        /// picking. This is cached and 
+        /// @return The world space axis-aligned bounding box
+        ///
+        const AABB& GetAABB() noexcept override;
+        
+        /// Calculates and returns the world space OOBB of the model. This is cached and only
         /// recomputed when required.
-        /// @return OOBB
-        //----------------------------------------------------
-        const OOBB& GetOOBB() override;
-        //----------------------------------------------------
-        /// Get Bounding Sphere
         ///
-        /// All render objects have an bounding sphere for
-        /// culling. This is cached and 
-        /// recomputed when required.
-        /// @return bounding sphere
-        //----------------------------------------------------
-        const Sphere& GetBoundingSphere() override;
-        //----------------------------------------------------
-        /// Is Visible
+        /// @return The world space OOBB
         ///
-        /// @return Whether or not to render
-        //----------------------------------------------------
-        bool IsVisible() const override { return m_isVisible; }
-        //----------------------------------------------------
-        /// Is Visible
+        const OOBB& GetOOBB() noexcept override;
+        
+        /// Calculates and returns the world space bounding sphere of the model. This is cached
+        /// and only recomputed when required.
         ///
-        /// @param in_isVisible - Whether or not to render
-        //----------------------------------------------------
-        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
-        //-----------------------------------------------------------
-        /// Set Material
+        /// @return The world space bounding sphere
         ///
-        /// Set the material that the mesh will use. Applies the material
-        /// To all submeshes
+        const Sphere& GetBoundingSphere() noexcept override;
+        
+        /// @return Whether or not the object should be rendered.
         ///
-        /// @param Handle to material
-        //-----------------------------------------------------------
-        void SetMaterial(const MaterialCSPtr& inpMaterial);
-        //-----------------------------------------------------------
-        /// Set Material For Sub Model
+        bool IsVisible() const noexcept override { return m_isVisible; }
+        
+        /// @param isVisible
+        ///     Whether or not the object should be rendered.
         ///
-        /// Set the material that one sub mesh will use.
+        void SetVisible(bool isVisible) noexcept { m_isVisible = isVisible; }
+        
+        /// Set the material that the model will use. Applies the material to all meshes.
         ///
-        /// @param Handle to material
-        /// @Param Index to the submesh
-        //-----------------------------------------------------------
-        void SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex);
-        //-----------------------------------------------------------
-        /// Set Material For Sub Model
+        /// @param material
+        ///     The material that should be used.
         ///
-        /// Set the material that one sub mesh will use.
+        void SetMaterial(const MaterialCSPtr& material) noexcept;
+        
+        /// Sets the material for a single mesh.
         ///
-        /// @param Handle to material
-        /// @param The name of the submesh.
-        //-----------------------------------------------------------
-        void SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName);
-        //-----------------------------------------------------------
-        /// Get Material Of Sub Model
+        /// @param material
+        ///     The material that should be used.
+        /// @param meshIndex
+        ///     The index of the mesh.
         ///
-        /// Get the material of a single sub mesh.
+        void SetMaterialForMesh(const MaterialCSPtr& imaterial, u32 meshIndex) noexcept;
+        
+        /// Sets the material for a single mesh.
         ///
-        /// @param Index to the sub mesh
+        /// @param material
+        ///     The material that should be used.
+        /// @param meshName
+        ///     The name of the mesh
+        ///
+        void SetMaterialForMesh(const MaterialCSPtr& material, const std::string& meshName) noexcept;
+        
+        /// Get the material of a single mesh.
+        ///
+        /// @param meshIndex
+        ///     Index to the mesh
+        ///
         /// @return Handle to material
-        //-----------------------------------------------------------
-        MaterialCSPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
-        //-----------------------------------------------------------
-        /// Get Material Of Sub Model
         ///
-        /// Get the material of a single sub mesh.
+        const MaterialCSPtr& GetMaterialForMesh(u32 meshIndex) const noexcept;
+        
+        /// Get the material of a single mesh.
         ///
-        /// @param The name of the submesh.
+        /// @param meshName
+        ///     The name of the mesh.
+        ///
         /// @return Handle to material
-        //-----------------------------------------------------------
-        MaterialCSPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
-        //----------------------------------------------------------
-        /// Attach Model
         ///
-        /// Attach a mesh to this component
-        /// @param Model object
-        //----------------------------------------------------------
-        void SetModel(const ModelCSPtr& inpModel);
-        //----------------------------------------------------------
-        /// Attach Model
+        const MaterialCSPtr& GetMaterialForMesh(const std::string& meshName) const noexcept;
+        
+        /// Sets the model the component should use.
         ///
-        /// Attach a mesh to this component but uses the given 
-        /// material
-        /// @param Model object
-        //----------------------------------------------------------
-        void SetModel(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial);
-        //----------------------------------------------------------
-        /// Get Model
+        /// @param model
+        ///     The model.
         ///
-        /// @return The components internal mesh
-        //----------------------------------------------------------
-        const ModelCSPtr& GetModel() const;
-        //-----------------------------------------------------
-        /// Set Shadow Casting Enabled
+        void SetModel(const ModelCSPtr& model) noexcept;
+        
+        /// Sets the model and material that should be used.
         ///
-        /// @param Whether the render component casts shadows
-        //-----------------------------------------------------
-        void SetShadowCastingEnabled(bool inbEnabled);
-        //-----------------------------------------------------
-        /// Is Shadow Casting Enabled
+        /// @param model
+        ///     The model
+        /// @param material
+        ///     The material
         ///
+        void SetModel(const ModelCSPtr& in_model, const MaterialCSPtr& in_material) noexcept;
+        
+        /// @return The model that will be rendered.
+        ///
+        const ModelCSPtr& GetModel() const noexcept;
+        
+        /// @param enabled
+        ///     Whether the render component casts shadows
+        ///
+        void SetShadowCastingEnabled(bool enabled) noexcept;
+        
         /// @return Whether the render component casts shadows
-        //-----------------------------------------------------
-        bool IsShadowCastingEnabled() const;
+        ///
+        bool IsShadowCastingEnabled() const noexcept;
         
     private:
-        //----------------------------------------------------
-        /// Triggered when the component is attached to
-        /// an entity on the scene
+        /// Triggered when the component is attached to an entity on the scene
         ///
-        /// @author S Downie
-        //----------------------------------------------------
-        void OnAddedToScene() override;
-        //----------------------------------------------------
-        /// On Entity Transform Changed
+        void OnAddedToScene() noexcept override;
+        
+        /// Delegate called when the owning entities transform changes. This is used to dirty
+        /// the bounding volumes
         ///
-        /// Delegate called when the owning entities transform
-        /// changes. This is used to dirty the bounding volumes
-        //----------------------------------------------------
-        void OnEntityTransformChanged();
-        //----------------------------------------------------
-        /// Called during the render snapshot phase. Adds
-        /// render objects to the scene describing the model.
+        void OnEntityTransformChanged() noexcept;
+        
+        /// Called during the render snapshot phase. Adds render objects to the scene
+        /// describing the model.
         ///
-        /// @author Ian Copland
+        /// @param renderSnapshot
+        ///     The render snapshot.
         ///
-        /// @param in_renderSnapshot - The render snapshot.
-        //----------------------------------------------------
-        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
-        //----------------------------------------------------
-        /// Triggered when the component is removed from
-        /// an entity on the scene
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        
+        /// Triggered when the component is removed from an entity on the scene.
         ///
-        /// @author S Downie
-        //----------------------------------------------------
-        void OnRemovedFromScene() override;
+        void OnRemovedFromScene() noexcept override;
         
-    private:
-        
-        ModelCSPtr mpModel;
-        std::vector<MaterialCSPtr> mMaterials;
-        
-        EventConnectionUPtr m_transformChangedConnection;
-        
-        bool m_isBSValid;
-        bool m_isAABBValid;
-        bool m_isOOBBValid;
-        
-        AABB mBoundingBox;
-        OOBB mOBBoundingBox;
-        Sphere mBoundingSphere;
+        ModelCSPtr m_model;
+        std::vector<MaterialCSPtr> m_materials;
+        AABB m_aabb;
+        OOBB m_oobb;
+        Sphere m_boundingSphere;
         bool m_shadowCastingEnabled = true;
         bool m_isVisible = true;
+        
+        bool m_isAABBValid = false;
+        bool m_isOOBBValid = false;
+        bool m_isBoundingSphereValid = false;
+        EventConnectionUPtr m_transformChangedConnection;
     };
 }
 

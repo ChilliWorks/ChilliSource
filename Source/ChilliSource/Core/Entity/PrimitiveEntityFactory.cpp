@@ -64,7 +64,7 @@ namespace ChilliSource
         ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(in_size);
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
         
-        StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
+        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
         
         auto entity = Entity::Create();
@@ -81,7 +81,7 @@ namespace ChilliSource
         ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(in_size);
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
         
-        StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
+        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
         
         auto entity = Entity::Create();
