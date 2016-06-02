@@ -59,7 +59,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     VertexFormat::VertexFormat(const std::vector<Element>& elements) noexcept
-        : m_numElements(elements.size())
+        : m_numElements(u32(elements.size()))
     {
         for (u32 index = 0; index < m_numElements; ++index)
         {

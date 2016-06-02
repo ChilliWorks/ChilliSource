@@ -71,7 +71,7 @@ namespace ChilliSource
         
         /// @return The list of mesh descriptions.
         ///
-        u32 GetNumMeshDescs() const noexcept { return m_meshDescs.size(); }
+        u32 GetNumMeshDescs() const noexcept { return u32(m_meshDescs.size()); }
         
         /// @param index
         ///     The mesh description index. Must be lower than the value returned from

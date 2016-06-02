@@ -63,7 +63,6 @@ namespace ChilliSource
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
         
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         material->SetShadingType(Material::ShadingType::k_unlit);
         material->SetTransparencyEnabled(true);
         material->SetCullFace(CullFace::k_back);
@@ -76,7 +75,6 @@ namespace ChilliSource
     MaterialSPtr MaterialFactory::CreateSprite(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         material->SetShadingType(Material::ShadingType::k_unlit);
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
@@ -89,7 +87,6 @@ namespace ChilliSource
     MaterialSPtr MaterialFactory::CreateStatic(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         material->SetShadingType(Material::ShadingType::k_unlit);
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
@@ -102,7 +99,6 @@ namespace ChilliSource
     MaterialSPtr MaterialFactory::CreateStaticAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         material->SetShadingType(Material::ShadingType::k_unlit);
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
@@ -115,7 +111,6 @@ namespace ChilliSource
     MaterialSPtr MaterialFactory::CreateStaticBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         material->SetShadingType(Material::ShadingType::k_blinn);
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
@@ -208,7 +203,6 @@ namespace ChilliSource
     MaterialSPtr MaterialFactory::CreateAnimated(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         material->SetShadingType(Material::ShadingType::k_unlit);
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
@@ -221,7 +215,6 @@ namespace ChilliSource
     MaterialSPtr MaterialFactory::CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         material->SetShadingType(Material::ShadingType::k_unlit);
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);
@@ -234,7 +227,6 @@ namespace ChilliSource
     MaterialSPtr MaterialFactory::CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
     {
         MaterialSPtr material(CreateCustom(in_uniqueId));
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
         material->SetShadingType(Material::ShadingType::k_blinn);
         material->AddTexture(in_texture);
         material->SetTransparencyEnabled(false);

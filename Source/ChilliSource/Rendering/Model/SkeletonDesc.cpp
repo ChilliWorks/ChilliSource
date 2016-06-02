@@ -30,6 +30,6 @@ namespace ChilliSource
     SkeletonDesc::SkeletonDesc(const std::vector<std::string>& nodeNames, const std::vector<s32>& parentNodeIndices, const std::vector<s32>& jointIndices) noexcept
         : m_nodeNames(nodeNames), m_parentNodeIndices(parentNodeIndices), m_jointIndices(jointIndices)
     {
-        CS_ASSERT(m_nodeNames.size() == m_parentNodeIndices.size() == m_jointIndices.size(), "Provided skeleton data is invalid.");
+        CS_ASSERT(m_nodeNames.size() == m_parentNodeIndices.size(), "Provided skeleton data is invalid.");
     }
 }

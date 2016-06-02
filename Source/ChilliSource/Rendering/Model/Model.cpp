@@ -102,7 +102,7 @@ namespace ChilliSource
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access a model before it is loaded.");
         CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
         
-        return m_meshNames.size();
+        return u32(m_meshNames.size());
     }
     
     //------------------------------------------------------------------------------

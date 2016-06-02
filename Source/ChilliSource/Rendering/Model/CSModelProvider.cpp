@@ -373,7 +373,7 @@ namespace ChilliSource
             
             constexpr u8 k_shortIndexFormatSize = 2;
             auto indexSize = ReadValue<u8>(in_meshStream);
-            CS_ASSERT(indexSize == 2, "Invalid index size.");
+            CS_ASSERT(indexSize == k_shortIndexFormatSize, "Invalid index size.");
             
             Vector3 minBounds, maxBounds;
             minBounds.x = ReadValue<f32>(in_meshStream);

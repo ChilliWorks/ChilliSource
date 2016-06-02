@@ -624,36 +624,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.cpp">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Mesh.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\MeshDescriptor.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp">
       <Filter>ChilliSource\Rendering\Texture</Filter>
     </ClCompile>
@@ -1098,12 +1068,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterial.cpp">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClCompile>
@@ -1133,6 +1097,54 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CameraRenderPassGroup.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\ForwardRenderMaterialGroupManager.cpp">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\IndexFormat.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\MeshDesc.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Model.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\ModelDesc.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkeletonDesc.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1829,36 +1841,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Mesh.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\MeshDescriptor.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h">
       <Filter>ChilliSource\Rendering\Texture</Filter>
     </ClInclude>
@@ -2303,9 +2285,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ShaderPass.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
@@ -2375,18 +2354,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.h">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\IndexType.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PolygonType.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterial.h">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClInclude>
@@ -2422,6 +2389,57 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObject.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\ForwardRenderMaterialGroupManager.h">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\IndexFormat.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\MeshDesc.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Model.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\ModelDesc.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PolygonType.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkeletonDesc.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
