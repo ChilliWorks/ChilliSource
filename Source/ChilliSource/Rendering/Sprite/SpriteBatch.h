@@ -33,10 +33,14 @@
 #include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
+    //TODO: Remove once converted over to new system.
+    enum class BufferUsage	{k_static, k_dynamic};
+    
     const u32 k_numSpriteVerts = 4;
     const u32 k_numSpriteIndices = 6;
     

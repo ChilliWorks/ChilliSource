@@ -35,7 +35,7 @@
 namespace ChilliSource
 {
     //-------------------------------------------------------------------------
-    /// Loads model files into a Mesh resource.
+    /// Loads model files into a Model resource.
     //-------------------------------------------------------------------------
     class CSModelProvider final : public ResourceProvider
     {
@@ -111,17 +111,7 @@ namespace ChilliSource
         /// @param Delegate to callback on completion either success or failure
         /// @param the output resource pointer
         //----------------------------------------------------------------------------
-        void LoadMeshDataTask(StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const MeshSPtr& out_resource);
-        //----------------------------------------------------------------------------
-        /// Constructs the mesh buffer from the mesh description
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param Delegate to callback on completion either success or failure
-        /// @param The MeshDescriptor used to build the mesh
-        /// @param [Out] The mesh resource
-        //----------------------------------------------------------------------------
-        void BuildMesh(const AsyncLoadDelegate& in_delegate, const MeshDescriptor& in_meshDesc, const MeshSPtr& out_resource);
+        void LoadMeshDataTask(StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const ModelSPtr& out_resource);
     };
 }
 

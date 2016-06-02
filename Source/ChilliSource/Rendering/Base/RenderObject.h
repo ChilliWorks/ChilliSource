@@ -27,8 +27,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
-//#include <ChilliSource/Rendering/Materal/RenderMaterialGroup.h>
-//#include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
+#include <ChilliSource/Rendering/Model/RenderMesh.h>
 
 namespace ChilliSource
 {
@@ -49,23 +49,23 @@ namespace ChilliSource
         /// @param worldMatrix
         ///     The world matrix describing the transform of the object.
         ///
-        RenderObject(/*const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, */const Matrix4& worldMatrix) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept;
         
         /// @return The material group that should be used when rendering this object.
         ///
-        //const RenderMaterialGroup* GetRenderMaterialGroup() const noexcept { return m_renderMaterialGroup; }
+        const RenderMaterialGroup* GetRenderMaterialGroup() const noexcept { return m_renderMaterialGroup; }
         
         /// @return The mesh that should be used when rendering this object.
         ///
-        //const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
+        const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
         
         /// @return The world matrix describing the transform of the object.
         ///
         const Matrix4& GetWorldMatrix() const noexcept { return m_worldMatrix; }
         
     private:
-        //const RenderMaterialGroup* m_renderMaterialGroup;
-        //const RenderMesh* m_renderMesh;
+        const RenderMaterialGroup* m_renderMaterialGroup;
+        const RenderMesh* m_renderMesh;
         Matrix4 m_worldMatrix;
     };
 }

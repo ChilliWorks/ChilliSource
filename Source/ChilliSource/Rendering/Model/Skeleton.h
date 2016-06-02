@@ -53,6 +53,7 @@ namespace ChilliSource
     class Skeleton
     {
     public:
+        Skeleton() = default;
         //-------------------------------------------------------------------------
         /// Construct the skeleton from the given descriptor.
         ///
@@ -60,7 +61,7 @@ namespace ChilliSource
         ///
         /// @param Skeleton descriptor
         //-------------------------------------------------------------------------
-        void Build(const SkeletonDescriptor& in_desc);
+        Skeleton(const SkeletonDesc& in_desc) noexcept;
         //-------------------------------------------------------------------------
         /// Get Node By Name
         ///

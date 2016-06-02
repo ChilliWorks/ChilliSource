@@ -34,7 +34,7 @@
 namespace ChilliSource
 {
     //--------------------------------------------------------------
-    /// Vertex format for mesh batches. Mesh batches must be in this
+    /// Vertex format for mesh batches. Model batches must be in this
     /// format.
     //--------------------------------------------------------------
     struct MeshBatchVertex
@@ -57,14 +57,14 @@ namespace ChilliSource
         MeshBatch();
         ~MeshBatch();
         //------------------------------------------------------
-        /// Add Mesh
+        /// Add Model
         ///
         /// Insert a mesh into this batch.
         ///
         /// @param Static mesh component
         /// @param Transform
         //------------------------------------------------------
-        void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Matrix4& inmatTransform);
+        void AddMesh(const StaticModelComponentSPtr &inpSprite, const Matrix4& inmatTransform);
         //------------------------------------------------------
         /// Set Material
         ///
@@ -108,7 +108,7 @@ namespace ChilliSource
         MaterialCSPtr mpMaterial;
         
         //List of sprites in the batch
-        typedef std::unordered_map<StaticMeshComponentSPtr, Matrix4> MapMeshToTransform;
+        typedef std::unordered_map<StaticModelComponentSPtr, Matrix4> MapMeshToTransform;
         MapMeshToTransform mmapMeshCache;
     };
 }

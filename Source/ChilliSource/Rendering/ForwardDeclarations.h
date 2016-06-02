@@ -56,7 +56,6 @@ namespace ChilliSource
     enum class DepthTestComparison;
     enum class ForwardRenderPasses;
     enum class HorizontalTextJustification;
-    enum class ShaderPass;
     enum class SizePolicy;
     enum class SurfaceFormat;
     enum class VerticalTextJustification;
@@ -96,22 +95,21 @@ namespace ChilliSource
     /// Model
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(AnimatedMeshComponent);
-    CS_FORWARDDECLARE_CLASS(Mesh);
-    CS_FORWARDDECLARE_STRUCT(MeshFeatureDescriptor);
-    CS_FORWARDDECLARE_STRUCT(SubMeshDescriptor);
-    CS_FORWARDDECLARE_STRUCT(MeshDescriptor);
-    CS_FORWARDDECLARE_STRUCT(SkeletonDescriptor);
     CS_FORWARDDECLARE_CLASS(CSAnimProvider);
     CS_FORWARDDECLARE_CLASS(CSModelProvider);
+    CS_FORWARDDECLARE_CLASS(MeshDesc);
+    CS_FORWARDDECLARE_CLASS(Model);
+    CS_FORWARDDECLARE_CLASS(ModelDesc);
     CS_FORWARDDECLARE_CLASS(PrimitiveModelFactory);
     CS_FORWARDDECLARE_CLASS(RenderMesh);
     CS_FORWARDDECLARE_CLASS(RenderMeshManager);
     CS_FORWARDDECLARE_CLASS(Skeleton);
-    CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
+    CS_FORWARDDECLARE_CLASS(SkeletonDesc);
     CS_FORWARDDECLARE_STRUCT(SkeletonNode);
+    CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimationGroup);
-    CS_FORWARDDECLARE_CLASS(StaticMeshComponent);
-    enum class IndexType;
+    CS_FORWARDDECLARE_CLASS(StaticModelComponent);
+    enum class IndexFormat;
     enum class PolygonType;
     //------------------------------------------------------------
     /// Particle

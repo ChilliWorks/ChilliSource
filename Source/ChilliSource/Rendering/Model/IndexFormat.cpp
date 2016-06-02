@@ -22,13 +22,20 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/Model/IndexFormat.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderMesh::RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept
-        : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere)
+    u32 GetIndexSize(IndexFormat indexFormat) noexcept
     {
+        switch (indexFormat)
+        {
+            case IndexFormat::k_short:
+                return 2;
+            default:
+                CS_LOG_FATAL("Invalid index format.");
+                return 0;
+        }
     }
 }

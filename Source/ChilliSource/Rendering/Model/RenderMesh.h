@@ -49,7 +49,7 @@ namespace ChilliSource
         ///     The type of polygon the mesh uses.
         /// @param vertexFormat
         ///     The vertex format.
-        /// @param indexType
+        /// @param indexFormat
         ///     The type of index.
         /// @param numVertices
         ///     The number of vertices in the mesh. The maximum number is determined by the type of index.
@@ -58,7 +58,7 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     A local space sphere enclosing the mesh.
         ///
-        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept;
+        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept;
         
         /// @return The type of polygon the mesh uses.
         ///
@@ -70,7 +70,7 @@ namespace ChilliSource
         
         /// @return The type of index.
         ///
-        IndexType GetIndexType() const noexcept { return m_indexType; }
+        IndexFormat GetIndexFormat() const noexcept { return m_indexFormat; }
         
         /// @return The number of vertices in the mesh. The maximum number is determined by the type of index.
         ///
@@ -100,7 +100,7 @@ namespace ChilliSource
     private:
         PolygonType m_polygonType;
         VertexFormat m_vertexFormat;
-        IndexType m_indexType;
+        IndexFormat m_indexFormat;
         u32 m_numVertices;
         u32 m_numIndices;
         Sphere m_boundingSphere;

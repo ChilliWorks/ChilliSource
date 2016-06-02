@@ -1,11 +1,7 @@
 //
-//  ShaderPass.h
-//  Chilli Source
-//  Created by Scott Downie on 09/04/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +22,14 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_SHADERPASS_H_
-#define _CHILLISOURCE_RENDERING_BASE_SHADERPASS_H_
+#include <ChilliSource/Rendering/Model/SkeletonDesc.h>
 
 namespace ChilliSource
 {
-    //---------------------------------------------
-    /// The renderer adds to the render buffer
-    /// in a series of lighting passes.
-    /// * The ambient pass
-    /// * The directional pass
-    /// * The point light pass
-    ///
-    /// @author S Downie
-    //---------------------------------------------
-    enum class ShaderPass
+    //------------------------------------------------------------------------------
+    SkeletonDesc::SkeletonDesc(const std::vector<std::string>& nodeNames, const std::vector<s32>& parentNodeIndices, const std::vector<s32>& jointIndices) noexcept
+        : m_nodeNames(nodeNames), m_parentNodeIndices(parentNodeIndices), m_jointIndices(jointIndices)
     {
-        k_ambient,
-        k_directional,
-        k_point,
-        k_total
-    };
+        CS_ASSERT(m_nodeNames.size() == m_parentNodeIndices.size() == m_jointIndices.size(), "Provided skeleton data is invalid.");
+    }
 }
-
-#endif
