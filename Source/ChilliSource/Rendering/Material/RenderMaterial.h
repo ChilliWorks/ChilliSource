@@ -42,41 +42,6 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(RenderMaterial);
         
-        /// Creates a new instance with the given material data.
-        ///
-        /// @param renderShader
-        ///     The shader applied by this material.
-        /// @param renderTextures
-        ///     The list of textures applied by this material.
-        /// @param isTransparencyEnabled
-        ///     Whether or not transparency is enabled.
-        /// @param isColourWriteEnabled
-        ///     Whether or not colour write is enabled.
-        /// @param isDepthWriteEnabled
-        ///     Whether or not depth write is enabled.
-        /// @param isDepthTestEnabled
-        ///     Whether or not the depth test will be performed.
-        /// @param isFaceCullingEnabled
-        ///     Whether or not face culling will be performed.
-        /// @param sourceBlendMode
-        ///     The source blend mode. This only applies if transparency is enabled.
-        /// @param destinationBlendMode
-        ///     The destination blend mode. This only applies if transparency is enabled.
-        /// @param cullFace
-        ///     The face which should be called. This only applies if face culling is enabled.
-        /// @param emissiveColour
-        ///     The emissive colour.
-        /// @param ambientColour
-        ///     The ambient colour.
-        /// @param diffuseColour
-        ///     The diffuseColour.
-        /// @param specularColour
-        ///     The specularColour.
-        ///
-        RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
-                       bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour,
-                       const Colour& diffuseColour, const Colour& specularColour) noexcept;
-        
         /// @return The shader applied by this material.
         ///
         const RenderShader* GetRenderShader() const noexcept { return m_renderShader; }
@@ -147,6 +112,43 @@ namespace ChilliSource
         void SetExtraData(void* extraData) noexcept { m_extraData = extraData; }
         
     private:
+        friend class ForwardRenderMaterialGroupManager;
+        
+        /// Creates a new instance with the given material data.
+        ///
+        /// @param renderShader
+        ///     The shader applied by this material.
+        /// @param renderTextures
+        ///     The list of textures applied by this material.
+        /// @param isTransparencyEnabled
+        ///     Whether or not transparency is enabled.
+        /// @param isColourWriteEnabled
+        ///     Whether or not colour write is enabled.
+        /// @param isDepthWriteEnabled
+        ///     Whether or not depth write is enabled.
+        /// @param isDepthTestEnabled
+        ///     Whether or not the depth test will be performed.
+        /// @param isFaceCullingEnabled
+        ///     Whether or not face culling will be performed.
+        /// @param sourceBlendMode
+        ///     The source blend mode. This only applies if transparency is enabled.
+        /// @param destinationBlendMode
+        ///     The destination blend mode. This only applies if transparency is enabled.
+        /// @param cullFace
+        ///     The face which should be called. This only applies if face culling is enabled.
+        /// @param emissiveColour
+        ///     The emissive colour.
+        /// @param ambientColour
+        ///     The ambient colour.
+        /// @param diffuseColour
+        ///     The diffuseColour.
+        /// @param specularColour
+        ///     The specularColour.
+        ///
+        RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
+                       bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour,
+                       const Colour& diffuseColour, const Colour& specularColour) noexcept;
+        
         const RenderShader* m_renderShader;
         std::vector<const RenderTexture*> m_renderTextures;
         bool m_isTransparencyEnabled;

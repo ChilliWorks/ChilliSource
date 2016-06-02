@@ -88,15 +88,6 @@ namespace ChilliSource
             std::array<const RenderMaterial*, k_maxPasses> m_renderMaterials;
         };
         
-        /// Creates a new instance with the given collections of RenderMaterials.
-        ///
-        /// @param renderMaterials
-        ///     The list of all materials in the group.
-        /// @param collections
-        ///     The list of material collections.
-        ///
-        RenderMaterialGroup(std::vector<RenderMaterialUPtr> renderMaterials, const std::vector<Collection>& collections) noexcept;
-        
         /// Looks up the render material for the given vertex format and pass index.
         ///
         /// @param vertexFormat
@@ -116,6 +107,17 @@ namespace ChilliSource
         const std::vector<RenderMaterial*>& GetRenderMaterials() noexcept { return m_renderMaterialsRaw; }
         
     private:
+        friend class ForwardRenderMaterialGroupManager;
+        
+        /// Creates a new instance with the given collections of RenderMaterials.
+        ///
+        /// @param renderMaterials
+        ///     The list of all materials in the group.
+        /// @param collections
+        ///     The list of material collections.
+        ///
+        RenderMaterialGroup(std::vector<RenderMaterialUPtr> renderMaterials, const std::vector<Collection>& collections) noexcept;
+        
         std::vector<RenderMaterialUPtr> m_renderMaterials;
         std::vector<RenderMaterial*> m_renderMaterialsRaw;
         std::vector<Collection> m_collections;
