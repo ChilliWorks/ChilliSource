@@ -47,8 +47,9 @@ namespace ChilliSource
         
         /// Collection of sort functions for render pass objects
         ///
-        namespace RenderPassObjectSorter
+        class RenderPassObjectSorter
     	{
+        public:
             /// Sorts a collection of opaque RenderPassObjects based on if they share a material
             /// and then by z position (Front to back)
             ///
@@ -67,7 +68,7 @@ namespace ChilliSource
             ///     The list of render pass objects to sort
             ///
             static void TransparentSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
-    	}
+        };
     }
 }
 

@@ -189,8 +189,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         std::vector<TargetRenderPassGroup> ForwardRenderPassCompiler::CompileRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept
         {
-            u32 numTargets = k_targetRenderPassGroups;
-            std::vector<TargetRenderPassGroup> targetRenderPassGroups(numTargets);
+            std::vector<TargetRenderPassGroup> targetRenderPassGroups(k_targetRenderPassGroups);
             std::vector<Task> tasks;
             u32 nextPassIndex = 0;
             
@@ -201,14 +200,18 @@ namespace ChilliSource
             });
             
             //TODO:Shadows
+            outerTaskContext.ProcessChildTasks(tasks);
             
-            return std::vector<TargetRenderPassGroup>();
+            return targetRenderPassGroups;
         }
         //------------------------------------------------------------------------------
         TargetRenderPassGroup ForwardRenderPassCompiler::CompileMainRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept
         {
+            std::vector<CameraRenderPassGroup> cameraRenderPassGroup;
+            cameraRenderPassGroup.push_back(CompileSceneRenderPasses(outerTaskContext, renderFrame));
             //TODO::GUI
-            return TargetRenderPassGroup(CompileMainRenderPasses(outerTaskContext, renderFrame));
+            
+            return TargetRenderPassGroup(cameraRenderPassGroup);
         }
         //------------------------------------------------------------------------------
         CameraRenderPassGroup ForwardRenderPassCompiler::CompileSceneRenderPasses(const TaskContext& outerTaskContext, const RenderFrame& renderFrame) noexcept

@@ -30,37 +30,12 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        namespace RenderPassObjectSorter
-        {
         //------------------------------------------------------------------------------
-            void OpaqueSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept
+        void RenderPassObjectSorter::OpaqueSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept
+        {
+            std::sort(renderPassObjects.begin(), renderPassObjects.end(), [&camera](const RenderPassObject& a, const RenderPassObject& b)
             {
-                std::sort(renderPassObjects.begin(), renderPassObjects.end(), [&camera](const RenderPassObject& a, const RenderPassObject& b)
-                {
-                    if (a.GetRenderMaterial() == b.GetRenderMaterial())
-                    {
-                        Matrix4 wvpA = a.GetWorldMatrix() * camera.GetViewProjectionMatrix();
-                        Matrix4 wvpB = b.GetWorldMatrix() * camera.GetViewProjectionMatrix();
-                        
-                        if (wvpA.GetTranslation().z == wvpB.GetTranslation().z)
-                        {
-                            return (a.GetRenderMesh() < b.GetRenderMesh());
-                        }
-                        else
-                        {
-                            return (wvpA.GetTranslation().z > wvpB.GetTranslation().z);
-                        }
-                    }
-                    else
-                    {
-                        return (a.GetRenderMaterial() < b.GetRenderMaterial());
-                    }
-                });
-            }
-            //------------------------------------------------------------------------------
-            void TransparentSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept
-            {
-                std::sort(renderPassObjects.begin(), renderPassObjects.end(), [&camera](const RenderPassObject& a, const RenderPassObject& b)
+                if (a.GetRenderMaterial() == b.GetRenderMaterial())
                 {
                     Matrix4 wvpA = a.GetWorldMatrix() * camera.GetViewProjectionMatrix();
                     Matrix4 wvpB = b.GetWorldMatrix() * camera.GetViewProjectionMatrix();
@@ -71,10 +46,32 @@ namespace ChilliSource
                     }
                     else
                     {
-                        return (wvpA.GetTranslation().z < wvpB.GetTranslation().z);
+                        return (wvpA.GetTranslation().z > wvpB.GetTranslation().z);
                     }
-                });
-            }
+                }
+                else
+                {
+                    return (a.GetRenderMaterial() < b.GetRenderMaterial());
+                }
+            });
+        }
+        //------------------------------------------------------------------------------
+        void RenderPassObjectSorter::TransparentSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept
+        {
+            std::sort(renderPassObjects.begin(), renderPassObjects.end(), [&camera](const RenderPassObject& a, const RenderPassObject& b)
+            {
+                Matrix4 wvpA = a.GetWorldMatrix() * camera.GetViewProjectionMatrix();
+                Matrix4 wvpB = b.GetWorldMatrix() * camera.GetViewProjectionMatrix();
+                
+                if (wvpA.GetTranslation().z == wvpB.GetTranslation().z)
+                {
+                    return (a.GetRenderMesh() < b.GetRenderMesh());
+                }
+                else
+                {
+                    return (wvpA.GetTranslation().z < wvpB.GetTranslation().z);
+                }
+            });
         }
     }
 } 
