@@ -346,6 +346,8 @@ namespace ChilliSource
         
         if (!m_isCacheValid || !m_isVariableCacheValid || !m_renderMaterialGroup)
         {
+            DestroyRenderMaterialGroup();
+            
             //TODO: Handle variables
             
             m_isCacheValid = true;
@@ -371,6 +373,7 @@ namespace ChilliSource
         CS_ASSERT(m_textures.size() == 1, "Unlit materials must have one texture.");
         
         auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
+        CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.")
         
         auto renderTexture = m_textures[0]->GetRenderTexture();
         return renderMaterialGroupManager->CreateUnlitRenderMaterialGroup(renderTexture, m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled,
@@ -389,9 +392,30 @@ namespace ChilliSource
         CS_ASSERT(m_cullFace == CullFace::k_back, "Blinn materials must use back-face culling.");
         
         auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
+        CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.")
         
         auto renderTexture = m_textures[0]->GetRenderTexture();
         return renderMaterialGroupManager->CreateBlinnRenderMaterialGroup(renderTexture, m_emissive, m_ambient, m_diffuse, m_specular);
+    }
+    
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    void Material::DestroyRenderMaterialGroup() const noexcept
+    {
+        if (m_renderMaterialGroup)
+        {
+            auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
+            CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.");
+            
+            renderMaterialGroupManager->DestroyRenderMaterialGroup(m_renderMaterialGroup);
+            m_renderMaterialGroup = nullptr;
+        }
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    Material::~Material() noexcept
+    {
+        DestroyRenderMaterialGroup();
     }
 }
 

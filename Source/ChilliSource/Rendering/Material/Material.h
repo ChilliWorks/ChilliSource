@@ -380,6 +380,8 @@ namespace ChilliSource
         //-----------------------------------------------------------
         const RenderMaterialGroup* GetRenderMaterialGroup() const noexcept;
         
+        ~Material() noexcept;
+        
         //TODO: Make private when we rework the render system
         std::unordered_map<std::string, f32> m_floatVars;
         std::unordered_map<std::string, Vector2> m_vec2Vars;
@@ -426,6 +428,12 @@ namespace ChilliSource
         /// @return The RenderMaterialGroup.
         //----------------------------------------------------------
         const RenderMaterialGroup* CreateBlinnRenderMaterialGroup() const;
+        //----------------------------------------------------------
+        /// Destroys the render material group if there is one.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------
+        void DestroyRenderMaterialGroup() const noexcept;
         
         std::vector<TextureCSPtr> m_textures;
         

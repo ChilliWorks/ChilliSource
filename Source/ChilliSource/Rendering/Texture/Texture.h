@@ -117,6 +117,10 @@ namespace ChilliSource
         ///
         static TextureUPtr Create() noexcept;
         
+        /// Destroys the render texture if one currently exists.
+        ///
+        void DestroyRenderTexture() noexcept;
+        
         Texture() = default;
         
         const RenderTexture* m_renderTexture = nullptr;

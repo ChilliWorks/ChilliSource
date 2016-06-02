@@ -98,6 +98,8 @@ namespace ChilliSource
         ///
         void DestroyRenderTexture(const RenderTexture* renderTexture) noexcept;
         
+        ~RenderTextureManager() noexcept;
+        
     private:
         friend class Application;
         

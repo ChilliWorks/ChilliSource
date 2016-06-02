@@ -115,6 +115,8 @@ namespace ChilliSource
         ///
         const RenderMesh* GetRenderMesh(u32 index) const noexcept;
         
+        ~Model() noexcept;
+        
     private:
         friend class ResourcePool;
         friend class CSModelProvider;
@@ -126,6 +128,10 @@ namespace ChilliSource
         /// @return The new instance of the resource.
         ///
         static ModelUPtr Create() noexcept;
+        
+        /// Destroys the RenderMeshes if there currently are any
+        ///
+        void DestroyRenderMeshes() noexcept;
         
         Model() = default;
 

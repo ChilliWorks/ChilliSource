@@ -100,6 +100,8 @@ namespace ChilliSource
         ///
         void DestroyRenderMesh(const RenderMesh* renderMesh) noexcept;
         
+        ~RenderMeshManager() noexcept;
+        
     private:
         friend class Application;
         

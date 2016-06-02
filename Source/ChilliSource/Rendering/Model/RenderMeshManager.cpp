@@ -105,4 +105,10 @@ namespace ChilliSource
         }
         m_pendingUnloadCommands.clear();
     }
+    
+    //------------------------------------------------------------------------------
+    RenderMeshManager::~RenderMeshManager() noexcept
+    {
+        CS_ASSERT(m_renderMeshes.size() == 0, "Render meshes have not been correctly released.");
+    }
 }

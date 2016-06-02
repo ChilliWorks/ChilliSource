@@ -111,7 +111,7 @@ namespace ChilliSource
         ///
         void DestroyRenderMaterialGroup(const RenderMaterialGroup* renderMaterial) noexcept;
         
-        virtual ~RenderMaterialGroupManager() noexcept {}
+        virtual ~RenderMaterialGroupManager() noexcept;
         
     protected:
         RenderMaterialGroupManager() = default;

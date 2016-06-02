@@ -100,4 +100,10 @@ namespace ChilliSource
         }
         m_pendingUnloadCommands.clear();
     }
+    
+    //------------------------------------------------------------------------------
+    RenderShaderManager::~RenderShaderManager() noexcept
+    {
+        CS_ASSERT(m_renderShaders.size() == 0, "Render shaders have not correctly been released.");
+    }
 }

@@ -52,6 +52,8 @@ namespace ChilliSource
     {
         //TODO: correctly handle bounding sphere.
         
+        DestroyRenderMeshes();
+        
         m_aabb = modelDesc.GetAABB();
         m_skeleton = Skeleton(modelDesc.GetSkeletonDesc());
         
@@ -141,5 +143,22 @@ namespace ChilliSource
         CS_ASSERT(index < m_meshNames.size(), "Index is out of bounds.");
         
         return m_renderMeshes[index];
+    }
+    
+    //------------------------------------------------------------------------------
+    void Model::DestroyRenderMeshes() noexcept
+    {
+        auto renderMeshManager = Application::Get()->GetSystem<RenderMeshManager>();
+        for (const auto& renderMesh : m_renderMeshes)
+        {
+            renderMeshManager->DestroyRenderMesh(renderMesh);
+        }
+        m_renderMeshes.clear();
+    }
+    
+    //------------------------------------------------------------------------------
+    Model::~Model() noexcept
+    {
+        DestroyRenderMeshes();
     }
 }

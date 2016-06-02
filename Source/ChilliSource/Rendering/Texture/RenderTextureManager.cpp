@@ -101,4 +101,10 @@ namespace ChilliSource
         }
         m_pendingUnloadCommands.clear();
     }
+    
+    //------------------------------------------------------------------------------
+    RenderTextureManager::~RenderTextureManager() noexcept
+    {
+        CS_ASSERT(m_renderTextures.size() == 0, "Render textures have not been correctly released.");
+    }
 }

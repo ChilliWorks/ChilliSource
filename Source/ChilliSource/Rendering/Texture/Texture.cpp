@@ -47,15 +47,11 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Texture::Build(DataUPtr textureData, u32 textureDataSize, const TextureDesc& textureDesc) noexcept
     {
+        DestroyRenderTexture();
+        
         auto renderTextureManager = Application::Get()->GetSystem<RenderTextureManager>();
         CS_ASSERT(renderTextureManager, "RenderTextureManager must exist.");
-        
-        if (m_renderTexture)
-        {
-            renderTextureManager->DestroyRenderTexture(m_renderTexture);
-            m_renderTexture = nullptr;
-        }
-        
+
         m_renderTexture = renderTextureManager->CreateRenderTexture(std::move(textureData), textureDataSize, textureDesc.GetDimensions(), textureDesc.GetImageFormat(), textureDesc.GetImageCompression(),
                                                                     textureDesc.GetFilterMode(), textureDesc.GetWrapModeS(), textureDesc.GetWrapModeT(), textureDesc.IsMipmappingEnabled());
         
@@ -145,7 +141,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    Texture::~Texture() noexcept
+    void Texture::DestroyRenderTexture() noexcept
     {
         if (m_renderTexture)
         {
@@ -155,5 +151,11 @@ namespace ChilliSource
             renderTextureManager->DestroyRenderTexture(m_renderTexture);
             m_renderTexture = nullptr;
         }
+    }
+    
+    //------------------------------------------------------------------------------
+    Texture::~Texture() noexcept
+    {
+        DestroyRenderTexture();
     }
 }
