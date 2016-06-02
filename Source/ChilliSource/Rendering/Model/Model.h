@@ -62,19 +62,19 @@ namespace ChilliSource
         ///
         void Build(ModelDesc modelDesc) noexcept;
         
-        /// This must not be called until the model is build and loaded.
+        /// This must not be called until the model is built and loaded.
         ///
         /// @return The local space axis-aligned bounding box of the Model.
         ///
         const AABB& GetAABB() const noexcept;
         
-        /// This must not be called until the model is build and loaded.
+        /// This must not be called until the model is built and loaded.
         ///
         /// @return The skeleton.
         ///
         const Skeleton& GetSkeleton() const noexcept;
         
-        /// This must not be called until the model is build and loaded.
+        /// This must not be called until the model is built and loaded.
         ///
         /// @return The number of meshes that make up the model.
         ///
@@ -83,7 +83,7 @@ namespace ChilliSource
         /// Looks up the name of the mesh with the given index. If the index is out of bounds, this will
         /// assert.
         ///
-        /// This must not be called until the model is build and loaded.
+        /// This must not be called until the model is built and loaded.
         ///
         /// @param index
         ///     The index of the mesh.
@@ -94,7 +94,7 @@ namespace ChilliSource
         
         /// Looks up the index of the mesh with the given name. If the name doesn't exist, this will assert.
         ///
-        /// This must not be called until the model is build and loaded.
+        /// This must not be called until the model is built and loaded.
         ///
         /// @param name
         ///     The name of the mesh.
@@ -106,7 +106,7 @@ namespace ChilliSource
         /// Looks up the RenderMesh of the mesh with the given index. If the index is out of bounds, this will
         /// assert.
         ///
-        /// This must not be called until the model is build and loaded.
+        /// This must not be called until the model is built and loaded.
         ///
         /// @param index
         ///     The index of the mesh.
