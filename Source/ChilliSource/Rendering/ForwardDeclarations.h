@@ -55,7 +55,6 @@ namespace ChilliSource
     enum class DepthTestComparison;
     enum class ForwardRenderPasses;
     enum class HorizontalTextJustification;
-    enum class ShaderPass;
     enum class SizePolicy;
     enum class SurfaceFormat;
     enum class VerticalTextJustification;

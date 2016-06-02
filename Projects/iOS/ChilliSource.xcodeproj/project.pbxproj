@@ -678,7 +678,6 @@
 		8158F3551C89D2AD00B13109 /* RenderComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderComponentFactory.cpp; sourceTree = "<group>"; };
 		8158F3561C89D2AD00B13109 /* RenderComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderComponentFactory.h; sourceTree = "<group>"; };
 		8158F35D1C89D2AD00B13109 /* RenderTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTarget.h; sourceTree = "<group>"; };
-		8158F35E1C89D2AD00B13109 /* ShaderPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderPass.h; sourceTree = "<group>"; };
 		8158F35F1C89D2AD00B13109 /* SurfaceFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurfaceFormat.h; sourceTree = "<group>"; };
 		8158F3601C89D2AD00B13109 /* VertexFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VertexFormat.cpp; sourceTree = "<group>"; };
 		8158F3611C89D2AD00B13109 /* VertexFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexFormat.h; sourceTree = "<group>"; };
@@ -1930,7 +1929,6 @@
 				81A125EF1CF46A840010853A /* RenderSnapshot.cpp */,
 				81A125F01CF46A840010853A /* RenderSnapshot.h */,
 				8158F35D1C89D2AD00B13109 /* RenderTarget.h */,
-				8158F35E1C89D2AD00B13109 /* ShaderPass.h */,
 				81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */,
 				81E3AA971CE241F600DF7B4E /* SizePolicy.h */,
 				8158F35F1C89D2AD00B13109 /* SurfaceFormat.h */,

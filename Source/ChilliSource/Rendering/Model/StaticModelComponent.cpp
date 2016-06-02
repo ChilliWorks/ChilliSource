@@ -313,19 +313,18 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void StaticModelComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
     {
-        //TODO: Re-add once materials have been set up.
-//        CS_ASSERT(mpModel, "Static model component should not be in scene without a model set.");
-//        CS_ASSERT(mpModel->GetNumMeshes() == mMaterials.size(), "Invalid number of materials.");
-//        
-//        for (u32 index = 0; index < mpModel->GetNumMeshes(); ++index)
-//        {
-//            CS_ASSERT(mMaterials[index], "Material cannot be null.");
-//            
-//            auto renderMaterialGroup = mMaterials[index]->GetRenderMaterialGroup();
-//            auto renderMesh = mpModel->GetRenderMesh(index);
-//            
-//            in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform()));
-//        }
+        CS_ASSERT(m_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(m_model->GetNumMeshes() == m_materials.size(), "Invalid number of materials.");
+        
+        for (u32 index = 0; index < m_model->GetNumMeshes(); ++index)
+        {
+            CS_ASSERT(m_materials[index]->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+            
+            auto renderMaterialGroup = m_materials[index]->GetRenderMaterialGroup();
+            auto renderMesh = m_model->GetRenderMesh(index);
+            
+            in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform()));
+        }
     }
     
     //------------------------------------------------------------------------------

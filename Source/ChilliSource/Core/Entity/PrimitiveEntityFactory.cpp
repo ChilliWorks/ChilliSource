@@ -100,7 +100,8 @@ namespace ChilliSource
         {
             auto texture = m_resourcePool->LoadResource<Texture>(StorageLocation::k_chilliSource, "Textures/Blank.csimage");
             
-            auto mutableMaterial = m_materialFactory->CreateStaticBlinnShadowed(materialName, texture);
+            //TODO: Change back to creating shadowed once that is supported in the new renderer.
+            auto mutableMaterial = m_materialFactory->CreateStaticBlinn(materialName, texture);
             mutableMaterial->SetEmissive(Colour::k_black);
             mutableMaterial->SetAmbient(in_colour);
             mutableMaterial->SetDiffuse(in_colour);
