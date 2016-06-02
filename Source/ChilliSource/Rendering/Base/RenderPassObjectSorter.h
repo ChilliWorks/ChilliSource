@@ -37,10 +37,8 @@ namespace ChilliSource
 {
     /// Collection of sort functions for render pass objects
     ///
-    class RenderPassObjectSorter
+    namespace RenderPassObjectSorter
     {
-    public:
-        
         /// Defines a delegate to allow for custom render sorting
         ///
         /// @param camera
@@ -59,7 +57,7 @@ namespace ChilliSource
         /// @param renderPassObjects
         ///     The list of render pass objects to sort
         ///
-        static void OpaqueSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        void OpaqueSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
         
         /// Sorts a collection of transparent RenderPassObjects based on their z position (Back to front)
         ///
@@ -68,7 +66,7 @@ namespace ChilliSource
         /// @param renderPassObjects
         ///     The list of render pass objects to sort
         ///
-        static void TransparentSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        void TransparentSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
     };
 }
 
