@@ -30,6 +30,7 @@
 #include <ChilliSource/Rendering/Base/RenderPassObject.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
+#include <functional>
 #include <vector>
 
 namespace ChilliSource

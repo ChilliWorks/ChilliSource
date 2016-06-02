@@ -123,6 +123,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CameraRenderPassGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
@@ -133,6 +134,8 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPass.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObject.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\TargetRenderPassGroup.cpp" />
@@ -151,6 +154,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderAmbientLight.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderDirectionalLight.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderPointLight.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\ForwardRenderMaterialGroupManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\Material.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.cpp" />
@@ -506,6 +510,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderPassCompiler.h" />
@@ -518,6 +523,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPass.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObject.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ShaderPass.h" />
@@ -544,6 +551,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderDirectionalLight.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderPointLight.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\ForwardRenderMaterialGroupManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\Material.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h" />

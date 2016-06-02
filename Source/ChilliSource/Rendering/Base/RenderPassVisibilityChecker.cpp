@@ -53,7 +53,7 @@ namespace ChilliSource
                 std::mutex visibleObjectsMutex;
                 std::vector<RenderPassObject> visibleRenderPassObjects;
                 
-                u32 numTasks = 1 + (renderPassObjects.size() / k_objectsPerVisibilityBatch);
+                u32 numTasks = 1 + (u32(renderPassObjects.size()) / k_objectsPerVisibilityBatch);
                 std::vector<Task> tasks;
                 for (u32 taskIndex = 0; taskIndex < numTasks; ++taskIndex)
                 {
