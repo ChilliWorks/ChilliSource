@@ -22,16 +22,36 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Camera/RenderCamera.h>
+#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERPASSUTILS_H_
+#define _CHILLISOURCE_RENDERING_BASE_RENDERPASSUTILS_H_
+
+#include <ChilliSource/ChilliSource.h>
+
+#include <ChilliSource/Rendering/Base/RenderPass.h>
+#include <ChilliSource/Rendering/Base/RenderPassObjectSorter.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    RenderCamera::RenderCamera(const Integer2& viewportResolution, const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept
-    : m_viewportResolution(viewportResolution), m_worldMatrix(worldMatrix), m_projectionMatrix(projectionMatrix)
+    /// Collection of functions for render pass objects
+    ///
+    namespace RenderPassVisibilityChecker
     {
-        m_viewMatrix = Matrix4::Inverse(m_worldMatrix);
-        m_viewProjectionMatrix = m_viewMatrix * m_projectionMatrix;
-        m_frustrum.CalculateClippingPlanes(m_viewProjectionMatrix);
+        /// Parses a collection of RenderPassObjects and generates a list of them that are considered
+        /// to be visible and within the passed camera's view frustrum.
+        ///
+        /// @param taskContext
+        ///     Context to manage any spawned tasks
+        /// @param camera
+        ///     The camera who will decide the objects visibility
+        /// @param renderPassObjects
+        ///     The collection of RenderPassObjects whos visibility is to be checked
+        ///
+        /// @return Collection of visible RenderPassObjects
+        ///
+        std::vector<RenderPassObject> CalculateVisibleObjects(const TaskContext& taskContext, const RenderCamera& camera, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
     }
 }
+
+#endif

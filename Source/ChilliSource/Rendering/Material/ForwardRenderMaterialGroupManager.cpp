@@ -52,7 +52,7 @@ namespace ChilliSource
                                                                   isFaceCullingEnabled, sourceBlendMode, destinationBlendMode, cullFace, emissiveColour, ambientColour, Colour::k_black, Colour::k_black));
         
         //TODO: Add support for other standard vertex formats.
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> statisMeshRenderMaterials;
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> statisMeshRenderMaterials {};
         
         if (isTransparencyEnabled)
         {
@@ -88,7 +88,7 @@ namespace ChilliSource
                                                                              CullFace::k_back, Colour::k_black, Colour::k_black, diffuseColour, specularColour));
         
         //TODO: Add support for other standard vertex formats.
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> statisMeshRenderMaterials;
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> statisMeshRenderMaterials {};
         statisMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticMeshBaseRM.get();
         statisMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticMeshDirectionalRM.get();
         

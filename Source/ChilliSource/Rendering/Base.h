@@ -37,6 +37,7 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/DepthTestComparison.h>
+#include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/MeshBatch.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>

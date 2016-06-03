@@ -31,30 +31,29 @@
 
 namespace ChilliSource
 {
-    namespace Rendering
+    /// Provides the ability to group a number of camera render pass groups based on
+    /// them sharing the same render target
+    ///
+    /// This is immutable and therefore thread-safe
+    ///
+    class TargetRenderPassGroup final
     {
-        /// Provides the ability to group a number of camera render pass groups based on
-        /// them sharing the same render target
+    public:
+        
+        TargetRenderPassGroup() = default;
+        
+        /// @param cameraRenderPassGroups
+        ///     The list of camera render pass groups to render to the target
         ///
-        /// This is immutable and therefore thread-safe
+        TargetRenderPassGroup(const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept;
+        
+        /// @return The list of render camera groups
         ///
-        class TargetRenderPassGroup final
-        {
-        public:
-            
-            /// @param cameraRenderPassGroups
-            ///     The list of camera render pass groups to render to the target
-            ///
-            TargetRenderPassGroup(const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept;
-            
-            /// @return The list of render camera groups
-            ///
-            const std::vector<CameraRenderPassGroup>& GetRenderCameraGroups() const noexcept { return m_renderCameraGroups; }
-            
-        private:
-            std::vector<CameraRenderPassGroup> m_renderCameraGroups;
-        };
-    }
+        const std::vector<CameraRenderPassGroup>& GetRenderCameraGroups() const noexcept { return m_renderCameraGroups; }
+        
+    private:
+        std::vector<CameraRenderPassGroup> m_renderCameraGroups;
+    };
 }
 
 #endif

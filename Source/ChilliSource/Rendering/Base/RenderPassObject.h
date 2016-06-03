@@ -31,46 +31,43 @@
 
 namespace ChilliSource
 {
-    namespace Rendering
+    /// A standard-layout container for data which the renderer requires that relates to a single render
+    /// pass for a single object in the scene, such as mesh data, material and transform data.
+    /// While a RenderObject contains a material group that has materials for all render passes, this
+    /// only contains a single material for the pass this object is be created for.
+    ///
+    /// This is immutable and therefore thread-safe
+    ///
+    class RenderPassObject final
     {
-        /// A standard-layout container for data which the renderer requires that relates to a single render
-        /// pass for a single object in the scene, such as mesh data, material and transform data.
-        /// While a RenderObject contains a material group that has materials for all render passes, this
-        /// only contains a single material for the pass this object is be created for.
+    public:
+        
+        /// @param renderMaterial
+        ///     The material to use
+        /// @param renderMesh
+        ///     The mesh to render
+        /// @param worldMatrix
+        ///     The transform to render at
         ///
-        /// This is immutable and therefore thread-safe
+        RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept;
+        
+        /// @return The RenderMaterial to use
         ///
-        class RenderPassObject final
-        {
-        public:
-            
-            /// @param renderMaterial
-            ///     The material to use
-            /// @param renderMesh
-            ///     The mesh to render
-            /// @param worldMatrix
-            ///     The transform to render at
-            ///
-            RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept;
-            
-            /// @return The RenderMaterial to use
-            ///
-            const RenderMaterial* GetRenderMaterial() const noexcept { return m_renderMaterial; }
-            
-            /// @return The RenderMesh to use
-            ///
-            const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
-            
-            /// @return The WorldMatrix to use
-            ///
-            const Matrix4& GetWorldMatrix() const noexcept { return m_worldMatrix; }
-            
-        private:
-            const RenderMaterial* m_renderMaterial;
-            const RenderMesh* m_renderMesh;
-            Matrix4 m_worldMatrix;
-        };
-    }
+        const RenderMaterial* GetRenderMaterial() const noexcept { return m_renderMaterial; }
+        
+        /// @return The RenderMesh to use
+        ///
+        const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
+        
+        /// @return The WorldMatrix to use
+        ///
+        const Matrix4& GetWorldMatrix() const noexcept { return m_worldMatrix; }
+        
+    private:
+        const RenderMaterial* m_renderMaterial;
+        const RenderMesh* m_renderMesh;
+        Matrix4 m_worldMatrix;
+    };
 }
 
 #endif

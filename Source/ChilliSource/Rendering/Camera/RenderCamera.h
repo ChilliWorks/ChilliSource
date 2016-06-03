@@ -27,6 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
 namespace ChilliSource
 {
@@ -68,12 +69,17 @@ namespace ChilliSource
         ///
         const Matrix4& GetViewProjectionMatrix() const noexcept { return m_viewProjectionMatrix; }
         
+        /// @return The view frustrum of the camera.
+        ///
+        const Frustum& GetFrustrum() const noexcept { return m_frustrum; }
+        
     private:
         Integer2 m_viewportResolution;
         Matrix4 m_worldMatrix;
         Matrix4 m_projectionMatrix;
         Matrix4 m_viewMatrix;
         Matrix4 m_viewProjectionMatrix;
+        Frustum m_frustrum;
     };
 }
 

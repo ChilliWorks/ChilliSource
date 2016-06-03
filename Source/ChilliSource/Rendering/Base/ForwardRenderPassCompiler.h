@@ -22,23 +22,26 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_IRENDERPASSCOMPILER_H_
-#define _CHILLISOURCE_RENDERING_BASE_IRENDERPASSCOMPILER_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_FORWARDRENDERPASSCOMPILER_H_
+#define _CHILLISOURCE_RENDERING_BASE_FORWARDRENDERPASSCOMPILER_H_
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
+#include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 
 namespace ChilliSource
 {
-    /// Provides an interface for a render compiler. A render compiler breaks the RenderFrame down
-    /// into a series of RenderPasses ensuring each pass only contains the relevant objects by
-    /// filtering for material type and visibility. Objects within a render pass are also sorted
-    /// into an appropriate order for the type of pass. These render passes are contained by a
-    /// TargetRenderPassGroup, which groups passes based on the framebuffer they are targetting.
+    /// Compiles the RenderPasses required when forward rendering. See ForwardRenderPasses.h for more
+    /// information on these passes.
+    ///
+    /// This breaks the RenderFrame down into a series of RenderPasses ensuring each pass only contains
+    /// the relevant objects by filtering for material type and visibility. Objects within a render pass
+    /// are also sorted into an appropriate order for the type of pass. These render passes are contained
+    /// by a TargetRenderPassGroup, which groups passes based on the framebuffer they are targetting.
     /// All this is processed in a series of background tasks.
     ///
-    class IRenderPassCompiler
+    class ForwardRenderPassCompiler final : public IRenderPassCompiler
     {
     public:
         
@@ -51,10 +54,8 @@ namespace ChilliSource
         ///
         /// @return The list of target render pass groups
         ///
-        virtual std::vector<TargetRenderPassGroup> CompileTargetRenderPassGroups(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept = 0;
-        
-        virtual ~IRenderPassCompiler() noexcept {};
-        
+        std::vector<TargetRenderPassGroup> CompileTargetRenderPassGroups(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept override;
     };
 }
+
 #endif

@@ -291,6 +291,9 @@
 		818BC49D1CFDE6D9001DC484 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4961CFDE6D9001DC484 /* RenderPass.cpp */; };
 		818BC49E1CFDE6D9001DC484 /* RenderPassObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4981CFDE6D9001DC484 /* RenderPassObject.cpp */; };
 		818BC49F1CFDE6D9001DC484 /* TargetRenderPassGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC49A1CFDE6D9001DC484 /* TargetRenderPassGroup.cpp */; };
+		818BC4A61CFDEE3C001DC484 /* ForwardRenderPassCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4A01CFDEE3C001DC484 /* ForwardRenderPassCompiler.cpp */; };
+		818BC4A71CFDEE3C001DC484 /* RenderPassVisibilityChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4A21CFDEE3C001DC484 /* RenderPassVisibilityChecker.cpp */; };
+		818BC4A81CFDEE3C001DC484 /* RenderPassObjectSorter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4A41CFDEE3C001DC484 /* RenderPassObjectSorter.cpp */; };
 		81A125DB1CF44E490010853A /* RenderCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125D91CF44E490010853A /* RenderCamera.cpp */; };
 		81A125DE1CF454200010853A /* RenderAmbientLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125DC1CF454200010853A /* RenderAmbientLight.cpp */; };
 		81A125E11CF456340010853A /* RenderDirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125DF1CF456340010853A /* RenderDirectionalLight.cpp */; };
@@ -1063,6 +1066,12 @@
 		818BC4991CFDE6D9001DC484 /* RenderPassObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPassObject.h; sourceTree = "<group>"; };
 		818BC49A1CFDE6D9001DC484 /* TargetRenderPassGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargetRenderPassGroup.cpp; sourceTree = "<group>"; };
 		818BC49B1CFDE6D9001DC484 /* TargetRenderPassGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetRenderPassGroup.h; sourceTree = "<group>"; };
+		818BC4A01CFDEE3C001DC484 /* ForwardRenderPassCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ForwardRenderPassCompiler.cpp; sourceTree = "<group>"; };
+		818BC4A11CFDEE3C001DC484 /* ForwardRenderPassCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardRenderPassCompiler.h; sourceTree = "<group>"; };
+		818BC4A21CFDEE3C001DC484 /* RenderPassVisibilityChecker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPassVisibilityChecker.cpp; sourceTree = "<group>"; };
+		818BC4A31CFDEE3C001DC484 /* RenderPassVisibilityChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPassVisibilityChecker.h; sourceTree = "<group>"; };
+		818BC4A41CFDEE3C001DC484 /* RenderPassObjectSorter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPassObjectSorter.cpp; sourceTree = "<group>"; };
+		818BC4A51CFDEE3C001DC484 /* RenderPassObjectSorter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPassObjectSorter.h; sourceTree = "<group>"; };
 		81A125D91CF44E490010853A /* RenderCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCamera.cpp; sourceTree = "<group>"; };
 		81A125DA1CF44E490010853A /* RenderCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCamera.h; sourceTree = "<group>"; };
 		81A125DC1CF454200010853A /* RenderAmbientLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderAmbientLight.cpp; sourceTree = "<group>"; };
@@ -1924,6 +1933,8 @@
 				8158F3461C89D2AD00B13109 /* CanvasRenderer.h */,
 				8158F3471C89D2AD00B13109 /* CullFace.h */,
 				8158F34A1C89D2AD00B13109 /* DepthTestComparison.h */,
+				818BC4A01CFDEE3C001DC484 /* ForwardRenderPassCompiler.cpp */,
+				818BC4A11CFDEE3C001DC484 /* ForwardRenderPassCompiler.h */,
 				81A55E001CFD8FFF00C9F0D6 /* ForwardRenderPasses.h */,
 				8158F34B1C89D2AD00B13109 /* HorizontalTextJustification.cpp */,
 				8158F34C1C89D2AD00B13109 /* HorizontalTextJustification.h */,
@@ -1946,8 +1957,12 @@
 				818BC4971CFDE6D9001DC484 /* RenderPass.h */,
 				818BC4981CFDE6D9001DC484 /* RenderPassObject.cpp */,
 				818BC4991CFDE6D9001DC484 /* RenderPassObject.h */,
+				818BC4A21CFDEE3C001DC484 /* RenderPassVisibilityChecker.cpp */,
+				818BC4A31CFDEE3C001DC484 /* RenderPassVisibilityChecker.h */,
 				81A125EF1CF46A840010853A /* RenderSnapshot.cpp */,
 				81A125F01CF46A840010853A /* RenderSnapshot.h */,
+				818BC4A41CFDEE3C001DC484 /* RenderPassObjectSorter.cpp */,
+				818BC4A51CFDEE3C001DC484 /* RenderPassObjectSorter.h */,
 				8158F35D1C89D2AD00B13109 /* RenderTarget.h */,
 				81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */,
 				81E3AA971CE241F600DF7B4E /* SizePolicy.h */,
@@ -3254,6 +3269,7 @@
 				8158F6A71C89D2AD00B13109 /* HttpRequestSystem.cpp in Sources */,
 				8158F7221C89D2AD00B13109 /* UILayout.cpp in Sources */,
 				8158F7D01C89D2AD00B13109 /* DeviceButtonSystem.mm in Sources */,
+				818BC4A71CFDEE3C001DC484 /* RenderPassVisibilityChecker.cpp in Sources */,
 				8158F66B1C89D2AD00B13109 /* CSBinaryInputStream.cpp in Sources */,
 				81A125EE1CF464480010853A /* LoadTextureRenderCommand.cpp in Sources */,
 				8158F6641C89D2AD00B13109 /* Component.cpp in Sources */,
@@ -3401,6 +3417,7 @@
 				8158F7DD1C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */,
 				8158F67B1C89D2AD00B13109 /* MathUtils.cpp in Sources */,
 				8158F6601C89D2AD00B13109 /* HashMD5.cpp in Sources */,
+				818BC4A61CFDEE3C001DC484 /* ForwardRenderPassCompiler.cpp in Sources */,
 				8158F6611C89D2AD00B13109 /* HashSHA1.cpp in Sources */,
 				81BF7B8F1CF89B4700DBC80B /* RenderMaterial.cpp in Sources */,
 				8164A4691CB69C86002A95B0 /* MainThreadTaskPool.cpp in Sources */,
@@ -3421,6 +3438,7 @@
 				8158F7CA1C89D2AD00B13109 /* RNGContainer.mm in Sources */,
 				8158F7081C89D2AD00B13109 /* PropertyTypes.cpp in Sources */,
 				8158F6511C89D2AD00B13109 /* ByteColour.cpp in Sources */,
+				818BC4A81CFDEE3C001DC484 /* RenderPassObjectSorter.cpp in Sources */,
 				8158F6FE1C89D2AD00B13109 /* TextureResourceOptions.cpp in Sources */,
 				8158F7CE1C89D2AD00B13109 /* NSStringUtils.mm in Sources */,
 				8158F7CC1C89D2AD00B13109 /* NSNotificationAdapter.mm in Sources */,
