@@ -43,23 +43,6 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(RenderMesh);
         
-        /// Creates a new instance with the given mesh description data.
-        ///
-        /// @param polygonType
-        ///     The type of polygon the mesh uses.
-        /// @param vertexFormat
-        ///     The vertex format.
-        /// @param indexType
-        ///     The type of index.
-        /// @param numVertices
-        ///     The number of vertices in the mesh. The maximum number is determined by the type of index.
-        /// @param numIndices
-        ///     The number of indices in the mesh.
-        /// @param boundingSphere
-        ///     A local space sphere enclosing the mesh.
-        ///
-        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept;
-        
         /// @return The type of polygon the mesh uses.
         ///
         PolygonType GetPolygonType() const noexcept { return m_polygonType; }
@@ -70,7 +53,7 @@ namespace ChilliSource
         
         /// @return The type of index.
         ///
-        IndexType GetIndexType() const noexcept { return m_indexType; }
+        IndexFormat GetIndexFormat() const noexcept { return m_indexFormat; }
         
         /// @return The number of vertices in the mesh. The maximum number is determined by the type of index.
         ///
@@ -98,9 +81,28 @@ namespace ChilliSource
         void SetExtraData(void* extraData) noexcept { m_extraData = extraData; }
         
     private:
+        friend class RenderMeshManager;
+        
+        /// Creates a new instance with the given mesh description data.
+        ///
+        /// @param polygonType
+        ///     The type of polygon the mesh uses.
+        /// @param vertexFormat
+        ///     The vertex format.
+        /// @param indexFormat
+        ///     The type of index.
+        /// @param numVertices
+        ///     The number of vertices in the mesh. The maximum number is determined by the type of index.
+        /// @param numIndices
+        ///     The number of indices in the mesh.
+        /// @param boundingSphere
+        ///     A local space sphere enclosing the mesh.
+        ///
+        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept;
+        
         PolygonType m_polygonType;
         VertexFormat m_vertexFormat;
-        IndexType m_indexType;
+        IndexFormat m_indexFormat;
         u32 m_numVertices;
         u32 m_numIndices;
         Sphere m_boundingSphere;

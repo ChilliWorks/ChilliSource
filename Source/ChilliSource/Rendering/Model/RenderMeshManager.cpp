@@ -45,10 +45,10 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    const RenderMesh* RenderMeshManager::CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+    const RenderMesh* RenderMeshManager::CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
                                                           std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
     {
-        RenderMeshUPtr renderMesh(new RenderMesh(polygonType, vertexFormat, indexType, numVertices, numIndices, boundingSphere));
+        RenderMeshUPtr renderMesh(new RenderMesh(polygonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere));
         auto rawRenderMesh = renderMesh.get();
         
         PendingLoadCommand loadCommand;
@@ -104,5 +104,11 @@ namespace ChilliSource
             postRenderCommandList->AddUnloadMeshCommand(std::move(unloadCommand));
         }
         m_pendingUnloadCommands.clear();
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderMeshManager::~RenderMeshManager() noexcept
+    {
+        CS_ASSERT(m_renderMeshes.size() == 0, "Render meshes have not been correctly released.");
     }
 }

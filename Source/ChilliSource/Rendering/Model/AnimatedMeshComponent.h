@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Model/Model.h>
 
 #include <functional>
 
@@ -60,7 +60,7 @@ namespace ChilliSource
     typedef std::function<void(AnimatedMeshComponent*)> AnimationLoopedDelegate;
     typedef Event<AnimationLoopedDelegate> AnimationLoopedEvent;
     //===============================================================
-    /// Animated Mesh component
+    /// Animated Model component
     ///
     /// An animated mesh component. This defines a 3D mesh that can
     /// be manipulated, textured and animated.
@@ -129,7 +129,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void SetMaterial(const MaterialCSPtr& inpMaterial);
         //-----------------------------------------------------------
-        /// Set Material For Sub Mesh
+        /// Set Material For Sub Model
         ///
         /// Set the material that one sub mesh will use.
         ///
@@ -138,7 +138,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex);
         //-----------------------------------------------------------
-        /// Set Material For Sub Mesh
+        /// Set Material For Sub Model
         ///
         /// Set the material that one sub mesh will use.
         ///
@@ -147,7 +147,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName);
         //-----------------------------------------------------------
-        /// Get Material Of Sub Mesh
+        /// Get Material Of Sub Model
         ///
         /// Get the material of a single sub mesh.
         ///
@@ -156,7 +156,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         const MaterialCSPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
         //-----------------------------------------------------------
-        /// Get Material Of Sub Mesh
+        /// Get Material Of Sub Model
         ///
         /// Get the material of a single sub mesh.
         ///
@@ -165,26 +165,26 @@ namespace ChilliSource
         //-----------------------------------------------------------
         MaterialCSPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
         //----------------------------------------------------------
-        /// Attach Mesh
+        /// Attach Model
         ///
         /// Attach a mesh to this component
-        /// @param Mesh object
+        /// @param Model object
         //----------------------------------------------------------
-        void AttachMesh(const MeshCSPtr& inpModel);
+        void SetModel(const ModelCSPtr& inpModel);
         //----------------------------------------------------------
-        /// Attach Mesh
+        /// Attach Model
         ///
         /// Attach a mesh to this component but uses the given 
         /// material
-        /// @param Mesh object
+        /// @param Model object
         //----------------------------------------------------------
-        void AttachMesh(const MeshCSPtr& inpModel, const MaterialCSPtr& inpMaterial);
+        void SetModel(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial);
         //----------------------------------------------------------
-        /// Get Mesh
+        /// Get Model
         ///
         /// @return The components internal mesh
         //----------------------------------------------------------
-        const MeshCSPtr& GetMesh() const;
+        const ModelCSPtr& GetModel() const;
         //----------------------------------------------------------
         /// Attach Animation
         ///
@@ -449,7 +449,7 @@ namespace ChilliSource
     private:
         typedef std::vector<std::pair<EntityWPtr, s32> > AttachedEntityList;
         AttachedEntityList maAttachedEntities;
-        MeshCSPtr mpModel;
+        ModelCSPtr mpModel;
         std::vector<MaterialCSPtr> mMaterials;
         SkinnedAnimationGroupSPtr mActiveAnimationGroup;
         SkinnedAnimationGroupSPtr mFadingAnimationGroup;

@@ -46,14 +46,10 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Shader::Build(const std::string& vertexShader, const std::string& fragmentShader) noexcept
     {
+        DestroyRenderShader();
+        
         auto renderShaderManager = Application::Get()->GetSystem<RenderShaderManager>();
         CS_ASSERT(renderShaderManager, "RenderShaderManager must exist.");
-        
-        if (m_renderShader)
-        {
-            renderShaderManager->DestroyRenderShader(m_renderShader);
-            m_renderShader = nullptr;
-        }
         
         m_renderShader = renderShaderManager->CreateRenderShader(vertexShader, fragmentShader);
     }
@@ -66,9 +62,9 @@ namespace ChilliSource
         
         return m_renderShader;
     }
-
+    
     //------------------------------------------------------------------------------
-    Shader::~Shader() noexcept
+    void Shader::DestroyRenderShader() noexcept
     {
         if (m_renderShader)
         {
@@ -78,5 +74,11 @@ namespace ChilliSource
             renderShaderManager->DestroyRenderShader(m_renderShader);
             m_renderShader = nullptr;
         }
+    }
+
+    //------------------------------------------------------------------------------
+    Shader::~Shader() noexcept
+    {
+        DestroyRenderShader();
     }
 }

@@ -45,25 +45,6 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(RenderTexture);
         
-        /// Creates a new instance with the given texture information.
-        ///
-        /// @param dimensions
-        ///     The texture dimensions.
-        /// @param imageFormat
-        ///     The image format.
-        /// @param imageCompression
-        ///     The image compression type.
-        /// @param filterMode
-        ///     The texture filter mode.
-        /// @param wrapModeS
-        ///     The s-coordinate wrap mode.
-        /// @param wrapModeT
-        ///     The t-coordinate wrap mode.
-        /// @param isMipmapped
-        ///     Whether or not mipmaps are generated for the texture.
-        ///
-        RenderTexture(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression, TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped) noexcept;
-        
         /// @return The texture dimensions.
         ///
         const Integer2& GetDimensions() const noexcept { return m_dimensions; }
@@ -106,6 +87,27 @@ namespace ChilliSource
         void SetExtraData(void* extraData) noexcept { m_extraData = extraData; }
         
     private:
+        friend class RenderTextureManager;
+        
+        /// Creates a new instance with the given texture information.
+        ///
+        /// @param dimensions
+        ///     The texture dimensions.
+        /// @param imageFormat
+        ///     The image format.
+        /// @param imageCompression
+        ///     The image compression type.
+        /// @param filterMode
+        ///     The texture filter mode.
+        /// @param wrapModeS
+        ///     The s-coordinate wrap mode.
+        /// @param wrapModeT
+        ///     The t-coordinate wrap mode.
+        /// @param isMipmapped
+        ///     Whether or not mipmaps are generated for the texture.
+        ///
+        RenderTexture(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression, TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped) noexcept;
+        
         Integer2 m_dimensions;
         ImageFormat m_imageFormat;
         ImageCompression m_imageCompression;

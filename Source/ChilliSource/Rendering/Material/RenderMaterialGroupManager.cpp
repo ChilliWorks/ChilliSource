@@ -88,4 +88,10 @@ namespace ChilliSource
         }
         m_pendingUnloadCommands.clear();
     }
+    
+    //------------------------------------------------------------------------------
+    RenderMaterialGroupManager::~RenderMaterialGroupManager() noexcept
+    {
+        CS_ASSERT(m_renderMaterialGroups.size() == 0, "Render material groups have not been correctly released.");
+    }
 }

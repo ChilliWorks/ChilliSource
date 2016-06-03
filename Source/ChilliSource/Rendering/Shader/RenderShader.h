@@ -39,8 +39,6 @@ namespace ChilliSource
     {
     public:
         CS_DECLARE_NOCOPY(RenderShader);
-
-        RenderShader() = default;
         
         /// This is not thread safe and should only be called from the render thread.
         ///
@@ -56,6 +54,10 @@ namespace ChilliSource
         void SetExtraData(void* extraData) noexcept { m_extraData = extraData; }
         
     private:
+        friend class RenderShaderManager;
+        
+        RenderShader() = default;
+        
         void* m_extraData = nullptr;
     };
 }

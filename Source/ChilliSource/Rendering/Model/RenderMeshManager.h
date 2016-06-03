@@ -69,7 +69,7 @@ namespace ChilliSource
         ///     The type of polygon the mesh uses.
         /// @param vertexFormat
         ///     The vertex format.
-        /// @param indexType
+        /// @param indexFormat
         ///     The type of index.
         /// @param numVertices
         ///     The number of vertices in the mesh. The maximum number is determined by the type of index.
@@ -88,7 +88,7 @@ namespace ChilliSource
         ///
         /// @return The RenderMesh instance.
         ///
-        const RenderMesh* CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexType indexType, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+        const RenderMesh* CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
                                            std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
         
         /// Removes the RenderMesh from the manager and queues an UnloadMeshRenderCommand for the
@@ -99,6 +99,8 @@ namespace ChilliSource
         ///     The RenderMesh which should be destroyed.
         ///
         void DestroyRenderMesh(const RenderMesh* renderMesh) noexcept;
+        
+        ~RenderMeshManager() noexcept;
         
     private:
         friend class Application;

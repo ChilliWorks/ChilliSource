@@ -22,23 +22,35 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_MODEL_POLYGONTYPE_H_
-#define _CHILLISOURCE_RENDERING_MODEL_POLYGONTYPE_H_
-
-#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Model/ModelDesc.h>
 
 namespace ChilliSource
 {
-    /// An enum describing the type used to describe indices.
-    ///
-    /// Currently the only supported type is Short, which allows for an index range of
-    /// 0 - 65535.
-    ///
-    ///
-    enum class PolygonType
+    //------------------------------------------------------------------------------
+    ModelDesc::ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb) noexcept
+        : m_meshDescs(std::move(meshDescs)), m_aabb(aabb)
     {
-        k_short
-    };
+    }
+    
+    //------------------------------------------------------------------------------
+    ModelDesc::ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const SkeletonDesc& skeletonDesc) noexcept
+        : m_meshDescs(std::move(meshDescs)), m_aabb(aabb), m_skeletonDesc(skeletonDesc)
+    {
+    }
+    
+    //------------------------------------------------------------------------------
+    MeshDesc& ModelDesc::GetMeshDesc(u32 index) noexcept
+    {
+        CS_ASSERT(index < GetNumMeshDescs(), "Index out of bounds.");
+        
+        return m_meshDescs[index];
+    }
+    
+    //------------------------------------------------------------------------------
+    const MeshDesc& ModelDesc::GetMeshDesc(u32 index) const noexcept
+    {
+        CS_ASSERT(index < GetNumMeshDescs(), "Index out of bounds.");
+        
+        return m_meshDescs[index];
+    }
 }
-
-#endif

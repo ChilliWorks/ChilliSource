@@ -42,20 +42,7 @@ namespace ChilliSource
     class MaterialFactory final : public AppSystem
     {
     public:
-        
         CS_DECLARE_NAMEDTYPE(MaterialFactory);
-        
-        //-------------------------------------------------------
-        /// Factory method
-        ///
-        /// @author S Downie
-        ///
-        /// @param Render capabilities used to determine which
-        /// materials can be used
-        ///
-        /// @return New instance with ownership transferred
-        //-------------------------------------------------------
-        static MaterialFactoryUPtr Create(RenderCapabilities* in_renderCapabilities);
         //---------------------------------------------------
         /// @author S Downie
         ///
@@ -287,20 +274,24 @@ namespace ChilliSource
         MaterialSPtr CreateAnimatedDirectionalShadowMap(const std::string& in_uniqueId) const;
         
     private:
-        
+        friend class Application;
         //-------------------------------------------------------
-        /// Private constructor to force use of factory method
+        /// Factory method
         ///
         /// @author S Downie
         ///
         /// @param Render capabilities used to determine which
         /// materials can be used
+        ///
+        /// @return New instance with ownership transferred
         //-------------------------------------------------------
-        MaterialFactory(RenderCapabilities* in_renderCapabilities);
-        
-    private:
-        
-        RenderCapabilities* m_renderCapabilities;
+        static MaterialFactoryUPtr Create();
+        //-------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+        MaterialFactory() = default;
     };
 }
 

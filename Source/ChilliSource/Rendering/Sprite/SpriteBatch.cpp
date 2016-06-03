@@ -28,7 +28,6 @@
 
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Rendering/Base/ShaderPass.h>
 
 namespace ChilliSource
 {

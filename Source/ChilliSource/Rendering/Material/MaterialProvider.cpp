@@ -54,7 +54,6 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         enum class ResourceType
         {
-            k_shader,
             k_texture,
             k_cubemap
         };
@@ -68,7 +67,6 @@ namespace ChilliSource
             ResourceType m_type;
             std::string m_filePath;
             StorageLocation m_location;
-            ShaderPass m_pass;
             bool m_shouldMipMap;
             TextureFilterMode m_filterMode;
             TextureWrapMode m_wrapModeU;
@@ -159,144 +157,73 @@ namespace ChilliSource
             return TextureFilterMode::k_bilinear;
         }
         //----------------------------------------------------------------------------
-        /// Each material type has associated shaders. This function will build a
-        /// list of the paths to the shaders that are required by the material type
-        /// for each pass
+        /// Returns the shading type for the given material type.
         ///
-        /// @author S Downie
+        /// @param in_materialType - The material type.
         ///
-        /// @param Material type
-        /// @param Render capabilities
-        /// @param [Out] List of shader descriptions with pass and location
+        /// @return The shading type.
         //----------------------------------------------------------------------------
-        void GetShaderFilesForMaterialType(const std::string& in_materialType, RenderCapabilities* in_renderCapabilities, std::vector<MaterialProvider::ShaderDesc>& out_shaders)
+        Material::ShadingType GetShadingType(const std::string& in_materialType) noexcept
         {
             if(in_materialType == "Sprite")
             {
-                out_shaders.push_back({"Shaders/Sprite.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                return;
+                return Material::ShadingType::k_unlit;
             }
             if(in_materialType == "Static")
             {
-                out_shaders.push_back({"Shaders/Static.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                return;
+                return Material::ShadingType::k_unlit;
             }
             if(in_materialType == "StaticAmbient")
             {
-                out_shaders.push_back({"Shaders/StaticAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                return;
+                return Material::ShadingType::k_unlit;
             }
             if(in_materialType == "StaticBlinn")
             {
-                out_shaders.push_back({"Shaders/StaticAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                out_shaders.push_back({"Shaders/StaticBlinnDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                out_shaders.push_back({"Shaders/StaticBlinnPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                return;
+                return Material::ShadingType::k_blinn;
             }
             if(in_materialType == "StaticBlinnShadowed")
             {
-                if (in_renderCapabilities->IsShadowMappingSupported() == true)
-                {
-                    out_shaders.push_back({"Shaders/StaticAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/StaticBlinnShadowedDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/StaticBlinnPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                }
-                else
-                {
-                    out_shaders.push_back({"Shaders/StaticAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/StaticBlinnDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/StaticBlinnPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                }
-                return;
+                CS_LOG_FATAL("Unsupported: Not implemented yet.");
             }
             if(in_materialType == "StaticBlinnPerVertex")
             {
-                out_shaders.push_back({"Shaders/StaticAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                out_shaders.push_back({"Shaders/StaticBlinnPerVertexDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                out_shaders.push_back({"Shaders/StaticBlinnPerVertexPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                return;
+                CS_LOG_FATAL("Unsupported: Not implemented yet.");
             }
             if(in_materialType == "StaticBlinnPerVertexShadowed")
             {
-                if (in_renderCapabilities->IsShadowMappingSupported() == true)
-                {
-                    out_shaders.push_back({"Shaders/StaticAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/StaticBlinnPerVertexShadowedDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/StaticBlinnPerVertexPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                }
-                else
-                {
-                    out_shaders.push_back({"Shaders/StaticAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/StaticBlinnPerVertexDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/StaticBlinnPerVertexPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                }
-                return;
+                CS_LOG_FATAL("Unsupported: Not implemented yet.");
             }
             if(in_materialType == "Animated")
             {
-                out_shaders.push_back({"Shaders/Animated.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                return;
+                return Material::ShadingType::k_unlit;
             }
             if(in_materialType == "AnimatedAmbient")
             {
-                out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                return;
+                return Material::ShadingType::k_unlit;
             }
             if(in_materialType == "AnimatedBlinn")
             {
-                out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                out_shaders.push_back({"Shaders/AnimatedBlinnDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                out_shaders.push_back({"Shaders/AnimatedBlinnPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                return;
+                return Material::ShadingType::k_blinn;
             }
             if(in_materialType == "AnimatedBlinnShadowed")
             {
-                if (in_renderCapabilities->IsShadowMappingSupported() == true)
-                {
-                    out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/AnimatedBlinnShadowedDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/AnimatedBlinnPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                }
-                else
-                {
-                    out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/AnimatedBlinnDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/AnimatedBlinnPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                }
-                return;
+                CS_LOG_FATAL("Unsupported: Not implemented yet.");
             }
             if(in_materialType == "AnimatedBlinnPerVertex")
             {
-                out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                return;
+                CS_LOG_FATAL("Unsupported: Not implemented yet.");
             }
             if(in_materialType == "AnimatedBlinnPerVertexShadowed")
             {
-                if (in_renderCapabilities->IsShadowMappingSupported() == true)
-                {
-                    out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexShadowedDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                }
-                else
-                {
-                    out_shaders.push_back({"Shaders/AnimatedAmbient.csshader", StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                    out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexDirectional.csshader", StorageLocation::k_chilliSource, ShaderPass::k_directional});
-                    out_shaders.push_back({"Shaders/AnimatedBlinnPerVertexPoint.csshader", StorageLocation::k_chilliSource, ShaderPass::k_point});
-                }
-                return;
+                CS_LOG_FATAL("Unsupported: Not implemented yet.");
             }
             if(in_materialType == "Custom")
             {
-                out_shaders.push_back({"", StorageLocation::k_package, ShaderPass::k_ambient});
-                out_shaders.push_back({"", StorageLocation::k_package, ShaderPass::k_directional});
-                out_shaders.push_back({"", StorageLocation::k_package, ShaderPass::k_point});
-                return;
+                CS_LOG_FATAL("Unsupported: Not implemented yet.");
             }
             
             CS_LOG_FATAL("Invalid material type: " + in_materialType);
+            return Material::ShadingType::k_unlit;
         }
         //----------------------------------------------------------------------------
         /// Parse the render states from the XML element to the material
@@ -437,75 +364,76 @@ namespace ChilliSource
         /// @param [Out] Shader files to populate
         /// @param [Out] Material to populate
         //----------------------------------------------------------------------------
-        void ParseShaders(XML::Node* in_rootElement, std::vector<MaterialProvider::ShaderDesc>& out_shaderFiles, Material* out_material)
-        {
-            const u32 numShaderNodes = 3;
-            const std::pair<std::string, ShaderPass> shaderNodes[numShaderNodes] =
-            {
-                std::make_pair("AmbientLightPass", ShaderPass::k_ambient),
-                std::make_pair("DirectionalLightPass", ShaderPass::k_directional),
-                std::make_pair("PointLightPass", ShaderPass::k_point)
-            };
-            
-            XML::Node* shadersEl = XMLUtils::GetFirstChildElement(in_rootElement, "Shaders");
-            if(shadersEl)
-            {
-                for(u32 i=0; i<numShaderNodes; ++i)
-                {
-                    //Overwrite any of the default files for this material type with specified custom ones
-                    XML::Node* shaderEl = XMLUtils::GetFirstChildElement(shadersEl, shaderNodes[i].first);
-                    if(shaderEl)
-                    {
-                        for(u32 udwShaderFilesIndex = 0; udwShaderFilesIndex<out_shaderFiles.size(); ++udwShaderFilesIndex)
-                        {
-                            if(out_shaderFiles[udwShaderFilesIndex].m_pass == shaderNodes[i].second)
-                            {
-                                out_shaderFiles[udwShaderFilesIndex].m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(shaderEl, "location", "Package"));
-                                out_shaderFiles[udwShaderFilesIndex].m_filePath = XMLUtils::GetAttributeValue<std::string>(shaderEl, "file-name", "");
-                                break;
-                            }
-                        }
-                    }
-                }
-                
-                //---Get the shader variables
-                XML::Node* shaderVarEl = XMLUtils::GetFirstChildElement(shadersEl, "Var");
-                while(shaderVarEl)
-                {
-                    //Get the variable type
-                    std::string strType = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "type", "");
-                    //Get the variable name
-                    std::string strName = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "name", "");
-                    //Add the variable to the material
-                    if(strType == "Float")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<f32>(shaderVarEl, "value", 0.0f));
-                    }
-                    else if(strType == "Vec2")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector2>(shaderVarEl, "value", Vector2::k_zero));
-                    }
-                    else if(strType == "Vec3")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector3>(shaderVarEl, "value", Vector3::k_zero));
-                    }
-                    else if(strType == "Vec4")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector4>(shaderVarEl, "value", Vector4::k_zero));
-                    }
-                    else if(strType == "Colour")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Colour>(shaderVarEl, "value", Colour::k_white));
-                    }
-                    else if(strType == "Matrix")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Matrix4>(shaderVarEl, "value", Matrix4::k_identity));
-                    }
-                    //Move on to the next variable
-                    shaderVarEl =  XMLUtils::GetNextSiblingElement(shaderVarEl, "Var");
-                }
-            }
-        }
+//        void ParseShaders(XML::Node* in_rootElement, std::vector<MaterialProvider::ShaderDesc>& out_shaderFiles, Material* out_material)
+//        {
+            //TODO: Re-add when adding custom shader support.
+//            const u32 numShaderNodes = 3;
+//            const std::pair<std::string, ShaderPass> shaderNodes[numShaderNodes] =
+//            {
+//                std::make_pair("AmbientLightPass", ShaderPass::k_ambient),
+//                std::make_pair("DirectionalLightPass", ShaderPass::k_directional),
+//                std::make_pair("PointLightPass", ShaderPass::k_point)
+//            };
+//            
+//            XML::Node* shadersEl = XMLUtils::GetFirstChildElement(in_rootElement, "Shaders");
+//            if(shadersEl)
+//            {
+//                for(u32 i=0; i<numShaderNodes; ++i)
+//                {
+//                    //Overwrite any of the default files for this material type with specified custom ones
+//                    XML::Node* shaderEl = XMLUtils::GetFirstChildElement(shadersEl, shaderNodes[i].first);
+//                    if(shaderEl)
+//                    {
+//                        for(u32 udwShaderFilesIndex = 0; udwShaderFilesIndex<out_shaderFiles.size(); ++udwShaderFilesIndex)
+//                        {
+//                            if(out_shaderFiles[udwShaderFilesIndex].m_pass == shaderNodes[i].second)
+//                            {
+//                                out_shaderFiles[udwShaderFilesIndex].m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(shaderEl, "location", "Package"));
+//                                out_shaderFiles[udwShaderFilesIndex].m_filePath = XMLUtils::GetAttributeValue<std::string>(shaderEl, "file-name", "");
+//                                break;
+//                            }
+//                        }
+//                    }
+//                }
+//                
+//                //---Get the shader variables
+//                XML::Node* shaderVarEl = XMLUtils::GetFirstChildElement(shadersEl, "Var");
+//                while(shaderVarEl)
+//                {
+//                    //Get the variable type
+//                    std::string strType = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "type", "");
+//                    //Get the variable name
+//                    std::string strName = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "name", "");
+//                    //Add the variable to the material
+//                    if(strType == "Float")
+//                    {
+//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<f32>(shaderVarEl, "value", 0.0f));
+//                    }
+//                    else if(strType == "Vec2")
+//                    {
+//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector2>(shaderVarEl, "value", Vector2::k_zero));
+//                    }
+//                    else if(strType == "Vec3")
+//                    {
+//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector3>(shaderVarEl, "value", Vector3::k_zero));
+//                    }
+//                    else if(strType == "Vec4")
+//                    {
+//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector4>(shaderVarEl, "value", Vector4::k_zero));
+//                    }
+//                    else if(strType == "Colour")
+//                    {
+//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Colour>(shaderVarEl, "value", Colour::k_white));
+//                    }
+//                    else if(strType == "Matrix")
+//                    {
+//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Matrix4>(shaderVarEl, "value", Matrix4::k_identity));
+//                    }
+//                    //Move on to the next variable
+//                    shaderVarEl =  XMLUtils::GetNextSiblingElement(shaderVarEl, "Var");
+//                }
+//            }
+//        }
         //----------------------------------------------------------------------------
         /// Parse the texture file paths
         ///
@@ -577,42 +505,6 @@ namespace ChilliSource
             
             switch(in_descs[in_loadIndex].m_type)
             {
-                case ResourceType::k_shader:
-                {
-                    resourcePool->LoadResourceAsync<Shader>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const ShaderCSPtr& in_shader)
-                    {
-                        if(in_shader->GetLoadState() == Resource::LoadState::k_loaded)
-                        {
-                            out_material->SetShader(in_descs[in_loadIndex].m_pass, in_shader);
-                            
-                            u32 newLoadIndex = in_loadIndex + 1;
-                            
-                            if(newLoadIndex < in_descs.size())
-                            {
-                                LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
-                            }
-                            else
-                            {
-                                out_material->SetLoadState(Resource::LoadState::k_loaded);
-                                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                                {
-                                    in_delegate(out_material);
-                                });
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            out_material->SetLoadState(Resource::LoadState::k_failed);
-                            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                            {
-                                in_delegate(out_material);
-                            });
-                            return;
-                        }
-                    });
-                    break;
-                }
                 case ResourceType::k_texture:
                 {
                     auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV, true));
@@ -695,16 +587,9 @@ namespace ChilliSource
     
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    MaterialProviderUPtr MaterialProvider::Create(RenderCapabilities* in_renderCapabilities)
+    MaterialProviderUPtr MaterialProvider::Create()
     {
-        return MaterialProviderUPtr(new MaterialProvider(in_renderCapabilities));
-    }
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    MaterialProvider::MaterialProvider(RenderCapabilities* in_renderCapabilities)
-    : m_renderCapabilities(in_renderCapabilities)
-    {
-        CS_ASSERT(m_renderCapabilities, "Material loader is missing required system: Render Capabilities.");
+        return MaterialProviderUPtr(new MaterialProvider());
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -728,11 +613,10 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void MaterialProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
-        std::vector<ShaderDesc> shaderFiles;
         std::vector<TextureDesc> textureFiles;
         std::vector<TextureDesc> cubemapFiles;
         
-        if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
+        if(BuildMaterialFromFile(in_location, in_filePath, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
         {
             out_resource->SetLoadState(Resource::LoadState::k_failed);
             return;
@@ -741,20 +625,6 @@ namespace ChilliSource
         MaterialSPtr material = std::static_pointer_cast<Material>(out_resource);
         
         ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-        
-        for(u32 i=0; i<shaderFiles.size(); ++i)
-        {
-            if(shaderFiles[i].m_filePath.empty() == false)
-            {
-                ShaderCSPtr shader = resourcePool->LoadResource<Shader>(shaderFiles[i].m_location, shaderFiles[i].m_filePath);
-                if(shader == nullptr)
-                {
-                    out_resource->SetLoadState(Resource::LoadState::k_failed);
-                    return;
-                }
-                material->SetShader(shaderFiles[i].m_pass, shader);
-            }
-        }
         
         for(u32 i=0; i<textureFiles.size(); ++i)
         {
@@ -802,10 +672,9 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void MaterialProvider::BuildMaterialTask(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
-        std::vector<ShaderDesc> shaderFiles;
         std::vector<TextureDesc> textureFiles;
         std::vector<TextureDesc> cubemapFiles;
-        if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
+        if(BuildMaterialFromFile(in_location, in_filePath, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
         {
             out_resource->SetLoadState(Resource::LoadState::k_failed);
             Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
@@ -820,17 +689,7 @@ namespace ChilliSource
         MaterialSPtr material = std::static_pointer_cast<Material>(out_resource);
         
         std::vector<ChainedLoadDesc> resourceFiles;
-        resourceFiles.reserve(shaderFiles.size() + textureFiles.size() + cubemapFiles.size());
-        
-        for(const auto& shaderDesc : shaderFiles)
-        {
-            ChainedLoadDesc desc;
-            desc.m_filePath = shaderDesc.m_filePath;
-            desc.m_location = shaderDesc.m_location;
-            desc.m_pass = shaderDesc.m_pass;
-            desc.m_type = ResourceType::k_shader;
-            resourceFiles.push_back(desc);
-        }
+        resourceFiles.reserve(textureFiles.size() + cubemapFiles.size());
         
         for(const auto& textureDesc : textureFiles)
         {
@@ -863,7 +722,6 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     bool MaterialProvider::BuildMaterialFromFile(StorageLocation in_location, const std::string& in_filePath,
-                                                std::vector<ShaderDesc>& out_shaderFiles,
                                                 std::vector<TextureDesc>& out_textureFiles,
                                                 std::vector<TextureDesc>& out_cubemapFiles,
                                                 Material* out_material)
@@ -878,13 +736,15 @@ namespace ChilliSource
         }
         
         std::string materialType = XMLUtils::GetAttributeValue<std::string>(rootElement, "type", "Static");
-        GetShaderFilesForMaterialType(materialType, m_renderCapabilities, out_shaderFiles);
+        out_material->SetShadingType(GetShadingType(materialType));
 
         ParseRenderStates(rootElement, out_material);
         ParseAlphaBlendFunction(rootElement, out_material);
         ParseCullFunction(rootElement, out_material);
         ParseSurface(rootElement, out_material);
-        ParseShaders(rootElement, out_shaderFiles, out_material);
+        
+        //TODO: Re-add when supporting custom shaders.
+        //ParseShaders(rootElement, out_shaderFiles, out_material);
         ParseTextures(rootElement, out_textureFiles);
         ParseCubemaps(rootElement, out_cubemapFiles);
         

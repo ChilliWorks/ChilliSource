@@ -76,6 +76,10 @@ namespace ChilliSource
         ///
         static ShaderUPtr Create() noexcept;
         
+        /// Destroys the render shader if there is currently one available.
+        ///
+        void DestroyRenderShader() noexcept;
+        
         Shader() = default;
         
         const RenderShader* m_renderShader = nullptr;

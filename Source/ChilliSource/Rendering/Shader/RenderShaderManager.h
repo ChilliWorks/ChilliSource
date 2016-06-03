@@ -84,6 +84,8 @@ namespace ChilliSource
         ///
         void DestroyRenderShader(const RenderShader* renderShader) noexcept;
         
+        ~RenderShaderManager() noexcept;
+        
     private:
         friend class Application;
         
