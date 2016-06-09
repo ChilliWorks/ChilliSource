@@ -31,6 +31,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/FileSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/File/VirtualTextInputStream.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaStaticClass.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -411,7 +412,9 @@ namespace CSBackend
 				case ChilliSource::StorageLocation::k_package:
 				case ChilliSource::StorageLocation::k_chilliSource:
 				{
-					//TODO::Create virtual text input stream
+					auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
+                    textInputStream = m_zippedFileSystem->CreateTextInputStream(absFilePath);
+
 					break;
 				}
 				case ChilliSource::StorageLocation::k_DLC:
@@ -423,7 +426,8 @@ namespace CSBackend
 					}
 					else
 					{
-						//TODO::Create virtual text input stream
+						auto absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
+                        textInputStream = m_zippedFileSystem->CreateTextInputStream(absFilePath);
 					}
 					break;
 				}
