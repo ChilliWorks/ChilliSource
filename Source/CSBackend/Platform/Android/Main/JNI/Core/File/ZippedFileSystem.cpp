@@ -395,11 +395,9 @@ namespace CSBackend
 
             static const u32 k_filePathLength = 32 * 1024;
 
-            CS_LOG_ERROR("#########Open ZIP FILE!. - " + m_filePath);
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)
             {
-                CS_LOG_ERROR("#########Cannot open ZIP FILE!.");
                 return;
             }
 
@@ -442,7 +440,6 @@ namespace CSBackend
         {
             std::string filePath = ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
 
-            CS_LOG_ERROR("#########Adding to manifest - " + filePath);
             std::string directoryPath, fileName;
             ChilliSource::StringUtils::SplitFilename(filePath, fileName, directoryPath);
 
