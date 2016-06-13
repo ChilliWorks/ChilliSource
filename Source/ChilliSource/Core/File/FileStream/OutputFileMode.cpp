@@ -22,35 +22,41 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/File/FileStream/TextOutputStream.h>
+#include <ChilliSource/Core/File/FileStream/OutputFileMode.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    TextOutputStream::TextOutputStream(const std::string& filePath, TextOutputFileMode fileMode) noexcept
+    std::ios_base::openmode ToFileMode(TextOutputFileMode outputFileMode)
     {
-        m_fileStream.open(filePath.c_str(), ToFileMode(fileMode));
-		m_isValid = m_fileStream.is_open() && !m_fileStream.bad() && !m_fileStream.fail();
-    }
-    //------------------------------------------------------------------------------
-    bool TextOutputStream::IsValid() const noexcept
-    {
-        return m_isValid;
-    }
-    //------------------------------------------------------------------------------
-    void TextOutputStream::Write(const std::string& data) noexcept
-    {
-        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
-        m_fileStream.write(data.c_str(), data.length());
-        CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
-    }
-    //------------------------------------------------------------------------------
-    TextOutputStream::~TextOutputStream() noexcept
-    {
-        if(m_fileStream.is_open())
+        //We use the binary mode for text to ensure no platform specific formatting is appended
+        switch (outputFileMode)
         {
-            //Close also flushes the changes to disk
-            m_fileStream.close();
+            case TextOutputFileMode::k_write:
+                return std::ios_base::out | std::ios_base::binary;
+            case TextOutputFileMode::k_writeAppend:
+                return std::ios_base::out | std::ios_base::binary | std::ios_base::app;
+            default:
+                CS_LOG_FATAL("Unhandled TextOutputFileMode case.");
+                break;
         }
+        
+        return std::ios_base::out | std::ios_base::binary;
+    }
+    //------------------------------------------------------------------------------
+    std::ios_base::openmode ToFileMode(BinaryOutputFileMode outputFileMode)
+    {
+        switch (outputFileMode)
+        {
+            case BinaryOutputFileMode::k_write:
+                return std::ios_base::out | std::ios_base::binary;
+            case BinaryOutputFileMode::k_writeAppend:
+                return std::ios_base::out | std::ios_base::binary | std::ios_base::app;
+            default:
+                CS_LOG_FATAL("Unhandled BinaryOutputFileMode case.");
+                break;
+        }
+        
+        return std::ios_base::out | std::ios_base::binary;
     }
 }

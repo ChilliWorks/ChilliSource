@@ -36,7 +36,6 @@
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/Screen.h>
 #import <ChilliSource/Core/File/FileSystem.h>
-#import <ChilliSource/Core/File/FileStream.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 
 #import <UIKit/UIKit.h>
@@ -150,12 +149,13 @@ namespace CSBackend
                     fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
                 }
 
-                std::string strHTMLFileContents;
-                ChilliSource::FileStreamUPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_read);
-                pHTMLFile->GetAll(strHTMLFileContents);
-                pHTMLFile.reset();
                 
-                NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:strHTMLFileContents];
+                auto HTMLFileStream = fileSystem->CreateTextInputStream(in_storageLocation, in_filePath);
+                CS_ASSERT(HTMLFileStream, "Could not open file: " + filePath);
+                std::string HTMLFileContents = HTMLFileStream->ReadAll();
+                HTMLFileStream.reset();
+                
+                NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:HTMLFileContents];
                 NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];
                 [m_webView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
                 [urlString release];

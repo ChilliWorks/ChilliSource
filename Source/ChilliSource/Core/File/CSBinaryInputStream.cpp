@@ -48,7 +48,7 @@ namespace ChilliSource
         ///
         /// @return Whether reading the header was successful or not.
         //--------------------------------------------------------------
-        bool ReadHeader(FileStream* in_fileStream, const std::string& in_filePath, u32& out_fileFormatId, u32& out_fileFormatVersion, u32& out_numChunkTableEntries)
+        bool ReadHeader(IBinaryInputStream* in_fileStream, const std::string& in_filePath, u32& out_fileFormatId, u32& out_fileFormatVersion, u32& out_numChunkTableEntries)
         {
             CS_ASSERT(in_fileStream != nullptr, "File stream cannot be null.");
             
@@ -96,7 +96,7 @@ namespace ChilliSource
         FileSystem* fileSystem = Application::Get()->GetFileSystem();
         CS_ASSERT(fileSystem != nullptr, "CSBinaryInputStream missing required system: FileSystem.");
         
-        m_fileStream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
+        m_fileStream = fileSystem->CreateBinaryInputStream(in_storageLocation, in_filePath);
         if (m_fileStream != nullptr)
         {
             u32 numChunkTableEntries;
@@ -138,8 +138,8 @@ namespace ChilliSource
         auto chunkInfoIt = m_chunkInfoMap.find(in_chunkId);
         if (chunkInfoIt != m_chunkInfoMap.end())
         {
-            m_fileStream->SeekG(chunkInfoIt->second.m_offset, SeekDir::k_beginning);
-            CS_ASSERT(m_fileStream->TellG() == chunkInfoIt->second.m_offset, "Seek failed.");
+            m_fileStream->SetReadPosition(chunkInfoIt->second.m_offset);
+            CS_ASSERT(m_fileStream->GetReadPosition() == chunkInfoIt->second.m_offset, "Seek failed.");
             
             std::unique_ptr<u8[]> chunkData(new u8[chunkInfoIt->second.m_size]);
             m_fileStream->Read(reinterpret_cast<s8*>(chunkData.get()), chunkInfoIt->second.m_size);

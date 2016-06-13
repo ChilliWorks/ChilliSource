@@ -387,9 +387,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.cpp">
       <Filter>ChilliSource\Core\File</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream.cpp">
-      <Filter>ChilliSource\Core\File</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileSystem.cpp">
       <Filter>ChilliSource\Core\File</Filter>
     </ClCompile>
@@ -1086,6 +1083,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryOutputStream.cpp">
       <Filter>ChilliSource\Core\File</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\OutputFileMode.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -1356,9 +1356,6 @@
       <Filter>ChilliSource\Core\File</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.h">
-      <Filter>ChilliSource\Core\File</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream.h">
       <Filter>ChilliSource\Core\File</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileSystem.h">
@@ -2316,6 +2313,9 @@
       <Filter>ChilliSource\Core\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryOutputStream.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\OutputFileMode.h">
       <Filter>ChilliSource\Core\File</Filter>
     </ClInclude>
   </ItemGroup>

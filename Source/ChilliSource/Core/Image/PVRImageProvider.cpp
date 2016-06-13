@@ -188,7 +188,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void LoadImage(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
-            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
+            auto pImageFile = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_storageLocation, in_filePath);
             
             if(pImageFile == nullptr)
             {
@@ -203,11 +203,10 @@ namespace ChilliSource
                 return;
             }
             
-            std::string abyData;
-            pImageFile->GetAll(abyData);
-            CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + ToString(std::numeric_limits<u32>::max()) + " bytes.");
+            auto data = pImageFile->ReadAll();
+            CS_ASSERT(data->GetLength() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + ToString(std::numeric_limits<u32>::max()) + " bytes.");
             
-            CreatePVRImageFromFile(abyData.data(), static_cast<u32>(abyData.size()), (Image*)out_resource.get());
+            CreatePVRImageFromFile(reinterpret_cast<const s8*>(data->GetData()), data->GetLength(), (Image*)out_resource.get());
             
             out_resource->SetLoadState(Resource::LoadState::k_loaded);
             if(in_delegate != nullptr)

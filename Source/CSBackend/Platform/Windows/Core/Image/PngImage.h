@@ -112,7 +112,7 @@ namespace CSBackend
 			/// Loads the png data using lib png
 			/// @param FileStreamSPtr inStream - the stream lib png should use to read the data.
 			//----------------------------------------------------------------------------------
-			bool LoadWithLibPng(ChilliSource::FileStreamSPtr inStream);
+			bool LoadWithLibPng(const ChilliSource::IBinaryInputStreamUPtr& inStream);
 
 			bool mbIsLoaded;
 			s32 mdwHeight;

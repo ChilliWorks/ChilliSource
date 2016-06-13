@@ -126,7 +126,7 @@ namespace ChilliSource
         /// @param Pointer to image data file
         /// @param Pointer to resource destination
         //-------------------------------------------------------
-        void ReadFileVersion3(const FileStreamSPtr& in_stream, const ResourceSPtr& out_resource)
+        void ReadFileVersion3(const IBinaryInputStreamUPtr& in_stream, const ResourceSPtr& out_resource)
         {
             //Read the header
             ImageHeaderVersion3 sHeader;
@@ -207,7 +207,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
-            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
+            auto pImageFile = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_storageLocation, in_filepath);
             
             if(pImageFile == nullptr)
             {

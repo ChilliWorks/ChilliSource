@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/File.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -116,7 +117,7 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void TextureAtlasProvider::LoadFrames(StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc)
     {
-        FileStreamUPtr frameFile = Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, FileMode::k_readBinary);
+        IBinaryInputStreamUPtr frameFile = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_location, in_filePath);
         
         if(frameFile == nullptr)
         {
@@ -179,16 +180,15 @@ namespace ChilliSource
         std::string fileExtension;
         
         StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
-        FileStreamUPtr mapFile = Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".csatlasid", FileMode::k_read);
+        auto mapFile = Application::Get()->GetFileSystem()->CreateTextInputStream(in_location, fileName + ".csatlasid");
         
         if(mapFile != nullptr)
         {
             std::vector<u32> IDHashedLookup;
             
             std::string spriteID;
-            while(!mapFile->EndOfFile())
+            while(mapFile->ReadLine(spriteID))
             {
-                mapFile->GetLine(spriteID);
                 if(spriteID.empty() == false)
                 {
                     out_desc.m_keys.push_back(HashCRC32::GenerateHashCode(spriteID));

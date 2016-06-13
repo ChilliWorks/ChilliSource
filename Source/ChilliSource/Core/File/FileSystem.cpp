@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Core/File/FileSystem.h>
 
+#include <ChilliSource/Core/Base/ByteBuffer.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/String/StringUtils.h>
@@ -42,6 +43,7 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 #include <CSBackend/Platform/Windows/Core/File/FileSystem.h>
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #endif
 
 #include <md5/md5.h>
@@ -53,6 +55,9 @@ namespace ChilliSource
     namespace
     {
         const std::string k_defaultPackageDLCDirectory = "DLC/";
+        constexpr u32 k_maxSHA1Length = 80;
+        const u32 k_md5ChunkSize = 256;
+        const u32 k_sha1ChunkSize = 256;
     }
     CS_DEFINE_NAMEDTYPE(FileSystem);
     
@@ -81,13 +86,13 @@ namespace ChilliSource
     //--------------------------------------------------------------
     bool FileSystem::ReadFile(StorageLocation in_storageLocation, const std::string& in_directory, std::string& out_contents) const
     {
-        FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, FileMode::k_read);
+        ITextInputStreamUPtr fileStream = CreateTextInputStream(in_storageLocation, in_directory);
         if (fileStream == nullptr)
         {
             return false;
         }
         
-        fileStream->GetAll(out_contents);
+        out_contents = fileStream->ReadAll();
         
         return true;
     }
@@ -95,13 +100,13 @@ namespace ChilliSource
     //--------------------------------------------------------------
     bool FileSystem::WriteFile(StorageLocation in_storageLocation, const std::string& in_directory, const std::string& in_contents) const
     {
-        FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, FileMode::k_writeBinary);
+        BinaryOutputStreamUPtr fileStream = CreateBinaryOutputStream(in_storageLocation, in_directory);
         if (fileStream.get() == nullptr)
         {
             return false;
         }
         
-        fileStream->Write(in_contents);
+        fileStream->Write((void*)in_contents.c_str(), in_contents.size());
         
         return true;
     }
@@ -109,13 +114,13 @@ namespace ChilliSource
     //--------------------------------------------------------------
     bool FileSystem::WriteFile(StorageLocation in_storageLocation, const std::string& in_directory, const s8* in_data, u32 in_dataSize) const
     {
-        FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, FileMode::k_writeBinary);
+        BinaryOutputStreamUPtr fileStream = CreateBinaryOutputStream(in_storageLocation, in_directory);
         if (fileStream.get() == nullptr)
         {
             return false;
         }
         
-        fileStream->Write(in_data, (s32)in_dataSize);
+        fileStream->Write((void*)in_data, (s32)in_dataSize);
         
         return true;
     }
@@ -166,17 +171,79 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    std::string FileSystem::GetFileChecksumSHA1(StorageLocation in_storageLocation, const std::string& in_filePath) const
+    std::string FileSystem::GetFileChecksumSHA1(StorageLocation in_storageLocation, const std::string& in_filePath, const CSHA1::REPORT_TYPE in_reportType) const
     {
-        FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
-        return file->GetSHA1Checksum(CSHA1::REPORT_TYPE::REPORT_HEX_SHORT);
+        auto fileStream = CreateBinaryInputStream(in_storageLocation, in_filePath);
+        CS_ASSERT(fileStream, "Could not open file: " + in_filePath);
+
+        u64 currentPosition = fileStream->GetReadPosition();
+        u32 length = u32(fileStream->GetLength());
+        s8 data[k_sha1ChunkSize];
+        CSHA1 Hash;
+        Hash.Reset();
+
+        while(length >= k_sha1ChunkSize)
+        {
+            fileStream->Read(data, k_sha1ChunkSize);
+            
+            Hash.Update(reinterpret_cast<u8*>(data), k_sha1ChunkSize);
+            length -= k_sha1ChunkSize;
+        }
+        
+        // Last chunk
+        if(length > 0)
+        {
+            fileStream->Read(data, length);
+            Hash.Update(reinterpret_cast<u8*>(data), length);
+        }
+        
+        fileStream->SetReadPosition(currentPosition);
+        
+        Hash.Final();
+            
+#ifdef CS_TARGETPLATFORM_WINDOWS
+        TCHAR cHash[k_maxSHA1Length];
+        memset(cHash, 0, k_maxSHA1Length);
+        Hash.ReportHash(cHash, in_reportType);
+        return CSBackend::Windows::WindowsStringUtils::UTF16ToUTF8(std::wstring(cHash));
+#else
+        char cHash[k_maxSHA1Length];
+        memset(cHash, 0, k_maxSHA1Length);
+        Hash.ReportHash(cHash, in_reportType);
+        return std::string(cHash);
+#endif
+
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    std::string FileSystem::GetFileChecksumMD5(StorageLocation in_storageLocation, const std::string& in_filePath) const
+    std::string FileSystem::GetFileChecksumMD5(StorageLocation storageLocation, const std::string& filePath) const
     {
-        FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
-        return file->GetMD5Checksum();
+        auto fileStream = CreateBinaryInputStream(storageLocation, filePath);
+        CS_ASSERT(fileStream, "Could not open file: " + filePath);
+        
+        u64 currentPosition = fileStream->GetReadPosition();
+        u32 length = u32(fileStream->GetLength());
+        s8 data[k_md5ChunkSize];
+        MD5 Hash;
+        
+        while(length >= k_md5ChunkSize)
+        {
+            fileStream->Read(data, k_md5ChunkSize);
+            Hash.update(data, k_md5ChunkSize);
+            length -= k_md5ChunkSize;
+        }
+        
+        // Last chunk
+        if(length > 0)
+        {
+            fileStream->Read(data, length);
+            Hash.update(data, length);
+        }
+        
+        fileStream->SetReadPosition(currentPosition);
+        
+        Hash.finalize();
+        return Hash.binarydigest();
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
@@ -218,27 +285,17 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    u32 FileSystem::GetFileChecksumCRC32(StorageLocation in_storageLocation, const std::string& in_filePath) const
+    u32 FileSystem::GetFileChecksumCRC32(StorageLocation storageLocation, const std::string& filePath) const
     {
         u32 output = 0;
 
-        //open the file
-        FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
-        if (file != nullptr)
-        {
-            //get the length of the file
-            file->SeekG(0, SeekDir::k_end);
-            s32 length = file->TellG();
-            file->SeekG(0, SeekDir::k_beginning);
+        auto fileStream = CreateBinaryInputStream(storageLocation, filePath);
+        CS_ASSERT(fileStream, "Could not open file: " + filePath);
 
-            //read contents of file
-            s8* contents = new s8[length];
-            file->Read(contents, length);
+        auto contents = fileStream->ReadAll();
 
-            //get the hash
-            output = HashCRC32::GenerateHashCode(contents, length);
-            CS_SAFEDELETE_ARRAY(contents);
-        }
+        //get the hash
+        output = HashCRC32::GenerateHashCode(reinterpret_cast<const s8*>(contents->GetData()), contents->GetLength());
 
         return output;
     }
@@ -281,19 +338,12 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    u32 FileSystem::GetFileSize(StorageLocation in_storageLocation, const std::string& in_filepath) const
+    u32 FileSystem::GetFileSize(StorageLocation storageLocation, const std::string& filePath) const
     {
-        //open the file
-        FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
-        if (file != nullptr)
-        {
-            //get the length of the file
-            file->SeekG(0, SeekDir::k_end);
-            s32 dwLength = file->TellG();
-            return dwLength;
-        }
-
-        return 0;
+        auto fileStream = CreateBinaryInputStream(storageLocation, filePath);
+        CS_ASSERT(fileStream, "Could not open file: " + filePath);
+        
+        return fileStream->GetLength();
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
@@ -319,25 +369,6 @@ namespace ChilliSource
             case StorageLocation::k_cache:
             case StorageLocation::k_DLC:
             case StorageLocation::k_root:
-                return true;
-            default:
-                return false;
-        }
-    }
-    //--------------------------------------------------------------
-    //--------------------------------------------------------------
-    bool FileSystem::IsWriteMode(FileMode in_fileMode) const
-    {
-        switch (in_fileMode)
-        {
-            case FileMode::k_write:
-            case FileMode::k_writeAppend:
-            case FileMode::k_writeAtEnd:
-            case FileMode::k_writeBinary:
-            case FileMode::k_writeBinaryAppend:
-            case FileMode::k_writeBinaryAtEnd:
-            case FileMode::k_writeBinaryTruncate:
-            case FileMode::k_writeTruncate:
                 return true;
             default:
                 return false;

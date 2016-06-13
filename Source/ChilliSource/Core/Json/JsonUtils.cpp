@@ -61,7 +61,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         bool ReadJson(StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue)
         {
-            FileStreamSPtr fileStream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
+            auto fileStream = Application::Get()->GetFileSystem()->CreateTextInputStream(in_storageLocation, in_filePath);
             
             if (fileStream == nullptr)
             {
@@ -69,8 +69,7 @@ namespace ChilliSource
                 return false;
             }
             
-            std::string fileContents;
-            fileStream->GetAll(fileContents);
+            std::string fileContents = fileStream->ReadAll();
             fileStream.reset();
             
             Json::Reader jsonReader;

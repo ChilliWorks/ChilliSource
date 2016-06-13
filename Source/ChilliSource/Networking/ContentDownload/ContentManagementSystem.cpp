@@ -34,7 +34,6 @@
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -667,7 +666,7 @@ namespace ChilliSource
         std::string strFile = k_tempDirectory + in_packageDetails.m_id + k_packageExtensionFull;
 
         //Append to the file as it can take multiple writes
-        FileStreamUPtr pFileStream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_DLC, strFile, FileMode::k_writeBinaryAppend);
+        auto pFileStream = Application::Get()->GetFileSystem()->CreateBinaryOutputStream(StorageLocation::k_DLC, strFile, CS::BinaryOutputFileMode::k_writeAppend);
         if (pFileStream == nullptr)
         {
             CS_LOG_ERROR("CMS: " + in_packageDetails.m_id + " Couldn't write package.");
@@ -687,7 +686,7 @@ namespace ChilliSource
                 return false;
             }
         }
-            
+        
         return true;
     }
 

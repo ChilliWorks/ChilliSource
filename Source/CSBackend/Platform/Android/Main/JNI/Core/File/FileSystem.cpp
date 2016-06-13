@@ -35,7 +35,6 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaStaticClass.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <cstdio>
@@ -354,53 +353,6 @@ namespace CSBackend
 		{
 			return (ChilliSource::FileSystem::InterfaceID == in_interfaceId || FileSystem::InterfaceID == in_interfaceId);
 		}
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		ChilliSource::FileStreamUPtr FileSystem::CreateFileStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const
-		{
-			switch (in_storageLocation)
-			{
-				case ChilliSource::StorageLocation::k_package:
-				case ChilliSource::StorageLocation::k_chilliSource:
-				{
-					CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == false, "Cannot open write mode file stream in read-only storage location.");
-
-					auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
-					return m_zippedFileSystem->CreateFileStream(absFilePath, in_fileMode);
-					break;
-				}
-				case ChilliSource::StorageLocation::k_DLC:
-				{
-					if (DoesFileExistInCachedDLC(in_filePath) == true || IsWriteMode(in_fileMode) == true)
-					{
-						auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
-						ChilliSource::FileStreamUPtr output(new ChilliSource::FileStream(absFilePath, in_fileMode));
-						if (output->IsValid() == true)
-						{
-							return output;
-						}
-					}
-					else
-					{
-						auto absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
-						return m_zippedFileSystem->CreateFileStream(absFilePath, in_fileMode);
-					}
-					break;
-				}
-				default:
-				{
-					auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
-					ChilliSource::FileStreamUPtr output(new ChilliSource::FileStream(absFilePath, in_fileMode));
-					if (output->IsValid() == true)
-					{
-						return output;
-					}
-					break;
-				}
-			}
-
-			return nullptr;
-		}
 		//--------------------------------------------------------------
         //--------------------------------------------------------------
         ChilliSource::ITextInputStreamUPtr FileSystem::CreateTextInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
@@ -496,7 +448,7 @@ namespace CSBackend
         }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-        ChilliSource::TextOutputStreamUPtr FileSystem::CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        ChilliSource::TextOutputStreamUPtr FileSystem::CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::TextOutputFileMode in_fileMode) const
         {
         	CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
@@ -504,7 +456,7 @@ namespace CSBackend
             {
             	std::string absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
 
-            	ChilliSource::TextOutputStreamUPtr output(new ChilliSource::TextOutputStream(absFilePath));
+            	ChilliSource::TextOutputStreamUPtr output(new ChilliSource::TextOutputStream(absFilePath, in_fileMode));
             	if (output->IsValid() == true)
             	{
             		return output;
@@ -515,7 +467,7 @@ namespace CSBackend
         }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-        ChilliSource::BinaryOutputStreamUPtr FileSystem::CreateBinaryOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        ChilliSource::BinaryOutputStreamUPtr FileSystem::CreateBinaryOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::BinaryOutputFileMode in_fileMode) const
         {
         	CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
@@ -523,7 +475,7 @@ namespace CSBackend
             {
             	std::string absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
 
-            	ChilliSource::BinaryOutputStreamUPtr output(new ChilliSource::BinaryOutputStream(absFilePath));
+            	ChilliSource::BinaryOutputStreamUPtr output(new ChilliSource::BinaryOutputStream(absFilePath, in_fileMode));
             	if (output->IsValid() == true)
             	{
             		return output;
@@ -566,21 +518,19 @@ namespace CSBackend
 
             const s32 k_chunkSize = 32 * 1024;
 
-            auto sourceStream = CreateFileStream(in_sourceStorageLocation, in_sourceFilePath, ChilliSource::FileMode::k_readBinary);
+            auto sourceStream = CreateBinaryInputStream(in_sourceStorageLocation, in_sourceFilePath);
             if (sourceStream == nullptr)
             {
                 return false;
             }
 
-            auto destinationStream = CreateFileStream(in_destinationStorageLocation, in_destinationFilePath, ChilliSource::FileMode::k_writeBinary);
+            auto destinationStream = CreateBinaryOutputStream(in_destinationStorageLocation, in_destinationFilePath, ChilliSource::BinaryOutputFileMode::k_write);
             if (destinationStream == nullptr)
             {
                 return false;
             }
 
-            sourceStream->SeekG(0, ChilliSource::SeekDir::k_end);
-            s32 length = sourceStream->TellG();
-            sourceStream->SeekG(0, ChilliSource::SeekDir::k_beginning);
+            s32 length = sourceStream->GetLength();
 
             s32 progress = 0;
             s8 buffer[k_chunkSize];

@@ -58,7 +58,7 @@ namespace CSBackend
 				return;
 			}
 
-			ChilliSource::FileStream* pStream = (ChilliSource::FileStream*)png_get_io_ptr(inpPng);
+			ChilliSource::IBinaryInputStream* pStream = (ChilliSource::IBinaryInputStream*)png_get_io_ptr(inpPng);
 			pStream->Read((s8*)inpData, indwLength);
 		}
 		//----------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ namespace CSBackend
 		void PngImage::Load(ChilliSource::StorageLocation ineStorageLocation, const std::string& instrFilename)
 		{
 			//create the file stream
-			ChilliSource::FileStreamSPtr stream = ChilliSource::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrFilename, ChilliSource::FileMode::k_readBinary);
+			auto stream = ChilliSource::Application::Get()->GetFileSystem()->CreateBinaryInputStream(ineStorageLocation, instrFilename);
 
 			//insure the stream is not broken
 			if (stream == nullptr)
@@ -174,7 +174,7 @@ namespace CSBackend
 		//----------------------------------------------------------------------------------
 		/// Load with lib png
 		//----------------------------------------------------------------------------------
-		bool PngImage::LoadWithLibPng(ChilliSource::FileStreamSPtr inStream)
+		bool PngImage::LoadWithLibPng(const ChilliSource::IBinaryInputStreamUPtr& inStream)
 		{
 			//-------- Intialisation
 			//read the header to insure it is indeed a png

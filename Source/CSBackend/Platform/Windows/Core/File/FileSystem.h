@@ -36,7 +36,6 @@
 #include <ChilliSource/Core/File/FileStream/BinaryOutputStream.h>
 #include <ChilliSource/Core/File/FileStream/TextInputStream.h>
 #include <ChilliSource/Core/File/FileStream/TextOutputStream.h>
-#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 #include <string>
@@ -65,19 +64,6 @@ namespace CSBackend
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------------
 			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
-			//--------------------------------------------------------------
-			/// Creates a new file stream to the given file in the given
-			/// storage location.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The storage location.
-			/// @param The file path.
-			/// @param The file mode.
-			///
-			/// @return The new file stream.
-			//--------------------------------------------------------------
-			ChilliSource::FileStreamUPtr CreateFileStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const override;
 			//------------------------------------------------------------------------------
             /// Creates a new input text stream to the given file in the given storage location.
             ///
@@ -113,7 +99,7 @@ namespace CSBackend
 			/// @return The new file stream. If the stream cannot be created or is invalid,
 			/// null be returned.
 			//------------------------------------------------------------------------------
-			ChilliSource::TextOutputStreamUPtr CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+			ChilliSource::TextOutputStreamUPtr CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::TextOutputFileMode in_fileMode) const override;
 			//------------------------------------------------------------------------------
 			/// Creates a new output binary stream to the given file in the given storage location.
 			///
@@ -125,7 +111,7 @@ namespace CSBackend
 			/// @return The new file stream. If the stream cannot be created or is invalid,
 			/// null be returned.
 			//------------------------------------------------------------------------------
-			ChilliSource::BinaryOutputStreamUPtr CreateBinaryOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+			ChilliSource::BinaryOutputStreamUPtr CreateBinaryOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::BinaryOutputFileMode in_fileMode) const override;
 			//--------------------------------------------------------------
 			/// Creates the given directory. The full directory hierarchy
 			/// will be created.

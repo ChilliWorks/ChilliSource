@@ -29,6 +29,7 @@
 #include <ChilliSource/Rendering/Model/CSModelProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/File.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
@@ -93,7 +94,7 @@ namespace ChilliSource
         ///
         /// @return Value of type T
         //----------------------------------------------------------------------------
-        template <typename TType> TType ReadValue(const FileStreamSPtr& in_meshStream)
+        template <typename TType> TType ReadValue(const IBinaryInputStreamUPtr& in_meshStream)
         {
             TType value;
             in_meshStream->Read(reinterpret_cast<s8*>(&value), sizeof(TType));
@@ -108,7 +109,7 @@ namespace ChilliSource
         /// @param Num to read
         /// @param [Out] data
         //----------------------------------------------------------------------------
-        template <typename TType> void ReadBlock(const FileStreamSPtr& in_meshStream, u32 in_numToRead, TType* out_data)
+        template <typename TType> void ReadBlock(const IBinaryInputStreamUPtr& in_meshStream, u32 in_numToRead, TType* out_data)
         {
             in_meshStream->Read(reinterpret_cast<s8*>(out_data), sizeof(TType) * in_numToRead);
         }
@@ -121,7 +122,7 @@ namespace ChilliSource
         /// @param Mesh stream
         /// @param [Out] Mesh description
         //-----------------------------------------------------------------------------
-        void ReadVertexDeclaration(const FileStreamSPtr& in_meshStream, MeshDescriptor& out_meshDesc)
+        void ReadVertexDeclaration(const IBinaryInputStreamUPtr& in_meshStream, MeshDescriptor& out_meshDesc)
         {
             //build the vertex declaration from the file
             u8 numVertexElements = ReadValue<u8>(in_meshStream);
@@ -175,7 +176,7 @@ namespace ChilliSource
         /// @param Mesh description
         /// @param [Out] Submesh description
         //-----------------------------------------------------------------------------
-        void ReadSubMeshData(const FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
+        void ReadSubMeshData(const IBinaryInputStreamUPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
         {
             //read the inverse bind matrices
             if(true == in_meshDesc.mFeatures.mbHasAnimationData)
@@ -205,7 +206,7 @@ namespace ChilliSource
         /// @param Mesh description
         /// @param [Out] Sube mesh description
         //-----------------------------------------------------------------------------
-        void ReadSubMeshHeader(const FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
+        void ReadSubMeshHeader(const IBinaryInputStreamUPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
         {
             //read mesh name
             u8 nextChar = 0;
@@ -267,7 +268,7 @@ namespace ChilliSource
         /// @param Container holding the num of meshes, joints and bones
         /// @param [Out] Skeleton description
         //-----------------------------------------------------------------------------
-        void ReadSkeletonData(const FileStreamSPtr& in_meshStream, const MeshDataQuantities& in_quantities, SkeletonDescriptor& out_skeletonDesc)
+        void ReadSkeletonData(const IBinaryInputStreamUPtr& in_meshStream, const MeshDataQuantities& in_quantities, SkeletonDescriptor& out_skeletonDesc)
         {
             //read the skeleton nodes
             out_skeletonDesc.m_nodeNames.reserve(in_quantities.m_numSkeletonNodes);
@@ -320,7 +321,7 @@ namespace ChilliSource
         ///
         /// @return Whether the file is correct
         //-----------------------------------------------------------------------------
-        bool ReadGlobalHeader(const FileStreamSPtr& in_meshStream, const std::string& in_filePath, MeshDescriptor& out_meshDesc, MeshDataQuantities& out_meshQuantities)
+        bool ReadGlobalHeader(const IBinaryInputStreamUPtr& in_meshStream, const std::string& in_filePath, MeshDescriptor& out_meshDesc, MeshDataQuantities& out_meshQuantities)
         {
             u32 fileCheckValue = ReadValue<u32>(in_meshStream);
             if(fileCheckValue != k_fileCheckValue)
@@ -399,10 +400,10 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         bool ReadFile(StorageLocation in_location, const std::string& in_filePath, MeshDescriptor& out_meshDesc)
         {
-            FileStreamSPtr meshStream = Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, FileMode::k_readBinary);
+            auto meshStream = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_location, in_filePath);
             
             //Check file for corruption
-            if(nullptr == meshStream)
+            if(!meshStream)
             {
                 CS_LOG_ERROR("Cannot open csmodel file: " + in_filePath);
                 return false;

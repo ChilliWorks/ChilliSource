@@ -139,7 +139,7 @@ namespace CSBackend
             //-----------------------------------------------------------
             void LoadImage(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource)
             {
-                ChilliSource::FileStreamUPtr pImageFile = ChilliSource::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_readBinary);
+                auto pImageFile = ChilliSource::Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_storageLocation, in_filePath);
                 
                 if(pImageFile == nullptr)
                 {
@@ -154,12 +154,10 @@ namespace CSBackend
                     return;
                 }
                 
-                std::string abyData;
-                pImageFile->GetAll(abyData);
+                auto data = pImageFile->ReadAll();
                 
-                CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "Image is too large. It cannot exceed " + ChilliSource::ToString(std::numeric_limits<u32>::max()) + " bytes.");
-                u32 size = static_cast<u32>(abyData.size());
-                CreatePNGImageFromFile(abyData.data(), size, (ChilliSource::Image*)out_resource.get());
+                CS_ASSERT(data->GetLength() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "Image is too large. It cannot exceed " + ChilliSource::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+                CreatePNGImageFromFile(reinterpret_cast<const s8*>(data->GetData()), data->GetLength(), (ChilliSource::Image*)out_resource.get());
                 
                 out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)

@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/File/FileStream/IBinaryInputStream.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
@@ -68,7 +69,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
-            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
+            auto pImageFile = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_storageLocation, in_filepath);
             
             if(pImageFile == nullptr)
             {
@@ -105,9 +106,7 @@ namespace ChilliSource
             
             //get the size of the rest of the data
             const u32 kstrHeaderSize = 16;
-            pImageFile->SeekG(0, SeekDir::k_end);
-            u32 dwDataSize = pImageFile->TellG() - kstrHeaderSize;
-            pImageFile->SeekG(kstrHeaderSize, SeekDir::k_beginning);
+            u32 dwDataSize = pImageFile->GetLength() - kstrHeaderSize;
             
             //read the rest of the data
             u8* pData = new u8[dwDataSize];
