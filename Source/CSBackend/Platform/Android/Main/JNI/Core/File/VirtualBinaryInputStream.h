@@ -94,7 +94,7 @@ namespace CSBackend
                 /// will contain everything up to that point.
                 ///
                 /// If the current read position is at the end of the file, this function will return
-                /// nullptr.
+                /// false.
                 ///
                 /// @param buffer
                 ///     The buffer to read into.
