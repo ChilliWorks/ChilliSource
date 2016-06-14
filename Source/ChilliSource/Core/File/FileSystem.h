@@ -137,7 +137,7 @@ namespace ChilliSource
         /// @return The new file stream. If the stream cannot be created or is invalid,
         /// null be returned.
         //------------------------------------------------------------------------------
-        virtual TextOutputStreamUPtr CreateTextOutputStream(StorageLocation in_storageLocation, const std::string& in_filePath, TextOutputFileMode in_fileMode = TextOutputFileMode::k_write) const = 0;
+        virtual TextOutputStreamUPtr CreateTextOutputStream(StorageLocation in_storageLocation, const std::string& in_filePath, FileWriteMode in_fileMode = FileWriteMode::k_overwrite) const = 0;
         //------------------------------------------------------------------------------
         /// Creates a new output binary stream to the given file in the given storage location.
         ///
@@ -150,7 +150,7 @@ namespace ChilliSource
         /// @return The new file stream. If the stream cannot be created or is invalid,
         /// null be returned.
         //------------------------------------------------------------------------------
-        virtual BinaryOutputStreamUPtr CreateBinaryOutputStream(StorageLocation in_storageLocation, const std::string& in_filePath, BinaryOutputFileMode in_fileMode = BinaryOutputFileMode::k_write) const = 0;
+        virtual BinaryOutputStreamUPtr CreateBinaryOutputStream(StorageLocation in_storageLocation, const std::string& in_filePath, FileWriteMode in_fileMode = FileWriteMode::k_overwrite) const = 0;
         //------------------------------------------------------------------------------
         /// Creates the given directory. The full directory hierarchy will be created.
         ///
@@ -464,7 +464,7 @@ namespace ChilliSource
         ///
         /// @return The size in bytes of the given file.
         //------------------------------------------------------------------------------
-        u32 GetFileSize(StorageLocation in_storageLocation, const std::string& in_filePath) const;
+        u64 GetFileSize(StorageLocation in_storageLocation, const std::string& in_filePath) const;
         //------------------------------------------------------------------------------
         /// This is thread-safe.
         ///
@@ -475,7 +475,7 @@ namespace ChilliSource
         ///
         /// @return The size in bytes of the contents of the given directory.
         //------------------------------------------------------------------------------
-        u32 GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
+        u64 GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
         //------------------------------------------------------------------------------
         /// Returns whether or not the given storage location can be written to.
         ///

@@ -56,7 +56,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryInputStream.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryOutputStream.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\OutputFileMode.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\FileWriteMode.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\TextInputStream.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\TextOutputStream.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileSystem.cpp" />
@@ -366,9 +366,9 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryInputStream.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryOutputStream.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\FileWriteMode.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\IBinaryInputStream.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\ITextInputStream.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\OutputFileMode.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\TextInputStream.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\TextOutputStream.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileSystem.h" />

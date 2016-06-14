@@ -53,7 +53,7 @@ namespace ChilliSource
         
         TextOutputStreamUPtr StringToFile(StorageLocation ineStorageLocation, const std::string& instrPath, const std::string& instrFileOut)
         {
-            auto pFile = Application::Get()->GetFileSystem()->CreateTextOutputStream(ineStorageLocation, instrPath, TextOutputFileMode::k_write);
+            auto pFile = Application::Get()->GetFileSystem()->CreateTextOutputStream(ineStorageLocation, instrPath, FileWriteMode::k_overwrite);
             
             if(pFile == nullptr)
             {

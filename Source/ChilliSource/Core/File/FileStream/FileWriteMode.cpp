@@ -22,38 +22,22 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/File/FileStream/OutputFileMode.h>
+#include <ChilliSource/Core/File/FileStream/FileWriteMode.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    std::ios_base::openmode ToFileMode(TextOutputFileMode outputFileMode)
+    std::ios_base::openmode ToOpenMode(FileWriteMode outputFileMode) noexcept
     {
         //We use the binary mode for text to ensure no platform specific formatting is appended
         switch (outputFileMode)
         {
-            case TextOutputFileMode::k_write:
+            case FileWriteMode::k_overwrite:
                 return std::ios_base::out | std::ios_base::binary;
-            case TextOutputFileMode::k_writeAppend:
+            case FileWriteMode::k_append:
                 return std::ios_base::out | std::ios_base::binary | std::ios_base::app;
             default:
-                CS_LOG_FATAL("Unhandled TextOutputFileMode case.");
-                break;
-        }
-        
-        return std::ios_base::out | std::ios_base::binary;
-    }
-    //------------------------------------------------------------------------------
-    std::ios_base::openmode ToFileMode(BinaryOutputFileMode outputFileMode)
-    {
-        switch (outputFileMode)
-        {
-            case BinaryOutputFileMode::k_write:
-                return std::ios_base::out | std::ios_base::binary;
-            case BinaryOutputFileMode::k_writeAppend:
-                return std::ios_base::out | std::ios_base::binary | std::ios_base::app;
-            default:
-                CS_LOG_FATAL("Unhandled BinaryOutputFileMode case.");
+                CS_LOG_FATAL("Unhandled FileWriteMode case.");
                 break;
         }
         

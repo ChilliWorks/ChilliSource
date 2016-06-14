@@ -22,48 +22,30 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_OUTPUTFILEMODE_H_
-#define _CHILLISOURCE_CORE_FILE_FILESTREAM_OUTPUTFILEMODE_H_
+#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_FILEWRITEMODE_H_
+#define _CHILLISOURCE_CORE_FILE_FILESTREAM_FILEWRITEMODE_H_
 
 #include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    /// Specifies the modes an TextOutputStream file can be opened with.
+    /// Specifies the modes an Text/BinaryOutputStream file can be opened with.
     ///
-    enum class TextOutputFileMode
+    enum class FileWriteMode
     {
-        k_write,
-        k_writeAppend
+        k_overwrite,
+        k_append
     };
     
-    /// Specifies the modes an BinaryOutputStream file can be opened with.
-    ///
-    enum class BinaryOutputFileMode
-    {
-        k_write,
-        k_writeAppend
-    };
-    
-    /// Converts an TextOutputFileMode to a std openmode for use in
+    /// Converts an FileWriteMode to a std openmode for use in
     /// file opening.
     ///
     /// @param outputFileMode
-    ///     The TextOutputFileMode to convert.
+    ///     The FileWriteMode to convert.
     ///
     /// @return The std open mode.
     ///
-    std::ios_base::openmode ToFileMode(TextOutputFileMode outputFileMode);
-
-    /// Converts an BinaryOutputFileMode to a std openmode for use in
-    /// file opening.
-    ///
-    /// @param outputFileMode
-    ///     The BinaryOutputFileMode to convert.
-    ///
-    /// @return The std open mode.
-    ///
-    std::ios_base::openmode ToFileMode(BinaryOutputFileMode outputFileMode);
+    std::ios_base::openmode ToOpenMode(FileWriteMode outputFileMode) noexcept;
 }
 
 #endif

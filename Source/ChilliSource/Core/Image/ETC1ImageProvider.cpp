@@ -106,7 +106,7 @@ namespace ChilliSource
             
             //get the size of the rest of the data
             const u32 kstrHeaderSize = 16;
-            u32 dwDataSize = pImageFile->GetLength() - kstrHeaderSize;
+            u32 dwDataSize = u32(pImageFile->GetLength()) - kstrHeaderSize;
             
             //read the rest of the data
             u8* pData = new u8[dwDataSize];

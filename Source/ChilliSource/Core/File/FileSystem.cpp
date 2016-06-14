@@ -338,7 +338,7 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    u32 FileSystem::GetFileSize(StorageLocation storageLocation, const std::string& filePath) const
+    u64 FileSystem::GetFileSize(StorageLocation storageLocation, const std::string& filePath) const
     {
         auto fileStream = CreateBinaryInputStream(storageLocation, filePath);
         CS_ASSERT(fileStream, "Could not open file: " + filePath);
@@ -347,7 +347,7 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    u32 FileSystem::GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directory) const
+    u64 FileSystem::GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directory) const
     {
         std::vector<std::string> filenames = GetFilePaths(in_storageLocation, in_directory, true);
 

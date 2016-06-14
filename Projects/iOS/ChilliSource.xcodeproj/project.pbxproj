@@ -288,7 +288,7 @@
 		8158F8001C89D2AD00B13109 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6461C89D2AD00B13109 /* Texture.cpp */; };
 		8158F8011C89D2AD00B13109 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6481C89D2AD00B13109 /* TextureUnitSystem.cpp */; };
 		8164A4691CB69C86002A95B0 /* MainThreadTaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */; };
-		818ADFAA1D0EB692009C3848 /* OutputFileMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818ADFA91D0EB692009C3848 /* OutputFileMode.cpp */; };
+		818ADFAA1D0EB692009C3848 /* FileWriteMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */; };
 		81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */; };
 		81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
@@ -1038,8 +1038,8 @@
 		8158F6491C89D2AD00B13109 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainThreadTaskPool.cpp; sourceTree = "<group>"; };
 		8164A4681CB69C86002A95B0 /* MainThreadTaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainThreadTaskPool.h; sourceTree = "<group>"; };
-		818ADFA81D0EAD60009C3848 /* OutputFileMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OutputFileMode.h; sourceTree = "<group>"; };
-		818ADFA91D0EB692009C3848 /* OutputFileMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OutputFileMode.cpp; sourceTree = "<group>"; };
+		818ADFA81D0EAD60009C3848 /* FileWriteMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileWriteMode.h; sourceTree = "<group>"; };
+		818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileWriteMode.cpp; sourceTree = "<group>"; };
 		81C26AF51CB7F3410079A113 /* Task.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskScheduler.cpp; sourceTree = "<group>"; };
 		81C58C211CB3C57000EA58A0 /* TaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskScheduler.h; sourceTree = "<group>"; };
@@ -2966,8 +2966,8 @@
 				81EA87091CEE1AB400DB798C /* TextOutputStream.h */,
 				8141A5EA1CF5E67100197C0E /* BinaryOutputStream.cpp */,
 				8141A5EB1CF5E67100197C0E /* BinaryOutputStream.h */,
-				818ADFA81D0EAD60009C3848 /* OutputFileMode.h */,
-				818ADFA91D0EB692009C3848 /* OutputFileMode.cpp */,
+				818ADFA81D0EAD60009C3848 /* FileWriteMode.h */,
+				818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */,
 			);
 			path = FileStream;
 			sourceTree = "<group>";
@@ -3244,7 +3244,7 @@
 				8158F7D61C89D2AD00B13109 /* HttpRequest.mm in Sources */,
 				8158F6C71C89D2AD00B13109 /* CSAnimProvider.cpp in Sources */,
 				8158F7CF1C89D2AD00B13109 /* Accelerometer.mm in Sources */,
-				818ADFAA1D0EB692009C3848 /* OutputFileMode.cpp in Sources */,
+				818ADFAA1D0EB692009C3848 /* FileWriteMode.cpp in Sources */,
 				8158F6A51C89D2AD00B13109 /* ContentManagementSystem.cpp in Sources */,
 				8158F7251C89D2AD00B13109 /* VListUILayout.cpp in Sources */,
 				8158F72D1C89D2AD00B13109 /* TextIcon.cpp in Sources */,

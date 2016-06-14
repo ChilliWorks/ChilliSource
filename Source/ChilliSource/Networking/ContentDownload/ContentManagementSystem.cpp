@@ -666,7 +666,7 @@ namespace ChilliSource
         std::string strFile = k_tempDirectory + in_packageDetails.m_id + k_packageExtensionFull;
 
         //Append to the file as it can take multiple writes
-        auto pFileStream = Application::Get()->GetFileSystem()->CreateBinaryOutputStream(StorageLocation::k_DLC, strFile, CS::BinaryOutputFileMode::k_writeAppend);
+        auto pFileStream = Application::Get()->GetFileSystem()->CreateBinaryOutputStream(StorageLocation::k_DLC, strFile, CS::FileWriteMode::k_append);
         if (pFileStream == nullptr)
         {
             CS_LOG_ERROR("CMS: " + in_packageDetails.m_id + " Couldn't write package.");

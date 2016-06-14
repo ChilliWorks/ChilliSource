@@ -27,7 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/ByteBuffer.h>
-#include <ChilliSource/Core/File/FileStream/OutputFileMode.h>
+#include <ChilliSource/Core/File/FileStream/FileWriteMode.h>
 
 #include <fstream>
 
@@ -63,7 +63,7 @@ namespace ChilliSource
         /// @param fileMode
         ///     The mode to open the file with.
         ///
-        BinaryOutputStream(const std::string& filePath, BinaryOutputFileMode fileMode) noexcept;
+        BinaryOutputStream(const std::string& filePath, FileWriteMode fileMode) noexcept;
         
         /// Checks the status of the stream, if this returns false then the stream
         /// can no longer be accessed.

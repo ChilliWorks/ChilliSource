@@ -27,7 +27,7 @@
 #define _CHILLISOURCE_CORE_FILE_FILESTREAM_TEXTOUTPUTSTREAM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/File/FileStream/OutputFileMode.h>
+#include <ChilliSource/Core/File/FileStream/FileWriteMode.h>
 
 #include <fstream>
 
@@ -62,7 +62,7 @@ namespace ChilliSource
         /// @param fileMode
         ///     The mode to open the file with.
         ///
-        TextOutputStream(const std::string& filePath, TextOutputFileMode fileMode) noexcept;
+        TextOutputStream(const std::string& filePath, FileWriteMode fileMode) noexcept;
         
         /// Checks the status of the stream, if this returns false then the stream
         /// can no longer be accessed.
