@@ -459,7 +459,8 @@ namespace CSBackend
         		case ChilliSource::StorageLocation::k_package:
         		case ChilliSource::StorageLocation::k_chilliSource:
         		{
-        			//TODO::Create virtual text input stream
+        			auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
+                    binaryInputStream = m_zippedFileSystem->CreateBinaryInputStream(absFilePath);
         			break;
         		}
         		case ChilliSource::StorageLocation::k_DLC:
@@ -471,7 +472,8 @@ namespace CSBackend
         			}
         			else
         			{
-        				//TODO::Create virtual text input stream
+        				auto absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + ChilliSource::StringUtils::StandardiseFilePath(in_filePath);
+                        binaryInputStream = m_zippedFileSystem->CreateBinaryInputStream(absFilePath);
         			}
         			break;
         		}

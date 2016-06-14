@@ -137,7 +137,7 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             ChilliSource::FileStreamUPtr CreateFileStream(const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const;
             //------------------------------------------------------------------------------
-            /// Creates a new "virtual" file stream to a file within the zip. The zipped
+            /// Creates a new "virtual" input text stream to a file within the zip. The zipped
             /// file is inflated in full and stored in memory. The "virtual" file stream
             /// then treats this memory as if it were a file on disk.
             ///
@@ -153,7 +153,25 @@ namespace CSBackend
             ///
             /// @return The file stream.
             //------------------------------------------------------------------------------
-            ChilliSource::ITextInputStreamUPtr CreateTextInputStream(const std::string& filePath) const;
+            ChilliSource::ITextInputStreamUPtr CreateTextInputStream(const std::string& filePath) const noexcept;
+            //------------------------------------------------------------------------------
+            /// Creates a new "virtual" input binary stream to a file within the zip. The zipped
+            /// file is inflated in full and stored in memory. The "virtual" file stream
+            /// then treats this memory as if it were a file on disk.
+            ///
+            /// This can only be called by one thread at a time meaning others will block
+            /// until it is finished. This can be a slow operation if accessing a large
+            /// file, so care needs to be taken to ensure this doesn't cause visible
+            /// stutters on the main thread.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param filePath - The file path inside the zip, relative to the "root
+            /// directory path".
+            ///
+            /// @return The file stream.
+            //------------------------------------------------------------------------------
+            ChilliSource::IBinaryInputStreamUPtr CreateBinaryInputStream(const std::string& filePath) const noexcept;
             //------------------------------------------------------------------------------
             /// Opens a series of files one by one without closing the zip. The contents of
             /// each file are returned via the FileReadDelegate.
@@ -287,6 +305,18 @@ namespace CSBackend
             /// @return Whether or not the look up was successful.
             //------------------------------------------------------------------------------
             bool TryGetManifestItem(const std::string& in_path, ManifestItem& out_manifestItem) const;
+            //------------------------------------------------------------------------------
+            /// Reads a zip files contents and returns, length of the file is stored in the numBytesRead
+            /// param. Returns nullptr if file is empty or the file doesn't exist.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param filePath - The zipped file to read.
+            /// @param numBytesRead - The number of bytes read from file.
+            ///
+            /// @return The data read.
+            //------------------------------------------------------------------------------
+            std::unique_ptr<u8[]> ReadZipFileContents(const std::string& filePath, u32& numBytesRead) const noexcept;
 
             std::string m_filePath;
             bool m_isValid = false;
