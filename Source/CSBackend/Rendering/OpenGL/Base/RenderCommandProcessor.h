@@ -27,6 +27,8 @@
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
+#include <CSBackend/Rendering/OpenGL/Base/ContextState.h>
+
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 
@@ -137,6 +139,8 @@ namespace CSBackend
             ///     The render command
             ///
             void UnloadMesh(const ChilliSource::UnloadMeshRenderCommand* renderCommand) noexcept;
+            
+            ContextState m_contextState;
         };
     }
 }
