@@ -59,7 +59,7 @@ namespace CSBackend
 			}
 
 			ChilliSource::IBinaryInputStream* pStream = (ChilliSource::IBinaryInputStream*)png_get_io_ptr(inpPng);
-			pStream->Read((s8*)inpData, indwLength);
+			pStream->Read((u8*)inpData, indwLength);
 		}
 		//----------------------------------------------------------------------------------
 		/// Constructor
@@ -180,7 +180,7 @@ namespace CSBackend
 			//read the header to insure it is indeed a png
 			s32 dwHeaderSize = 8;
 			u8 * ubyHeader = new u8[dwHeaderSize];
-			inStream->Read((s8*)ubyHeader, dwHeaderSize);
+			inStream->Read(ubyHeader, dwHeaderSize);
 			bool bIsPng = !png_sig_cmp(ubyHeader, 0, dwHeaderSize);
 			delete[] ubyHeader;
 

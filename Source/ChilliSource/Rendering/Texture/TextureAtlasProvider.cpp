@@ -125,25 +125,25 @@ namespace ChilliSource
         }
         
         s16 numFrames = 0;
-        frameFile->Read(reinterpret_cast<s8*>(&numFrames), sizeof(s16));
+        frameFile->Read(reinterpret_cast<u8*>(&numFrames), sizeof(s16));
         
         s16 binVersion = 0;
-        frameFile->Read(reinterpret_cast<s8*>(&binVersion), sizeof(s16));
+        frameFile->Read(reinterpret_cast<u8*>(&binVersion), sizeof(s16));
         
         CS_ASSERT(binVersion >= 3, "TextureAtlas minimum version supported is 2.0");
         
         s16 textureAtlasWidth = 0;
-        frameFile->Read(reinterpret_cast<s8*>(&textureAtlasWidth), sizeof(s16));
+        frameFile->Read(reinterpret_cast<u8*>(&textureAtlasWidth), sizeof(s16));
         
         s16 textureAtlasHeight = 0;
-        frameFile->Read(reinterpret_cast<s8*>(&textureAtlasHeight), sizeof(s16));
+        frameFile->Read(reinterpret_cast<u8*>(&textureAtlasHeight), sizeof(s16));
         
         //Temporary buffer to hold our unformatted data
         const u32 numElements = numFrames * k_numElementsPerFrame;
         s16* buffer = new s16[numElements];
         
         //Fetch the binary data in one read.
-        frameFile->Read(reinterpret_cast<s8*>(buffer), numElements * sizeof(s16));
+        frameFile->Read(reinterpret_cast<u8*>(buffer), numElements * sizeof(s16));
         frameFile.reset();
         
         //Now copy the data into our sprite data buffer as it is now in the correct format

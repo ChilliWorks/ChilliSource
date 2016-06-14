@@ -89,7 +89,7 @@ namespace ChilliSource
         ///
         /// @return If the read was successful
         ///
-        virtual bool Read(s8* buffer, u64 length) noexcept = 0;
+        virtual bool Read(u8* buffer, u64 length) noexcept = 0;
         
         /// Reads in a number of characters from the current read position and puts them
         /// into a BinaryStreamBuffer. If the length of the stream is overrun, the buffer

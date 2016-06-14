@@ -80,7 +80,7 @@ namespace CSBackend
             return Read(m_length);
         }
         //------------------------------------------------------------------------------
-        bool VirtualBinaryInputStream::Read(s8* buffer, u64 length) noexcept
+        bool VirtualBinaryInputStream::Read(u8* buffer, u64 length) noexcept
         {
             CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
 
@@ -98,7 +98,7 @@ namespace CSBackend
                 return true;
             }
 
-            m_stream.read(buffer, maxValidLength);
+            m_stream.read(reinterpret_cast<s8*>(buffer), maxValidLength);
 
             CS_ASSERT(!m_stream.fail(), "Unexpected error occured in filestream");
 

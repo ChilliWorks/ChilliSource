@@ -95,7 +95,7 @@ namespace ChilliSource
         ///
         /// @return If the read was successful
         ///
-        bool Read(s8* buffer, u64 length) noexcept override;
+        bool Read(u8* buffer, u64 length) noexcept override;
         
         /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object. This
         ///     will be nullptr for empty files

@@ -178,7 +178,7 @@ namespace ChilliSource
 
         u64 currentPosition = fileStream->GetReadPosition();
         u32 length = u32(fileStream->GetLength());
-        s8 data[k_sha1ChunkSize];
+        u8 data[k_sha1ChunkSize];
         CSHA1 Hash;
         Hash.Reset();
 
@@ -223,7 +223,7 @@ namespace ChilliSource
         
         u64 currentPosition = fileStream->GetReadPosition();
         u32 length = u32(fileStream->GetLength());
-        s8 data[k_md5ChunkSize];
+        u8 data[k_md5ChunkSize];
         MD5 Hash;
         
         while(length >= k_md5ChunkSize)

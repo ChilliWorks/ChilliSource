@@ -130,13 +130,13 @@ namespace ChilliSource
         {
             //Read the header
             ImageHeaderVersion3 sHeader;
-            in_stream->Read((s8*)&sHeader.m_width, sizeof(u32));
-            in_stream->Read((s8*)&sHeader.m_height, sizeof(u32));
-            in_stream->Read((s8*)&sHeader.m_imageFormat, sizeof(u32));
-            in_stream->Read((s8*)&sHeader.m_compression, sizeof(u32));
-            in_stream->Read((s8*)&sHeader.m_checksum, sizeof(u64));
-            in_stream->Read((s8*)&sHeader.m_originalDataSize, sizeof(u32));
-            in_stream->Read((s8*)&sHeader.m_compressedDataSize, sizeof(u32));
+            in_stream->Read((u8*)&sHeader.m_width, sizeof(u32));
+            in_stream->Read((u8*)&sHeader.m_height, sizeof(u32));
+            in_stream->Read((u8*)&sHeader.m_imageFormat, sizeof(u32));
+            in_stream->Read((u8*)&sHeader.m_compression, sizeof(u32));
+            in_stream->Read((u8*)&sHeader.m_checksum, sizeof(u64));
+            in_stream->Read((u8*)&sHeader.m_originalDataSize, sizeof(u32));
+            in_stream->Read((u8*)&sHeader.m_compressedDataSize, sizeof(u32));
             
             u32 udwSize = 0;
             ImageFormat eFormat = ImageFormat::k_RGBA8888;
@@ -148,7 +148,7 @@ namespace ChilliSource
             {
                 // Allocated memory needed for the compressed image data
                 u8* pubyCompressedData = (u8*)malloc(sHeader.m_compressedDataSize);
-                in_stream->Read((s8*)pubyCompressedData, sHeader.m_compressedDataSize);
+                in_stream->Read(pubyCompressedData, sHeader.m_compressedDataSize);
                 
                 // Allocated memory need for for the bitmap context
                 pubyBitmapData = new u8[sHeader.m_originalDataSize];
@@ -180,7 +180,7 @@ namespace ChilliSource
             {
                 // Allocated memory needed for the bitmap context
                 pubyBitmapData = new u8[sHeader.m_originalDataSize];;
-                in_stream->Read((s8*)pubyBitmapData, udwSize);
+                in_stream->Read(pubyBitmapData, udwSize);
             }
             
             Image::ImageDataUPtr imageData(pubyBitmapData);
@@ -224,12 +224,12 @@ namespace ChilliSource
             
             //Read the byte order mark and ensure it is 123456
             u32 udwByteOrder = 0;
-            pImageFile->Read((s8*)&udwByteOrder, sizeof(u32));
+            pImageFile->Read((u8*)&udwByteOrder, sizeof(u32));
             CS_ASSERT(udwByteOrder == 123456, "Endianess not supported");
             
             //Read the version
             u32 udwVersion = 0;
-            pImageFile->Read((s8*)&udwVersion, sizeof(u32));
+            pImageFile->Read((u8*)&udwVersion, sizeof(u32));
             CS_ASSERT(udwVersion >= 3, "Only version 3 and above supported");
 
             ReadFileVersion3(pImageFile, out_resource);

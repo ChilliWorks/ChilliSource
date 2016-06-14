@@ -533,7 +533,7 @@ namespace CSBackend
             s32 length = sourceStream->GetLength();
 
             s32 progress = 0;
-            s8 buffer[k_chunkSize];
+            u8 buffer[k_chunkSize];
             while (progress < length)
             {
                 s32 copySize = length - progress;

@@ -59,7 +59,7 @@ namespace CSBackend
 			u32 length = stream->GetLength();
 
 			std::unique_ptr<u8[]> bankBuffer(new u8[length]);
-			stream->Read(reinterpret_cast<s8*>(bankBuffer.get()), length);
+			stream->Read(bankBuffer.get(), length);
 			stream.reset();
 
 			::CkBank* bank = ::CkBank::newBankFromMemory(reinterpret_cast<void*>(bankBuffer.get()), length);
@@ -95,7 +95,7 @@ namespace CSBackend
 				u32 length = stream->GetLength();
 
 				std::unique_ptr<u8[]> bankBuffer(new u8[length]);
-				stream->Read(reinterpret_cast<s8*>(bankBuffer.get()), length);
+				stream->Read(bankBuffer.get(), length);
 				stream.reset();
 
 				//we cannot capture the unique pointer in the main thread task, so store it and

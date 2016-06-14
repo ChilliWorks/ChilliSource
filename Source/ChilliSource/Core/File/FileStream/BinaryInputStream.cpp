@@ -84,7 +84,7 @@ namespace ChilliSource
         return Read(m_length);
     }
     //------------------------------------------------------------------------------
-    bool BinaryInputStream::Read(s8* buffer, u64 length) noexcept
+    bool BinaryInputStream::Read(u8* buffer, u64 length) noexcept
     {
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
         
@@ -102,7 +102,7 @@ namespace ChilliSource
             return true;
         }
         
-        m_fileStream.read(buffer, maxValidLength);
+        m_fileStream.read(reinterpret_cast<s8*>(buffer), maxValidLength);
         
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured in filestream");
         

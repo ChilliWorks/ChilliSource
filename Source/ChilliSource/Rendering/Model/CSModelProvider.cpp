@@ -86,21 +86,6 @@ namespace ChilliSource
             u32 m_numJoints;
         };
         //----------------------------------------------------------------------------
-        /// Read value in for given type
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param File stream
-        ///
-        /// @return Value of type T
-        //----------------------------------------------------------------------------
-        template <typename TType> TType ReadValue(const IBinaryInputStreamUPtr& in_meshStream)
-        {
-            TType value;
-            in_meshStream->Read(reinterpret_cast<s8*>(&value), sizeof(TType));
-            return value;
-        }
-        //----------------------------------------------------------------------------
         /// Read block of data in for given type
         ///
         /// @author Ian Copland
@@ -111,7 +96,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         template <typename TType> void ReadBlock(const IBinaryInputStreamUPtr& in_meshStream, u32 in_numToRead, TType* out_data)
         {
-            in_meshStream->Read(reinterpret_cast<s8*>(out_data), sizeof(TType) * in_numToRead);
+            in_meshStream->Read(reinterpret_cast<u8*>(out_data), sizeof(TType) * in_numToRead);
         }
         //-----------------------------------------------------------------------------
         /// Read the vertex declaration from the mesh filestream. The declaration
@@ -125,12 +110,12 @@ namespace ChilliSource
         void ReadVertexDeclaration(const IBinaryInputStreamUPtr& in_meshStream, MeshDescriptor& out_meshDesc)
         {
             //build the vertex declaration from the file
-            u8 numVertexElements = ReadValue<u8>(in_meshStream);
+            u8 numVertexElements = in_meshStream->Read<u8>();
             
             VertexElement* vertexElements = new VertexElement[numVertexElements];
             for (int i = 0; i < numVertexElements; ++i)
             {
-                u8 vertexAttrib = ReadValue<u8>(in_meshStream);
+                u8 vertexAttrib = in_meshStream->Read<u8>();
                 
                 switch (VertexAttribute(vertexAttrib))
                 {
@@ -191,11 +176,11 @@ namespace ChilliSource
             
             //read the vertex data
             out_subMeshDesc.mpVertexData = new u8[in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices];
-            in_meshStream->Read((s8*)out_subMeshDesc.mpVertexData, in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices);
+            in_meshStream->Read((u8*)out_subMeshDesc.mpVertexData, in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices);
             
             //read the index data
             out_subMeshDesc.mpIndexData = new u8[in_meshDesc.mudwIndexSize * out_subMeshDesc.mudwNumIndices];
-            in_meshStream->Read((s8*)out_subMeshDesc.mpIndexData, in_meshDesc.mudwIndexSize * out_subMeshDesc.mudwNumIndices);
+            in_meshStream->Read((u8*)out_subMeshDesc.mpIndexData, in_meshDesc.mudwIndexSize * out_subMeshDesc.mudwNumIndices);
         }
         //-----------------------------------------------------------------------------
         /// Reads the sub-mesh header section of the file
@@ -212,7 +197,7 @@ namespace ChilliSource
             u8 nextChar = 0;
             do
             {
-                nextChar = ReadValue<u8>(in_meshStream);
+                nextChar = in_meshStream->Read<u8>();
                 out_subMeshDesc.mstrName += nextChar;
                 
             } while(nextChar != 0);
@@ -220,22 +205,22 @@ namespace ChilliSource
             //read num verts and triangles
             if (2 == in_meshDesc.mudwIndexSize)
             {
-                out_subMeshDesc.mudwNumVertices = (u32)ReadValue<u16>(in_meshStream);
-                out_subMeshDesc.mudwNumIndices = ((u32)ReadValue<u16>(in_meshStream)) * 3;
+                out_subMeshDesc.mudwNumVertices = u32(in_meshStream->Read<u16>());
+                out_subMeshDesc.mudwNumIndices = (u32(in_meshStream->Read<u16>())) * 3;
             }
             else
             {
-                out_subMeshDesc.mudwNumVertices = ReadValue<u32>(in_meshStream);
-                out_subMeshDesc.mudwNumIndices = ReadValue<u32>(in_meshStream) * 3;
+                out_subMeshDesc.mudwNumVertices = in_meshStream->Read<u32>();
+                out_subMeshDesc.mudwNumIndices = in_meshStream->Read<u32>() * 3;
             }
             
             //read bounds
-            out_subMeshDesc.mvMinBounds.x = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMinBounds.y = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMinBounds.z = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMaxBounds.x = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMaxBounds.y = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMaxBounds.z = ReadValue<f32>(in_meshStream);
+            out_subMeshDesc.mvMinBounds.x = in_meshStream->Read<f32>();
+            out_subMeshDesc.mvMinBounds.y = in_meshStream->Read<f32>();
+            out_subMeshDesc.mvMinBounds.z = in_meshStream->Read<f32>();
+            out_subMeshDesc.mvMaxBounds.x = in_meshStream->Read<f32>();
+            out_subMeshDesc.mvMaxBounds.y = in_meshStream->Read<f32>();
+            out_subMeshDesc.mvMaxBounds.z = in_meshStream->Read<f32>();
             
             //TODO: Remove texture and material from mesh
             //in the meantime just read and discard.
@@ -244,7 +229,7 @@ namespace ChilliSource
                 u8 nextCharacter = 0;
                 do
                 {
-                    nextCharacter = ReadValue<u8>(in_meshStream);
+                    nextCharacter = in_meshStream->Read<u8>();
                     
                 } while(nextCharacter != 0);
             }
@@ -254,7 +239,7 @@ namespace ChilliSource
                 u8 nextCharacter = 0;
                 do
                 {
-                    nextCharacter = ReadValue<u8>(in_meshStream);
+                    nextCharacter = in_meshStream->Read<u8>();
                     
                 } while(nextCharacter != 0);
             }
@@ -282,19 +267,19 @@ namespace ChilliSource
                 u8 nextChar = 0;
                 do
                 {
-                    nextChar = ReadValue<u8>(in_meshStream);
+                    nextChar = in_meshStream->Read<u8>();
                     nodeName += nextChar;
                 } while(nextChar != 0);
                 
                 //get the parent index
-                s32 parentIndex = (s32)ReadValue<s16>(in_meshStream);
+                s32 parentIndex = (s32)in_meshStream->Read<s16>();
                 
                 //get the type
                 const u32 k_isJoint = 1;
-                u8 type = ReadValue<u8>(in_meshStream);
+                u8 type = in_meshStream->Read<u8>();
                 if (type == k_isJoint)
                 {
-                    u32 jointIndex = (u32)ReadValue<u8>(in_meshStream);
+                    u32 jointIndex = (u32)in_meshStream->Read<u8>();
                     jointToNodeMap.insert(std::pair<u32, s32>(jointIndex, (s32)i));
                 }
                 
@@ -323,14 +308,14 @@ namespace ChilliSource
         //-----------------------------------------------------------------------------
         bool ReadGlobalHeader(const IBinaryInputStreamUPtr& in_meshStream, const std::string& in_filePath, MeshDescriptor& out_meshDesc, MeshDataQuantities& out_meshQuantities)
         {
-            u32 fileCheckValue = ReadValue<u32>(in_meshStream);
+            u32 fileCheckValue = in_meshStream->Read<u32>();
             if(fileCheckValue != k_fileCheckValue)
             {
                 CS_LOG_ERROR("csmodel file has corruption(incorrect File Check Value): " + in_filePath);
                 return false;
             }
             
-            u32 versionNum = ReadValue<u32>(in_meshStream);
+            u32 versionNum = in_meshStream->Read<u32>();
             if (versionNum < k_minVersion || versionNum > k_maxVersion)
             {
                 CS_LOG_ERROR("Unsupported csmodel version: " + in_filePath);
@@ -343,10 +328,10 @@ namespace ChilliSource
             out_meshDesc.mFeatures.mbHasTexture = false;
             
             //build the feature declaration from the file
-            u32 numFeatures = (u32)ReadValue<u8>(in_meshStream);
+            u32 numFeatures = u32(in_meshStream->Read<u8>());
             for (u32 i=0; i<numFeatures; ++i)
             {
-                u32 featureType = (u32)ReadValue<u8>(in_meshStream);
+                u32 featureType = u32(in_meshStream->Read<u8>());
                 
                 switch (Feature(featureType))
                 {
@@ -363,26 +348,26 @@ namespace ChilliSource
             ReadVertexDeclaration(in_meshStream, out_meshDesc);
             
             //read index declaration
-            out_meshDesc.mudwIndexSize = ReadValue<u8>(in_meshStream);
+            out_meshDesc.mudwIndexSize = in_meshStream->Read<u8>();
             
             //read the min and max bounds
-            out_meshDesc.mvMinBounds.x = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMinBounds.y = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMinBounds.z = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMaxBounds.x = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMaxBounds.y = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMaxBounds.z = ReadValue<f32>(in_meshStream);
+            out_meshDesc.mvMinBounds.x = in_meshStream->Read<f32>();
+            out_meshDesc.mvMinBounds.y = in_meshStream->Read<f32>();
+            out_meshDesc.mvMinBounds.z = in_meshStream->Read<f32>();
+            out_meshDesc.mvMaxBounds.x = in_meshStream->Read<f32>();
+            out_meshDesc.mvMaxBounds.y = in_meshStream->Read<f32>();
+            out_meshDesc.mvMaxBounds.z = in_meshStream->Read<f32>();
             
             //read the number of meshes
-            out_meshQuantities.m_numMeshes = (u32)ReadValue<u16>(in_meshStream);
+            out_meshQuantities.m_numMeshes = u32(in_meshStream->Read<u16>());
             out_meshQuantities.m_numSkeletonNodes = 0;
             out_meshQuantities.m_numJoints = 0;
             
             //read num skeleton nodes and joints if used
             if (true == out_meshDesc.mFeatures.mbHasAnimationData)
             {
-                out_meshQuantities.m_numSkeletonNodes = (s32)ReadValue<s16>(in_meshStream);
-                out_meshQuantities.m_numJoints = (u32)ReadValue<u8>(in_meshStream);
+                out_meshQuantities.m_numSkeletonNodes = s32(in_meshStream->Read<s16>());
+                out_meshQuantities.m_numJoints = u32(in_meshStream->Read<u8>());
             }
             
             return true;

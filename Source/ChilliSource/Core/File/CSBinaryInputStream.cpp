@@ -55,7 +55,7 @@ namespace ChilliSource
             //read the header data
             const u32 k_headerSize = 20;
             std::unique_ptr<u8[]> headerData(new u8[k_headerSize]);
-            in_fileStream->Read(reinterpret_cast<s8*>(headerData.get()), k_headerSize);
+            in_fileStream->Read(headerData.get(), k_headerSize);
             
             //test file id.
             if (headerData[0] != 'C' || headerData[1] != 'S' || headerData[2] != 'C' || headerData[3] != 'S')
@@ -142,7 +142,7 @@ namespace ChilliSource
             CS_ASSERT(m_fileStream->GetReadPosition() == chunkInfoIt->second.m_offset, "Seek failed.");
             
             std::unique_ptr<u8[]> chunkData(new u8[chunkInfoIt->second.m_size]);
-            m_fileStream->Read(reinterpret_cast<s8*>(chunkData.get()), chunkInfoIt->second.m_size);
+            m_fileStream->Read(chunkData.get(), chunkInfoIt->second.m_size);
             
             return CSBinaryChunkUPtr(new CSBinaryChunk(std::move(chunkData), chunkInfoIt->second.m_size));
         }
@@ -158,7 +158,7 @@ namespace ChilliSource
         //read the chunk table
         const u32 chunkTableDataSize = k_chunkEntrySize * in_numEntries;
         std::unique_ptr<u8[]> chunkTableData(new u8[chunkTableDataSize]);
-        m_fileStream->Read(reinterpret_cast<s8*>(chunkTableData.get()), chunkTableDataSize);
+        m_fileStream->Read(chunkTableData.get(), chunkTableDataSize);
         
         //iterate over the chunks
         for (u32 i = 0; i < in_numEntries; ++i)

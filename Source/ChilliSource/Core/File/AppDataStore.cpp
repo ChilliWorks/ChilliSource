@@ -319,7 +319,7 @@ namespace ChilliSource
             {
                 u32 encryptedDataSize = fileStream->GetLength();
                 
-                std::unique_ptr<s8[]> encryptedData(new s8[encryptedDataSize]);
+                std::unique_ptr<u8[]> encryptedData(new u8[encryptedDataSize]);
                 fileStream->Read(encryptedData.get(), encryptedDataSize);
                 fileStream.reset();
                 

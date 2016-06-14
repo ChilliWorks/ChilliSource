@@ -50,7 +50,7 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 		return;
 
 	ChilliSource::IBinaryInputStream* pStream = (ChilliSource::IBinaryInputStream*)png_get_io_ptr(png_ptr);
-	pStream->Read(reinterpret_cast<s8*>(data), s32(length));
+	pStream->Read(reinterpret_cast<u8*>(data), s32(length));
 }
 
 namespace CSBackend
@@ -191,7 +191,7 @@ namespace CSBackend
 			//insure that it is indeed a png
 			const s32 dwHeaderSize = 8;
 			u8 ubyHeader[dwHeaderSize];
-			inStream->Read((s8*)ubyHeader, dwHeaderSize);
+			inStream->Read(ubyHeader, dwHeaderSize);
 
 			if (png_sig_cmp(ubyHeader, 0, dwHeaderSize) > 0)
 			{
