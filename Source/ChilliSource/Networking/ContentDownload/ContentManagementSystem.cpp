@@ -673,7 +673,7 @@ namespace ChilliSource
             return false;
         }
 
-        pFileStream->Write((s8*)in_zippedPackage.data(), (s32)in_zippedPackage.size());
+        pFileStream->Write(reinterpret_cast<const u8*>(in_zippedPackage.data()), (s32)in_zippedPackage.size());
         pFileStream.reset();
         
         //Check if the full file has been written and perform a checksum validation 

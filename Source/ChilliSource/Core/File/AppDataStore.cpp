@@ -300,7 +300,7 @@ namespace ChilliSource
             auto fileStream = pFileSystem->CreateBinaryOutputStream(StorageLocation::k_saveData, k_filename);
             if(fileStream != nullptr)
             {
-                fileStream->Write((void*)(encryptedData.m_data.get()), encryptedData.m_size);
+                fileStream->Write(reinterpret_cast<const u8*>(encryptedData.m_data.get()), encryptedData.m_size);
                 fileStream.reset();
             }
             

@@ -83,7 +83,7 @@ namespace ChilliSource
         /// @param length
         ///     The length of the data to write
         ///
-        void Write(void* data, u64 length) noexcept;
+        void Write(const u8* data, u64 length) noexcept;
         
         /// Writes ByteBuffer data to the stream. It may not write out to file yet,
         /// but if the buffer is full it'll flush.
@@ -122,11 +122,11 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     template<typename TType> void BinaryOutputStream::Write(TType data) noexcept
     {
-        static_assert(std::is_pod<TType>::value, "TType must be POD type");
+        static_assert(std::is_standard_layout<TType>::value, "TType must be standard layout type");
         static_assert(!std::is_pointer<TType>::value, "TType cannot be a pointer");
         
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
-        Write(&data, sizeof(TType));
+        Write(reinterpret_cast<const u8*>(&data), sizeof(TType));
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
     }
 }

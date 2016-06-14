@@ -106,7 +106,7 @@ namespace ChilliSource
             return false;
         }
         
-        fileStream->Write((void*)in_contents.c_str(), in_contents.size());
+        fileStream->Write(reinterpret_cast<const u8*>(in_contents.c_str()), in_contents.size());
         
         return true;
     }
@@ -120,7 +120,7 @@ namespace ChilliSource
             return false;
         }
         
-        fileStream->Write((void*)in_data, (s32)in_dataSize);
+        fileStream->Write(reinterpret_cast<const u8*>(in_data), (s32)in_dataSize);
         
         return true;
     }

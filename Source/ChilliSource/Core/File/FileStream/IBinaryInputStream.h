@@ -122,7 +122,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     template<typename TType> TType IBinaryInputStream::Read() noexcept
     {
-        static_assert(std::is_pod<TType>::value, "TType must be POD type");
+        static_assert(std::is_standard_layout<TType>::value, "TType must be standard layout type");
         static_assert(!std::is_pointer<TType>::value, "TType cannot be a pointer");
         
         const auto readData = Read(sizeof(TType));
