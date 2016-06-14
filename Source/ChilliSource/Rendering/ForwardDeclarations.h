@@ -40,6 +40,7 @@ namespace ChilliSource
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(CanvasMaterialPool);
     CS_FORWARDDECLARE_CLASS(CanvasRenderer);
+    CS_FORWARDDECLARE_CLASS(IRenderCommandProcessor);
     CS_FORWARDDECLARE_CLASS(IRenderPassCompiler);
     CS_FORWARDDECLARE_CLASS(ForwardRenderPassCompiler);
     CS_FORWARDDECLARE_CLASS(MeshBatch);
