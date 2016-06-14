@@ -24,11 +24,19 @@
 
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+#   include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
+#endif
+
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     IRenderCommandProcessorUPtr IRenderCommandProcessor::Create() noexcept
     {
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+        return IRenderCommandProcessorUPtr(new CSBackend::OpenGL::RenderCommandProcessor());
+#else
         return nullptr;
+#endif
     }
 }

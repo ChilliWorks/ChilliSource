@@ -42,8 +42,6 @@ namespace CSBackend
         class RenderCommandProcessor final : public ChilliSource::IRenderCommandProcessor
         {
         public:
-            RenderCommandProcessor() = default;
-            
             /// Processes the given render command queue, performing the required actions for
             /// the command using OpenGL.
             ///
@@ -51,6 +49,94 @@ namespace CSBackend
             ///     The queue of render commands that should be processed.
             ///
             void Process(const ChilliSource::RenderCommandQueue& renderCommandQueue) noexcept override;
+            
+        private:
+            /// Loads the shader described by the given load command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void LoadShader(const ChilliSource::LoadShaderRenderCommand* renderCommand) noexcept;
+            
+            /// Loads the texture described by the given load command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void LoadTexture(const ChilliSource::LoadTextureRenderCommand* renderCommand) noexcept;
+            
+            /// Loads the mesh described by the given load command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept;
+            
+            /// Begin render rendering to the default render target as described by the given
+            /// render command.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void BeginRender(const ChilliSource::BeginRenderRenderCommand* renderCommand) noexcept;
+            
+            /// Applies the camera described by the given render command.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyCamera(const ChilliSource::ApplyCameraRenderCommand* renderCommand) noexcept;
+            
+            /// Applies the material described by the given render command.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyMaterial(const ChilliSource::ApplyMaterialRenderCommand* renderCommand) noexcept;
+            
+            /// Applies the mesh described by the given render command.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyMesh(const ChilliSource::ApplyMeshRenderCommand* renderCommand) noexcept;
+            
+            /// Renders an instance of the current mesh with the current context state and data
+            /// provided by the given render command.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void RenderInstance(const ChilliSource::RenderInstanceRenderCommand* renderCommand) noexcept;
+            
+            /// Finish rendering to the current render target as described by the given render
+            /// command.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void EndRender(const ChilliSource::EndRenderRenderCommand* renderCommand) noexcept;
+            
+            /// Unloads the shader described by the given unload command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void UnloadShader(const ChilliSource::UnloadShaderRenderCommand* renderCommand) noexcept;
+            
+            /// Unloads the texture described by the given unload command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void UnloadTexture(const ChilliSource::UnloadTextureRenderCommand* renderCommand) noexcept;
+            
+            /// Unloads the mesh described by the given unload command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void UnloadMesh(const ChilliSource::UnloadMeshRenderCommand* renderCommand) noexcept;
         };
     }
 }

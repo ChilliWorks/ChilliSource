@@ -134,7 +134,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandListUPtr RenderSnapshot::ClaimPreRenderCommandList() noexcept
+    RenderCommandListCUPtr RenderSnapshot::ClaimPreRenderCommandList() noexcept
     {
         CS_ASSERT(m_preRenderCommandList, "Pre-RenderCommandList has already been claimed.");
         
@@ -142,7 +142,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandListUPtr RenderSnapshot::ClaimPostRenderCommandList() noexcept
+    RenderCommandListCUPtr RenderSnapshot::ClaimPostRenderCommandList() noexcept
     {
         CS_ASSERT(m_postRenderCommandList, "Post-RenderCommandList has already been claimed.");
         

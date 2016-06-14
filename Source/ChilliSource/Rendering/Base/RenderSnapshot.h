@@ -51,6 +51,11 @@ namespace ChilliSource
     class RenderSnapshot final
     {
     public:
+        CS_DECLARE_NOCOPY(RenderSnapshot);
+        
+        RenderSnapshot(RenderSnapshot&&) = default;
+        RenderSnapshot& operator=(RenderSnapshot&&) = default;
+        
         /// Creates a new instance with the given clear colour.
         ///
         /// @param clearColour
@@ -142,13 +147,13 @@ namespace ChilliSource
         ///
         /// @return The moved pre render command list.
         ///
-        RenderCommandListUPtr ClaimPreRenderCommandList() noexcept;
+        RenderCommandListCUPtr ClaimPreRenderCommandList() noexcept;
     
         /// Moves the post render command list to a new external owner.
         ///
         /// @return The moved post render command list.
         ///
-        RenderCommandListUPtr ClaimPostRenderCommandList() noexcept;
+        RenderCommandListCUPtr ClaimPostRenderCommandList() noexcept;
         
     private:
         Colour m_clearColour;

@@ -27,8 +27,12 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+
+#include <deque>
+#include <mutex>
 
 namespace ChilliSource
 {
@@ -89,10 +93,9 @@ namespace ChilliSource
         ///
         /// @param renderSnapshot
         ///     The render snapshot to process. This should have already been populated by passing it
-        ///     to each system and component in the scene. This will be modified internally and should
-        ///     not be reused.
+        ///     to each system and component in the scene. This must be moved.
         ///
-        void ProcessRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept;
+        void ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept;
         
         /// Processes the next render command queue. If there is no render command queue ready to be
         /// processed then this will block until there is.
@@ -113,9 +116,44 @@ namespace ChilliSource
         
         Renderer() noexcept;
         
-    private:
+        /// If the render preparation stages (Compile Render Frame, Compile Render Passes and Compile
+        /// Render Commands stages) are currently being processed this waits until they have finished
+        /// before continuing. It then again flags the render preparation stages as in-progress.
+        ///
+        void WaitThenStartRenderPrep() noexcept;
+        
+        /// Flags the render preparation stage as finished and notifies any threads that are currently
+        /// waiting.
+        ///
+        void EndRenderPrep() noexcept;
+        
+        /// If the queue of command queues is full then this waits until one has been popped to continue.
+        /// It then adds the given render queue and notifies any threads which are waiting.
+        ///
+        /// @param renderCommandQueue
+        ///     The render command queue which should be pushed. Must be moved.
+        ///
+        void WaitThenPushCommandQueue(RenderCommandQueue renderCommandQueue) noexcept;
+        
+        /// If the queue of command queues is empty then this waits until one has been pushed to continue.
+        /// It pops a command queue from the list and notifies any threads which are waiting.
+        ///
+        /// @return The render command queue which has been popped.
+        ///
+        RenderCommandQueue WaitThenPopCommandQueue() noexcept;
         
         IRenderPassCompilerUPtr m_renderPassCompiler;
+        IRenderCommandProcessorUPtr m_renderCommandProcessor;
+        
+        RenderSnapshot m_currentSnapshot;
+        
+        std::mutex m_renderPrepMutex;
+        std::condition_variable m_renderPrepCondition;
+        bool m_renderPrepActive = false;
+        
+        std::mutex m_renderCommandQueuesMutex;
+        std::condition_variable m_renderCommandQueuesCondition;
+        std::deque<RenderCommandQueue> m_renderCommandQueues;
     };
 }
 

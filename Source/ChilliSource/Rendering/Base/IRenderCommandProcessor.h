@@ -46,6 +46,8 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(IRenderCommandProcessor);
         
+        IRenderCommandProcessor() = default;
+        
         /// Creates a new instance of the render command processor. The specific processor
         /// type depends on the current platform.
         ///

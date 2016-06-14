@@ -27,11 +27,15 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
-#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
 
 namespace ChilliSource
 {
+    namespace
+    {
+        constexpr u32 k_maxQueueSize = 1;
+    }
+    
     CS_DEFINE_NAMEDTYPE(Renderer);
     
     //------------------------------------------------------------------------------
@@ -42,10 +46,10 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
+        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Colour::k_black)
     {
-        //TODO: Decide which rendering backend to use
+        //TODO: Handle forward vs deferred rendering
         m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
-        //TODO: RenderCommandProcessor.
     }
     
     //------------------------------------------------------------------------------
@@ -55,34 +59,95 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::ProcessRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void Renderer::ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept
     {
-        // claim data from the render snapshot to ensure that it can't be externally modified when passed
-        // to background tasks.
-        auto clearColour = renderSnapshot.GetClearColour();
-        auto renderCamera = renderSnapshot.ClaimRenderCamera();
-        auto renderAmbientLights = renderSnapshot.ClaimRenderAmbientLights();
-        auto renderDirectionalLights = renderSnapshot.ClaimRenderDirectionalLights();
-        auto renderPointLights = renderSnapshot.ClaimRenderPointLights();
-        auto renderObjects = renderSnapshot.ClaimRenderObjects();
-        auto preRenderCommandList = renderSnapshot.ClaimPreRenderCommandList();
-        auto postRenderCommandList = renderSnapshot.ClaimPostRenderCommandList();
+        WaitThenStartRenderPrep();
+        
+        m_currentSnapshot = std::move(renderSnapshot);
         
         auto taskScheduler = Application::Get()->GetTaskScheduler();
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
+            auto clearColour = m_currentSnapshot.GetClearColour();
+            auto renderCamera = m_currentSnapshot.ClaimRenderCamera();
+            auto renderAmbientLights = m_currentSnapshot.ClaimRenderAmbientLights();
+            auto renderDirectionalLights = m_currentSnapshot.ClaimRenderDirectionalLights();
+            auto renderPointLights = m_currentSnapshot.ClaimRenderPointLights();
+            auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
+            auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();
+            auto postRenderCommandList = m_currentSnapshot.ClaimPostRenderCommandList();
+            
             auto renderFrame = RenderFrameCompiler::CompileRenderFrame(renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            //TODO: Process the rest of the render pipeline.
+            
+            //TODO: Properly build render command queue.
+            RenderCommandQueue renderCommandQueue;
+            renderCommandQueue.push_back(std::move(preRenderCommandList));
+            renderCommandQueue.push_back(std::move(postRenderCommandList));
+            
+            WaitThenPushCommandQueue(std::move(renderCommandQueue));
+            EndRenderPrep();
         });
-        
-        //TODO: Remove this when locking in place
-        std::this_thread::sleep_for(std::chrono::milliseconds(17));
     }
     
     //------------------------------------------------------------------------------
     void Renderer::ProcessRenderCommandQueue() noexcept
     {
-        //TODO: process render command queue.
+        auto renderCommandQueue = WaitThenPopCommandQueue();
+        m_renderCommandProcessor->Process(std::move(renderCommandQueue));
+    }
+    
+    //------------------------------------------------------------------------------
+    void Renderer::WaitThenStartRenderPrep() noexcept
+    {
+        std::unique_lock<std::mutex> lock(m_renderPrepMutex);
+        
+        while (m_renderPrepActive)
+        {
+            m_renderPrepCondition.wait(lock);
+        }
+        
+        m_renderPrepActive = true;
+    }
+    
+    //------------------------------------------------------------------------------
+    void Renderer::EndRenderPrep() noexcept
+    {
+        std::unique_lock<std::mutex> lock(m_renderPrepMutex);
+        m_renderPrepActive = false;
+        m_renderPrepCondition.notify_all();
+    }
+    
+    //------------------------------------------------------------------------------
+    void Renderer::WaitThenPushCommandQueue(RenderCommandQueue renderCommandQueue) noexcept
+    {
+        std::unique_lock<std::mutex> lock(m_renderCommandQueuesMutex);
+        
+        while (m_renderCommandQueues.size() >= k_maxQueueSize)
+        {
+            m_renderCommandQueuesCondition.wait(lock);
+        }
+        
+        m_renderCommandQueues.push_back(std::move(renderCommandQueue));
+        
+        m_renderCommandQueuesCondition.notify_all();
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderCommandQueue Renderer::WaitThenPopCommandQueue() noexcept
+    {
+        std::unique_lock<std::mutex> lock(m_renderCommandQueuesMutex);
+        
+        while (m_renderCommandQueues.empty())
+        {
+            m_renderCommandQueuesCondition.wait(lock);
+        }
+        
+        auto renderCommandQueue = std::move(m_renderCommandQueues.front());
+        m_renderCommandQueues.pop_front();
+        
+        m_renderCommandQueuesCondition.notify_all();
+        
+        return renderCommandQueue;
     }
 }

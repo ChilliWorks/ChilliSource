@@ -338,11 +338,6 @@ namespace ChilliSource
             }
         }
         
-        //Initialise the render system prior to the OnInit() event.
-
-        //TODO: Remove?
-        //m_renderSystem->Init();
-        
         //Texture/Cubemap provider is a compound provider and needs to be informed when the other providers are created.
         GetSystem<TextureProvider>()->PostCreate();
         GetSystem<CubemapProvider>()->PostCreate();
@@ -363,7 +358,7 @@ namespace ChilliSource
         
         m_stateManager->RenderSnapshotStates(renderSnapshot);
         
-        m_renderer->ProcessRenderSnapshot(renderSnapshot);
+        m_renderer->ProcessRenderSnapshot(std::move(renderSnapshot));
     }
     
     //------------------------------------------------------------------------------
@@ -481,8 +476,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::Render() noexcept
     {
-        //TODO: Render scene
-        //m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene(), m_stateManager->GetActiveState()->GetUICanvas());
+        m_renderer->ProcessRenderCommandQueue();
     }
     
     //------------------------------------------------------------------------------
