@@ -203,8 +203,6 @@ namespace CSBackend
             //read the contents of the zip file.
             std::unique_lock<std::mutex> lock(m_mutex);
 
-            ChilliSource::IBinaryInputStreamUPtr output;
-
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)
             {
