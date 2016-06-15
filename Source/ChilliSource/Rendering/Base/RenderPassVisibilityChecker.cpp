@@ -42,7 +42,10 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             bool IsRenderObjectVisible(const RenderCamera& camera, const RenderPassObject& renderPassObject) noexcept
             {
-                return camera.GetFrustrum().SphereCullTest(renderPassObject.GetRenderMesh()->GetBoundingSphere());
+                //In the future, we could cache this worldspace sphere in the renderpass object if it turns out its needed in different steps.
+                const Sphere& localSphere = renderPassObject.GetRenderMesh()->GetBoundingSphere();
+                Sphere worldSphere(renderPassObject.GetWorldMatrix().GetTranslation() + localSphere.vOrigin, localSphere.fRadius);
+                return camera.GetFrustrum().SphereCullTest(worldSphere);
             }
         }
         
