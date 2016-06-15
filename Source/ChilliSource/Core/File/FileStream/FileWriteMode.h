@@ -1,11 +1,7 @@
 //
-//  File.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright © 2016 Tag Games. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,21 +22,30 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_FILE_H_
-#define _CHILLISOURCE_CORE_FILE_H_
+#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_FILEWRITEMODE_H_
+#define _CHILLISOURCE_CORE_FILE_FILESTREAM_FILEWRITEMODE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/File/AppDataStore.h>
-#include <ChilliSource/Core/File/CSBinaryChunk.h>
-#include <ChilliSource/Core/File/CSBinaryInputStream.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/File/StorageLocation.h>
-#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
-#include <ChilliSource/Core/File/FileStream/IBinaryInputStream.h>
-#include <ChilliSource/Core/File/FileStream/BinaryInputStream.h>
-#include <ChilliSource/Core/File/FileStream/BinaryOutputStream.h>
-#include <ChilliSource/Core/File/FileStream/ITextInputStream.h>
-#include <ChilliSource/Core/File/FileStream/TextInputStream.h>
-#include <ChilliSource/Core/File/FileStream/TextOutputStream.h>
+
+namespace ChilliSource
+{
+    /// Specifies the modes an Text/BinaryOutputStream file can be opened with.
+    ///
+    enum class FileWriteMode
+    {
+        k_overwrite,
+        k_append
+    };
+    
+    /// Converts an FileWriteMode to a std openmode for use in
+    /// file opening.
+    ///
+    /// @param outputFileMode
+    ///     The FileWriteMode to convert.
+    ///
+    /// @return The std open mode.
+    ///
+    std::ios_base::openmode ToOpenMode(FileWriteMode outputFileMode) noexcept;
+}
 
 #endif

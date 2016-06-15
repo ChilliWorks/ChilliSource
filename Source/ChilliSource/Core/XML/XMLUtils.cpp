@@ -43,11 +43,10 @@ namespace ChilliSource
         //--------------------------------------------------
         XMLUPtr ReadDocument(StorageLocation in_storageLocation, const std::string& in_filePath)
         {
-            FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_read);
+            auto stream = Application::Get()->GetFileSystem()->CreateTextInputStream(in_storageLocation, in_filePath);
             if (stream != nullptr)
             {
-                std::string contents;
-                stream->GetAll(contents);
+                std::string contents = stream->ReadAll();
                 stream.reset();
 
                 XMLUPtr document = ParseDocument(contents);
@@ -373,7 +372,7 @@ namespace ChilliSource
         //--------------------------------------------------
         bool WriteDocument(XML::Document* in_document, StorageLocation in_storageLocation, const std::string& in_filePath)
         {
-            FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_write);
+            auto stream = Application::Get()->GetFileSystem()->CreateTextOutputStream(in_storageLocation, in_filePath);
             if (stream != nullptr)
             {
                 std::string contents = XMLUtils::ToString(in_document);

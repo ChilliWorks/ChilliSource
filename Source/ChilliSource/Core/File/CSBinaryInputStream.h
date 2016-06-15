@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_CORE_FILE_CSBINARYINPUTSTREAM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/FileStream/IBinaryInputStream.h>
 
 #include <unordered_map>
 
@@ -154,7 +155,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         void ReadChunkTable(u32 in_numEntries);
         
-        FileStreamUPtr m_fileStream;
+        IBinaryInputStreamUPtr m_fileStream;
         bool m_isValid = false;
         u32 m_fileFormatId = 0;
         u32 m_fileFormatVersion = 0;

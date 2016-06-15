@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8123B6781CE098BF008F8182 /* InputFilter.cpp */; };
+		8141A5E91CF5D9CD00197C0E /* ByteBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8141A5E71CF5D9CD00197C0E /* ByteBuffer.cpp */; };
+		8141A5EC1CF5E67100197C0E /* BinaryOutputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8141A5EA1CF5E67100197C0E /* BinaryOutputStream.cpp */; };
+		8145805F1CF34D7800E0BFF4 /* BinaryInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8145805D1CF34D7800E0BFF4 /* BinaryInputStream.cpp */; };
 		814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814E92B31CB54F76004D6ADE /* TaskPool.cpp */; };
 		8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */; };
 		8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FB1C89D2AC00B13109 /* CkBank.cpp */; };
@@ -43,7 +46,6 @@
 		8158F6691C89D2AD00B13109 /* AppDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2691C89D2AC00B13109 /* AppDataStore.cpp */; };
 		8158F66A1C89D2AD00B13109 /* CSBinaryChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F26B1C89D2AC00B13109 /* CSBinaryChunk.cpp */; };
 		8158F66B1C89D2AD00B13109 /* CSBinaryInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F26D1C89D2AC00B13109 /* CSBinaryInputStream.cpp */; };
-		8158F66C1C89D2AD00B13109 /* FileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F26F1C89D2AC00B13109 /* FileStream.cpp */; };
 		8158F66D1C89D2AD00B13109 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2711C89D2AC00B13109 /* FileSystem.cpp */; };
 		8158F66E1C89D2AD00B13109 /* TaggedFilePathResolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2741C89D2AC00B13109 /* TaggedFilePathResolver.cpp */; };
 		8158F66F1C89D2AD00B13109 /* CSImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2791C89D2AC00B13109 /* CSImageProvider.cpp */; };
@@ -286,6 +288,7 @@
 		8158F8001C89D2AD00B13109 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6461C89D2AD00B13109 /* Texture.cpp */; };
 		8158F8011C89D2AD00B13109 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6481C89D2AD00B13109 /* TextureUnitSystem.cpp */; };
 		8164A4691CB69C86002A95B0 /* MainThreadTaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */; };
+		818ADFAA1D0EB692009C3848 /* FileWriteMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */; };
 		81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */; };
 		81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
@@ -315,7 +318,9 @@
 		81C7FFD71C89DDE300D306F9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */; };
 		81C7FFD81C89DDE300D306F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */; };
 		81C7FFD91C89DDE300D306F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC11C89DDE300D306F9 /* UIKit.framework */; };
+		81CA60ED1CE5DFB500080533 /* TextInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CA60EB1CE5DFB500080533 /* TextInputStream.cpp */; };
 		81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */; };
+		81EA870A1CEE1AB400DB798C /* TextOutputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81EA87081CEE1AB400DB798C /* TextOutputStream.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -332,6 +337,13 @@
 
 /* Begin PBXFileReference section */
 		8123B6781CE098BF008F8182 /* InputFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputFilter.cpp; sourceTree = "<group>"; };
+		8141A5E71CF5D9CD00197C0E /* ByteBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ByteBuffer.cpp; sourceTree = "<group>"; };
+		8141A5E81CF5D9CD00197C0E /* ByteBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteBuffer.h; sourceTree = "<group>"; };
+		8141A5EA1CF5E67100197C0E /* BinaryOutputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryOutputStream.cpp; sourceTree = "<group>"; };
+		8141A5EB1CF5E67100197C0E /* BinaryOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryOutputStream.h; sourceTree = "<group>"; };
+		8145805D1CF34D7800E0BFF4 /* BinaryInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryInputStream.cpp; sourceTree = "<group>"; };
+		8145805E1CF34D7800E0BFF4 /* BinaryInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryInputStream.h; sourceTree = "<group>"; };
+		814580631CF3564400E0BFF4 /* IBinaryInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBinaryInputStream.h; sourceTree = "<group>"; };
 		814E92B31CB54F76004D6ADE /* TaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPool.cpp; sourceTree = "<group>"; };
 		814E92B41CB54F76004D6ADE /* TaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskPool.h; sourceTree = "<group>"; };
 		8158F1EA1C89D27300B13109 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -443,8 +455,6 @@
 		8158F26C1C89D2AC00B13109 /* CSBinaryChunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryChunk.h; sourceTree = "<group>"; };
 		8158F26D1C89D2AC00B13109 /* CSBinaryInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryInputStream.cpp; sourceTree = "<group>"; };
 		8158F26E1C89D2AC00B13109 /* CSBinaryInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryInputStream.h; sourceTree = "<group>"; };
-		8158F26F1C89D2AC00B13109 /* FileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileStream.cpp; sourceTree = "<group>"; };
-		8158F2701C89D2AC00B13109 /* FileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileStream.h; sourceTree = "<group>"; };
 		8158F2711C89D2AC00B13109 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		8158F2721C89D2AC00B13109 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		8158F2731C89D2AC00B13109 /* StorageLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageLocation.h; sourceTree = "<group>"; };
@@ -1028,6 +1038,8 @@
 		8158F6491C89D2AD00B13109 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainThreadTaskPool.cpp; sourceTree = "<group>"; };
 		8164A4681CB69C86002A95B0 /* MainThreadTaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainThreadTaskPool.h; sourceTree = "<group>"; };
+		818ADFA81D0EAD60009C3848 /* FileWriteMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileWriteMode.h; sourceTree = "<group>"; };
+		818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileWriteMode.cpp; sourceTree = "<group>"; };
 		81C26AF51CB7F3410079A113 /* Task.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskScheduler.cpp; sourceTree = "<group>"; };
 		81C58C211CB3C57000EA58A0 /* TaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskScheduler.h; sourceTree = "<group>"; };
@@ -1114,8 +1126,13 @@
 		81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		81C7FFC11C89DDE300D306F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		81CA60EB1CE5DFB500080533 /* TextInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextInputStream.cpp; sourceTree = "<group>"; };
+		81CA60EC1CE5DFB500080533 /* TextInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInputStream.h; sourceTree = "<group>"; };
+		81CA60EE1CE604AB00080533 /* ITextInputStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITextInputStream.h; sourceTree = "<group>"; };
 		81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SizePolicy.cpp; sourceTree = "<group>"; };
 		81E3AA971CE241F600DF7B4E /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
+		81EA87081CEE1AB400DB798C /* TextOutputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextOutputStream.cpp; sourceTree = "<group>"; };
+		81EA87091CEE1AB400DB798C /* TextOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextOutputStream.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1282,6 +1299,8 @@
 				8158F20A1C89D2AC00B13109 /* AppConfig.h */,
 				8158F20B1C89D2AC00B13109 /* Application.cpp */,
 				8158F20C1C89D2AC00B13109 /* Application.h */,
+				8141A5E71CF5D9CD00197C0E /* ByteBuffer.cpp */,
+				8141A5E81CF5D9CD00197C0E /* ByteBuffer.h */,
 				8158F20D1C89D2AC00B13109 /* ByteColour.cpp */,
 				8158F20E1C89D2AC00B13109 /* ByteColour.h */,
 				8158F20F1C89D2AC00B13109 /* Colour.cpp */,
@@ -1416,14 +1435,13 @@
 		8158F2681C89D2AC00B13109 /* File */ = {
 			isa = PBXGroup;
 			children = (
+				81CA60EA1CE5DF9300080533 /* FileStream */,
 				8158F2691C89D2AC00B13109 /* AppDataStore.cpp */,
 				8158F26A1C89D2AC00B13109 /* AppDataStore.h */,
 				8158F26B1C89D2AC00B13109 /* CSBinaryChunk.cpp */,
 				8158F26C1C89D2AC00B13109 /* CSBinaryChunk.h */,
 				8158F26D1C89D2AC00B13109 /* CSBinaryInputStream.cpp */,
 				8158F26E1C89D2AC00B13109 /* CSBinaryInputStream.h */,
-				8158F26F1C89D2AC00B13109 /* FileStream.cpp */,
-				8158F2701C89D2AC00B13109 /* FileStream.h */,
 				8158F2711C89D2AC00B13109 /* FileSystem.cpp */,
 				8158F2721C89D2AC00B13109 /* FileSystem.h */,
 				8158F2731C89D2AC00B13109 /* StorageLocation.h */,
@@ -2935,6 +2953,25 @@
 			path = ../../Libraries;
 			sourceTree = "<group>";
 		};
+		81CA60EA1CE5DF9300080533 /* FileStream */ = {
+			isa = PBXGroup;
+			children = (
+				8145805D1CF34D7800E0BFF4 /* BinaryInputStream.cpp */,
+				8145805E1CF34D7800E0BFF4 /* BinaryInputStream.h */,
+				814580631CF3564400E0BFF4 /* IBinaryInputStream.h */,
+				81CA60EE1CE604AB00080533 /* ITextInputStream.h */,
+				81CA60EB1CE5DFB500080533 /* TextInputStream.cpp */,
+				81CA60EC1CE5DFB500080533 /* TextInputStream.h */,
+				81EA87081CEE1AB400DB798C /* TextOutputStream.cpp */,
+				81EA87091CEE1AB400DB798C /* TextOutputStream.h */,
+				8141A5EA1CF5E67100197C0E /* BinaryOutputStream.cpp */,
+				8141A5EB1CF5E67100197C0E /* BinaryOutputStream.h */,
+				818ADFA81D0EAD60009C3848 /* FileWriteMode.h */,
+				818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */,
+			);
+			path = FileStream;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3091,7 +3128,6 @@
 				814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */,
 				8158F6A91C89D2AD00B13109 /* IAPSystem.cpp in Sources */,
 				8158F7C61C89D2AD00B13109 /* DialogueBoxListener.mm in Sources */,
-				8158F66C1C89D2AD00B13109 /* FileStream.cpp in Sources */,
 				8158F6B21C89D2AD00B13109 /* RenderCapabilities.cpp in Sources */,
 				8158F6DD1C89D2AD00B13109 /* CSParticleProvider.cpp in Sources */,
 				8158F6AB1C89D2AD00B13109 /* AspectRatioUtils.cpp in Sources */,
@@ -3119,6 +3155,7 @@
 				8158F6A41C89D2AD00B13109 /* TextEntry.cpp in Sources */,
 				8158F72B1C89D2AD00B13109 /* SliderDirection.cpp in Sources */,
 				8158F6EB1C89D2AD00B13109 /* ParticleEmitterDefFactory.cpp in Sources */,
+				81CA60ED1CE5DFB500080533 /* TextInputStream.cpp in Sources */,
 				8158F6781C89D2AD00B13109 /* ShapeIntersection.cpp in Sources */,
 				8158F65A1C89D2AD00B13109 /* ParamDictionarySerialiser.cpp in Sources */,
 				8158F7FD1C89D2AD00B13109 /* GLSLShaderProvider.cpp in Sources */,
@@ -3149,6 +3186,7 @@
 				8158F6E51C89D2AD00B13109 /* Cone2DParticleEmitter.cpp in Sources */,
 				8158F7F91C89D2AD00B13109 /* MeshBuffer.cpp in Sources */,
 				8158F7C51C89D2AD00B13109 /* Screen.mm in Sources */,
+				8141A5E91CF5D9CD00197C0E /* ByteBuffer.cpp in Sources */,
 				8158F6BF1C89D2AD00B13109 /* AmbientLightComponent.cpp in Sources */,
 				8158F65C1C89D2AD00B13109 /* PropertyTypes.cpp in Sources */,
 				8158F6FD1C89D2AD00B13109 /* TextureProvider.cpp in Sources */,
@@ -3162,6 +3200,7 @@
 				8158F71E1C89D2AD00B13109 /* GridUILayout.cpp in Sources */,
 				8158F65E1C89D2AD00B13109 /* BaseEncoding.cpp in Sources */,
 				8158F7101C89D2AD00B13109 /* WidgetTemplate.cpp in Sources */,
+				8145805F1CF34D7800E0BFF4 /* BinaryInputStream.cpp in Sources */,
 				8158F7061C89D2AD00B13109 /* UIComponentFactory.cpp in Sources */,
 				8158F7D51C89D2AD00B13109 /* HttpDelegate.mm in Sources */,
 				8158F6951C89D2AD00B13109 /* XML.cpp in Sources */,
@@ -3201,9 +3240,11 @@
 				8158F6A01C89D2AD00B13109 /* TapGesture.cpp in Sources */,
 				8158F6EE1C89D2AD00B13109 /* SphereParticleEmitter.cpp in Sources */,
 				8158F6CC1C89D2AD00B13109 /* Skeleton.cpp in Sources */,
+				81EA870A1CEE1AB400DB798C /* TextOutputStream.cpp in Sources */,
 				8158F7D61C89D2AD00B13109 /* HttpRequest.mm in Sources */,
 				8158F6C71C89D2AD00B13109 /* CSAnimProvider.cpp in Sources */,
 				8158F7CF1C89D2AD00B13109 /* Accelerometer.mm in Sources */,
+				818ADFAA1D0EB692009C3848 /* FileWriteMode.cpp in Sources */,
 				8158F6A51C89D2AD00B13109 /* ContentManagementSystem.cpp in Sources */,
 				8158F7251C89D2AD00B13109 /* VListUILayout.cpp in Sources */,
 				8158F72D1C89D2AD00B13109 /* TextIcon.cpp in Sources */,
@@ -3229,6 +3270,7 @@
 				8158F6E01C89D2AD00B13109 /* ParticleDrawableDefFactory.cpp in Sources */,
 				8158F6F61C89D2AD00B13109 /* SpriteComponent.cpp in Sources */,
 				8158F7F81C89D2AD00B13109 /* GLError.cpp in Sources */,
+				8141A5EC1CF5E67100197C0E /* BinaryOutputStream.cpp in Sources */,
 				8158F6A31C89D2AD00B13109 /* PointerSystem.cpp in Sources */,
 				8158F6541C89D2AD00B13109 /* Device.cpp in Sources */,
 				8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */,
