@@ -32,6 +32,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Threading.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
@@ -61,31 +62,43 @@ namespace CSBackend
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
-        	m_dialogueBoxJI->ShowSystemDialogue(in_id, in_title, in_message, in_confirm);
-            m_activeSysConfirmDelegate = in_delegate;
+            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
+            {
+                m_dialogueBoxJI->ShowSystemDialogue(in_id, in_title, in_message, in_confirm);
+                m_activeSysConfirmDelegate = in_delegate;
+            });
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
-        	m_dialogueBoxJI->ShowSystemConfirmDialogue(in_id, in_title, in_message, in_confirm, in_cancel);
-            m_activeSysConfirmDelegate = in_delegate;
+            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
+            {
+                m_dialogueBoxJI->ShowSystemConfirmDialogue(in_id, in_title, in_message, in_confirm, in_cancel);
+                m_activeSysConfirmDelegate = in_delegate;
+            });
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::MakeToast(const std::string& in_text)
         {
-        	m_dialogueBoxJI->MakeToast(in_text);
+            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
+            {
+                m_dialogueBoxJI->MakeToast(in_text);
+            });
         }
         //------------------------------------------------------
         //------------------------------------------------------
         void DialogueBoxSystem::OnSystemConfirmDialogueResult(u32 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result)
         {
-            if(m_activeSysConfirmDelegate)
-        	{
-        		m_activeSysConfirmDelegate(in_id, in_result);
-        		m_activeSysConfirmDelegate = nullptr;
-        	}
+            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
+            {
+                if (m_activeSysConfirmDelegate)
+                {
+                    m_activeSysConfirmDelegate(in_id, in_result);
+                    m_activeSysConfirmDelegate = nullptr;
+                }
+            });
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
