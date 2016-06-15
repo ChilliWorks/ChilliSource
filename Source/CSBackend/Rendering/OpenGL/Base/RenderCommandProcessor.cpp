@@ -25,6 +25,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+#include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
@@ -84,19 +85,27 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadShader(const ChilliSource::LoadShaderRenderCommand* renderCommand) noexcept
         {
+            auto renderShader = renderCommand->GetRenderShader();
+            
             //TODO: Should be pooled.
             auto glShader = new GLShader(renderCommand->GetVertexShader(), renderCommand->GetFragmentShader());
             
-            auto renderShader = renderCommand->GetRenderShader();
             renderShader->SetExtraData(glShader);
-            
             m_contextState.SetRenderShader(nullptr);
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadTexture(const ChilliSource::LoadTextureRenderCommand* renderCommand) noexcept
         {
-            //TODO:
+            auto renderTexture = renderCommand->GetRenderTexture();
+            
+            //TODO: Should be pooled.
+            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture->GetDimensions(), renderTexture->GetImageFormat(),
+                                           renderTexture->GetImageCompression(), renderTexture->GetFilterMode(), renderTexture->GetWrapModeS(), renderTexture->GetWrapModeT(),
+                                           renderTexture->IsMipmapped());
+            
+            renderTexture->SetExtraData(glTexture);
+            m_contextState.SetRenderTexture(nullptr);
         }
         
         //------------------------------------------------------------------------------
@@ -153,7 +162,10 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::UnloadTexture(const ChilliSource::UnloadTextureRenderCommand* renderCommand) noexcept
         {
-            //TODO:
+            auto renderTexture = renderCommand->GetRenderTexture();
+            auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());
+            
+            CS_SAFEDELETE(glTexture);
         }
         
         //------------------------------------------------------------------------------

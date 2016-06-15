@@ -45,6 +45,8 @@ namespace CSBackend
         /// A container for all OpenGL functionality relating to a single shader, including loading,
         /// binding and applying attributes and uniforms.
         ///
+        /// This is not thread-safe and should only be accessed from the render thread.
+        ///
         class GLShader final
         {
         public:

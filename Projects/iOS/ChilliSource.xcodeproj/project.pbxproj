@@ -311,6 +311,7 @@
 		81A55DFE1CFD8BA400C9F0D6 /* UnloadMaterialGroupRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A55DFC1CFD8BA400C9F0D6 /* UnloadMaterialGroupRenderCommand.cpp */; };
 		81A55E031CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A55E011CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.cpp */; };
 		81A5AF5F1D11575A00307707 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A5AF5D1D11575A00307707 /* GLShader.cpp */; };
+		81A5AF671D1190FB00307707 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A5AF651D1190FB00307707 /* GLTexture.cpp */; };
 		81BF7B7D1CF84AFD00DBC80B /* RenderMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */; };
 		81BF7B811CF84CA600DBC80B /* RenderMeshManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B801CF84CA600DBC80B /* RenderMeshManager.cpp */; };
 		81BF7B851CF8552000DBC80B /* LoadMeshRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF7B831CF8552000DBC80B /* LoadMeshRenderCommand.cpp */; };
@@ -1112,6 +1113,8 @@
 		81A55E021CFDA5EE00C9F0D6 /* ForwardRenderMaterialGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardRenderMaterialGroupManager.h; sourceTree = "<group>"; };
 		81A5AF5D1D11575A00307707 /* GLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShader.cpp; sourceTree = "<group>"; };
 		81A5AF5E1D11575A00307707 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
+		81A5AF651D1190FB00307707 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
+		81A5AF661D1190FB00307707 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
 		81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderMesh.cpp; sourceTree = "<group>"; };
 		81BF7B7C1CF84AFD00DBC80B /* RenderMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderMesh.h; sourceTree = "<group>"; };
 		81BF7B7E1CF84B3300DBC80B /* PolygonType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PolygonType.h; sourceTree = "<group>"; };
@@ -2800,6 +2803,7 @@
 				8158F62F1C89D2AD00B13109 /* Base */,
 				8158F63D1C89D2AD00B13109 /* ForwardDeclarations.h */,
 				81A5AF5C1D11575A00307707 /* Shader */,
+				81A5AF641D1190FB00307707 /* Texture */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -2866,6 +2870,15 @@
 				81A5AF5E1D11575A00307707 /* GLShader.h */,
 			);
 			path = Shader;
+			sourceTree = "<group>";
+		};
+		81A5AF641D1190FB00307707 /* Texture */ = {
+			isa = PBXGroup;
+			children = (
+				81A5AF651D1190FB00307707 /* GLTexture.cpp */,
+				81A5AF661D1190FB00307707 /* GLTexture.h */,
+			);
+			path = Texture;
 			sourceTree = "<group>";
 		};
 		81C7FE121C89DD0500D306F9 /* Libraries */ = {
@@ -3254,6 +3267,7 @@
 				8158F6F01C89D2AD00B13109 /* ParticleEffect.cpp in Sources */,
 				8158F7FA1C89D2AD00B13109 /* RenderCapabilities.cpp in Sources */,
 				8158F6CF1C89D2AD00B13109 /* StaticModelComponent.cpp in Sources */,
+				81A5AF671D1190FB00307707 /* GLTexture.cpp in Sources */,
 				8158F6FC1C89D2AD00B13109 /* TextureAtlasProvider.cpp in Sources */,
 				8158F6B01C89D2AD00B13109 /* MeshBatch.cpp in Sources */,
 				8158F72C1C89D2AD00B13109 /* TextUIComponent.cpp in Sources */,
