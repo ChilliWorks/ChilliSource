@@ -24,6 +24,8 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
+#include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
@@ -82,8 +84,13 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadShader(const ChilliSource::LoadShaderRenderCommand* renderCommand) noexcept
         {
-            //TODO:
+            //TODO: Should be pooled.
+            auto glShader = new GLShader(renderCommand->GetVertexShader(), renderCommand->GetFragmentShader());
             
+            auto renderShader = renderCommand->GetRenderShader();
+            renderShader->SetExtraData(glShader);
+            
+            m_contextState.SetRenderShader(nullptr);
         }
         
         //------------------------------------------------------------------------------
@@ -137,7 +144,10 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::UnloadShader(const ChilliSource::UnloadShaderRenderCommand* renderCommand) noexcept
         {
-            //TODO:
+            auto renderShader = renderCommand->GetRenderShader();
+            auto glShader = reinterpret_cast<GLShader*>(renderShader->GetExtraData());
+            
+            CS_SAFEDELETE(glShader);
         }
         
         //------------------------------------------------------------------------------

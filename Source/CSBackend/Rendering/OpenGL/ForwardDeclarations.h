@@ -44,6 +44,10 @@ namespace CSBackend
         CS_FORWARDDECLARE_CLASS(RenderCapabilities);
         CS_FORWARDDECLARE_CLASS(RenderCommandProcessor);
         CS_FORWARDDECLARE_CLASS(RenderTarget);
+        //----------------------------------------------------
+        /// Shader
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(GLShader);
     }
 }
 
