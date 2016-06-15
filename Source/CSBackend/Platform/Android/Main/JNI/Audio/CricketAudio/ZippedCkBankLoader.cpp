@@ -49,19 +49,17 @@ namespace CSBackend
 
 			auto fileSystem = ChilliSource::Application::Get()->GetFileSystem();
 
-			auto stream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_readBinary);
+			auto stream = fileSystem->CreateBinaryInputStream(in_storageLocation, in_filePath);
 			if (stream == nullptr)
 			{
 				out_resource->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
 				return;
 			}
 
-			stream->SeekG(0, ChilliSource::SeekDir::k_end);
-			u32 length = stream->TellG();
-			stream->SeekG(0, ChilliSource::SeekDir::k_beginning);
+			u32 length = stream->GetLength();
 
 			std::unique_ptr<u8[]> bankBuffer(new u8[length]);
-			stream->Read(reinterpret_cast<s8*>(bankBuffer.get()), length);
+			stream->Read(bankBuffer.get(), length);
 			stream.reset();
 
 			::CkBank* bank = ::CkBank::newBankFromMemory(reinterpret_cast<void*>(bankBuffer.get()), length);
@@ -84,7 +82,7 @@ namespace CSBackend
 			taskScheduler->ScheduleTask(ChilliSource::TaskType::k_file, [=](const ChilliSource::TaskContext&)
 			{
 				auto fileSystem = ChilliSource::Application::Get()->GetFileSystem();
-				auto stream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_readBinary);
+				auto stream = fileSystem->CreateBinaryInputStream(in_storageLocation, in_filePath);
 				if (stream == nullptr)
 				{
 					taskScheduler->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
@@ -94,12 +92,10 @@ namespace CSBackend
 					});
 				}
 
-				stream->SeekG(0, ChilliSource::SeekDir::k_end);
-				u32 length = stream->TellG();
-				stream->SeekG(0, ChilliSource::SeekDir::k_beginning);
+				u32 length = stream->GetLength();
 
 				std::unique_ptr<u8[]> bankBuffer(new u8[length]);
-				stream->Read(reinterpret_cast<s8*>(bankBuffer.get()), length);
+				stream->Read(bankBuffer.get(), length);
 				stream.reset();
 
 				//we cannot capture the unique pointer in the main thread task, so store it and

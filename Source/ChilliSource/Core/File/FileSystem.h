@@ -30,11 +30,15 @@
 #define _CHILLISOURCE_CORE_FILE_FILESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/File/FileStream/IBinaryInputStream.h>
+#include <ChilliSource/Core/File/FileStream/ITextInputStream.h>
+#include <ChilliSource/Core/File/FileStream/BinaryOutputStream.h>
+#include <ChilliSource/Core/File/FileStream/TextOutputStream.h>
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <mutex>
+#include <SHA1/SHA1.h>
 
 namespace ChilliSource
 {
@@ -98,22 +102,6 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         bool WriteFile(StorageLocation in_storageLocation, const std::string& in_filePath, const s8* in_data, u32 in_dataSize) const;
         //------------------------------------------------------------------------------
-        /// Creates a new file stream to the given file in the given storage location.
-        ///
-        /// This is thread-safe, though the created file stream is not. Make sure it
-        /// is used and destroyed on the same thread it was created.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param in_storageLocation - The storage location.
-        /// @param in_filePath - The file path.
-        /// @param in_fileMode - The file mode.
-        ///
-        /// @return The new file stream. If the stream cannot be created or is invalid,
-        /// null be returned.
-        //------------------------------------------------------------------------------
-        virtual FileStreamUPtr CreateFileStream(StorageLocation in_storageLocation, const std::string& in_filePath, FileMode in_fileMode) const = 0;
-        //------------------------------------------------------------------------------
         /// Creates a new input text stream to the given file in the given storage location.
         ///
         /// @author HMcLaughlin
@@ -144,11 +132,12 @@ namespace ChilliSource
         ///
         /// @param in_storageLocation - The storage location.
         /// @param in_filePath - The file path.
+        /// @param in_fileMode - The write mode to open the file with.
         ///
         /// @return The new file stream. If the stream cannot be created or is invalid,
         /// null be returned.
         //------------------------------------------------------------------------------
-        virtual TextOutputStreamUPtr CreateTextOutputStream(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
+        virtual TextOutputStreamUPtr CreateTextOutputStream(StorageLocation in_storageLocation, const std::string& in_filePath, FileWriteMode in_fileMode = FileWriteMode::k_overwrite) const = 0;
         //------------------------------------------------------------------------------
         /// Creates a new output binary stream to the given file in the given storage location.
         ///
@@ -156,11 +145,12 @@ namespace ChilliSource
         ///
         /// @param in_storageLocation - The storage location.
         /// @param in_filePath - The file path.
+        /// @param in_fileMode - The write mode to open the file with.
         ///
         /// @return The new file stream. If the stream cannot be created or is invalid,
         /// null be returned.
         //------------------------------------------------------------------------------
-        virtual BinaryOutputStreamUPtr CreateBinaryOutputStream(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
+        virtual BinaryOutputStreamUPtr CreateBinaryOutputStream(StorageLocation in_storageLocation, const std::string& in_filePath, FileWriteMode in_fileMode = FileWriteMode::k_overwrite) const = 0;
         //------------------------------------------------------------------------------
         /// Creates the given directory. The full directory hierarchy will be created.
         ///
@@ -409,10 +399,11 @@ namespace ChilliSource
         ///
         /// @param in_storageLocation - Storage location
         /// @param in_filePath - File path
+        /// @param in_reportType - SHA1 type
         ///
         /// @return SHA1 checksum
         //------------------------------------------------------------------------------
-        std::string GetFileChecksumSHA1(StorageLocation in_storageLocation, const std::string& in_filePath) const;
+        std::string GetFileChecksumSHA1(StorageLocation in_storageLocation, const std::string& in_filePath, const CSHA1::REPORT_TYPE in_reportType = CSHA1::REPORT_HEX_SHORT) const;
         //------------------------------------------------------------------------------
         /// Calculate the MD5 checksum of the file at the given directory
         ///
@@ -473,7 +464,7 @@ namespace ChilliSource
         ///
         /// @return The size in bytes of the given file.
         //------------------------------------------------------------------------------
-        u32 GetFileSize(StorageLocation in_storageLocation, const std::string& in_filePath) const;
+        u64 GetFileSize(StorageLocation in_storageLocation, const std::string& in_filePath) const;
         //------------------------------------------------------------------------------
         /// This is thread-safe.
         ///
@@ -484,7 +475,7 @@ namespace ChilliSource
         ///
         /// @return The size in bytes of the contents of the given directory.
         //------------------------------------------------------------------------------
-        u32 GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
+        u64 GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
         //------------------------------------------------------------------------------
         /// Returns whether or not the given storage location can be written to.
         ///
@@ -520,16 +511,6 @@ namespace ChilliSource
         /// @author S Downie
         //------------------------------------------------------------------------------
         FileSystem();
-        //------------------------------------------------------------------------------
-        /// This is thread-safe.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param in_fileMode - The file mode.
-        ///
-        /// @return whether or not the given file mode is a write mode
-        //------------------------------------------------------------------------------
-        bool IsWriteMode(FileMode in_fileMode) const;
 
     private:
         std::string m_packageDLCPath;

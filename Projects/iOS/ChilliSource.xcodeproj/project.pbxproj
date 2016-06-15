@@ -46,7 +46,6 @@
 		8158F6691C89D2AD00B13109 /* AppDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2691C89D2AC00B13109 /* AppDataStore.cpp */; };
 		8158F66A1C89D2AD00B13109 /* CSBinaryChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F26B1C89D2AC00B13109 /* CSBinaryChunk.cpp */; };
 		8158F66B1C89D2AD00B13109 /* CSBinaryInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F26D1C89D2AC00B13109 /* CSBinaryInputStream.cpp */; };
-		8158F66C1C89D2AD00B13109 /* FileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F26F1C89D2AC00B13109 /* FileStream.cpp */; };
 		8158F66D1C89D2AD00B13109 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2711C89D2AC00B13109 /* FileSystem.cpp */; };
 		8158F66E1C89D2AD00B13109 /* TaggedFilePathResolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2741C89D2AC00B13109 /* TaggedFilePathResolver.cpp */; };
 		8158F66F1C89D2AD00B13109 /* CSImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2791C89D2AC00B13109 /* CSImageProvider.cpp */; };
@@ -289,6 +288,7 @@
 		8158F8001C89D2AD00B13109 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6461C89D2AD00B13109 /* Texture.cpp */; };
 		8158F8011C89D2AD00B13109 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6481C89D2AD00B13109 /* TextureUnitSystem.cpp */; };
 		8164A4691CB69C86002A95B0 /* MainThreadTaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */; };
+		818ADFAA1D0EB692009C3848 /* FileWriteMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */; };
 		81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */; };
 		81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
@@ -455,8 +455,6 @@
 		8158F26C1C89D2AC00B13109 /* CSBinaryChunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryChunk.h; sourceTree = "<group>"; };
 		8158F26D1C89D2AC00B13109 /* CSBinaryInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryInputStream.cpp; sourceTree = "<group>"; };
 		8158F26E1C89D2AC00B13109 /* CSBinaryInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryInputStream.h; sourceTree = "<group>"; };
-		8158F26F1C89D2AC00B13109 /* FileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileStream.cpp; sourceTree = "<group>"; };
-		8158F2701C89D2AC00B13109 /* FileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileStream.h; sourceTree = "<group>"; };
 		8158F2711C89D2AC00B13109 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		8158F2721C89D2AC00B13109 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		8158F2731C89D2AC00B13109 /* StorageLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageLocation.h; sourceTree = "<group>"; };
@@ -1040,6 +1038,8 @@
 		8158F6491C89D2AD00B13109 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainThreadTaskPool.cpp; sourceTree = "<group>"; };
 		8164A4681CB69C86002A95B0 /* MainThreadTaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainThreadTaskPool.h; sourceTree = "<group>"; };
+		818ADFA81D0EAD60009C3848 /* FileWriteMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileWriteMode.h; sourceTree = "<group>"; };
+		818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileWriteMode.cpp; sourceTree = "<group>"; };
 		81C26AF51CB7F3410079A113 /* Task.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskScheduler.cpp; sourceTree = "<group>"; };
 		81C58C211CB3C57000EA58A0 /* TaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskScheduler.h; sourceTree = "<group>"; };
@@ -1442,8 +1442,6 @@
 				8158F26C1C89D2AC00B13109 /* CSBinaryChunk.h */,
 				8158F26D1C89D2AC00B13109 /* CSBinaryInputStream.cpp */,
 				8158F26E1C89D2AC00B13109 /* CSBinaryInputStream.h */,
-				8158F26F1C89D2AC00B13109 /* FileStream.cpp */,
-				8158F2701C89D2AC00B13109 /* FileStream.h */,
 				8158F2711C89D2AC00B13109 /* FileSystem.cpp */,
 				8158F2721C89D2AC00B13109 /* FileSystem.h */,
 				8158F2731C89D2AC00B13109 /* StorageLocation.h */,
@@ -2968,6 +2966,8 @@
 				81EA87091CEE1AB400DB798C /* TextOutputStream.h */,
 				8141A5EA1CF5E67100197C0E /* BinaryOutputStream.cpp */,
 				8141A5EB1CF5E67100197C0E /* BinaryOutputStream.h */,
+				818ADFA81D0EAD60009C3848 /* FileWriteMode.h */,
+				818ADFA91D0EB692009C3848 /* FileWriteMode.cpp */,
 			);
 			path = FileStream;
 			sourceTree = "<group>";
@@ -3128,7 +3128,6 @@
 				814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */,
 				8158F6A91C89D2AD00B13109 /* IAPSystem.cpp in Sources */,
 				8158F7C61C89D2AD00B13109 /* DialogueBoxListener.mm in Sources */,
-				8158F66C1C89D2AD00B13109 /* FileStream.cpp in Sources */,
 				8158F6B21C89D2AD00B13109 /* RenderCapabilities.cpp in Sources */,
 				8158F6DD1C89D2AD00B13109 /* CSParticleProvider.cpp in Sources */,
 				8158F6AB1C89D2AD00B13109 /* AspectRatioUtils.cpp in Sources */,
@@ -3245,6 +3244,7 @@
 				8158F7D61C89D2AD00B13109 /* HttpRequest.mm in Sources */,
 				8158F6C71C89D2AD00B13109 /* CSAnimProvider.cpp in Sources */,
 				8158F7CF1C89D2AD00B13109 /* Accelerometer.mm in Sources */,
+				818ADFAA1D0EB692009C3848 /* FileWriteMode.cpp in Sources */,
 				8158F6A51C89D2AD00B13109 /* ContentManagementSystem.cpp in Sources */,
 				8158F7251C89D2AD00B13109 /* VListUILayout.cpp in Sources */,
 				8158F72D1C89D2AD00B13109 /* TextIcon.cpp in Sources */,

@@ -27,9 +27,9 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    BinaryOutputStream::BinaryOutputStream(const std::string& filePath) noexcept
+    BinaryOutputStream::BinaryOutputStream(const std::string& filePath, FileWriteMode fileMode) noexcept
     {
-        m_fileStream.open(filePath.c_str(), std::ofstream::out | std::ofstream::binary);
+        m_fileStream.open(filePath.c_str(), ToOpenMode(fileMode));
         m_isValid = m_fileStream.is_open() && !m_fileStream.bad() && !m_fileStream.fail();
     }
     //------------------------------------------------------------------------------
@@ -38,10 +38,10 @@ namespace ChilliSource
         return m_isValid;
     }
     //------------------------------------------------------------------------------
-    void BinaryOutputStream::Write(void* data, u64 length) noexcept
+    void BinaryOutputStream::Write(const u8* data, u64 length) noexcept
     {
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
-        m_fileStream.write(static_cast<s8*>(data), length);
+        m_fileStream.write(reinterpret_cast<const s8*>(data), length);
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
     }
     //------------------------------------------------------------------------------

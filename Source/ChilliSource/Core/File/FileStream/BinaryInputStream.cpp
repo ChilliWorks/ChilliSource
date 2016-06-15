@@ -84,6 +84,31 @@ namespace ChilliSource
         return Read(m_length);
     }
     //------------------------------------------------------------------------------
+    bool BinaryInputStream::Read(u8* buffer, u64 length) noexcept
+    {
+        CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
+        
+        if(m_fileStream.eof())
+        {
+            return false;
+        }
+        
+        //Ensure that we never overrun the file stream
+        const auto currentPosition = GetReadPosition();
+        const auto maxValidLength = std::min(m_length - currentPosition, length);
+        
+        if(maxValidLength == 0)
+        {
+            return true;
+        }
+        
+        m_fileStream.read(reinterpret_cast<s8*>(buffer), maxValidLength);
+        
+        CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured in filestream");
+        
+        return true;
+    }
+    //------------------------------------------------------------------------------
     ByteBufferUPtr BinaryInputStream::Read(u64 length) noexcept
     {
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");

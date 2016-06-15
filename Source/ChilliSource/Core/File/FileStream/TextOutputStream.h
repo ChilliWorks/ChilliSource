@@ -27,22 +27,24 @@
 #define _CHILLISOURCE_CORE_FILE_FILESTREAM_TEXTOUTPUTSTREAM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/FileStream/FileWriteMode.h>
 
 #include <fstream>
 
 namespace ChilliSource
 {
-    /// Class to provide textual write functionality for a file
+    /// Class to provide textual write functionality for a file.
 	///
 	/// Calling Write() on this stream will not cause a flush to disk, this will
 	/// only occur when the destructer is called.
 	///
 	/// If a TextOutputStream is created with an existing file, that file will
-	/// be overwritten, regardless of whether or not a Write() was carried out
+    /// be overwritten, regardless of whether or not a Write() was carried out, unless
+    /// the append file mode is used.
     ///
     /// OutputTextStream is thread agnostic, but not thread-safe. i.e. Instances
     /// can used by one thread at a time. It doesn't matter which thread as long
-    /// as any previous threads are no longer accessing it
+    /// as any previous threads are no longer accessing it.
     ///
     class TextOutputStream final
     {
@@ -57,8 +59,10 @@ namespace ChilliSource
         ///
         /// @param filepath
         ///     The absolute path to a file
+        /// @param fileMode
+        ///     The mode to open the file with.
         ///
-        TextOutputStream(const std::string& filePath) noexcept;
+        TextOutputStream(const std::string& filePath, FileWriteMode fileMode) noexcept;
         
         /// Checks the status of the stream, if this returns false then the stream
         /// can no longer be accessed.

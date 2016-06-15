@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/File/FileStream/IBinaryInputStream.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
@@ -68,7 +69,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void LoadImage(StorageLocation in_storageLocation, const std::string& in_filepath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
-            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
+            auto pImageFile = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_storageLocation, in_filepath);
             
             if(pImageFile == nullptr)
             {
@@ -86,32 +87,30 @@ namespace ChilliSource
             //ETC1 Format is in big endian format. As all the platforms we support are little endian we will have to convert the data to little endian.
             //read the header.
             ETC1Header sHeader;
-            pImageFile->Read((s8*)sHeader.m_pkmTag, sizeof(u8) * 6);
+            pImageFile->Read(sHeader.m_pkmTag, sizeof(u8) * 6);
             
-            pImageFile->Read((s8*)&sHeader.m_numberOfMipmaps, sizeof(u16));
+            pImageFile->Read((u8*)&sHeader.m_numberOfMipmaps, sizeof(u16));
             sHeader.m_numberOfMipmaps = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_numberOfMipmaps));
             
-            pImageFile->Read((s8*)&sHeader.m_textureWidth, sizeof(u16));
+            pImageFile->Read((u8*)&sHeader.m_textureWidth, sizeof(u16));
             sHeader.m_textureWidth = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_textureWidth));
             
-            pImageFile->Read((s8*)&sHeader.m_textureHeight, sizeof(u16));
+            pImageFile->Read((u8*)&sHeader.m_textureHeight, sizeof(u16));
             sHeader.m_textureHeight = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_textureHeight));
             
-            pImageFile->Read((s8*)&sHeader.m_originalWidth, sizeof(u16));
+            pImageFile->Read((u8*)&sHeader.m_originalWidth, sizeof(u16));
             sHeader.m_originalWidth = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_originalWidth));
             
-            pImageFile->Read((s8*)&sHeader.m_originalHeight, sizeof(u16));
+            pImageFile->Read((u8*)&sHeader.m_originalHeight, sizeof(u16));
             sHeader.m_originalHeight = Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.m_originalHeight));
             
             //get the size of the rest of the data
             const u32 kstrHeaderSize = 16;
-            pImageFile->SeekG(0, SeekDir::k_end);
-            u32 dwDataSize = pImageFile->TellG() - kstrHeaderSize;
-            pImageFile->SeekG(kstrHeaderSize, SeekDir::k_beginning);
+            u32 dwDataSize = u32(pImageFile->GetLength()) - kstrHeaderSize;
             
             //read the rest of the data
             u8* pData = new u8[dwDataSize];
-            pImageFile->Read((s8*)pData, dwDataSize);
+            pImageFile->Read((u8*)pData, dwDataSize);
             pImageFile.reset();
 
             Image::ImageDataUPtr imageData(pData);

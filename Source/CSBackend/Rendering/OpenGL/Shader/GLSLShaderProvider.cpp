@@ -134,7 +134,7 @@ namespace CSBackend
             //----------------------------------------------
 			void LoadShader(ChilliSource::StorageLocation in_location, const std::string& in_filePath, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ShaderSPtr& out_shader)
             {
-                ChilliSource::FileStreamUPtr shaderStream = ChilliSource::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, ChilliSource::FileMode::k_read);
+                auto shaderStream = ChilliSource::Application::Get()->GetFileSystem()->CreateTextInputStream(in_location, in_filePath);
                 if(shaderStream == nullptr)
                 {
                     CS_LOG_ERROR("Failed to open shader file: " + in_filePath);
@@ -149,8 +149,7 @@ namespace CSBackend
                     return;
                 }
                 
-                std::string fileContents;
-                shaderStream->GetAll(fileContents);
+                std::string fileContents = shaderStream->ReadAll();
                 shaderStream.reset();
                 
                 std::string languageChunk = GetChunk(k_languageTag, fileContents);

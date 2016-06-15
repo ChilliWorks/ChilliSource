@@ -32,7 +32,6 @@
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/File/FileStream.h>
 
 #include <minizip/unzip.h>
 
@@ -113,29 +112,6 @@ namespace CSBackend
             /// for use.
             //------------------------------------------------------------------------------
             bool IsValid() const;
-            //------------------------------------------------------------------------------
-            /// Creates a new "virtual" file stream to a file within the zip. The zipped
-            /// file is inflated in full and stored in memory. The "virtual" file stream
-            /// then treats this memory as if it were a file on disk.
-            ///
-            /// The memory location is read-only and write operations on the file stream
-            /// are not possible.
-            ///
-            /// This can only be called by one thread at a time meaning others will block
-            /// until it is finished. This can be a slow operation if accessing a large
-            /// file, so care needs to be taken to ensure this doesn't cause visible
-            /// stutters on the main thread.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_filePath - The file path inside the zip, relative to the "root
-            /// directory path".
-            /// @param in_fileMode - The file mode. The file mode has to be a "read" file
-            /// mode or this will assert.
-            ///
-            /// @return The file stream.
-            //------------------------------------------------------------------------------
-            ChilliSource::FileStreamUPtr CreateFileStream(const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const;
             //------------------------------------------------------------------------------
             /// Creates a new "virtual" input text stream to a file within the zip. The zipped
             /// file is inflated in full and stored in memory. The "virtual" file stream

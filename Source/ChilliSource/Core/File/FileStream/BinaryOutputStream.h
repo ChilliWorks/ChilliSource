@@ -27,23 +27,25 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/ByteBuffer.h>
+#include <ChilliSource/Core/File/FileStream/FileWriteMode.h>
 
 #include <fstream>
 
 namespace ChilliSource
 {
-    /// Class to provide binary write functionality for a file
+    /// Class to provide binary write functionality for a file.
     ///
     /// Calling Write() on this stream will not cause a flush to disk, this will
     /// only occur when the destructer is called.
     ///
     /// If a BinaryOutputStream is created with an existing file, that file will
-    /// be overwritten, regardless of whether or not a Write() was carried out
+    /// be overwritten, regardless of whether or not a Write() was carried out, unless
+    /// the append file mode is used.
     ///
     /// BinaryOutputStream is thread agnostic, but not thread-safe.
     /// i.e. Instances can used by one thread at a time. It
     /// doesn't matter which thread as long as any previous threads
-    /// are no longer accessing it
+    /// are no longer accessing it.
     ///
     class BinaryOutputStream final
     {
@@ -58,8 +60,10 @@ namespace ChilliSource
         ///
         /// @param filepath
         ///     The absolute path to a file
+        /// @param fileMode
+        ///     The mode to open the file with.
         ///
-        BinaryOutputStream(const std::string& filePath) noexcept;
+        BinaryOutputStream(const std::string& filePath, FileWriteMode fileMode) noexcept;
         
         /// Checks the status of the stream, if this returns false then the stream
         /// can no longer be accessed.
@@ -79,7 +83,7 @@ namespace ChilliSource
         /// @param length
         ///     The length of the data to write
         ///
-        void Write(void* data, u64 length) noexcept;
+        void Write(const u8* data, u64 length) noexcept;
         
         /// Writes ByteBuffer data to the stream. It may not write out to file yet,
         /// but if the buffer is full it'll flush.
@@ -118,11 +122,11 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     template<typename TType> void BinaryOutputStream::Write(TType data) noexcept
     {
-        static_assert(std::is_standard_layout<TType>::value, "TType must be standard layout data type");
+        static_assert(std::is_standard_layout<TType>::value, "TType must be standard layout type");
         static_assert(!std::is_pointer<TType>::value, "TType cannot be a pointer");
         
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
-        Write(&data, sizeof(TType));
+        Write(reinterpret_cast<const u8*>(&data), sizeof(TType));
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
     }
 }

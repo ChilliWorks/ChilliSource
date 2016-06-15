@@ -81,11 +81,27 @@ namespace ChilliSource
         ///
         void SetReadPosition(u64 readPosition) noexcept override;
         
+        /// Reads in a number of characters from the current read position and puts them
+        /// into the passed buffer. If the length of the stream is overrun, the buffer
+        /// will contain everything up to that point.
+        ///
+        /// If the current read position is at the end of the file, this function will return
+        /// false.
+        ///
+        /// @param buffer
+        ///     The buffer to read into.
+        /// @param length
+        ///     The number of characters to read.
+        ///
+        /// @return If the read was successful
+        ///
+        bool Read(u8* buffer, u64 length) noexcept override;
+        
         /// @return The resulting read bytes wrapped in a BinaryStreamBuffer object. This
         ///     will be nullptr for empty files
         ///
         ByteBufferUPtr ReadAll() noexcept override;
-        
+
         /// Reads in a number of characters from the current read position and puts them
         /// into a BinaryStreamBuffer. If the length of the stream is overrun, the buffer
         /// will contain everything up to that point.

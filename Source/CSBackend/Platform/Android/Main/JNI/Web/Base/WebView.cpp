@@ -35,7 +35,6 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
