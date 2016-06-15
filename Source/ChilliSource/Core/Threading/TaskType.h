@@ -49,6 +49,9 @@ namespace ChilliSource
     /// Main thread task: A small task which is executed on the main thread. This
     /// occurs after the game logic for each frame is executed.
     ///
+    /// System thread task: A small task which is executed on the system thread.
+    /// These tasks are intended to be for lower-level operations.
+    ///
     /// Game logic task: A small task which is executed on a background thread and
     /// is guaranteed to be processed within the game logic stage, prior to
     /// executing the main thread tasks.
@@ -64,6 +67,7 @@ namespace ChilliSource
         k_small,
         k_large,
         k_mainThread,
+        k_system,
         k_gameLogic,
         k_file
     };

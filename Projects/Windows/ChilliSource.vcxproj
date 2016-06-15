@@ -88,7 +88,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\String\ToString.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\String\UTF8StringUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\System\StateSystem.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.cpp" />
@@ -420,7 +420,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\System\AppSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\System\StateSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\Task.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.h" />

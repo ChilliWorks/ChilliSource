@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/Threading/MainThreadTaskPool.h>
+#include <ChilliSource/Core/Threading/SingleThreadTaskPool.h>
 #include <ChilliSource/Core/Threading/Task.h>
 #include <ChilliSource/Core/Threading/TaskPool.h>
 #include <ChilliSource/Core/Threading/TaskType.h>
@@ -141,6 +141,14 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void ExecuteMainThreadTasks() noexcept;
         //------------------------------------------------------------------------------
+        /// Executes all system thread tasks.
+        ///
+        /// This must be called from the system thread, which the task scheduler creates.
+        ///
+        /// @author Jordan Brown
+        //------------------------------------------------------------------------------
+        void ExecuteSystemThreadTasks() noexcept;
+        //------------------------------------------------------------------------------
         /// Adds the given task to the large task pool. Once the task is complete then
         /// this is called again for the next task in the file queue. If the file queue
         /// is empty then flag indication whether or not file tasks are running is set
@@ -168,7 +176,8 @@ namespace ChilliSource
         
         TaskPoolUPtr m_smallTaskPool;
         TaskPoolUPtr m_largeTaskPool;
-        MainThreadTaskPoolUPtr m_mainThreadTaskPool;
+        SingleThreadTaskPoolUPtr m_mainThreadTaskPool;
+        SingleThreadTaskPoolUPtr m_systemThreadTaskPool;
         
         std::atomic<u32> m_gameLogicTaskCount;
         std::condition_variable m_gameLogicTaskCondition;

@@ -39,9 +39,9 @@ namespace ChilliSource
     TaskContext::TaskContext(TaskType in_taskType, TaskPool* in_taskPool) noexcept
         : m_taskType(in_taskType), m_taskPool(in_taskPool)
     {
-        if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
+        if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_system || m_taskType == TaskType::k_file)
         {
-            CS_ASSERT(!m_taskPool, "Main thread and file task contexts should not have a task pool.");
+            CS_ASSERT(!m_taskPool, "Main thread, system thread, and file task contexts should not have a task pool.");
         }
         else
         {
@@ -58,7 +58,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void TaskContext::ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept
     {
-        if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
+        if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_system || m_taskType == TaskType::k_file)
         {
             for (const auto& task : in_tasks)
             {

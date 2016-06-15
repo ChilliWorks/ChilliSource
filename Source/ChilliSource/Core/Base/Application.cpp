@@ -224,6 +224,8 @@ namespace ChilliSource
             // Updating after told to suspend so early out
             return;
         }
+
+        m_taskScheduler->ExecuteSystemThreadTasks(); //TODO: move to lifecycle later
         
 #if CS_ENABLE_DEBUG
         //When debugging we may have breakpoints so restrict the time between

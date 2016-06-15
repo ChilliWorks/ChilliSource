@@ -927,9 +927,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\Shader.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
@@ -1070,6 +1067,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Input\Base\InputFilter.cpp">
       <Filter>ChilliSource\Input\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2126,9 +2126,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\Shader.h">
       <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
@@ -2281,6 +2278,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\Base\InputFilter.h">
       <Filter>ChilliSource\Input\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
