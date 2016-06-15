@@ -28,7 +28,6 @@
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Threading/TaskContext.h>
