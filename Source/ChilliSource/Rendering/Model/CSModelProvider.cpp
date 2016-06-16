@@ -186,33 +186,33 @@ namespace ChilliSource
             //build the vertex declaration from the file
             u8 numVertexElements = ReadValue<u8>(in_meshStream);
             
-            std::vector<VertexFormat::Element> elements;
+            std::vector<VertexFormat::ElementType> elements;
             for (int i = 0; i < numVertexElements; ++i)
             {
                 u8 vertexAttrib = ReadValue<u8>(in_meshStream);
                 
                 switch (VertexAttribute(vertexAttrib))
                 {
-                    case VertexAttribute::k_none:
-                        CS_LOG_ERROR("Unknown vertex type in vertex declaration!");
-                        break;
                     case VertexAttribute::k_position:
-                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_float4, VertexFormat::Semantic::k_position));
+                        elements.push_back(VertexFormat::ElementType::k_position4);
                         break;
                     case VertexAttribute::k_normal:
-                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_float3, VertexFormat::Semantic::k_normal));
+                        elements.push_back(VertexFormat::ElementType::k_normal3);
                         break;
                     case VertexAttribute::k_texcoord:
-                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_float2, VertexFormat::Semantic::k_uv));
+                        elements.push_back(VertexFormat::ElementType::k_uv2);
                         break;
                     case VertexAttribute::k_colour:
-                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_byte4, VertexFormat::Semantic::k_colour));
+                        elements.push_back(VertexFormat::ElementType::k_colour4);
                         break;
                     case VertexAttribute::k_weights:
-                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_float4, VertexFormat::Semantic::k_weight));
+                        elements.push_back(VertexFormat::ElementType::k_weight4);
                         break;
                     case VertexAttribute::k_jointIndices:
-                        elements.push_back(VertexFormat::Element(VertexFormat::DataType::k_byte4, VertexFormat::Semantic::k_jointIndex));
+                        elements.push_back(VertexFormat::ElementType::k_jointIndex4);
+                        break;
+                    default:
+                        CS_LOG_ERROR("Unknown vertex type in vertex declaration!");
                         break;
                 }
             }

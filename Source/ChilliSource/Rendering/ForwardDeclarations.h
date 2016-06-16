@@ -53,7 +53,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderPassObject);
     CS_FORWARDDECLARE_CLASS(RenderSnapshot);
     CS_FORWARDDECLARE_CLASS(RenderTarget);
-    CS_FORWARDDECLARE_CLASS(VertexFormat);
     enum class AlignmentAnchor;
     enum class BlendMode;
     enum class CullFace;
@@ -113,6 +112,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimationGroup);
     CS_FORWARDDECLARE_CLASS(StaticModelComponent);
+    CS_FORWARDDECLARE_CLASS(VertexFormat);
     enum class IndexFormat;
     enum class PolygonType;
     //------------------------------------------------------------

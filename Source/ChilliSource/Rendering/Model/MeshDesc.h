@@ -28,9 +28,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-#include <ChilliSource/Rendering/Base/VertexFormat.h>
 #include <ChilliSource/Rendering/Model/IndexFormat.h>
 #include <ChilliSource/Rendering/Model/PolygonType.h>
+#include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 namespace ChilliSource
 {

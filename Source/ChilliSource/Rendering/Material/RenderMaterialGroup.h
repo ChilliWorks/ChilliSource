@@ -26,8 +26,8 @@
 #define _CHILLISOURCE_RENDERING_MATERIAL_RENDERMATERIALGROUP_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/VertexFormat.h>
 #include <ChilliSource/Rendering/Material/RenderMaterial.h>
+#include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 #include <array>
 #include <vector>

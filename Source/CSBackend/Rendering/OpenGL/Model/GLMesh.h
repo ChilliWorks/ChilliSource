@@ -29,7 +29,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/VertexFormat.h>
+#include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 namespace CSBackend
 {
@@ -64,9 +64,12 @@ namespace CSBackend
             GLMesh(ChilliSource::PolygonType polygonType, const ChilliSource::VertexFormat& vertexFormat, ChilliSource::IndexFormat indexFormat,
                    const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
             
-            /// Binds the mesh for use.
+            /// Binds the mesh for use and applies attibutes to the given shader.
             ///
-            void Bind() noexcept;
+            /// @param glShader
+            ///     The shader to apply attributes to.
+            ///
+            void Bind(GLShader* glShader) noexcept;
             
             /// Destroys the OpenGL texture that this represents.
             ///

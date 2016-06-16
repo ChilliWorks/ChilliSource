@@ -24,7 +24,7 @@
 
 #include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
 
-#include <ChilliSource/Rendering/Base/VertexFormat.h>
+#include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 #include <vector>
 

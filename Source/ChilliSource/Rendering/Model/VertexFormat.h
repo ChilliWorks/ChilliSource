@@ -33,7 +33,7 @@
 namespace ChilliSource
 {
     /// Describes the format and layout of the vertices used in a single mesh. This
-    /// consists of a series of data types and semantics.
+    /// consists of a series of vertex elements.
     ///
     /// Standard format types describe the common formats used in the engine, but
     /// custom types can also be declared.
@@ -49,81 +49,55 @@ namespace ChilliSource
         static const VertexFormat k_animatedMesh;
         static const VertexFormat k_sprite;
         
-        /// An enum describing the various possible data types in a vertex format.
+        /// An enum describing the various possible element types in a vertex format.
+        /// The number suffix indicates the number of components in the element, i.e
+        /// k_position4 represents a position vector with [ X, Y, Z, W ] components.
         ///
+        enum class ElementType
+        {
+            k_position4,
+            k_normal3,
+            k_uv2,
+            k_colour4,
+            k_weight4,
+            k_jointIndex4
+        };
+        
+        /// An enum describing the possible data types for each component in a vertex
+        /// element.
         enum class DataType
         {
-            k_float2,
-            k_float3,
-            k_float4,
-            k_byte4
+            k_byte,
+            k_float
         };
         
-        /// An enum describing the various possible semantics in a vertex format.
+        /// @param elementType
+        ///     The element type.
         ///
-        enum class Semantic
-        {
-            k_position,
-            k_normal,
-            k_uv,
-            k_colour,
-            k_weight,
-            k_jointIndex
-        };
+        /// @return The data type used for this element.
+        ///
+        static DataType GetDataType(ElementType elementType) noexcept;
         
-        /// A container for information pertaining to a single vertex element within a
-        /// vertex format.
+        /// @param elementType
+        ///     The element type.
         ///
-        /// This is immutable, and therefore thread-safe.
+        /// @return The number of components that make up the given element type.
         ///
-        class Element
-        {
-        public:
-            Element() = default;
-            
-            /// Constructs a new instance with the given data type and semantic.
-            ///
-            /// @param dataType
-            ///     The data type of the element
-            /// @param semantic
-            ///     The semantic of the element
-            ///
-            Element(DataType dataType, Semantic semantic) noexcept;
-            
-            /// @return The data type of the element
-            ///
-            DataType GetDataType() const noexcept { return m_dataType; }
-            
-            /// @return The semantic of the element
-            ///
-            Semantic GetSemantic() const noexcept { return m_semantic; }
-            
-            /// @return The total size of the element in bytes.
-            ///
-            u32 GetSize() const noexcept;
-            
-            /// @return The number of values that make up the element, in other words the dimensions
-            ///     of the vector described.
-            u32 GetNumValues() const noexcept;
-            
-            /// @param other
-            ///     The other element to compare.
-            ///
-            /// @return Whether or not the two are equal in value.
-            ///
-            bool operator==(const VertexFormat::Element& other) const noexcept;
-            
-            /// @param other
-            ///     The other element to compare.
-            ///
-            /// @return Whether or not the two are inequal in value.
-            ///
-            bool operator!=(const VertexFormat::Element& other) const noexcept;
-            
-        private:
-            DataType m_dataType = DataType::k_float4;
-            Semantic m_semantic = Semantic::k_position;
-        };
+        static u32 GetNumComponents(ElementType elementType) noexcept;
+        
+        /// @param elementType
+        ///     The element type.
+        ///
+        /// @return The size of the given element type in bytes.
+        ///
+        static u32 GetSize(ElementType elementType) noexcept;
+        
+        /// @param dataType
+        ///     The data type.
+        ///
+        /// @return The size of the given data type in bytes.
+        ///
+        static u32 GetSize(DataType dataType) noexcept;
         
         VertexFormat() = default;
         
@@ -132,28 +106,24 @@ namespace ChilliSource
         /// @param elements
         ///     The elements that make up the format.
         ///
-        VertexFormat(const std::vector<Element>& elements) noexcept;
+        VertexFormat(const std::vector<ElementType>& elements) noexcept;
         
         /// @return The number of elements in the vertex format.
         ///
         u32 GetNumElements() const noexcept { return m_numElements; }
         
-        /// Gets the element at the requested index.
+        /// Gets the element type at the requested index.
         ///
         /// @return index
         ///     The index of the element
         ///
         /// @return The element at the requested index.
         ///
-        const Element& GetElement(u32 index) const noexcept;
+        ElementType GetElement(u32 index) const noexcept;
         
         /// @return The total size of the vertex this this describes in bytes.
         ///
         u32 GetSize() const noexcept { return m_size; }
-        
-        /// @return The total size of the vertex this this describes in bytes.
-        ///
-        u32 GetNumValues() const noexcept { return m_numValues; }
         
         /// Gets the offset of the element at the given index.
         ///
@@ -181,8 +151,7 @@ namespace ChilliSource
     private:
         u32 m_numElements = 0;
         u32 m_size = 0;
-        u32 m_numValues = 0;
-        std::array<Element, k_maxElements> m_elements;
+        std::array<ElementType, k_maxElements> m_elements;
     };
 }
 

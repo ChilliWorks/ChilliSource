@@ -47,5 +47,6 @@
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/StaticModelComponent.h>
+#include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 #endif

@@ -24,6 +24,7 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
+#include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
@@ -111,48 +112,22 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept
         {
-            //TODO:
+            auto renderMesh = renderCommand->GetRenderMesh();
+            
+            //TODO: Should be pooled.
+            auto glMesh = new GLMesh(renderMesh->GetPolygonType(), renderMesh->GetVertexFormat(), renderMesh->GetIndexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(),
+                                     renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
+            
+            renderMesh->SetExtraData(glMesh);
+            m_contextState.SetRenderMesh(nullptr);
         }
         
-        //------------------------------------------------------------------------------
-        void RenderCommandProcessor::BeginRender(const ChilliSource::BeginRenderRenderCommand* renderCommand) noexcept
-        {
-            //TODO:
-        }
-        
-        //------------------------------------------------------------------------------
-        void RenderCommandProcessor::ApplyCamera(const ChilliSource::ApplyCameraRenderCommand* renderCommand) noexcept
-        {
-            //TODO:
-        }
-        
-        //------------------------------------------------------------------------------
-        void RenderCommandProcessor::ApplyMaterial(const ChilliSource::ApplyMaterialRenderCommand* renderCommand) noexcept
-        {
-            //TODO:
-        }
-        
-        //------------------------------------------------------------------------------
-        void RenderCommandProcessor::ApplyMesh(const ChilliSource::ApplyMeshRenderCommand* renderCommand) noexcept
-        {
-            //TODO:
-        }
-        
-        //------------------------------------------------------------------------------
-        void RenderCommandProcessor::RenderInstance(const ChilliSource::RenderInstanceRenderCommand* renderCommand) noexcept
-        {
-            //TODO:
-        }
-        
-        //------------------------------------------------------------------------------
-        void RenderCommandProcessor::EndRender(const ChilliSource::EndRenderRenderCommand* renderCommand) noexcept
-        {
-            //TODO:
-        }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::UnloadShader(const ChilliSource::UnloadShaderRenderCommand* renderCommand) noexcept
         {
+            m_contextState.SetRenderShader(nullptr);
+            
             auto renderShader = renderCommand->GetRenderShader();
             auto glShader = reinterpret_cast<GLShader*>(renderShader->GetExtraData());
             
@@ -162,6 +137,8 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::UnloadTexture(const ChilliSource::UnloadTextureRenderCommand* renderCommand) noexcept
         {
+            m_contextState.SetRenderTexture(nullptr);
+            
             auto renderTexture = renderCommand->GetRenderTexture();
             auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());
             
@@ -171,7 +148,12 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::UnloadMesh(const ChilliSource::UnloadMeshRenderCommand* renderCommand) noexcept
         {
-            //TODO:
+            m_contextState.SetRenderMesh(nullptr);
+            
+            auto renderMesh = renderCommand->GetRenderMesh();
+            auto glMesh = reinterpret_cast<GLMesh*>(renderMesh->GetExtraData());
+            
+            CS_SAFEDELETE(glMesh);
         }
     }
 }
