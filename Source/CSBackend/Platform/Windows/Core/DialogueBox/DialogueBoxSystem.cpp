@@ -32,7 +32,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Threading.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
@@ -58,12 +58,16 @@ namespace CSBackend
         //-----------------------------------------------------
 		void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "System Dialogue requested outside of main thread.");
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
             {
                 MessageBox(SFMLWindow::Get()->GetWindowHandle(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), MB_OK);
                 if (in_delegate)
                 {
-                    in_delegate(in_id, DialogueResult::k_confirm);
+                    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_mainThread, [=](const CS::TaskContext& in_taskContext)
+                    {
+                        in_delegate(in_id, DialogueResult::k_confirm);
+                    });
                 }
             });
         }
@@ -71,20 +75,27 @@ namespace CSBackend
         //-----------------------------------------------------
 		void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "System Confirm Dialogue requested outside of main thread.");
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
             {
 			    if (MessageBox(SFMLWindow::Get()->GetWindowHandle(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), MB_OKCANCEL) == IDOK)
 			    {
 				    if (in_delegate)
 				    {
-					    in_delegate(in_id, DialogueResult::k_confirm);
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_mainThread, [=](const CS::TaskContext& in_taskContext)
+                        {
+                            in_delegate(in_id, DialogueResult::k_confirm);
+                        });
 				    }
 			    }
 			    else
 			    {
 				    if (in_delegate)
 				    {
-					    in_delegate(in_id, DialogueResult::k_cancel);
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_mainThread, [=](const CS::TaskContext& in_taskContext)
+                        {
+                            in_delegate(in_id, DialogueResult::k_cancel);
+                        });
 				    }
 			    }
             });
@@ -93,10 +104,7 @@ namespace CSBackend
         //-----------------------------------------------------
 		void DialogueBoxSystem::MakeToast(const std::string& in_text)
         {
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
-            {
-			    CS_LOG_WARNING("Toast not available on Windows");
-            });
+			CS_LOG_WARNING("Toast not available on Windows");
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
