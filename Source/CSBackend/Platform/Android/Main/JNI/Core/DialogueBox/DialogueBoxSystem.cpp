@@ -65,6 +65,8 @@ namespace CSBackend
             CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
             {
                 m_dialogueBoxJI->ShowSystemDialogue(in_id, in_title, in_message, in_confirm);
+                std::mutex delegateMutex;
+                std::unique_lock<std::mutex> lock(delegateMutex);
                 m_activeSysConfirmDelegate = in_delegate;
             });
         }
@@ -75,6 +77,8 @@ namespace CSBackend
             CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
             {
                 m_dialogueBoxJI->ShowSystemConfirmDialogue(in_id, in_title, in_message, in_confirm, in_cancel);
+                std::mutex delegateMutex;
+                std::unique_lock<std::mutex> lock(delegateMutex);
                 m_activeSysConfirmDelegate = in_delegate;
             });
         }
@@ -93,6 +97,8 @@ namespace CSBackend
         {
             CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
             {
+                std::mutex delegateMutex;
+                std::unique_lock<std::mutex> lock(delegateMutex);
                 if (m_activeSysConfirmDelegate)
                 {
                     m_activeSysConfirmDelegate(in_id, in_result);
