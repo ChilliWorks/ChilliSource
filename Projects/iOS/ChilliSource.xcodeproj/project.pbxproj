@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		810C0C841D11B01100C32406 /* GLMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 810C0C821D11B01100C32406 /* GLMesh.cpp */; };
 		8119916A1CFEED470078C246 /* ModelDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811991681CFEED470078C246 /* ModelDesc.cpp */; };
 		8119916D1CFEF42A0078C246 /* MeshDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8119916B1CFEF42A0078C246 /* MeshDesc.cpp */; };
 		811991701CFEF77B0078C246 /* SkeletonDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8119916E1CFEF77B0078C246 /* SkeletonDesc.cpp */; };
@@ -363,6 +364,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		810C0C821D11B01100C32406 /* GLMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLMesh.cpp; sourceTree = "<group>"; };
+		810C0C831D11B01100C32406 /* GLMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLMesh.h; sourceTree = "<group>"; };
 		811991681CFEED470078C246 /* ModelDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModelDesc.cpp; sourceTree = "<group>"; };
 		811991691CFEED470078C246 /* ModelDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelDesc.h; sourceTree = "<group>"; };
 		8119916B1CFEF42A0078C246 /* MeshDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshDesc.cpp; sourceTree = "<group>"; };
@@ -1257,6 +1260,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		810C0C811D11B01100C32406 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				810C0C821D11B01100C32406 /* GLMesh.cpp */,
+				810C0C831D11B01100C32406 /* GLMesh.h */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		8158F1E11C89D27300B13109 = {
 			isa = PBXGroup;
 			children = (
@@ -2802,6 +2814,7 @@
 			children = (
 				8158F62F1C89D2AD00B13109 /* Base */,
 				8158F63D1C89D2AD00B13109 /* ForwardDeclarations.h */,
+				810C0C811D11B01100C32406 /* Model */,
 				81A5AF5C1D11575A00307707 /* Shader */,
 				81A5AF641D1190FB00307707 /* Texture */,
 			);
@@ -3224,6 +3237,7 @@
 				8158F70C1C89D2AD00B13109 /* WidgetDefProvider.cpp in Sources */,
 				8158F6E21C89D2AD00B13109 /* StaticBillboardParticleDrawableDef.cpp in Sources */,
 				8158F6FF1C89D2AD00B13109 /* UVs.cpp in Sources */,
+				810C0C841D11B01100C32406 /* GLMesh.cpp in Sources */,
 				8119916D1CFEF42A0078C246 /* MeshDesc.cpp in Sources */,
 				8158F6AF1C89D2AD00B13109 /* HorizontalTextJustification.cpp in Sources */,
 				81A125DE1CF454200010853A /* RenderAmbientLight.cpp in Sources */,
