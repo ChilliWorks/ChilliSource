@@ -286,6 +286,12 @@
     <Filter Include="ChilliSource\Rendering\RenderCommand\Commands">
       <UniqueIdentifier>{c2eb53b5-a623-49e1-806b-44d9d1f2417c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CSBackend\Rendering\OpenGL\Model">
+      <UniqueIdentifier>{408fa944-c114-41fa-847a-027e49dff283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CSBackend\Rendering\OpenGL\Shader">
+      <UniqueIdentifier>{6e3ada5f-5fe9-49f6-a37a-f815cbeef523}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -1083,9 +1089,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexFormat.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObject.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
@@ -1145,6 +1148,30 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\VertexFormat.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextState.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2372,9 +2399,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexFormat.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\TargetRenderPassGroup.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
@@ -2440,6 +2464,30 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\VertexFormat.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.h">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.h">
+      <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.h">
+      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextState.h">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.h">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

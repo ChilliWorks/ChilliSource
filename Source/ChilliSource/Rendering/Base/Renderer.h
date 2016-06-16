@@ -31,6 +31,7 @@
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 
+#include <condition_variable>
 #include <deque>
 #include <mutex>
 

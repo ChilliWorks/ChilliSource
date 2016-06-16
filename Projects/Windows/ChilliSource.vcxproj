@@ -125,6 +125,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp" />
@@ -139,7 +140,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\TargetRenderPassGroup.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexFormat.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.cpp" />
@@ -176,6 +176,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\VertexFormat.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffectorDef.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffector.cpp" />
@@ -305,9 +306,14 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextState.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio.h" />
@@ -516,6 +522,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h" />
@@ -533,7 +540,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\TargetRenderPassGroup.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexFormat.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.h" />
@@ -577,6 +583,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\VertexFormat.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffectorDef.h" />
@@ -739,11 +746,16 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextState.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLIncludes.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\ForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{09108227-056C-4A6F-9A74-1C3ECA245C3F}</ProjectGuid>

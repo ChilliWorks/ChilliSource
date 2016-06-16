@@ -141,7 +141,7 @@ namespace CSBackend
             
             GLint maxVertexAttributes = 0;
             glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
-            CS_ASSERT(maxVertexAttributes >= m_vertexFormat.GetNumElements(), "Too many vertex elements.");
+            CS_ASSERT(u32(maxVertexAttributes) >= m_vertexFormat.GetNumElements(), "Too many vertex elements.");
             
             for (u32 i = 0; i < m_vertexFormat.GetNumElements(); ++i)
             {
@@ -152,12 +152,12 @@ namespace CSBackend
                 auto numComponents = ChilliSource::VertexFormat::GetNumComponents(elementType);
                 auto type = GetGLType(ChilliSource::VertexFormat::GetDataType(elementType));
                 auto normalised = IsNormalised(elementType);
-                auto offset = reinterpret_cast<const GLvoid*>(m_vertexFormat.GetElementOffset(i));
+                auto offset = reinterpret_cast<const GLvoid*>(u64(m_vertexFormat.GetElementOffset(i)));
                 
                 glShader->SetAttribute(name, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
             }
             
-            for (u32 i = m_vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
+            for (s32 i = m_vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
             {
                 glDisableVertexAttribArray(i);
             }
