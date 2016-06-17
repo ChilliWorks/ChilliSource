@@ -30,7 +30,6 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/File/FileStream.h>
 
 #include <iostream>
 

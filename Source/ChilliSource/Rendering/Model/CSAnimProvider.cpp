@@ -29,6 +29,7 @@
 #include <ChilliSource/Rendering/Model/CSAnimProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/File.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -45,20 +46,6 @@ namespace ChilliSource
         const u32 k_fileCheckValue = 7777;
         
         //----------------------------------------------------------------------------
-        /// Read value of the given type and size from the binary file stream
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param File stream
-        /// @return Value of type TType
-        //----------------------------------------------------------------------------
-        template <typename TType> TType ReadValue(const FileStreamSPtr& in_fileStream)
-        {
-            TType value;
-            in_fileStream->Read(reinterpret_cast<s8*>(&value), sizeof(TType));
-            return value;
-        }
-        //----------------------------------------------------------------------------
         /// Reads all of the data for the animation into the SkinnedAnimation resource
         ///
         /// @author Ian Copland
@@ -68,7 +55,7 @@ namespace ChilliSource
         /// @param The number of skeleton nodes.
         /// @param [Out] Animation resource to populate
         //----------------------------------------------------------------------------
-        void ReadAnimationData(const FileStreamSPtr& in_fileStream, u32 in_numFrames, s32 in_numSkeletonNodes, const SkinnedAnimationSPtr& out_resource)
+        void ReadAnimationData(const IBinaryInputStreamUPtr& in_fileStream, u32 in_numFrames, s32 in_numSkeletonNodes, const SkinnedAnimationSPtr& out_resource)
         {
             for (u32 frameCount=0; frameCount<in_numFrames; ++frameCount)
             {
@@ -80,22 +67,22 @@ namespace ChilliSource
                 {
                     //create new translation
                     Vector3 translation;
-                    translation.x = ReadValue<f32>(in_fileStream);
-                    translation.y = ReadValue<f32>(in_fileStream);
-                    translation.z = ReadValue<f32>(in_fileStream);
+                    translation.x = in_fileStream->Read<f32>();
+                    translation.y = in_fileStream->Read<f32>();
+                    translation.z = in_fileStream->Read<f32>();
                     
                     //create new orientation
                     Quaternion orientation;
-                    orientation.x = ReadValue<f32>(in_fileStream);
-                    orientation.y = ReadValue<f32>(in_fileStream);
-                    orientation.z = ReadValue<f32>(in_fileStream);
-                    orientation.w = ReadValue<f32>(in_fileStream);
+                    orientation.x = in_fileStream->Read<f32>();
+                    orientation.y = in_fileStream->Read<f32>();
+                    orientation.z = in_fileStream->Read<f32>();
+                    orientation.w = in_fileStream->Read<f32>();
                     
                     //create new scale
                     Vector3 scale;
-                    scale.x = ReadValue<f32>(in_fileStream);
-                    scale.y = ReadValue<f32>(in_fileStream);
-                    scale.z = ReadValue<f32>(in_fileStream);
+                    scale.x = in_fileStream->Read<f32>();
+                    scale.y = in_fileStream->Read<f32>();
+                    scale.z = in_fileStream->Read<f32>();
                     
                     //add to the frame
                     frame->m_nodeTranslations.push_back(translation);
@@ -117,7 +104,7 @@ namespace ChilliSource
         ///
         /// @return whether or not this was successful
         //----------------------------------------------------------------------------
-        bool ReadHeader(const FileStreamSPtr& in_stream, const std::string & in_filePath, const SkinnedAnimationSPtr& out_resource, u32& out_numFrames, s32& out_numSkeletonNodes)
+        bool ReadHeader(const IBinaryInputStreamUPtr& in_stream, const std::string & in_filePath, const SkinnedAnimationSPtr& out_resource, u32& out_numFrames, s32& out_numSkeletonNodes)
         {
             //Check file for corruption
             if(in_stream == nullptr)
@@ -126,14 +113,14 @@ namespace ChilliSource
                 return false;
             }
             
-            u32 fileCheckValue = ReadValue<u32>(in_stream);
+            u32 fileCheckValue = in_stream->Read<u32>();
             if(fileCheckValue != k_fileCheckValue)
             {
                 CS_LOG_ERROR("CSAnim file has corruption(incorrect File Check Value): " + in_filePath);
                 return false;
             }
             
-            u32 versionNum = ReadValue<u32>(in_stream);
+            u32 versionNum = in_stream->Read<u32>();
             if (versionNum < k_minVersion || versionNum > k_maxVersion)
             {
                 CS_LOG_ERROR("Unsupported CSAnim version: " + in_filePath);
@@ -141,18 +128,18 @@ namespace ChilliSource
             }
             
             //build the feature declaration from the file
-            u32 numFeatures = (u32)ReadValue<u8>(in_stream);
+            u32 numFeatures = (u32)in_stream->Read<u8>();
             if (numFeatures != 0)
             {
                 CS_LOG_ERROR("Unknown feature type in CSAnim (" + in_filePath + ") feature declaration!");
             }
             
             //read num frames and skeleton nodes
-            out_numFrames = (u32)ReadValue<u16>(in_stream);
-            out_numSkeletonNodes = (s32)ReadValue<s16>(in_stream);
+            out_numFrames = (u32)in_stream->Read<u16>();
+            out_numSkeletonNodes = (s32)in_stream->Read<s16>();
             
             //read frame time
-            f32 frameTime = ReadValue<f32>(in_stream);
+            f32 frameTime = in_stream->Read<f32>();
             out_resource->SetFrameTime(frameTime);
             return true;
         }
@@ -206,7 +193,7 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void CSAnimProvider::ReadSkinnedAnimationFromFile(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const SkinnedAnimationSPtr& out_resource) const
     {
-        FileStreamSPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, FileMode::k_readBinary);
+        IBinaryInputStreamUPtr stream = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_location, in_filePath);
 
         u32 numFrames = 0;
         s32 numSkeletonNodes = 0;

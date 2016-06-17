@@ -1,11 +1,7 @@
 //
-//  Base.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright © 2016 Tag Games. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,26 +22,49 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_CORE_BASE_H_
-#define _CHILLISOURCE_CORE_BASE_H_
+#ifndef _CHILLISOURCE_CORE_FILE_FILESTREAM_BYTEBUFFER_H_
+#define _CHILLISOURCE_CORE_FILE_FILESTREAM_BYTEBUFFER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/AppConfig.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ByteBuffer.h>
-#include <ChilliSource/Core/Base/ByteColour.h>
-#include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Base/ColourUtils.h>
-#include <ChilliSource/Core/Base/Device.h>
-#include <ChilliSource/Core/Base/LifecycleManager.h>
-#include <ChilliSource/Core/Base/Logging.h>
-#include <ChilliSource/Core/Base/MakeSharedArray.h>
-#include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Base/QueryableInterface.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Base/Singleton.h>
-#include <ChilliSource/Core/Base/StandardMacros.h>
-#include <ChilliSource/Core/Base/Utils.h>
+
+namespace ChilliSource
+{
+    /// Class to store a data pointer and size
+    ///
+    /// Class will take ownership of any data passed and data will
+    /// be destroyed with this instance
+    ///
+    class ByteBuffer final
+    {
+    public:
+
+		CS_DECLARE_NOCOPY(ByteBuffer);
+
+        /// Constructor
+        ///
+        /// @param data
+        ///     The unique pointer to the start of the data
+        /// @param length
+        ///     The length of the data
+        ///
+        ByteBuffer(std::unique_ptr<const u8> data, u64 length) noexcept;
+        
+        /// Gets the pointer to the start of the data.
+        /// This should never be modified directly.
+        ///
+        /// @return The pointer to the start of the data
+        ///
+        const u8* GetData() const noexcept;
+        
+        /// @return The length of the data stored
+        ///
+        u64 GetLength() const noexcept;
+        
+    private:
+        
+        std::unique_ptr<const u8> m_data;
+        u64 m_length;
+    };
+}
 
 #endif

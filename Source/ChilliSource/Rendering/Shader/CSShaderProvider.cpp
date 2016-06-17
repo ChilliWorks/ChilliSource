@@ -113,7 +113,7 @@ namespace ChilliSource
         ///
         void LoadShader(StorageLocation location, const std::string& filePath, const ResourceProvider::AsyncLoadDelegate& delegate, const ShaderSPtr& shader) noexcept
         {
-            FileStreamUPtr shaderStream = Application::Get()->GetFileSystem()->CreateFileStream(location, filePath, FileMode::k_read);
+            auto shaderStream = Application::Get()->GetFileSystem()->CreateTextInputStream(location, filePath);
             if(shaderStream == nullptr)
             {
                 CS_LOG_ERROR("Failed to open shader file: " + filePath);
@@ -128,8 +128,7 @@ namespace ChilliSource
                 return;
             }
             
-            std::string fileContents;
-            shaderStream->GetAll(fileContents);
+            std::string fileContents = shaderStream->ReadAll();
             shaderStream.reset();
             
             std::string languageChunk = GetChunk(k_languageTag, fileContents);

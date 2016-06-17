@@ -122,21 +122,6 @@ namespace ChilliSource
             AABB m_aabb;
         };
         //----------------------------------------------------------------------------
-        /// Read value in for given type
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param File stream
-        ///
-        /// @return Value of type T
-        //----------------------------------------------------------------------------
-        template <typename TType> TType ReadValue(const FileStreamSPtr& in_meshStream)
-        {
-            TType value;
-            in_meshStream->Read(reinterpret_cast<s8*>(&value), sizeof(TType));
-            return value;
-        }
-        //----------------------------------------------------------------------------
         /// Read block of data in for given type
         ///
         /// @author Ian Copland
@@ -145,9 +130,9 @@ namespace ChilliSource
         /// @param Num to read
         /// @param [Out] data
         //----------------------------------------------------------------------------
-        template <typename TType> void ReadBlock(const FileStreamSPtr& in_meshStream, u32 in_numToRead, TType* out_data)
+        template <typename TType> void ReadBlock(IBinaryInputStream* in_meshStream, u32 in_numToRead, TType* out_data)
         {
-            in_meshStream->Read(reinterpret_cast<s8*>(out_data), sizeof(TType) * in_numToRead);
+            in_meshStream->Read(reinterpret_cast<u8*>(out_data), sizeof(TType) * in_numToRead);
         }
         //----------------------------------------------------------------------------
         /// Reads a null terminated string from the stream.
@@ -158,14 +143,14 @@ namespace ChilliSource
         ///
         /// @return The string.
         //----------------------------------------------------------------------------
-        std::string ReadString(const FileStreamSPtr& in_meshStream) noexcept
+        std::string ReadString(IBinaryInputStream* in_meshStream) noexcept
         {
             std::string output;
             
             u8 nextChar = 0;
             do
             {
-                nextChar = ReadValue<u8>(in_meshStream);
+                nextChar = in_meshStream->Read<u8>();
                 output += nextChar;
                 
             } while(nextChar != 0);
@@ -181,15 +166,15 @@ namespace ChilliSource
         ///
         /// @return the vertex description.
         //-----------------------------------------------------------------------------
-        VertexFormat ReadVertexFormat(const FileStreamSPtr& in_meshStream)
+        VertexFormat ReadVertexFormat(IBinaryInputStream* in_meshStream)
         {
             //build the vertex declaration from the file
-            u8 numVertexElements = ReadValue<u8>(in_meshStream);
+            u8 numVertexElements = in_meshStream->Read<u8>();
             
             std::vector<VertexFormat::ElementType> elements;
             for (int i = 0; i < numVertexElements; ++i)
             {
-                u8 vertexAttrib = ReadValue<u8>(in_meshStream);
+                u8 vertexAttrib = in_meshStream->Read<u8>();
                 
                 switch (VertexAttribute(vertexAttrib))
                 {
@@ -228,7 +213,7 @@ namespace ChilliSource
         /// @param Model description
         /// @param [Out] Sube mesh description
         //-----------------------------------------------------------------------------
-        MeshHeader ReadMeshHeader(const FileStreamSPtr& in_meshStream, IndexFormat in_indexFormat)
+        MeshHeader ReadMeshHeader(IBinaryInputStream* in_meshStream, IndexFormat in_indexFormat)
         {
             MeshHeader meshHeader;
             
@@ -237,16 +222,16 @@ namespace ChilliSource
             CS_ASSERT(in_indexFormat == IndexFormat::k_short, "Only short indices are currently supported.");
             
             constexpr u32 k_indicesPerTriangle = 3;
-            meshHeader.m_numVertices = (u32)ReadValue<u16>(in_meshStream);
-            meshHeader.m_numIndices = ((u32)ReadValue<u16>(in_meshStream)) * k_indicesPerTriangle;
+            meshHeader.m_numVertices = (u32)in_meshStream->Read<u16>();
+            meshHeader.m_numIndices = ((u32)in_meshStream->Read<u16>()) * k_indicesPerTriangle;
             
             Vector3 minBound, maxBound;
-            minBound.x = ReadValue<f32>(in_meshStream);
-            minBound.y = ReadValue<f32>(in_meshStream);
-            minBound.z = ReadValue<f32>(in_meshStream);
-            maxBound.x = ReadValue<f32>(in_meshStream);
-            maxBound.y = ReadValue<f32>(in_meshStream);
-            maxBound.z = ReadValue<f32>(in_meshStream);
+            minBound.x = in_meshStream->Read<f32>();
+            minBound.y = in_meshStream->Read<f32>();
+            minBound.z = in_meshStream->Read<f32>();
+            maxBound.x = in_meshStream->Read<f32>();
+            maxBound.y = in_meshStream->Read<f32>();
+            maxBound.z = in_meshStream->Read<f32>();
             
             meshHeader.m_aabb = AABB((maxBound + minBound) * 0.5f, maxBound - minBound);
             
@@ -264,7 +249,7 @@ namespace ChilliSource
         ///
         /// @return The mesh data
         //-----------------------------------------------------------------------------
-        MeshData ReadMeshData(const FileStreamSPtr& in_meshStream, u32 in_vertexDataSize, u32 in_indexDataSize, u32 in_numJoints = 0)
+        MeshData ReadMeshData(IBinaryInputStream*in_meshStream, u32 in_vertexDataSize, u32 in_indexDataSize, u32 in_numJoints = 0)
         {
             MeshData meshData;
             
@@ -277,11 +262,11 @@ namespace ChilliSource
             }
             
             auto vertexData = new u8[in_vertexDataSize];
-            in_meshStream->Read(reinterpret_cast<s8*>(vertexData), in_vertexDataSize);
+            in_meshStream->Read(vertexData, in_vertexDataSize);
             meshData.m_vertexData = std::unique_ptr<const u8[]>(vertexData);
             
             auto indexData = new u8[in_indexDataSize];
-            in_meshStream->Read(reinterpret_cast<s8*>(indexData), in_indexDataSize);
+            in_meshStream->Read(indexData, in_indexDataSize);
             meshData.m_indexData = std::unique_ptr<const u8[]>(indexData);
             
             return meshData;
@@ -296,7 +281,7 @@ namespace ChilliSource
         ///
         /// @return The skeleton description.
         //-----------------------------------------------------------------------------
-        SkeletonDesc ReadSkeletonData(const FileStreamSPtr& in_meshStream, const MeshDataQuantities& in_quantities)
+        SkeletonDesc ReadSkeletonData(IBinaryInputStream* in_meshStream, const MeshDataQuantities& in_quantities)
         {
             std::vector<std::string> names;
             std::vector<s32> parentNodeIndices;
@@ -310,14 +295,14 @@ namespace ChilliSource
                 names.push_back(ReadString(in_meshStream));
                 
                 //get the parent index
-                parentNodeIndices.push_back(s32(ReadValue<s16>(in_meshStream)));
+                parentNodeIndices.push_back(s32(in_meshStream->Read<s16>()));
                 
                 //get the type
                 constexpr u32 k_isJoint = 1;
-                u8 type = ReadValue<u8>(in_meshStream);
+                u8 type = in_meshStream->Read<u8>();
                 if (type == k_isJoint)
                 {
-                    u32 jointIndex = (u32)ReadValue<u8>(in_meshStream);
+                    u32 jointIndex = (u32)in_meshStream->Read<u8>();
                     jointToNodeMap.insert(std::pair<u32, s32>(jointIndex, (s32)i));
                 }
             }
@@ -345,18 +330,18 @@ namespace ChilliSource
         ///
         /// @return Whether the file is correct
         //-----------------------------------------------------------------------------
-        void ReadGlobalHeader(const FileStreamSPtr& in_meshStream, const std::string& in_filePath, ModelHeader& out_modelHeader, MeshDataQuantities& out_meshQuantities)
+        void ReadGlobalHeader(IBinaryInputStream* in_meshStream, const std::string& in_filePath, ModelHeader& out_modelHeader, MeshDataQuantities& out_meshQuantities)
         {
-            u32 fileCheckValue = ReadValue<u32>(in_meshStream);
+            u32 fileCheckValue = in_meshStream->Read<u32>();
             CS_ASSERT(fileCheckValue != k_fileCheckValue, "csmodel file is corrupt (incorrect File Check Value): " + in_filePath);
             
-            u32 versionNum = ReadValue<u32>(in_meshStream);
+            u32 versionNum = in_meshStream->Read<u32>();
             CS_ASSERT(versionNum < k_minVersion || versionNum > k_maxVersion, "Unsupported csmodel version: " + in_filePath);
             
-            u32 numFeatures = (u32)ReadValue<u8>(in_meshStream);
+            u32 numFeatures = (u32)in_meshStream->Read<u8>();
             for (u32 i=0; i<numFeatures; ++i)
             {
-                u32 featureType = (u32)ReadValue<u8>(in_meshStream);
+                u32 featureType = (u32)in_meshStream->Read<u8>();
                 
                 switch (Feature(featureType))
                 {
@@ -372,23 +357,23 @@ namespace ChilliSource
             out_modelHeader.m_vertexFormat = ReadVertexFormat(in_meshStream);
             
             constexpr u8 k_shortIndexFormatSize = 2;
-            auto indexSize = ReadValue<u8>(in_meshStream);
+            auto indexSize = in_meshStream->Read<u8>();
             CS_ASSERT(indexSize == k_shortIndexFormatSize, "Invalid index size.");
             
             Vector3 minBounds, maxBounds;
-            minBounds.x = ReadValue<f32>(in_meshStream);
-            minBounds.y = ReadValue<f32>(in_meshStream);
-            minBounds.z = ReadValue<f32>(in_meshStream);
-            maxBounds.x = ReadValue<f32>(in_meshStream);
-            maxBounds.y = ReadValue<f32>(in_meshStream);
-            maxBounds.z = ReadValue<f32>(in_meshStream);
+            minBounds.x = in_meshStream->Read<f32>();
+            minBounds.y = in_meshStream->Read<f32>();
+            minBounds.z = in_meshStream->Read<f32>();
+            maxBounds.x = in_meshStream->Read<f32>();
+            maxBounds.y = in_meshStream->Read<f32>();
+            maxBounds.z = in_meshStream->Read<f32>();
             out_modelHeader.m_aabb = AABB((maxBounds + minBounds) * 0.5f, maxBounds - minBounds);
             
-            out_meshQuantities.m_numMeshes = (u32)ReadValue<u16>(in_meshStream);
+            out_meshQuantities.m_numMeshes = (u32)in_meshStream->Read<u16>();
             if (out_modelHeader.m_hasAnimationData)
             {
-                out_meshQuantities.m_numSkeletonNodes = (s32)ReadValue<s16>(in_meshStream);
-                out_meshQuantities.m_numJoints = (u32)ReadValue<u8>(in_meshStream);
+                out_meshQuantities.m_numSkeletonNodes = (s32)in_meshStream->Read<s16>();
+                out_meshQuantities.m_numJoints = (u32)in_meshStream->Read<u8>();
             }
         }
         //----------------------------------------------------------------------------
@@ -404,7 +389,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         bool ReadFile(StorageLocation in_location, const std::string& in_filePath, ModelDesc& out_modelDesc)
         {
-            FileStreamSPtr meshStream = Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, FileMode::k_readBinary);
+            auto meshStream = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_location, in_filePath);
             
             //Check file for corruption
             if(nullptr == meshStream)
@@ -415,22 +400,22 @@ namespace ChilliSource
             
             ModelHeader modelHeader;
             MeshDataQuantities quantities;
-            ReadGlobalHeader(meshStream, in_filePath, modelHeader, quantities);
+            ReadGlobalHeader(meshStream.get(), in_filePath, modelHeader, quantities);
             
             SkeletonDesc skeletonDesc;
             if (modelHeader.m_hasAnimationData)
             {
-                skeletonDesc = ReadSkeletonData(meshStream, quantities);
+                skeletonDesc = ReadSkeletonData(meshStream.get(), quantities);
             }
             
             std::vector<MeshDesc> meshDescs;
             for(u32 i = 0; i < quantities.m_numMeshes; ++i)
             {
-                auto meshHeader = ReadMeshHeader(meshStream, modelHeader.m_indexFormat);
+                auto meshHeader = ReadMeshHeader(meshStream.get(), modelHeader.m_indexFormat);
                 
                 CS_ASSERT(modelHeader.m_indexFormat == IndexFormat::k_short, "Invalid index format.");
                 constexpr u32 k_indexSize = 2;
-                auto meshData = ReadMeshData(meshStream, meshHeader.m_numVertices * modelHeader.m_vertexFormat.GetSize(), meshHeader.m_numIndices * k_indexSize, quantities.m_numJoints);
+                auto meshData = ReadMeshData(meshStream.get(), meshHeader.m_numVertices * modelHeader.m_vertexFormat.GetSize(), meshHeader.m_numIndices * k_indexSize, quantities.m_numJoints);
                 
                 meshDescs.push_back(MeshDesc(meshHeader.m_name, PolygonType::k_triangle, modelHeader.m_vertexFormat, modelHeader.m_indexFormat, meshHeader.m_aabb, meshHeader.m_numVertices, meshHeader.m_numIndices,
                                              std::move(meshData.m_vertexData), std::move(meshData.m_indexData), std::move(meshData.m_inverseBindPoses)));
