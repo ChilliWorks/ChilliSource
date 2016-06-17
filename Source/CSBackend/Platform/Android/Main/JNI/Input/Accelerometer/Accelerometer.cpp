@@ -114,7 +114,6 @@ namespace CSBackend
         	//Android continues to send accelerometer events even if
         	//the app is suspended so we may have had to manually stop this
         	//and now must restart listening
-            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to resume accelerometer outside of main thread.");
         	if(true == m_isUpdating)
         	{
         		m_accelerometerJI->StartListening(ChilliSource::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
@@ -126,7 +125,6 @@ namespace CSBackend
         {
         	//Android continues to send accelerometer events even if
         	//the app is suspended. We don't want this
-            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to suspend accelerometer outside of main thread.");
         	if(true == m_isUpdating)
         	{
         		m_accelerometerJI->StopListening();
