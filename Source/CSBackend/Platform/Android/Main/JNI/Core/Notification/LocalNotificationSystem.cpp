@@ -107,6 +107,7 @@ namespace CSBackend
         //--------------------------------------------------
 		ChilliSource::IConnectableEvent<ChilliSource::LocalNotificationSystem::ReceivedDelegate>& LocalNotificationSystem::GetReceivedEvent()
 		{
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to get received event outside of main thread.");
             return m_recievedEvent;
 		}
 		//--------------------------------------------------

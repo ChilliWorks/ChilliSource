@@ -42,6 +42,9 @@ namespace CSBackend
 		//--------------------------------------------------------
 		/// Android backend for the local notification system
 		///
+        /// The methods in this class aren't thread-safe, and 
+        /// must be accessed from the main thread.
+        ///
 		/// @author Steven Hendrie
 		//--------------------------------------------------------
 		class LocalNotificationSystem : public ChilliSource::LocalNotificationSystem
@@ -61,8 +64,6 @@ namespace CSBackend
 			/// All existing notifications will be cancelled
 			/// when this is disabled. This is enabled by default.
             /// 
-            /// This isn't thread-safe, and must be accessed from the main thread.
-			///
 			/// @author Ian Copland
 			///
 			/// @param Whether or not to enable the scheduling
@@ -76,8 +77,6 @@ namespace CSBackend
 			/// be received even if it was scheduled during a
 			/// previous instance of the application.
 			///
-            /// This isn't thread-safe, and must be accessed from the main thread. 
-            ///
 			/// @author Ian Copland
 			///
 			/// @param The notification id
@@ -91,8 +90,6 @@ namespace CSBackend
 			/// Builds a list of all notifications currently scheduled
 			/// within the given time period.
 			///
-            /// This isn't thread-safe, and must be accessed from the main thread.
-            ///
 			/// @author Ian Copland
 			///
 			/// @param [Out] The list of notifications.
@@ -103,8 +100,6 @@ namespace CSBackend
 			//-------------------------------------------------------
 			/// Prevent any notifications with given ID type from firing
 			///
-            /// This isn't thread-safe, and must be accessed from the main thread.
-            ///
 			/// @author Steven Hendrie
 			///
 			/// @param ID type
@@ -113,15 +108,11 @@ namespace CSBackend
 			//------------------------------------------------------
 			/// @author Steven Hendrie
 			///
-            /// This isn't thread-safe, and must be accessed from the main thread.
-            ///
 			/// Terminate all currently scheduled notifications
 			//-----------------------------------------------------
 			void CancelAll() override;
             //--------------------------------------------------
             /// @author Ian Copland
-            ///
-            /// This is thread-safe, but only if accessed between the OnInit() and OnDestroy() lifecycle events.
             ///
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
@@ -130,8 +121,6 @@ namespace CSBackend
 			//-----------------------------------------------------
 			/// Called when game receives a local notification.
 			///
-            /// This isn't thread-safe, and must be accessed from the main thread.
-            ///
 			/// @author Steven Hendrie
             ///
             /// @param The notification ID
