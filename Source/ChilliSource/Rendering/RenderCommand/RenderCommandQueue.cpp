@@ -27,23 +27,15 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderCommandQueue::RenderCommandQueue(RenderCommandListUPtr preRenderCommandList, u32 numMainSlots, RenderCommandListUPtr postRenderCommandList) noexcept
+    RenderCommandQueue::RenderCommandQueue(u32 numSlots) noexcept
     {
-        constexpr u32 k_defaultListCount = 2;
-        u32 numLists = k_defaultListCount + numMainSlots;
-        
-        m_renderCommandLists.reserve(numLists);
-        m_renderCommandLists.push_back(std::move(preRenderCommandList));
-        
-        for (u32 i = 0; i < numMainSlots; ++i)
+        m_renderCommandLists.reserve(numSlots);
+        for (u32 i = 0; i < numSlots; ++i)
         {
             m_renderCommandLists.push_back(RenderCommandListUPtr(new RenderCommandList()));
         }
         
-        m_renderCommandLists.push_back(std::move(postRenderCommandList));
-        
-        m_queue.reserve(numLists);
-        
+        m_queue.reserve(numSlots);
         for (const auto& renderCommandList : m_renderCommandLists)
         {
             m_queue.push_back(renderCommandList.get());

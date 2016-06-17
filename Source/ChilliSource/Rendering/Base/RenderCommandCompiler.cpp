@@ -24,13 +24,139 @@
 
 #include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
 
+#include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
+#include <ChilliSource/Rendering/Base/RenderPass.h>
+#include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+
 namespace ChilliSource
 {
+    namespace
+    {
+        /// Calculates whether a Camera Render Pass Group contains at least one render pass
+        /// object.
+        ///
+        /// @param cameraRenderPassGroup
+        ///     The camera render pass group.
+        ///
+        /// @return Whether or not there is at least one object.
+        ///
+        bool ContainsRenderPassObject(const CameraRenderPassGroup& cameraRenderPassGroup) noexcept
+        {
+            for (const auto& renderPass : cameraRenderPassGroup.GetRenderPasses())
+            {
+                if (renderPass.GetRenderPassObjects().size() > 0)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        /// Calculates the number of render command lists required to process the given list
+        /// of target render pass groups, and pre and post command lists.
+        ///
+        /// @param targetRenderPassGroups
+        ///     The list of target render pass groups.
+        /// @param preRenderCommandList
+        ///     The render command list that should be inserted at the beginning of the queue if
+        ///     the list contains any commands.
+        /// @param postRenderCommandList
+        ///     The render command list that should be inserted at the end of the queue if
+        ///     the list contains any commands.
+        ///
+        /// @return The number of render command lists required.
+        ///
+        u32 CalcNumRenderCommandLists(const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const RenderCommandList* preRenderCommandList, const RenderCommandList* postRenderCommandList) noexcept
+        {
+            u32 count = 0;
+            
+            if (preRenderCommandList->GetOrderedList().size() > 0)
+            {
+                ++count;
+            }
+            
+            for (const auto& targetRenderPassGroup : targetRenderPassGroups)
+            {
+                ++count; // target setup
+                
+                for (const auto& cameraRenderPassGroup : targetRenderPassGroup.GetRenderCameraGroups())
+                {
+                    for (const auto& renderPass : cameraRenderPassGroup.GetRenderPasses())
+                    {
+                        if (renderPass.GetRenderPassObjects().size() > 0)
+                        {
+                            ++count;
+                        }
+                    }
+                }
+                
+                ++count; // target cleanup
+            }
+            
+            if (postRenderCommandList->GetOrderedList().size() > 0)
+            {
+                ++count;
+            }
+            
+            return count;
+        }
+        
+        /// Compiles the render commands for the given render pass.
+        ///
+        /// @param renderPass
+        ///     The render pass.
+        /// @param renderCommandList
+        ///     The render command list to add the commands to.
+        ///
+        void CompileRenderCommandsForPass(const RenderPass& renderPass, RenderCommandList* renderCommandList) noexcept
+        {
+            //TODO: Implement
+        }
+    }
+    
     //------------------------------------------------------------------------------
     RenderCommandQueue RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
                                                                     const Colour& clearColour, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept
     {
-        //TODO: Handle properly.
-        return RenderCommandQueue(std::move(preRenderCommandList), 0, std::move(postRenderCommandList));
+        u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());
+        RenderCommandQueue renderCommandQueue(numLists);
+        u32 currentList = 0;
+        
+        if (preRenderCommandList->GetOrderedList().size() > 0)
+        {
+            *renderCommandQueue.GetRenderCommandList(currentList++) = std::move(*preRenderCommandList);
+        }
+        
+        for (const auto& targetRenderPassGroup : targetRenderPassGroups)
+        {
+            renderCommandQueue.GetRenderCommandList(currentList++)->AddBeginCommand(resolution, clearColour);
+                
+            for (const auto& cameraRenderPassGroup : targetRenderPassGroup.GetRenderCameraGroups())
+            {
+                if (ContainsRenderPassObject(cameraRenderPassGroup))
+                {
+                    const auto& camera = cameraRenderPassGroup.GetCamera();
+                    renderCommandQueue.GetRenderCommandList(currentList)->AddApplyCameraCommand(camera.GetWorldMatrix().GetTranslation(), camera.GetViewProjectionMatrix());
+                    
+                    for (const auto& renderPass : cameraRenderPassGroup.GetRenderPasses())
+                    {
+                        if (renderPass.GetRenderPassObjects().size() > 0)
+                        {
+                            CompileRenderCommandsForPass(renderPass, renderCommandQueue.GetRenderCommandList(currentList++));
+                        }
+                    }
+                }
+            }
+            
+            renderCommandQueue.GetRenderCommandList(currentList++)->AddEndCommand();
+        }
+        
+        if (postRenderCommandList->GetOrderedList().size() > 0)
+        {
+            *renderCommandQueue.GetRenderCommandList(currentList++) = std::move(*postRenderCommandList);
+        }
+        
+        return renderCommandQueue;
     }
 }

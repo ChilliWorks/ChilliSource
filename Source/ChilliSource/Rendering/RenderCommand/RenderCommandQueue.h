@@ -49,14 +49,10 @@ namespace ChilliSource
         
         /// Creates a new render command queue with the requested number of slots.
         ///
-        /// @param preRenderCommandList
-        ///     The render command list to be inserted at the start of the queue.
-        /// @param numMainSlots
-        ///     The number of slots in the queue, excluding the pre and post lists.
-        /// @param postRenderCommandList
-        ///     The render command list to be inseted at the end of the queue.
+        /// @param numSlots
+        ///     The number of slots in the queue.
         ///
-        RenderCommandQueue(RenderCommandListUPtr preRenderCommandList, u32 numMainSlots, RenderCommandListUPtr postRenderCommandList) noexcept;
+        RenderCommandQueue(u32 numSlots) noexcept;
         
         /// @return The number of slots in the queue.
         ///

@@ -41,6 +41,12 @@ namespace ChilliSource
     class RenderCommandList final
     {
     public:
+        CS_DECLARE_NOCOPY(RenderCommandList);
+        
+        RenderCommandList() = default;
+        RenderCommandList(RenderCommandList&&) = default;
+        RenderCommandList& operator=(RenderCommandList&&) = default;
+        
         /// Creates and adds a new load shader command to the render command list.
         ///
         /// @param renderShader
@@ -126,10 +132,7 @@ namespace ChilliSource
         
         /// Creates and adds a new end command to the render command list.
         ///
-        /// @param renderMesh
-        ///     The world matrix of the instance.
-        ///
-        void AddEndCommand(const Matrix4& worldMatrix) noexcept;
+        void AddEndCommand() noexcept;
         
         /// Creates and adds a new unload mesh command to the render command list.
         ///

@@ -123,7 +123,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddEndCommand(const Matrix4& worldMatrix) noexcept
+    void RenderCommandList::AddEndCommand() noexcept
     {
         RenderCommandUPtr renderCommand(new EndRenderCommand());
         
