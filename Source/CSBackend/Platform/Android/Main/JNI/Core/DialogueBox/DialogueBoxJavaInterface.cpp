@@ -34,6 +34,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <jni.h>
 
@@ -59,11 +60,14 @@ extern "C"
 //-------------------------------------------------
 void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
 {
-	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
-	if (dialogueBoxSystem != nullptr)
-	{
-		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_confirm);
-	}
+    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_mainThread, [=](const CS::TaskContext& in_taskContext)
+    {
+        CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
+        if (dialogueBoxSystem != nullptr)
+        {
+            dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_confirm);
+        }
+    });
 }
 //-------------------------------------------------
 /// Interface function called from java. This is
@@ -78,11 +82,14 @@ void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogu
 //------------------------------------------------
 void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogueCancelPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
 {
-	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
-	if (dialogueBoxSystem != nullptr)
-	{
-		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_cancel);
-	}
+    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_mainThread, [=](const CS::TaskContext& in_taskContext)
+    {
+        CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
+        if (dialogueBoxSystem != nullptr)
+        {
+            dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_cancel);
+        }
+    });
 }
 
 namespace CSBackend

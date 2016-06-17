@@ -70,6 +70,8 @@ namespace ChilliSource
         //-----------------------------------------------------
         /// Display a system dialog with the given ID and delegate
         ///
+        /// This isn't thread-safe and must be called on the main thread.
+        ///
         /// @author Ian Copland
         ///
         /// @param ID
@@ -83,6 +85,8 @@ namespace ChilliSource
         /// Display a system confirmation dialog with the given
         /// ID and delegate.
         ///
+        /// This isn't thread-safe and must be called on the main thread.
+        ///
         /// @author Ian Copland
         ///
         /// @param ID
@@ -95,6 +99,8 @@ namespace ChilliSource
         virtual void ShowSystemConfirmDialogue(u32 in_id, const DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel) = 0;
         //-----------------------------------------------------
         /// Display a toast notification with the given text
+        ///
+        /// This isn't thread-safe and must be called on the main thread.
         ///
         /// @author Ian Copland
         ///
