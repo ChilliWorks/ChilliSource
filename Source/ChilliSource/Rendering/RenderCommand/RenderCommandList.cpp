@@ -24,10 +24,16 @@
 
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/EndRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
@@ -35,24 +41,6 @@
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    void RenderCommandList::AddLoadMaterialGroupCommand(RenderMaterialGroup* renderMaterialGroup) noexcept
-    {
-        RenderCommandUPtr renderCommand(new LoadMaterialGroupRenderCommand(renderMaterialGroup));
-        
-        m_orderedCommands.push_back(renderCommand.get());
-        m_renderCommands.push_back(std::move(renderCommand));
-    }
-    
-    //------------------------------------------------------------------------------
-    void RenderCommandList::AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
-    {
-        RenderCommandUPtr renderCommand(new LoadMeshRenderCommand(renderMesh, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize));
-        
-        m_orderedCommands.push_back(renderCommand.get());
-        m_renderCommands.push_back(std::move(renderCommand));
-    }
-    
     //------------------------------------------------------------------------------
     void RenderCommandList::AddLoadShaderCommand(RenderShader* renderShader, const std::string& vertexShader, const std::string& fragmentShader) noexcept
     {
@@ -72,14 +60,77 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadMaterialGroupCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept
+    void RenderCommandList::AddLoadMaterialGroupCommand(RenderMaterialGroup* renderMaterialGroup) noexcept
     {
-        RenderCommandUPtr renderCommand(new UnloadMaterialGroupRenderCommand(std::move(renderMaterialGroup)));
+        RenderCommandUPtr renderCommand(new LoadMaterialGroupRenderCommand(renderMaterialGroup));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
     }
     
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
+    {
+        RenderCommandUPtr renderCommand(new LoadMeshRenderCommand(renderMesh, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddBeginCommand(const Integer2& resolution, const Colour& clearColour) noexcept
+    {
+        RenderCommandUPtr renderCommand(new BeginRenderCommand(resolution, clearColour));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplyCameraCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplyCameraRenderCommand(position, viewProjectionMatrix));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplyMaterialCommand(const RenderMaterial* renderMaterial) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplyMaterialRenderCommand(renderMaterial));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplyMeshCommand(const RenderMesh* renderMesh) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplyMeshRenderCommand(renderMesh));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddRenderInstanceCommand(const Matrix4& worldMatrix) noexcept
+    {
+        RenderCommandUPtr renderCommand(new RenderInstanceRenderCommand(worldMatrix));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddEndCommand(const Matrix4& worldMatrix) noexcept
+    {
+        RenderCommandUPtr renderCommand(new EndRenderCommand());
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+
     //------------------------------------------------------------------------------
     void RenderCommandList::AddUnloadMeshCommand(RenderMeshUPtr renderMesh) noexcept
     {
@@ -90,9 +141,9 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept
+    void RenderCommandList::AddUnloadMaterialGroupCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept
     {
-        RenderCommandUPtr renderCommand(new UnloadShaderRenderCommand(std::move(renderShader)));
+        RenderCommandUPtr renderCommand(new UnloadMaterialGroupRenderCommand(std::move(renderMaterialGroup)));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
@@ -102,6 +153,15 @@ namespace ChilliSource
     void RenderCommandList::AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept
     {
         RenderCommandUPtr renderCommand(new UnloadTextureRenderCommand(std::move(renderTexture)));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept
+    {
+        RenderCommandUPtr renderCommand(new UnloadShaderRenderCommand(std::move(renderShader)));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));

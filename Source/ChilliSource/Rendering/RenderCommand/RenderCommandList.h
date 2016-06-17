@@ -41,28 +41,6 @@ namespace ChilliSource
     class RenderCommandList final
     {
     public:
-        /// Creates and adds a new load material group command to the render command list.
-        ///
-        /// @param renderMaterialGroup
-        ///     The RenderMaterialGroup that should be loaded.
-        ///
-        void AddLoadMaterialGroupCommand(RenderMaterialGroup* renderMaterialGroup) noexcept;
-        
-        /// Creates and adds a new load mesh command to the render command list.
-        ///
-        /// @param renderMesh
-        ///     The render mesh that should be loaded.
-        /// @param vertexData
-        ///     The vertex data buffer.
-        /// @param vertexDataSize
-        ///     The size of the vertex data buffer.
-        /// @param indexData
-        ///     The index data buffer.
-        /// @param indexDataSize
-        ///     The size of the index data buffer.
-        ///
-        void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
-        
         /// Creates and adds a new load shader command to the render command list.
         ///
         /// @param renderShader
@@ -85,12 +63,73 @@ namespace ChilliSource
         ///
         void AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
         
-        /// Creates and adds a new unload material group command to the render command list.
+        /// Creates and adds a new load material group command to the render command list.
         ///
         /// @param renderMaterialGroup
-        ///     The render material group that should be unloaded.
+        ///     The RenderMaterialGroup that should be loaded.
         ///
-        void AddUnloadMaterialGroupCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept;
+        void AddLoadMaterialGroupCommand(RenderMaterialGroup* renderMaterialGroup) noexcept;
+        
+        /// Creates and adds a new load mesh command to the render command list.
+        ///
+        /// @param renderMesh
+        ///     The render mesh that should be loaded.
+        /// @param vertexData
+        ///     The vertex data buffer.
+        /// @param vertexDataSize
+        ///     The size of the vertex data buffer.
+        /// @param indexData
+        ///     The index data buffer.
+        /// @param indexDataSize
+        ///     The size of the index data buffer.
+        ///
+        void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
+        
+        /// Creates and adds a new begin rendering command to the render command list.
+        ///
+        /// @param resolution
+        ///     The resolution of the viewport.
+        /// @param clearColour
+        ///     The clear colour.
+        ///
+        void AddBeginCommand(const Integer2& resolution, const Colour& clearColour) noexcept;
+        
+        /// Creates and adds a new apply camera command to the render command list.
+        ///
+        /// @param position
+        ///     The world space position of the camera.
+        /// @param viewProjectionMatrix
+        ///     The view projection matrix of the camera.
+        ///
+        void AddApplyCameraCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept;
+        
+        /// Creates and adds a new apply material command to the render command list.
+        ///
+        /// @param renderMaterial
+        ///     The render material to apply.
+        ///
+        void AddApplyMaterialCommand(const RenderMaterial* renderMaterial) noexcept;
+        
+        /// Creates and adds a new apply mesh command to the render command list.
+        ///
+        /// @param renderMesh
+        ///     The render mesh to apply.
+        ///
+        void AddApplyMeshCommand(const RenderMesh* renderMesh) noexcept;
+        
+        /// Creates and adds a new render instance command to the render command list.
+        ///
+        /// @param renderMesh
+        ///     The world matrix of the instance.
+        ///
+        void AddRenderInstanceCommand(const Matrix4& worldMatrix) noexcept;
+        
+        /// Creates and adds a new end command to the render command list.
+        ///
+        /// @param renderMesh
+        ///     The world matrix of the instance.
+        ///
+        void AddEndCommand(const Matrix4& worldMatrix) noexcept;
         
         /// Creates and adds a new unload mesh command to the render command list.
         ///
@@ -99,13 +138,13 @@ namespace ChilliSource
         ///
         void AddUnloadMeshCommand(RenderMeshUPtr renderMesh) noexcept;
         
-        /// Creates and adds a new unload shader command to the render command list.
+        /// Creates and adds a new unload material group command to the render command list.
         ///
-        /// @param renderShader
-        ///     The render shader that should be unloaded.
+        /// @param renderMaterialGroup
+        ///     The render material group that should be unloaded.
         ///
-        void AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept;
-        
+        void AddUnloadMaterialGroupCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept;
+
         /// Creates and adds a new unload texture command to the render command list.
         ///
         /// @param renderTexture
@@ -113,6 +152,13 @@ namespace ChilliSource
         ///
         void AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept;
         
+        /// Creates and adds a new unload shader command to the render command list.
+        ///
+        /// @param renderShader
+        ///     The render shader that should be unloaded.
+        ///
+        void AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept;
+
         /// @return The ordered list of render commands.
         ///
         const std::vector<const RenderCommand*>& GetOrderedList() const noexcept { return m_orderedCommands; };
