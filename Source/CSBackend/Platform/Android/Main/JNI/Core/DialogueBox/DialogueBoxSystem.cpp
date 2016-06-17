@@ -78,6 +78,7 @@ namespace CSBackend
         //-----------------------------------------------------
         void DialogueBoxSystem::MakeToast(const std::string& in_text)
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to make toast outside of main thread.");
             m_dialogueBoxJI->MakeToast(in_text);   
         }
         //------------------------------------------------------
