@@ -27,8 +27,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderSnapshot::RenderSnapshot(const Colour& clearColour) noexcept
-    : m_clearColour(clearColour), m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
+    RenderSnapshot::RenderSnapshot(const Integer2& resolution, const Colour& clearColour) noexcept
+        : m_resolution(resolution), m_clearColour(clearColour), m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
     {
     }
     
@@ -134,7 +134,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandListCUPtr RenderSnapshot::ClaimPreRenderCommandList() noexcept
+    RenderCommandListUPtr RenderSnapshot::ClaimPreRenderCommandList() noexcept
     {
         CS_ASSERT(m_preRenderCommandList, "Pre-RenderCommandList has already been claimed.");
         
@@ -142,7 +142,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandListCUPtr RenderSnapshot::ClaimPostRenderCommandList() noexcept
+    RenderCommandListUPtr RenderSnapshot::ClaimPostRenderCommandList() noexcept
     {
         CS_ASSERT(m_postRenderCommandList, "Post-RenderCommandList has already been claimed.");
         

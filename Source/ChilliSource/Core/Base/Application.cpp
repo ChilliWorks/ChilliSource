@@ -350,7 +350,14 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::ProcessRenderSnapshotEvent() noexcept
     {
-        RenderSnapshot renderSnapshot(m_stateManager->GetActiveState()->GetScene()->GetClearColour());
+        auto resolution = Integer2(m_screen->GetResolution().x, m_screen->GetResolution().y);
+        
+        auto activeState = m_stateManager->GetActiveState();
+        CS_ASSERT(activeState, "Must have active state.");
+        
+        auto clearColour = activeState->GetScene()->GetClearColour();
+        
+        RenderSnapshot renderSnapshot(resolution, clearColour);
         for (const AppSystemUPtr& system : m_systems)
         {
             system->OnRenderSnapshot(renderSnapshot);

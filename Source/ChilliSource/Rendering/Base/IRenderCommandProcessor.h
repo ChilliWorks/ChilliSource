@@ -31,9 +31,6 @@
 
 namespace ChilliSource
 {
-    //TODO: !? Replace
-    using RenderCommandQueue = std::vector<RenderCommandListCUPtr>;
-    
     /// The interface for RenderCommand processors. A render command processor takes a
     /// RenderCommandQueue and performs each action described by the RenderCommands it
     /// is comprised of. The actions performed depend on the render API that the

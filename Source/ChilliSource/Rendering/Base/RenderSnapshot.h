@@ -56,16 +56,22 @@ namespace ChilliSource
         RenderSnapshot(RenderSnapshot&&) = default;
         RenderSnapshot& operator=(RenderSnapshot&&) = default;
         
-        /// Creates a new instance with the given clear colour.
+        /// Creates a new instance with the given viewport resolution and clear colour.
         ///
+        /// @param resolution
+        ///     The viewport resolution.
         /// @param clearColour
         ///     The clear colour
         ///
-        RenderSnapshot(const Colour& clearColour) noexcept;
+        RenderSnapshot(const Integer2& resolution, const Colour& clearColour) noexcept;
+        
+        /// @return The viewport resolution.
+        ///
+        const Integer2& GetResolution() const noexcept { return m_resolution; }
         
         /// @return The clear colour that should be used during rendering.
         ///
-        Colour GetClearColour() const noexcept { return m_clearColour; }
+        const Colour& GetClearColour() const noexcept { return m_clearColour; }
         
         /// Sets the main camera that will be used to render the scene. Currently only one camera per scene
         /// is supported.
@@ -147,15 +153,16 @@ namespace ChilliSource
         ///
         /// @return The moved pre render command list.
         ///
-        RenderCommandListCUPtr ClaimPreRenderCommandList() noexcept;
+        RenderCommandListUPtr ClaimPreRenderCommandList() noexcept;
     
         /// Moves the post render command list to a new external owner.
         ///
         /// @return The moved post render command list.
         ///
-        RenderCommandListCUPtr ClaimPostRenderCommandList() noexcept;
+        RenderCommandListUPtr ClaimPostRenderCommandList() noexcept;
         
     private:
+        Integer2 m_resolution;
         Colour m_clearColour;
         RenderCamera m_renderCamera;
         std::vector<RenderAmbientLight> m_renderAmbientLights;

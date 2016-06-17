@@ -22,16 +22,15 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Camera/RenderCamera.h>
+#include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderCamera::RenderCamera(const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept
-    : m_worldMatrix(worldMatrix), m_projectionMatrix(projectionMatrix)
+    RenderCommandQueue RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
+                                                                    const Colour& clearColour, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept
     {
-        m_viewMatrix = Matrix4::Inverse(m_worldMatrix);
-        m_viewProjectionMatrix = m_viewMatrix * m_projectionMatrix;
-        m_frustrum.CalculateClippingPlanes(m_viewProjectionMatrix);
+        //TODO: Handle properly.
+        return RenderCommandQueue(std::move(preRenderCommandList), 0, std::move(postRenderCommandList));
     }
 }

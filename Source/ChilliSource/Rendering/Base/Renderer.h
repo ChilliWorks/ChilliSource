@@ -30,6 +30,7 @@
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandQueue.h>
 
 #include <condition_variable>
 #include <deque>

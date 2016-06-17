@@ -27,6 +27,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
+#include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
 
 namespace ChilliSource
@@ -46,7 +47,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Colour::k_black)
+        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black)
     {
         //TODO: Handle forward vs deferred rendering
         m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
@@ -68,6 +69,7 @@ namespace ChilliSource
         auto taskScheduler = Application::Get()->GetTaskScheduler();
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
+            auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
             auto renderCamera = m_currentSnapshot.ClaimRenderCamera();
             auto renderAmbientLights = m_currentSnapshot.ClaimRenderAmbientLights();
@@ -79,11 +81,7 @@ namespace ChilliSource
             
             auto renderFrame = RenderFrameCompiler::CompileRenderFrame(renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            
-            //TODO: Properly build render command queue.
-            RenderCommandQueue renderCommandQueue;
-            renderCommandQueue.push_back(std::move(preRenderCommandList));
-            renderCommandQueue.push_back(std::move(postRenderCommandList));
+            auto renderCommandQueue = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(preRenderCommandList), std::move(postRenderCommandList));
             
             WaitThenPushCommandQueue(std::move(renderCommandQueue));
             EndRenderPrep();

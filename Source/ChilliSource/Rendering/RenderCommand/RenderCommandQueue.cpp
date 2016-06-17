@@ -22,16 +22,39 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Camera/RenderCamera.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandQueue.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderCamera::RenderCamera(const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept
-    : m_worldMatrix(worldMatrix), m_projectionMatrix(projectionMatrix)
+    RenderCommandQueue::RenderCommandQueue(RenderCommandListUPtr preRenderCommandList, u32 numMainSlots, RenderCommandListUPtr postRenderCommandList) noexcept
     {
-        m_viewMatrix = Matrix4::Inverse(m_worldMatrix);
-        m_viewProjectionMatrix = m_viewMatrix * m_projectionMatrix;
-        m_frustrum.CalculateClippingPlanes(m_viewProjectionMatrix);
+        constexpr u32 k_defaultListCount = 2;
+        u32 numLists = k_defaultListCount + numMainSlots;
+        
+        m_renderCommandLists.reserve(numLists);
+        m_renderCommandLists.push_back(std::move(preRenderCommandList));
+        
+        for (u32 i = 0; i < numMainSlots; ++i)
+        {
+            m_renderCommandLists.push_back(RenderCommandListUPtr(new RenderCommandList()));
+        }
+        
+        m_renderCommandLists.push_back(std::move(postRenderCommandList));
+        
+        m_queue.reserve(numLists);
+        
+        for (const auto& renderCommandList : m_renderCommandLists)
+        {
+            m_queue.push_back(renderCommandList.get());
+        }
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderCommandList* RenderCommandQueue::GetRenderCommandList(u32 slotIndex) noexcept
+    {
+        CS_ASSERT(slotIndex < GetNumSlots(), "Index out of bounds.");
+        
+        return m_renderCommandLists[slotIndex].get();
     }
 }

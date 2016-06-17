@@ -53,6 +53,8 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderPassObject);
     CS_FORWARDDECLARE_CLASS(RenderSnapshot);
     CS_FORWARDDECLARE_CLASS(RenderTarget);
+    CS_FORWARDDECLARE_CLASS(TargetRenderPassGroup);
+    CS_FORWARDDECLARE_CLASS(CameraRenderPassGroup);
     enum class AlignmentAnchor;
     enum class BlendMode;
     enum class CullFace;
@@ -167,14 +169,15 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ApplyCameraRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
-    CS_FORWARDDECLARE_CLASS(BeginRenderRenderCommand);
-    CS_FORWARDDECLARE_CLASS(EndRenderRenderCommand);
+    CS_FORWARDDECLARE_CLASS(BeginRenderCommand);
+    CS_FORWARDDECLARE_CLASS(EndRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandList);
+    CS_FORWARDDECLARE_CLASS(RenderCommandQueue);
     CS_FORWARDDECLARE_CLASS(UnloadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadShaderRenderCommand);

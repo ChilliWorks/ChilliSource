@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandQueue.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>

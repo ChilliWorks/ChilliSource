@@ -44,14 +44,12 @@ namespace ChilliSource
         /// Constructs a new instance of the container with the given camera world and projection
         /// matrices.
         ///
-        /// @param viewportResolution
-        ///     The viewport resolution.
         /// @param worldMatrix
         ///     The world matrix of the camera. The view matrix will be derrived from this.
         /// @param projectionMatrix
         ///     The projection matrix of the camera.
         ///
-        RenderCamera(const Integer2& viewportResolution, const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept;
+        RenderCamera(const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept;
         
         /// @return The world matrix of the camera.
         ///
@@ -74,7 +72,6 @@ namespace ChilliSource
         const Frustum& GetFrustrum() const noexcept { return m_frustrum; }
         
     private:
-        Integer2 m_viewportResolution;
         Matrix4 m_worldMatrix;
         Matrix4 m_projectionMatrix;
         Matrix4 m_viewMatrix;
