@@ -36,36 +36,36 @@ namespace ChilliSource
 {
     namespace Utils
     {
-        bool FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent)
+        bool FileToString(StorageLocation ineStorageLocation, const std::string& instrPath, std::string& outstrFileContent)
         {
-            FileStreamUPtr pFile = Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
+            auto pFile = Application::Get()->GetFileSystem()->CreateTextInputStream(ineStorageLocation, instrPath);
             
             if(pFile == nullptr)
             {
                 CS_LOG_WARNING("Utils::FileToString: Could not open file: " + instrPath);
                 return false;
             }
-
-            pFile->GetAll(outstrFileContent);
+            
+            outstrFileContent = pFile->ReadAll();
             
             return true;
         }
-
-        FileStreamSPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut)
+        
+        TextOutputStreamUPtr StringToFile(StorageLocation ineStorageLocation, const std::string& instrPath, const std::string& instrFileOut)
         {
-            FileStreamSPtr pFile = Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
+            auto pFile = Application::Get()->GetFileSystem()->CreateTextOutputStream(ineStorageLocation, instrPath, FileWriteMode::k_overwrite);
             
             if(pFile == nullptr)
             {
                 CS_LOG_WARNING("Utils::StringToFile: Could not open file: " + instrPath);
-                return FileStreamSPtr();
+                return nullptr;
             }
             
             pFile->Write(instrFileOut);
             
-            return pFile;    
+            return std::move(pFile);
         }
-
+        
         bool ZlibCompressString(const std::string &instrUncompressed, std::string &outstrCompressed)
         {
             uLongf maxCompSize = (uLongf)(instrUncompressed.size() * 1.1f + 12);

@@ -39,6 +39,7 @@ namespace ChilliSource
     /// Base
     //---------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(Application);
+    CS_FORWARDDECLARE_CLASS(ByteBuffer);
     CS_FORWARDDECLARE_CLASS(Colour);
     CS_FORWARDDECLARE_CLASS(Device);
     CS_FORWARDDECLARE_CLASS(LifecycleManager);
@@ -90,13 +91,19 @@ namespace ChilliSource
     //---------------------------------------------------------
     /// File
     //---------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(FileStream);
+    CS_FORWARDDECLARE_CLASS(IBinaryInputStream);
+    CS_FORWARDDECLARE_CLASS(BinaryInputStream);
+    CS_FORWARDDECLARE_CLASS(BinaryOutputStream);
+    CS_FORWARDDECLARE_CLASS(ITextInputStream);
+    CS_FORWARDDECLARE_CLASS(TextInputStream);
+    CS_FORWARDDECLARE_CLASS(TextOutputStream);
     CS_FORWARDDECLARE_CLASS(FileSystem);
     CS_FORWARDDECLARE_CLASS(AppDataStore);
     CS_FORWARDDECLARE_CLASS(TaggedFilePathResolver);
     CS_FORWARDDECLARE_CLASS(CSBinaryInputStream);
     CS_FORWARDDECLARE_CLASS(CSBinaryChunk);
     enum class StorageLocation;
+    enum class FileWriteMode;
     //---------------------------------------------------------
     /// Image
     //---------------------------------------------------------

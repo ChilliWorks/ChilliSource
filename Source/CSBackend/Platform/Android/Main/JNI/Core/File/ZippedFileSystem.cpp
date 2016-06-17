@@ -28,8 +28,11 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/ZippedFileSystem.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/File/VirtualFileStream.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/File/VirtualBinaryInputStream.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/File/VirtualTextInputStream.h>
 
+#include <ChilliSource/Core/File/FileStream/IBinaryInputStream.h>
+#include <ChilliSource/Core/File/FileStream/ITextInputStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
@@ -77,13 +80,57 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        ChilliSource::FileStreamUPtr ZippedFileSystem::CreateFileStream(const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const
+        ChilliSource::ITextInputStreamUPtr ZippedFileSystem::CreateTextInputStream(const std::string& filePath) const noexcept
+        {
+            CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
+
+            u32 bytesRead = 0;
+            std::unique_ptr<u8[]> buffer = ReadZipFileContents(filePath, bytesRead);
+
+            if(buffer == nullptr || bytesRead == 0)
+            {
+                return nullptr;
+            }
+
+            auto output = ChilliSource::ITextInputStreamUPtr(new VirtualTextInputStream(std::move(buffer), bytesRead));
+            if (output->IsValid() == false)
+            {
+                output = nullptr;
+            }
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        ChilliSource::IBinaryInputStreamUPtr ZippedFileSystem::CreateBinaryInputStream(const std::string& filePath) const noexcept
+        {
+            CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
+
+            u32 bytesRead = 0;
+            std::unique_ptr<u8[]> buffer = ReadZipFileContents(filePath, bytesRead);
+
+            if(buffer == nullptr || bytesRead == 0)
+            {
+                return nullptr;
+            }
+
+            auto output = ChilliSource::IBinaryInputStreamUPtr(new VirtualBinaryInputStream(std::move(buffer), bytesRead));
+            if (output->IsValid() == false)
+            {
+                output = nullptr;
+            }
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        std::unique_ptr<u8[]> ZippedFileSystem::ReadZipFileContents(const std::string& filePath, u32& numBytesRead) const noexcept
         {
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
             //Get the manifest item describing the location of the file within the zip.
             ManifestItem item;
-            if (TryGetManifestItem(ChilliSource::StringUtils::StandardiseFilePath(in_filePath), item) == false)
+            if (TryGetManifestItem(ChilliSource::StringUtils::StandardiseFilePath(filePath), item) == false)
             {
                 return nullptr;
             }
@@ -96,8 +143,6 @@ namespace CSBackend
 
             //read the contents of the zip file.
             std::unique_lock<std::mutex> lock(m_mutex);
-
-            ChilliSource::FileStreamUPtr output;
 
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)
@@ -120,17 +165,14 @@ namespace CSBackend
                 return nullptr;
             }
 
-            std::unique_ptr<u8[]> buffer(new u8[info.uncompressed_size]);
-            unzReadCurrentFile(unzipper, (voidp)buffer.get(), info.uncompressed_size);
-            output = ChilliSource::FileStreamUPtr(new VirtualFileStream(std::move(buffer), info.uncompressed_size, in_fileMode));
-            if (output->IsValid() == false)
-            {
-                output = nullptr;
-            }
+            numBytesRead = info.uncompressed_size;
+            std::unique_ptr<u8[]> buffer(new u8[numBytesRead]);
 
+            unzReadCurrentFile(unzipper, (voidp)buffer.get(), numBytesRead);
             unzCloseCurrentFile(unzipper);
             unzClose(unzipper);
-            return output;
+
+            return std::move(buffer);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -294,8 +336,6 @@ namespace CSBackend
 
             //read the contents of the zip file.
             std::unique_lock<std::mutex> lock(m_mutex);
-
-            ChilliSource::FileStreamUPtr output;
 
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)

@@ -292,6 +292,9 @@
     <Filter Include="CSBackend\Rendering\OpenGL\Shader">
       <UniqueIdentifier>{6e3ada5f-5fe9-49f6-a37a-f815cbeef523}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Core\File\FileStream">
+      <UniqueIdentifier>{58b86741-22bf-4fee-a185-277889c92c94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -394,9 +397,6 @@
       <Filter>ChilliSource\Core\File</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.cpp">
-      <Filter>ChilliSource\Core\File</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream.cpp">
       <Filter>ChilliSource\Core\File</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileSystem.cpp">
@@ -1149,9 +1149,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\VertexFormat.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
@@ -1171,6 +1168,33 @@
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ByteBuffer.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryInputStream.cpp">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryOutputStream.cpp">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\FileWriteMode.cpp">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\TextInputStream.cpp">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream\TextOutputStream.cpp">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1443,9 +1467,6 @@
       <Filter>ChilliSource\Core\File</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.h">
-      <Filter>ChilliSource\Core\File</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream.h">
       <Filter>ChilliSource\Core\File</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileSystem.h">
@@ -2465,9 +2486,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\VertexFormat.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
@@ -2487,6 +2505,39 @@
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ByteBuffer.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryInputStream.h">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\BinaryOutputStream.h">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\FileWriteMode.h">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\IBinaryInputStream.h">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\ITextInputStream.h">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\TextInputStream.h">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream\TextOutputStream.h">
+      <Filter>ChilliSource\Core\File\FileStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>
