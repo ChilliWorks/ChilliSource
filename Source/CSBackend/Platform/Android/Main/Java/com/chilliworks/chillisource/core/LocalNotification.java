@@ -56,6 +56,7 @@ public final class LocalNotification
 	
 	private final static String k_paramNameParams = "Params";
 	private final static String k_intentAction = "com.chilliworks.chillisource.core.ALARM_NOTIFICATION_INTENT";
+	//TODO: should read com.chillisource instead of com.chilliworks.chillisource but generated manifest doesn't match
 	
 	private int m_intentId = 0;
 	private int m_notificationId = 0;

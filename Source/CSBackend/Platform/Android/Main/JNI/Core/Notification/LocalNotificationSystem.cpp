@@ -32,7 +32,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Threading.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Notification/LocalNotificationJavaInterface.h>
 
@@ -64,85 +64,61 @@ namespace CSBackend
 		//--------------------------------------------------
 		void LocalNotificationSystem::SetEnabled(bool in_enabled)
         {
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to enable/disable notification system outside of main thread.");
+            m_enabled = in_enabled;
+
+            if (m_enabled == false)
             {
-                std::mutex enabledMutex;
-                std::unique_lock<std::mutex> lock(enabledMutex);
-
-                m_enabled = in_enabled;
-
-                if (m_enabled == false)
-                {
-                    CancelAll();
-                }
-            });
+                CancelAll();
+            }
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
 		void LocalNotificationSystem::ScheduleNotificationForTime(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, TimeIntervalSecs in_time, ChilliSource::Notification::Priority in_priority)
         {
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to schedule notification outside of main thread.");
+            if (m_enabled == true)
             {
-                if (m_enabled == true)
-                {
-                    m_localNotificationJI->ScheduleNotificationForTime(in_id, in_params, in_time, in_priority);
-                }
-            });
+                m_localNotificationJI->ScheduleNotificationForTime(in_id, in_params, in_time, in_priority);
+            }
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
 		void LocalNotificationSystem::GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
 		{
-            std::vector<ChilliSource::NotificationCSPtr> notifications;
-            TimeIntervalSecs time = in_time;
-            TimeIntervalSecs period = in_period;
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [&](const CS::TaskContext& in_taskContext)
-            {
-                m_localNotificationJI->GetScheduledNotifications(notifications, time, period);
-            });
-            out_notifications = notifications;
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to retrieve scheduled notifications outside of main thread.");
+            m_localNotificationJI->GetScheduledNotifications(out_notifications, in_time, in_period);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
 		void LocalNotificationSystem::CancelByID(ChilliSource::Notification::ID in_id)
 		{
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
-            {
-                m_localNotificationJI->CancelByID(in_id);
-            });
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel notification outside of main thread.");
+            m_localNotificationJI->CancelByID(in_id);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
 		void LocalNotificationSystem::CancelAll()
 		{
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
-            {
-                m_localNotificationJI->CancelAll();
-            });
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel all notifications outside of main thread.");
+            m_localNotificationJI->CancelAll();
 		}
         //--------------------------------------------------
         //--------------------------------------------------
 		ChilliSource::IConnectableEvent<ChilliSource::LocalNotificationSystem::ReceivedDelegate>& LocalNotificationSystem::GetReceivedEvent()
 		{
-            ChilliSource::IConnectableEvent<ChilliSource::LocalNotificationSystem::ReceivedDelegate>* receivedEvent = nullptr;
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [&](const CS::TaskContext& in_taskContext)
-            {
-                receivedEvent = &m_recievedEvent;
-            });
-            return *receivedEvent;        	
+            return m_recievedEvent;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
 		void LocalNotificationSystem::OnNotificationReceived(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, ChilliSource::Notification::Priority in_priority)
 		{
-            CS::Application::Get()->GetTaskScheduler()->ScheduleTask(CS::TaskType::k_system, [=](const CS::TaskContext& in_taskContext)
-            {
-                ChilliSource::NotificationSPtr notification = std::make_shared<ChilliSource::Notification>();
-                notification->m_id = in_id;
-                notification->m_params = in_params;
-                notification->m_priority = in_priority;
-                m_recievedEvent.NotifyConnections(notification);
-            });
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to handle received notification outside of main thread.");
+            ChilliSource::NotificationSPtr notification = std::make_shared<ChilliSource::Notification>();
+            notification->m_id = in_id;
+            notification->m_params = in_params;
+            notification->m_priority = in_priority;
+            m_recievedEvent.NotifyConnections(notification);
 		}
 	}
 }

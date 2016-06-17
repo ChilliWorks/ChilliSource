@@ -65,6 +65,8 @@ namespace ChilliSource
         /// All existing notifications will be cancelled
         /// when this is disabled. This is enabled by default.
         ///
+        /// This isn't thread-safe, and must be accessed from the main thread.
+        ///
         /// @author Ian Copland
         ///
         /// @param Whether or not to enable the scheduling
@@ -77,6 +79,8 @@ namespace ChilliSource
         /// the system specfic notification alarms and can
         /// be received even if it was scheduled during a
         /// previous instance of the application.
+        ///
+        /// This isn't thread-safe, and must be accessed from the main thread.
         ///
         /// @author Ian Copland
         ///
@@ -91,6 +95,8 @@ namespace ChilliSource
         /// Builds a list of all notifications currently scheduled
         /// within the given time period.
         ///
+        /// This isn't thread-safe, and must be accessed from the main thread.
+        ///
         /// @author Ian Copland
         ///
         /// @param [Out] The list of notifications.
@@ -101,6 +107,8 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Cancel By ID
         ///
+        /// This isn't thread-safe, and must be accessed from the main thread.
+        ///
         /// Prevent any notifications with given ID type from firing
         ///
         /// @param ID type
@@ -109,11 +117,15 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Cancel All
         ///
+        /// This isn't thread-safe, and must be accessed from the main thread.
+        ///
         /// Terminate all currently scheduled notifications
         //--------------------------------------------------------
         virtual void CancelAll() = 0;
         //--------------------------------------------------
         /// @author Ian Copland
+        ///
+        /// This is thread-safe, but only if accessed between the OnInit() and OnDestroy() lifecycle events.
         ///
         /// @return An event that can be used to listen for
         /// new notifications being received.
