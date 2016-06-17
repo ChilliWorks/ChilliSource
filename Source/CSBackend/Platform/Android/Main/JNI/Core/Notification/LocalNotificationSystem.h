@@ -42,6 +42,9 @@ namespace CSBackend
 		//--------------------------------------------------------
 		/// Android backend for the local notification system
 		///
+        /// The methods in this class aren't thread-safe, and 
+        /// must be accessed from the main thread.
+        ///
 		/// @author Steven Hendrie
 		//--------------------------------------------------------
 		class LocalNotificationSystem : public ChilliSource::LocalNotificationSystem
@@ -60,7 +63,7 @@ namespace CSBackend
 			/// Enables and disables addition of local notifications.
 			/// All existing notifications will be cancelled
 			/// when this is disabled. This is enabled by default.
-			///
+            /// 
 			/// @author Ian Copland
 			///
 			/// @param Whether or not to enable the scheduling

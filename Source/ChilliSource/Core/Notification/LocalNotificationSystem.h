@@ -40,9 +40,13 @@ namespace ChilliSource
 {
     //-------------------------------------------------------
     /// Schedules notifications using the platform specific
-    /// notification alaram. Notifications scheduled using
+    /// notification alarm. Notifications scheduled using
     /// this can still be received even if the Application
     /// is restarted.
+    ///
+    /// The methods in this class aren't thread-safe, and 
+    /// must be accessed from the main thread.
+    ///
     //-------------------------------------------------------
     class LocalNotificationSystem : public AppSystem
     {
