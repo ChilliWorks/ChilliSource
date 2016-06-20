@@ -30,7 +30,9 @@
 
 #include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Input/Keyboard/KeyCode.h>
 #include <ChilliSource/Input/Keyboard/ModifierKeyCode.h>
 
@@ -306,6 +308,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void Keyboard::OnKeyPressed(sf::Keyboard::Key in_code, const sf::Event::KeyEvent& in_event)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Key press events must be on the main thread.");
 			auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
 
 			if (IsKeyDown(keyCode) == false)
@@ -339,6 +342,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void Keyboard::OnKeyReleased(sf::Keyboard::Key in_code)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Key release events must be on the main thread.");
 			auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
 			if (IsKeyDown(keyCode) == true)
 			{
@@ -351,6 +355,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		bool Keyboard::IsKeyDown(ChilliSource::KeyCode in_code) const
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to access held keys outside of the main thread.");
 			return m_keysDown[static_cast<u32>(in_code)];
 		}
 		//-------------------------------------------------------
