@@ -33,6 +33,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Input/Pointer/TouchInputJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -49,6 +50,7 @@ namespace CSBackend
 		//----------------------------------------------------
 		void PointerSystem::OnTouchDown(s32 in_systemId, const ChilliSource::Vector2& in_location)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle touch event outside of main thread.");
 			ChilliSource::Vector2 touchLocation(in_location.x, m_screen->GetResolution().y - in_location.y);
 			ChilliSource::Pointer::Id pointerId = AddPointerCreateEvent(touchLocation);
 			AddPointerDownEvent(pointerId, ChilliSource::Pointer::InputType::k_touch);
@@ -58,6 +60,7 @@ namespace CSBackend
 		//----------------------------------------------------
 		void PointerSystem::OnTouchMoved(s32 in_systemId, const ChilliSource::Vector2& in_location)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle touch moved event outside of main thread.");
 			auto it = m_systemIdToPointerIdMap.find(in_systemId);
 			if (it != m_systemIdToPointerIdMap.end())
 			{
@@ -69,6 +72,7 @@ namespace CSBackend
 		//----------------------------------------------------
 		void PointerSystem::OnTouchUp(s32 in_systemId)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle touch released event outside of main thread.");
 			auto it = m_systemIdToPointerIdMap.find(in_systemId);
 			if (it != m_systemIdToPointerIdMap.end())
 			{

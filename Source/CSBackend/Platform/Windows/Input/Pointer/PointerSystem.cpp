@@ -32,6 +32,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace CSBackend
@@ -92,18 +93,21 @@ namespace CSBackend
 		//----------------------------------------------------
 		void PointerSystem::HideCursor()
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to hide mouse cursor outside of main thread.");
 			SFMLWindow::Get()->HideCursor();
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void PointerSystem::ShowCursor()
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to show mouse cursor outside of main thread.");
 			SFMLWindow::Get()->ShowCursor();
 		}
 		//----------------------------------------------
 		//----------------------------------------------
 		void PointerSystem::OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle mouse button outside of main thread");
 			ChilliSource::Pointer::InputType type = ButtonIdToInputType(in_button);
 			if (type == ChilliSource::Pointer::InputType::k_none)
 			{
@@ -124,6 +128,7 @@ namespace CSBackend
 		//----------------------------------------------
 		void PointerSystem::OnMouseMoved(s32 in_xPos, s32 in_yPos)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle mouse movement outside of main thread.");
 			ChilliSource::Vector2 touchLocation((f32)in_xPos, m_screen->GetResolution().y - (f32)in_yPos);
 			AddPointerMovedEvent(m_pointerId, touchLocation);
 		}
@@ -131,6 +136,7 @@ namespace CSBackend
 		//----------------------------------------------
 		void PointerSystem::OnMouseWheeled(s32 in_delta)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle mouse wheel scrolling outside of main thread.");
 			ChilliSource::Vector2 delta(0.0f, (f32)in_delta);
 			AddPointerScrollEvent(m_pointerId, delta);
 		}

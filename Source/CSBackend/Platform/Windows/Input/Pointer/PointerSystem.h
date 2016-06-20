@@ -46,6 +46,9 @@ namespace CSBackend
 		/// The iOS backend for the pointer system. This provides
 		/// access to touch events.
 		///
+        /// The methods in this class are not thread-safe and must be
+        /// accessed from the main thread.
+        ///
 		/// @author Ian Copland
 		//------------------------------------------------------------
 		class PointerSystem final : public ChilliSource::PointerSystem
