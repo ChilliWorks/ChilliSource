@@ -30,7 +30,9 @@
 
 #include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
 namespace CSBackend
@@ -49,6 +51,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot activate system text entry outside of main thread.");
 			if (IsActive() == false)
 			{
 				m_text = in_text;
@@ -61,6 +64,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void TextEntry::Deactivate()
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot deactivate system text entry outside of main thread.");
 			if (IsActive() == true)
 			{
 				m_textEnteredConnection.reset();
@@ -76,24 +80,28 @@ namespace CSBackend
         //-------------------------------------------------------
         bool TextEntry::IsActive() const
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot check system text entry activation status outside of main thread.");
 			return m_textEnteredConnection != nullptr;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         const std::string& TextEntry::GetTextBuffer() const
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot get system text entry buffer outside of main thread.");
             return m_text;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void TextEntry::SetTextBuffer(const std::string& in_text)
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot set system text entry buffer outside of main thread.");
             m_text = in_text;
         }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void TextEntry::OnTextEntered(ChilliSource::UTF8Char in_unicodeChar)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot handle system text entry callback outside of main thread.");
 			const ChilliSource::UTF8Char k_backspace = 8;
 
 			std::string text;

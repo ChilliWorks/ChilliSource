@@ -32,7 +32,9 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/TextEntry/TextEntryJavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -63,6 +65,7 @@ namespace CSBackend
         //-------------------------------------------------------
 		void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot activate system text entry outside of main thread.");
 			if (m_enabled == false)
 			{
 				m_textBufferChangedDelegate = in_changeDelegate;
@@ -79,6 +82,7 @@ namespace CSBackend
         //-------------------------------------------------------
 		void TextEntry::Deactivate()
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot deactivate system text entry outside of main thread.");
 			if (m_enabled == true)
 			{
 				m_textEntryJI->Deactivate();
@@ -96,18 +100,21 @@ namespace CSBackend
 		//-------------------------------------------------------
 		bool TextEntry::IsActive() const
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot check system text entry activation status outside of main thread.");
 			return m_enabled;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		const std::string& TextEntry::GetTextBuffer() const
 		{
-			return m_text;
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot get system text entry buffer outside of main thread.");
+            return m_text;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void TextEntry::SetTextBuffer(const std::string& in_text)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot set system text entry buffer outside of main thread.");
 			m_text = in_text;
 			m_textEntryJI->SetTextBuffer(m_text);
 		}
@@ -115,6 +122,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void TextEntry::OnTextChanged(const std::string& in_text)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot handle system text entry callback outside of main thread.");
 			if(m_text == in_text)
 				return;
 
@@ -138,6 +146,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void TextEntry::OnKeyboardDismissed()
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot handle keyboard dismissal outside of main thread.");
 			if (m_enabled == true)
 			{
 				m_enabled = false;

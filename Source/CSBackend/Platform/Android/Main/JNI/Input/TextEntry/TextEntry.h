@@ -43,6 +43,9 @@ namespace CSBackend
 		/// The Android backend to the text entry system. This provides access
 		/// to the Android virtual keyboard functionality.
 		///
+        /// The methods in this class are not thread-safe and must be called
+        /// from the main thread.
+        ///
 		/// @author Ian Copland
 		//----------------------------------------------------------------
 		class TextEntry final : public ChilliSource::TextEntry

@@ -45,6 +45,9 @@ namespace CSBackend
         /// The iOS backend to the text entry system. This provides access
         /// to the iOS virtual keyboard functionality via a text buffer
         ///
+        /// The methods in this class are not thread-safe and must be called
+        /// from the main thread.
+        ///
         /// @author S Downie
         //----------------------------------------------------------------
 		class TextEntry final : public ChilliSource::TextEntry
