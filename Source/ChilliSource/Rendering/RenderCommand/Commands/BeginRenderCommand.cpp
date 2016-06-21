@@ -28,7 +28,7 @@ namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     BeginRenderCommand::BeginRenderCommand(const Integer2& resolution, const Colour& clearColour) noexcept
-        : RenderCommand(Type::k_end), m_resolution(resolution), m_clearColour(clearColour)
+        : RenderCommand(Type::k_begin), m_resolution(resolution), m_clearColour(clearColour)
     {
     }
 }

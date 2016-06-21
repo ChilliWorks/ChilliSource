@@ -56,7 +56,7 @@ namespace ChilliSource
         
         /// @return The number of slots in the queue.
         ///
-        u32 GetNumSlots() const noexcept { return m_queue.size(); }
+        u32 GetNumSlots() const noexcept { return u32(m_queue.size()); }
         
         /// @param slotIndex
         ///     The requested slot index.

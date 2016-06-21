@@ -1197,6 +1197,30 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandCompiler.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyCameraRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMaterialRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\EndRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandQueue.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2539,6 +2563,30 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandCompiler.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyCameraRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMaterialRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\EndRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandQueue.h">
+      <Filter>ChilliSource\Rendering\RenderCommand</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

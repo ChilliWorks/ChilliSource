@@ -135,14 +135,14 @@ namespace ChilliSource
         /// @param renderCommandQueue
         ///     The render command queue which should be pushed. Must be moved.
         ///
-        void WaitThenPushCommandQueue(RenderCommandQueue renderCommandQueue) noexcept;
+        void WaitThenPushCommandQueue(RenderCommandQueueCUPtr renderCommandQueue) noexcept;
         
         /// If the queue of command queues is empty then this waits until one has been pushed to continue.
         /// It pops a command queue from the list and notifies any threads which are waiting.
         ///
         /// @return The render command queue which has been popped.
         ///
-        RenderCommandQueue WaitThenPopCommandQueue() noexcept;
+        RenderCommandQueueCUPtr WaitThenPopCommandQueue() noexcept;
         
         IRenderPassCompilerUPtr m_renderPassCompiler;
         IRenderCommandProcessorUPtr m_renderCommandProcessor;
@@ -155,7 +155,7 @@ namespace ChilliSource
         
         std::mutex m_renderCommandQueuesMutex;
         std::condition_variable m_renderCommandQueuesCondition;
-        std::deque<RenderCommandQueue> m_renderCommandQueues;
+        std::deque<RenderCommandQueueCUPtr> m_renderCommandQueues;
     };
 }
 

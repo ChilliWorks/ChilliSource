@@ -77,7 +77,8 @@ namespace CSBackend
                             UnloadMesh(static_cast<const ChilliSource::UnloadMeshRenderCommand*>(renderCommand));
                             break;
                         default:
-                            CS_LOG_FATAL("Unknown render command.");
+                            //TODO: Re-add once all commands are being processed.
+                            //CS_LOG_FATAL("Unknown render command.");
                             break;
                     }
                 }

@@ -92,7 +92,7 @@ namespace ChilliSource
     void Renderer::ProcessRenderCommandQueue() noexcept
     {
         auto renderCommandQueue = WaitThenPopCommandQueue();
-        m_renderCommandProcessor->Process(std::move(renderCommandQueue));
+        m_renderCommandProcessor->Process(*renderCommandQueue);
     }
     
     //------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::WaitThenPushCommandQueue(RenderCommandQueue renderCommandQueue) noexcept
+    void Renderer::WaitThenPushCommandQueue(RenderCommandQueueCUPtr renderCommandQueue) noexcept
     {
         std::unique_lock<std::mutex> lock(m_renderCommandQueuesMutex);
         
@@ -132,7 +132,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandQueue Renderer::WaitThenPopCommandQueue() noexcept
+    RenderCommandQueueCUPtr Renderer::WaitThenPopCommandQueue() noexcept
     {
         std::unique_lock<std::mutex> lock(m_renderCommandQueuesMutex);
         
