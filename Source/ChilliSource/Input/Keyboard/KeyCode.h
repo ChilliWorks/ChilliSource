@@ -1,11 +1,6 @@
-//
-//  KeyCode.h
-//  Chilli Source
-//  Created by Scott Downie on 09/07/2014
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,18 +21,15 @@
 //  THE SOFTWARE.
 //
 
-#include <string>
-
 #ifndef _CHILLISOURCE_INPUT_KEYBOARD_KEYCODE_H_
 #define _CHILLISOURCE_INPUT_KEYBOARD_KEYCODE_H_
 
+#include <string>
+
 namespace ChilliSource
 {
-    //---------------------------------------------------------------
     /// List of all the key-codes supported for keyboard events
     ///
-    /// @author S Downie
-    //---------------------------------------------------------------
     enum class KeyCode
     {
         k_unknown,
@@ -145,13 +137,11 @@ namespace ChilliSource
         
         k_total
     };
-    //---------------------------------------------------------------
     /// Retrieve a key name as a string for a given key code.
     ///
-    /// @author Jordan Brown
+    /// @param in_key 
+    ///     The key code to retrieve.
     ///
-    /// @param in_key - The key code to retrieve.
-    //---------------------------------------------------------------
     std::string GetKeyName(const KeyCode& in_key);
 }
 

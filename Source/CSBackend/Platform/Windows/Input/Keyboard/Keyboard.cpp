@@ -315,7 +315,6 @@ namespace CSBackend
 		{
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& context)
             {
-                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Key press events must be on the main thread.");
                 auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
 
                 if (IsKeyDown(keyCode) == false)
@@ -352,7 +351,6 @@ namespace CSBackend
 		{
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& context)
             {
-                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Key release events must be on the main thread.");
 			    auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
 			    if (IsKeyDown(keyCode) == true)
 			    {

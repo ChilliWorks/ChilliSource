@@ -1,8 +1,3 @@
-//
-//  KeyCode.cpp
-//  Chilli Source
-//  Created by Jordan Brown on 21/06/2016
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2016 Tag Games Limited
@@ -33,63 +28,62 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------------
-    //----------------------------------------------------------------------
     std::string GetKeyName(const KeyCode& in_key)
     {
         switch (in_key)
         {
             case KeyCode::k_a:
-                return "a";
+                return "A";
             case KeyCode::k_b:
-                return "b";
+                return "B";
             case KeyCode::k_c:
-                return "c";
+                return "C";
             case KeyCode::k_d:
-                return "d";
+                return "D";
             case KeyCode::k_e:
-                return "e";
+                return "E";
             case KeyCode::k_f:
-                return "f";
+                return "F";
             case KeyCode::k_g:
-                return "g";
+                return "G";
             case KeyCode::k_h:
-                return "h";
+                return "H";
             case KeyCode::k_i:
-                return "i";
+                return "I";
             case KeyCode::k_j:
-                return "j";
+                return "J";
             case KeyCode::k_k:
-                return "k";
+                return "K";
             case KeyCode::k_l:
-                return "l";
+                return "L";
             case KeyCode::k_m:
-                return "m";
+                return "M";
             case KeyCode::k_n:
-                return "n";
+                return "N";
             case KeyCode::k_o:
-                return "o";
+                return "O";
             case KeyCode::k_p:
-                return "p";
+                return "P";
             case KeyCode::k_q:
-                return "q";
+                return "Q";
             case KeyCode::k_r:
-                return "r";
+                return "R";
             case KeyCode::k_s:
-                return "s";
+                return "S";
             case KeyCode::k_t:
-                return "t";
+                return "T";
             case KeyCode::k_u:
-                return "u";
+                return "U";
             case KeyCode::k_v:
-                return "v";
+                return "V";
             case KeyCode::k_w:
-                return "w";
+                return "W";
             case KeyCode::k_x:
-                return "x";
+                return "X";
             case KeyCode::k_y:
-                return "y";
+                return "Y";
             case KeyCode::k_z:
-                return "z";
+                return "Z";
             case KeyCode::k_num0:
                 return "0";
             case KeyCode::k_num1:
@@ -141,106 +135,105 @@ namespace ChilliSource
             case KeyCode::k_f15:
                 return "F15";
             case KeyCode::k_numpad0:
-                return "NUMPAD 0";
+                return "Numpad 0";
             case KeyCode::k_numpad1:
-                return "NUMPAD 1";
+                return "Numpad 1";
             case KeyCode::k_numpad2:
-                return "NUMPAD 2";
+                return "Numpad 2";
             case KeyCode::k_numpad3:
-                return "NUMPAD 3";
+                return "Numpad 3";
             case KeyCode::k_numpad4:
-                return "NUMPAD 4";
+                return "Numpad 4";
             case KeyCode::k_numpad5:
-                return "NUMPAD 5";
+                return "Numpad 5";
             case KeyCode::k_numpad6:
-                return "NUMPAD 6";
+                return "Numpad 6";
             case KeyCode::k_numpad7:
-                return "NUMPAD 7";
+                return "Numpad 7";
             case KeyCode::k_numpad8:
-                return "NUMPAD 8";
+                return "Numpad 8";
             case KeyCode::k_numpad9:
-                return "NUMPAD 9";
+                return "Numpad 9";
             case KeyCode::k_space:
-                return "SPACE";
+                return "Space";
             case KeyCode::k_left:
-                return "LEFT";
+                return "Left";
             case KeyCode::k_right:
-                return "RIGHT";
+                return "Right";
             case KeyCode::k_up:
-                return "UP";
+                return "Up";
             case KeyCode::k_down:
-                return "DOWN";
+                return "Down";
             case KeyCode::k_insert:
-                return "INSERT";
+                return "Insert";
             case KeyCode::k_delete:
-                return "DELETE";
+                return "Delete";
             case KeyCode::k_home:
-                return "HOME";
+                return "Home";
             case KeyCode::k_end:
-                return "END";
+                return "End";
             case KeyCode::k_pageUp:
-                return "PAGE UP";
+                return "Page Up";
             case KeyCode::k_pageDown:
-                return "PAGE DOWN";
+                return "Page Down";
             case KeyCode::k_pause:
-                return "PAUSE";
+                return "Pause";
             case KeyCode::k_backSpace:
-                return "BACKSPACE";
+                return "Backspace";
             case KeyCode::k_return:
-                return "RETURN";
+                return "Return";
             case KeyCode::k_add:
-                return "NUMPAD ADD";
+                return "Numpad Add";
             case KeyCode::k_divide:
-                return "NUMPAD DIVIDE";
+                return "Numpad Divide";
             case KeyCode::k_multiply:
-                return "NUMPAD MULTIPLY";
+                return "Numpad Multiply";
             case KeyCode::k_subtract:
-                return "NUMPAD SUBTRACT";
+                return "Numpad Subtract";
             case KeyCode::k_escape:
-                return "ESCAPE";
+                return "Escape";
             case KeyCode::k_backSlash:
-                return "BACKSLASH";
+                return "Backslash";
             case KeyCode::k_comma:
-                return "COMMA";
+                return "Comma";
             case KeyCode::k_period:
-                return "PERIOD";
+                return "Period";
             case KeyCode::k_forwardSlash:
-                return "FORWARD SLASH";
+                return "Forward Slash";
             case KeyCode::k_semiColon:
-                return "SEMICOLON";
+                return "Semicolon";
             case KeyCode::k_quote:
-                return "QUOTE";
+                return "Quote";
             case KeyCode::k_tilde:
-                return "TILDE";
+                return "Tilde";
             case KeyCode::k_leftBracket:
-                return "LEFT BRACKET";
+                return "Left Bracket";
             case KeyCode::k_rightBracket:
-                return "RIGHT BRACKET";
+                return "Right Bracket";
             case KeyCode::k_hyphen:
-                return "HYPHEN";
+                return "Hyphen";
             case KeyCode::k_equals:
-                return "EQUALS";
+                return "Equals";
             case KeyCode::k_menu:
-                return "MENU";
+                return "Menu";
             case KeyCode::k_leftShift:
-                return "LEFT SHIFT";
+                return "Left Shift";
             case KeyCode::k_rightShift:
-                return "RIGHT SHIFT";
+                return "Right Shift";
             case KeyCode::k_leftCtrl:
-                return "LEFT CTRL";
+                return "Left Ctrl";
             case KeyCode::k_rightCtrl:
-                return "RIGHT CTRL";
+                return "Right Ctrl";
             case KeyCode::k_leftAlt:
-                return "LEFT ALT";
+                return "Left Alt";
             case KeyCode::k_rightAlt:
-                return "RIGHT ALT";
+                return "Right Alt";
             case KeyCode::k_leftSystem:
-                return "LEFT SYSTEM";
+                return "Left System";
             case KeyCode::k_rightSystem:
-                return "RIGHT SYSTEM";
+                return "Right System";
             case KeyCode::k_unknown:
-            default:
-                return "UNKNOWN";
+                return "Unknown";
         }
     }
 }
