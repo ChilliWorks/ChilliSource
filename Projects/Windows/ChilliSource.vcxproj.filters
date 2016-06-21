@@ -1071,6 +1071,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.cpp">
+      <Filter>ChilliSource\Input\Keyboard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">

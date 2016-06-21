@@ -26,6 +26,8 @@
 //  THE SOFTWARE.
 //
 
+#include <string>
+
 #ifndef _CHILLISOURCE_INPUT_KEYBOARD_KEYCODE_H_
 #define _CHILLISOURCE_INPUT_KEYBOARD_KEYCODE_H_
 
@@ -143,6 +145,14 @@ namespace ChilliSource
         
         k_total
     };
+    //---------------------------------------------------------------
+    /// Retrieve a key name as a string for a given key code.
+    ///
+    /// @author Jordan Brown
+    ///
+    /// @param in_key - The key code to retrieve.
+    //---------------------------------------------------------------
+    std::string GetKeyName(const KeyCode& in_key);
 }
 
 #endif

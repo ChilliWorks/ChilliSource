@@ -296,60 +296,71 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void Keyboard::OnInit()
 		{
-			for (auto& flag : m_keysDown)
+            for (auto& flag : m_keysDown)
 			{
 				flag = false;
 			}
 
-			m_keyPressedConnection = SFMLWindow::Get()->GetKeyPressedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyPressed));
-			m_keyReleasedConnection = SFMLWindow::Get()->GetKeyReleasedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyReleased));
+
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
+            {
+                m_keyPressedConnection = SFMLWindow::Get()->GetKeyPressedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyPressed));
+                m_keyReleasedConnection = SFMLWindow::Get()->GetKeyReleasedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyReleased));
+            });
+			
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void Keyboard::OnKeyPressed(sf::Keyboard::Key in_code, const sf::Event::KeyEvent& in_event)
 		{
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Key press events must be on the main thread.");
-			auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& context)
+            {
+                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Key press events must be on the main thread.");
+                auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
 
-			if (IsKeyDown(keyCode) == false)
-			{
-				m_keysDown[static_cast<u32>(keyCode)] = true;
+                if (IsKeyDown(keyCode) == false)
+                {
+                    m_keysDown[static_cast<u32>(keyCode)] = true;
 
-				std::vector<ChilliSource::ModifierKeyCode> modifiers;
-				modifiers.reserve((u32)ChilliSource::ModifierKeyCode::k_total);
+                    std::vector<ChilliSource::ModifierKeyCode> modifiers;
+                    modifiers.reserve((u32)ChilliSource::ModifierKeyCode::k_total);
 
-				if (in_event.alt == true)
-				{
-					modifiers.push_back(ChilliSource::ModifierKeyCode::k_alt);
-				}
-				if (in_event.control == true)
-				{
-					modifiers.push_back(ChilliSource::ModifierKeyCode::k_ctrl);
-				}
-				if (in_event.shift == true)
-				{
-					modifiers.push_back(ChilliSource::ModifierKeyCode::k_shift);
-				}
-				if (in_event.system == true)
-				{
-					modifiers.push_back(ChilliSource::ModifierKeyCode::k_system);
-				}
+                    if (in_event.alt == true)
+                    {
+                        modifiers.push_back(ChilliSource::ModifierKeyCode::k_alt);
+                    }
+                    if (in_event.control == true)
+                    {
+                        modifiers.push_back(ChilliSource::ModifierKeyCode::k_ctrl);
+                    }
+                    if (in_event.shift == true)
+                    {
+                        modifiers.push_back(ChilliSource::ModifierKeyCode::k_shift);
+                    }
+                    if (in_event.system == true)
+                    {
+                        modifiers.push_back(ChilliSource::ModifierKeyCode::k_system);
+                    }
 
-				m_keyPressedEvent.NotifyConnections(keyCode, modifiers);
-			}
+                    m_keyPressedEvent.NotifyConnections(keyCode, modifiers);
+                }
+            });
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void Keyboard::OnKeyReleased(sf::Keyboard::Key in_code)
 		{
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Key release events must be on the main thread.");
-			auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
-			if (IsKeyDown(keyCode) == true)
-			{
-				m_keysDown[static_cast<u32>(keyCode)] = false;
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& context)
+            {
+                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Key release events must be on the main thread.");
+			    auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
+			    if (IsKeyDown(keyCode) == true)
+			    {
+				    m_keysDown[static_cast<u32>(keyCode)] = false;
 
-				m_keyReleasedEvent.NotifyConnections(keyCode);
-			}
+				    m_keyReleasedEvent.NotifyConnections(keyCode);
+			    }
+            });
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
