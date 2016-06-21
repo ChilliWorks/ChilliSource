@@ -76,69 +76,86 @@ namespace CSBackend
 		//------------------------------------------------
 		void PointerSystem::OnInit()
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Pointer must be initialized on main thread.");
 			m_screen = ChilliSource::Application::Get()->GetSystem<ChilliSource::Screen>();
 			CS_ASSERT(m_screen != nullptr, "Cannot find system required by PointerSystem: Screen.");
 
-			m_mouseButtonConnection = SFMLWindow::Get()->GetMouseButtonEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent));
-			m_mouseMovedConnection = SFMLWindow::Get()->GetMouseMovedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved));
-			m_mouseWheelConnection = SFMLWindow::Get()->GetMouseWheelEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
+            {
+                m_mouseButtonConnection = SFMLWindow::Get()->GetMouseButtonEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent));
+                m_mouseMovedConnection = SFMLWindow::Get()->GetMouseMovedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved));
+                m_mouseWheelConnection = SFMLWindow::Get()->GetMouseWheelEvent().OpenConnection(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
 
-			//create the mouse pointer
-			ChilliSource::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
-			ChilliSource::Vector2 mousePos((f32)mousePosi.x, m_screen->GetResolution().y - (f32)mousePosi.y);
+                //create the mouse pointer
+                ChilliSource::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
+                ChilliSource::Vector2 mousePos((f32)mousePosi.x, m_screen->GetResolution().y - (f32)mousePosi.y);
 
-			m_pointerId = AddPointerCreateEvent(mousePos);
+                m_pointerId = AddPointerCreateEvent(mousePos);
+
+            });
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void PointerSystem::HideCursor()
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to hide mouse cursor outside of main thread.");
-			SFMLWindow::Get()->HideCursor();
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
+            {
+                SFMLWindow::Get()->HideCursor();
+            });
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void PointerSystem::ShowCursor()
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to show mouse cursor outside of main thread.");
-			SFMLWindow::Get()->ShowCursor();
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
+            {
+                SFMLWindow::Get()->ShowCursor();
+            });
 		}
 		//----------------------------------------------
 		//----------------------------------------------
 		void PointerSystem::OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos)
 		{
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle mouse button outside of main thread");
-			ChilliSource::Pointer::InputType type = ButtonIdToInputType(in_button);
-			if (type == ChilliSource::Pointer::InputType::k_none)
-			{
-				return;
-			}
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& context)
+            {
+                ChilliSource::Pointer::InputType type = ButtonIdToInputType(in_button);
+                if (type == ChilliSource::Pointer::InputType::k_none)
+                {
+                    return;
+                }
 
-			switch (in_event)
-			{
-			case SFMLWindow::MouseButtonEvent::k_pressed:
-				AddPointerDownEvent(m_pointerId, type);
-				break;
-			case SFMLWindow::MouseButtonEvent::k_released:
-				AddPointerUpEvent(m_pointerId, type);
-				break;
-			}
+                switch (in_event)
+                {
+                case SFMLWindow::MouseButtonEvent::k_pressed:
+                    AddPointerDownEvent(m_pointerId, type);
+                    break;
+                case SFMLWindow::MouseButtonEvent::k_released:
+                    AddPointerUpEvent(m_pointerId, type);
+                    break;
+                }
+            });
 		}
 		//----------------------------------------------
 		//----------------------------------------------
 		void PointerSystem::OnMouseMoved(s32 in_xPos, s32 in_yPos)
 		{
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle mouse movement outside of main thread.");
-			ChilliSource::Vector2 touchLocation((f32)in_xPos, m_screen->GetResolution().y - (f32)in_yPos);
-			AddPointerMovedEvent(m_pointerId, touchLocation);
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& context)
+            {
+                ChilliSource::Vector2 touchLocation((f32)in_xPos, m_screen->GetResolution().y - (f32)in_yPos);
+                AddPointerMovedEvent(m_pointerId, touchLocation);
+            });
 		}
 		//----------------------------------------------
 		//----------------------------------------------
 		void PointerSystem::OnMouseWheeled(s32 in_delta)
 		{
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to handle mouse wheel scrolling outside of main thread.");
-			ChilliSource::Vector2 delta(0.0f, (f32)in_delta);
-			AddPointerScrollEvent(m_pointerId, delta);
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& context)
+            {
+                ChilliSource::Vector2 delta(0.0f, (f32)in_delta);
+                AddPointerScrollEvent(m_pointerId, delta);
+            });
 		}
 		//------------------------------------------------
 		//------------------------------------------------
