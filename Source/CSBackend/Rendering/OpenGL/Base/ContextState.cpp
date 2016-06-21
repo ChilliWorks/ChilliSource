@@ -29,6 +29,16 @@ namespace CSBackend
     namespace OpenGL
     {
         //------------------------------------------------------------------------------
+        void ContextState::Reset() noexcept
+        {
+            m_cameraState = CameraState();
+            m_renderMesh = nullptr;
+            m_renderShader = nullptr;
+            m_renderTexture = nullptr;
+            m_renderMaterial = nullptr;
+        }
+        
+        //------------------------------------------------------------------------------
         ContextState::CameraState::CameraState(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept
             : m_position(position), m_viewProjectionMatrix(viewProjectionMatrix)
         {

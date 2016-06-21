@@ -74,6 +74,47 @@ namespace CSBackend
             ///
             void LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept;
             
+            /// Begins rendering to the default render target.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void Begin(const ChilliSource::BeginRenderCommand* renderCommand) noexcept;
+            
+            /// Caches the given camera data. All applied materials after this will use this camera data.
+            /// The currently applied material will be invalidated and needs to be re-applied.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyCamera(const ChilliSource::ApplyCameraRenderCommand* renderCommand) noexcept;
+            
+            /// Applies the given material to the OpenGL Context. The cached camera data will be used.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyMaterial(const ChilliSource::ApplyMaterialRenderCommand* renderCommand) noexcept;
+            
+            /// Applies the given mesh to the OpenGL Context.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyMesh(const ChilliSource::ApplyMeshRenderCommand* renderCommand) noexcept;
+            
+            /// Renders an instance of the mesh described by the current OpenGL context state. A camera,
+            /// material and mesh must all currently be appled to the context.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void RenderInstance(const ChilliSource::RenderInstanceRenderCommand* renderCommand) noexcept;
+            
+            /// Ends rendering to the current render target.
+            ///
+            void End() noexcept;
+            
             /// Unloads the shader described by the given unload command
             ///
             /// @param renderCommand

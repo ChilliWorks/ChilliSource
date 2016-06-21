@@ -131,6 +131,10 @@ namespace CSBackend
             ///
             void SetCameraState(const CameraState& cameraState) noexcept { m_cameraState = cameraState; }
             
+            /// Resets the context back to its original state.
+            ///
+            void Reset() noexcept;
+            
         private:
             const ChilliSource::RenderShader* m_renderShader = nullptr;
             const ChilliSource::RenderTexture* m_renderTexture = nullptr;

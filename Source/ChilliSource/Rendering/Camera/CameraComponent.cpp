@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 
 namespace ChilliSource
 {
@@ -175,6 +176,12 @@ namespace ChilliSource
         {
             m_isFrustumCacheValid = false;
         });
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void CameraComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        in_renderSnapshot.SetRenderCamera(RenderCamera(GetEntity()->GetTransform().GetWorldTransform(), GetProjection()));
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
