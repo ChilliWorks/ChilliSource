@@ -350,7 +350,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::ProcessRenderSnapshotEvent() noexcept
     {
-        auto resolution = Integer2(f32(m_screen->GetResolution().x), f32(m_screen->GetResolution().y));
+        auto resolution = Integer2(s32(m_screen->GetResolution().x), s32(m_screen->GetResolution().y));
         
         auto activeState = m_stateManager->GetActiveState();
         CS_ASSERT(activeState, "Must have active state.");
