@@ -76,9 +76,10 @@ namespace CSBackend
 		//------------------------------------------------
 		void PointerSystem::OnInit()
 		{
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Pointer must be initialized on main thread.");
 			m_screen = ChilliSource::Application::Get()->GetSystem<ChilliSource::Screen>();
 			CS_ASSERT(m_screen != nullptr, "Cannot find system required by PointerSystem: Screen.");
+
+            auto screenResolution = m_screen->GetResolution();
 
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
             {
@@ -88,7 +89,7 @@ namespace CSBackend
 
                 //create the mouse pointer
                 ChilliSource::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
-                ChilliSource::Vector2 mousePos((f32)mousePosi.x, m_screen->GetResolution().y - (f32)mousePosi.y);
+                ChilliSource::Vector2 mousePos((f32)mousePosi.x, screenResolution.y - (f32)mousePosi.y);
 
                 m_pointerId = AddPointerCreateEvent(mousePos);
 
