@@ -44,6 +44,9 @@ namespace CSBackend
         //---------------------------------------------------------------
         /// A system for receiving input from the current keyboard
         ///
+        /// The methods in this class are not thread-safe and must be
+        /// accessed from the main thread.
+        ///
         /// @author S Downie
         //---------------------------------------------------------------
 		class Keyboard final : public ChilliSource::Keyboard
