@@ -1071,6 +1071,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.cpp">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2281,6 +2284,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.h">
       <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.h">
+      <Filter>ChilliSource\UI\Text</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
