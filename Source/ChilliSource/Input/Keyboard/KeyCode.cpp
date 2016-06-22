@@ -235,5 +235,8 @@ namespace ChilliSource
             case KeyCode::k_unknown:
                 return "Unknown";
         }
+        
+        CS_LOG_FATAL("Invalid keycode.");
+        return "";
     }
 }

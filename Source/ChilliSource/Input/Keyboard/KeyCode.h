@@ -24,6 +24,8 @@
 #ifndef _CHILLISOURCE_INPUT_KEYBOARD_KEYCODE_H_
 #define _CHILLISOURCE_INPUT_KEYBOARD_KEYCODE_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <string>
 
 namespace ChilliSource
