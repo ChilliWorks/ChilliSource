@@ -141,6 +141,7 @@ namespace ChilliSource
     {
         CS_ASSERT(!m_active, "Can't activate text entry if it is already active.");
         m_active = true;
+        m_uiDirty = true;
 
         m_textEntrySystem->Activate(m_initialText, m_inputType, m_capitalisationFormat, MakeDelegate(this, &EditableTextUIComponent::OnTextChanged), MakeDelegate(this, &EditableTextUIComponent::OnTextEntryDismissed));
     }
