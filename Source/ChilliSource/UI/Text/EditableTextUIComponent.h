@@ -28,7 +28,7 @@
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
 #include <ChilliSource/UI/Base/UIComponent.h>
-#include <ChilliSource/UI/Text/TextComponent.h>
+#include <ChilliSource/UI/Text/TextUIComponent.h>
 
 namespace ChilliSource
 {
@@ -44,7 +44,13 @@ namespace ChilliSource
     /// "MultilineDisabled": Setting this to True will disable the display of newlines
     /// within the text field. This is False by default.
     /// 
-
+    /// "InputType": Keyboard type; currently supported values are "Text" and "Numeric".
+    /// Defaults to "Text".
+    ///
+    /// "CapitalisationFormat": Capitalisation format for the virtual keyboard.
+    /// Currently supported values are: "None", "Words", "Sentences" and "All".
+    /// Defaults to "Sentences".
+    ///
     class EditableTextUIComponent final : public UIComponent
     {
     public:
@@ -64,7 +70,7 @@ namespace ChilliSource
         ///
         /// @return Whether the object implements the given interface.
         ///
-        bool IsA(InterfaceIDType in_interfaceId) const noexcept override;
+        bool IsA(InterfaceIDType interfaceId) const noexcept override;
 
         /// @return The initial text present in the field upon creation.
         ///
@@ -72,11 +78,19 @@ namespace ChilliSource
 
         /// @return The maximum number of characters allowed in the field.
         ///
-        u32 GetMaxCharacters() const noexcept;
+        s32 GetMaxCharacters() const noexcept;
 
         /// @return Whether or not multi-line text is enabled.
         ///
         bool GetMultilineDisabled() const noexcept;
+
+        /// @return The keyboard input type.
+        ///
+        const ChilliSource::TextEntry::Type&  GetInputType() const noexcept;
+
+        /// @return The capitalisation format.
+        ///
+        const ChilliSource::TextEntry::Capitalisation& GetCapitalisationFormat() const noexcept;
 
         /// Set initial text present in the field.
         /// 
@@ -99,6 +113,20 @@ namespace ChilliSource
         ///
         void SetMultilineDisabled(bool disable) noexcept;
 
+        /// Set keyboard input type.
+        ///
+        /// @param type
+        ///     The desired keyboard input type.
+        ///
+        void SetInputType(ChilliSource::TextEntry::Type type) noexcept;
+
+        /// Set capitalisation format. 
+        ///
+        /// @param format
+        ///     The desired capitalisation format.
+        ///
+        void SetCapitalisationFormat(ChilliSource::TextEntry::Capitalisation format) noexcept;
+
     private:
         friend class UIComponentFactory;
 
@@ -120,9 +148,26 @@ namespace ChilliSource
         ///
         void Deactivate() noexcept;
 
+        /// Called when text entry is active and the text has been changed.
+        ///
+        /// @return If the new text is valid or not.
+        ///
+        bool OnTextChanged(const std::string& newText) noexcept;
+        
+        /// Called when the virtual keyboard is dismissed.
+        ///
+        void OnTextEntryDismissed() noexcept;
+
         /// Called when the component is first added to the owning widget.
         ///
         void OnInit() noexcept override;
+
+        /// Called every frame.
+        ///
+        /// @param deltaTime
+        ///     Time passed since last frame.
+        ///
+        void OnUpdate(f32 deltaTime) noexcept override;
 
         /// Called when a pointer is released inside the bounds of the owning
         /// widget. This will toggle the text entry & virtual keyboard.
@@ -134,7 +179,7 @@ namespace ChilliSource
         /// @param inputType
         ///     The type of input.
         ///
-        void OnReleasedInside(Widget* widget, const Pointer& pointer, Pointer::InputType inputType);
+        void OnReleasedInside(Widget* widget, const Pointer& pointer, Pointer::InputType inputType) noexcept;
 
         /// Called when a pointer is released outside the bounds of the owning
         /// widget. This will disable the text entry & virtual keyboard.
@@ -146,7 +191,7 @@ namespace ChilliSource
         /// @param inputType
         ///     The type of input.
         ///
-        void OnReleasedInside(Widget* widget, const Pointer& pointer, Pointer::InputType inputType);
+        void OnReleasedOutside(Widget* widget, const Pointer& pointer, Pointer::InputType inputType) noexcept;
 
         /// Called when the owning widget is destructed.
         ///
@@ -155,17 +200,18 @@ namespace ChilliSource
         TextUIComponent* m_textComponent = nullptr;
         TextEntry* m_textEntrySystem = nullptr;
 
+        bool m_uiDirty = true;
+
         bool m_active = false;
         bool m_multilineDisabled = false;
         s32 m_maxCharacters = 50;
         std::string m_initialText = "";
-
+        ChilliSource::TextEntry::Type m_inputType = ChilliSource::TextEntry::Type::k_text;
+        ChilliSource::TextEntry::Capitalisation m_capitalisationFormat = ChilliSource::TextEntry::Capitalisation::k_sentences;
 
         EventConnectionUPtr m_releasedInsideConnection;
         EventConnectionUPtr m_releasedOutsideConnection;
-
     };
-
 }
 
 #endif

@@ -143,6 +143,26 @@ namespace ChilliSource
         //-------------------------------------------------------
         virtual void SetTextBuffer(const std::string& in_text) = 0;
     };
+    //-------------------------------------------------------------------
+    /// Parses a keyboard type from a string.
+    ///
+    /// @author Jordan Brown
+    ///
+    /// @param The string.
+    ///
+    /// @return The keyboard input type
+    //-------------------------------------------------------------------
+    TextEntry::Type ParseKeyboardInputType(const std::string& in_string);
+    //-------------------------------------------------------------------
+    /// Parses keyboard capitalisation method from a string.
+    ///
+    /// @author Jordan Brown
+    ///
+    /// @param The string.
+    ///
+    /// @return The capitalisation method.
+    //-------------------------------------------------------------------
+    TextEntry::Capitalisation ParseCapitalisationFormat(const std::string& in_string);
 }
 
 #endif

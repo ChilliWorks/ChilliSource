@@ -22,6 +22,7 @@
 
 #include <ChilliSource/UI/Text/EditableTextUIComponent.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Container/Property/PropertyTypes.h>
@@ -36,12 +37,16 @@ namespace ChilliSource
         const char k_initialTextKey[] = "InitialText";
         const char k_maxCharactersKey[] = "MaxCharacters";
         const char k_multilineDisabledKey[] = "MultilineDisabled";
+        const char k_inputTypeKey[] = "InputType";
+        const char k_capitalisationFormatKey[] = "CapitalisationFormat";
 
         const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
             { PropertyTypes::String(), k_initialTextKey },
             { PropertyTypes::Int(), k_maxCharactersKey },
-            { PropertyTypes::Bool(), k_multilineDisabledKey }
+            { PropertyTypes::Bool(), k_multilineDisabledKey },
+            { PropertyTypes::InputType(), k_inputTypeKey },
+            { PropertyTypes::CapitalisationFormat(), k_capitalisationFormatKey }
         };
     }
 
@@ -60,6 +65,183 @@ namespace ChilliSource
         RegisterProperty<std::string>(PropertyTypes::String(), k_initialTextKey, MakeDelegate(this, &EditableTextUIComponent::GetInitialText), MakeDelegate(this, &EditableTextUIComponent::SetInitialText));
         RegisterProperty<s32>(PropertyTypes::Int(), k_maxCharactersKey, MakeDelegate(this, &EditableTextUIComponent::GetMaxCharacters), MakeDelegate(this, &EditableTextUIComponent::SetMaxCharacters));
         RegisterProperty<bool>(PropertyTypes::Bool(), k_multilineDisabledKey, MakeDelegate(this, &EditableTextUIComponent::GetMultilineDisabled), MakeDelegate(this, &EditableTextUIComponent::SetMultilineDisabled));
+        RegisterProperty<ChilliSource::TextEntry::Type>(PropertyTypes::InputType(), k_inputTypeKey, MakeDelegate(this, &EditableTextUIComponent::GetInputType), MakeDelegate(this, &EditableTextUIComponent::SetInputType));
+        RegisterProperty<ChilliSource::TextEntry::Capitalisation>(PropertyTypes::CapitalisationFormat(), k_capitalisationFormatKey, MakeDelegate(this, &EditableTextUIComponent::GetCapitalisationFormat), MakeDelegate(this, &EditableTextUIComponent::SetCapitalisationFormat));
         ApplyRegisteredProperties(properties);
+    }
+
+    //--------------------------------------------------------
+    bool EditableTextUIComponent::IsA(InterfaceIDType interfaceId) const noexcept
+    {
+        return (UIComponent::InterfaceID == interfaceId || EditableTextUIComponent::InterfaceID == interfaceId);
+    }
+
+    //--------------------------------------------------------
+    const std::string& EditableTextUIComponent::GetInitialText() const noexcept
+    {
+        return m_initialText;
+    }
+
+    //--------------------------------------------------------
+    s32 EditableTextUIComponent::GetMaxCharacters() const noexcept
+    {
+        return m_maxCharacters;
+    }
+
+    //--------------------------------------------------------
+    bool EditableTextUIComponent::GetMultilineDisabled() const noexcept
+    {
+        return m_multilineDisabled;
+    }
+
+    //--------------------------------------------------------
+    const ChilliSource::TextEntry::Type& EditableTextUIComponent::GetInputType() const noexcept
+    {
+        return m_inputType;
+    }
+
+    //--------------------------------------------------------
+    const ChilliSource::TextEntry::Capitalisation& EditableTextUIComponent::GetCapitalisationFormat() const noexcept
+    {
+        return m_capitalisationFormat;
+    }
+
+    //--------------------------------------------------------
+    void EditableTextUIComponent::SetInitialText(const std::string& text) noexcept
+    {
+        m_initialText = text;
+    }
+
+    //--------------------------------------------------------
+    void EditableTextUIComponent::SetMaxCharacters(s32 numCharacters) noexcept
+    {
+        m_maxCharacters = numCharacters;
+    }
+
+    //--------------------------------------------------------
+    void EditableTextUIComponent::SetMultilineDisabled(bool disabled) noexcept
+    {
+        m_multilineDisabled = disabled;
+    }
+
+    //--------------------------------------------------------
+    void EditableTextUIComponent::SetInputType(ChilliSource::TextEntry::Type type) noexcept
+    {
+        m_inputType = type;
+    }
+
+    //--------------------------------------------------------
+    void EditableTextUIComponent::SetCapitalisationFormat(ChilliSource::TextEntry::Capitalisation format) noexcept
+    {
+        m_capitalisationFormat = format;
+    }
+
+    //--------------------------------------------------------
+    void EditableTextUIComponent::Activate() noexcept
+    {
+        CS_ASSERT(!m_active, "Can't activate text entry if it is already active.");
+        m_active = true;
+
+        m_textEntrySystem->Activate(m_initialText, m_inputType, m_capitalisationFormat, MakeDelegate(this, &EditableTextUIComponent::OnTextChanged), MakeDelegate(this, &EditableTextUIComponent::OnTextEntryDismissed));
+    }
+
+    //---------------------------------------------------------
+    void EditableTextUIComponent::Deactivate() noexcept
+    {
+        CS_ASSERT(m_active, "Can't deactivate text entry if it is not active.");
+        m_active = false;
+
+        m_textEntrySystem->Deactivate();
+    }
+
+    //----------------------------------------------------------
+    bool EditableTextUIComponent::OnTextChanged(const std::string& newText) noexcept
+    {
+        // Make sure text is within set size, otherwise reject.
+        if (newText.size() > m_maxCharacters)
+        {
+            return false;
+        }
+
+        // Make sure the font can handle all the characters going in, otherwise reject text.
+        for (auto character : newText)
+        {
+            ChilliSource::Font::CharacterInfo info;
+            if (!m_textComponent->GetFont()->TryGetCharacterInfo(character, info))
+            {
+                return false;
+            }
+        }
+
+        // Need to update text on UI. This function is for internal validation of TextEntry system.
+        m_uiDirty = true;
+
+        return true;
+    }
+
+    //----------------------------------------------------------
+    void EditableTextUIComponent::OnTextEntryDismissed() noexcept
+    {
+        // Update activation state.
+        m_active = false;
+    }
+
+    //-----------------------------------------------------------
+    void EditableTextUIComponent::OnReleasedInside(Widget* widget, const Pointer& pointer, Pointer::InputType inputType) noexcept
+    {
+        // Toggle activation status when element is pressed.
+        if (m_active)
+        {
+            Deactivate();
+        }
+        else
+        {
+            Activate();
+        }
+    }
+
+    //-----------------------------------------------------------
+    void EditableTextUIComponent::OnReleasedOutside(Widget* widget, const Pointer& pointer, Pointer::InputType inputType) noexcept
+    {
+        // If user presses outside of element, defocus and deactivate.
+        if (m_active)
+        {
+            Deactivate();
+        }
+    }
+
+    //-----------------------------------------------------------
+    void EditableTextUIComponent::OnUpdate(f32 deltaTime) noexcept
+    {
+        if (m_uiDirty)
+        {
+            m_textComponent->SetText(m_textEntrySystem->GetTextBuffer());
+            m_uiDirty = false;
+        }
+    }
+
+    //------------------------------------------------------------
+    void EditableTextUIComponent::OnInit() noexcept
+    {
+        m_textEntrySystem = ChilliSource::Application::Get()->GetSystem<ChilliSource::TextEntry>();
+        CS_ASSERT(m_textEntrySystem, "No active text entry system found.");
+
+        m_textComponent = GetWidget()->GetComponent<TextUIComponent>();
+        CS_ASSERT(m_textComponent, "No text component found in editable text widget.");
+
+        m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(MakeDelegate(this, &EditableTextUIComponent::OnReleasedInside));
+        m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(MakeDelegate(this, &EditableTextUIComponent::OnReleasedOutside));
+    }
+
+    //-------------------------------------------------------------
+    void EditableTextUIComponent::OnDestroy() noexcept
+    {
+        if (m_active)
+        {
+            Deactivate();
+        }
+
+        m_releasedInsideConnection.reset();
+        m_releasedOutsideConnection.reset();
     }
 }

@@ -59,4 +59,50 @@ namespace ChilliSource
 #endif
 
     }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    TextEntry::Type ParseKeyboardInputType(const std::string& in_string)
+    {
+        std::string keyboardInputString = in_string;
+        StringUtils::ToLowerCase(keyboardInputString);
+
+        if (keyboardInputString == "text")
+        {
+            return TextEntry::Type::k_text;
+        }
+        else if (keyboardInputString == "numeric")
+        {
+            return TextEntry::Type::k_numeric;
+        }
+
+        CS_LOG_FATAL("Invalid keyboard input type.");
+        return TextEntry::Type::k_text;
+    }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    TextEntry::Capitalisation ParseCapitalisationFormat(const std::string& in_string)
+    {
+        std::string capitalisationFormatString = in_string;
+        StringUtils::ToLowerCase(capitalisationFormatString);
+
+        if (capitalisationFormatString == "none")
+        {
+            return TextEntry::Capitalisation::k_none;
+        }
+        else if (capitalisationFormatString == "words")
+        {
+            return TextEntry::Capitalisation::k_words;
+        }
+        else if (capitalisationFormatString == "sentences")
+        {
+            return TextEntry::Capitalisation::k_sentences;
+        }
+        else if (capitalisationFormatString == "all")
+        {
+            return TextEntry::Capitalisation::k_all;
+        }
+
+        CS_LOG_FATAL("Invalid keyboard input type.");
+        return TextEntry::Capitalisation::k_sentences;
+    }
 }

@@ -15,15 +15,15 @@
   "ComponentPropertyLinks": {
     "EditableText": "all",
 	"Text": {
-	  "Font": "Font"
-	  "TextColour": "TextColour"
-	  "HorizontalJustification": "HorizontalJustification"
-	  "VerticalJustification": "VerticalJustification"
-	  "AbsCharSpacingOffset": "AbsCharSpacingOffset"
-	  "AbsLineSpacingOffset": "AbsLineSpacingOffset"
-	  "LineSpacingScale": "LineSpacingScale"
-	  "MaxNumberOfLines": "MaxNumberOfLines"
-	  "TextScale": "TextScale"
+	  "Font": "Font",
+	  "TextColour": "TextColour",
+	  "HorizontalJustification": "HorizontalJustification",
+	  "VerticalJustification": "VerticalJustification",
+	  "AbsCharSpacingOffset": "AbsCharSpacingOffset",
+	  "AbsLineSpacingOffset": "AbsLineSpacingOffset",
+	  "LineSpacingScale": "LineSpacingScale",
+	  "MaxNumberOfLines": "MaxNumberOfLines",
+	  "TextScale": "TextScale",
 	  "MinTextAutoScale": "MinTextAutoScale",
 	  "EnableAutoTextScale": "EnableAutoTextScale"	  
 	}
