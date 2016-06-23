@@ -37,6 +37,9 @@
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 
+#include <mutex>
+
+
 namespace CSBackend
 {
 	namespace Windows
@@ -125,6 +128,10 @@ namespace CSBackend
             TextInputDeactivatedDelegate m_textInputDeactivatedDelegate;
 
 			ChilliSource::EventConnectionUPtr m_textEnteredConnection;
+
+            std::mutex m_mutex;
+
+            bool m_active = false;
 
 			std::string m_text;
 		};
