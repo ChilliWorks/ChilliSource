@@ -226,12 +226,16 @@ namespace ChilliSource
     {
         m_textEntrySystem = ChilliSource::Application::Get()->GetSystem<ChilliSource::TextEntry>();
         CS_ASSERT(m_textEntrySystem, "No active text entry system found.");
+        m_textEntrySystem->SetTextBuffer(m_initialText);
 
         m_textComponent = GetWidget()->GetComponent<TextUIComponent>();
         CS_ASSERT(m_textComponent, "No text component found in editable text widget.");
+        m_textComponent->SetText(m_initialText);
 
         m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(MakeDelegate(this, &EditableTextUIComponent::OnReleasedInside));
         m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(MakeDelegate(this, &EditableTextUIComponent::OnReleasedOutside));
+        
+        m_uiDirty = true;
     }
 
     //-------------------------------------------------------------
@@ -241,6 +245,9 @@ namespace ChilliSource
         {
             Deactivate();
         }
+
+        // Clear text from buffer.
+        m_textEntrySystem->SetTextBuffer("");
 
         m_releasedInsideConnection.reset();
         m_releasedOutsideConnection.reset();

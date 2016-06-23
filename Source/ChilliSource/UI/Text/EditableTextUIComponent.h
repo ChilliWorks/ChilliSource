@@ -127,6 +127,14 @@ namespace ChilliSource
         ///
         void SetCapitalisationFormat(ChilliSource::TextEntry::Capitalisation format) noexcept;
 
+        /// Enables text entry and invokes virtual keyboard on mobile devices.
+        ///
+        void Activate() noexcept;
+
+        /// Disables text entry and dismisses virtual keyboard on mobile devices.
+        ///
+        void Deactivate() noexcept;
+
     private:
         friend class UIComponentFactory;
 
@@ -139,14 +147,6 @@ namespace ChilliSource
         ///     The property map.
         ///
         EditableTextUIComponent(const std::string& componentName, const PropertyMap& properties);
-
-        /// Enables text entry and invokes virtual keyboard on mobile devices.
-        ///
-        void Activate() noexcept;
-
-        /// Disables text entry and dismisses virtual keyboard on mobile devices.
-        ///
-        void Deactivate() noexcept;
 
         /// Called when text entry is active and the text has been changed.
         ///
