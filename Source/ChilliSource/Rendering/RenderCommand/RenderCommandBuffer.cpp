@@ -22,12 +22,12 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandQueue.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderCommandQueue::RenderCommandQueue(u32 numSlots) noexcept
+    RenderCommandBuffer::RenderCommandBuffer(u32 numSlots) noexcept
     {
         m_renderCommandLists.reserve(numSlots);
         for (u32 i = 0; i < numSlots; ++i)
@@ -43,7 +43,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandList* RenderCommandQueue::GetRenderCommandList(u32 slotIndex) noexcept
+    RenderCommandList* RenderCommandBuffer::GetRenderCommandList(u32 slotIndex) noexcept
     {
         CS_ASSERT(slotIndex < GetNumSlots(), "Index out of bounds.");
         

@@ -32,27 +32,27 @@
 
 namespace ChilliSource
 {
-    /// Provides the ability to create a queue of Render Command Lists. By creating and ordering
+    /// Provides the ability to create a buffer of Render Command Lists. By creating and ordering
     /// all of the Render Command Lists up front, the Render Command Lists can be safely
     /// populated on separate threads without locking.
     ///
     /// This is not thread-safe but can be safely used accross threads as long as each thread
     /// only accessed one queue slot.
     ///
-    class RenderCommandQueue final
+    class RenderCommandBuffer final
     {
     public:
-        CS_DECLARE_NOCOPY(RenderCommandQueue);
+        CS_DECLARE_NOCOPY(RenderCommandBuffer);
         
-        RenderCommandQueue(RenderCommandQueue&&) = default;
-        RenderCommandQueue& operator=(RenderCommandQueue&&) = default;
+        RenderCommandBuffer(RenderCommandBuffer&&) = default;
+        RenderCommandBuffer& operator=(RenderCommandBuffer&&) = default;
         
-        /// Creates a new render command queue with the requested number of slots.
+        /// Creates a new render command buffer with the requested number of slots.
         ///
         /// @param numSlots
         ///     The number of slots in the queue.
         ///
-        RenderCommandQueue(u32 numSlots) noexcept;
+        RenderCommandBuffer(u32 numSlots) noexcept;
         
         /// @return The number of slots in the queue.
         ///

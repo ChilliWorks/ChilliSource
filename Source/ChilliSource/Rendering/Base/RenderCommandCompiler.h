@@ -26,7 +26,7 @@
 #define _CHILLISOURCE_RENDERING_BASE_RENDERCOMMANDCOMPILER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandQueue.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 
 #include <vector>
 
@@ -39,7 +39,7 @@ namespace ChilliSource
     {
         /// Performs the Compile Render Commands stage of the render pipeline. This takes the
         /// render passes generated during the Compile Render Passes stage and breaks them down
-        /// into a series of render commands. The output is an immutable render command queue.
+        /// into a series of render commands. The output is an immutable render command buffer.
         ///
         /// @param taskContext
         ///     The task context that child tasks should be run within. This assumes that the
@@ -56,10 +56,10 @@ namespace ChilliSource
         /// @param postRenderCommandList
         ///     The RenderCommandList that should be included last. Must be moved.
         ///
-        /// @return The render command queue.
+        /// @return The render command buffer.
         ///
-        RenderCommandQueueCUPtr CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
-                                                      const Colour& clearColour, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept;
+        RenderCommandBufferCUPtr CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
+                                                       const Colour& clearColour, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept;
     }
 }
 

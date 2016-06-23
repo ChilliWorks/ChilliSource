@@ -31,7 +31,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which unloads the data pertaining to a single render material group.
+    /// A render command for unloading the data pertaining to a single render material group.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///

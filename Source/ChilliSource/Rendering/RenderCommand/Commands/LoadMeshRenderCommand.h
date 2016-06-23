@@ -31,7 +31,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which loads the mesh data pertaining to a single render mesh into
+    /// A render command for loading the mesh data pertaining to a single render mesh into
     /// render memory.
     ///
     /// This must be instantiated via a RenderCommandList.

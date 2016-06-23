@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandQueue.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
@@ -81,9 +81,9 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void RenderCommandProcessor::Process(const ChilliSource::RenderCommandQueue& renderCommandQueue) noexcept
+        void RenderCommandProcessor::Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept
         {
-            for (const auto& renderCommandList : renderCommandQueue.GetQueue())
+            for (const auto& renderCommandList : renderCommandBuffer->GetQueue())
             {
                 for (const auto& renderCommand : renderCommandList->GetOrderedList())
                 {

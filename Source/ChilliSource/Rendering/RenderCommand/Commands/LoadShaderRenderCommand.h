@@ -31,7 +31,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which loads a single shader.
+    /// A render command for loading a single shader.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///

@@ -32,7 +32,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which applies the described camera to the current context state.
+    /// A render command for applying the described camera to the current context state.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///

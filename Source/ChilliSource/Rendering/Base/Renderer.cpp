@@ -81,18 +81,18 @@ namespace ChilliSource
             
             auto renderFrame = RenderFrameCompiler::CompileRenderFrame(renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            auto renderCommandQueue = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(preRenderCommandList), std::move(postRenderCommandList));
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(preRenderCommandList), std::move(postRenderCommandList));
             
-            WaitThenPushCommandQueue(std::move(renderCommandQueue));
+            WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
             EndRenderPrep();
         });
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::ProcessRenderCommandQueue() noexcept
+    void Renderer::ProcessRenderCommandBuffer() noexcept
     {
-        auto renderCommandQueue = WaitThenPopCommandQueue();
-        m_renderCommandProcessor->Process(*renderCommandQueue);
+        auto renderCommandBuffer = WaitThenPopCommandBuffer();
+        m_renderCommandProcessor->Process(renderCommandBuffer.get());
     }
     
     //------------------------------------------------------------------------------
@@ -117,35 +117,35 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::WaitThenPushCommandQueue(RenderCommandQueueCUPtr renderCommandQueue) noexcept
+    void Renderer::WaitThenPushCommandBuffer(RenderCommandBufferCUPtr renderCommandBuffer) noexcept
     {
-        std::unique_lock<std::mutex> lock(m_renderCommandQueuesMutex);
+        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
         
-        while (m_renderCommandQueues.size() >= k_maxQueueSize)
+        while (m_renderCommandBuffers.size() >= k_maxQueueSize)
         {
-            m_renderCommandQueuesCondition.wait(lock);
+            m_renderCommandBuffersCondition.wait(lock);
         }
         
-        m_renderCommandQueues.push_back(std::move(renderCommandQueue));
+        m_renderCommandBuffers.push_back(std::move(renderCommandBuffer));
         
-        m_renderCommandQueuesCondition.notify_all();
+        m_renderCommandBuffersCondition.notify_all();
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandQueueCUPtr Renderer::WaitThenPopCommandQueue() noexcept
+    RenderCommandBufferCUPtr Renderer::WaitThenPopCommandBuffer() noexcept
     {
-        std::unique_lock<std::mutex> lock(m_renderCommandQueuesMutex);
+        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
         
-        while (m_renderCommandQueues.empty())
+        while (m_renderCommandBuffers.empty())
         {
-            m_renderCommandQueuesCondition.wait(lock);
+            m_renderCommandBuffersCondition.wait(lock);
         }
         
-        auto renderCommandQueue = std::move(m_renderCommandQueues.front());
-        m_renderCommandQueues.pop_front();
+        auto renderCommandBuffer = std::move(m_renderCommandBuffers.front());
+        m_renderCommandBuffers.pop_front();
         
-        m_renderCommandQueuesCondition.notify_all();
+        m_renderCommandBuffersCondition.notify_all();
         
-        return renderCommandQueue;
+        return renderCommandBuffer;
     }
 }

@@ -318,7 +318,7 @@
 		81AF895B1D13FF1400A02E99 /* TextOutputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AF89551D13FF1400A02E99 /* TextOutputStream.cpp */; };
 		81AF895E1D14036500A02E99 /* ByteBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AF895C1D14036500A02E99 /* ByteBuffer.cpp */; };
 		81AF89641D14152000A02E99 /* RenderCommandCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AF89621D14152000A02E99 /* RenderCommandCompiler.cpp */; };
-		81AF89671D142D6A00A02E99 /* RenderCommandQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AF89651D142D6A00A02E99 /* RenderCommandQueue.cpp */; };
+		81AF89671D142D6A00A02E99 /* RenderCommandBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AF89651D142D6A00A02E99 /* RenderCommandBuffer.cpp */; };
 		81B3D32F1D12DCEC00F17401 /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B3D32D1D12DCEC00F17401 /* VertexFormat.cpp */; };
 		81B3D34F1D130C6400F17401 /* ApplyCameraRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B3D3431D130C6400F17401 /* ApplyCameraRenderCommand.cpp */; };
 		81B3D3501D130C6400F17401 /* ApplyMaterialRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B3D3451D130C6400F17401 /* ApplyMaterialRenderCommand.cpp */; };
@@ -1143,8 +1143,8 @@
 		81AF895D1D14036500A02E99 /* ByteBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteBuffer.h; sourceTree = "<group>"; };
 		81AF89621D14152000A02E99 /* RenderCommandCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommandCompiler.cpp; sourceTree = "<group>"; };
 		81AF89631D14152000A02E99 /* RenderCommandCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandCompiler.h; sourceTree = "<group>"; };
-		81AF89651D142D6A00A02E99 /* RenderCommandQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommandQueue.cpp; sourceTree = "<group>"; };
-		81AF89661D142D6A00A02E99 /* RenderCommandQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandQueue.h; sourceTree = "<group>"; };
+		81AF89651D142D6A00A02E99 /* RenderCommandBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommandBuffer.cpp; sourceTree = "<group>"; };
+		81AF89661D142D6A00A02E99 /* RenderCommandBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandBuffer.h; sourceTree = "<group>"; };
 		81B3D32D1D12DCEC00F17401 /* VertexFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VertexFormat.cpp; sourceTree = "<group>"; };
 		81B3D32E1D12DCEC00F17401 /* VertexFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexFormat.h; sourceTree = "<group>"; };
 		81B3D3431D130C6400F17401 /* ApplyCameraRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplyCameraRenderCommand.cpp; sourceTree = "<group>"; };
@@ -2893,8 +2893,8 @@
 				81A125E61CF45E230010853A /* RenderCommand.h */,
 				81A125E81CF4614C0010853A /* RenderCommandList.cpp */,
 				81A125E91CF4614C0010853A /* RenderCommandList.h */,
-				81AF89651D142D6A00A02E99 /* RenderCommandQueue.cpp */,
-				81AF89661D142D6A00A02E99 /* RenderCommandQueue.h */,
+				81AF89651D142D6A00A02E99 /* RenderCommandBuffer.cpp */,
+				81AF89661D142D6A00A02E99 /* RenderCommandBuffer.h */,
 			);
 			path = RenderCommand;
 			sourceTree = "<group>";
@@ -3582,7 +3582,7 @@
 				8158F6721C89D2AD00B13109 /* ImageFormatConverter.cpp in Sources */,
 				81A55DFB1CFD8AD600C9F0D6 /* LoadMaterialGroupRenderCommand.cpp in Sources */,
 				8158F6BB1C89D2AD00B13109 /* OrthographicCameraComponent.cpp in Sources */,
-				81AF89671D142D6A00A02E99 /* RenderCommandQueue.cpp in Sources */,
+				81AF89671D142D6A00A02E99 /* RenderCommandBuffer.cpp in Sources */,
 				8158F6C01C89D2AD00B13109 /* DirectionalLightComponent.cpp in Sources */,
 				8158F69D1C89D2AD00B13109 /* HoldGesture.cpp in Sources */,
 				8158F7CA1C89D2AD00B13109 /* RNGContainer.mm in Sources */,
