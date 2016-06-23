@@ -27,7 +27,8 @@
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
-#include <CSBackend/Rendering/OpenGL/Base/ContextState.h>
+#include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
+#include <CSBackend/Rendering/OpenGL/Texture/TextureUnitManager.h>
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
@@ -53,6 +54,11 @@ namespace CSBackend
             void Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept override;
             
         private:
+            /// Initialises the render command processor. This is deferred until Process is first called
+            /// to ensure it is run on the render thread.
+            ///
+            void Init() noexcept;
+            
             /// Loads the shader described by the given load command
             ///
             /// @param renderCommand
@@ -136,7 +142,17 @@ namespace CSBackend
             ///
             void UnloadMesh(const ChilliSource::UnloadMeshRenderCommand* renderCommand) noexcept;
             
-            ContextState m_contextState;
+            /// Resets the cached values back to thier original state.
+            ///
+            void ResetCache() noexcept;
+            
+            bool m_initRequired = true;
+            
+            TextureUnitManagerUPtr m_textureUnitManager;
+            GLCamera m_currentCamera;
+            const ChilliSource::RenderShader* m_currentShader = nullptr;
+            const ChilliSource::RenderMaterial* m_currentMaterial = nullptr;
+            const ChilliSource::RenderMesh* m_currentMesh = nullptr;
         };
     }
 }

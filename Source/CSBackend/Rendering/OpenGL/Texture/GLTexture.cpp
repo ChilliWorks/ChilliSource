@@ -283,13 +283,6 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLTexture::Bind() noexcept
-        {
-            glBindTexture(GL_TEXTURE_2D, m_handle);
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding texture.");
-        }
-        
-        //------------------------------------------------------------------------------
         GLTexture::~GLTexture() noexcept
         {
             //TODO: Handle context loss

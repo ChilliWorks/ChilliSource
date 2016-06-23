@@ -60,6 +60,7 @@ namespace CSBackend
         /// Texture
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLTexture);
+        CS_FORWARDDECLARE_CLASS(TextureUnitManager);
     }
 }
 

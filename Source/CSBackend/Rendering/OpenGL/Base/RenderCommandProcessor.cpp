@@ -80,6 +80,12 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept
         {
+            if (m_initRequired)
+            {
+                m_initRequired = false;
+                Init();
+            }
+            
             for (const auto& renderCommandList : renderCommandBuffer->GetQueue())
             {
                 for (const auto& renderCommand : renderCommandList->GetOrderedList())
@@ -137,10 +143,17 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::Init() noexcept
+        {
+            m_textureUnitManager = TextureUnitManagerUPtr(new TextureUnitManager());
+            
+            ResetCache();
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadShader(const ChilliSource::LoadShaderRenderCommand* renderCommand) noexcept
         {
-            m_contextState.SetRenderShader(nullptr);
-            m_contextState.SetRenderMaterial(nullptr);
+            ResetCache();
             
             auto renderShader = renderCommand->GetRenderShader();
             
@@ -153,8 +166,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadTexture(const ChilliSource::LoadTextureRenderCommand* renderCommand) noexcept
         {
-            m_contextState.SetRenderTexture(nullptr);
-            m_contextState.SetRenderMaterial(nullptr);
+            ResetCache();
             
             auto renderTexture = renderCommand->GetRenderTexture();
             
@@ -169,7 +181,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept
         {
-            m_contextState.SetRenderMesh(nullptr);
+            ResetCache();
             
             auto renderMesh = renderCommand->GetRenderMesh();
             
@@ -183,7 +195,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::Begin(const ChilliSource::BeginRenderCommand* renderCommand) noexcept
         {
-            m_contextState.Reset();
+            ResetCache();
             
             glViewport(0, 0, renderCommand->GetResolution().x, renderCommand->GetResolution().y);
             
@@ -200,52 +212,48 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::ApplyCamera(const ChilliSource::ApplyCameraRenderCommand* renderCommand) noexcept
         {
-            m_contextState.SetRenderMaterial(nullptr);
-            m_contextState.SetCamera(GLCamera(renderCommand->GetPosition(), renderCommand->GetViewProjectionMatrix()));
+            m_currentMaterial = nullptr;
+            
+            m_currentCamera = GLCamera(renderCommand->GetPosition(), renderCommand->GetViewProjectionMatrix());
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::ApplyMaterial(const ChilliSource::ApplyMaterialRenderCommand* renderCommand) noexcept
         {
             auto renderMaterial = renderCommand->GetRenderMaterial();
-            if (renderMaterial != m_contextState.GetRenderMaterial())
+            if (m_currentMaterial != renderMaterial)
             {
-                m_contextState.SetRenderMesh(nullptr);
-                m_contextState.SetRenderMaterial(renderMaterial);
+                m_currentMaterial = renderMaterial;
                 
-                auto renderShader = renderMaterial->GetRenderShader();
+                auto renderShader = m_currentMaterial->GetRenderShader();
                 GLShader* glShader = static_cast<GLShader*>(renderShader->GetExtraData());
-                if (renderShader != m_contextState.GetRenderShader())
+                if (m_currentShader != renderShader)
                 {
-                    m_contextState.SetRenderShader(renderShader);
+                    m_currentMesh = nullptr;
+                    m_currentShader = renderShader;
                     
                     glShader->Bind();
                 }
                 
-                //TODO: Handle textures properly
-                auto renderTexture = renderMaterial->GetRenderTextures()[0];
-                if (renderTexture != m_contextState.GetRenderTexture())
-                {
-                    m_contextState.SetRenderTexture(renderTexture);
-                    
-                    auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());
-                    glTexture->Bind();
-                }
+                m_textureUnitManager->Bind(m_currentMaterial->GetRenderTextures());
                 
-                GLMaterial::Apply(renderMaterial, m_contextState.GetCamera(), glShader);
+                GLMaterial::Apply(renderMaterial, m_currentCamera, glShader);
             }
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::ApplyMesh(const ChilliSource::ApplyMeshRenderCommand* renderCommand) noexcept
         {
+            CS_ASSERT(m_currentMaterial, "A material must be applied before applying mesh.");
+            CS_ASSERT(m_currentShader, "A shader must be applied before applying mesh.");
+            
             auto renderMesh = renderCommand->GetRenderMesh();
-            if (renderMesh != m_contextState.GetRenderMesh())
+            if (m_currentMesh != renderMesh)
             {
-                m_contextState.SetRenderMesh(renderMesh);
+                m_currentMesh = renderMesh;
                 
-                auto glMesh = reinterpret_cast<GLMesh*>(renderMesh->GetExtraData());
-                auto glShader = reinterpret_cast<GLShader*>(m_contextState.GetRenderShader()->GetExtraData());
+                auto glMesh = reinterpret_cast<GLMesh*>(m_currentMesh->GetExtraData());
+                auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
                 glMesh->Bind(glShader);
             }
         }
@@ -253,32 +261,34 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::RenderInstance(const ChilliSource::RenderInstanceRenderCommand* renderCommand) noexcept
         {
-            auto glShader = static_cast<GLShader*>(m_contextState.GetRenderShader()->GetExtraData());
-            glShader->SetUniform("u_wvpMat", renderCommand->GetWorldMatrix() * m_contextState.GetCamera().GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
+            CS_ASSERT(m_currentMaterial, "A material must be applied before rendering a mesh.");
+            CS_ASSERT(m_currentShader, "A shader must be applied before rendering a mesh.");
+            CS_ASSERT(m_currentShader, "A mesh must be applied before rendering.");
+            
+            auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
+            glShader->SetUniform("u_wvpMat", renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
             glShader->SetUniform("u_normalMat", ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
             
-            auto renderMesh = m_contextState.GetRenderMesh();
-            if (renderMesh->GetNumIndices() > 0)
+            if (m_currentMesh->GetNumIndices() > 0)
             {
-                glDrawElements(ToGLPolygonType(renderMesh->GetPolygonType()), renderMesh->GetNumIndices(), GL_UNSIGNED_SHORT, 0);
+                glDrawElements(ToGLPolygonType(m_currentMesh->GetPolygonType()), m_currentMesh->GetNumIndices(), GL_UNSIGNED_SHORT, 0);
             }
             else
             {
-                glDrawArrays(ToGLPolygonType(renderMesh->GetPolygonType()), 0, renderMesh->GetNumVertices());
+                glDrawArrays(ToGLPolygonType(m_currentMesh->GetPolygonType()), 0, m_currentMesh->GetNumVertices());
             }
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::End() noexcept
         {
-            m_contextState.Reset();
+            ResetCache();
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::UnloadShader(const ChilliSource::UnloadShaderRenderCommand* renderCommand) noexcept
         {
-            m_contextState.SetRenderShader(nullptr);
-            m_contextState.SetRenderMaterial(nullptr);
+            ResetCache();
             
             auto renderShader = renderCommand->GetRenderShader();
             auto glShader = reinterpret_cast<GLShader*>(renderShader->GetExtraData());
@@ -289,8 +299,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::UnloadTexture(const ChilliSource::UnloadTextureRenderCommand* renderCommand) noexcept
         {
-            m_contextState.SetRenderTexture(nullptr);
-            m_contextState.SetRenderMaterial(nullptr);
+            ResetCache();
             
             auto renderTexture = renderCommand->GetRenderTexture();
             auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());
@@ -301,12 +310,22 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::UnloadMesh(const ChilliSource::UnloadMeshRenderCommand* renderCommand) noexcept
         {
-            m_contextState.SetRenderMesh(nullptr);
+            ResetCache();
             
             auto renderMesh = renderCommand->GetRenderMesh();
             auto glMesh = reinterpret_cast<GLMesh*>(renderMesh->GetExtraData());
             
             CS_SAFEDELETE(glMesh);
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ResetCache() noexcept
+        {
+            m_textureUnitManager->Reset();
+            m_currentCamera = GLCamera();
+            m_currentMesh = nullptr;
+            m_currentShader = nullptr;
+            m_currentMaterial = nullptr;
         }
     }
 }

@@ -22,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_SHADER_GLTEXTURE_H_
-#define _CSBACKEND_RENDERING_OPENGL_SHADER_GLTEXTURE_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_TEXTURE_GLTEXTURE_H_
+#define _CSBACKEND_RENDERING_OPENGL_TEXTURE_GLTEXTURE_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
@@ -74,9 +74,9 @@ namespace CSBackend
             GLTexture(const u8* data, u32 dataSize, const ChilliSource::Integer2& dimensions, ChilliSource::ImageFormat format, ChilliSource::ImageCompression compression,
                       ChilliSource::TextureFilterMode filterMode, ChilliSource::TextureWrapMode wrapModeS, ChilliSource::TextureWrapMode wrapModeT, bool enableMipmapping) noexcept;
             
-            /// Binds the texture for use.
+            /// @return The OpenGL texture handle.
             ///
-            void Bind() noexcept;
+            GLuint GetHandle() noexcept { return m_handle; }
             
             /// Destroys the OpenGL texture that this represents.
             ///
