@@ -30,7 +30,7 @@
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandQueue.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 
 #include <condition_variable>
 #include <deque>
@@ -59,10 +59,10 @@ namespace ChilliSource
     ///   processed in a series of background tasks.
     ///
     /// * The Render Command Queue Compilation stage takes the series of passes and breaks
-    ///   them down further into a queue of render commands. This is processed as a series
+    ///   them down further into a buffer of render commands. This is processed as a series
     ///   of background tasks.
     ///
-    /// * The Render Command Processing stage takes the generated command queue and processes
+    /// * The Render Command Processing stage takes the generated command buffer and processes
     ///   each depending on render API (i.e OpenGL) that is being used. This is processed on
     ///   the render thread.
     ///
@@ -85,8 +85,8 @@ namespace ChilliSource
         bool IsA(InterfaceIDType interfaceId) const noexcept override;
         
         /// Performs the Scene Snapshot through to the Render Command Queue Compilation Stages and
-        /// then stores the output render command queue render to later be processed by the
-        /// ProcessRenderCommandQueue() method.
+        /// then stores the output render command buffer render to later be processed by the
+        /// ProcessRenderCommandBuffer() method.
         ///
         /// If the render pipeline is busy this will block until is it ready for the next snapshot
         /// to be processed.
@@ -99,12 +99,12 @@ namespace ChilliSource
         ///
         void ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept;
         
-        /// Processes the next render command queue. If there is no render command queue ready to be
+        /// Processes the next render command buffer. If there is no render command buffer ready to be
         /// processed then this will block until there is.
         ///
         /// This must be called from the render thread.
         ///
-        void ProcessRenderCommandQueue() noexcept;
+        void ProcessRenderCommandBuffer() noexcept;
         
     private:
         friend class Application;
@@ -129,20 +129,20 @@ namespace ChilliSource
         ///
         void EndRenderPrep() noexcept;
         
-        /// If the queue of command queues is full then this waits until one has been popped to continue.
-        /// It then adds the given render queue and notifies any threads which are waiting.
+        /// If the queue of command buffers is full then this waits until one has been popped to continue.
+        /// It then adds the given render buffer and notifies any threads which are waiting.
         ///
-        /// @param renderCommandQueue
-        ///     The render command queue which should be pushed. Must be moved.
+        /// @param renderCommandBuffer
+        ///     The render command buffer which should be pushed. Must be moved.
         ///
-        void WaitThenPushCommandQueue(RenderCommandQueueCUPtr renderCommandQueue) noexcept;
+        void WaitThenPushCommandBuffer(RenderCommandBufferCUPtr renderCommandBuffer) noexcept;
         
-        /// If the queue of command queues is empty then this waits until one has been pushed to continue.
-        /// It pops a command queue from the list and notifies any threads which are waiting.
+        /// If the queue of command buffers is empty then this waits until one has been pushed to continue.
+        /// It pops a command buffer from the list and notifies any threads which are waiting.
         ///
-        /// @return The render command queue which has been popped.
+        /// @return The render command buffer which has been popped.
         ///
-        RenderCommandQueueCUPtr WaitThenPopCommandQueue() noexcept;
+        RenderCommandBufferCUPtr WaitThenPopCommandBuffer() noexcept;
         
         IRenderPassCompilerUPtr m_renderPassCompiler;
         IRenderCommandProcessorUPtr m_renderCommandProcessor;
@@ -153,9 +153,9 @@ namespace ChilliSource
         std::condition_variable m_renderPrepCondition;
         bool m_renderPrepActive = false;
         
-        std::mutex m_renderCommandQueuesMutex;
-        std::condition_variable m_renderCommandQueuesCondition;
-        std::deque<RenderCommandQueueCUPtr> m_renderCommandQueues;
+        std::mutex m_renderCommandBuffersMutex;
+        std::condition_variable m_renderCommandBuffersCondition;
+        std::deque<RenderCommandBufferCUPtr> m_renderCommandBuffers;
     };
 }
 

@@ -483,7 +483,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::Render() noexcept
     {
-        m_renderer->ProcessRenderCommandQueue();
+        m_renderer->ProcessRenderCommandBuffer();
     }
     
     //------------------------------------------------------------------------------

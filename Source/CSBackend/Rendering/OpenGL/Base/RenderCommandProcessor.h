@@ -37,20 +37,20 @@ namespace CSBackend
     namespace OpenGL
     {
         /// An OpenGL implementation of the IRenderCommandProcessor interface. This processes
-        /// queues of render commands using the OpenGL render API.
+        /// buffers of render commands using the OpenGL render API.
         ///
         /// This is not thread-safe and must be called on the render thread.
         ///
         class RenderCommandProcessor final : public ChilliSource::IRenderCommandProcessor
         {
         public:
-            /// Processes the given render command queue, performing the required actions for
+            /// Processes the given render command buffer, performing the required actions for
             /// the command using OpenGL.
             ///
-            /// @param renderCommandQueue
-            ///     The queue of render commands that should be processed.
+            /// @param renderCommandBuffer
+            ///     The buffer of render commands that should be processed.
             ///
-            void Process(const ChilliSource::RenderCommandQueue& renderCommandQueue) noexcept override;
+            void Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept override;
             
         private:
             /// Loads the shader described by the given load command

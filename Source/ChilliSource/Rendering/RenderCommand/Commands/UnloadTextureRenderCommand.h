@@ -31,7 +31,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which unloads the texture data for a single render texture from
+    /// A render command for unloading the texture data for a single render texture from
     /// render memory.
     ///
     /// This must be instantiated via a RenderCommandList.

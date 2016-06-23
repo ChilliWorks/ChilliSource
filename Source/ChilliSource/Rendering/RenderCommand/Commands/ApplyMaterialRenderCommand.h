@@ -30,7 +30,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which applies the given render material to the current context state.
+    /// A render command for applying the given render material to the current context state.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///

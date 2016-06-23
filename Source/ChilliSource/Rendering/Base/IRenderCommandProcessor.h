@@ -32,7 +32,7 @@
 namespace ChilliSource
 {
     /// The interface for RenderCommand processors. A render command processor takes a
-    /// RenderCommandQueue and performs each action described by the RenderCommands it
+    /// RenderCommandBuffer and performs each action described by the RenderCommands it
     /// is comprised of. The actions performed depend on the render API that the
     /// processor represents.
     ///
@@ -52,13 +52,13 @@ namespace ChilliSource
         ///
         static IRenderCommandProcessorUPtr Create() noexcept;
         
-        /// Processes the given render command queue, performing the required actions for
+        /// Processes the given render command buffer, performing the required actions for
         /// each command as per the render API that this represents.
         ///
-        /// @param renderCommandQueue
-        ///     The queue of render commands that should be processed.
+        /// @param renderCommandBuffer
+        ///     The buffer of render commands that should be processed.
         ///
-        virtual void Process(const RenderCommandQueue& renderCommandQueue) noexcept = 0;
+        virtual void Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept = 0;
         
         virtual ~IRenderCommandProcessor() noexcept {}
     };

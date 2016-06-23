@@ -31,7 +31,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which renders an instance of the mesh currently described by the
+    /// A render command for rendering an instance of the mesh currently described by the
     /// context state with the given world trasform.
     ///
     /// This must be instantiated via a RenderCommandList.

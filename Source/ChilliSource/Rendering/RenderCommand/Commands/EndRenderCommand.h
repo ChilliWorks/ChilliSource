@@ -30,7 +30,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which end rendering to the current render target.
+    /// A render command for ending rendering to the current render target.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///

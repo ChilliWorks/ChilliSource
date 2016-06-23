@@ -140,47 +140,47 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandQueueCUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
+    RenderCommandBufferCUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
                                                                     const Colour& clearColour, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept
     {
         u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());
-        RenderCommandQueueUPtr renderCommandQueue(new RenderCommandQueue(numLists));
+        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(numLists));
         u32 currentList = 0;
         
         if (preRenderCommandList->GetOrderedList().size() > 0)
         {
-            *renderCommandQueue->GetRenderCommandList(currentList++) = std::move(*preRenderCommandList);
+            *renderCommandBuffer->GetRenderCommandList(currentList++) = std::move(*preRenderCommandList);
         }
         
         for (const auto& targetRenderPassGroup : targetRenderPassGroups)
         {
-            renderCommandQueue->GetRenderCommandList(currentList++)->AddBeginCommand(resolution, clearColour);
+            renderCommandBuffer->GetRenderCommandList(currentList++)->AddBeginCommand(resolution, clearColour);
                 
             for (const auto& cameraRenderPassGroup : targetRenderPassGroup.GetRenderCameraGroups())
             {
                 if (ContainsRenderPassObject(cameraRenderPassGroup))
                 {
                     const auto& camera = cameraRenderPassGroup.GetCamera();
-                    renderCommandQueue->GetRenderCommandList(currentList)->AddApplyCameraCommand(camera.GetWorldMatrix().GetTranslation(), camera.GetViewProjectionMatrix());
+                    renderCommandBuffer->GetRenderCommandList(currentList)->AddApplyCameraCommand(camera.GetWorldMatrix().GetTranslation(), camera.GetViewProjectionMatrix());
                     
                     for (const auto& renderPass : cameraRenderPassGroup.GetRenderPasses())
                     {
                         if (renderPass.GetRenderPassObjects().size() > 0)
                         {
-                            CompileRenderCommandsForPass(renderPass, renderCommandQueue->GetRenderCommandList(currentList++));
+                            CompileRenderCommandsForPass(renderPass, renderCommandBuffer->GetRenderCommandList(currentList++));
                         }
                     }
                 }
             }
             
-            renderCommandQueue->GetRenderCommandList(currentList++)->AddEndCommand();
+            renderCommandBuffer->GetRenderCommandList(currentList++)->AddEndCommand();
         }
         
         if (postRenderCommandList->GetOrderedList().size() > 0)
         {
-            *renderCommandQueue->GetRenderCommandList(currentList++) = std::move(*postRenderCommandList);
+            *renderCommandBuffer->GetRenderCommandList(currentList++) = std::move(*postRenderCommandList);
         }
         
-        return std::move(renderCommandQueue);
+        return std::move(renderCommandBuffer);
     }
 }

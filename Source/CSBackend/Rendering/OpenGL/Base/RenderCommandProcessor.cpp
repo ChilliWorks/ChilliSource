@@ -29,7 +29,7 @@
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandQueue.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
@@ -44,9 +44,9 @@ namespace CSBackend
     namespace OpenGL
     {
         //------------------------------------------------------------------------------
-        void RenderCommandProcessor::Process(const ChilliSource::RenderCommandQueue& renderCommandQueue) noexcept
+        void RenderCommandProcessor::Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept
         {
-            for (const auto& renderCommandList : renderCommandQueue.GetQueue())
+            for (const auto& renderCommandList : renderCommandBuffer->GetQueue())
             {
                 for (const auto& renderCommand : renderCommandList->GetOrderedList())
                 {

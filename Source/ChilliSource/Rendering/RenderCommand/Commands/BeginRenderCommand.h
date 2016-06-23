@@ -32,7 +32,7 @@
 
 namespace ChilliSource
 {
-    /// A render command which begins rendering to the default render target with the given
+    /// A render command for beginning rendering to the default render target with the given
     /// resolution and clear colour.
     ///
     /// This must be instantiated via a RenderCommandList.
