@@ -45,6 +45,10 @@ namespace CSBackend
         CS_FORWARDDECLARE_CLASS(RenderCommandProcessor);
         CS_FORWARDDECLARE_CLASS(RenderTarget);
         //----------------------------------------------------
+        /// Camera
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(GLCamera);
+        //----------------------------------------------------
         /// Model
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLMesh);

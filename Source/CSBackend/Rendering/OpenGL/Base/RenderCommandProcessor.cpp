@@ -24,11 +24,12 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
+#include <CSBackend/Rendering/OpenGL/Material/GLMaterial.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
-#include <ChilliSource/Rendering/Base/BlendMode.h>
+#include <ChilliSource/Rendering/Model/PolygonType.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
@@ -52,30 +53,26 @@ namespace CSBackend
     {
         namespace
         {
-            /// TODO: Do properly.
+            /// Converts from a ChilliSource polygon type to a OpenGL polygon type.
             ///
-            GLenum ToGLBlendMode(ChilliSource::BlendMode in_blendMode)
+            /// @param blendMode
+            ///     The ChilliSource polygon type.
+            ///
+            /// @return The OpenGL polygon type.
+            ///
+            GLenum ToGLPolygonType(ChilliSource::PolygonType polygonType)
             {
-                switch(in_blendMode)
+                switch(polygonType)
                 {
-                    case ChilliSource::BlendMode::k_zero:
-                        return GL_ZERO;
-                    case ChilliSource::BlendMode::k_one:
-                        return GL_ONE;
-                    case ChilliSource::BlendMode::k_sourceCol:
-                        return GL_SRC_COLOR;
-                    case ChilliSource::BlendMode::k_oneMinusSourceCol:
-                        return GL_ONE_MINUS_SRC_COLOR;
-                    case ChilliSource::BlendMode::k_sourceAlpha:
-                        return GL_SRC_ALPHA;
-                    case ChilliSource::BlendMode::k_oneMinusSourceAlpha:
-                        return GL_ONE_MINUS_SRC_ALPHA;
-                    case ChilliSource::BlendMode::k_destAlpha:
-                        return GL_DST_ALPHA;
-                    case ChilliSource::BlendMode::k_oneMinusDestAlpha:
-                        return GL_ONE_MINUS_DST_ALPHA;
+                    case ChilliSource::PolygonType::k_triangle:
+                        return GL_TRIANGLES;
+                    case ChilliSource::PolygonType::k_triangleStrip:
+                        return GL_TRIANGLE_STRIP;
+                    case ChilliSource::PolygonType::k_line:
+                        return GL_LINES;
                     default:
-                        return GL_SRC_ALPHA;
+                        CS_LOG_FATAL("Invalid polygon type.");
+                        return GL_TRIANGLES;
                 };
             }
         }
@@ -142,18 +139,23 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadShader(const ChilliSource::LoadShaderRenderCommand* renderCommand) noexcept
         {
+            m_contextState.SetRenderShader(nullptr);
+            m_contextState.SetRenderMaterial(nullptr);
+            
             auto renderShader = renderCommand->GetRenderShader();
             
             //TODO: Should be pooled.
             auto glShader = new GLShader(renderCommand->GetVertexShader(), renderCommand->GetFragmentShader());
             
             renderShader->SetExtraData(glShader);
-            m_contextState.SetRenderShader(nullptr);
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadTexture(const ChilliSource::LoadTextureRenderCommand* renderCommand) noexcept
         {
+            m_contextState.SetRenderTexture(nullptr);
+            m_contextState.SetRenderMaterial(nullptr);
+            
             auto renderTexture = renderCommand->GetRenderTexture();
             
             //TODO: Should be pooled.
@@ -162,12 +164,13 @@ namespace CSBackend
                                            renderTexture->IsMipmapped());
             
             renderTexture->SetExtraData(glTexture);
-            m_contextState.SetRenderTexture(nullptr);
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept
         {
+            m_contextState.SetRenderMesh(nullptr);
+            
             auto renderMesh = renderCommand->GetRenderMesh();
             
             //TODO: Should be pooled.
@@ -175,12 +178,13 @@ namespace CSBackend
                                      renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
             
             renderMesh->SetExtraData(glMesh);
-            m_contextState.SetRenderMesh(nullptr);
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::Begin(const ChilliSource::BeginRenderCommand* renderCommand) noexcept
         {
+            m_contextState.Reset();
+            
             glViewport(0, 0, renderCommand->GetResolution().x, renderCommand->GetResolution().y);
             
             glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -191,101 +195,45 @@ namespace CSBackend
             
             glBlendEquation(GL_FUNC_ADD);
             glDepthFunc(GL_LEQUAL);
-            
-            m_contextState.Reset();
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::ApplyCamera(const ChilliSource::ApplyCameraRenderCommand* renderCommand) noexcept
         {
-            m_contextState.SetCameraState(ContextState::CameraState(renderCommand->GetPosition(), renderCommand->GetViewProjectionMatrix()));
-            
-            m_contextState.SetRenderShader(nullptr);
-            m_contextState.SetRenderTexture(nullptr);
             m_contextState.SetRenderMaterial(nullptr);
-            m_contextState.SetRenderMesh(nullptr);
+            m_contextState.SetCamera(GLCamera(renderCommand->GetPosition(), renderCommand->GetViewProjectionMatrix()));
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::ApplyMaterial(const ChilliSource::ApplyMaterialRenderCommand* renderCommand) noexcept
         {
             auto renderMaterial = renderCommand->GetRenderMaterial();
-            
-            auto renderShader = renderMaterial->GetRenderShader();
-            if (renderShader != m_contextState.GetRenderShader())
+            if (renderMaterial != m_contextState.GetRenderMaterial())
             {
-                m_contextState.SetRenderShader(renderShader);
+                m_contextState.SetRenderMesh(nullptr);
+                m_contextState.SetRenderMaterial(renderMaterial);
                 
-                auto glShader = reinterpret_cast<GLShader*>(renderShader->GetExtraData());
-                glShader->Bind();
-            }
-            
-            //TODO: Handle textures properly
-            auto renderTexture = renderMaterial->GetRenderTextures()[0];
-            if (renderTexture != m_contextState.GetRenderTexture())
-            {
-                m_contextState.SetRenderTexture(renderTexture);
+                auto renderShader = renderMaterial->GetRenderShader();
+                GLShader* glShader = static_cast<GLShader*>(renderShader->GetExtraData());
+                if (renderShader != m_contextState.GetRenderShader())
+                {
+                    m_contextState.SetRenderShader(renderShader);
+                    
+                    glShader->Bind();
+                }
                 
-                auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());
-                glTexture->Bind();
+                //TODO: Handle textures properly
+                auto renderTexture = renderMaterial->GetRenderTextures()[0];
+                if (renderTexture != m_contextState.GetRenderTexture())
+                {
+                    m_contextState.SetRenderTexture(renderTexture);
+                    
+                    auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());
+                    glTexture->Bind();
+                }
+                
+                GLMaterial::Apply(renderMaterial, m_contextState.GetCamera(), glShader);
             }
-            
-            //TODO: Apply material state properly
-            
-            if (renderMaterial->IsDepthTestEnabled())
-            {
-                glEnable(GL_DEPTH_TEST);
-            }
-            else
-            {
-                glDisable(GL_DEPTH_TEST);
-            }
-            
-            if (renderMaterial->IsDepthWriteEnabled())
-            {
-                glDepthMask(GL_TRUE);
-            }
-            else
-            {
-                glDepthMask(GL_FALSE);
-            }
-            
-            if (renderMaterial->IsColourWriteEnabled())
-            {
-                glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-            }
-            else
-            {
-                glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-            }
-            
-            if (renderMaterial->IsFaceCullingEnabled())
-            {
-                glEnable(GL_CULL_FACE);
-                glCullFace(GL_BACK);
-            }
-            else
-            {
-                glDisable(GL_CULL_FACE);
-            }
-            
-            if (renderMaterial->IsTransparencyEnabled())
-            {
-                glEnable(GL_BLEND);
-                glBlendFunc(ToGLBlendMode(renderMaterial->GetSourceBlendMode()), ToGLBlendMode(renderMaterial->GetDestinationBlendMode()));
-            }
-            else
-            {
-                glDisable(GL_BLEND);
-            }
-            
-            GLShader* glShader = static_cast<GLShader*>(renderShader->GetExtraData());
-            glShader->SetUniform("u_emissive", renderMaterial->GetEmissiveColour(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform("u_ambient", renderMaterial->GetAmbientColour(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform("u_diffuse", renderMaterial->GetDiffuseColour(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform("u_specular", renderMaterial->GetSpecularColour(), GLShader::FailurePolicy::k_silent);
-            
-            glShader->SetUniform("u_cameraPos", m_contextState.GetCameraState().GetPosition(), GLShader::FailurePolicy::k_silent);
         }
         
         //------------------------------------------------------------------------------
@@ -305,11 +253,19 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::RenderInstance(const ChilliSource::RenderInstanceRenderCommand* renderCommand) noexcept
         {
-            GLShader* glShader = static_cast<GLShader*>(m_contextState.GetRenderShader()->GetExtraData());
-            glShader->SetUniform("u_wvpMat", renderCommand->GetWorldMatrix() * m_contextState.GetCameraState().GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
+            auto glShader = static_cast<GLShader*>(m_contextState.GetRenderShader()->GetExtraData());
+            glShader->SetUniform("u_wvpMat", renderCommand->GetWorldMatrix() * m_contextState.GetCamera().GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
             glShader->SetUniform("u_normalMat", ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
             
-            glDrawElements(GL_TRIANGLES, m_contextState.GetRenderMesh()->GetNumIndices(), GL_UNSIGNED_SHORT, 0);
+            auto renderMesh = m_contextState.GetRenderMesh();
+            if (renderMesh->GetNumIndices() > 0)
+            {
+                glDrawElements(ToGLPolygonType(renderMesh->GetPolygonType()), renderMesh->GetNumIndices(), GL_UNSIGNED_SHORT, 0);
+            }
+            else
+            {
+                glDrawArrays(ToGLPolygonType(renderMesh->GetPolygonType()), 0, renderMesh->GetNumVertices());
+            }
         }
         
         //------------------------------------------------------------------------------
@@ -322,6 +278,7 @@ namespace CSBackend
         void RenderCommandProcessor::UnloadShader(const ChilliSource::UnloadShaderRenderCommand* renderCommand) noexcept
         {
             m_contextState.SetRenderShader(nullptr);
+            m_contextState.SetRenderMaterial(nullptr);
             
             auto renderShader = renderCommand->GetRenderShader();
             auto glShader = reinterpret_cast<GLShader*>(renderShader->GetExtraData());
@@ -333,6 +290,7 @@ namespace CSBackend
         void RenderCommandProcessor::UnloadTexture(const ChilliSource::UnloadTextureRenderCommand* renderCommand) noexcept
         {
             m_contextState.SetRenderTexture(nullptr);
+            m_contextState.SetRenderMaterial(nullptr);
             
             auto renderTexture = renderCommand->GetRenderTexture();
             auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());

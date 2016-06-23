@@ -26,10 +26,9 @@
 #define _CSBACKEND_RENDERING_OPENGL_BASE_CONTEXTSTATE_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Matrix4.h>
-#include <ChilliSource/Core/Math/Vector3.h>
 
 namespace CSBackend
 {
@@ -44,38 +43,6 @@ namespace CSBackend
         class ContextState final
         {
         public:
-            /// Describes the state of the camera, including it's view projection matrix and the
-            /// current camera position.
-            ///
-            /// This is immutable and therefore thread-safe.
-            ///
-            class CameraState final
-            {
-            public:
-                CameraState() = default;
-                
-                /// Constructs the container with the given view projection matrix and position data.
-                ///
-                /// @param position
-                ///     The world space position of the camera.
-                /// @param viewProjectionMatrix
-                ///     The view projection matrix of the camera.
-                ///
-                CameraState(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept;
-                
-                /// @return The world space position of the camera.
-                ///
-                const ChilliSource::Vector3& GetPosition() const noexcept { return m_position; }
-                
-                /// @return The view projection matrix of the camera.
-                ///
-                const ChilliSource::Matrix4& GetViewProjectionMatrix() const noexcept { return m_viewProjectionMatrix; }
-                
-            private:
-                ChilliSource::Vector3 m_position;
-                ChilliSource::Matrix4 m_viewProjectionMatrix;
-            };
-            
             /// @return The currently bound render shader
             ///
             const ChilliSource::RenderShader* GetRenderShader() const noexcept { return m_renderShader; }
@@ -94,7 +61,7 @@ namespace CSBackend
             
             /// @return The current state of the camera.
             ///
-            const CameraState& GetCameraState() const noexcept { return m_cameraState; }
+            const GLCamera& GetCamera() const noexcept { return m_glCamera; }
             
             /// Sets the render shader which is currently bound in the context.
             ///
@@ -129,7 +96,7 @@ namespace CSBackend
             /// @param cameraState
             ///     The current state of the camera.
             ///
-            void SetCameraState(const CameraState& cameraState) noexcept { m_cameraState = cameraState; }
+            void SetCamera(const GLCamera& glCamera) noexcept { m_glCamera = glCamera; }
             
             /// Resets the context back to its original state.
             ///
@@ -140,7 +107,7 @@ namespace CSBackend
             const ChilliSource::RenderTexture* m_renderTexture = nullptr;
             const ChilliSource::RenderMaterial* m_renderMaterial = nullptr;
             const ChilliSource::RenderMesh* m_renderMesh = nullptr;
-            CameraState m_cameraState;
+            GLCamera m_glCamera;
         };
     }
 }

@@ -22,20 +22,34 @@
 //  THE SOFTWARE.
 //
 
-#include <CSBackend/Rendering/OpenGL/Base/ContextState.h>
+#ifndef _CSBACKEND_RENDERING_OPENGL_SHADER_GLMATERIAL_H_
+#define _CSBACKEND_RENDERING_OPENGL_SHADER_GLMATERIAL_H_
+
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
-        //------------------------------------------------------------------------------
-        void ContextState::Reset() noexcept
+        /// A container for all functionality pertaining to materials in OpenGL.
+        ///
+        namespace GLMaterial
         {
-            m_glCamera = GLCamera();
-            m_renderMesh = nullptr;
-            m_renderShader = nullptr;
-            m_renderTexture = nullptr;
-            m_renderMaterial = nullptr;
-        }
+            /// Applys the state described by the given RenderMaterial to the OpenGL context.
+            ///
+            /// @param renderMaterial
+            ///     The render material to apply.
+            /// @param glCamera
+            ///     The current glCamera.
+            /// @param glShader
+            ///     The currently active shader to apply uniforms to.
+            ///
+            void Apply(const ChilliSource::RenderMaterial* renderMaterial, const GLCamera& glCamera, GLShader* glShader) noexcept;
+        };
     }
 }
+
+#endif

@@ -125,12 +125,15 @@ namespace ChilliSource
                 if (renderPassObject.GetRenderMaterial() != currentMaterial)
                 {
                     currentMaterial = renderPassObject.GetRenderMaterial();
+                    currentMesh = nullptr;
+                    
                     renderCommandList->AddApplyMaterialCommand(currentMaterial);
                 }
                 
                 if (renderPassObject.GetRenderMesh() != currentMesh)
                 {
                     currentMesh = renderPassObject.GetRenderMesh();
+                    
                     renderCommandList->AddApplyMeshCommand(currentMesh);
                 }
                 

@@ -224,7 +224,7 @@ namespace ChilliSource
             std::unique_ptr<const u8[]> indexData(reinterpret_cast<const u8*>(indices));
             
             std::vector<MeshDesc> meshDescs;
-            meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, k_numVertices, k_numVertices, std::move(vertexData), std::move(indexData)));
+            meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, k_numVertices, k_numIndices, std::move(vertexData), std::move(indexData)));
             
             return ModelDesc(std::move(meshDescs), aabb);
         }

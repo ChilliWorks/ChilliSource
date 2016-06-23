@@ -22,20 +22,16 @@
 //  THE SOFTWARE.
 //
 
-#include <CSBackend/Rendering/OpenGL/Base/ContextState.h>
+#include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
         //------------------------------------------------------------------------------
-        void ContextState::Reset() noexcept
+        GLCamera::GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept
+            : m_position(position), m_viewProjectionMatrix(viewProjectionMatrix)
         {
-            m_glCamera = GLCamera();
-            m_renderMesh = nullptr;
-            m_renderShader = nullptr;
-            m_renderTexture = nullptr;
-            m_renderMaterial = nullptr;
         }
     }
 }
