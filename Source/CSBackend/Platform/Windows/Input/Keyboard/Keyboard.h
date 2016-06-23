@@ -149,9 +149,6 @@ namespace CSBackend
 			ChilliSource::Event<KeyPressedDelegate> m_keyPressedEvent;
 			ChilliSource::Event<KeyReleasedDelegate> m_keyReleasedEvent;
 
-			ChilliSource::EventConnectionUPtr m_keyPressedConnection;
-			ChilliSource::EventConnectionUPtr m_keyReleasedConnection;
-
 			std::array<bool, static_cast<u32>(ChilliSource::KeyCode::k_total)> m_keysDown;
 		};
 	}

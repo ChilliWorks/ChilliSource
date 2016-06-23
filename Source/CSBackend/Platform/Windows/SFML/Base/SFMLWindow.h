@@ -40,6 +40,7 @@
 #include <SFML/Window.hpp>
 
 #include <functional>
+#include <mutex>
 
 namespace CSBackend
 {
@@ -124,7 +125,7 @@ namespace CSBackend
 			///
 			/// @param UTF-8 character entered
 			//-----------------------------------------------------------
-			using TextEnteredEvent = std::function<void(ChilliSource::UTF8Char)>;
+			using TextEnteredDelegate = std::function<void(ChilliSource::UTF8Char)>;
 			//-------------------------------------------------------
 			/// Delegate that receieves events on the key with the
 			/// given code when key is pressed
@@ -211,69 +212,114 @@ namespace CSBackend
 			//----------------------------------------------------
 			void ShowCursor();
 			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when the window is resized
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<WindowResizeDelegate>& GetWindowResizedEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when the window fullscreen is enabled or disabled
-			//-------------------------------------------------
-			ChilliSource::IConnectableEvent<WindowDisplayModeDelegate>& GetWindowDisplayModeEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when a mouse button event occurs
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<MouseButtonDelegate>& GetMouseButtonEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when the mouse moves
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<MouseMovedDelegate>& GetMouseMovedEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when the mouse wheel scrolls
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<MouseWheelDelegate>& GetMouseWheelEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when text is entered
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<TextEnteredEvent>& GetTextEnteredEvent();
-			//-------------------------------------------------------
-			/// Get the event that is triggered whenever a key is pressed.
-			///
-			/// This event is guaranteed and should be used for low
-			/// frequency events such as catching a confirm enter press.
-			/// The polling "IsDown" method should be used for realtime
-			/// events such as moving characters on arrow press, etc.
-			///
-			/// The event also returns the current state of the modifier
-			/// keys (Ctrl, Alt, Shift, etc.)
-			///
-			/// @author S Downie
-			///
-			/// @return Event to register for key presses
-			//-------------------------------------------------------
-			ChilliSource::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent();
-			//-------------------------------------------------------
-			/// Get the event that is triggered whenever a key is released.
-			///
-			/// This event is guaranteed and should be used for low
-			/// frequency events. The polling "IsUp" method should be
-			/// used for realtime events.
-			///
-			/// @author S Downie
-			///
-			/// @return Event to register for key releases
-			//-------------------------------------------------------
-			ChilliSource::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent();
+            /// Set the delegate that is called when the window is
+            /// resized.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_windowResizeDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetWindowResizedDelegate(const WindowResizeDelegate in_windowResizeDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegate that is called when the window's
+            /// display mode is changed (e.g. fullscreen toggle)
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_windowDisplayModeDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetWindowDisplayModeDelegate(const WindowDisplayModeDelegate in_windowDisplayModeDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegate that is called when a mouse button
+            /// event occurs.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_mouseButtonDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetMouseButtonDelegate(const MouseButtonDelegate in_mouseButtonDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegate that is called when the mouse
+            /// moves.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_mouseMovedDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetMouseMovedDelegate(const MouseMovedDelegate in_mouseMovedDelegate) noexcept;
+            ////-------------------------------------------------------
+            /// Set the delegate that is called when the mouse wheel
+            /// scrolls.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_windowResizeDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetMouseWheelDelegate(const MouseWheelDelegate in_mouseWheelDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegate that is called when text is entered.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_textEnteredDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetTextEnteredDelegate(const TextEnteredDelegate in_textEnteredDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegate that is called when a key is pressed.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_keyPressedDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetKeyPressedDelegate(const KeyPressedDelegate in_keyPressedDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegate that is called when a key is released.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_keyReleasedDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetKeyReleasedDelegate(const KeyReleasedDelegate in_keyReleasedDelegate) noexcept;
+            //-------------------------------------------------------
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveWindowResizedDelegate() noexcept;
+            //-------------------------------------------------------
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveWindowDisplayModeDelegate() noexcept;
+            //-------------------------------------------------------
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveMouseButtonDelegate() noexcept;
+            //-------------------------------------------------------
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveMouseMovedDelegate() noexcept;
+            //-------------------------------------------------------
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveMouseWheelDelegate() noexcept;
+            //-------------------------------------------------------
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveTextEnteredDelegate() noexcept;
+            //-------------------------------------------------------
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveKeyPressedDelegate() noexcept;
+            //-------------------------------------------------------
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveKeyReleasedDelegate() noexcept;
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -319,14 +365,16 @@ namespace CSBackend
 
 			sf::Window m_window;
 
-			ChilliSource::Event<WindowResizeDelegate> m_windowResizeEvent;
-			ChilliSource::Event<WindowDisplayModeDelegate> m_windowDisplayModeEvent;
-			ChilliSource::Event<MouseButtonDelegate> m_mouseButtonEvent;
-			ChilliSource::Event<MouseMovedDelegate> m_mouseMovedEvent;
-			ChilliSource::Event<MouseWheelDelegate> m_mouseWheelEvent;
-			ChilliSource::Event<TextEnteredEvent> m_textEnteredEvent;
-			ChilliSource::Event<KeyPressedDelegate> m_keyPressedEvent;
-			ChilliSource::Event<KeyReleasedDelegate> m_keyReleasedEvent;
+            WindowResizeDelegate m_windowResizeDelegate;
+            WindowDisplayModeDelegate m_windowDisplayModeDelegate;
+            MouseButtonDelegate m_mouseButtonDelegate;
+            MouseMovedDelegate m_mouseMovedDelegate;
+            MouseWheelDelegate m_mouseWheelDelegate;
+            TextEnteredDelegate m_textEnteredDelegate;
+            KeyPressedDelegate m_keyPressedDelegate;
+            KeyReleasedDelegate m_keyReleasedDelegate;
+
+            std::mutex m_mutex;
 
 			std::string m_title;
 

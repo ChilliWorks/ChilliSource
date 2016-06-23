@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
 #include <GL/glew.h>
@@ -43,6 +44,7 @@
 
 #include <fstream>
 #include <array>
+#include <mutex>
 
 #include <windows.h>
 
@@ -289,7 +291,13 @@ namespace CSBackend
 				{
 					auto windowSize = GetWindowSize();
 					m_window.create(sf::VideoMode(windowSize.x, windowSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
-					m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_fullscreen);
+                    if (m_windowDisplayModeDelegate)
+                    {
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                        {
+                            m_windowDisplayModeDelegate(DisplayMode::k_fullscreen);
+                        });
+                    }
 					break;
 				}
 			}
@@ -300,7 +308,13 @@ namespace CSBackend
 		{
 			auto windowSize = GetWindowSize();
 			m_window.create(sf::VideoMode(windowSize.x, windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
-			m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_windowed);
+            if (m_windowDisplayModeDelegate)
+            {
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                {
+                    m_windowDisplayModeDelegate(DisplayMode::k_windowed);
+                });
+            }
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
@@ -320,54 +334,132 @@ namespace CSBackend
 
 			return result;
 		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::WindowResizeDelegate>& SFMLWindow::GetWindowResizedEvent()
-		{
-			return m_windowResizeEvent;
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::WindowDisplayModeDelegate>& SFMLWindow::GetWindowDisplayModeEvent()
-		{
-			return m_windowDisplayModeEvent;
-		}
-		//-------------------------------------------------
-		//------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::MouseButtonDelegate>& SFMLWindow::GetMouseButtonEvent()
-		{
-			return m_mouseButtonEvent;
-		}
-		//-------------------------------------------------
-		//------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::MouseMovedDelegate>& SFMLWindow::GetMouseMovedEvent()
-		{
-			return m_mouseMovedEvent;
-		}
-		//-------------------------------------------------
-		//------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::MouseWheelDelegate>& SFMLWindow::GetMouseWheelEvent()
-		{
-			return m_mouseWheelEvent;
-		}
-		//-------------------------------------------------
-		//------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::TextEnteredEvent>& SFMLWindow::GetTextEnteredEvent()
-		{
-			return m_textEnteredEvent;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::KeyPressedDelegate>& SFMLWindow::GetKeyPressedEvent()
-		{
-			return m_keyPressedEvent;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::KeyReleasedDelegate>& SFMLWindow::GetKeyReleasedEvent()
-		{
-			return m_keyReleasedEvent;
-		}
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetWindowResizedDelegate(const WindowResizeDelegate in_windowResizedDelegate) noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_windowResizeDelegate = in_windowResizedDelegate;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetWindowDisplayModeDelegate(const WindowDisplayModeDelegate in_windowDisplayModeDelegate) noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_windowDisplayModeDelegate = in_windowDisplayModeDelegate;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetMouseButtonDelegate(const MouseButtonDelegate in_mouseButtonDelegate) noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_mouseButtonDelegate = in_mouseButtonDelegate;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetMouseMovedDelegate(const MouseMovedDelegate in_mouseMovedDelegate) noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_mouseMovedDelegate = in_mouseMovedDelegate;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetMouseWheelDelegate(const MouseWheelDelegate in_mouseWheelDelegate) noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_mouseWheelDelegate = in_mouseWheelDelegate;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetTextEnteredDelegate(const TextEnteredDelegate in_textEnteredDelegate) noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_textEnteredDelegate = in_textEnteredDelegate;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetKeyPressedDelegate(const KeyPressedDelegate in_keyPressedDelegate) noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_keyPressedDelegate = in_keyPressedDelegate;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetKeyReleasedDelegate(const KeyReleasedDelegate in_keyReleasedDelegate) noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_keyReleasedDelegate = in_keyReleasedDelegate;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveWindowResizedDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_windowResizeDelegate = nullptr;
+            lock.unlock();
+        }        //------------------------------------------------
+                 //------------------------------------------------
+        void SFMLWindow::RemoveWindowDisplayModeDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_windowDisplayModeDelegate = nullptr;
+            lock.unlock();
+        }        //------------------------------------------------
+                 //------------------------------------------------
+        void SFMLWindow::RemoveMouseButtonDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_mouseButtonDelegate = nullptr;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveMouseMovedDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_mouseMovedDelegate = nullptr;
+            lock.unlock();
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveMouseWheelDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_mouseWheelDelegate = nullptr;
+            lock.unlock();
+        }
+        //------------------------------------------------
+         //------------------------------------------------
+        void SFMLWindow::RemoveTextEnteredDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_textEnteredDelegate = nullptr;
+            lock.unlock();
+        }        
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveKeyPressedDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_keyPressedDelegate = nullptr;
+            lock.unlock();
+        }        
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveKeyReleasedDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_keyReleasedDelegate = nullptr;
+            lock.unlock();
+        }
 		//------------------------------------------------
 		//------------------------------------------------
 		ChilliSource::Integer2 SFMLWindow::GetWindowSize() const
@@ -460,7 +552,13 @@ namespace CSBackend
 							app->Quit();
 							return;
 						case sf::Event::Resized:
-							m_windowResizeEvent.NotifyConnections(ChilliSource::Integer2(s32(event.size.width), s32(event.size.height)));
+                            if (m_windowResizeDelegate)
+                            {
+                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                                {
+                                    m_windowResizeDelegate(ChilliSource::Integer2(s32(event.size.width), s32(event.size.height)));
+                                });
+                            }
 							break;
 						case sf::Event::GainedFocus:
 							if (m_isFocused == false)
@@ -477,27 +575,69 @@ namespace CSBackend
 							}
 							break;
 						case sf::Event::MouseButtonPressed:
-							m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
+                            if (m_mouseButtonDelegate)
+                            {
+                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                                {
+                                    m_mouseButtonDelegate(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
+                                });
+                            }
 							break;
 						case sf::Event::MouseButtonReleased:
-							m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
+                            if (m_mouseButtonDelegate)
+                            {
+                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                                {
+                                    m_mouseButtonDelegate(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
+                                });
+                            }
 							break;
 						case sf::Event::MouseMoved:
-							m_mouseMovedEvent.NotifyConnections(event.mouseMove.x, event.mouseMove.y);
+                            if (m_mouseMovedDelegate)
+                            {
+                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                                {
+                                    m_mouseMovedDelegate(event.mouseMove.x, event.mouseMove.y);
+                                });
+                            }
 							break;
 						case sf::Event::MouseWheelMoved:
-							m_mouseWheelEvent.NotifyConnections(event.mouseWheel.delta);
+                            if (m_mouseWheelDelegate)
+                            {
+                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                                {
+                                    m_mouseWheelDelegate(event.mouseWheel.delta);
+                                });
+                            }
 							break;
 						case sf::Event::KeyPressed:
-							m_keyPressedEvent.NotifyConnections(event.key.code, event.key);
+                            if (m_keyPressedDelegate)
+                            {
+                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                                {
+                                    m_keyPressedDelegate(event.key.code, event.key);
+                                });
+                            }
 							break;
 						case sf::Event::KeyReleased:
-							m_keyReleasedEvent.NotifyConnections(event.key.code);
+                            if (m_keyReleasedDelegate)
+                            {
+                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                                {
+                                    m_keyReleasedDelegate(event.key.code);
+                                });
+                            }
 							break;
 						case sf::Event::TextEntered:
 						{
-							ChilliSource::UTF8Char utf8Char = event.text.unicode;
-							m_textEnteredEvent.NotifyConnections(utf8Char);
+                            if (m_textEnteredDelegate)
+                            {
+                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+                                {
+                                    ChilliSource::UTF8Char utf8Char = event.text.unicode;
+                                    m_textEnteredDelegate(utf8Char);
+                                });
+                            }
 							break;
 						}
 					}

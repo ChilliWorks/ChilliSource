@@ -139,10 +139,6 @@ namespace CSBackend
 
 			ChilliSource::Screen* m_screen;
 			ChilliSource::Pointer::Id m_pointerId;
-
-			ChilliSource::EventConnectionUPtr m_mouseButtonConnection;
-			ChilliSource::EventConnectionUPtr m_mouseMovedConnection;
-			ChilliSource::EventConnectionUPtr m_mouseWheelConnection;
 		};
 	}
 }

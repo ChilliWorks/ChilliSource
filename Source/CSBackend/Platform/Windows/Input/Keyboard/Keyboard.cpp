@@ -299,8 +299,8 @@ namespace CSBackend
 				flag = false;
 			}
 
-			m_keyPressedConnection = SFMLWindow::Get()->GetKeyPressedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyPressed));
-			m_keyReleasedConnection = SFMLWindow::Get()->GetKeyReleasedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyReleased));
+			SFMLWindow::Get()->SetKeyPressedDelegate(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyPressed));
+			SFMLWindow::Get()->SetKeyReleasedDelegate(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyReleased));
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -369,8 +369,8 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void Keyboard::OnDestroy()
 		{
-			m_keyPressedConnection.reset();
-			m_keyReleasedConnection.reset();
+            SFMLWindow::Get()->RemoveKeyPressedDelegate();
+            SFMLWindow::Get()->RemoveKeyReleasedDelegate();
 
 			for (auto& flag : m_keysDown)
 			{

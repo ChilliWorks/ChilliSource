@@ -51,10 +51,11 @@ namespace CSBackend
 		{
 			if (IsActive() == false)
 			{
+                m_active = true;
 				m_text = in_text;
 				m_textBufferChangedDelegate = in_changeDelegate;
 				m_textInputDeactivatedDelegate = in_deactivateDelegate;
-				m_textEnteredConnection = SFMLWindow::Get()->GetTextEnteredEvent().OpenConnection(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
+				SFMLWindow::Get()->SetTextEnteredDelegate(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
 			}
 		}
 		//-------------------------------------------------------
@@ -63,7 +64,8 @@ namespace CSBackend
 		{
 			if (IsActive() == true)
 			{
-				m_textEnteredConnection.reset();
+                m_active = false;
+                SFMLWindow::Get()->RemoveTextEnteredDelegate();
 				if (m_textInputDeactivatedDelegate != nullptr)
 				{
 					auto delegate = m_textInputDeactivatedDelegate;
@@ -76,7 +78,7 @@ namespace CSBackend
         //-------------------------------------------------------
         bool TextEntry::IsActive() const
         {
-			return m_textEnteredConnection != nullptr;
+            return m_active;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
