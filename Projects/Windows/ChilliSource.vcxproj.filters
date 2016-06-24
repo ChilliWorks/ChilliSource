@@ -295,6 +295,12 @@
     <Filter Include="ChilliSource\Core\File\FileStream">
       <UniqueIdentifier>{58b86741-22bf-4fee-a185-277889c92c94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CSBackend\Rendering\OpenGL\Material">
+      <UniqueIdentifier>{ac322408-c7ba-4202-b831-14661a51ed2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CSBackend\Rendering\OpenGL\Camera">
+      <UniqueIdentifier>{8e88dc6e-d075-47ce-bc7e-dc460822f3a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -1161,9 +1167,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextState.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
@@ -1218,7 +1221,16 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandQueue.cpp">
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Material\GLMaterial.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitManager.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandBuffer.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2522,9 +2534,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.h">
       <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextState.h">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
@@ -2585,7 +2594,16 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.h">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandQueue.h">
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Material\GLMaterial.h">
+      <Filter>CSBackend\Rendering\OpenGL\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.h">
+      <Filter>CSBackend\Rendering\OpenGL\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitManager.h">
+      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandBuffer.h">
       <Filter>ChilliSource\Rendering\RenderCommand</Filter>
     </ClInclude>
   </ItemGroup>

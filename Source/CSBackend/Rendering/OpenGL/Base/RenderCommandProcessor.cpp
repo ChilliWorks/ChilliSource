@@ -266,8 +266,8 @@ namespace CSBackend
             CS_ASSERT(m_currentShader, "A mesh must be applied before rendering.");
             
             auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
-            glShader->SetUniform("u_wvpMat", renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform("u_normalMat", ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(GLShader::k_defaultUniformWVPMat, renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(GLShader::k_defaultUniformNormalMat, ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
             
             if (m_currentMesh->GetNumIndices() > 0)
             {

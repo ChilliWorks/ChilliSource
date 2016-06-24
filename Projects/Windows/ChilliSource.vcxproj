@@ -232,8 +232,8 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandBuffer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandList.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandQueue.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\CSShaderProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.cpp" />
@@ -319,14 +319,16 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextState.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Material\GLMaterial.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio.h" />
@@ -664,8 +666,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTextureRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandBuffer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandList.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandQueue.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\CSShaderProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShader.h" />
@@ -774,16 +776,18 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextState.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLIncludes.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\ForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Material\GLMaterial.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{09108227-056C-4A6F-9A74-1C3ECA245C3F}</ProjectGuid>
