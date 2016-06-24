@@ -109,6 +109,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\RotationGesture.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\Pointer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.cpp" />

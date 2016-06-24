@@ -30,6 +30,9 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Social/Communications/EmailComposerJavaInterface.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 
@@ -144,12 +147,15 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		void EmailComposerJavaInterface::OnEmailClosed(s32 indwResultCode)
 		{
-			if (mDelegate != nullptr)
-			{
-				ResultDelegate delegate = mDelegate;
-				mDelegate = nullptr;
-				delegate(IntegerToResult(indwResultCode));
-			}
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                if (mDelegate != nullptr)
+                {
+                    ResultDelegate delegate = mDelegate;
+                    mDelegate = nullptr;
+                    delegate(IntegerToResult(indwResultCode));
+                }
+            });
 		}
 	}
 }

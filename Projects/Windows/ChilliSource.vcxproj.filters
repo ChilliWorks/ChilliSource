@@ -1073,6 +1073,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.cpp">
       <Filter>ChilliSource\UI\Text</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.cpp">
+      <Filter>ChilliSource\Input\Keyboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

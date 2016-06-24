@@ -127,12 +127,9 @@ namespace CSBackend
             TextBufferChangedDelegate m_textBufferChangedDelegate;
             TextInputDeactivatedDelegate m_textInputDeactivatedDelegate;
 
-			ChilliSource::EventConnectionUPtr m_textEnteredConnection;
-
             std::mutex m_mutex;
 
             bool m_active = false;
-
 			std::string m_text;
 		};
 	}

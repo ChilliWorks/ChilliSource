@@ -48,7 +48,7 @@ namespace CSBackend
 
 			m_densityScale = m_invDensityScale = 1.0f;
 
-			m_displayModeChangeConnection = SFMLWindow::Get()->GetWindowDisplayModeEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Screen::OnDisplayModeChanged));
+            SFMLWindow::Get()->SetWindowDelegates(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged), ChilliSource::MakeDelegate(this, &Screen::OnDisplayModeChanged));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -140,14 +140,12 @@ namespace CSBackend
 		//------------------------------------------------
 		void Screen::OnInit()
 		{
-			m_windowResizeConnection = SFMLWindow::Get()->GetWindowResizedEvent().OpenConnection(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged));
 		}
 		//------------------------------------------------
 		//------------------------------------------------
 		void Screen::OnDestroy()
 		{
-			m_windowResizeConnection = nullptr;
-			m_displayModeChangeConnection = nullptr;
+            SFMLWindow::Get()->RemoveWindowDelegates();
 		}
     }
 }

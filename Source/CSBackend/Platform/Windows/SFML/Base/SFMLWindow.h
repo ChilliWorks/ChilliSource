@@ -40,16 +40,20 @@
 #include <SFML/Window.hpp>
 
 #include <functional>
+#include <mutex>
 
 namespace CSBackend
 {
 	namespace Windows
 	{
-		//---------------------------------------------------
+		//-----------------------------------------------------------
 		/// System that allows access to SFML and its window
+        ///
+        /// While some of the methods in this class are thread-safe,
+        /// most should be called on the system thread.
 		///
 		/// @author S Downie
-		//---------------------------------------------------
+		//-----------------------------------------------------------
 		class SFMLWindow final : public ChilliSource::Singleton<SFMLWindow>
 		{
 		public:
@@ -124,7 +128,7 @@ namespace CSBackend
 			///
 			/// @param UTF-8 character entered
 			//-----------------------------------------------------------
-			using TextEnteredEvent = std::function<void(ChilliSource::UTF8Char)>;
+			using TextEnteredDelegate = std::function<void(ChilliSource::UTF8Char)>;
 			//-------------------------------------------------------
 			/// Delegate that receieves events on the key with the
 			/// given code when key is pressed
@@ -211,69 +215,97 @@ namespace CSBackend
 			//----------------------------------------------------
 			void ShowCursor();
 			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when the window is resized
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<WindowResizeDelegate>& GetWindowResizedEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when the window fullscreen is enabled or disabled
-			//-------------------------------------------------
-			ChilliSource::IConnectableEvent<WindowDisplayModeDelegate>& GetWindowDisplayModeEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when a mouse button event occurs
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<MouseButtonDelegate>& GetMouseButtonEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when the mouse moves
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<MouseMovedDelegate>& GetMouseMovedEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when the mouse wheel scrolls
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<MouseWheelDelegate>& GetMouseWheelEvent();
-			//-------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return An event that is called when text is entered
-			//------------------------------------------------
-			ChilliSource::IConnectableEvent<TextEnteredEvent>& GetTextEnteredEvent();
-			//-------------------------------------------------------
-			/// Get the event that is triggered whenever a key is pressed.
-			///
-			/// This event is guaranteed and should be used for low
-			/// frequency events such as catching a confirm enter press.
-			/// The polling "IsDown" method should be used for realtime
-			/// events such as moving characters on arrow press, etc.
-			///
-			/// The event also returns the current state of the modifier
-			/// keys (Ctrl, Alt, Shift, etc.)
-			///
-			/// @author S Downie
-			///
-			/// @return Event to register for key presses
-			//-------------------------------------------------------
-			ChilliSource::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent();
-			//-------------------------------------------------------
-			/// Get the event that is triggered whenever a key is released.
-			///
-			/// This event is guaranteed and should be used for low
-			/// frequency events. The polling "IsUp" method should be
-			/// used for realtime events.
-			///
-			/// @author S Downie
-			///
-			/// @return Event to register for key releases
-			//-------------------------------------------------------
-			ChilliSource::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent();
+            /// Set the delegates that relate to window events.
+            /// This method will assert if a given delegate is null
+            /// or if the delegate has already been set.
+            ///
+            /// This method is thread-safe.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_windowResizeDelegate - The delegate to be
+            /// called when the window is resized.
+            /// @param in_windowDisplayModeDelegate - The delegate to be
+            /// called when the window's display mode is changed.
+            //-------------------------------------------------------
+            void SetWindowDelegates(const WindowResizeDelegate& in_windowResizeDelegate, const WindowDisplayModeDelegate& in_windowDisplayModeDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegates that relate to mouse events.
+            /// This method will assert if a given delegate is null
+            /// or if the delegate has already been set.
+            ///
+            /// This method is thread-safe.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_mouseButtonDelegate - The delegate to be
+            /// called when a mouse button event occurs.
+            /// @param in_mouseMovedDelegate - The delegate to be
+            /// called when the mouse is moved.
+            /// @param in_mouseWheelDelegate - The delegate to be
+            /// called when the mouse wheel is scrolled.
+            //-------------------------------------------------------
+            void SetMouseDelegates(const MouseButtonDelegate& in_mouseButtonDelegate, const MouseMovedDelegate& in_mouseMovedDelegate, const MouseWheelDelegate& in_mouseWheelDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegate that is called when text is entered.
+            /// This method will assert if a given delegate is null
+            /// or if the delegate has already been set.
+            ///
+            /// This method is thread-safe.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_textEnteredDelegate - The delegate to be
+            /// called.
+            //-------------------------------------------------------
+            void SetTextEnteredDelegate(const TextEnteredDelegate& in_textEnteredDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Set the delegates that relate to keyboard events.
+            /// This method will assert if a given delegate is null
+            /// or if the delegate has already been set.
+            ///
+            /// This method is thread-safe.
+            ///
+            /// @author Jordan Brown
+            ///
+            /// @param in_keyPressedDelegate - The delegate to be
+            /// called when a key is pressed.
+            /// @param in_keyReleasedDelegate - The delegate to be
+            /// called when a key is released.
+            //-------------------------------------------------------
+            void SetKeyDelegates(const KeyPressedDelegate& in_keyPressedDelegate, const KeyReleasedDelegate& in_keyReleasedDelegate) noexcept;
+            //-------------------------------------------------------
+            /// Remove the delegates that relate to window events.
+            ///
+            /// This method is thread-safe.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveWindowDelegates() noexcept;
+            //-------------------------------------------------------
+            /// Remove the delegates that relate to mouse events.
+            ///
+            /// This method is thread-safe.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveMouseDelegates() noexcept;
+            //-------------------------------------------------------
+            /// Remove the delegate that is called when text is entered.
+            ///
+            /// This method is thread-safe.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveTextEnteredDelegate() noexcept;
+            //-------------------------------------------------------
+            /// Remove the delegates that relate to keyboard events.
+            ///
+            /// This method is thread-safe.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            void RemoveKeyDelegates() noexcept;
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -299,6 +331,13 @@ namespace CSBackend
 			/// @author S Downie
 			//-------------------------------------------------
 			void Quit();
+            //-------------------------------------------------
+            /// Destructor; makes sure that delegates have been
+            /// properly un-set.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------
+            ~SFMLWindow() noexcept;
 
 		private:
 
@@ -319,14 +358,19 @@ namespace CSBackend
 
 			sf::Window m_window;
 
-			ChilliSource::Event<WindowResizeDelegate> m_windowResizeEvent;
-			ChilliSource::Event<WindowDisplayModeDelegate> m_windowDisplayModeEvent;
-			ChilliSource::Event<MouseButtonDelegate> m_mouseButtonEvent;
-			ChilliSource::Event<MouseMovedDelegate> m_mouseMovedEvent;
-			ChilliSource::Event<MouseWheelDelegate> m_mouseWheelEvent;
-			ChilliSource::Event<TextEnteredEvent> m_textEnteredEvent;
-			ChilliSource::Event<KeyPressedDelegate> m_keyPressedEvent;
-			ChilliSource::Event<KeyReleasedDelegate> m_keyReleasedEvent;
+            WindowResizeDelegate m_windowResizeDelegate;
+            WindowDisplayModeDelegate m_windowDisplayModeDelegate;
+            MouseButtonDelegate m_mouseButtonDelegate;
+            MouseMovedDelegate m_mouseMovedDelegate;
+            MouseWheelDelegate m_mouseWheelDelegate;
+            TextEnteredDelegate m_textEnteredDelegate;
+            KeyPressedDelegate m_keyPressedDelegate;
+            KeyReleasedDelegate m_keyReleasedDelegate;
+
+            std::mutex m_windowMutex;
+            std::mutex m_mouseMutex;
+            std::mutex m_textEntryMutex;
+            std::mutex m_keyMutex;
 
 			std::string m_title;
 

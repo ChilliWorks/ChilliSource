@@ -54,22 +54,11 @@ namespace CSBackend
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot activate system text entry outside of main thread.");
 			if (!m_active)
 			{
+                m_active = true;
 				m_text = in_text;
 				m_textBufferChangedDelegate = in_changeDelegate;
 				m_textInputDeactivatedDelegate = in_deactivateDelegate;
-
-                std::unique_lock<std::mutex> lock(m_mutex);
-                m_active = true;
-                lock.unlock();
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-                {
-                    std::unique_lock<std::mutex> taskLock(m_mutex);
-                    if (m_active)
-                    {
-                        m_textEnteredConnection = SFMLWindow::Get()->GetTextEnteredEvent().OpenConnection(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
-                    }
-                    taskLock.unlock();
-                });
+				SFMLWindow::Get()->SetTextEnteredDelegate(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
 			}
 		}
 		//-------------------------------------------------------
@@ -88,7 +77,7 @@ namespace CSBackend
                     std::unique_lock<std::mutex> taskLock(m_mutex);
                     if (!m_active)
                     {
-                        m_textEnteredConnection.reset();
+                        SFMLWindow::Get()->RemoveTextEnteredDelegate();
                         if (m_textInputDeactivatedDelegate != nullptr)
                         {
                             auto delegate = m_textInputDeactivatedDelegate;
