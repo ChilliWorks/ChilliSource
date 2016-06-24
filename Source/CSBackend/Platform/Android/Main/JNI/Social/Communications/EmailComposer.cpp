@@ -118,6 +118,7 @@ namespace CSBackend
         //-------------------------------------------------------
 		void EmailComposer::OnEmailClosed(EmailComposerJavaInterface::Result in_result)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Email closed callback not on main thread.");
 			if(m_javaInterface != nullptr)
 			{
 				EmailComposer::SendResult result = EmailComposer::SendResult::k_failed;
@@ -137,10 +138,7 @@ namespace CSBackend
 
 				SendResultDelegate delegate = m_resultDelegate;
 				m_resultDelegate = nullptr;
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& context)
-                {
-                    delegate(result);
-                });
+                delegate(result);
 			}
 		}
         //------------------------------------------------------
