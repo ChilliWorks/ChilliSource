@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8123B6781CE098BF008F8182 /* InputFilter.cpp */; };
+		812A42E11D1D7022000360A7 /* EditableTextUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A42DE1D1D7022000360A7 /* EditableTextUIComponent.cpp */; };
 		814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814E92B31CB54F76004D6ADE /* TaskPool.cpp */; };
 		8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */; };
 		8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FB1C89D2AC00B13109 /* CkBank.cpp */; };
@@ -333,6 +334,9 @@
 
 /* Begin PBXFileReference section */
 		8123B6781CE098BF008F8182 /* InputFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputFilter.cpp; sourceTree = "<group>"; };
+		812A42DE1D1D7022000360A7 /* EditableTextUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EditableTextUIComponent.cpp; sourceTree = "<group>"; };
+		812A42DF1D1D7022000360A7 /* EditableTextUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTextUIComponent.h; sourceTree = "<group>"; };
+		812A42E01D1D7022000360A7 /* TextComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextComponent.h; sourceTree = "<group>"; };
 		814E92B31CB54F76004D6ADE /* TaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPool.cpp; sourceTree = "<group>"; };
 		814E92B41CB54F76004D6ADE /* TaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskPool.h; sourceTree = "<group>"; };
 		8158F1EA1C89D27300B13109 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2301,6 +2305,9 @@
 		8158F47E1C89D2AD00B13109 /* Text */ = {
 			isa = PBXGroup;
 			children = (
+				812A42DE1D1D7022000360A7 /* EditableTextUIComponent.cpp */,
+				812A42DF1D1D7022000360A7 /* EditableTextUIComponent.h */,
+				812A42E01D1D7022000360A7 /* TextComponent.h */,
 				8158F47F1C89D2AD00B13109 /* TextUIComponent.cpp */,
 				8158F4801C89D2AD00B13109 /* TextUIComponent.h */,
 				8158F4811C89D2AD00B13109 /* TextIcon.cpp */,
@@ -3062,6 +3069,7 @@
 				8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */,
 				81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */,
 				8158F6831C89D2AD00B13109 /* ResourcePool.cpp in Sources */,
+				812A42E11D1D7022000360A7 /* EditableTextUIComponent.cpp in Sources */,
 				8158F7E51C89D2AD00B13109 /* WebViewDelegate.mm in Sources */,
 				8158F7141C89D2AD00B13109 /* UIDrawable.cpp in Sources */,
 				8158F6861C89D2AD00B13109 /* State.cpp in Sources */,
