@@ -34,6 +34,8 @@
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
+#include <ChilliSource/Input/TextEntry/TextEntryCapitalisation.h>
+#include <ChilliSource/Input/TextEntry/TextEntryType.h>
 
 namespace CSBackend
 {
@@ -107,7 +109,7 @@ namespace CSBackend
 			/// @param The keyboard type to be used the
 			/// next time the keyboard is displayed.
 			//-------------------------------------------
-            void SetKeyboardType(ChilliSource::TextEntry::Type ineKeyboardType);
+            void SetKeyboardType(ChilliSource::TextEntryType ineKeyboardType);
 			//-------------------------------------------
 			/// Set Capitalisation Method
 			///
@@ -115,7 +117,7 @@ namespace CSBackend
             /// used the next time the keyboard is
             /// displayed.
 			//-------------------------------------------
-            void SetCapitalisationMethod(ChilliSource::TextEntry::Capitalisation ineKeyboardCapitalisation);
+            void SetCapitalisationMethod(ChilliSource::TextEntryCapitalisation ineKeyboardCapitalisation);
 			//-----------------------------------------------
 			/// Called when the contents of the text buffer
             /// has changed

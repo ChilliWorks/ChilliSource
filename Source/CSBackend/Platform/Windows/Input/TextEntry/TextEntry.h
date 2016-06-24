@@ -35,7 +35,12 @@
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
+#include <ChilliSource/Input/TextEntry/TextEntryCapitalisation.h>
+#include <ChilliSource/Input/TextEntry/TextEntryType.h>
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
+
+#include <mutex>
+
 
 namespace CSBackend
 {
@@ -44,6 +49,9 @@ namespace CSBackend
         //----------------------------------------------------------------
         /// The iOS backend to the text entry system. This provides access
         /// to the iOS virtual keyboard functionality via a text buffer
+        ///
+        /// The methods in this class are not thread-safe and must be called
+        /// from the main thread.
         ///
         /// @author S Downie
         //----------------------------------------------------------------
@@ -70,7 +78,7 @@ namespace CSBackend
 			/// @param Text changed delegate
 			/// @param Deactivate delegate
 			//-------------------------------------------------------
-			void Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate) override;
+			void Activate(const std::string& in_text, ChilliSource::TextEntryType in_type, ChilliSource::TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate) override;
 			//-------------------------------------------------------
 			/// The system will no longer receive text input.
 			///
@@ -121,9 +129,10 @@ namespace CSBackend
             TextBufferChangedDelegate m_textBufferChangedDelegate;
             TextInputDeactivatedDelegate m_textInputDeactivatedDelegate;
 
-			std::string m_text;
+            std::mutex m_mutex;
 
             bool m_active = false;
+			std::string m_text;
 		};
 	}
 }

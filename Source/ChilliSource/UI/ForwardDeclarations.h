@@ -95,6 +95,7 @@ namespace ChilliSource
     //---------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(TextUIComponent);
     CS_FORWARDDECLARE_CLASS(TextIcon);
+    CS_FORWARDDECLARE_CLASS(EditableTextUIComponent);
 }
 
 #endif

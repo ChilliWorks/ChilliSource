@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
+#include <ChilliSource/Input/TextEntry.h>
 
 namespace ChilliSource
 {
@@ -54,6 +55,8 @@ namespace ChilliSource
         CS_DECLARE_PROPERTYTYPE(SliderDirection, SliderDirection);
         CS_DECLARE_PROPERTYTYPE(ProgressBarDirection, ProgressBarDirection);
         CS_DECLARE_PROPERTYTYPE(ProgressBarType, ProgressBarType);
+        CS_DECLARE_PROPERTYTYPE(TextEntryType, InputType);
+        CS_DECLARE_PROPERTYTYPE(TextEntryCapitalisation, CapitalisationFormat);
     }
 }
 

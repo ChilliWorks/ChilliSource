@@ -113,6 +113,8 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\Pointer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryType.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\MoContentDownloader.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpRequestSystem.cpp" />
@@ -248,6 +250,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarUIComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Slider\SliderDirection.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Slider\SliderUIComponent.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextIcon.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextUIComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Video\Base\CSSubtitlesProvider.cpp" />
@@ -466,6 +469,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\IContentDownloader.h" />
@@ -646,6 +651,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Slider\SliderDirection.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Slider\SliderUIComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextIcon.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextUIComponent.h" />

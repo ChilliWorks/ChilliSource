@@ -1,11 +1,6 @@
-//
-//  Text.h
-//  Chilli Source
-//  Created by Ian Copland on 05/11/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +21,29 @@
 //  THE SOFTWARE.
 //
 
+#include <ChilliSource/Input/TextEntry/TextEntryType.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
-#ifndef _CHILLISOURCE_UI_TEXT_H_
-#define _CHILLISOURCE_UI_TEXT_H_
+namespace ChilliSource
+{
+    //-------------------------------------------------------------------
+    TextEntryType ParseKeyboardInputType(const std::string& string) noexcept
+    {
+        std::string keyboardInputString = string;
+        StringUtils::ToLowerCase(keyboardInputString);
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Text/EditableTextUIComponent.h>
-#include <ChilliSource/UI/Text/TextUIComponent.h>
-#include <ChilliSource/UI/Text/TextIcon.h>
+        StringUtils::ToLowerCase(keyboardInputString);
 
-#endif
+        if (keyboardInputString == "text")
+        {
+            return TextEntryType::k_text;
+        }
+        else if (keyboardInputString == "numeric")
+        {
+            return TextEntryType::k_numeric;
+        }
+
+        CS_LOG_FATAL("Invalid keyboard input type.");
+        return TextEntryType::k_text;
+    }
+}

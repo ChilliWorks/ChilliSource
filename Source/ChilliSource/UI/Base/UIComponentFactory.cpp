@@ -35,6 +35,7 @@
 #include <ChilliSource/UI/ProgressBar/ProgressBarUIComponent.h>
 #include <ChilliSource/UI/Slider/SliderUIComponent.h>
 #include <ChilliSource/UI/Text/TextUIComponent.h>
+#include <ChilliSource/UI/Text/EditableTextUIComponent.h>
 
 namespace ChilliSource
 {
@@ -80,6 +81,7 @@ namespace ChilliSource
         Register<TextUIComponent>("Text");
         Register<ProgressBarUIComponent>("ProgressBar");
         Register<SliderUIComponent>("Slider");
+        Register<EditableTextUIComponent>("EditableText");
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

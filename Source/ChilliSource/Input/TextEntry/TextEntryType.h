@@ -1,11 +1,6 @@
-//
-//  Text.h
-//  Chilli Source
-//  Created by Ian Copland on 05/11/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +21,31 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_UI_TEXT_H_
-#define _CHILLISOURCE_UI_TEXT_H_
+#ifndef _CHILLISOURCE_INPUT_TEXTENTRY_TEXTENTRYTYPE_H_
+#define _CHILLISOURCE_INPUT_TEXTENTRY_TEXTENTRYTYPE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Text/EditableTextUIComponent.h>
-#include <ChilliSource/UI/Text/TextUIComponent.h>
-#include <ChilliSource/UI/Text/TextIcon.h>
+
+#include <functional>
+
+namespace ChilliSource
+{
+    /// An enum describing the different types of keyboard.
+    ///
+    enum class TextEntryType
+    {
+        k_text,
+        k_numeric
+    };
+
+    /// Parses a keyboard type from a string.
+    ///
+    /// @param string
+    ///     The string.
+    ///
+    /// @return The keyboard input type
+    ///
+    TextEntryType ParseKeyboardInputType(const std::string& string) noexcept;
+}
 
 #endif
