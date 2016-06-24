@@ -363,7 +363,7 @@ namespace CSBackend
         }
         //------------------------------------------------
         //------------------------------------------------
-        void SFMLWindow::SetTextEnteredDelegate(const TextEnteredDelegate in_textEnteredDelegate) noexcept
+        void SFMLWindow::SetTextEnteredDelegate(const TextEnteredDelegate& in_textEnteredDelegate) noexcept
         {
             CS_ASSERT(in_textEnteredDelegate, "Text entered delegate invalid.");
             CS_ASSERT(!m_textEnteredDelegate, "Text entered delegate already set.");
@@ -632,7 +632,7 @@ namespace CSBackend
 		}
         //------------------------------------------------
         //------------------------------------------------
-        SFMLWindow::~SFMLWindow()
+        SFMLWindow::~SFMLWindow() noexcept
         {
             CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate not removed.");
             CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate not removed.");

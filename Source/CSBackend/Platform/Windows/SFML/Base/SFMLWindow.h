@@ -244,6 +244,7 @@ namespace CSBackend
             /// called when the mouse is moved.
             /// @param in_mouseWheelDelegate - The delegate to be
             /// called when the mouse wheel is scrolled.
+            //-------------------------------------------------------
             void SetMouseDelegates(const MouseButtonDelegate& in_mouseButtonDelegate, const MouseMovedDelegate& in_mouseMovedDelegate, const MouseWheelDelegate& in_mouseWheelDelegate) noexcept;
             //-------------------------------------------------------
             /// Set the delegate that is called when text is entered.
@@ -257,7 +258,7 @@ namespace CSBackend
             /// @param in_textEnteredDelegate - The delegate to be
             /// called.
             //-------------------------------------------------------
-            void SetTextEnteredDelegate(const TextEnteredDelegate in_textEnteredDelegate) noexcept;
+            void SetTextEnteredDelegate(const TextEnteredDelegate& in_textEnteredDelegate) noexcept;
             //-------------------------------------------------------
             /// Set the delegates that relate to keyboard events.
             /// This method will assert if a given delegate is null
@@ -335,7 +336,8 @@ namespace CSBackend
             /// properly un-set.
             ///
             /// @author Jordan Brown
-            ~SFMLWindow();
+            //-------------------------------------------------
+            ~SFMLWindow() noexcept;
 
 		private:
 
