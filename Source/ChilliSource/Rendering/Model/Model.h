@@ -120,7 +120,6 @@ namespace ChilliSource
     private:
         friend class ResourcePool;
         friend class CSModelProvider;
-        friend class MeshBatch;
         
         /// A factory method for creating new, empty instances of the resource. This must only be
         /// called by ResourcePool.

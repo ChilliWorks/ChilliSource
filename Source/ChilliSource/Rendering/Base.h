@@ -44,7 +44,6 @@
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
-#include <ChilliSource/Rendering/Base/MeshBatch.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>

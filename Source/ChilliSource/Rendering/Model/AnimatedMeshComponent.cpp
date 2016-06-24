@@ -36,7 +36,6 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
-#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 
 #include <algorithm>
 #include <limits>
