@@ -287,7 +287,7 @@
 		816D96BB1CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816D96B91CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp */; };
 		81729FA41D1BE681005B8CC9 /* GLMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA21D1BE681005B8CC9 /* GLMaterial.cpp */; };
 		81729FA81D1BE92B005B8CC9 /* GLCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA61D1BE92B005B8CC9 /* GLCamera.cpp */; };
-		81729FAB1D1BFF05005B8CC9 /* TextureUnitManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA91D1BFF05005B8CC9 /* TextureUnitManager.cpp */; };
+		81729FAB1D1BFF05005B8CC9 /* GLTextureUnitManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA91D1BFF05005B8CC9 /* GLTextureUnitManager.cpp */; };
 		817EA3541CFC3B0C00828E08 /* RenderMaterialGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817EA3521CFC3B0C00828E08 /* RenderMaterialGroupManager.cpp */; };
 		8184CE8D1D0EFBC600E35BE8 /* IRenderCommandProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8184CE8B1D0EFBC600E35BE8 /* IRenderCommandProcessor.cpp */; };
 		8184CE901D0EFF9100E35BE8 /* RenderCommandProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8184CE8E1D0EFF9100E35BE8 /* RenderCommandProcessor.cpp */; };
@@ -1078,8 +1078,8 @@
 		81729FA31D1BE681005B8CC9 /* GLMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLMaterial.h; sourceTree = "<group>"; };
 		81729FA61D1BE92B005B8CC9 /* GLCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCamera.cpp; sourceTree = "<group>"; };
 		81729FA71D1BE92B005B8CC9 /* GLCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCamera.h; sourceTree = "<group>"; };
-		81729FA91D1BFF05005B8CC9 /* TextureUnitManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureUnitManager.cpp; sourceTree = "<group>"; };
-		81729FAA1D1BFF05005B8CC9 /* TextureUnitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitManager.h; sourceTree = "<group>"; };
+		81729FA91D1BFF05005B8CC9 /* GLTextureUnitManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureUnitManager.cpp; sourceTree = "<group>"; };
+		81729FAA1D1BFF05005B8CC9 /* GLTextureUnitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTextureUnitManager.h; sourceTree = "<group>"; };
 		817EA3521CFC3B0C00828E08 /* RenderMaterialGroupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderMaterialGroupManager.cpp; sourceTree = "<group>"; };
 		817EA3531CFC3B0C00828E08 /* RenderMaterialGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderMaterialGroupManager.h; sourceTree = "<group>"; };
 		8184CE8B1D0EFBC600E35BE8 /* IRenderCommandProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IRenderCommandProcessor.cpp; sourceTree = "<group>"; };
@@ -2972,8 +2972,8 @@
 			children = (
 				81A5AF651D1190FB00307707 /* GLTexture.cpp */,
 				81A5AF661D1190FB00307707 /* GLTexture.h */,
-				81729FA91D1BFF05005B8CC9 /* TextureUnitManager.cpp */,
-				81729FAA1D1BFF05005B8CC9 /* TextureUnitManager.h */,
+				81729FA91D1BFF05005B8CC9 /* GLTextureUnitManager.cpp */,
+				81729FAA1D1BFF05005B8CC9 /* GLTextureUnitManager.h */,
 			);
 			path = Texture;
 			sourceTree = "<group>";
@@ -3613,7 +3613,7 @@
 				8158F6C01C89D2AD00B13109 /* DirectionalLightComponent.cpp in Sources */,
 				8158F69D1C89D2AD00B13109 /* HoldGesture.cpp in Sources */,
 				8158F7CA1C89D2AD00B13109 /* RNGContainer.mm in Sources */,
-				81729FAB1D1BFF05005B8CC9 /* TextureUnitManager.cpp in Sources */,
+				81729FAB1D1BFF05005B8CC9 /* GLTextureUnitManager.cpp in Sources */,
 				8158F7081C89D2AD00B13109 /* PropertyTypes.cpp in Sources */,
 				8158F6511C89D2AD00B13109 /* ByteColour.cpp in Sources */,
 				818BC4A81CFDEE3C001DC484 /* RenderPassObjectSorter.cpp in Sources */,

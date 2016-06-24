@@ -145,7 +145,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::Init() noexcept
         {
-            m_textureUnitManager = TextureUnitManagerUPtr(new TextureUnitManager());
+            m_textureUnitManager = GLTextureUnitManagerUPtr(new GLTextureUnitManager());
             
             ResetCache();
         }

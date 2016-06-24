@@ -22,7 +22,7 @@
 //  THE SOFTWARE.
 //
 
-#include <CSBackend/Rendering/OpenGL/Texture/TextureUnitManager.h>
+#include <CSBackend/Rendering/OpenGL/Texture/GLTextureUnitManager.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
@@ -34,7 +34,7 @@ namespace CSBackend
     namespace OpenGL
     {
         //------------------------------------------------------------------------------
-        TextureUnitManager::TextureUnitManager() noexcept
+        GLTextureUnitManager::GLTextureUnitManager() noexcept
         {
             s32 numTextureUnits = 0;
             glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &numTextureUnits);
@@ -49,7 +49,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void TextureUnitManager::Bind(const std::vector<const ChilliSource::RenderTexture*> textures) noexcept
+        void GLTextureUnitManager::Bind(const std::vector<const ChilliSource::RenderTexture*> textures) noexcept
         {
             for (u32 textureUnitIndex = 0; textureUnitIndex < u32(textures.size()); ++textureUnitIndex)
             {
@@ -70,7 +70,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void TextureUnitManager::Reset() noexcept
+        void GLTextureUnitManager::Reset() noexcept
         {
             for (auto& texture : m_boundTextures)
             {
