@@ -316,6 +316,7 @@
 		81C7FFD81C89DDE300D306F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */; };
 		81C7FFD91C89DDE300D306F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC11C89DDE300D306F9 /* UIKit.framework */; };
 		81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */; };
+		81EEEC361D1988A90092346C /* KeyCode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81EEEC351D1988A90092346C /* KeyCode.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1116,6 +1117,7 @@
 		81C7FFC11C89DDE300D306F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SizePolicy.cpp; sourceTree = "<group>"; };
 		81E3AA971CE241F600DF7B4E /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
+		81EEEC351D1988A90092346C /* KeyCode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyCode.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1726,6 +1728,7 @@
 			children = (
 				8158F3191C89D2AD00B13109 /* Keyboard.cpp */,
 				8158F31A1C89D2AD00B13109 /* Keyboard.h */,
+				81EEEC351D1988A90092346C /* KeyCode.cpp */,
 				8158F31B1C89D2AD00B13109 /* KeyCode.h */,
 				8158F31C1C89D2AD00B13109 /* ModifierKeyCode.h */,
 			);
@@ -3202,6 +3205,7 @@
 				8158F6EE1C89D2AD00B13109 /* SphereParticleEmitter.cpp in Sources */,
 				8158F6CC1C89D2AD00B13109 /* Skeleton.cpp in Sources */,
 				8158F7D61C89D2AD00B13109 /* HttpRequest.mm in Sources */,
+				81EEEC361D1988A90092346C /* KeyCode.cpp in Sources */,
 				8158F6C71C89D2AD00B13109 /* CSAnimProvider.cpp in Sources */,
 				8158F7CF1C89D2AD00B13109 /* Accelerometer.mm in Sources */,
 				8158F6A51C89D2AD00B13109 /* ContentManagementSystem.cpp in Sources */,
