@@ -30,6 +30,9 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebView.h>
 
@@ -66,7 +69,10 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
 {
-	CSBackend::Android::WebView::OnWebViewDismissed(inudwIndex);
+    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& in_taskContext)
+    {
+        CSBackend::Android::WebView::OnWebViewDismissed(inudwIndex);
+    });
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
