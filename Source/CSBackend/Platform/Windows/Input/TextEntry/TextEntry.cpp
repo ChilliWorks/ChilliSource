@@ -52,41 +52,28 @@ namespace CSBackend
 		void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot activate system text entry outside of main thread.");
-			if (!m_active)
-			{
-                m_active = true;
-				m_text = in_text;
-				m_textBufferChangedDelegate = in_changeDelegate;
-				m_textInputDeactivatedDelegate = in_deactivateDelegate;
-				SFMLWindow::Get()->SetTextEnteredDelegate(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
-			}
+            CS_ASSERT(!m_active, "Cannot activate TextEntry system while already active.");
+
+            m_active = true;
+			m_text = in_text;
+			m_textBufferChangedDelegate = in_changeDelegate;
+			m_textInputDeactivatedDelegate = in_deactivateDelegate;
+			SFMLWindow::Get()->SetTextEnteredDelegate(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
         void TextEntry::Deactivate()
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot deactivate system text entry outside of main thread.");
-            if (m_active)
+            CS_ASSERT(m_active, "Cannot deactivate TextEntry system when not active.");
+
+            m_active = false;
+            SFMLWindow::Get()->RemoveTextEnteredDelegate();
+            if (m_textInputDeactivatedDelegate != nullptr)
             {
-                std::unique_lock<std::mutex> lock(m_mutex);
-                m_active = false;
-                lock.unlock();
-                
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-                {
-                    std::unique_lock<std::mutex> taskLock(m_mutex);
-                    if (!m_active)
-                    {
-                        SFMLWindow::Get()->RemoveTextEnteredDelegate();
-                        if (m_textInputDeactivatedDelegate != nullptr)
-                        {
-                            auto delegate = m_textInputDeactivatedDelegate;
-                            m_textInputDeactivatedDelegate = nullptr;
-                            delegate();
-                        }
-                    }
-                    taskLock.unlock();
-                });
+                auto delegate = m_textInputDeactivatedDelegate;
+                m_textInputDeactivatedDelegate = nullptr;
+                delegate();
             }
 		}
         //-------------------------------------------------------
@@ -111,43 +98,39 @@ namespace CSBackend
         }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void TextEntry::OnTextEntered(ChilliSource::UTF8Char in_unicodeChar)
-		{
+        void TextEntry::OnTextEntered(ChilliSource::UTF8Char in_unicodeChar)
+        {
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
                 std::unique_lock<std::mutex> lock(m_mutex);
-                if (m_active)
+                const ChilliSource::UTF8Char k_backspace = 8;
+
+                std::string text;
+
+                if (in_unicodeChar != k_backspace)
                 {
-                    const ChilliSource::UTF8Char k_backspace = 8;
-
-                    std::string text;
-
-                    if (in_unicodeChar != k_backspace)
-                    {
-                        text = ChilliSource::UTF8StringUtils::AppendCopy(in_unicodeChar, m_text);
-                    }
-                    else
-                    {
-                        s32 length = (s32)ChilliSource::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end());
-                        length = std::max(length - 1, 0);
-                        text = ChilliSource::UTF8StringUtils::SubString(m_text, 0, (u32)length);
-                    }
-
-                    bool acceptText = true;
-
-                    if (m_textBufferChangedDelegate != nullptr)
-                    {
-                        acceptText = m_textBufferChangedDelegate(text);
-                    }
-
-                    if (acceptText == true)
-                    {
-                        m_text = text;
-                    }
+                    text = ChilliSource::UTF8StringUtils::AppendCopy(in_unicodeChar, m_text);
                 }
-                lock.unlock();
+                else
+                {
+                    s32 length = (s32)ChilliSource::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end());
+                    length = std::max(length - 1, 0);
+                    text = ChilliSource::UTF8StringUtils::SubString(m_text, 0, (u32)length);
+                }
+
+                bool acceptText = true;
+
+                if (m_textBufferChangedDelegate != nullptr)
+                {
+                    acceptText = m_textBufferChangedDelegate(text);
+                }
+
+                if (acceptText == true)
+                {
+                    m_text = text;
+                }
             });
-		}
+        }
 	}
 }
 
