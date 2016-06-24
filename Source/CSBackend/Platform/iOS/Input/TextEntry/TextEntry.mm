@@ -65,7 +65,8 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
+        void TextEntry::Activate(const std::string& in_text, ChilliSource::TextEntryType in_type, ChilliSource::TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate,
+                                 const TextInputDeactivatedDelegate& in_deactivateDelegate)
         {
             if (IsActive() == false && [m_textView canBecomeFirstResponder])
             {
@@ -119,16 +120,16 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void TextEntry::SetType(Type in_type)
+        void TextEntry::SetType(ChilliSource::TextEntryType in_type)
         {
             if(m_textView != nullptr)
             {
                 switch (in_type)
                 {
-                    case ChilliSource::TextEntry::Type::k_text:
+                    case ChilliSource::TextEntryType::k_text:
                         m_textView.keyboardType = UIKeyboardTypeASCIICapable;
                         break;
-                    case ChilliSource::TextEntry::Type::k_numeric:
+                    case ChilliSource::TextEntryType::k_numeric:
                         m_textView.keyboardType = UIKeyboardTypeNumberPad;
                         break;
                     default:
@@ -140,22 +141,22 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void TextEntry::SetCapitalisation(Capitalisation in_capitalisation)
+        void TextEntry::SetCapitalisation(ChilliSource::TextEntryCapitalisation in_capitalisation)
         {
             if(m_textView != nullptr)
             {
                 switch (in_capitalisation)
                 {
-                    case ChilliSource::TextEntry::Capitalisation::k_none:
+                    case ChilliSource::TextEntryCapitalisation::k_none:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
                         break;
-                    case ChilliSource::TextEntry::Capitalisation::k_words:
+                    case ChilliSource::TextEntryCapitalisation::k_words:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeWords;
                         break;
-                    case ChilliSource::TextEntry::Capitalisation::k_sentences:
+                    case ChilliSource::TextEntryCapitalisation::k_sentences:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
                         break;
-                    case ChilliSource::TextEntry::Capitalisation::k_all:
+                    case ChilliSource::TextEntryCapitalisation::k_all:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
                         break;
                     default:

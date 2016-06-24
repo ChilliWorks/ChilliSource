@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8123B6781CE098BF008F8182 /* InputFilter.cpp */; };
 		812A42E11D1D7022000360A7 /* EditableTextUIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A42DE1D1D7022000360A7 /* EditableTextUIComponent.cpp */; };
+		812A42F61D1D8C7B000360A7 /* TextEntryCapitalisation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A42F21D1D8C7B000360A7 /* TextEntryCapitalisation.cpp */; };
+		812A42F71D1D8C7B000360A7 /* TextEntryType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A42F41D1D8C7B000360A7 /* TextEntryType.cpp */; };
 		814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814E92B31CB54F76004D6ADE /* TaskPool.cpp */; };
 		8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */; };
 		8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FB1C89D2AC00B13109 /* CkBank.cpp */; };
@@ -337,6 +339,10 @@
 		812A42DE1D1D7022000360A7 /* EditableTextUIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EditableTextUIComponent.cpp; sourceTree = "<group>"; };
 		812A42DF1D1D7022000360A7 /* EditableTextUIComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTextUIComponent.h; sourceTree = "<group>"; };
 		812A42E01D1D7022000360A7 /* TextComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextComponent.h; sourceTree = "<group>"; };
+		812A42F21D1D8C7B000360A7 /* TextEntryCapitalisation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEntryCapitalisation.cpp; sourceTree = "<group>"; };
+		812A42F31D1D8C7B000360A7 /* TextEntryCapitalisation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEntryCapitalisation.h; sourceTree = "<group>"; };
+		812A42F41D1D8C7B000360A7 /* TextEntryType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEntryType.cpp; sourceTree = "<group>"; };
+		812A42F51D1D8C7B000360A7 /* TextEntryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEntryType.h; sourceTree = "<group>"; };
 		814E92B31CB54F76004D6ADE /* TaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPool.cpp; sourceTree = "<group>"; };
 		814E92B41CB54F76004D6ADE /* TaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskPool.h; sourceTree = "<group>"; };
 		8158F1EA1C89D27300B13109 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1753,6 +1759,10 @@
 		8158F3241C89D2AD00B13109 /* TextEntry */ = {
 			isa = PBXGroup;
 			children = (
+				812A42F21D1D8C7B000360A7 /* TextEntryCapitalisation.cpp */,
+				812A42F31D1D8C7B000360A7 /* TextEntryCapitalisation.h */,
+				812A42F41D1D8C7B000360A7 /* TextEntryType.cpp */,
+				812A42F51D1D8C7B000360A7 /* TextEntryType.h */,
 				8158F3251C89D2AD00B13109 /* TextEntry.cpp */,
 				8158F3261C89D2AD00B13109 /* TextEntry.h */,
 			);
@@ -3168,6 +3178,7 @@
 				8158F6751C89D2AD00B13109 /* JsonUtils.cpp in Sources */,
 				8158F6651C89D2AD00B13109 /* Entity.cpp in Sources */,
 				8158F6971C89D2AD00B13109 /* Accelerometer.cpp in Sources */,
+				812A42F71D1D8C7B000360A7 /* TextEntryType.cpp in Sources */,
 				8158F7C41C89D2AD00B13109 /* PlatformSystem.mm in Sources */,
 				8158F69C1C89D2AD00B13109 /* GestureSystem.cpp in Sources */,
 				8158F71E1C89D2AD00B13109 /* GridUILayout.cpp in Sources */,
@@ -3245,6 +3256,7 @@
 				8158F6A31C89D2AD00B13109 /* PointerSystem.cpp in Sources */,
 				8158F6541C89D2AD00B13109 /* Device.cpp in Sources */,
 				8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */,
+				812A42F61D1D8C7B000360A7 /* TextEntryCapitalisation.cpp in Sources */,
 				8158F8001C89D2AD00B13109 /* Texture.cpp in Sources */,
 				8158F7D41C89D2AD00B13109 /* Main.cpp in Sources */,
 				8158F6DC1C89D2AD00B13109 /* ConcurrentParticleData.cpp in Sources */,
