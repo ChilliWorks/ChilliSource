@@ -1,11 +1,6 @@
-//
-//  TextEntry.cpp
-//  Chilli Source
-//  Created by Scott Downie on 08/07/2014
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,37 +21,41 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Input/TextEntry/TextEntry.h>
+#ifndef _CHILLISOURCE_INPUT_TEXTENTRY_TEXTENTRYCAPITALISATION_H_
+#define _CHILLISOURCE_INPUT_TEXTENTRY_TEXTENTRYCAPITALISATION_H_
 
-#ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Main/JNI/Input/TextEntry/TextEntry.h>
-#endif
+#include <ChilliSource/ChilliSource.h>
 
-#ifdef CS_TARGETPLATFORM_IOS
-#include <CSBackend/Platform/iOS/Input/TextEntry/TextEntry.h>
-#endif
-
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
-#endif
+#include <functional>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(TextEntry);
-    
-    //-------------------------------------------------------
-    //-------------------------------------------------------
-    TextEntryUPtr TextEntry::Create()
+    /// An enum describing the various methods of keyboard
+    /// capitalisation that can be used.
+    ///
+    ///  - None: will not capitalise anything.
+    ///  - Words: will capitalise the first letter
+    ///	   of each word.
+    ///  - Sentences: will capitalise the first letter
+    ///	   of each sentence.
+    ///  - All: will capitalise every letter.
+    ///
+    enum class TextEntryCapitalisation
     {
-#if defined CS_TARGETPLATFORM_ANDROID
-        return TextEntryUPtr(new CSBackend::Android::TextEntry());
-#elif defined CS_TARGETPLATFORM_IOS
-        return TextEntryUPtr(new CSBackend::iOS::TextEntry());
-#elif defined CS_TARGETPLATFORM_WINDOWS
-        return TextEntryUPtr(new CSBackend::Windows::TextEntry());
-#else
-        return nullptr;
-#endif
+        k_none,
+        k_words,
+        k_sentences,
+        k_all
+    };
 
-    }
+    /// Parses keyboard capitalisation method from a string.
+    ///
+    /// @param string
+    ///     The string.
+    ///
+    /// @return The capitalisation method.
+    ///
+    TextEntryCapitalisation ParseCapitalisationFormat(const std::string& string) noexcept;
 }
+
+#endif

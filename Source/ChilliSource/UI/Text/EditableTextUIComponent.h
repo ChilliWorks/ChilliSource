@@ -86,11 +86,11 @@ namespace ChilliSource
 
         /// @return The keyboard input type.
         ///
-        const ChilliSource::TextEntry::Type&  GetInputType() const noexcept;
+        const ChilliSource::TextEntryType&  GetInputType() const noexcept;
 
         /// @return The capitalisation format.
         ///
-        const ChilliSource::TextEntry::Capitalisation& GetCapitalisationFormat() const noexcept;
+        const ChilliSource::TextEntryCapitalisation& GetCapitalisationFormat() const noexcept;
 
         /// Set initial text present in the field.
         /// 
@@ -118,14 +118,14 @@ namespace ChilliSource
         /// @param type
         ///     The desired keyboard input type.
         ///
-        void SetInputType(ChilliSource::TextEntry::Type type) noexcept;
+        void SetInputType(ChilliSource::TextEntryType type) noexcept;
 
         /// Set capitalisation format. 
         ///
         /// @param format
         ///     The desired capitalisation format.
         ///
-        void SetCapitalisationFormat(ChilliSource::TextEntry::Capitalisation format) noexcept;
+        void SetCapitalisationFormat(ChilliSource::TextEntryCapitalisation format) noexcept;
 
         /// Enables text entry and invokes virtual keyboard on mobile devices.
         ///
@@ -146,7 +146,7 @@ namespace ChilliSource
         /// @param properties
         ///     The property map.
         ///
-        EditableTextUIComponent(const std::string& componentName, const PropertyMap& properties);
+        EditableTextUIComponent(const std::string& componentName, const PropertyMap& properties) noexcept;
 
         /// Called when text entry is active and the text has been changed.
         ///
@@ -206,8 +206,8 @@ namespace ChilliSource
         bool m_multilineDisabled = false;
         s32 m_maxCharacters = 50;
         std::string m_initialText = "";
-        ChilliSource::TextEntry::Type m_inputType = ChilliSource::TextEntry::Type::k_text;
-        ChilliSource::TextEntry::Capitalisation m_capitalisationFormat = ChilliSource::TextEntry::Capitalisation::k_sentences;
+        ChilliSource::TextEntryType m_inputType = ChilliSource::TextEntryType::k_text;
+        ChilliSource::TextEntryCapitalisation m_capitalisationFormat = ChilliSource::TextEntryCapitalisation::k_sentences;
 
         EventConnectionUPtr m_releasedInsideConnection;
         EventConnectionUPtr m_releasedOutsideConnection;

@@ -59,14 +59,14 @@ namespace ChilliSource
     }
 
     //-------------------------------------------------------
-    EditableTextUIComponent::EditableTextUIComponent(const std::string& componentName, const PropertyMap& properties)
-        : UIComponent(componentName)
+    EditableTextUIComponent::EditableTextUIComponent(const std::string& componentName, const PropertyMap& properties) noexcept
+        : UIComponent(componentName) 
     {
         RegisterProperty<std::string>(PropertyTypes::String(), k_initialTextKey, MakeDelegate(this, &EditableTextUIComponent::GetInitialText), MakeDelegate(this, &EditableTextUIComponent::SetInitialText));
         RegisterProperty<s32>(PropertyTypes::Int(), k_maxCharactersKey, MakeDelegate(this, &EditableTextUIComponent::GetMaxCharacters), MakeDelegate(this, &EditableTextUIComponent::SetMaxCharacters));
         RegisterProperty<bool>(PropertyTypes::Bool(), k_multilineDisabledKey, MakeDelegate(this, &EditableTextUIComponent::GetMultilineDisabled), MakeDelegate(this, &EditableTextUIComponent::SetMultilineDisabled));
-        RegisterProperty<ChilliSource::TextEntry::Type>(PropertyTypes::InputType(), k_inputTypeKey, MakeDelegate(this, &EditableTextUIComponent::GetInputType), MakeDelegate(this, &EditableTextUIComponent::SetInputType));
-        RegisterProperty<ChilliSource::TextEntry::Capitalisation>(PropertyTypes::CapitalisationFormat(), k_capitalisationFormatKey, MakeDelegate(this, &EditableTextUIComponent::GetCapitalisationFormat), MakeDelegate(this, &EditableTextUIComponent::SetCapitalisationFormat));
+        RegisterProperty<ChilliSource::TextEntryType>(PropertyTypes::InputType(), k_inputTypeKey, MakeDelegate(this, &EditableTextUIComponent::GetInputType), MakeDelegate(this, &EditableTextUIComponent::SetInputType));
+        RegisterProperty<ChilliSource::TextEntryCapitalisation>(PropertyTypes::CapitalisationFormat(), k_capitalisationFormatKey, MakeDelegate(this, &EditableTextUIComponent::GetCapitalisationFormat), MakeDelegate(this, &EditableTextUIComponent::SetCapitalisationFormat));
         ApplyRegisteredProperties(properties);
     }
 
@@ -95,13 +95,13 @@ namespace ChilliSource
     }
 
     //--------------------------------------------------------
-    const ChilliSource::TextEntry::Type& EditableTextUIComponent::GetInputType() const noexcept
+    const ChilliSource::TextEntryType& EditableTextUIComponent::GetInputType() const noexcept
     {
         return m_inputType;
     }
 
     //--------------------------------------------------------
-    const ChilliSource::TextEntry::Capitalisation& EditableTextUIComponent::GetCapitalisationFormat() const noexcept
+    const ChilliSource::TextEntryCapitalisation& EditableTextUIComponent::GetCapitalisationFormat() const noexcept
     {
         return m_capitalisationFormat;
     }
@@ -125,13 +125,13 @@ namespace ChilliSource
     }
 
     //--------------------------------------------------------
-    void EditableTextUIComponent::SetInputType(ChilliSource::TextEntry::Type type) noexcept
+    void EditableTextUIComponent::SetInputType(ChilliSource::TextEntryType type) noexcept
     {
         m_inputType = type;
     }
 
     //--------------------------------------------------------
-    void EditableTextUIComponent::SetCapitalisationFormat(ChilliSource::TextEntry::Capitalisation format) noexcept
+    void EditableTextUIComponent::SetCapitalisationFormat(ChilliSource::TextEntryCapitalisation format) noexcept
     {
         m_capitalisationFormat = format;
     }
@@ -142,6 +142,11 @@ namespace ChilliSource
         CS_ASSERT(!m_active, "Can't activate text entry if it is already active.");
         m_active = true;
         m_uiDirty = true;
+
+        if (m_textEntrySystem->IsActive())
+        {
+            m_textEntrySystem->Deactivate();
+        }
 
         m_textEntrySystem->Activate(m_initialText, m_inputType, m_capitalisationFormat, MakeDelegate(this, &EditableTextUIComponent::OnTextChanged), MakeDelegate(this, &EditableTextUIComponent::OnTextEntryDismissed));
     }
@@ -174,8 +179,7 @@ namespace ChilliSource
             }
         }
 
-        // Need to update text on UI. This function is for internal validation of TextEntry system.
-        m_uiDirty = true;
+        m_textComponent->SetText(newText);
 
         return true;
     }

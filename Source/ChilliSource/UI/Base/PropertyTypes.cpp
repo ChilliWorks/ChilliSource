@@ -56,7 +56,7 @@ namespace ChilliSource
         CS_DEFINE_PROPERTYTYPE(ChilliSource::SliderDirection, SliderDirection, ChilliSource::SliderDirection::k_horizontal, &ParseSliderDirection);
         CS_DEFINE_PROPERTYTYPE(ChilliSource::ProgressBarDirection, ProgressBarDirection, ChilliSource::ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
         CS_DEFINE_PROPERTYTYPE(ChilliSource::ProgressBarType, ProgressBarType, ChilliSource::ProgressBarType::k_stretch, &ParseProgressBarType);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::TextEntry::Type, InputType, ChilliSource::TextEntry::Type::k_text, &ParseKeyboardInputType);
-        CS_DEFINE_PROPERTYTYPE(ChilliSource::TextEntry::Capitalisation, CapitalisationFormat, ChilliSource::TextEntry::Capitalisation::k_sentences, &ParseCapitalisationFormat);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::TextEntryType, InputType, ChilliSource::TextEntryType::k_text, &ParseKeyboardInputType);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::TextEntryCapitalisation, CapitalisationFormat, ChilliSource::TextEntryCapitalisation::k_sentences, &ParseCapitalisationFormat);
     }
 }

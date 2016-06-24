@@ -108,13 +108,13 @@ namespace CSBackend
 			/// @param The keyboard type to convert.
 			/// @return The keyboard type in integer form.
 			//-----------------------------------------------
-			s32 KeyboardTypeToInteger(ChilliSource::TextEntry::Type ineKeyboardType)
+			s32 KeyboardTypeToInteger(ChilliSource::TextEntryType ineKeyboardType)
 			{
 				switch (ineKeyboardType)
 				{
-				case ChilliSource::TextEntry::Type::k_text:
+				case ChilliSource::TextEntryType::k_text:
 					return 0;
-				case ChilliSource::TextEntry::Type::k_numeric:
+				case ChilliSource::TextEntryType::k_numeric:
 					return 1;
 				default:
 					CS_LOG_ERROR("Invalid keyboard type, cannot be converted.");
@@ -132,17 +132,17 @@ namespace CSBackend
 			/// @return The Keyboard Capitalisation in integer
 			/// form.
 			//-----------------------------------------------
-			s32 KeyboardCapitalisationToInteger(ChilliSource::TextEntry::Capitalisation ineKeyboardCapitalisation)
+			s32 KeyboardCapitalisationToInteger(ChilliSource::TextEntryCapitalisation ineKeyboardCapitalisation)
 			{
 				switch (ineKeyboardCapitalisation)
 				{
-				case ChilliSource::TextEntry::Capitalisation::k_none:
+				case ChilliSource::TextEntryCapitalisation::k_none:
 					return 0;
-				case ChilliSource::TextEntry::Capitalisation::k_sentences:
+				case ChilliSource::TextEntryCapitalisation::k_sentences:
 					return 1;
-				case ChilliSource::TextEntry::Capitalisation::k_words:
+				case ChilliSource::TextEntryCapitalisation::k_words:
 					return 2;
-				case ChilliSource::TextEntry::Capitalisation::k_all:
+				case ChilliSource::TextEntryCapitalisation::k_all:
 					return 3;
 				default:
 					CS_LOG_ERROR("Invalid keyboard capitalisation, cannot be converted.");
@@ -206,7 +206,7 @@ namespace CSBackend
 		}
 		//-------------------------------------------
 		//-------------------------------------------
-        void TextEntryJavaInterface::SetKeyboardType(ChilliSource::TextEntry::Type ineKeyboardType)
+        void TextEntryJavaInterface::SetKeyboardType(ChilliSource::TextEntryType ineKeyboardType)
         {
         	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	s32 dwKeyboardType = KeyboardTypeToInteger(ineKeyboardType);
@@ -214,7 +214,7 @@ namespace CSBackend
         }
 		//-------------------------------------------
 		//-------------------------------------------
-        void TextEntryJavaInterface::SetCapitalisationMethod(ChilliSource::TextEntry::Capitalisation ineKeyboardCapitalisation)
+        void TextEntryJavaInterface::SetCapitalisationMethod(ChilliSource::TextEntryCapitalisation ineKeyboardCapitalisation)
         {
         	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	s32 dwKeyboardCapitalisation = KeyboardCapitalisationToInteger(ineKeyboardCapitalisation);

@@ -34,6 +34,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
+#include <ChilliSource/Input/TextEntry/TextEntryCapitalisation.h>
+#include <ChilliSource/Input/TextEntry/TextEntryType.h>
+
 
 namespace CSBackend
 {
@@ -73,7 +76,7 @@ namespace CSBackend
             /// @param Text changed delegate
             /// @param Deactivate delegate
             //-------------------------------------------------------
-			void Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate) override;
+			void Activate(const std::string& in_text, ChilliSource::TextEntryType in_type, ChilliSource::TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate) override;
             //-------------------------------------------------------
             /// The system will no longer receive text input. This
             /// will also hide the virtual keyboard if required

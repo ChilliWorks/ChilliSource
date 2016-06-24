@@ -1,11 +1,6 @@
-//
-//  TextEntry.cpp
-//  Chilli Source
-//  Created by Scott Downie on 08/07/2014
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,37 +21,29 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Input/TextEntry/TextEntry.h>
-
-#ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Main/JNI/Input/TextEntry/TextEntry.h>
-#endif
-
-#ifdef CS_TARGETPLATFORM_IOS
-#include <CSBackend/Platform/iOS/Input/TextEntry/TextEntry.h>
-#endif
-
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
-#endif
+#include <ChilliSource/Input/TextEntry/TextEntryType.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(TextEntry);
-    
-    //-------------------------------------------------------
-    //-------------------------------------------------------
-    TextEntryUPtr TextEntry::Create()
+    //-------------------------------------------------------------------
+    TextEntryType ParseKeyboardInputType(const std::string& string) noexcept
     {
-#if defined CS_TARGETPLATFORM_ANDROID
-        return TextEntryUPtr(new CSBackend::Android::TextEntry());
-#elif defined CS_TARGETPLATFORM_IOS
-        return TextEntryUPtr(new CSBackend::iOS::TextEntry());
-#elif defined CS_TARGETPLATFORM_WINDOWS
-        return TextEntryUPtr(new CSBackend::Windows::TextEntry());
-#else
-        return nullptr;
-#endif
+        std::string keyboardInputString = string;
+        StringUtils::ToLowerCase(keyboardInputString);
 
+        StringUtils::ToLowerCase(keyboardInputString);
+
+        if (keyboardInputString == "text")
+        {
+            return TextEntryType::k_text;
+        }
+        else if (keyboardInputString == "numeric")
+        {
+            return TextEntryType::k_numeric;
+        }
+
+        CS_LOG_FATAL("Invalid keyboard input type.");
+        return TextEntryType::k_text;
     }
 }
