@@ -28,7 +28,7 @@
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
-#include <CSBackend/Rendering/OpenGL/Texture/TextureUnitManager.h>
+#include <CSBackend/Rendering/OpenGL/Texture/GLTextureUnitManager.h>
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
@@ -148,7 +148,7 @@ namespace CSBackend
             
             bool m_initRequired = true;
             
-            TextureUnitManagerUPtr m_textureUnitManager;
+            GLTextureUnitManagerUPtr m_textureUnitManager;
             GLCamera m_currentCamera;
             const ChilliSource::RenderShader* m_currentShader = nullptr;
             const ChilliSource::RenderMaterial* m_currentMaterial = nullptr;

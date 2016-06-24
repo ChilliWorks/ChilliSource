@@ -41,12 +41,12 @@ namespace CSBackend
         ///
         /// This is not thread-safe and should only be accessed from the render thread.
         ///
-        class TextureUnitManager final
+        class GLTextureUnitManager final
         {
         public:
-            CS_DECLARE_NOCOPY(TextureUnitManager);
+            CS_DECLARE_NOCOPY(GLTextureUnitManager);
             
-            TextureUnitManager() noexcept;
+            GLTextureUnitManager() noexcept;
             
             /// @return The number of available texture slots.
             ///
