@@ -162,13 +162,6 @@ namespace ChilliSource
         ///
         void OnInit() noexcept override;
 
-        /// Called every frame.
-        ///
-        /// @param deltaTime
-        ///     Time passed since last frame.
-        ///
-        void OnUpdate(f32 deltaTime) noexcept override;
-
         /// Called when a pointer is released inside the bounds of the owning
         /// widget. This will toggle the text entry & virtual keyboard.
         ///
@@ -199,8 +192,6 @@ namespace ChilliSource
 
         TextUIComponent* m_textComponent = nullptr;
         TextEntry* m_textEntrySystem = nullptr;
-
-        bool m_uiDirty = true;
 
         bool m_active = false;
         bool m_multilineDisabled = false;

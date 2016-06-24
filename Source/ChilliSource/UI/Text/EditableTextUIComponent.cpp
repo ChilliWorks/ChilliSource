@@ -141,7 +141,6 @@ namespace ChilliSource
     {
         CS_ASSERT(!m_active, "Can't activate text entry if it is already active.");
         m_active = true;
-        m_uiDirty = true;
 
         if (m_textEntrySystem->IsActive())
         {
@@ -215,16 +214,6 @@ namespace ChilliSource
         }
     }
 
-    //-----------------------------------------------------------
-    void EditableTextUIComponent::OnUpdate(f32 deltaTime) noexcept
-    {
-        if (m_uiDirty)
-        {
-            m_textComponent->SetText(m_textEntrySystem->GetTextBuffer());
-            m_uiDirty = false;
-        }
-    }
-
     //------------------------------------------------------------
     void EditableTextUIComponent::OnInit() noexcept
     {
@@ -238,8 +227,6 @@ namespace ChilliSource
 
         m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(MakeDelegate(this, &EditableTextUIComponent::OnReleasedInside));
         m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(MakeDelegate(this, &EditableTextUIComponent::OnReleasedOutside));
-        
-        m_uiDirty = true;
     }
 
     //-------------------------------------------------------------
