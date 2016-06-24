@@ -299,8 +299,7 @@ namespace CSBackend
 				flag = false;
 			}
 
-			SFMLWindow::Get()->SetKeyPressedDelegate(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyPressed));
-			SFMLWindow::Get()->SetKeyReleasedDelegate(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyReleased));
+			SFMLWindow::Get()->SetKeyDelegates(ChilliSource::MakeDelegate(this, &Keyboard::OnKeyPressed), ChilliSource::MakeDelegate(this, &Keyboard::OnKeyReleased));
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -369,8 +368,7 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void Keyboard::OnDestroy()
 		{
-            SFMLWindow::Get()->RemoveKeyPressedDelegate();
-            SFMLWindow::Get()->RemoveKeyReleasedDelegate();
+            SFMLWindow::Get()->RemoveKeyDelegates();
 
 			for (auto& flag : m_keysDown)
 			{

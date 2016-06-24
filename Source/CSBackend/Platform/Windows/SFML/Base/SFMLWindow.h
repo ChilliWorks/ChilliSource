@@ -46,11 +46,14 @@ namespace CSBackend
 {
 	namespace Windows
 	{
-		//---------------------------------------------------
+		//-----------------------------------------------------------
 		/// System that allows access to SFML and its window
+        ///
+        /// While some of the methods in this class are thread-safe,
+        /// most should be called on the system thread.
 		///
 		/// @author S Downie
-		//---------------------------------------------------
+		//-----------------------------------------------------------
 		class SFMLWindow final : public ChilliSource::Singleton<SFMLWindow>
 		{
 		public:
@@ -212,57 +215,42 @@ namespace CSBackend
 			//----------------------------------------------------
 			void ShowCursor();
 			//-------------------------------------------------
-            /// Set the delegate that is called when the window is
-            /// resized.
+            /// Set the delegates that relate to window events.
+            /// This method will assert if a given delegate is null
+            /// or if the delegate has already been set.
+            ///
+            /// This method is thread-safe.
             ///
             /// @author Jordan Brown
             ///
             /// @param in_windowResizeDelegate - The delegate to be
-            /// called.
-            //-------------------------------------------------------
-            void SetWindowResizedDelegate(const WindowResizeDelegate in_windowResizeDelegate) noexcept;
-            //-------------------------------------------------------
-            /// Set the delegate that is called when the window's
-            /// display mode is changed (e.g. fullscreen toggle)
-            ///
-            /// @author Jordan Brown
-            ///
+            /// called when the window is resized.
             /// @param in_windowDisplayModeDelegate - The delegate to be
-            /// called.
+            /// called when the window's display mode is changed.
             //-------------------------------------------------------
-            void SetWindowDisplayModeDelegate(const WindowDisplayModeDelegate in_windowDisplayModeDelegate) noexcept;
+            void SetWindowDelegates(const WindowResizeDelegate& in_windowResizeDelegate, const WindowDisplayModeDelegate& in_windowDisplayModeDelegate) noexcept;
             //-------------------------------------------------------
-            /// Set the delegate that is called when a mouse button
-            /// event occurs.
+            /// Set the delegates that relate to mouse events.
+            /// This method will assert if a given delegate is null
+            /// or if the delegate has already been set.
+            ///
+            /// This method is thread-safe.
             ///
             /// @author Jordan Brown
             ///
             /// @param in_mouseButtonDelegate - The delegate to be
-            /// called.
-            //-------------------------------------------------------
-            void SetMouseButtonDelegate(const MouseButtonDelegate in_mouseButtonDelegate) noexcept;
-            //-------------------------------------------------------
-            /// Set the delegate that is called when the mouse
-            /// moves.
-            ///
-            /// @author Jordan Brown
-            ///
+            /// called when a mouse button event occurs.
             /// @param in_mouseMovedDelegate - The delegate to be
-            /// called.
-            //-------------------------------------------------------
-            void SetMouseMovedDelegate(const MouseMovedDelegate in_mouseMovedDelegate) noexcept;
-            ////-------------------------------------------------------
-            /// Set the delegate that is called when the mouse wheel
-            /// scrolls.
-            ///
-            /// @author Jordan Brown
-            ///
-            /// @param in_windowResizeDelegate - The delegate to be
-            /// called.
-            //-------------------------------------------------------
-            void SetMouseWheelDelegate(const MouseWheelDelegate in_mouseWheelDelegate) noexcept;
+            /// called when the mouse is moved.
+            /// @param in_mouseWheelDelegate - The delegate to be
+            /// called when the mouse wheel is scrolled.
+            void SetMouseDelegates(const MouseButtonDelegate& in_mouseButtonDelegate, const MouseMovedDelegate& in_mouseMovedDelegate, const MouseWheelDelegate& in_mouseWheelDelegate) noexcept;
             //-------------------------------------------------------
             /// Set the delegate that is called when text is entered.
+            /// This method will assert if a given delegate is null
+            /// or if the delegate has already been set.
+            ///
+            /// This method is thread-safe.
             ///
             /// @author Jordan Brown
             ///
@@ -271,55 +259,52 @@ namespace CSBackend
             //-------------------------------------------------------
             void SetTextEnteredDelegate(const TextEnteredDelegate in_textEnteredDelegate) noexcept;
             //-------------------------------------------------------
-            /// Set the delegate that is called when a key is pressed.
+            /// Set the delegates that relate to keyboard events.
+            /// This method will assert if a given delegate is null
+            /// or if the delegate has already been set.
+            ///
+            /// This method is thread-safe.
             ///
             /// @author Jordan Brown
             ///
             /// @param in_keyPressedDelegate - The delegate to be
-            /// called.
-            //-------------------------------------------------------
-            void SetKeyPressedDelegate(const KeyPressedDelegate in_keyPressedDelegate) noexcept;
-            //-------------------------------------------------------
-            /// Set the delegate that is called when a key is released.
-            ///
-            /// @author Jordan Brown
-            ///
+            /// called when a key is pressed.
             /// @param in_keyReleasedDelegate - The delegate to be
-            /// called.
+            /// called when a key is released.
             //-------------------------------------------------------
-            void SetKeyReleasedDelegate(const KeyReleasedDelegate in_keyReleasedDelegate) noexcept;
+            void SetKeyDelegates(const KeyPressedDelegate& in_keyPressedDelegate, const KeyReleasedDelegate& in_keyReleasedDelegate) noexcept;
             //-------------------------------------------------------
+            /// Remove the delegates that relate to window events.
+            ///
+            /// This method is thread-safe.
+            ///
             /// @author Jordan Brown
             //-------------------------------------------------------
-            void RemoveWindowResizedDelegate() noexcept;
+            void RemoveWindowDelegates() noexcept;
             //-------------------------------------------------------
+            /// Remove the delegates that relate to mouse events.
+            ///
+            /// This method is thread-safe.
+            ///
             /// @author Jordan Brown
             //-------------------------------------------------------
-            void RemoveWindowDisplayModeDelegate() noexcept;
+            void RemoveMouseDelegates() noexcept;
             //-------------------------------------------------------
-            /// @author Jordan Brown
-            //-------------------------------------------------------
-            void RemoveMouseButtonDelegate() noexcept;
-            //-------------------------------------------------------
-            /// @author Jordan Brown
-            //-------------------------------------------------------
-            void RemoveMouseMovedDelegate() noexcept;
-            //-------------------------------------------------------
-            /// @author Jordan Brown
-            //-------------------------------------------------------
-            void RemoveMouseWheelDelegate() noexcept;
-            //-------------------------------------------------------
+            /// Remove the delegate that is called when text is entered.
+            ///
+            /// This method is thread-safe.
+            ///
             /// @author Jordan Brown
             //-------------------------------------------------------
             void RemoveTextEnteredDelegate() noexcept;
             //-------------------------------------------------------
+            /// Remove the delegates that relate to keyboard events.
+            ///
+            /// This method is thread-safe.
+            ///
             /// @author Jordan Brown
             //-------------------------------------------------------
-            void RemoveKeyPressedDelegate() noexcept;
-            //-------------------------------------------------------
-            /// @author Jordan Brown
-            //-------------------------------------------------------
-            void RemoveKeyReleasedDelegate() noexcept;
+            void RemoveKeyDelegates() noexcept;
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -345,6 +330,12 @@ namespace CSBackend
 			/// @author S Downie
 			//-------------------------------------------------
 			void Quit();
+            //-------------------------------------------------
+            /// Destructor; makes sure that delegates have been
+            /// properly un-set.
+            ///
+            /// @author Jordan Brown
+            ~SFMLWindow();
 
 		private:
 
@@ -374,7 +365,10 @@ namespace CSBackend
             KeyPressedDelegate m_keyPressedDelegate;
             KeyReleasedDelegate m_keyReleasedDelegate;
 
-            std::mutex m_mutex;
+            std::mutex m_windowMutex;
+            std::mutex m_mouseMutex;
+            std::mutex m_textEntryMutex;
+            std::mutex m_keyMutex;
 
 			std::string m_title;
 

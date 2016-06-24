@@ -81,19 +81,13 @@ namespace CSBackend
 
             auto screenResolution = m_screen->GetResolution();
 
-            SFMLWindow::Get()->SetMouseButtonDelegate(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent));
-            SFMLWindow::Get()->SetMouseMovedDelegate(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved));
-            SFMLWindow::Get()->SetMouseWheelDelegate(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
+            SFMLWindow::Get()->SetMouseDelegates(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
 
-            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
-            {
-                //create the mouse pointer
-                ChilliSource::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
-                ChilliSource::Vector2 mousePos((f32)mousePosi.x, screenResolution.y - (f32)mousePosi.y);
+            //create the mouse pointer
+            ChilliSource::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
+            ChilliSource::Vector2 mousePos((f32)mousePosi.x, screenResolution.y - (f32)mousePosi.y);
 
-                m_pointerId = AddPointerCreateEvent(mousePos);
-
-            });
+            m_pointerId = AddPointerCreateEvent(mousePos);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -155,9 +149,7 @@ namespace CSBackend
 		{
 			AddPointerRemoveEvent(m_pointerId);
 
-            SFMLWindow::Get()->RemoveMouseButtonDelegate();
-            SFMLWindow::Get()->RemoveMouseMovedDelegate();
-            SFMLWindow::Get()->RemoveMouseWheelDelegate();
+            SFMLWindow::Get()->RemoveMouseDelegates();
 
 			m_screen = nullptr;
 		}

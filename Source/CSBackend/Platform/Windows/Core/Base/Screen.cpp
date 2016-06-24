@@ -48,7 +48,7 @@ namespace CSBackend
 
 			m_densityScale = m_invDensityScale = 1.0f;
 
-            SFMLWindow::Get()->SetWindowDisplayModeDelegate(ChilliSource::MakeDelegate(this, &Screen::OnDisplayModeChanged));
+            SFMLWindow::Get()->SetWindowDelegates(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged), ChilliSource::MakeDelegate(this, &Screen::OnDisplayModeChanged));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -140,13 +140,12 @@ namespace CSBackend
 		//------------------------------------------------
 		void Screen::OnInit()
 		{
-			SFMLWindow::Get()->SetWindowResizedDelegate(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged));
 		}
 		//------------------------------------------------
 		//------------------------------------------------
 		void Screen::OnDestroy()
 		{
-            SFMLWindow::Get()->RemoveWindowDisplayModeDelegate();
+            SFMLWindow::Get()->RemoveWindowDelegates();
 		}
     }
 }

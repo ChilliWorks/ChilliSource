@@ -291,12 +291,11 @@ namespace CSBackend
 				{
 					auto windowSize = GetWindowSize();
 					m_window.create(sf::VideoMode(windowSize.x, windowSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
+                    
+                    std::unique_lock<std::mutex> lock(m_windowMutex);
                     if (m_windowDisplayModeDelegate)
                     {
-                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                        {
-                            m_windowDisplayModeDelegate(DisplayMode::k_fullscreen);
-                        });
+                        m_windowDisplayModeDelegate(DisplayMode::k_fullscreen);
                     }
 					break;
 				}
@@ -308,12 +307,11 @@ namespace CSBackend
 		{
 			auto windowSize = GetWindowSize();
 			m_window.create(sf::VideoMode(windowSize.x, windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
+            
+            std::unique_lock<std::mutex> lock(m_windowMutex);
             if (m_windowDisplayModeDelegate)
             {
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                {
-                    m_windowDisplayModeDelegate(DisplayMode::k_windowed);
-                });
+                m_windowDisplayModeDelegate(DisplayMode::k_windowed);
             }
 		}
 		//----------------------------------------------------------
@@ -336,130 +334,88 @@ namespace CSBackend
 		}
         //------------------------------------------------
         //------------------------------------------------
-        void SFMLWindow::SetWindowResizedDelegate(const WindowResizeDelegate in_windowResizedDelegate) noexcept
+        void SFMLWindow::SetWindowDelegates(const WindowResizeDelegate& in_windowResizeDelegate, const WindowDisplayModeDelegate& in_windowDisplayModeDelegate) noexcept
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            m_windowResizeDelegate = in_windowResizedDelegate;
-            lock.unlock();
-        }
-        //------------------------------------------------
-        //------------------------------------------------
-        void SFMLWindow::SetWindowDisplayModeDelegate(const WindowDisplayModeDelegate in_windowDisplayModeDelegate) noexcept
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(in_windowResizeDelegate, "Window resize delegate invalid.");
+            CS_ASSERT(in_windowDisplayModeDelegate, "Window display mode delegate invalid.");
+            CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate already set.");
+            CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate already set.");
+
+            std::unique_lock<std::mutex> lock(m_windowMutex);
+            m_windowResizeDelegate = in_windowResizeDelegate;
             m_windowDisplayModeDelegate = in_windowDisplayModeDelegate;
-            lock.unlock();
         }
         //------------------------------------------------
         //------------------------------------------------
-        void SFMLWindow::SetMouseButtonDelegate(const MouseButtonDelegate in_mouseButtonDelegate) noexcept
+        void SFMLWindow::SetMouseDelegates(const MouseButtonDelegate& in_mouseButtonDelegate, const MouseMovedDelegate& in_mouseMovedDelegate, const MouseWheelDelegate& in_mouseWheelDelegate) noexcept
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(in_mouseButtonDelegate, "Mouse button event delegate invalid.");
+            CS_ASSERT(in_mouseMovedDelegate, "Mouse moved delegate invalid.");
+            CS_ASSERT(in_mouseWheelDelegate, "Mouse wheel scroll delegate invalid.");
+            CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate already set.");
+            CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate already set.");
+            CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate already set.");
+
+            std::unique_lock<std::mutex> lock(m_mouseMutex);
             m_mouseButtonDelegate = in_mouseButtonDelegate;
-            lock.unlock();
-        }
-        //------------------------------------------------
-        //------------------------------------------------
-        void SFMLWindow::SetMouseMovedDelegate(const MouseMovedDelegate in_mouseMovedDelegate) noexcept
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
             m_mouseMovedDelegate = in_mouseMovedDelegate;
-            lock.unlock();
-        }
-        //------------------------------------------------
-        //------------------------------------------------
-        void SFMLWindow::SetMouseWheelDelegate(const MouseWheelDelegate in_mouseWheelDelegate) noexcept
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
             m_mouseWheelDelegate = in_mouseWheelDelegate;
-            lock.unlock();
         }
         //------------------------------------------------
         //------------------------------------------------
         void SFMLWindow::SetTextEnteredDelegate(const TextEnteredDelegate in_textEnteredDelegate) noexcept
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(in_textEnteredDelegate, "Text entered delegate invalid.");
+            CS_ASSERT(!m_textEnteredDelegate, "Text entered delegate already set.");
+
+            std::unique_lock<std::mutex> lock(m_textEntryMutex);
             m_textEnteredDelegate = in_textEnteredDelegate;
-            lock.unlock();
         }
         //------------------------------------------------
         //------------------------------------------------
-        void SFMLWindow::SetKeyPressedDelegate(const KeyPressedDelegate in_keyPressedDelegate) noexcept
+        void SFMLWindow::SetKeyDelegates(const KeyPressedDelegate& in_keyPressedDelegate, const KeyReleasedDelegate& in_keyReleasedDelegate) noexcept
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(in_keyPressedDelegate, "Key pressed delegate invalid.");
+            CS_ASSERT(in_keyReleasedDelegate, "Key released delegate invalid.");
+            CS_ASSERT(!m_keyPressedDelegate, "Key pressed delegate already set.");
+            CS_ASSERT(!m_keyReleasedDelegate, "Key released delegate already set.");
+
+            std::unique_lock<std::mutex> lock(m_keyMutex);
             m_keyPressedDelegate = in_keyPressedDelegate;
-            lock.unlock();
-        }
-        //------------------------------------------------
-        //------------------------------------------------
-        void SFMLWindow::SetKeyReleasedDelegate(const KeyReleasedDelegate in_keyReleasedDelegate) noexcept
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
             m_keyReleasedDelegate = in_keyReleasedDelegate;
-            lock.unlock();
         }
         //------------------------------------------------
         //------------------------------------------------
-        void SFMLWindow::RemoveWindowResizedDelegate() noexcept
+        void SFMLWindow::RemoveWindowDelegates() noexcept
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_windowMutex);
             m_windowResizeDelegate = nullptr;
-            lock.unlock();
-        }        //------------------------------------------------
-                 //------------------------------------------------
-        void SFMLWindow::RemoveWindowDisplayModeDelegate() noexcept
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
             m_windowDisplayModeDelegate = nullptr;
-            lock.unlock();
-        }        //------------------------------------------------
-                 //------------------------------------------------
-        void SFMLWindow::RemoveMouseButtonDelegate() noexcept
+        }        
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveMouseDelegates() noexcept
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_mouseMutex);
             m_mouseButtonDelegate = nullptr;
-            lock.unlock();
-        }
-        //------------------------------------------------
-        //------------------------------------------------
-        void SFMLWindow::RemoveMouseMovedDelegate() noexcept
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
             m_mouseMovedDelegate = nullptr;
-            lock.unlock();
-        }
-        //------------------------------------------------
-        //------------------------------------------------
-        void SFMLWindow::RemoveMouseWheelDelegate() noexcept
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
             m_mouseWheelDelegate = nullptr;
-            lock.unlock();
         }
         //------------------------------------------------
-         //------------------------------------------------
+        //------------------------------------------------
         void SFMLWindow::RemoveTextEnteredDelegate() noexcept
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_textEntryMutex);
             m_textEnteredDelegate = nullptr;
-            lock.unlock();
         }        
         //------------------------------------------------
         //------------------------------------------------
-        void SFMLWindow::RemoveKeyPressedDelegate() noexcept
+        void SFMLWindow::RemoveKeyDelegates() noexcept
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_keyMutex);
             m_keyPressedDelegate = nullptr;
-            lock.unlock();
-        }        
-        //------------------------------------------------
-        //------------------------------------------------
-        void SFMLWindow::RemoveKeyReleasedDelegate() noexcept
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
             m_keyReleasedDelegate = nullptr;
-            lock.unlock();
-        }
+        }        
 		//------------------------------------------------
 		//------------------------------------------------
 		ChilliSource::Integer2 SFMLWindow::GetWindowSize() const
@@ -552,14 +508,14 @@ namespace CSBackend
 							app->Quit();
 							return;
 						case sf::Event::Resized:
+                        {
+                            std::unique_lock<std::mutex> lock(m_windowMutex);
                             if (m_windowResizeDelegate)
                             {
-                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                                {
-                                    m_windowResizeDelegate(ChilliSource::Integer2(s32(event.size.width), s32(event.size.height)));
-                                });
+                                m_windowResizeDelegate(ChilliSource::Integer2(s32(event.size.width), s32(event.size.height)));
                             }
-							break;
+                            break;
+                        }
 						case sf::Event::GainedFocus:
 							if (m_isFocused == false)
 							{
@@ -575,68 +531,66 @@ namespace CSBackend
 							}
 							break;
 						case sf::Event::MouseButtonPressed:
+                        {
+                            std::unique_lock<std::mutex> lock(m_mouseMutex);
                             if (m_mouseButtonDelegate)
                             {
-                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                                {
-                                    m_mouseButtonDelegate(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
-                                });
+                                m_mouseButtonDelegate(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
                             }
-							break;
+                            break;
+                        }
 						case sf::Event::MouseButtonReleased:
+                        {
+                            std::unique_lock<std::mutex> lock(m_mouseMutex);
                             if (m_mouseButtonDelegate)
                             {
-                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                                {
-                                    m_mouseButtonDelegate(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
-                                });
+                                m_mouseButtonDelegate(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
                             }
-							break;
+                            break;
+                        }
 						case sf::Event::MouseMoved:
+                        {
+                            std::unique_lock<std::mutex> lock(m_mouseMutex);
                             if (m_mouseMovedDelegate)
                             {
-                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                                {
-                                    m_mouseMovedDelegate(event.mouseMove.x, event.mouseMove.y);
-                                });
+                                m_mouseMovedDelegate(event.mouseMove.x, event.mouseMove.y);
                             }
-							break;
+                            break;
+                        }
 						case sf::Event::MouseWheelMoved:
+                        {
+                            std::unique_lock<std::mutex> lock(m_mouseMutex);
                             if (m_mouseWheelDelegate)
                             {
-                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                                {
-                                    m_mouseWheelDelegate(event.mouseWheel.delta);
-                                });
+                                m_mouseWheelDelegate(event.mouseWheel.delta);
                             }
-							break;
+                            break;
+                        }
 						case sf::Event::KeyPressed:
+                        {
+                            std::unique_lock<std::mutex> lock(m_keyMutex);
                             if (m_keyPressedDelegate)
                             {
-                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                                {
-                                    m_keyPressedDelegate(event.key.code, event.key);
-                                });
+                                m_keyPressedDelegate(event.key.code, event.key);
                             }
-							break;
+                            break;
+                        }
 						case sf::Event::KeyReleased:
+                        {
+                            std::unique_lock<std::mutex> lock(m_keyMutex);
                             if (m_keyReleasedDelegate)
                             {
-                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                                {
-                                    m_keyReleasedDelegate(event.key.code);
-                                });
+                                m_keyReleasedDelegate(event.key.code);
                             }
-							break;
+                            break;
+                        }
 						case sf::Event::TextEntered:
 						{
+                            std::unique_lock<std::mutex> lock(m_textEntryMutex);
                             if (m_textEnteredDelegate)
                             {
-                                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-                                {
-                                    ChilliSource::UTF8Char utf8Char = event.text.unicode;
-                                    m_textEnteredDelegate(utf8Char);
-                                });
+                                ChilliSource::UTF8Char utf8Char = event.text.unicode;
+                                m_textEnteredDelegate(utf8Char);
                             }
 							break;
 						}
@@ -676,7 +630,21 @@ namespace CSBackend
 
 			m_isRunning = false;
 		}
+        //------------------------------------------------
+        //------------------------------------------------
+        SFMLWindow::~SFMLWindow()
+        {
+            CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate not removed.");
+            CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate not removed.");
+            CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
+            CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
+            CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate not removed.");
+            CS_ASSERT(!m_textEnteredDelegate, "Text entry delegate not removed.");
+            CS_ASSERT(!m_keyPressedDelegate, "Key press delegate not removed.");
+            CS_ASSERT(!m_keyReleasedDelegate, "Key release delegate not removed.");
+        }
 	}
 }
 
 #endif
+
