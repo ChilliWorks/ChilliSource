@@ -151,7 +151,7 @@ namespace CSBackend
             auto taggedFilePath = ChilliSource::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
 
 			bool inApk = false;
-			std::string absFilePath = absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+			std::string absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
 			s32 fileOffset = -1;
 			s32 fileLength = -1;
             if (in_storageLocation == ChilliSource::StorageLocation::k_package || in_storageLocation == ChilliSource::StorageLocation::k_package)
