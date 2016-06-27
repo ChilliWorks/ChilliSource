@@ -200,7 +200,7 @@ public class VideoPlayer extends System
 	protected void updateSubtitles()
 	{
 		m_updateSubtitlesEvent = true;
-		OnUpdateSubtitles();
+		onUpdateSubtitles();
 		m_updateSubtitlesEvent = false;
 	}
 	/**
@@ -219,7 +219,7 @@ public class VideoPlayer extends System
 	 *
 	 * @author Ian Copland
 	 */
-	private native void OnUpdateSubtitles();
+	private native void onUpdateSubtitles();
 	/**
 	 * Notifies the native side of the engine that video playback has completed.
 	 *
