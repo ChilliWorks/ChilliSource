@@ -109,6 +109,12 @@ namespace ChilliSource
         ///
         void AddRenderObject(const RenderObject& renderObject) noexcept;
         
+        /// Adds a RenderDynamicMesh to the snapshot. This will be deleted at the end of the frame.
+        ///
+        /// @param The render dynamic mesh.
+        ///
+        void AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept;
+        
         /// @return A modifiable version of the pre render command list. This can be used to populate
         ///     The list with additional commands.
         ///
@@ -149,6 +155,12 @@ namespace ChilliSource
         ///
         std::vector<RenderObject> ClaimRenderObjects() noexcept;
         
+        /// Moves the list of render dynamic meshes to a new external owner.
+        ///
+        /// @return The moved list of dynamic meshes.
+        ///
+        std::vector<RenderDynamicMeshUPtr> ClaimRenderDynamicMeshes() noexcept;
+        
         /// Moves the pre render command list to a new external owner.
         ///
         /// @return The moved pre render command list.
@@ -169,6 +181,7 @@ namespace ChilliSource
         std::vector<RenderDirectionalLight> m_renderDirectionalLights;
         std::vector<RenderPointLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
+        std::vector<RenderDynamicMeshUPtr> m_renderDynamicMeshes;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
         
@@ -177,6 +190,7 @@ namespace ChilliSource
         bool m_renderDirectionalLightsClaimed = false;
         bool m_renderPointLightsClaimed = false;
         bool m_renderObjectsClaimed = false;
+        bool m_renderDynamicMeshesClaimed = false;
     };
 };
 

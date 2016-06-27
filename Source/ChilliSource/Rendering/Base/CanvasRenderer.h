@@ -35,8 +35,7 @@
 #include <ChilliSource/Rendering/Base/CanvasMaterialPool.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
-#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
-#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 #include <unordered_map>
 
@@ -102,7 +101,6 @@ namespace ChilliSource
         /// @author HMcLaughlin
         //----------------------------------------------------------------------------
         using WrappedText = std::vector<std::string>;
-        
         //----------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -111,12 +109,6 @@ namespace ChilliSource
         /// @return Whether the class implements the given interface
         //----------------------------------------------------------------------------
         bool IsA(InterfaceIDType in_interfaceId) const override;
-        //----------------------------------------------------------
-        /// Render
-        ///
-        /// Draw UI
-        //----------------------------------------------------------
-        void Render(Canvas* in_canvas);
         //----------------------------------------------------------------------------
         /// Set the bounds beyond which any subviews will clip
         /// Pushes to a stack which tracks when to enable and
@@ -198,6 +190,16 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         void OnInit() override;
         //----------------------------------------------------------------------------
+        /// Called when the render snapshot event occurs. This iterates over all UI
+        /// adding objects to the render snapshot as appropriate.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render snapshot object which contains all
+        /// snapshotted data.
+        //----------------------------------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        //----------------------------------------------------------------------------
         /// Called when the system is destroyed
         ///
         /// @author S Downie
@@ -205,11 +207,8 @@ namespace ChilliSource
         void OnDestroy() override;
 
     private:
+        RenderSnapshot* m_currentRenderSnapshot = nullptr;
         
-        SpriteBatch::SpriteData m_canvasSprite;
-
-        DynamicSpriteBatchUPtr m_overlayBatcher;
-
         std::vector<Vector2> m_scissorPositions;
         std::vector<Vector2> m_scissorSizes;
 
@@ -218,6 +217,6 @@ namespace ChilliSource
         ResourcePool* m_resourcePool;
         Screen* m_screen;
     };
-	}
+}
 
 #endif

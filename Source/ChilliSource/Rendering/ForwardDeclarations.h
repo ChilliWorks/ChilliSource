@@ -105,6 +105,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(Model);
     CS_FORWARDDECLARE_CLASS(ModelDesc);
     CS_FORWARDDECLARE_CLASS(PrimitiveModelFactory);
+    CS_FORWARDDECLARE_CLASS(RenderDynamicMesh);
     CS_FORWARDDECLARE_CLASS(RenderMesh);
     CS_FORWARDDECLARE_CLASS(RenderMeshManager);
     CS_FORWARDDECLARE_CLASS(Skeleton);

@@ -362,6 +362,8 @@
 		81C7FFD71C89DDE300D306F9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */; };
 		81C7FFD81C89DDE300D306F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */; };
 		81C7FFD91C89DDE300D306F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC11C89DDE300D306F9 /* UIKit.framework */; };
+		81CA86B41D216EBE002CE6A0 /* RenderDynamicMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CA86B21D216EBE002CE6A0 /* RenderDynamicMesh.cpp */; };
+		81CA86B81D2190DB002CE6A0 /* SpriteMeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CA86B61D2190DB002CE6A0 /* SpriteMeshBuilder.cpp */; };
 		81E3AA981CE241F600DF7B4E /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */; };
 /* End PBXBuildFile section */
 
@@ -1262,6 +1264,10 @@
 		81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		81C7FFC11C89DDE300D306F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		81CA86B21D216EBE002CE6A0 /* RenderDynamicMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderDynamicMesh.cpp; sourceTree = "<group>"; };
+		81CA86B31D216EBE002CE6A0 /* RenderDynamicMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderDynamicMesh.h; sourceTree = "<group>"; };
+		81CA86B61D2190DB002CE6A0 /* SpriteMeshBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteMeshBuilder.cpp; sourceTree = "<group>"; };
+		81CA86B71D2190DB002CE6A0 /* SpriteMeshBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteMeshBuilder.h; sourceTree = "<group>"; };
 		81E3AA961CE241F600DF7B4E /* SizePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SizePolicy.cpp; sourceTree = "<group>"; };
 		81E3AA971CE241F600DF7B4E /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2137,6 +2143,8 @@
 				81BF7B7E1CF84B3300DBC80B /* PolygonType.h */,
 				8158F3921C89D2AD00B13109 /* PrimitiveModelFactory.cpp */,
 				8158F3931C89D2AD00B13109 /* PrimitiveModelFactory.h */,
+				81CA86B21D216EBE002CE6A0 /* RenderDynamicMesh.cpp */,
+				81CA86B31D216EBE002CE6A0 /* RenderDynamicMesh.h */,
 				81BF7B7B1CF84AFD00DBC80B /* RenderMesh.cpp */,
 				81BF7B7C1CF84AFD00DBC80B /* RenderMesh.h */,
 				81BF7B801CF84CA600DBC80B /* RenderMeshManager.cpp */,
@@ -2296,6 +2304,8 @@
 				8158F3FA1C89D2AD00B13109 /* SpriteBatch.h */,
 				8158F3FB1C89D2AD00B13109 /* SpriteComponent.cpp */,
 				8158F3FC1C89D2AD00B13109 /* SpriteComponent.h */,
+				81CA86B61D2190DB002CE6A0 /* SpriteMeshBuilder.cpp */,
+				81CA86B71D2190DB002CE6A0 /* SpriteMeshBuilder.h */,
 			);
 			path = Sprite;
 			sourceTree = "<group>";
@@ -3364,6 +3374,7 @@
 				8158F7D11C89D2AD00B13109 /* PointerSystem.mm in Sources */,
 				8158F6921C89D2AD00B13109 /* PerformanceTimer.cpp in Sources */,
 				816D96B81CF73CB600D23969 /* LoadShaderRenderCommand.cpp in Sources */,
+				81CA86B41D216EBE002CE6A0 /* RenderDynamicMesh.cpp in Sources */,
 				8153A3071CF5DD32002AC919 /* RenderTexture.cpp in Sources */,
 				8158F6C81C89D2AD00B13109 /* CSModelProvider.cpp in Sources */,
 				816D96BB1CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp in Sources */,
@@ -3524,6 +3535,7 @@
 				8158F67F1C89D2AD00B13109 /* LocalNotificationSystem.cpp in Sources */,
 				8158F6F91C89D2AD00B13109 /* CubemapResourceOptions.cpp in Sources */,
 				8158F7C91C89D2AD00B13109 /* PNGImageProvider.cpp in Sources */,
+				81CA86B81D2190DB002CE6A0 /* SpriteMeshBuilder.cpp in Sources */,
 				8158F7301C89D2AD00B13109 /* VideoPlayer.cpp in Sources */,
 				8158F6711C89D2AD00B13109 /* Image.cpp in Sources */,
 				8158F7041C89D2AD00B13109 /* UIComponent.cpp in Sources */,

@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright © 2016 Tag Games. All rights reserved.
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,33 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Base/ByteBuffer.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ByteBuffer::ByteBuffer(std::unique_ptr<const u8[]> data, u64 length) noexcept
-        : m_data(std::move(data)), m_length(length)
+    RenderDynamicMesh::RenderDynamicMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+                      ByteBuffer vertexData, ByteBuffer indexData) noexcept
+    : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere),
+      m_vertexData(std::move(vertexData)), m_indexData(std::move(indexData))
     {
     }
+    
     //------------------------------------------------------------------------------
-    const u8* ByteBuffer::GetData() const noexcept
+    ByteBuffer RenderDynamicMesh::ClaimVertexData() noexcept
     {
-        return m_data.get();
+        CS_ASSERT(!m_vertexDataClaimed, "Vertex buffer has already been claimed.");
+        
+        m_vertexDataClaimed = true;
+        return std::move(m_vertexData);
     }
+    
     //------------------------------------------------------------------------------
-    u64 ByteBuffer::GetLength() const noexcept
+    ByteBuffer RenderDynamicMesh::ClaimIndexData() noexcept
     {
-        return m_length;
+        CS_ASSERT(!m_indexDataClaimed, "Vertex buffer has already been claimed.");
+        
+        m_indexDataClaimed = true;
+        return std::move(m_indexData);
     }
 }

@@ -40,6 +40,14 @@ namespace ChilliSource
     class RenderObject final
     {
     public:
+        /// An enum describing the type of mesh this object represents.
+        ///
+        enum class Type
+        {
+            k_static,
+            k_dynamic
+        };
+        
         /// Creates a new instance with the given material group, mesh and transform data.
         ///
         /// @param renderMaterialGroup
@@ -51,6 +59,21 @@ namespace ChilliSource
         ///
         RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept;
         
+        /// Creates a new instance with the given material group, mesh and transform data.
+        ///
+        /// @param renderMaterialGroup
+        ///     The material group that should be used when rendering this object.
+        /// @param renderDynamicMesh
+        ///     The dynamic mesh that should be used when rendering this object.
+        /// @param worldMatrix
+        ///     The world matrix describing the transform of the object.
+        ///
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix) noexcept;
+        
+        /// @return The type of object this describes.
+        ///
+        Type GetType() const { return m_type; }
+        
         /// @return The material group that should be used when rendering this object.
         ///
         const RenderMaterialGroup* GetRenderMaterialGroup() const noexcept { return m_renderMaterialGroup; }
@@ -59,13 +82,19 @@ namespace ChilliSource
         ///
         const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
         
+        /// @return The mesh that should be used when rendering this object.
+        ///
+        const RenderDynamicMesh* GetRenderDynamicMesh() noexcept { return m_renderDynamicMesh; }
+        
         /// @return The world matrix describing the transform of the object.
         ///
         const Matrix4& GetWorldMatrix() const noexcept { return m_worldMatrix; }
         
     private:
+        Type m_type;
         const RenderMaterialGroup* m_renderMaterialGroup;
-        const RenderMesh* m_renderMesh;
+        const RenderMesh* m_renderMesh = nullptr;
+        const RenderDynamicMesh* m_renderDynamicMesh = nullptr;
         Matrix4 m_worldMatrix;
     };
 }

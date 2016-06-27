@@ -73,6 +73,14 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    void RenderSnapshot::AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept
+    {
+        CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes list cannot be changed after it has been claimed.");
+        
+        m_renderDynamicMeshes.push_back(std::move(renderDynamicMesh));
+    }
+    
+    //------------------------------------------------------------------------------
     RenderCommandList* RenderSnapshot::GetPreRenderCommandList() noexcept
     {
         CS_ASSERT(m_preRenderCommandList, "Pre-RenderCommandList cannot be modified after it has been claimed.");
@@ -131,6 +139,15 @@ namespace ChilliSource
         
         m_renderObjectsClaimed = true;
         return std::move(m_renderObjects);
+    }
+    
+    //------------------------------------------------------------------------------
+    std::vector<RenderDynamicMeshUPtr> RenderSnapshot::ClaimRenderDynamicMeshes() noexcept
+    {
+        CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes have already been claimed.");
+        
+        m_renderDynamicMeshesClaimed = true;
+        return std::move(m_renderDynamicMeshes);
     }
     
     //------------------------------------------------------------------------------
