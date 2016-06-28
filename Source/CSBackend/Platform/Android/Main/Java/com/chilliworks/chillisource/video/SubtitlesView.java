@@ -40,7 +40,6 @@ import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -238,7 +237,7 @@ public class SubtitlesView extends ViewGroup
 			dwGravity = Gravity.BOTTOM | Gravity.RIGHT;
 		}
 		inTextView.setGravity(dwGravity);
-        LinearLayout.LayoutParams newParameters = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams newParameters = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         newParameters.gravity = dwGravity;
         inTextView.setLayoutParams(newParameters);
 	}
