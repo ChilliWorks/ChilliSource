@@ -223,7 +223,6 @@ namespace CSBackend
 			//only update if the position in the video has changed.
 			f32 position = m_javaSystem->CallFloatMethod("getPlaybackPosition");
 			TimeIntervalMs currentTimeMS = (TimeIntervalMs)(position * 1000.0f);
-            
 			if (m_currentSubtitleTimeMS != currentTimeMS)
 			{
 				m_currentSubtitleTimeMS = currentTimeMS;
