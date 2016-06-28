@@ -118,23 +118,46 @@ namespace ChilliSource
             CS_ASSERT(renderPassObjects.size() > 0, "Cannot compile a pass with no objects.");
             
             const RenderMaterial* currentMaterial = nullptr;
-            const RenderMesh* currentMesh = nullptr;
+            const RenderMesh* currentStaticMesh = nullptr;
+            const RenderDynamicMesh* currentDynamicMesh = nullptr;
             
             for (const auto& renderPassObject : renderPassObjects)
             {
                 if (renderPassObject.GetRenderMaterial() != currentMaterial)
                 {
                     currentMaterial = renderPassObject.GetRenderMaterial();
-                    currentMesh = nullptr;
+                    currentStaticMesh = nullptr;
                     
                     renderCommandList->AddApplyMaterialCommand(currentMaterial);
                 }
                 
-                if (renderPassObject.GetRenderMesh() != currentMesh)
+                switch (renderPassObject.GetType())
                 {
-                    currentMesh = renderPassObject.GetRenderMesh();
-                    
-                    renderCommandList->AddApplyMeshCommand(currentMesh);
+                    case RenderPassObject::Type::k_static:
+                    {
+                        if (renderPassObject.GetRenderMesh() != currentStaticMesh)
+                        {
+                            currentStaticMesh = renderPassObject.GetRenderMesh();
+                            currentDynamicMesh = nullptr;
+                            
+                            renderCommandList->AddApplyMeshCommand(currentStaticMesh);
+                        }
+                        break;
+                    }
+                    case RenderPassObject::Type::k_dynamic:
+                    {
+                        if (renderPassObject.GetRenderDynamicMesh() != currentDynamicMesh)
+                        {
+                            currentStaticMesh = nullptr;
+                            currentDynamicMesh = renderPassObject.GetRenderDynamicMesh();
+                            
+                            renderCommandList->AddApplyDynamicMeshCommand(currentDynamicMesh);
+                        }
+                        break;
+                    }
+                    default:
+                        CS_LOG_FATAL("INvalid RenderPassObject type.");
+                        break;
                 }
                 
                 renderCommandList->AddRenderInstanceCommand(renderPassObject.GetWorldMatrix());

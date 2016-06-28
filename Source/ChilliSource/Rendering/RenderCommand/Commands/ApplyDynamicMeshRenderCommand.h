@@ -22,17 +22,39 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYDYNAMICMESHRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYDYNAMICMESHRENDERCOMMAND_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    RenderDynamicMesh::RenderDynamicMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                      ByteBuffer vertexData, ByteBuffer indexData) noexcept
-    : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere),
-      m_vertexData(std::move(vertexData)), m_indexData(std::move(indexData))
+    /// A render command for applying the given render dynamic mesh to the current context state.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class ApplyDynamicMeshRenderCommand final : public RenderCommand
     {
-        CS_ASSERT(m_vertexData.GetLength() <= k_maxVertexDataSize, "Vertex data too large.");
-        CS_ASSERT(m_indexData.GetLength() <= k_maxIndexDataSize, "Index data too large.");
-    }
+    public:
+        /// @return The render mesh to apply.
+        ///
+        const RenderDynamicMesh* GetRenderDynamicMesh() const noexcept { return m_renderDynamicMesh; };
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Creates a new instance with the given render dynamic mesh.
+        ///
+        /// @param renderDynamicMesh
+        ///     The render dynamic mesh to apply.
+        ///
+        ApplyDynamicMeshRenderCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept;
+        
+        const RenderDynamicMesh* m_renderDynamicMesh;
+    };
 }
+
+#endif

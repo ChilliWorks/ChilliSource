@@ -123,6 +123,13 @@ namespace ChilliSource
         ///
         void AddApplyMeshCommand(const RenderMesh* renderMesh) noexcept;
         
+        /// Creates and adds a new apply dynamic mesh command to the render command list.
+        ///
+        /// @param renderDynamicMesh
+        ///     The render dynamic mesh to apply.
+        ///
+        void AddApplyDynamicMeshCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept;
+        
         /// Creates and adds a new render instance command to the render command list.
         ///
         /// @param renderMesh

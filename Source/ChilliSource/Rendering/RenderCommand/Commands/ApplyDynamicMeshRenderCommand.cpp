@@ -22,17 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderDynamicMesh::RenderDynamicMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                      ByteBuffer vertexData, ByteBuffer indexData) noexcept
-    : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere),
-      m_vertexData(std::move(vertexData)), m_indexData(std::move(indexData))
+    ApplyDynamicMeshRenderCommand::ApplyDynamicMeshRenderCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept
+    : RenderCommand(Type::k_applyDynamicMesh), m_renderDynamicMesh(renderDynamicMesh)
     {
-        CS_ASSERT(m_vertexData.GetLength() <= k_maxVertexDataSize, "Vertex data too large.");
-        CS_ASSERT(m_indexData.GetLength() <= k_maxIndexDataSize, "Index data too large.");
     }
 }

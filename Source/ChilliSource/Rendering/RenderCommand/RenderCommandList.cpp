@@ -25,6 +25,7 @@
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
@@ -108,6 +109,15 @@ namespace ChilliSource
     void RenderCommandList::AddApplyMeshCommand(const RenderMesh* renderMesh) noexcept
     {
         RenderCommandUPtr renderCommand(new ApplyMeshRenderCommand(renderMesh));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplyDynamicMeshCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplyDynamicMeshRenderCommand(renderDynamicMesh));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));

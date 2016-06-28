@@ -167,6 +167,7 @@ namespace ChilliSource
     /// Render Command
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(ApplyCameraRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplyDynamicMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginRenderCommand);
@@ -178,11 +179,11 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandBuffer);
     CS_FORWARDDECLARE_CLASS(RenderCommandList);
+    CS_FORWARDDECLARE_CLASS(RenderInstanceRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadTextureRenderCommand);
-    CS_FORWARDDECLARE_CLASS(RenderInstanceRenderCommand);
     //------------------------------------------------------------
     /// Shader
     //------------------------------------------------------------

@@ -29,10 +29,17 @@
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.cpp>
+#include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/EndRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>

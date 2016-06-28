@@ -94,7 +94,7 @@ namespace ChilliSource
         /// @return The dynamic mesh that should be used when rendering this object if this is
         ///     a dynamic mesh object, otherwise this will return nullptr.
         ///
-        const RenderDynamicMesh* GetRenderDynamicMesh() noexcept { return m_renderDynamicMesh; }
+        const RenderDynamicMesh* GetRenderDynamicMesh() const noexcept { return m_renderDynamicMesh; }
         
         /// @return The world matrix describing the transform of the object.
         ///

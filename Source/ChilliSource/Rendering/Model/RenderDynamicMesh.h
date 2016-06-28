@@ -43,6 +43,9 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(RenderDynamicMesh);
         
+        static constexpr u32 k_maxVertexDataSize = 512 * 1024;
+        static constexpr u32 k_maxIndexDataSize = 32 * 1024;
+        
         /// Creates a new instance with the given mesh description data.
         ///
         /// @param polygonType
