@@ -88,6 +88,15 @@ namespace ChilliSource
             std::array<const RenderMaterial*, k_maxPasses> m_renderMaterials;
         };
         
+        /// Evaluates whether or not the given RenderMaterial is part of this group.
+        ///
+        /// @param renderMaterial
+        ///     The RenderMaterial which should be checked.
+        ///
+        /// @return Whether or not the RenderMaterial is part of this group.
+        ///
+        bool Contains(const RenderMaterial* renderMaterial) const noexcept;
+        
         /// Looks up the render material for the given vertex format and pass index.
         ///
         /// @param vertexFormat

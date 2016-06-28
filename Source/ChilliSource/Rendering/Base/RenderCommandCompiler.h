@@ -51,6 +51,8 @@ namespace ChilliSource
         ///     The resolution of the view port.
         /// @param clearColour
         ///     The clear clear for cleaing the default render target.
+        /// @param renderDynamicMeshes
+        ///     Any render dynamic meshes for this frame that the render commands require.
         /// @param preRenderCommandList
         ///     The RenderCommandList that should be included first. Must be moved.
         /// @param postRenderCommandList
@@ -59,7 +61,8 @@ namespace ChilliSource
         /// @return The render command buffer.
         ///
         RenderCommandBufferCUPtr CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
-                                                       const Colour& clearColour, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept;
+                                                       const Colour& clearColour, std::vector<RenderDynamicMeshUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList,
+                                                       RenderCommandListUPtr postRenderCommandList) noexcept;
     }
 }
 

@@ -27,6 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
@@ -56,8 +57,11 @@ namespace ChilliSource
         ///     The mesh that should be used when rendering this object.
         /// @param worldMatrix
         ///     The world matrix describing the transform of the object.
+        /// @param boundingSphere
+        ///     The world space bounding sphere of the object. This should be build using the local mesh
+        ///     bounding sphere.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere) noexcept;
         
         /// Creates a new instance with the given material group, mesh and transform data.
         ///
@@ -67,8 +71,11 @@ namespace ChilliSource
         ///     The dynamic mesh that should be used when rendering this object.
         /// @param worldMatrix
         ///     The world matrix describing the transform of the object.
+        /// @param boundingSphere
+        ///     The world space bounding sphere of the object. This should be build using the local mesh
+        ///     bounding sphere.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere) noexcept;
         
         /// @return The type of object this describes.
         ///
@@ -78,17 +85,23 @@ namespace ChilliSource
         ///
         const RenderMaterialGroup* GetRenderMaterialGroup() const noexcept { return m_renderMaterialGroup; }
         
-        /// @return The mesh that should be used when rendering this object.
+        /// @return The static mesh that should be used when rendering this object if this is a
+        ///     static mesh object, otherwise this will return nullptr.
         ///
         const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
         
-        /// @return The mesh that should be used when rendering this object.
+        /// @return The dynamic mesh that should be used when rendering this object if this is
+        ///     a dynamic mesh object, otherwise this will return nullptr.
         ///
-        const RenderDynamicMesh* GetRenderDynamicMesh() noexcept { return m_renderDynamicMesh; }
+        const RenderDynamicMesh* GetRenderDynamicMesh() const noexcept { return m_renderDynamicMesh; }
         
         /// @return The world matrix describing the transform of the object.
         ///
         const Matrix4& GetWorldMatrix() const noexcept { return m_worldMatrix; }
+        
+        /// @return The world space bounding sphere of the object.
+        ///
+        const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
         
     private:
         Type m_type;
@@ -96,6 +109,7 @@ namespace ChilliSource
         const RenderMesh* m_renderMesh = nullptr;
         const RenderDynamicMesh* m_renderDynamicMesh = nullptr;
         Matrix4 m_worldMatrix;
+        Sphere m_boundingSphere;
     };
 }
 

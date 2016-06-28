@@ -38,8 +38,34 @@ namespace ChilliSource
 {
     namespace
     {
-        constexpr u32 k_reservedRenderPasses = 2;//Base + Transparent
-        constexpr u32 k_targetRenderPassGroups = 1;//Main
+        constexpr u32 k_reservedRenderPasses = 2; // Base + Transparent
+        constexpr u32 k_targetRenderPassGroups = 1; // Main
+        
+        /// Converts the given RenderObject to a RenderPassObject using the given RenderMaterial.
+        /// if the given RenderMaterial does not exist in the RenderMaterialGroup contained by
+        /// the RenderObject, then this will assert.
+        ///
+        /// @param renderObject
+        ///     The renderObject to convert.
+        /// @param renderMaterial
+        ///     The render material that should be used by the new RenderPassObject.
+        ///
+        /// @return The new RenderPassObject.
+        ///
+        RenderPassObject ConvertToRenderPassObject(const RenderObject& renderObject, const RenderMaterial* renderMaterial) noexcept
+        {
+            CS_ASSERT(renderObject.GetRenderMaterialGroup()->Contains(renderMaterial), "Invalid render material.");
+            
+            switch (renderObject.GetType())
+            {
+                case RenderObject::Type::k_static:
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere());
+                case RenderObject::Type::k_dynamic:
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderDynamicMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere());
+                default:
+                    CS_LOG_FATAL("Invalid RenderObject type.");
+            }
+        }
         
         /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
         /// each RenderObject that has a Base pass defined.
@@ -59,7 +85,7 @@ namespace ChilliSource
                 
                 if (renderMaterial)
                 {
-                    baseRenderPassObjects.push_back(RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix()));
+                    baseRenderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
                 }
             }
             
@@ -84,7 +110,7 @@ namespace ChilliSource
                 
                 if (renderMaterial)
                 {
-                    baseRenderPassObjects.push_back(RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix()));
+                    baseRenderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
                 }
             }
             
@@ -109,7 +135,7 @@ namespace ChilliSource
                 
                 if (renderMaterial)
                 {
-                    transparentRenderPassObjects.push_back(RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix()));
+                    transparentRenderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
                 }
             }
             
@@ -217,7 +243,7 @@ namespace ChilliSource
                 });
             }
             
-            //TODO:Point lights
+            //TODO: Point lights
             
             u32 transparentPassIndex = nextPassIndex++;
             tasks.push_back([=, &renderPasses, &renderFrame](const TaskContext& innerTaskContext)
@@ -245,7 +271,8 @@ namespace ChilliSource
         {
             std::vector<CameraRenderPassGroup> cameraRenderPassGroup;
             cameraRenderPassGroup.push_back(CompleSceneCameraRenderPassGroup(taskContext, renderFrame));
-            //TODO::GUI
+            
+            //TODO: GUI
             
             return TargetRenderPassGroup(cameraRenderPassGroup);
         }
@@ -258,13 +285,14 @@ namespace ChilliSource
         std::vector<Task> tasks;
         u32 nextPassIndex = 0;
         
+        //TODO: Shadows
+        
         u32 mainPassIndex = nextPassIndex++;
         tasks.push_back([=, &targetRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
         {
             targetRenderPassGroups[mainPassIndex] = CompileMainTargetRenderPassGroup(innerTaskContext, renderFrame);
         });
         
-        //TODO:Shadows
         taskContext.ProcessChildTasks(tasks);
         
         return targetRenderPassGroups;

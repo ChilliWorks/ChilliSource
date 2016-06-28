@@ -145,6 +145,7 @@ namespace ChilliSource
         ///
         std::unique_ptr<const u8[]> BuildVertexData(const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour, AlignmentAnchor alignmentAnchor) noexcept
         {
+            //TODO: This should be allocated from the frame based linear allocator.
             std::unique_ptr<u8[]> vertexData(new u8[k_vertexDataSize]);
             
             ApplyVertexPosition(reinterpret_cast<SpriteVertex*>(vertexData.get()), localPosition, localSize, alignmentAnchor);
@@ -158,8 +159,11 @@ namespace ChilliSource
         ///
         std::unique_ptr<const u8[]> BuildIndexData() noexcept
         {
+            //TODO: This should be allocated from the frame based linear allocator.
             std::unique_ptr<u8[]> indexData(new u8[k_indexDataSize]);
+            
             memcpy(indexData.get(), k_indices, k_indexDataSize);
+            
             return std::move(indexData);
         }
         

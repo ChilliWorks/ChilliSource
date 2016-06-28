@@ -33,6 +33,7 @@
 #include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
 #include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
 #include <ChilliSource/Rendering/Lighting/RenderPointLight.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
 #include <vector>

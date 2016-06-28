@@ -33,22 +33,4 @@ namespace ChilliSource
       m_vertexData(std::move(vertexData)), m_indexData(std::move(indexData))
     {
     }
-    
-    //------------------------------------------------------------------------------
-    ByteBuffer RenderDynamicMesh::ClaimVertexData() noexcept
-    {
-        CS_ASSERT(!m_vertexDataClaimed, "Vertex buffer has already been claimed.");
-        
-        m_vertexDataClaimed = true;
-        return std::move(m_vertexData);
-    }
-    
-    //------------------------------------------------------------------------------
-    ByteBuffer RenderDynamicMesh::ClaimIndexData() noexcept
-    {
-        CS_ASSERT(!m_indexDataClaimed, "Vertex buffer has already been claimed.");
-        
-        m_indexDataClaimed = true;
-        return std::move(m_indexData);
-    }
 }

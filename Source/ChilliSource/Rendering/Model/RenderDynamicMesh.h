@@ -36,8 +36,7 @@ namespace ChilliSource
     /// mesh. This data is stored here, rather than in graphics memory, due to it's temporary
     /// nature.
     ///
-    /// This is immutable and therefore thread-safe, aside from the data buffers which are
-    /// claimed rather than copied for the sake of performance.
+    /// This is immutable and therefore thread-safe.
     ///
     class RenderDynamicMesh final
     {
@@ -90,21 +89,13 @@ namespace ChilliSource
         ///
         const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
         
-        /// Claims the vertex data buffer. This can only be called once; if called again it will assert.
-        ///
-        /// This is not thread-safe.
-        ///
         /// @return The vertex data buffer.
         ///
-        ByteBuffer ClaimVertexData() noexcept;
+        const ByteBuffer& GetVertexData() const noexcept { return m_vertexData; }
         
-        /// Claims the index data buffer. This can only be called once; if called again it will assert.
-        ///
-        /// This is not thread-safe.
-        ///
         /// @return The index data buffer.
         ///
-        ByteBuffer ClaimIndexData() noexcept;
+        const ByteBuffer& GetIndexData() const noexcept { return m_indexData; }
         
     private:
         friend class RenderMeshManager;
@@ -117,9 +108,6 @@ namespace ChilliSource
         Sphere m_boundingSphere;
         ByteBuffer m_vertexData;
         ByteBuffer m_indexData;
-        
-        bool m_vertexDataClaimed = false;
-        bool m_indexDataClaimed = false;
     };
 }
 

@@ -30,10 +30,14 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept
-    :m_renderMaterial(renderMaterial)
-    ,m_renderMesh(renderMesh)
-    ,m_worldMatrix(worldMatrix)
+    RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere) noexcept
+        : m_type(Type::k_static), m_renderMaterial(renderMaterial), m_renderMesh(renderMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere)
     { 
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere) noexcept
+        : m_type(Type::k_dynamic), m_renderMaterial(renderMaterial), m_renderDynamicMesh(renderDynamicMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere)
+    {
     }
 }

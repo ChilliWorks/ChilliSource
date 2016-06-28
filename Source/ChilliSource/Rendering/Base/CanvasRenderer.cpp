@@ -612,6 +612,28 @@ namespace ChilliSource
             }
         }
         
+        /// Calculates the world space bounding sphere from a local bounding sphere, world position
+        /// and size.
+        ///
+        /// @param localBoundingSphere
+        ///     The local bounding sphere.
+        /// @param worldPosition
+        ///     The world position of the object.
+        /// @param size
+        ///     The final size of the object.
+        ///
+        /// @return The world space bounding sphere.
+        ///
+        Sphere CalcWorldSpaceBoundingSphere(const Sphere& localBoundingSphere, const Vector3& worldPosition, const Vector2& size) noexcept
+        {
+            f32 maxScaleComponent = std::max(size.x, size.y);
+            
+            auto centre = worldPosition + localBoundingSphere.vOrigin;
+            auto radius = maxScaleComponent * localBoundingSphere.fRadius;
+            
+            return Sphere(centre, radius);
+        }
+        
         /// Creates a new render object containing a dynamic mesh that describes the sprite and
         /// adds it to the snapshot.
         ///
@@ -634,10 +656,12 @@ namespace ChilliSource
         ///     The material of the sprite.
         ///
         void AddSpriteRenderObject(RenderSnapshot* renderSnapshot, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour,
-                            AlignmentAnchor alignmentAnchor, const Matrix4& worldMatrix, const MaterialCSPtr& material) noexcept
+                                   AlignmentAnchor alignmentAnchor, const Matrix4& worldMatrix, const MaterialCSPtr& material) noexcept
         {
             auto renderDynamicMesh = SpriteMeshBuilder::Build(localPosition, localSize, uvs, colour, alignmentAnchor);
-            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix));
+            auto boundingSphere = CalcWorldSpaceBoundingSphere(renderDynamicMesh->GetBoundingSphere(), worldMatrix.GetTranslation(), localSize);
+            
+            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere));
             renderSnapshot->AddRenderDynamicMesh(std::move(renderDynamicMesh));
         }
     }
@@ -735,7 +759,7 @@ namespace ChilliSource
                                  const Colour& in_colour, AlignmentAnchor in_anchor)
     {
         auto material = m_materialPool->GetMaterial(in_texture);
-        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(in_offset, 0.0f), in_size, in_UVs, in_colour, in_anchor, in_transform, material);
+        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(in_offset, 0.0f), in_size, in_UVs, in_colour, in_anchor, Convert2DTransformTo3D(in_transform), material);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
