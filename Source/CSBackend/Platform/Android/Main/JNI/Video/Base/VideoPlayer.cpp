@@ -72,10 +72,8 @@ void Java_com_chilliworks_chillisource_video_VideoPlayer_onUpdateSubtitles(JNIEn
 {
 	CS_ASSERT(g_activeVideoPlayer != nullptr, "No video player active!");
 
-	ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
-	{
-		g_activeVideoPlayer->OnUpdateSubtitles();
-	});
+    // This must run on the UI thread!
+	g_activeVideoPlayer->OnUpdateSubtitles();
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -207,6 +205,7 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
         void VideoPlayer::OnVideoComplete()
         {
+            CS_LOG_WARNING("Video is over.");
         	m_subtitles.reset();
         	m_isPlaying = false;
 			g_activeVideoPlayer = nullptr;
@@ -225,6 +224,7 @@ namespace CSBackend
 			//only update if the position in the video has changed.
 			f32 position = m_javaSystem->CallFloatMethod("getPlaybackPosition");
 			TimeIntervalMs currentTimeMS = (TimeIntervalMs)(position * 1000.0f);
+            
 			if (m_currentSubtitleTimeMS != currentTimeMS)
 			{
 				m_currentSubtitleTimeMS = currentTimeMS;
@@ -239,6 +239,7 @@ namespace CSBackend
 					auto mapEntry = m_subtitleMap.find(*it);
 					if (mapEntry == m_subtitleMap.end())
 					{
+                        CS_LOG_WARNING("Subtitle creation");
 						const std::string& text = localisedText->GetText((*it)->m_localisedTextId);
 						const ChilliSource::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
 						auto alignment = ChilliSource::StringFromAlignmentAnchor(style->m_alignment);
@@ -255,6 +256,7 @@ namespace CSBackend
 						JavaUtils::DeleteLocalRef(jText);
 
 						m_subtitleMap.insert(std::make_pair(*it, subtitleID));
+                        CS_LOG_WARNING("Subtitle creation finished.");
 					}
 				}
 
@@ -316,6 +318,8 @@ namespace CSBackend
 			{
 				m_subtitlesToRemove.push_back(in_subtitle);
 			}
+
+            CS_LOG_WARNING("Fade = " + CS::ToString(fade));
 
 			m_javaSystem->CallVoidMethod("setSubtitleColour", in_subtitleID, style->m_colour.r, style->m_colour.g, style->m_colour.b, fade * style->m_colour.a);
 		}

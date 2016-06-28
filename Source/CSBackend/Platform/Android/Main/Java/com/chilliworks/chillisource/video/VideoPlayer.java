@@ -93,7 +93,7 @@ public class VideoPlayer extends System
 	 *
 	 * @author Ian Copland
 	 *
-	 * @return The current playback position through the video.
+	 * @return The current playback position through the video, in seconds.
 	 */
 	public float getPlaybackPosition()
 	{
@@ -129,6 +129,8 @@ public class VideoPlayer extends System
 	public long createSubtitle(String in_text, String in_fontName, int in_fontSize, String in_alignment, float in_x, float in_y, float in_width, float in_height)
 	{
 		assert (m_updateSubtitlesEvent == true) : "Cannot only be called during the Update Subtitles event.";
+
+		android.util.Log.e("ChilliSource", "Should create subtitle.");
 
 		VideoPlayerActivity activity = VideoPlayerActivity.GetActivity();
 		if (activity != null)
