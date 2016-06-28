@@ -205,7 +205,6 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
         void VideoPlayer::OnVideoComplete()
         {
-            CS_LOG_WARNING("Video is over.");
         	m_subtitles.reset();
         	m_isPlaying = false;
 			g_activeVideoPlayer = nullptr;
@@ -239,7 +238,6 @@ namespace CSBackend
 					auto mapEntry = m_subtitleMap.find(*it);
 					if (mapEntry == m_subtitleMap.end())
 					{
-                        CS_LOG_WARNING("Subtitle creation");
 						const std::string& text = localisedText->GetText((*it)->m_localisedTextId);
 						const ChilliSource::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
 						auto alignment = ChilliSource::StringFromAlignmentAnchor(style->m_alignment);
@@ -248,7 +246,7 @@ namespace CSBackend
 						jstring jFontName = JavaUtils::CreateJStringFromSTDString(style->m_fontName);
 						jstring jAlignment = JavaUtils::CreateJStringFromSTDString(alignment);
 
-						s64 subtitleID = m_javaSystem->CallLongMethod("createSubtitle", jText, jFontName, style->m_fontSize, jAlignment, style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
+						s64 subtitleID = m_javaSystem->CallLongMethod("createSubtitle", jText, jFontName, style->m_fontSize, jAlignment, style->m_bounds.Left(), style->m_bounds.Bottom(), style->m_bounds.vSize.x, style->m_bounds.vSize.y);
 						m_javaSystem->CallVoidMethod("setSubtitleColour", subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
 
 						JavaUtils::DeleteLocalRef(jAlignment);
@@ -256,7 +254,6 @@ namespace CSBackend
 						JavaUtils::DeleteLocalRef(jText);
 
 						m_subtitleMap.insert(std::make_pair(*it, subtitleID));
-                        CS_LOG_WARNING("Subtitle creation finished.");
 					}
 				}
 
@@ -318,8 +315,6 @@ namespace CSBackend
 			{
 				m_subtitlesToRemove.push_back(in_subtitle);
 			}
-
-            CS_LOG_WARNING("Fade = " + CS::ToString(fade));
 
 			m_javaSystem->CallVoidMethod("setSubtitleColour", in_subtitleID, style->m_colour.r, style->m_colour.g, style->m_colour.b, fade * style->m_colour.a);
 		}

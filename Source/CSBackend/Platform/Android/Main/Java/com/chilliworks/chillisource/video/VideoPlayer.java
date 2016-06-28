@@ -130,8 +130,6 @@ public class VideoPlayer extends System
 	{
 		assert (m_updateSubtitlesEvent == true) : "Cannot only be called during the Update Subtitles event.";
 
-		android.util.Log.e("ChilliSource", "Should create subtitle.");
-
 		VideoPlayerActivity activity = VideoPlayerActivity.GetActivity();
 		if (activity != null)
 		{
