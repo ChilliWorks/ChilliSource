@@ -22,38 +22,48 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_MODEL_GLMESH_H_
-#define _CSBACKEND_RENDERING_OPENGL_MODEL_GLMESH_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_MODEL_GLDYNAMICMESH_H_
+#define _CSBACKEND_RENDERING_OPENGL_MODEL_GLDYNAMICMESH_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Model/VertexFormat.h>
+#include <ChilliSource/Rendering/Model/IndexFormat.h>
+#include <ChilliSource/Rendering/Model/PolygonType.h>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
-        /// A container for all functionality pertaining to a single OpenGL mesh, including
-        /// loading, unloading and binding the mesh. Binding includes setting up the relevant
-        /// shader attributes.
+        /// A container for all functionality pertaining to a single dynamic OpenGL mesh, including
+        /// buffer creation, and updating and binding the mesh. Binding includes setting up the
+        /// relevant shader attributes. A dynamic mesh does not have a fixed vertex or index format,
+        /// instead this is set when the data is bound.
         ///
         /// This is not thread-safe and should only be accessed from the render thread.
         ///
-        class GLMesh final
+        class GLDynamicMesh final
         {
         public:
-            CS_DECLARE_NOCOPY(GLMesh);
+            CS_DECLARE_NOCOPY(GLDynamicMesh);
             
-            /// Creates a new OpenGL mesh with the given mesh data and description.
+            /// Creates a new OpenGL dynamic mesh of the given size.
             ///
-            /// @param polygonType
-            ///     The type of polygon the mesh uses.
+            /// @param vertexDataSize
+            ///     The size of the vertex data.
+            /// @param indexDataSize
+            ///     The size of the index data.
+            ///
+            GLDynamicMesh(u32 vertexDataSize, u32 indexDataSize) noexcept;
+            
+            /// Updates the vertex and index data stored in the dynamic mesh, binds the mesh for use
+            /// and applies attibutes to the given shader.
+            ///
+            /// @param glShader
+            ///     The shader to apply attributes to.
             /// @param vertexFormat
             ///     The vertex format.
-            /// @param indexFormat
-            ///     The type of index.
             /// @param vertexData
             ///     The vertex data.
             /// @param vertexDataSize
@@ -63,22 +73,15 @@ namespace CSBackend
             /// @param indexDataSize
             ///     The size of the index data.
             ///
-            GLMesh(ChilliSource::PolygonType polygonType, const ChilliSource::VertexFormat& vertexFormat, ChilliSource::IndexFormat indexFormat,
-                   const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
+            void Bind(GLShader* glShader, const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
             
-            /// Binds the mesh for use and applies attibutes to the given shader.
+            /// Destroys the OpenGL dynamic mesh that this represents.
             ///
-            /// @param glShader
-            ///     The shader to apply attributes to.
-            ///
-            void Bind(GLShader* glShader) noexcept;
-            
-            /// Destroys the OpenGL mesh that this represents.
-            ///
-            ~GLMesh() noexcept;
+            ~GLDynamicMesh() noexcept;
             
         private:
-            ChilliSource::VertexFormat m_vertexFormat;
+            u32 m_maxVertexDataSize;
+            u32 m_maxIndexDataSize;
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
         };

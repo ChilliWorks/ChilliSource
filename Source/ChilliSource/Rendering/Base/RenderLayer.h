@@ -22,15 +22,26 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderFrame.h>
+#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERLAYER_H_
+#define _CHILLISOURCE_RENDERING_BASE_RENDERLAYER_H_
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    RenderFrame::RenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const RenderAmbientLight& renderAmbientLight, const std::vector<RenderDirectionalLight>& renderDirectionalLights,
-                             const std::vector<RenderPointLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept
-        : m_resolution(resolution), m_renderCamera(renderCamera), m_renderAmbientLight(renderAmbientLight), m_renderDirectionalLights(renderDirectionalLights), m_renderPointLights(renderPointLights),
-          m_renderObjects(renderObjects)
+    /// An enum describing the different render layers. These are used to filter different
+    /// render objects into different groups.
+    ///
+    /// "Standard": The standard scene layer, rendered using the main camera.
+    ///
+    /// "UI": The UI layer, rendered using an orthographic camera with the same resolution as
+    /// the viewport.
+    ///
+    enum class RenderLayer
     {
-    }
+        k_standard,
+        k_ui
+    };
 }
+
+#endif

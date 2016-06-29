@@ -661,7 +661,7 @@ namespace ChilliSource
             auto renderDynamicMesh = SpriteMeshBuilder::Build(localPosition, localSize, uvs, colour, alignmentAnchor);
             auto boundingSphere = CalcWorldSpaceBoundingSphere(renderDynamicMesh->GetBoundingSphere(), worldMatrix.GetTranslation(), localSize);
             
-            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere));
+            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, RenderLayer::k_ui));
             renderSnapshot->AddRenderDynamicMesh(std::move(renderDynamicMesh));
         }
     }

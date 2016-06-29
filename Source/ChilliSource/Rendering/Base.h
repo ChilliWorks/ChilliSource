@@ -50,6 +50,7 @@
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderFrame.h>
 #include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
+#include <ChilliSource/Rendering/Base/RenderLayer.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
 #include <ChilliSource/Rendering/Base/RenderPassObject.h>

@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Rendering/Base/RenderLayer.h>
 #include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
@@ -60,8 +61,10 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     The world space bounding sphere of the object. This should be build using the local mesh
         ///     bounding sphere.
+        /// @param renderLayer
+        ///     The layer the object should be rendered into.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer) noexcept;
         
         /// Creates a new instance with the given material group, mesh and transform data.
         ///
@@ -74,10 +77,12 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     The world space bounding sphere of the object. This should be build using the local mesh
         ///     bounding sphere.
+        /// @param renderLayer
+        ///     The layer the object should be rendered into.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer) noexcept;
         
-        /// @return The type of object this describes.
+        /// @return The mesh type of object this describes.
         ///
         Type GetType() const { return m_type; }
         
@@ -103,6 +108,10 @@ namespace ChilliSource
         ///
         const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
         
+        /// @return The layer the object should be rendered into.
+        ///
+        RenderLayer GetRenderLayer() const { return m_renderLayer; }
+        
     private:
         Type m_type;
         const RenderMaterialGroup* m_renderMaterialGroup;
@@ -110,6 +119,7 @@ namespace ChilliSource
         const RenderDynamicMesh* m_renderDynamicMesh = nullptr;
         Matrix4 m_worldMatrix;
         Sphere m_boundingSphere;
+        RenderLayer m_renderLayer;
     };
 }
 

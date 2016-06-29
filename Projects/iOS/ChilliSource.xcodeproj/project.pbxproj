@@ -298,6 +298,8 @@
 		818BC4A71CFDEE3C001DC484 /* RenderPassVisibilityChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4A21CFDEE3C001DC484 /* RenderPassVisibilityChecker.cpp */; };
 		818BC4A81CFDEE3C001DC484 /* RenderPassObjectSorter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4A41CFDEE3C001DC484 /* RenderPassObjectSorter.cpp */; };
 		818C15081D22F0A3001D639B /* ApplyDynamicMeshRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818C15061D22F0A3001D639B /* ApplyDynamicMeshRenderCommand.cpp */; };
+		818C150B1D22F8F4001D639B /* GLDynamicMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818C15091D22F8F4001D639B /* GLDynamicMesh.cpp */; };
+		818C150E1D22FB70001D639B /* GLMeshUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818C150C1D22FB70001D639B /* GLMeshUtils.cpp */; };
 		81A125DB1CF44E490010853A /* RenderCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125D91CF44E490010853A /* RenderCamera.cpp */; };
 		81A125DE1CF454200010853A /* RenderAmbientLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125DC1CF454200010853A /* RenderAmbientLight.cpp */; };
 		81A125E11CF456340010853A /* RenderDirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125DF1CF456340010853A /* RenderDirectionalLight.cpp */; };
@@ -393,6 +395,7 @@
 		811ECDF91CEB28E900E07948 /* LifecycleManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LifecycleManager.cpp; sourceTree = "<group>"; };
 		811ECDFA1CEB28E900E07948 /* LifecycleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LifecycleManager.h; sourceTree = "<group>"; };
 		8123B6781CE098BF008F8182 /* InputFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputFilter.cpp; sourceTree = "<group>"; };
+		814BC3F01D23C4F600CAC7DB /* RenderLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderLayer.h; sourceTree = "<group>"; };
 		814E92B31CB54F76004D6ADE /* TaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPool.cpp; sourceTree = "<group>"; };
 		814E92B41CB54F76004D6ADE /* TaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskPool.h; sourceTree = "<group>"; };
 		8153A2FC1CF5A22A002AC919 /* RenderFrameCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderFrameCompiler.cpp; sourceTree = "<group>"; };
@@ -1103,6 +1106,10 @@
 		818BC4A51CFDEE3C001DC484 /* RenderPassObjectSorter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPassObjectSorter.h; sourceTree = "<group>"; };
 		818C15061D22F0A3001D639B /* ApplyDynamicMeshRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplyDynamicMeshRenderCommand.cpp; sourceTree = "<group>"; };
 		818C15071D22F0A3001D639B /* ApplyDynamicMeshRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplyDynamicMeshRenderCommand.h; sourceTree = "<group>"; };
+		818C15091D22F8F4001D639B /* GLDynamicMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDynamicMesh.cpp; sourceTree = "<group>"; };
+		818C150A1D22F8F4001D639B /* GLDynamicMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLDynamicMesh.h; sourceTree = "<group>"; };
+		818C150C1D22FB70001D639B /* GLMeshUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLMeshUtils.cpp; sourceTree = "<group>"; };
+		818C150D1D22FB70001D639B /* GLMeshUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLMeshUtils.h; sourceTree = "<group>"; };
 		81A125D91CF44E490010853A /* RenderCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCamera.cpp; sourceTree = "<group>"; };
 		81A125DA1CF44E490010853A /* RenderCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCamera.h; sourceTree = "<group>"; };
 		81A125DC1CF454200010853A /* RenderAmbientLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderAmbientLight.cpp; sourceTree = "<group>"; };
@@ -1318,6 +1325,10 @@
 			children = (
 				810C0C821D11B01100C32406 /* GLMesh.cpp */,
 				810C0C831D11B01100C32406 /* GLMesh.h */,
+				818C15091D22F8F4001D639B /* GLDynamicMesh.cpp */,
+				818C150A1D22F8F4001D639B /* GLDynamicMesh.h */,
+				818C150C1D22FB70001D639B /* GLMeshUtils.cpp */,
+				818C150D1D22FB70001D639B /* GLMeshUtils.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2054,6 +2065,7 @@
 				818BC49B1CFDE6D9001DC484 /* TargetRenderPassGroup.h */,
 				8158F3631C89D2AD00B13109 /* VerticalTextJustification.cpp */,
 				8158F3641C89D2AD00B13109 /* VerticalTextJustification.h */,
+				814BC3F01D23C4F600CAC7DB /* RenderLayer.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -3325,6 +3337,7 @@
 				8158F6CB1C89D2AD00B13109 /* PrimitiveModelFactory.cpp in Sources */,
 				8158F6AC1C89D2AD00B13109 /* CanvasMaterialPool.cpp in Sources */,
 				8158F6931C89D2AD00B13109 /* Timer.cpp in Sources */,
+				818C150B1D22F8F4001D639B /* GLDynamicMesh.cpp in Sources */,
 				8158F6CD1C89D2AD00B13109 /* SkinnedAnimation.cpp in Sources */,
 				8158F6991C89D2AD00B13109 /* DeviceButtonSystem.cpp in Sources */,
 				8158F7021C89D2AD00B13109 /* FacebookPostSystem.cpp in Sources */,
@@ -3627,6 +3640,7 @@
 				8158F7CA1C89D2AD00B13109 /* RNGContainer.mm in Sources */,
 				81729FAB1D1BFF05005B8CC9 /* GLTextureUnitManager.cpp in Sources */,
 				8158F7081C89D2AD00B13109 /* PropertyTypes.cpp in Sources */,
+				818C150E1D22FB70001D639B /* GLMeshUtils.cpp in Sources */,
 				8158F6511C89D2AD00B13109 /* ByteColour.cpp in Sources */,
 				818BC4A81CFDEE3C001DC484 /* RenderPassObjectSorter.cpp in Sources */,
 				8158F6FE1C89D2AD00B13109 /* TextureResourceOptions.cpp in Sources */,

@@ -47,7 +47,6 @@ namespace ChilliSource
         const std::vector<VertexFormat::ElementType> k_spriteElements =
         {
             VertexFormat::ElementType::k_position4,
-            VertexFormat::ElementType::k_normal3,
             VertexFormat::ElementType::k_uv2,
             VertexFormat::ElementType::k_colour4
         };

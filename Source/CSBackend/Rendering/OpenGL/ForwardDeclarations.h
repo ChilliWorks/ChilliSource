@@ -52,6 +52,7 @@ namespace CSBackend
         /// Model
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLMesh);
+        CS_FORWARDDECLARE_CLASS(GLDynamicMesh);
         //----------------------------------------------------
         /// Shader
         //----------------------------------------------------
