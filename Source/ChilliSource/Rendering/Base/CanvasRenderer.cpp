@@ -69,7 +69,7 @@ namespace ChilliSource
                 in_transform.m[0], in_transform.m[1], in_transform.m[2], 0,
                 in_transform.m[3], in_transform.m[4], in_transform.m[5], 0,
                 0, 0, 1, 0,
-                in_transform.m[6], in_transform.m[7], in_transform.m[8], 1);
+                in_transform.m[6], in_transform.m[7], 0, 1);
         }
         //----------------------------------------------------------------------------
         /// Get the width of the character

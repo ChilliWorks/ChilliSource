@@ -212,8 +212,7 @@ namespace CSBackend
             auto renderMesh = renderCommand->GetRenderMesh();
             
             //TODO: Should be pooled.
-            auto glMesh = new GLMesh(renderMesh->GetPolygonType(), renderMesh->GetVertexFormat(), renderMesh->GetIndexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(),
-                                     renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
+            auto glMesh = new GLMesh(renderMesh->GetVertexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
             
             renderMesh->SetExtraData(glMesh);
         }

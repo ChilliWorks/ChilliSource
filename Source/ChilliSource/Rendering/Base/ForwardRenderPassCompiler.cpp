@@ -336,7 +336,7 @@ namespace ChilliSource
         CameraRenderPassGroup CompileUICameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
         {
             constexpr f32 k_near = 0.0f;
-            constexpr f32 k_far = 5.0f;
+            constexpr f32 k_far = 1.0f;
             auto projMatrix = Matrix4::CreateOrthographicProjectionLH(0, renderFrame.GetResolution().x, 0, renderFrame.GetResolution().y, k_near, k_far);
             RenderCamera uiCamera(Matrix4::k_identity, projMatrix);
             
@@ -344,7 +344,9 @@ namespace ChilliSource
             auto uiRenderPassObjects = GetTransparentRenderPassObjects(uiRenderObjects);
             CS_ASSERT(uiRenderObjects.size() == uiRenderPassObjects.size(), "Invalid number of render pass objects in transparent pass. All render objects in the UI layer should have a transparent material.");
             
-            std::vector<RenderPass> renderPasses { CompileRenderPass(taskContext, uiCamera, renderFrame.GetRenderAmbientLight(), uiRenderPassObjects, nullptr) };
+            //TODO: Handle properly
+            //std::vector<RenderPass> renderPasses { CompileRenderPass(taskContext, uiCamera, renderFrame.GetRenderAmbientLight(), uiRenderPassObjects, nullptr) };
+            std::vector<RenderPass> renderPasses { RenderPass(renderFrame.GetRenderAmbientLight(), uiRenderPassObjects) };
             
             return CameraRenderPassGroup(uiCamera, renderPasses);
         }

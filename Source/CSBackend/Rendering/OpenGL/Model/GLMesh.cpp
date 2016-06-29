@@ -33,8 +33,7 @@ namespace CSBackend
     namespace OpenGL
     {
         //------------------------------------------------------------------------------
-        GLMesh::GLMesh(ChilliSource::PolygonType polygonType, const ChilliSource::VertexFormat& vertexFormat, ChilliSource::IndexFormat indexFormat,
-                       const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept
+        GLMesh::GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept
             : m_vertexFormat(vertexFormat)
         {
             glGenBuffers(1, &m_vertexBufferHandle);

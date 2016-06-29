@@ -48,12 +48,8 @@ namespace CSBackend
             
             /// Creates a new OpenGL mesh with the given mesh data and description.
             ///
-            /// @param polygonType
-            ///     The type of polygon the mesh uses.
             /// @param vertexFormat
             ///     The vertex format.
-            /// @param indexFormat
-            ///     The type of index.
             /// @param vertexData
             ///     The vertex data.
             /// @param vertexDataSize
@@ -63,8 +59,7 @@ namespace CSBackend
             /// @param indexDataSize
             ///     The size of the index data.
             ///
-            GLMesh(ChilliSource::PolygonType polygonType, const ChilliSource::VertexFormat& vertexFormat, ChilliSource::IndexFormat indexFormat,
-                   const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
+            GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
             
             /// Binds the mesh for use and applies attibutes to the given shader.
             ///

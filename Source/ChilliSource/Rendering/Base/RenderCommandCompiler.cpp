@@ -156,7 +156,7 @@ namespace ChilliSource
                         break;
                     }
                     default:
-                        CS_LOG_FATAL("INvalid RenderPassObject type.");
+                        CS_LOG_FATAL("Invalid RenderPassObject type.");
                         break;
                 }
                 
