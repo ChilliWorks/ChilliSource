@@ -39,7 +39,6 @@ namespace ChilliSource
     class TargetRenderPassGroup final
     {
     public:
-        
         TargetRenderPassGroup() = default;
         
         /// @param cameraRenderPassGroups

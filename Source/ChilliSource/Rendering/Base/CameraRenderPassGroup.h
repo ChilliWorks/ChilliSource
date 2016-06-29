@@ -42,6 +42,7 @@ namespace ChilliSource
     class CameraRenderPassGroup final
     {
     public:
+        CameraRenderPassGroup() = default;
         
         /// @param camera
         ///     The camera to use for this pass
