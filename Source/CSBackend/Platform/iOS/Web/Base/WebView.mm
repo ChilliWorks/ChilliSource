@@ -225,7 +225,6 @@ namespace CSBackend
                     [m_webView removeFromSuperview];
                     [m_webView release];
                     m_webView = nil;
-                
                 });
                 
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
