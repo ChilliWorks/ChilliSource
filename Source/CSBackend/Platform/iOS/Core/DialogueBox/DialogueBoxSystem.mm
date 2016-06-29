@@ -35,6 +35,7 @@
 
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/PlatformSystem.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #import <UIKit/UIKit.h>
 
@@ -59,41 +60,49 @@ namespace CSBackend
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
-            NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
-            NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
-            NSString* confirm = [NSStringUtils newNSStringWithUTF8String:in_confirm];
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "System Dialogue requested outside of main thread.");
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
+                NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
+                NSString* confirm = [NSStringUtils newNSStringWithUTF8String:in_confirm];
             
-            UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:confirm otherButtonTitles:nil];
+                UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:confirm otherButtonTitles:nil];
             
-            pConfirm.tag = in_id;
-            [pConfirm show];
-            [pConfirm release];
+                pConfirm.tag = in_id;
+                [pConfirm show];
+                [pConfirm release];
             
-            [title release];
-            [message release];
-            [confirm release];
-            
+                [title release];
+                [message release];
+                [confirm release];
+            });
+                
             m_activeSysConfirmDelegate = in_delegate;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
-            NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
-            NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
-            NSString* confirm = [NSStringUtils newNSStringWithUTF8String:in_confirm];
-            NSString* cancel = [NSStringUtils newNSStringWithUTF8String:in_cancel];
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "System Confirm Dialogue requested outside of main thread.");
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
+                NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
+                NSString* confirm = [NSStringUtils newNSStringWithUTF8String:in_confirm];
+                NSString* cancel = [NSStringUtils newNSStringWithUTF8String:in_cancel];
             
-            UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
+                UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
             
-            pConfirm.tag = in_id;
-            [pConfirm show];
-            [pConfirm release];
+                pConfirm.tag = in_id;
+                [pConfirm show];
+                [pConfirm release];
         
-            [title release];
-            [message release];
-            [confirm release];
-            [cancel release];
+                [title release];
+                [message release];
+                [confirm release];
+                [cancel release];
+            });
             
             m_activeSysConfirmDelegate = in_delegate;
         }
@@ -107,6 +116,7 @@ namespace CSBackend
         //------------------------------------------------------
         void DialogueBoxSystem::OnSystemConfirmDialogResult(s64 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result)
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Dialogue Confirmation Delegate on background thread.");
             if(m_activeSysConfirmDelegate)
         	{
                 //we know the Id is in the range of a u32 as we set it when the confirm dialogue was created meaning we can cast to that.

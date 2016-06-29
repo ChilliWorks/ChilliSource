@@ -38,6 +38,7 @@
 #import <ChilliSource/Core/File/FileSystem.h>
 #import <ChilliSource/Core/File/FileStream.h>
 #import <ChilliSource/Core/String/StringUtils.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/CALayer.h>
@@ -93,6 +94,7 @@ namespace CSBackend
             @autoreleasepool
             {
                 CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
+                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Can't present webview outside of main thread.");
                 
                 m_isPresented = true;
                 m_dismissedDelegate = in_delegate;
@@ -127,6 +129,7 @@ namespace CSBackend
             @autoreleasepool
             {
                 CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
+                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Can't present webview outside of main thread.");
                 
                 m_isPresented = true;
                 m_dismissedDelegate = in_delegate;

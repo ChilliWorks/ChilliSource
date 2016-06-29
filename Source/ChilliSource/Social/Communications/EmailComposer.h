@@ -70,6 +70,17 @@ namespace ChilliSource
             k_html
         };
         //-------------------------------------------------------
+        /// Describes the current state of the system.
+        ///
+        /// @author Jordan Brown
+        //-------------------------------------------------------
+        enum class EmailComposerState
+        {
+            k_inactive,
+            k_presented,
+            k_dismissing
+        };
+        //-------------------------------------------------------
         /// A container for information describing a single
         /// attachment file.
         ///
@@ -85,6 +96,9 @@ namespace ChilliSource
         /// A delegate that is called when the email view is
         /// dismissed, returning the result.
         ///
+        /// If Dismiss() has been called, this must only be called
+        /// after the result delegate has finished, if it exists.
+        ///
         /// @author S McGaw
         ///
         /// @param The result of the email composition.
@@ -93,6 +107,9 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Displays the email activity with the given recipients,
         /// subject and contents.
+        ///
+        /// If Dismiss() has been called, this must only be called
+        /// after the result delegate has finished, if it exists.
         ///
         /// @author S Downie
         ///
@@ -120,6 +137,12 @@ namespace ChilliSource
         //-------------------------------------------------------
         virtual void PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
                                            const Attachment& in_attachment, const SendResultDelegate& in_callback) = 0;
+        //-------------------------------------------------------
+        /// Determines whether or not the composer is presented.
+        ///
+        /// @author Jordan Brown
+        //-------------------------------------------------------
+        virtual bool IsPresented() = 0;
         //-------------------------------------------------------
         /// Dismisses the activity if it is currently displayed.
         ///

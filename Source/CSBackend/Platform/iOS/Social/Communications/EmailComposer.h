@@ -34,6 +34,8 @@
 
 #import <MessageUI/MessageUI.h>
 
+#import <mutex>
+
 @class EmailComposerDelegate;
 
 namespace CSBackend
@@ -63,6 +65,9 @@ namespace CSBackend
             /// Displays the email activity with the given recipients,
             /// subject and contents.
             ///
+            /// If Dismiss() has been called, this must only be called
+            /// after the result delegate has finished, if it exists.
+            ///
             /// @author S Downie
             ///
             /// @param A list of recipients (UTF-8).
@@ -78,6 +83,9 @@ namespace CSBackend
             /// subject and contents, and adds a list of attachments
             /// to the email.
             ///
+            /// If Dismiss() has been called, this must only be called
+            /// after the result delegate has finished, if it exists.
+            ///
             /// @author Ian Copland
             ///
             /// @param A list of recipients (UTF-8).
@@ -89,6 +97,11 @@ namespace CSBackend
             //-------------------------------------------------------
             void PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
                                        const Attachment& in_attachment, const SendResultDelegate & in_callback) override;
+            //-------------------------------------------------------
+            /// Determines whether or not the composer is presented.
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            bool IsPresented() override;
             //-------------------------------------------------------
             /// Dismisses the activity if it is currently displayed.
             ///
@@ -141,11 +154,11 @@ namespace CSBackend
             //------------------------------------------------------
             void OnDestroy() override;
             
-            bool m_isPresented;
             SendResultDelegate m_resultDelegate;
 			EmailComposerDelegate* m_emailComposerDelegate;
 			MFMailComposeViewController* m_viewController;
             UIViewController* m_rootViewController;
+            EmailComposerState m_currentState = EmailComposerState::k_inactive;
 		};
 		 
 	}

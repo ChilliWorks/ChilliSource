@@ -77,6 +77,7 @@ namespace CSBackend
         //----------------------------------------------------
         void Accelerometer::StartUpdating()
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
             if (m_isUpdating == false)
             {
                 m_isUpdating = true;
@@ -123,6 +124,7 @@ namespace CSBackend
         //----------------------------------------------------
         void Accelerometer::StopUpdating()
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
             if (m_isUpdating == true)
             {
                 m_isUpdating = false;

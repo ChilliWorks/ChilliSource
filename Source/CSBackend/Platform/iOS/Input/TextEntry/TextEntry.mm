@@ -32,6 +32,8 @@
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <CSBackend/Platform/iOS/Input/TextEntry/TextEntryDelegate.h>
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 
 #import <UIKit/UIKit.h>
@@ -65,8 +67,9 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
+        void TextEntry::Activate(const std::string& in_text, ChilliSource::TextEntryType in_type, ChilliSource::TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
             if (IsActive() == false && [m_textView canBecomeFirstResponder])
             {
                 SetType(in_type);
@@ -78,11 +81,13 @@ namespace CSBackend
                 [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
 				[m_textView becomeFirstResponder];
             }
+            
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void TextEntry::Deactivate()
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
             if (IsActive() == true)
             {
                 [m_textView resignFirstResponder];
@@ -112,23 +117,27 @@ namespace CSBackend
         //-------------------------------------------------------
         void TextEntry::SetTextBuffer(const std::string& in_text)
         {
-            m_text = in_text;
-            NSString* text = [NSStringUtils newNSStringWithUTF8String:m_text];
-            m_textView.text = text;
-            [text release];
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                std::unique_lock<std::mutex> lock(m_mutex);
+                m_text = in_text;
+                NSString* text = [NSStringUtils newNSStringWithUTF8String:m_text];
+                m_textView.text = text;
+                [text release];
+            });
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void TextEntry::SetType(Type in_type)
+        void TextEntry::SetType(ChilliSource::TextEntryType in_type)
         {
             if(m_textView != nullptr)
             {
                 switch (in_type)
                 {
-                    case ChilliSource::TextEntry::Type::k_text:
+                    case ChilliSource::TextEntryType::k_text:
                         m_textView.keyboardType = UIKeyboardTypeASCIICapable;
                         break;
-                    case ChilliSource::TextEntry::Type::k_numeric:
+                    case ChilliSource::TextEntryType::k_numeric:
                         m_textView.keyboardType = UIKeyboardTypeNumberPad;
                         break;
                     default:
@@ -140,22 +149,22 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void TextEntry::SetCapitalisation(Capitalisation in_capitalisation)
+        void TextEntry::SetCapitalisation(ChilliSource::TextEntryCapitalisation in_capitalisation)
         {
             if(m_textView != nullptr)
             {
                 switch (in_capitalisation)
                 {
-                    case ChilliSource::TextEntry::Capitalisation::k_none:
+                    case ChilliSource::TextEntryCapitalisation::k_none:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
                         break;
-                    case ChilliSource::TextEntry::Capitalisation::k_words:
+                    case ChilliSource::TextEntryCapitalisation::k_words:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeWords;
                         break;
-                    case ChilliSource::TextEntry::Capitalisation::k_sentences:
+                    case ChilliSource::TextEntryCapitalisation::k_sentences:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
                         break;
-                    case ChilliSource::TextEntry::Capitalisation::k_all:
+                    case ChilliSource::TextEntryCapitalisation::k_all:
                         m_textView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
                         break;
                     default:

@@ -35,6 +35,8 @@
 #include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
+#include <mutex>
+
 @class CMMotionManager;
 
 namespace CSBackend
@@ -139,6 +141,7 @@ namespace CSBackend
             bool m_isUpdating;
             CMMotionManager* m_motionManager;
             ChilliSource::Event<AccelerationUpdatedDelegate> m_accelerationUpdatedEvent;
+            std::mutex m_mutex;
 		};
 	}
 }

@@ -29,8 +29,10 @@
 #ifdef CS_TARGETPLATFORM_IOS
 
 #include <CSBackend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
-
 #include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #import <UIKit/UIKit.h>
 
@@ -84,6 +86,7 @@ namespace CSBackend
         //---------------------------------------------------
         void LocalNotificationSystem::SetEnabled(bool in_enabled)
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to enable/disable notifications outside of main thread.");
             m_enabled = in_enabled;
             
             if (m_enabled == false)
@@ -97,6 +100,7 @@ namespace CSBackend
         {
             @autoreleasepool
             {
+                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to schedule notification outside of main thread.");
                 //Clean-up any duplicates from recently added
                 for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
                 {
@@ -167,6 +171,7 @@ namespace CSBackend
         //--------------------------------------------------------
         void LocalNotificationSystem::GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to retrieve scheduled notifications outside of main thread.");
             for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
 			{
                 TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
@@ -200,6 +205,7 @@ namespace CSBackend
         //------------------------------------------------
         void LocalNotificationSystem::CancelByID(ChilliSource::Notification::ID in_id)
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel notification outside of main thread.");
 			for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
 			{
 				ChilliSource::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
@@ -229,6 +235,7 @@ namespace CSBackend
         //------------------------------------------------
         void LocalNotificationSystem::CancelAll()
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel all notifications outside of main thread.");
             [[UIApplication sharedApplication] cancelAllLocalNotifications];
         }
         //--------------------------------------------------
