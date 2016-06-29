@@ -654,14 +654,16 @@ namespace ChilliSource
         ///     The world matrix of the sprite.
         /// @param material
         ///     The material of the sprite.
+        /// @param priority
+        ///     the order priority of the render object.
         ///
         void AddSpriteRenderObject(RenderSnapshot* renderSnapshot, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour,
-                                   AlignmentAnchor alignmentAnchor, const Matrix4& worldMatrix, const MaterialCSPtr& material) noexcept
+                                   AlignmentAnchor alignmentAnchor, const Matrix4& worldMatrix, const MaterialCSPtr& material, u32 priority) noexcept
         {
             auto renderDynamicMesh = SpriteMeshBuilder::Build(localPosition, localSize, uvs, colour, alignmentAnchor);
             auto boundingSphere = CalcWorldSpaceBoundingSphere(renderDynamicMesh->GetBoundingSphere(), worldMatrix.GetTranslation(), localSize);
             
-            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, RenderLayer::k_ui));
+            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, RenderLayer::k_ui, priority));
             renderSnapshot->AddRenderDynamicMesh(std::move(renderDynamicMesh));
         }
     }
@@ -759,7 +761,7 @@ namespace ChilliSource
                                  const Colour& in_colour, AlignmentAnchor in_anchor)
     {
         auto material = m_materialPool->GetMaterial(in_texture);
-        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(in_offset, 0.0f), in_size, in_UVs, in_colour, in_anchor, Convert2DTransformTo3D(in_transform), material);
+        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(in_offset, 0.0f), in_size, in_UVs, in_colour, in_anchor, Convert2DTransformTo3D(in_transform), material, m_nextPriority++);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
@@ -838,7 +840,7 @@ namespace ChilliSource
         for (const auto& character : in_characters)
         {
             matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
-            AddSpriteRenderObject(m_currentRenderSnapshot, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material);
+            AddSpriteRenderObject(m_currentRenderSnapshot, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
         }
     }
     //----------------------------------------------------------------------------
@@ -852,7 +854,10 @@ namespace ChilliSource
         CS_ASSERT(activeUICanvas != nullptr, "Cannot render null UI canvas");
         
         m_currentRenderSnapshot = &in_renderSnapshot;
+        m_nextPriority = 0;
+        
         activeUICanvas->Draw(this);
+        
         m_currentRenderSnapshot = nullptr;
         
         m_materialPool->Clear();

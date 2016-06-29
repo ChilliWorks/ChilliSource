@@ -208,6 +208,7 @@ namespace ChilliSource
 
     private:
         RenderSnapshot* m_currentRenderSnapshot = nullptr;
+        u32 m_nextPriority = 0;
         
         std::vector<Vector2> m_scissorPositions;
         std::vector<Vector2> m_scissorSizes;

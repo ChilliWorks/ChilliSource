@@ -63,8 +63,12 @@ namespace ChilliSource
         ///     bounding sphere.
         /// @param renderLayer
         ///     The layer the object should be rendered into.
+        /// @param priority
+        ///     (Optional) The order priority of the render object; lower values will be rendered first.
+        ///     This may or may not be used depending on the render pass the object will be included in.
+        ///     Objects with the same order value will return in an undefined order. Defaults to 0.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer, u32 priority = 0) noexcept;
         
         /// Creates a new instance with the given material group, mesh and transform data.
         ///
@@ -79,8 +83,12 @@ namespace ChilliSource
         ///     bounding sphere.
         /// @param renderLayer
         ///     The layer the object should be rendered into.
+        /// @param priority
+        ///     (Optional) The order priority of the render object; lower values will be rendered first.
+        ///     This may or may not be used depending on the sort algorithm used, as is the order
+        ///     of objects with the same priority. Defaults to 0.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer, u32 priority = 0) noexcept;
         
         /// @return The mesh type of object this describes.
         ///
@@ -110,7 +118,13 @@ namespace ChilliSource
         
         /// @return The layer the object should be rendered into.
         ///
-        RenderLayer GetRenderLayer() const { return m_renderLayer; }
+        RenderLayer GetRenderLayer() const noexcept { return m_renderLayer; }
+        
+        /// @return The order priority of the render object; lower values will be rendered first.
+        ///     This may or may not be used depending on the sort algorithm used, as is the order
+        ///     of objects with the same priority.
+        ///
+        u32 GetPriority() const noexcept { return m_priority; }
         
     private:
         Type m_type;
@@ -120,6 +134,7 @@ namespace ChilliSource
         Matrix4 m_worldMatrix;
         Sphere m_boundingSphere;
         RenderLayer m_renderLayer;
+        u32 m_priority;
     };
 }
 

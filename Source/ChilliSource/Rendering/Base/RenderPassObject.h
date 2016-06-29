@@ -61,8 +61,12 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     The world space bounding sphere of the object. This should be build using the local mesh
         ///     bounding sphere.
+        /// @param priority
+        ///     The order priority of the render object; lower values will be rendered first. This may or
+        ///     may not be used depending on the sort algorithm used, as is the order of objects with the
+        ///     same priority.
         ///
-        RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere) noexcept;
+        RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, u32 priority) noexcept;
         
         /// Creates a new dynamic mesh render pass object.
         ///
@@ -75,8 +79,12 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     The world space bounding sphere of the object. This should be build using the local mesh
         ///     bounding sphere.
+        /// @param priority
+        ///     The order priority of the render object; lower values will be rendered first. This may or
+        ///     may not be used depending on the sort algorithm used, as is the order of objects with the
+        ///     same priority.
         ///
-        RenderPassObject(const RenderMaterial* renderMaterial, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere) noexcept;
+        RenderPassObject(const RenderMaterial* renderMaterial, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, u32 priority) noexcept;
         
         /// @return The type of object this describes.
         ///
@@ -104,6 +112,12 @@ namespace ChilliSource
         ///
         const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
         
+        /// @return The order priority of the render object; lower values will be rendered first.
+        ///     This may or may not be used depending on the sort algorithm used, as is the order
+        ///     of objects with the same priority.
+        ///
+        u32 GetPriority() const noexcept { return m_priority; }
+        
     private:
         Type m_type;
         const RenderMaterial* m_renderMaterial;
@@ -111,6 +125,7 @@ namespace ChilliSource
         const RenderDynamicMesh* m_renderDynamicMesh = nullptr;
         Matrix4 m_worldMatrix;
         Sphere m_boundingSphere;
+        u32 m_priority;
     };
 }
 

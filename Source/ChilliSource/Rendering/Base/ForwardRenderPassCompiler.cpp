@@ -57,12 +57,12 @@ namespace ChilliSource
             switch (renderObject.GetType())
             {
                 case RenderObject::Type::k_static:
-                    return RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere());
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(), renderObject.GetPriority());
                 case RenderObject::Type::k_dynamic:
-                    return RenderPassObject(renderMaterial, renderObject.GetRenderDynamicMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere());
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderDynamicMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(), renderObject.GetPriority());
                 default:
                     CS_LOG_FATAL("Invalid RenderObject type.");
-                    return RenderPassObject(nullptr, reinterpret_cast<const RenderMesh*>(NULL), Matrix4::k_identity, Sphere());
+                    return RenderPassObject(nullptr, reinterpret_cast<const RenderMesh*>(NULL), Matrix4::k_identity, Sphere(), 0);
             }
         }
         
@@ -271,7 +271,7 @@ namespace ChilliSource
             auto uiRenderPassObjects = GetTransparentRenderPassObjects(visibleUIRenderObjects);
             CS_ASSERT(visibleUIRenderObjects.size() == uiRenderPassObjects.size(), "Invalid number of render pass objects in transparent pass. All render objects in the UI layer should have a transparent material.");
             
-            //TODO: Sort UI
+            RenderPassObjectSorter::PrioritySort(uiRenderPassObjects);
             
             std::vector<RenderPass> renderPasses { RenderPass(renderFrame.GetRenderAmbientLight(), uiRenderPassObjects) };
             return CameraRenderPassGroup(uiCamera, renderPasses);

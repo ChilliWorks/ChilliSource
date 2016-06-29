@@ -24,6 +24,7 @@
 
 #include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
 
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
@@ -172,6 +173,7 @@ namespace ChilliSource
     {
         u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());
         RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(numLists, std::move(renderDynamicMeshes)));
+        std::vector<Task> tasks;
         u32 currentList = 0;
         
         if (preRenderCommandList->GetOrderedList().size() > 0)
@@ -194,7 +196,11 @@ namespace ChilliSource
                     {
                         if (renderPass.GetRenderPassObjects().size() > 0)
                         {
-                            CompileRenderCommandsForPass(renderPass, renderCommandBuffer->GetRenderCommandList(currentList++));
+                            auto renderCommandList = renderCommandBuffer->GetRenderCommandList(currentList++);
+                            tasks.push_back([&renderPass, &renderCommandList](const TaskContext& innerTaskContext)
+                            {
+                                CompileRenderCommandsForPass(renderPass, renderCommandList);
+                            });
                         }
                     }
                 }
@@ -207,6 +213,8 @@ namespace ChilliSource
         {
             *renderCommandBuffer->GetRenderCommandList(currentList++) = std::move(*postRenderCommandList);
         }
+        
+        taskContext.ProcessChildTasks(tasks);
         
         return std::move(renderCommandBuffer);
     }

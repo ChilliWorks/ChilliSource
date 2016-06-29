@@ -321,7 +321,7 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationDidReceiveMemoryWarning:(UIApplication*)in_application
 {
-    //TODO: !? Handle memory warnings
+    //TODO: Handle memory warnings
     
 //    for(id<UIApplicationDelegate> delegate in subdelegates)
 //    {
