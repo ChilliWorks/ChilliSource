@@ -78,7 +78,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		//-----------------------------------------------
 		WebView::WebView()
-            : m_webView(nil), m_dismissButton(nil), m_isPresented(false), m_activityIndicator(nil), m_webViewDelegate(nil), m_dismissButtonRelativeSize(0.0f)
+            : m_webView(nil), m_dismissButton(nil), m_currentState(WebViewState::k_inactive), m_activityIndicator(nil), m_webViewDelegate(nil), m_dismissButtonRelativeSize(0.0f)
 		{
 		}
         //-------------------------------------------------------
@@ -93,33 +93,37 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
+                CS_ASSERT(m_currentState == WebViewState::k_inactive, "Cannot present a web view while one is already displayed, or is being dismissed.");
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Can't present webview outside of main thread.");
                 
-                m_isPresented = true;
-                m_dismissedDelegate = in_delegate;
-                m_linkHandlerDelegate = in_customLinkHandler;
-                m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
+                m_currentState = WebViewState::k_presented;
                 
-                if(!m_webView)
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
-                    CreateWebview(in_size);
+                    m_dismissedDelegate = in_delegate;
+                    m_linkHandlerDelegate = in_customLinkHandler;
+                    m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
                     
-                    m_anchor = "";
+                    if(!m_webView)
+                    {
+                        CreateWebview(in_size);
+                        
+                        m_anchor = "";
+                        
+                        NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
+                        NSURL* url = [NSURL URLWithString:urlString];
+                        [urlString release];
+                        
+                        [m_webView loadRequest:[NSURLRequest requestWithURL:url]];
+                        
+                        m_webView.backgroundColor = [UIColor clearColor];
+                        m_webView.opaque = NO;
+                        
+                        AddActivityIndicator();
+                    }
                     
-                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
-                    NSURL* url = [NSURL URLWithString:urlString];
-                    [urlString release];
-                    
-                    [m_webView loadRequest:[NSURLRequest requestWithURL:url]];
-                    
-                    m_webView.backgroundColor = [UIColor clearColor];
-                    m_webView.opaque = NO;
-                    
-                    AddActivityIndicator();
-                }
-                
-                Display();
+                    Display();
+                });
             }
 		}
 		//-----------------------------------------------
@@ -128,48 +132,52 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
+                CS_ASSERT(m_currentState == WebViewState::k_inactive, "Cannot present a web view while one is already displayed, or is being dismissed.");
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Can't present webview outside of main thread.");
                 
-                m_isPresented = true;
-                m_dismissedDelegate = in_delegate;
-                m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
-                m_linkHandlerDelegate = in_customLinkHandler;
+                m_currentState = WebViewState::k_presented;
                 
-                CreateWebview(in_size);
-                
-                std::string filePath;
-                GetFilePathAndAnchor(in_filePath, filePath, m_anchor);
-                
-                ChilliSource::FileSystem* fileSystem = ChilliSource::Application::Get()->GetFileSystem();
-
-                std::string fullFilePath;
-                if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(filePath) == false)
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
-                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + filePath;
-                }
-                else
-                {
-                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
-                }
+                    m_dismissedDelegate = in_delegate;
+                    m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
+                    m_linkHandlerDelegate = in_customLinkHandler;
+                    
+                    CreateWebview(in_size);
+                    
+                    std::string filePath;
+                    GetFilePathAndAnchor(in_filePath, filePath, m_anchor);
+                    
+                    ChilliSource::FileSystem* fileSystem = ChilliSource::Application::Get()->GetFileSystem();
 
-                std::string strHTMLFileContents;
-                ChilliSource::FileStreamUPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_read);
-                pHTMLFile->GetAll(strHTMLFileContents);
-                pHTMLFile.reset();
-                
-                NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:strHTMLFileContents];
-                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];
-                [m_webView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
-                [urlString release];
-                [pstrHTML release];
-                
-                m_webView.backgroundColor = [UIColor clearColor];
-                m_webView.opaque = NO;
-                
-                AddActivityIndicator();
-                
-                Display();
+                    std::string fullFilePath;
+                    if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(filePath) == false)
+                    {
+                        fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + filePath;
+                    }
+                    else
+                    {
+                        fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
+                    }
+
+                    std::string strHTMLFileContents;
+                    ChilliSource::FileStreamUPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, ChilliSource::FileMode::k_read);
+                    pHTMLFile->GetAll(strHTMLFileContents);
+                    pHTMLFile.reset();
+                    
+                    NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:strHTMLFileContents];
+                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];
+                    [m_webView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
+                    [urlString release];
+                    [pstrHTML release];
+                    
+                    m_webView.backgroundColor = [UIColor clearColor];
+                    m_webView.opaque = NO;
+                    
+                    AddActivityIndicator();
+                    
+                    Display();
+                });
             }
 		}
         //-----------------------------------------------
@@ -191,7 +199,12 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                if(m_isPresented == true)
+                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to dismiss Web View outside of main thread.");
+                CS_ASSERT(IsPresented(), "Cannot dismiss non-presented webview.");
+                
+                m_currentState = WebViewState::k_dismissing;
+                
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
                     if (m_activityIndicator != nil)
                     {
@@ -212,23 +225,27 @@ namespace CSBackend
                     [m_webView removeFromSuperview];
                     [m_webView release];
                     m_webView = nil;
-                    
-                    m_isPresented = false;
-                    
+                
+                });
+                
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                {
                     if (m_dismissedDelegate)
                     {
                         DismissedDelegate delegate = m_dismissedDelegate;
                         m_dismissedDelegate = nullptr;
                         delegate();
                     }
-                }
+                    
+                    m_currentState = WebViewState::k_inactive;
+                });
             }
 		}
         //---------------------------------------------------------
         //---------------------------------------------------------
         bool WebView::IsPresented() const
         {
-            return m_isPresented;
+            return (m_currentState == WebViewState::k_presented);
         }
         //---------------------------------------------------------
         //---------------------------------------------------------

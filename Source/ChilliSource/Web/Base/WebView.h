@@ -50,6 +50,17 @@ namespace ChilliSource
     public:
         CS_DECLARE_NAMEDTYPE(WebViewActivity);
         //------------------------------------------------------------------------------
+        /// Describes the current state of the system.
+        ///
+        /// @author Jordan Brown
+        //------------------------------------------------------------------------------
+        enum class WebViewState
+        {
+            k_inactive,
+            k_presented,
+            k_dismissing
+        };
+        //------------------------------------------------------------------------------
         /// A delegate called when the webview is dismissed.
         ///
         /// @author S Downie

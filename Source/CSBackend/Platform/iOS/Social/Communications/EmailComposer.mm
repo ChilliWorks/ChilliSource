@@ -170,7 +170,7 @@ namespace CSBackend
                     Cleanup();
                 });
                 
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
                 {
                     if (m_resultDelegate != nullptr)
                     {
