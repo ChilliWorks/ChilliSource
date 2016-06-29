@@ -197,7 +197,7 @@ namespace ChilliSource
                         if (renderPass.GetRenderPassObjects().size() > 0)
                         {
                             auto renderCommandList = renderCommandBuffer->GetRenderCommandList(currentList++);
-                            tasks.push_back([&renderPass, &renderCommandList](const TaskContext& innerTaskContext)
+                            tasks.push_back([=, &renderPass](const TaskContext& innerTaskContext)
                             {
                                 CompileRenderCommandsForPass(renderPass, renderCommandList);
                             });

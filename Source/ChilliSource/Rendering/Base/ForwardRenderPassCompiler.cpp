@@ -239,7 +239,7 @@ namespace ChilliSource
             {
                 auto renderPassObjects = GetTransparentRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::TransparentSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                renderPasses[basePassIndex] = RenderPass(renderFrame.GetRenderAmbientLight(), renderPassObjects);
+                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetRenderAmbientLight(), renderPassObjects);
             });
             
             taskContext.ProcessChildTasks(tasks);
@@ -273,7 +273,12 @@ namespace ChilliSource
             
             RenderPassObjectSorter::PrioritySort(uiRenderPassObjects);
             
-            std::vector<RenderPass> renderPasses { RenderPass(renderFrame.GetRenderAmbientLight(), uiRenderPassObjects) };
+            std::vector<RenderPass> renderPasses;
+            if (uiRenderPassObjects.size() > 0)
+            {
+                renderPasses.push_back(RenderPass(renderFrame.GetRenderAmbientLight(), uiRenderPassObjects));
+            }
+            
             return CameraRenderPassGroup(uiCamera, renderPasses);
         }
         
