@@ -50,6 +50,18 @@ namespace ChilliSource
     public:
         CS_DECLARE_NAMEDTYPE(VideoPlayer);
         //-------------------------------------------------------
+        /// Represents the current state of the video player.
+        ///
+        /// @author Jordan Brown
+        //-------------------------------------------------------
+        enum class VideoPlayerState
+        {
+            k_inactive,
+            k_preparing,
+            k_ready,
+            k_playing
+        };
+        //-------------------------------------------------------
         /// A delegate called when the video finishes playback.
         ///
         /// @author S Downie

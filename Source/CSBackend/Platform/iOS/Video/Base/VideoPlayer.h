@@ -206,7 +206,7 @@ namespace CSBackend
         private:
             ChilliSource::Screen* m_screen;
             
-            bool m_playing;
+            VideoPlayerState m_currentState = VideoPlayerState::k_inactive;
             MPMoviePlayerController* m_moviePlayerController;
             
             bool m_dismissWithTap;
