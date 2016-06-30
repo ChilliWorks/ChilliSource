@@ -89,7 +89,7 @@ namespace CSBackend
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         VideoPlayer::VideoPlayer()
-            : m_moviePlayerController(nil), m_tapListener(nil), m_currentState(VideoPlayerState::k_inactive), m_dismissWithTap(false), m_videoOverlayView(nil), m_subtitlesRenderer(nil)
+            : m_moviePlayerController(nil), m_tapListener(nil), m_currentState(VideoPlayer::State::k_inactive), m_dismissWithTap(false), m_videoOverlayView(nil), m_subtitlesRenderer(nil)
         {
         }
 		//--------------------------------------------------------------
@@ -104,10 +104,8 @@ namespace CSBackend
         {
             @autoreleasepool
             {
-                CS_ASSERT(m_currentState == VideoPlayerState::k_inactive, "Cannot present video while a video is already playing.");
+                CS_ASSERT(m_currentState == VideoPlayer::State::k_inactive, "Cannot present video while a video is already playing.");
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present video on background thread.");
-                
-                m_currentState = VideoPlayerState::k_preparing;
                 
                 m_completionDelegateConnection = std::move(in_delegateConnection);
                 
@@ -134,13 +132,16 @@ namespace CSBackend
                     
                     AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, m_moviePlayerController);
                     
-                });
+                    std::unique_lock<std::mutex> lock(m_mutex);
+                    m_currentState = VideoPlayer::State::k_preparing;
+                    lock.unlock();
                     
-                Prepare();
-                
-                m_dismissWithTap = in_dismissWithTap;
-                
-                ListenForMoviePlayerNotifications();
+                    Prepare();
+                    
+                    m_dismissWithTap = in_dismissWithTap;
+                    
+                    ListenForMoviePlayerNotifications();
+                });
             }
         }
         //--------------------------------------------------------------
@@ -173,6 +174,12 @@ namespace CSBackend
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
+        bool VideoPlayer::IsPresented()
+        {
+            return (m_currentState != VideoPlayer::State::k_inactive);
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
         void VideoPlayer::OnInit()
         {
             m_screen = ChilliSource::Application::Get()->GetSystem<ChilliSource::Screen>();
@@ -182,33 +189,27 @@ namespace CSBackend
         //---------------------------------------------------------------
         void VideoPlayer::Prepare()
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot prepare to play video on background thread.");
-            CS_ASSERT(m_currentState == VideoPlayerState::k_preparing, "Video player not presented, cannot prepare to play video.");
+            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(m_currentState == VideoPlayer::State::k_preparing, "Video player not presented, cannot prepare to play video.");
             
-            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-            {
-                [m_moviePlayerController setControlStyle:MPMovieControlStyleNone];
-                [m_moviePlayerController setFullscreen:YES];
-                [m_moviePlayerController setRepeatMode:MPMovieRepeatModeNone];
-                [m_moviePlayerController prepareToPlay];
-            });
+            [m_moviePlayerController setControlStyle:MPMovieControlStyleNone];
+            [m_moviePlayerController setFullscreen:YES];
+            [m_moviePlayerController setRepeatMode:MPMovieRepeatModeNone];
+            [m_moviePlayerController prepareToPlay];
             
-            m_currentState = VideoPlayerState::k_ready;
+            m_currentState = VideoPlayer::State::k_ready;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
         void VideoPlayer::Play()
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot begin video playback on background thread.");
-            CS_ASSERT(m_currentState == VideoPlayerState::k_ready, "Video player not prepared to play video yet, cannot play.");
+            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(m_currentState == VideoPlayer::State::k_ready, "Video player not prepared to play video yet, cannot play.");
             
-            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-            {
-                CreateVideoOverlay();
-                [m_moviePlayerController play];
-            });
+            CreateVideoOverlay();
+            [m_moviePlayerController play];
             
-            m_currentState = VideoPlayerState::k_playing;
+            m_currentState = VideoPlayer::State::k_playing;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -276,47 +277,56 @@ namespace CSBackend
         //---------------------------------------------------------------
         void VideoPlayer::OnPlaybackFinished()
         {
-            CS_ASSERT(m_currentState == VideoPlayerState::k_playing, "Playback finished should only happen once per playing video.");
-            m_currentState = VideoPlayerState::k_inactive;
+            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(m_currentState == VideoPlayer::State::k_playing, "Playback finished should only happen once per playing video.");
             
-            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-            {
-                DeleteVideoOverlay();
-                
-                if([m_moviePlayerController respondsToSelector:@selector(setFullscreen:animated:)])
-                {
-                    [m_moviePlayerController.view removeFromSuperview];
-                }
-                
-                AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, m_moviePlayerController);
-                
-                StopListeningForMoviePlayerNotifications();
-                
-                [m_moviePlayerController release];
-                m_moviePlayerController = nil;
-                
-                [[NSNotificationAdapter sharedInstance] StopListeningForMPPlaybackDidFinish];
-                m_moviePlayerPlaybackFinishedConnection = nullptr;
-            });
+            DeleteVideoOverlay();
             
-            if (m_completionDelegateConnection != nullptr)
+            if([m_moviePlayerController respondsToSelector:@selector(setFullscreen:animated:)])
             {
-                auto delegateConnection = std::move(m_completionDelegateConnection);
-                m_completionDelegateConnection = nullptr;
-                delegateConnection->Call();
+                [m_moviePlayerController.view removeFromSuperview];
             }
+            
+            AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, m_moviePlayerController);
+            
+            StopListeningForMoviePlayerNotifications();
+            
+            [m_moviePlayerController release];
+            m_moviePlayerController = nil;
+            
+            [[NSNotificationAdapter sharedInstance] StopListeningForMPPlaybackDidFinish];
+            m_moviePlayerPlaybackFinishedConnection = nullptr;
+            lock.unlock();
+            
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                std::unique_lock<std::mutex> taskLock(m_mutex);
+                m_currentState = VideoPlayer::State::k_inactive;
+                
+                if (m_completionDelegateConnection != nullptr)
+                {
+                    auto delegateConnection = std::move(m_completionDelegateConnection);
+                    m_completionDelegateConnection = nullptr;
+                    delegateConnection->Call();
+                }
+            });
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
         void VideoPlayer::OnResume()
         {
-            if (m_moviePlayerController != nil)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                if (m_currentState == VideoPlayerState::k_playing || m_currentState == VideoPlayerState::k_ready)
+                std::unique_lock<std::mutex> lock(m_mutex);
+                
+                if (m_moviePlayerController != nil)
                 {
-                    [m_moviePlayerController play];
+                    if (m_currentState == VideoPlayer::State::k_playing || m_currentState == VideoPlayer::State::k_ready)
+                    {
+                        [m_moviePlayerController play];
+                    }
                 }
-            }
+            });
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------

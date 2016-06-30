@@ -32,6 +32,8 @@
 #import <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Video/Base/VideoPlayer.h>
 
+#import <mutex>
+
 @class MPMoviePlayerController;
 @class CVideoPlayerTapListener;
 @class CSubtitlesRenderer;
@@ -103,6 +105,13 @@ namespace CSBackend
             /// @return the actual dimensions of the playing video.
             //-------------------------------------------------------
             ChilliSource::Vector2 GetVideoDimensions() const;
+            //-------------------------------------------------------
+            /// Returns whether or not the player is currently
+            /// presented.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            bool IsPresented() override;
         private:
             
             friend ChilliSource::VideoPlayerUPtr ChilliSource::VideoPlayer::Create();
@@ -206,7 +215,7 @@ namespace CSBackend
         private:
             ChilliSource::Screen* m_screen;
             
-            VideoPlayerState m_currentState = VideoPlayerState::k_inactive;
+            VideoPlayer::State m_currentState = VideoPlayer::State::k_inactive;
             MPMoviePlayerController* m_moviePlayerController;
             
             bool m_dismissWithTap;
@@ -221,6 +230,8 @@ namespace CSBackend
             ChilliSource::EventConnectionUPtr m_moviePlayerPlaybackFinishedConnection;
             
             VideoCompleteDelegate::Connection m_completionDelegateConnection;
+            
+            std::mutex m_mutex;
         };
     }
 }

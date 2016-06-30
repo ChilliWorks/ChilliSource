@@ -50,18 +50,6 @@ namespace ChilliSource
     public:
         CS_DECLARE_NAMEDTYPE(VideoPlayer);
         //-------------------------------------------------------
-        /// Represents the current state of the video player.
-        ///
-        /// @author Jordan Brown
-        //-------------------------------------------------------
-        enum class VideoPlayerState
-        {
-            k_inactive,
-            k_preparing,
-            k_ready,
-            k_playing
-        };
-        //-------------------------------------------------------
         /// A delegate called when the video finishes playback.
         ///
         /// @author S Downie
@@ -98,6 +86,13 @@ namespace ChilliSource
         //--------------------------------------------------------
         virtual void PresentWithSubtitles(StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                           bool in_dismissWithTap, const Colour& in_backgroundColour = Colour::k_black) = 0;
+        //-------------------------------------------------------
+        /// Returns whether or not the player is currently
+        /// presented.
+        ///
+        /// @author Jordan Brown
+        //-------------------------------------------------------
+        virtual bool IsPresented() = 0;
         //--------------------------------------------------------
         /// Destructor
         ///
@@ -106,6 +101,18 @@ namespace ChilliSource
         virtual ~VideoPlayer(){}
     protected:
         friend class State;
+        //-------------------------------------------------------
+        /// Represents the current state of the video player.
+        ///
+        /// @author Jordan Brown
+        //-------------------------------------------------------
+        enum class State
+        {
+            k_inactive,
+            k_preparing,
+            k_ready,
+            k_playing
+        };
         //-------------------------------------------------------
         /// Create the platform dependent backend
         ///

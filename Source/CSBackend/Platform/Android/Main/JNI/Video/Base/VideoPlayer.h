@@ -109,7 +109,13 @@ namespace CSBackend
             /// @author Ian Copland
             //------------------------------------------------------------------------------
             void OnUpdateSubtitles();
-
+            //-------------------------------------------------------
+            /// Returns whether or not the player is currently
+            /// presented.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            bool IsPresented() override;
         private:
             friend ChilliSource::VideoPlayerUPtr ChilliSource::VideoPlayer::Create();
             //------------------------------------------------------------------------------

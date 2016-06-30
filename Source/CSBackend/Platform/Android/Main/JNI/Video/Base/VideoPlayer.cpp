@@ -188,6 +188,12 @@ namespace CSBackend
 			m_subtitles = in_subtitles;
 			Present(in_storageLocation, in_filePath, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
 		}
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        bool VideoPlayer::IsPresented()
+        {
+            return m_isPlaying;
+        }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
         void VideoPlayer::OnInit()
