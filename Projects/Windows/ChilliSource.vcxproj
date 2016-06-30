@@ -131,7 +131,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandCompiler.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp" />
@@ -175,6 +174,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Model.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\ModelDesc.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderDynamicMesh.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.cpp" />
@@ -218,6 +218,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyCameraRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDynamicMeshRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMaterialRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginRenderCommand.cpp" />
@@ -240,6 +241,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteMeshBuilder.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp" />
@@ -325,10 +327,12 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Material\GLMaterial.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLDynamicMesh.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMeshUtils.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitManager.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTextureUnitManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio.h" />
@@ -546,13 +550,13 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderPassCompiler.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderLayer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPass.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObject.h" />
@@ -599,6 +603,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\ModelDesc.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PolygonType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderDynamicMesh.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.h" />
@@ -652,6 +657,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomConstantParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomCurveParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyCameraRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDynamicMeshRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMaterialRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginRenderCommand.h" />
@@ -677,6 +683,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteMeshBuilder.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h" />
@@ -784,10 +791,12 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Material\GLMaterial.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLDynamicMesh.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMeshUtils.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitManager.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTextureUnitManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{09108227-056C-4A6F-9A74-1C3ECA245C3F}</ProjectGuid>

@@ -999,9 +999,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
@@ -1227,11 +1224,26 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitManager.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandBuffer.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteMeshBuilder.cpp">
+      <Filter>ChilliSource\Rendering\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDynamicMeshRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderDynamicMesh.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLDynamicMesh.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMeshUtils.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTextureUnitManager.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2342,9 +2354,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
@@ -2600,11 +2609,29 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.h">
       <Filter>CSBackend\Rendering\OpenGL\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitManager.h">
-      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandBuffer.h">
       <Filter>ChilliSource\Rendering\RenderCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteMeshBuilder.h">
+      <Filter>ChilliSource\Rendering\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDynamicMeshRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderDynamicMesh.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLDynamicMesh.h">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMeshUtils.h">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTextureUnitManager.h">
+      <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderLayer.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
