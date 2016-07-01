@@ -297,11 +297,11 @@ namespace ChilliSource
 
             // Write to disk
             FileSystem* pFileSystem = Application::Get()->GetFileSystem();
-            FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_writeBinary);
-            if(pFileStream != nullptr)
+            auto fileStream = pFileSystem->CreateBinaryOutputStream(StorageLocation::k_saveData, k_filename);
+            if(fileStream != nullptr)
             {
-                pFileStream->Write(reinterpret_cast<const s8*>(encryptedData.m_data.get()), encryptedData.m_size);
-                pFileStream.reset();
+                fileStream->Write(reinterpret_cast<const u8*>(encryptedData.m_data.get()), encryptedData.m_size);
+                fileStream.reset();
             }
             
             m_needsSynchonised = false;
@@ -314,14 +314,12 @@ namespace ChilliSource
         FileSystem* pFileSystem = Application::Get()->GetFileSystem();
         if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, k_filename) == true)
         {
-            FileStreamSPtr fileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_readBinary);
+            auto fileStream = pFileSystem->CreateBinaryInputStream(StorageLocation::k_saveData, k_filename);
             if (fileStream != nullptr)
             {
-                fileStream->SeekG(0, SeekDir::k_end);
-                u32 encryptedDataSize = fileStream->TellG();
-                fileStream->SeekG(0, SeekDir::k_beginning);
+                u32 encryptedDataSize = u32(fileStream->GetLength());
                 
-                std::unique_ptr<s8[]> encryptedData(new s8[encryptedDataSize]);
+                std::unique_ptr<u8[]> encryptedData(new u8[encryptedDataSize]);
                 fileStream->Read(encryptedData.get(), encryptedDataSize);
                 fileStream.reset();
                 

@@ -30,7 +30,6 @@
 #define _CHILLISOURCE_CORE_BASE_UTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/File/FileStream.h>
 
 #include <json/forwards.h>
 
@@ -136,7 +135,7 @@ namespace ChilliSource
         }
         
         bool          FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent);
-        FileStreamSPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
+        TextOutputStreamUPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
         
         bool ZlibCompressString(const std::string &instrUncompressed, std::string& outstrCompressed);
 

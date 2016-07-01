@@ -38,6 +38,38 @@ namespace CSBackend
 {
 	namespace Android
 	{
+	    //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        JavaClass::JavaClass(jobject in_object, const JavaClassDef& in_javaClassDef)
+        {
+            auto jvm = JavaVirtualMachine::Get();
+            auto environment = jvm->GetJNIEnvironment();
+
+            //Get the class
+            m_className = in_javaClassDef.GetClassName();
+            jclass jClass = jvm->FindClass(m_className);
+
+            CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
+
+            m_javaObject = environment->NewGlobalRef(in_object);
+
+            //setup the method references
+            for (const auto& method : in_javaClassDef.GetMethods())
+            {
+                CS_ASSERT(m_methods.find(method.first) == m_methods.end(), "Method '" + method.first + "' has already been added to Java class '" + m_className + "'");
+
+                MethodInfo info;
+                info.m_returnType = JavaMethodSignature::CalcReturnType(method.second);
+                info.m_numArguments = JavaMethodSignature::CalcNumArguments(method.second);
+                info.m_methodId = environment->GetMethodID(jClass, method.first.c_str(), method.second.c_str());
+
+                CS_ASSERT(info.m_methodId != nullptr, "Could not find method '" + method.first + "' in Java Class '" + m_className + "'");
+
+                m_methods.emplace(method.first, info);
+            }
+
+            environment->DeleteLocalRef(jClass);
+        }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         jmethodID JavaClass::GetMethodId(const std::string& in_methodName, JavaMethodSignature::ReturnType in_returnType, u32 in_numArguments) const

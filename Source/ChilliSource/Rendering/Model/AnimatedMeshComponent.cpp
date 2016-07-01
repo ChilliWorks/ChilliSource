@@ -28,19 +28,14 @@
 
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
-#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
-
-#include <ChilliSource/Core/Entity/Entity.h>
-
 #include <ChilliSource/Rendering/Model/Skeleton.h>
-#include <ChilliSource/Rendering/Model/SubMesh.h>
-#include <ChilliSource/Core/Base/Application.h>
 
 #include <algorithm>
 #include <limits>
@@ -57,16 +52,14 @@ namespace ChilliSource
     meBlendType(AnimationBlendType::k_linear), mePlaybackType(AnimationPlaybackType::k_once), meFadeType(AnimationBlendType::k_linear), mfFadeTimer(0.0f), mfFadeMaxTime(0.0f), mfFadePlaybackPosition(0.0f),
     mfFadeBlendlinePosition(0.0f), mbFinished(false), mbAnimationDataDirty(true)
     {
-        mMaterials.push_back(mpMaterial);
+        mMaterials.push_back(nullptr);
     }
     //----------------------------------------------------------
     /// Is A
     //----------------------------------------------------------
     bool AnimatedMeshComponent::IsA(InterfaceIDType inInterfaceID) const
     {
-        return  (inInterfaceID == AnimatedMeshComponent::InterfaceID) ||
-                (inInterfaceID == RenderComponent::InterfaceID) ||
-                (inInterfaceID == VolumeComponent::InterfaceID);
+        return  (inInterfaceID == VolumeComponent::InterfaceID || inInterfaceID == AnimatedMeshComponent::InterfaceID);
     }
     //----------------------------------------------------
     /// Get Axis Aligned Bounding Box
@@ -175,99 +168,77 @@ namespace ChilliSource
         return mBoundingSphere;
     }
     //-----------------------------------------------------------
-    /// Is Transparent
-    //-----------------------------------------------------------
-    bool AnimatedMeshComponent::IsTransparent()
-    {
-        for (u32 i = 0; i < mMaterials.size(); ++i)
-        {
-            if (mMaterials[i]->IsTransparencyEnabled() == true)
-                return true;
-        }
-        return false;
-    }
-    //-----------------------------------------------------------
     /// Set Material
     //-----------------------------------------------------------
     void AnimatedMeshComponent::SetMaterial(const MaterialCSPtr& inpMaterial)
     {
-        mpMaterial = inpMaterial;
-        
-        //apply to all materials
         for (u32 i = 0; i < mMaterials.size(); i++)
         {
-            mMaterials[i] = mpMaterial;
+            mMaterials[i] = inpMaterial;
         }
     }
     //-----------------------------------------------------------
-    /// Set Material For Sub Mesh
+    /// Set Material For Sub Model
     //-----------------------------------------------------------
     void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex)
     {
         if (indwSubMeshIndex < mMaterials.size())
         {
             mMaterials[indwSubMeshIndex] = inpMaterial;
-            
-            if (indwSubMeshIndex == 0)
-            {
-                mpMaterial = inpMaterial;
-            }
         }
     }
     //-----------------------------------------------------------
-    /// Set Material For Sub Mesh
+    /// Set Material For Sub Model
     //-----------------------------------------------------------
     void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName)
     {
-        if (nullptr != mpModel)
-        {
-            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
-            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
-            {
-                mMaterials[indwIndex] = inpMaterial;
-                
-                if (indwIndex == 0)
-                {
-                    mpMaterial = inpMaterial;
-                }
-            }
-        }
+        //TODO: Implement in new system
+//        if (nullptr != mpModel)
+//        {
+//            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
+//            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
+//            {
+//                mMaterials[indwIndex] = inpMaterial;
+//            }
+//        }
     }
     //-----------------------------------------------------------
-    /// Get Material Of Sub Mesh
+    /// Get Material Of Sub Model
     //-----------------------------------------------------------
     const MaterialCSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
     {
-        if (indwSubMeshIndex < mMaterials.size())
-        {
-            return mMaterials[indwSubMeshIndex];
-        }
+        //TODO: Implement in new system
+//        if (indwSubMeshIndex < mMaterials.size())
+//        {
+//            return mMaterials[indwSubMeshIndex];
+//        }
         
         CS_LOG_ERROR("Failed to get material from sub mesh " + ToString(indwSubMeshIndex));
         return MaterialCSPtr();
     }
     //-----------------------------------------------------------
-    /// Get Material Of Sub Mesh
+    /// Get Material Of Sub Model
     //-----------------------------------------------------------
     MaterialCSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
     {
-        if (nullptr != mpModel)
-        {
-            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
-            
-            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
-            {
-                return mMaterials[indwIndex];
-            }
-        }
+        //TODO: Implement in new system
+//        if (nullptr != mpModel)
+//        {
+//            s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
+//            
+//            if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
+//            {
+//                return mMaterials[indwIndex];
+//            }
+//        }
         
         CS_LOG_ERROR("Failed to get material from sub mesh " + instrSubMeshName);
         return nullptr;
     }
     //----------------------------------------------------------
-    /// Attach Mesh
+    /// Attach Model
     //----------------------------------------------------------
-    void AnimatedMeshComponent::AttachMesh(const MeshCSPtr& inpModel)
+    void AnimatedMeshComponent::SetModel(const ModelCSPtr& inpModel)
     {
         mpModel = inpModel;
         // Update OOBB
@@ -277,16 +248,15 @@ namespace ChilliSource
         Reset();
     }
     //----------------------------------------------------------
-    /// Attach Mesh
+    /// Attach Model
     ///
     /// Attach a mesh to this component but uses the given 
     /// material
-    /// @param Mesh object
+    /// @param Model object
     //----------------------------------------------------------
-    void AnimatedMeshComponent::AttachMesh(const MeshCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
+    void AnimatedMeshComponent::SetModel(const ModelCSPtr& inpModel, const MaterialCSPtr& inpMaterial)
     {
         mpModel = inpModel;
-        mpMaterial = inpMaterial;
         
         // Update OOBB
         mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
@@ -296,9 +266,9 @@ namespace ChilliSource
         SetMaterial(inpMaterial);
     }
     //----------------------------------------------------------
-    /// Get Mesh
+    /// Get Model
     //----------------------------------------------------------
-    const MeshCSPtr& AnimatedMeshComponent::GetMesh() const
+    const ModelCSPtr& AnimatedMeshComponent::GetModel() const
     {
         return mpModel;
     }
@@ -338,22 +308,22 @@ namespace ChilliSource
     //----------------------------------------------------------
     void AnimatedMeshComponent::FadeOut(AnimationBlendType ineFadeType, f32 infFadeOutTime)
     {
-        if (nullptr != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
-        {
-            mFadingAnimationGroup = mActiveAnimationGroup;
-            mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeleton()));
-            mfFadePlaybackPosition = mfPlaybackPosition;
-            mfFadeBlendlinePosition = mfBlendlinePosition;
-            mfFadeMaxTime = infFadeOutTime;
-            mfFadeTimer = 0.0f;
-            SetPlaybackPosition(0.0f);
-            mAnimationChangedEvent.NotifyConnections(this);
-        }
-        else if (nullptr != mActiveAnimationGroup)
-        {
-            mActiveAnimationGroup->ClearAnimations();
-        }
-        
+        //TODO: Re-implement in new system.
+//        if (nullptr != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
+//        {
+//            mFadingAnimationGroup = mActiveAnimationGroup;
+//            mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeleton()));
+//            mfFadePlaybackPosition = mfPlaybackPosition;
+//            mfFadeBlendlinePosition = mfBlendlinePosition;
+//            mfFadeMaxTime = infFadeOutTime;
+//            mfFadeTimer = 0.0f;
+//            SetPlaybackPosition(0.0f);
+//            mAnimationChangedEvent.NotifyConnections(this);
+//        }
+//        else if (nullptr != mActiveAnimationGroup)
+//        {
+//            mActiveAnimationGroup->ClearAnimations();
+//        }
     }
     //----------------------------------------------------------
     /// Clear Animations
@@ -375,39 +345,40 @@ namespace ChilliSource
     //----------------------------------------------------------
     void AnimatedMeshComponent::AttachEntity(const EntitySPtr& inpEntity, const std::string& instrNodeName)
     {
-        if (nullptr == GetEntity())
-        {
-            CS_LOG_ERROR("Could not attach entity to animated mesh because the mesh is not yet attached to an entity.");
-            return;
-        }
-        
-        if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetScene())
-        {
-            CS_LOG_ERROR("Could not attach entity to animated mesh because the entity already has a parent.");
-            return;
-        }
-        
-        //check that it has not already been added.
-        for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
-        {
-            if (EntitySPtr pEntity = it->first.lock())
-            {
-                if (pEntity.get() == inpEntity.get())
-                {
-                    return;
-                }
-            }
-        }
-        
-        s32 dwNodeIndex = mpModel->GetSkeleton()->GetNodeIndexByName(instrNodeName);
-        if (dwNodeIndex == -1)
-        {
-            CS_LOG_ERROR("Could not attach entity to the animated mesh because the skeleton node name could not be found.");
-            return;
-        }
-        
-        GetEntity()->AddEntity(inpEntity);
-        maAttachedEntities.push_back(std::pair<EntityWPtr, s32>(EntityWPtr(inpEntity), dwNodeIndex));
+        //TODO: Re-implement in new system.
+//        if (nullptr == GetEntity())
+//        {
+//            CS_LOG_ERROR("Could not attach entity to animated mesh because the mesh is not yet attached to an entity.");
+//            return;
+//        }
+//        
+//        if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetScene())
+//        {
+//            CS_LOG_ERROR("Could not attach entity to animated mesh because the entity already has a parent.");
+//            return;
+//        }
+//        
+//        //check that it has not already been added.
+//        for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
+//        {
+//            if (EntitySPtr pEntity = it->first.lock())
+//            {
+//                if (pEntity.get() == inpEntity.get())
+//                {
+//                    return;
+//                }
+//            }
+//        }
+//        
+//        s32 dwNodeIndex = mpModel->GetSkeleton()->GetNodeIndexByName(instrNodeName);
+//        if (dwNodeIndex == -1)
+//        {
+//            CS_LOG_ERROR("Could not attach entity to the animated mesh because the skeleton node name could not be found.");
+//            return;
+//        }
+//        
+//        GetEntity()->AddEntity(inpEntity);
+//        maAttachedEntities.push_back(std::pair<EntityWPtr, s32>(EntityWPtr(inpEntity), dwNodeIndex));
     }
     //----------------------------------------------------------
     /// Detatch Entity
@@ -574,6 +545,18 @@ namespace ChilliSource
     {
         return mbFinished;
     }
+    //-----------------------------------------------------
+    //-----------------------------------------------------
+    void AnimatedMeshComponent::SetShadowCastingEnabled(bool inbEnabled)
+    {
+        m_shadowCastingEnabled = inbEnabled;
+    }
+    //-----------------------------------------------------
+    //-----------------------------------------------------
+    bool AnimatedMeshComponent::IsShadowCastingEnabled() const
+    {
+        return m_shadowCastingEnabled;
+    }
     //----------------------------------------------------------
     /// Update
     //----------------------------------------------------------
@@ -598,58 +581,6 @@ namespace ChilliSource
     void AnimatedMeshComponent::OnRemovedFromScene()
     {
         DetatchAllEntities();
-    }
-    //----------------------------------------------------------
-    /// Render
-    //----------------------------------------------------------
-    void AnimatedMeshComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
-    {
-        if (nullptr != mActiveAnimationGroup)
-        {
-            if (mbAnimationDataDirty == true)
-            {
-                UpdateAnimation(0.0f);
-            }
-            
-            if(IsTransparent())
-            {
-                //Flush the sprite cache to maintain order
-                inpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
-            }
-            
-            //render the model with the animation data.
-            if (mActiveAnimationGroup->IsPrepared() == true)
-            {
-                mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials,ineShaderPass, mActiveAnimationGroup);
-            }
-            else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
-            {
-                mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, ineShaderPass, mFadingAnimationGroup);
-            }
-        }
-    }
-    //-----------------------------------------------------
-    /// Render Shadow Map
-    //-----------------------------------------------------
-    void AnimatedMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap)
-    {
-        if (nullptr != mActiveAnimationGroup)
-        {
-            if (mbAnimationDataDirty == true)
-            {
-                UpdateAnimation(0.0f);
-            }
-            
-            //render the model with the animation data.
-            if (mActiveAnimationGroup->IsPrepared() == true)
-            {
-                mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_animShadowMap}, ShaderPass::k_ambient, mActiveAnimationGroup);
-            }
-            else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
-            {
-                mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), {in_animShadowMap}, ShaderPass::k_ambient, mFadingAnimationGroup);
-            }
-        }
     }
     //----------------------------------------------------------
     /// Update Animation
@@ -753,11 +684,12 @@ namespace ChilliSource
     //----------------------------------------------------------
     void AnimatedMeshComponent::Reset()
     {
-        DetatchAllEntities();
-        mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeleton()));
-        mFadingAnimationGroup.reset();
-        mfBlendlinePosition = 0.0f;
-        mfFadeTimer = 0.0f;
-        SetPlaybackPosition(0.0f);
+        //TODO: Re-implement in new system.
+//        DetatchAllEntities();
+//        mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeleton()));
+//        mFadingAnimationGroup.reset();
+//        mfBlendlinePosition = 0.0f;
+//        mfFadeTimer = 0.0f;
+//        SetPlaybackPosition(0.0f);
     }
 }

@@ -321,6 +321,15 @@ namespace ChilliSource
     }
     //---------------------------------------------------------
     //---------------------------------------------------------
+    void StateManager::RenderSnapshotStates(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        if(!m_states.empty())
+        {
+            m_states.back()->RenderSnapshot(in_renderSnapshot);
+        }
+    }
+    //---------------------------------------------------------
+    //---------------------------------------------------------
     void StateManager::BackgroundStates()
     {
         CS_ASSERT(m_statesForegrounded == true, "Background states called when states are not foregrounded.");

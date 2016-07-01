@@ -34,7 +34,7 @@ namespace ChilliSource
 {
     //-------------------------------------------------------
     //-------------------------------------------------------
-    TextureResourceOptions::TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreTextureDataEnabled)
+    TextureResourceOptions::TextureResourceOptions(bool in_mipmaps, TextureFilterMode in_filter, TextureWrapMode in_wrapS, TextureWrapMode in_wrapT, bool in_restoreTextureDataEnabled)
     {
         m_options.m_hasMipMaps = in_mipmaps;
         m_options.m_filterMode = in_filter;
@@ -56,19 +56,19 @@ namespace ChilliSource
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Texture::WrapMode TextureResourceOptions::GetWrapModeS() const
+    TextureWrapMode TextureResourceOptions::GetWrapModeS() const
     {
         return m_options.m_wrapModeS;
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Texture::WrapMode TextureResourceOptions::GetWrapModeT() const
+    TextureWrapMode TextureResourceOptions::GetWrapModeT() const
     {
         return m_options.m_wrapModeT;
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Texture::FilterMode TextureResourceOptions::GetFilterMode() const
+    TextureFilterMode TextureResourceOptions::GetFilterMode() const
     {
         return m_options.m_filterMode;
     }

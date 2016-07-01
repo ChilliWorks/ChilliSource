@@ -128,42 +128,6 @@ namespace ChilliSource
         /// @return Billboarded matrix
         //------------------------------------------------------------------------------
         Matrix4 Billboard(const Matrix4& in_toBillboard);
-        //------------------------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Gets the currently set opaque sort predicate for this camera
-        //------------------------------------------------------------------------------
-        const RendererSortPredicateSPtr& GetOpaqueSortPredicate() const;
-        //------------------------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Gets the currently set opaque sort predicate for this camera
-        //------------------------------------------------------------------------------
-        const RendererSortPredicateSPtr& GetTransparentSortPredicate() const;
-        //------------------------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Opaque sort predicate to use for this camera
-        //------------------------------------------------------------------------------
-        void SetOpaqueSortPredicate(const RendererSortPredicateSPtr& in_predicate);
-        //------------------------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @param Transparent sort predicate to use for this camera
-        //------------------------------------------------------------------------------
-        void SetTransparentSortPredicate(const RendererSortPredicateSPtr& in_predicate);
-        //------------------------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Culling predicate to use for this camera
-        //------------------------------------------------------------------------------
-        const ICullingPredicateSPtr& GetCullingPredicate() const;
-        //------------------------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @param Culling predicate to use for this camera.
-        //------------------------------------------------------------------------------
-        void SetCullingPredicate(const ICullingPredicateSPtr& in_predicate);
         
     private:
         //------------------------------------------------------------------------------
@@ -194,6 +158,15 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void OnAddedToScene() override;
         //------------------------------------------------------------------------------
+        /// Called during the render snapshot phase of the render pipeline. This adds a
+        /// render camera to the snapshot, representing the cameras current state.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render snapshot.
+        //------------------------------------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        //------------------------------------------------------------------------------
         /// Called when the component is added to the scene.
         ///
         /// @author Ian Copland
@@ -219,11 +192,6 @@ namespace ChilliSource
         
         Matrix4 m_projMat;
         Matrix4 m_viewMat;
-        
-        RendererSortPredicateSPtr m_opaqueSortPredicate;
-        RendererSortPredicateSPtr m_transparentSortPredicate;
-        
-        ICullingPredicateSPtr m_cullPredicate;
         
         EventConnectionUPtr m_transformChangedConnection;
         EventConnectionUPtr m_resolutionChangedConnection;

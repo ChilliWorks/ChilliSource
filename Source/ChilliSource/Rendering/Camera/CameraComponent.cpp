@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 
 namespace ChilliSource
 {
@@ -160,42 +161,6 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const RendererSortPredicateSPtr& CameraComponent::GetOpaqueSortPredicate() const
-    {
-        return m_opaqueSortPredicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    const RendererSortPredicateSPtr& CameraComponent::GetTransparentSortPredicate() const
-    {
-        return m_transparentSortPredicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    void CameraComponent::SetOpaqueSortPredicate(const RendererSortPredicateSPtr& in_predicate)
-    {
-        m_opaqueSortPredicate = in_predicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    void CameraComponent::SetTransparentSortPredicate(const RendererSortPredicateSPtr& in_predicate)
-    {
-        m_transparentSortPredicate = in_predicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    const ICullingPredicateSPtr& CameraComponent::GetCullingPredicate() const
-    {
-        return m_cullPredicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    void CameraComponent::SetCullingPredicate(const ICullingPredicateSPtr& in_predicate)
-    {
-        m_cullPredicate = in_predicate;
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
     void CameraComponent::OnAddedToEntity()
     {
         m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection([=]()
@@ -211,6 +176,12 @@ namespace ChilliSource
         {
             m_isFrustumCacheValid = false;
         });
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void CameraComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        in_renderSnapshot.SetRenderCamera(RenderCamera(GetEntity()->GetTransform().GetWorldTransform(), GetProjection()));
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

@@ -35,6 +35,10 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/ZippedFileSystem.h>
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/FileStream/BinaryInputStream.h>
+#include <ChilliSource/Core/File/FileStream/BinaryOutputStream.h>
+#include <ChilliSource/Core/File/FileStream/TextInputStream.h>
+#include <ChilliSource/Core/File/FileStream/TextOutputStream.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace CSBackend
@@ -85,21 +89,53 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
 			//------------------------------------------------------------------------------
-			/// Creates a new file stream to the given file in the given storage location.
-			///
-			/// This is thread-safe, though the created file stream is not. Make sure it
-			/// is used and destroyed on the same thread it was created.
-			///
-			/// @author Ian Copland
-			///
-			/// @param in_storageLocation - The storage location.
-			/// @param in_filePath - The file path.
-			/// @param in_fileMode - The file mode.
-			///
-			/// @return The new file stream. If the stream cannot be created or is invalid,
-			/// null be returned.
+            /// Creates a new input text stream to the given file in the given storage location.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_storageLocation - The storage location.
+            /// @param in_filePath - The file path.
+            ///
+            /// @return The new file stream. If the stream cannot be created or is invalid,
+            /// null be returned.
+            //------------------------------------------------------------------------------
+            ChilliSource::ITextInputStreamUPtr CreateTextInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
+            //------------------------------------------------------------------------------
+            /// Creates a new input binary stream to the given file in the given storage location.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_storageLocation - The storage location.
+            /// @param in_filePath - The file path.
+            ///
+            /// @return The new file stream. If the stream cannot be created or is invalid,
+            /// null be returned.
+            //------------------------------------------------------------------------------
+            ChilliSource::IBinaryInputStreamUPtr CreateBinaryInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
 			//------------------------------------------------------------------------------
-			ChilliSource::FileStreamUPtr CreateFileStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const override;
+            /// Creates a new output text stream to the given file in the given storage location.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_storageLocation - The storage location.
+            /// @param in_filePath - The file path.
+            ///
+            /// @return The new file stream. If the stream cannot be created or is invalid,
+            /// null be returned.
+            //------------------------------------------------------------------------------
+            ChilliSource::TextOutputStreamUPtr CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileWriteMode in_fileMode) const override;
+            //------------------------------------------------------------------------------
+            /// Creates a new output binary stream to the given file in the given storage location.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_storageLocation - The storage location.
+            /// @param in_filePath - The file path.
+            ///
+            /// @return The new file stream. If the stream cannot be created or is invalid,
+            /// null be returned.
+            //------------------------------------------------------------------------------
+            ChilliSource::BinaryOutputStreamUPtr CreateBinaryOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileWriteMode in_fileMode) const override;
 			//------------------------------------------------------------------------------
 			/// Creates the given directory. The full directory hierarchy will be created.
             ///

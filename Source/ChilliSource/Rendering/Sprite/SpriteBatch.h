@@ -33,10 +33,14 @@
 #include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
-#include <ChilliSource/Rendering/Base/MeshBuffer.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
+    //TODO: Remove once converted over to new system.
+    enum class BufferUsage	{k_static, k_dynamic};
+    
     const u32 k_numSpriteVerts = 4;
     const u32 k_numSpriteIndices = 6;
     
@@ -79,7 +83,7 @@ namespace ChilliSource
             MaterialCSPtr pMaterial;
         };
         
-        SpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage);
+        SpriteBatch(u32 inudwCapacity, BufferUsage ineUsage);
         ~SpriteBatch();
         //------------------------------------------------------
         /// Build
@@ -153,11 +157,6 @@ namespace ChilliSource
         u32 mudwNumSpritesBuiltIndicesFor;
         
         s32 mdwTag;
-        
-        //---Render Buffer
-        MeshBuffer* mpSpriteBuffer;
-        
-        RenderSystem* m_renderSystem;
     };
 }
 

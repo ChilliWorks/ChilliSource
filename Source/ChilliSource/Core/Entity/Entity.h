@@ -438,6 +438,15 @@ namespace ChilliSource
         //-------------------------------------------------------------
         void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate);
         //-------------------------------------------------------------
+        /// Sends the render snapshot event onto all components.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render snapshot object which
+        /// contains all snapshotted data.
+        //-------------------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept;
+        //-------------------------------------------------------------
         /// Called when the application is backgrounded while the entity
         /// is in the scene. This will also be called when the entity is
         /// removed from the scene if the application is currently

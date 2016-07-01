@@ -54,8 +54,8 @@ namespace ChilliSource
                 Vector2 texSize;
                 if(in_texture != nullptr)
                 {
-                    texSize.x = (f32)in_texture->GetWidth() * in_virtualUVs.m_s;
-                    texSize.y = (f32)in_texture->GetHeight() * in_virtualUVs.m_t;
+                    texSize.x = (f32)in_texture->GetDimensions().x * in_virtualUVs.m_s;
+                    texSize.y = (f32)in_texture->GetDimensions().y * in_virtualUVs.m_t;
                 }
                 
                 outputFrame.m_croppedSize = texSize;

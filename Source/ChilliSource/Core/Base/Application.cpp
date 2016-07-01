@@ -41,6 +41,7 @@
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Localisation/LocalisedTextProvider.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -53,22 +54,26 @@
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-#include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Font/FontProvider.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
+#include <ChilliSource/Rendering/Model/RenderMeshManager.h>
 #include <ChilliSource/Rendering/Particle/CSParticleProvider.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDefFactory.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDefFactory.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDefFactory.h>
+#include <ChilliSource/Rendering/Shader/CSShaderProvider.h>
+#include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
+#include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 
@@ -84,290 +89,185 @@ namespace ChilliSource
 {
     namespace
     {
-        const f32 k_defaultUpdateInterval = 1.0f/60.0f;
-        const f32 k_updateClampThreshold = 0.33f;
-        const f32 k_updateIntervalMax = k_updateClampThreshold;
+        constexpr f32 k_defaultUpdateInterval = 1.0f / 60.0f;
+        constexpr f32 k_updateClampThreshold = 0.33f;
+        constexpr f32 k_updateIntervalMax = k_updateClampThreshold;
     }
     
     Application* Application::s_application = nullptr;
     
-    //----------------------------------------------------
-    //----------------------------------------------------
-    Application* Application::Get()
+    //------------------------------------------------------------------------------
+    Application* Application::Get() noexcept
     {
         return s_application;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    Application::Application()
+
+    //------------------------------------------------------------------------------
+    Application::Application() noexcept
         : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0)
     {
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    std::string Application::GetAppVersion() const
+
+    //------------------------------------------------------------------------------
+    std::string Application::GetAppVersion() const noexcept
     {
         return m_platformSystem->GetAppVersion();
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    u32 Application::GetFrameIndex() const
+
+    //------------------------------------------------------------------------------
+    u32 Application::GetFrameIndex() const noexcept
     {
         return m_frameIndex;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    TimeIntervalSecs Application::GetAppElapsedTime() const
+
+    //------------------------------------------------------------------------------
+    TimeIntervalSecs Application::GetAppElapsedTime() const noexcept
     {
         CS_ASSERT(m_taskScheduler->IsMainThread(), "Can only be called from the main thread.");
         
         return m_currentAppTime;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    TimeIntervalSecs Application::GetSystemTime() const
+
+    //------------------------------------------------------------------------------
+    TimeIntervalSecs Application::GetSystemTime() const noexcept
     {
         return time(0);
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    TimeIntervalMs Application::GetSystemTimeInMilliseconds() const
+
+    //------------------------------------------------------------------------------
+    TimeIntervalMs Application::GetSystemTimeInMilliseconds() const noexcept
     {
         return m_platformSystem->GetSystemTimeMS();
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::SetUpdateInterval(f32 infUpdateInterval)
+
+    //------------------------------------------------------------------------------
+    void Application::SetUpdateInterval(f32 updateInterval) noexcept
     {
-        m_updateInterval = infUpdateInterval;
+        m_updateInterval = updateInterval;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    f32 Application::GetUpdateInterval() const
+
+    //------------------------------------------------------------------------------
+    f32 Application::GetUpdateInterval() const noexcept
     {
         return m_updateInterval;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    f32 Application::GetUpdateIntervalMax() const
+
+    //------------------------------------------------------------------------------
+    f32 Application::GetUpdateIntervalMax() const noexcept
     {
         return k_updateIntervalMax;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::SetUpdateSpeed(f32 infSpeed)
+
+    //------------------------------------------------------------------------------
+    void Application::SetUpdateSpeed(f32 speed) noexcept
     {
-        m_updateSpeed = infSpeed;
+        m_updateSpeed = speed;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Quit()
+
+    //------------------------------------------------------------------------------
+    void Application::Quit() noexcept
     {
         m_platformSystem->Quit();
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Init()
+    
+    //------------------------------------------------------------------------------
+    StateManager* Application::GetStateManager() noexcept
     {
-        CS_ASSERT(s_application == nullptr, "Application already initialised!");
-        s_application = this;
-        
-        Logging::Create();
+        return m_stateManager;
+    }
+    
+    //------------------------------------------------------------------------------
+    const StateManager* Application::GetStateManager() const noexcept
+    {
+        return m_stateManager;
+    }
+    
+    //------------------------------------------------------------------------------
+    FileSystem* Application::GetFileSystem() noexcept
+    {
+        return m_fileSystem;
+    }
+    
+    //------------------------------------------------------------------------------
+    const FileSystem* Application::GetFileSystem() const noexcept
+    {
+        return m_fileSystem;
+    }
+    
+    //------------------------------------------------------------------------------
+    TaggedFilePathResolver* Application::GetTaggedFilePathResolver() noexcept
+    {
+        return m_taggedPathResolver;
+    }
+    
+    //------------------------------------------------------------------------------
+    const TaggedFilePathResolver* Application::GetTaggedFilePathResolver() const noexcept
+    {
+        return m_taggedPathResolver;
+    }
+    
+    //------------------------------------------------------------------------------
+    TaskScheduler* Application::GetTaskScheduler() noexcept
+    {
+        return m_taskScheduler;
+    }
+    
+    //------------------------------------------------------------------------------
+    const TaskScheduler* Application::GetTaskScheduler() const noexcept
+    {
+        return m_taskScheduler;
+    }
+    
+    //------------------------------------------------------------------------------
+    ResourcePool* Application::GetResourcePool() noexcept
+    {
+        return m_resourcePool;
+    }
+    
+    //------------------------------------------------------------------------------
+    const ResourcePool* Application::GetResourcePool() const noexcept
+    {
+        return m_resourcePool;
+    }
+    
+    //------------------------------------------------------------------------------
+    AppConfig* Application::GetAppConfig() noexcept
+    {
+        return m_appConfig;
+    }
+    
+    //------------------------------------------------------------------------------
+    const AppConfig* Application::GetAppConfig() const noexcept
+    {
+        return m_appConfig;
+    }
+    
+    //------------------------------------------------------------------------------
+    Screen* Application::GetScreen() noexcept
+    {
+        return m_screen;
+    }
+    
+    //------------------------------------------------------------------------------
+    const Screen* Application::GetScreen() const noexcept
+    {
+        return m_screen;
+    }
+    
+    //------------------------------------------------------------------------------
+    WidgetFactory* Application::GetWidgetFactory() noexcept
+    {
+        return m_widgetFactory;
+    }
+    
+    //------------------------------------------------------------------------------
+    const WidgetFactory* Application::GetWidgetFactory() const noexcept
+    {
+        return m_widgetFactory;
+    }
 
-        //Create all application systems.
-        m_isSystemCreationAllowed = true;
-        CreateDefaultSystems();
-        CreateSystems();
-        m_isSystemCreationAllowed = false;
-        
-        PostCreateSystems();
-        
-        //initialise all of the application systems.
-        for (const AppSystemUPtr& system : m_systems)
-        {
-            system->OnInit();
-        }
-        
-        OnInit();
-        PushInitialState();
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Resume()
-    {
-        m_shouldNotifyConnectionsResumeEvent = true;
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Foreground()
-    {
-        m_shouldNotifyConnectionsForegroundEvent = true;
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp)
-    {
-        if(m_shouldNotifyConnectionsResumeEvent == true)
-        {
-            m_shouldNotifyConnectionsResumeEvent = false;
-            OnResume();
-        }
-        
-        if(m_shouldNotifyConnectionsForegroundEvent == true)
-        {
-            m_shouldNotifyConnectionsForegroundEvent = false;
-            OnForeground();
-        }
-        
-        if(m_isSuspending)
-        {
-            // Updating after told to suspend so early out
-            return;
-        }
-
-        m_taskScheduler->ExecuteSystemThreadTasks(); //TODO: move to lifecycle later
-        
-#if CS_ENABLE_DEBUG
-        //When debugging we may have breakpoints so restrict the time between
-        //updates to something feasible.
-        in_deltaTime = std::min(in_deltaTime, 0.5f);
-#endif
-        
-        //Update the app time since start
-        m_currentAppTime = in_timestamp;
-        
-        //We do not need to render as often as we update so this callback will be triggered
-        //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
-        //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
-        m_updateIntervalRemainder = std::min(m_updateIntervalRemainder + in_deltaTime, GetUpdateIntervalMax());
-        
-        //process any queued input received by the pointer system.
-        if(m_pointerSystem != nullptr)
-        {
-            m_pointerSystem->ProcessQueuedInput();
-        }
-        
-        bool isFirstFrame = (m_frameIndex == 0);
-        while((m_updateIntervalRemainder >= GetUpdateInterval()) || isFirstFrame)
-        {
-            m_updateIntervalRemainder -=  GetUpdateInterval();
-            
-            //update all of the application systems
-            for (const AppSystemUPtr& system : m_systems)
-            {
-                system->OnFixedUpdate(GetUpdateInterval());
-            }
-            
-            m_stateManager->FixedUpdateStates(GetUpdateInterval());
-            
-            isFirstFrame = false;
-        }
-        
-        //Tell the state manager to update the active state
-        OnUpdate(in_deltaTime);
-        
-        m_taskScheduler->ExecuteMainThreadTasks();
-        
-        ++m_frameIndex;
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Render()
-    {
-        if(m_isSuspending)
-        {
-            // Updating after told to suspend so early out
-            return;
-        }
-        
-        //Render the scene
-        m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene(), m_stateManager->GetActiveState()->GetUICanvas());
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::ApplicationMemoryWarning()
-    {
-        CS_LOG_VERBOSE("Memory Warning. Clearing resource cache...");
-        
-        //update all of the application systems
-        for (const AppSystemUPtr& system : m_systems)
-        {
-            system->OnMemoryWarning();
-        }
-        
-        m_stateManager->MemoryWarningStates();
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Background()
-    {
-        if(m_shouldNotifyConnectionsForegroundEvent == true)
-        {
-            m_shouldNotifyConnectionsForegroundEvent = false;
-            return;
-        }
-        
-        m_stateManager->BackgroundStates();
-        
-        for (const AppSystemUPtr& system : m_systems)
-        {
-            system->OnBackground();
-        }
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Suspend()
-    {
-        if(m_shouldNotifyConnectionsResumeEvent == true)
-        {
-            m_shouldNotifyConnectionsResumeEvent = false;
-            return;
-        }
-        
-        CS_LOG_VERBOSE("App Suspending...");
-        
-        m_isSuspending = true;
-        
-        m_stateManager->SuspendStates();
-        
-        //suspend all application systems in reverse order.
-        for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
-        {
-            (*it)->OnSuspend();
-        }
-        
-        m_renderSystem->Suspend();
-        
-        CS_LOG_VERBOSE("App Finished Suspending...");
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::Destroy()
-    {
-        m_taskScheduler->Destroy();
-        
-        OnDestroy();
-
-        m_stateManager->DestroyStates();
-
-        //suspend all application systems in reverse order.
-        for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
-        {
-            (*it)->OnDestroy();
-        }
-        
-        m_renderSystem->Destroy();
-        m_resourcePool->Destroy();
-
-        m_systems.clear();
-
-        Logging::Destroy();
-        
-        s_application = nullptr;
-    }
-    //------------------------------------------------------
-    //------------------------------------------------------
-    void Application::CreateDefaultSystems()
+    //------------------------------------------------------------------------------
+    void Application::CreateDefaultSystems() noexcept
     {
         //Core
         m_platformSystem = CreateSystem<PlatformSystem>();
@@ -393,12 +293,16 @@ namespace ChilliSource
         CreateSystem<TextEntry>();
         
         //Rendering
-        RenderCapabilities* renderCapabilities = CreateSystem<RenderCapabilities>();
-        m_renderSystem = CreateSystem<RenderSystem>(renderCapabilities);
-        m_renderer = CreateSystem<Renderer>(m_renderSystem);
+        m_renderer = CreateSystem<Renderer>();
+        CreateSystem<RenderMaterialGroupManager>();
+        CreateSystem<RenderMeshManager>();
+        CreateSystem<RenderShaderManager>();
+        CreateSystem<RenderTextureManager>();
+        CreateSystem<RenderCapabilities>();
         CreateSystem<CanvasRenderer>();
-        CreateSystem<MaterialFactory>(renderCapabilities);
-        CreateSystem<MaterialProvider>(renderCapabilities);
+        CreateSystem<MaterialFactory>();
+        CreateSystem<MaterialProvider>();
+        CreateSystem<CSShaderProvider>();
         CreateSystem<TextureAtlasProvider>();
         CreateSystem<TextureProvider>();
         CreateSystem<CubemapProvider>();
@@ -420,9 +324,9 @@ namespace ChilliSource
         //Create any platform specific default systems
         m_platformSystem->CreateDefaultSystems(this);
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::PostCreateSystems()
+
+    //------------------------------------------------------------------------------
+    void Application::PostCreateSystems() noexcept
     {
         //Loop round all the created app systems and categorise them
         for(const AppSystemUPtr& system : m_systems)
@@ -434,9 +338,6 @@ namespace ChilliSource
             }
         }
         
-        //Initialise the render system prior to the OnInit() event.
-        m_renderSystem->Init();
-        
         //Texture/Cubemap provider is a compound provider and needs to be informed when the other providers are created.
         GetSystem<TextureProvider>()->PostCreate();
         GetSystem<CubemapProvider>()->PostCreate();
@@ -445,31 +346,61 @@ namespace ChilliSource
         m_appConfig->Load();
         m_platformSystem->SetPreferredFPS(m_appConfig->GetPreferredFPS());
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::OnUpdate(f32 in_deltaTime)
+    
+    //------------------------------------------------------------------------------
+    void Application::ProcessRenderSnapshotEvent() noexcept
     {
-        in_deltaTime *= m_updateSpeed;
+        auto resolution = Integer2(s32(m_screen->GetResolution().x), s32(m_screen->GetResolution().y));
         
-        CoreTimer::Update(in_deltaTime);
+        auto activeState = m_stateManager->GetActiveState();
+        CS_ASSERT(activeState, "Must have active state.");
         
-        //update all of the application systems
+        auto clearColour = activeState->GetScene()->GetClearColour();
+        
+        RenderSnapshot renderSnapshot(resolution, clearColour);
         for (const AppSystemUPtr& system : m_systems)
         {
-            system->OnUpdate(in_deltaTime);
+            system->OnRenderSnapshot(renderSnapshot);
         }
         
-        m_stateManager->UpdateStates(in_deltaTime);
+        m_stateManager->RenderSnapshotStates(renderSnapshot);
+        
+        m_renderer->ProcessRenderSnapshot(std::move(renderSnapshot));
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void Application::OnResume()
+    
+    //------------------------------------------------------------------------------
+    void Application::Init() noexcept
+    {
+        CS_ASSERT(s_application == nullptr, "Application already initialised!");
+        s_application = this;
+        
+        Logging::Create();
+        
+        //Create all application systems.
+        m_isSystemCreationAllowed = true;
+        CreateDefaultSystems();
+        CreateSystems();
+        m_isSystemCreationAllowed = false;
+        
+        PostCreateSystems();
+        
+        //initialise all of the application systems.
+        for (const AppSystemUPtr& system : m_systems)
+        {
+            system->OnInit();
+        }
+        
+        OnInit();
+        PushInitialState();
+    }
+    
+    //------------------------------------------------------------------------------
+    void Application::Resume() noexcept
     {
         CS_LOG_VERBOSE("App Resuming...");
-        
-        m_isSuspending = false;
-        
-        m_renderSystem->Resume();
+
+        //TODO: Remove?
+        //m_renderSystem->Resume();
         
         //resume all of the application systems
         for (const AppSystemUPtr& system : m_systems)
@@ -481,9 +412,9 @@ namespace ChilliSource
         
         CS_LOG_VERBOSE("App Finished Resuming...");
     }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    void Application::OnForeground()
+    
+    //------------------------------------------------------------------------------
+    void Application::Foreground() noexcept
     {
         for (const AppSystemUPtr& system : m_systems)
         {
@@ -492,129 +423,141 @@ namespace ChilliSource
         
         m_stateManager->ForegroundStates();
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    StateManager* Application::GetStateManager()
+    
+    //------------------------------------------------------------------------------
+    void Application::Update(f32 deltaTime, TimeIntervalSecs timestamp) noexcept
     {
-        return m_stateManager;
+#if CS_ENABLE_DEBUG
+        //When debugging we may have breakpoints so restrict the time between
+        //updates to something feasible.
+        deltaTime = std::min(deltaTime, 0.5f);
+#endif
+        
+        deltaTime *= m_updateSpeed;
+        m_currentAppTime = timestamp;
+        
+        //We do not need to render as often as we update so this callback will be triggered
+        //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
+        //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
+        m_updateIntervalRemainder = std::min(m_updateIntervalRemainder + deltaTime, GetUpdateIntervalMax());
+        
+        //process any queued input received by the pointer system.
+        if(m_pointerSystem != nullptr)
+        {
+            m_pointerSystem->ProcessQueuedInput();
+        }
+        
+        bool isFirstFrame = (m_frameIndex == 0);
+        while((m_updateIntervalRemainder >= GetUpdateInterval()) || isFirstFrame)
+        {
+            m_updateIntervalRemainder -=  GetUpdateInterval();
+            
+            //update all of the application systems
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnFixedUpdate(GetUpdateInterval());
+            }
+            
+            m_stateManager->FixedUpdateStates(GetUpdateInterval());
+            
+            isFirstFrame = false;
+        }
+        
+        CoreTimer::Update(deltaTime);
+        
+        //update all of the application systems
+        for (const AppSystemUPtr& system : m_systems)
+        {
+            system->OnUpdate(deltaTime);
+        }
+        
+        m_stateManager->UpdateStates(deltaTime);
+        
+        m_taskScheduler->ExecuteMainThreadTasks();
+        
+        ProcessRenderSnapshotEvent();
+        
+        ++m_frameIndex;
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const StateManager* Application::GetStateManager() const
+    
+    //------------------------------------------------------------------------------
+    void Application::Render() noexcept
     {
-        return m_stateManager;
+        m_renderer->ProcessRenderCommandBuffer();
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    Renderer* Application::GetRenderer()
+    
+    //------------------------------------------------------------------------------
+    void Application::ApplicationMemoryWarning() noexcept
     {
-        return m_renderer;
+        CS_LOG_VERBOSE("Memory Warning. Clearing resource cache...");
+        
+        //update all of the application systems
+        for (const AppSystemUPtr& system : m_systems)
+        {
+            system->OnMemoryWarning();
+        }
+        
+        m_stateManager->MemoryWarningStates();
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const Renderer* Application::GetRenderer() const
+    
+    //------------------------------------------------------------------------------
+    void Application::Background() noexcept
     {
-        return m_renderer;
+        m_stateManager->BackgroundStates();
+        
+        for (const AppSystemUPtr& system : m_systems)
+        {
+            system->OnBackground();
+        }
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    RenderSystem* Application::GetRenderSystem()
+    
+    //------------------------------------------------------------------------------
+    void Application::Suspend() noexcept
     {
-        return m_renderSystem;
+        CS_LOG_VERBOSE("App Suspending...");
+
+        m_stateManager->SuspendStates();
+        
+        //suspend all application systems in reverse order.
+        for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
+        {
+            (*it)->OnSuspend();
+        }
+        
+        //TODO: Re-implementing using new system
+        //m_renderSystem->Suspend();
+        
+        CS_LOG_VERBOSE("App Finished Suspending...");
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const RenderSystem* Application::GetRenderSystem() const
+    
+    //------------------------------------------------------------------------------
+    void Application::Destroy() noexcept
     {
-        return m_renderSystem;
+        m_taskScheduler->Destroy();
+        
+        OnDestroy();
+        
+        m_stateManager->DestroyStates();
+        
+        //suspend all application systems in reverse order.
+        for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
+        {
+            (*it)->OnDestroy();
+        }
+        
+        //TODO: Re-implementing using new system
+//        m_renderSystem->Destroy();
+        m_resourcePool->Destroy();
+        
+        m_systems.clear();
+        
+        Logging::Destroy();
+        
+        s_application = nullptr;
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    FileSystem* Application::GetFileSystem()
-    {
-        return m_fileSystem;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const FileSystem* Application::GetFileSystem() const
-    {
-        return m_fileSystem;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    TaggedFilePathResolver* Application::GetTaggedFilePathResolver()
-    {
-        return m_taggedPathResolver;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const TaggedFilePathResolver* Application::GetTaggedFilePathResolver() const
-    {
-        return m_taggedPathResolver;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    TaskScheduler* Application::GetTaskScheduler()
-    {
-        return m_taskScheduler;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const TaskScheduler* Application::GetTaskScheduler() const
-    {
-        return m_taskScheduler;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    ResourcePool* Application::GetResourcePool()
-    {
-        return m_resourcePool;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const ResourcePool* Application::GetResourcePool() const
-    {
-        return m_resourcePool;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    AppConfig* Application::GetAppConfig()
-    {
-        return m_appConfig;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const AppConfig* Application::GetAppConfig() const
-    {
-        return m_appConfig;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    Screen* Application::GetScreen()
-    {
-        return m_screen;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const Screen* Application::GetScreen() const
-    {
-        return m_screen;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    WidgetFactory* Application::GetWidgetFactory()
-    {
-        return m_widgetFactory;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    const WidgetFactory* Application::GetWidgetFactory() const
-    {
-        return m_widgetFactory;
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    Application::~Application()
+
+    //------------------------------------------------------------------------------
+    Application::~Application() noexcept
     {
         CS_ASSERT(s_application == nullptr, "Application destructed without calling OnDestroy!");
     }

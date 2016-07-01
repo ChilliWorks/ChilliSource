@@ -43,19 +43,20 @@
 //--------------------------------------------------------------------
 @interface CSAppDelegate : NSObject <UIApplicationDelegate, GLKViewControllerDelegate, GLKViewDelegate>
 {
-    UIWindow* window;
-    GLKViewController* viewControllerInternal;
-    ChilliSource::Application* csApplication;
+    UIWindow* m_window;
+    GLKViewController* m_viewControllerInternal;
+    ChilliSource::ApplicationUPtr m_application;
+    ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
     
     //Used to manually invoke OnForeground to conform to
     //ChilliSource lifecycle events
-    BOOL isFirstActive;
+    BOOL m_isFirstActive;
     
     //Used to ensure that the Update event is only called
     //between has become active and will resign active
-    BOOL isActive;
+    BOOL m_isActive;
     
-    NSMutableArray* subdelegates;
+    NSMutableArray* m_subDelegates;
 }
 //--------------------------------------------------------------------
 /// @author Ian Copland

@@ -85,7 +85,7 @@ namespace ChilliSource
         /// disk. This will only work for RGBA8888, RGB888, RGBA4444
         /// and RGB565 cubemaps.
         //--------------------------------------------------
-        virtual void Build(const std::array<Texture::Descriptor, 6>& in_descs, std::array<Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled) = 0;
+        //virtual void Build(const std::array<Texture::Descriptor, 6>& in_descs, std::array<Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled) = 0;
         //--------------------------------------------------------------
         /// Binds this cubemap to the given texture unit allowing it to
         /// be accessed by the shaders and operations to be performed on it
@@ -109,7 +109,7 @@ namespace ChilliSource
         ///
         /// @param Filter mode
         //--------------------------------------------------------------
-        virtual void SetFilterMode(Texture::FilterMode in_mode) = 0;
+        virtual void SetFilterMode(TextureFilterMode in_mode) = 0;
         //--------------------------------------------------------------
         /// Future sampling of the cubemap will use the given wrap mode
         ///
@@ -118,7 +118,7 @@ namespace ChilliSource
         /// @param Horizontal wrapping
         /// @param Vertical wrapping
         //--------------------------------------------------------------
-        virtual void SetWrapMode(Texture::WrapMode in_sMode, Texture::WrapMode in_tMode) = 0;
+        virtual void SetWrapMode(TextureWrapMode in_sMode, TextureWrapMode in_tMode) = 0;
         //--------------------------------------------------------------
         /// Virtual destructor
         ///
