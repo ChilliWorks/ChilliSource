@@ -48,8 +48,10 @@ namespace ChilliSource
         ///     The world matrix of the camera. The view matrix will be derrived from this.
         /// @param projectionMatrix
         ///     The projection matrix of the camera.
+        /// @param orientation
+        ///     The orientation of the camera.
         ///
-        RenderCamera(const Matrix4& worldMatrix, const Matrix4& projectionMatrix) noexcept;
+        RenderCamera(const Matrix4& worldMatrix, const Matrix4& projectionMatrix, const Quaternion& orientation) noexcept;
         
         /// @return The world matrix of the camera.
         ///
@@ -67,6 +69,10 @@ namespace ChilliSource
         ///
         const Matrix4& GetViewProjectionMatrix() const noexcept { return m_viewProjectionMatrix; }
         
+        /// @return The orientation of the camera.
+        ///
+        const Quaternion& GetOrientation() const noexcept { return m_orientation; }
+        
         /// @return The view frustrum of the camera.
         ///
         const Frustum& GetFrustrum() const noexcept { return m_frustrum; }
@@ -76,6 +82,7 @@ namespace ChilliSource
         Matrix4 m_projectionMatrix;
         Matrix4 m_viewMatrix;
         Matrix4 m_viewProjectionMatrix;
+        Quaternion m_orientation;
         Frustum m_frustrum;
     };
 }

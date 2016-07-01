@@ -63,8 +63,11 @@ namespace ChilliSource
         ///     The viewport resolution.
         /// @param clearColour
         ///     The clear colour
+        /// @param renderCamera
+        ///     The main camera that will be used to render the scene. Currently only one camera per
+        ///     scene is supported.
         ///
-        RenderSnapshot(const Integer2& resolution, const Colour& clearColour) noexcept;
+        RenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
         
         /// @return The viewport resolution.
         ///
@@ -74,13 +77,9 @@ namespace ChilliSource
         ///
         const Colour& GetClearColour() const noexcept { return m_clearColour; }
         
-        /// Sets the main camera that will be used to render the scene. Currently only one camera per scene
-        /// is supported.
+        /// @return  The main camera that will be used to render the scene.
         ///
-        /// @param renderCamera
-        ///     The main camera that will be used to render the scene.
-        ///
-        void SetRenderCamera(const RenderCamera& renderCamera) noexcept;
+        RenderCamera GetRenderCamera() noexcept { return m_renderCamera; }
         
         /// Adds an ambient light to the render snapshot.
         ///
@@ -125,12 +124,6 @@ namespace ChilliSource
         ///     populate the list with additional commands.
         ///
         RenderCommandList* GetPostRenderCommandList() noexcept;
-        
-        /// Moves the camera from the snapshot to a new external owner.
-        ///
-        /// @return The moved render camera.
-        ///
-        RenderCamera ClaimRenderCamera() noexcept;
         
         /// Moves the list of ambient lights to a new external owner.
         ///

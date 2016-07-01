@@ -49,27 +49,6 @@ namespace ChilliSource
     namespace
     {
         //----------------------------------------------------------
-        /// Calculates the world space bounding sphere of an object.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param localBoundingSphere - The local bounding sphere
-        /// of the object.
-        /// @param worldPosition - The world position of the object.
-        /// @param worldScale - The world scale of the object.
-        ///
-        /// @return The world space bounding sphere.
-        //----------------------------------------------------------
-        Sphere CalcWorldSpaceBoundingSphere(const Sphere& localBoundingSphere, const Vector3& worldPosition, const Vector3& worldScale) noexcept
-        {
-            f32 maxScaleComponent = std::max(std::max(worldScale.x, worldScale.y), worldScale.z);
-            
-            auto centre = worldPosition + localBoundingSphere.vOrigin;
-            auto radius = maxScaleComponent * localBoundingSphere.fRadius;
-            
-            return Sphere(centre, radius);
-        }
-        //----------------------------------------------------------
         /// Aspect ratio maintaing function that returns the original
         /// size. This is used despite the fact it doesn't do much to
         /// prevent multiple code paths when calculating size.
@@ -486,7 +465,7 @@ namespace ChilliSource
         
         const auto& transform = GetEntity()->GetTransform();
         auto renderDynamicMesh = SpriteMeshBuilder::Build(Vector3(frameCenter, 0.0f), frameSize, transformedUVs, m_colour, m_originAlignment);
-        auto boundingSphere = CalcWorldSpaceBoundingSphere(renderDynamicMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
+        auto boundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
         in_renderSnapshot.AddRenderObject(RenderObject(GetMaterial()->GetRenderMaterialGroup(), renderDynamicMesh.get(), transform.GetWorldTransform(), boundingSphere, RenderLayer::k_standard));
         in_renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
     }

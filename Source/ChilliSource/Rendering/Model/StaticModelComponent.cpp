@@ -42,30 +42,6 @@
 
 namespace ChilliSource
 {
-    namespace
-    {
-        /// Calculates the world space bounding sphere of an object.
-        ///
-        /// @param localBoundingSphere
-        ///     The local bounding sphere of the object.
-        /// @param worldPosition
-        ///     The world position of the object.
-        /// @param worldScale
-        ///     The world scale of the object.
-        ///
-        /// @return The world space bounding sphere.
-        ///
-        Sphere CalculateWorldSpaceBoundingSphere(const Sphere& localBoundingSphere, const Vector3& worldPosition, const Vector3& worldScale) noexcept
-        {
-            f32 maxScaleComponent = std::max(std::max(worldScale.x, worldScale.y), worldScale.z);
-            
-            auto centre = worldPosition + localBoundingSphere.vOrigin;
-            auto radius = maxScaleComponent * localBoundingSphere.fRadius;
-            
-            return Sphere(centre, radius);
-        }
-    }
-    
     CS_DEFINE_NAMEDTYPE(StaticModelComponent);
     
     //------------------------------------------------------------------------------
@@ -349,7 +325,7 @@ namespace ChilliSource
             auto renderMesh = m_model->GetRenderMesh(index);
             
             const auto& transform = GetEntity()->GetTransform();
-            auto boundingSphere = CalculateWorldSpaceBoundingSphere(renderMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
+            auto boundingSphere = Sphere::Transform(renderMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
             
             in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform(), boundingSphere, RenderLayer::k_standard));
         }

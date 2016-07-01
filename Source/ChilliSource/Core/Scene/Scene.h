@@ -109,6 +109,29 @@ namespace ChilliSource
         /// @return Screen clear colour
         //------------------------------------------------------
         const Colour& GetClearColour() const;
+        //------------------------------------------------------
+        /// Sets the active camera in the scene. This should be
+        /// set by CameraComponent during OnAddedToScene() and
+        /// OnRemovedFromScene() to ensure the scene is always
+        /// aware of the current camera.
+        ///
+        /// If a second camera is set while another is active
+        /// this will assert.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_cameraComponent - The camera component
+        /// that should become active. Null should be passed to
+        /// deactivate a camera.
+        //------------------------------------------------------
+        void SetActiveCamera(CameraComponent* in_cameraComponent) noexcept;
+        //------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The active camera in this scene, or null if
+        /// there isn't one.
+        //------------------------------------------------------
+        CameraComponent* GetActiveCamera() const noexcept { return m_activeCameraComponent; }
         //-------------------------------------------------------
         /// Sends the resume event on to the entities.
         ///
@@ -243,6 +266,7 @@ namespace ChilliSource
         Colour m_clearColour;
         bool m_entitiesActive = false;
         bool m_entitiesForegrounded = false;
+        CameraComponent* m_activeCameraComponent = nullptr;
     };		
 }
 

@@ -177,8 +177,6 @@
 		8158F6F11C89D2AD00B13109 /* ParticleEffectComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3E41C89D2AD00B13109 /* ParticleEffectComponent.cpp */; };
 		8158F6F21C89D2AD00B13109 /* ParticlePropertyFactoryImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3ED1C89D2AD00B13109 /* ParticlePropertyFactoryImpl.cpp */; };
 		8158F6F31C89D2AD00B13109 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3F31C89D2AD00B13109 /* Shader.cpp */; };
-		8158F6F41C89D2AD00B13109 /* DynamicSpriteBatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3F71C89D2AD00B13109 /* DynamicSpriteBatcher.cpp */; };
-		8158F6F51C89D2AD00B13109 /* SpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3F91C89D2AD00B13109 /* SpriteBatch.cpp */; };
 		8158F6F61C89D2AD00B13109 /* SpriteComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3FB1C89D2AD00B13109 /* SpriteComponent.cpp */; };
 		8158F6F71C89D2AD00B13109 /* Cubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F3FF1C89D2AD00B13109 /* Cubemap.cpp */; };
 		8158F6F81C89D2AD00B13109 /* CubemapProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4011C89D2AD00B13109 /* CubemapProvider.cpp */; };
@@ -842,10 +840,6 @@
 		8158F3F31C89D2AD00B13109 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		8158F3F41C89D2AD00B13109 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
 		8158F3F51C89D2AD00B13109 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
-		8158F3F71C89D2AD00B13109 /* DynamicSpriteBatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicSpriteBatcher.cpp; sourceTree = "<group>"; };
-		8158F3F81C89D2AD00B13109 /* DynamicSpriteBatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicSpriteBatcher.h; sourceTree = "<group>"; };
-		8158F3F91C89D2AD00B13109 /* SpriteBatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatch.cpp; sourceTree = "<group>"; };
-		8158F3FA1C89D2AD00B13109 /* SpriteBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatch.h; sourceTree = "<group>"; };
 		8158F3FB1C89D2AD00B13109 /* SpriteComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteComponent.cpp; sourceTree = "<group>"; };
 		8158F3FC1C89D2AD00B13109 /* SpriteComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteComponent.h; sourceTree = "<group>"; };
 		8158F3FD1C89D2AD00B13109 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
@@ -2313,10 +2307,6 @@
 		8158F3F61C89D2AD00B13109 /* Sprite */ = {
 			isa = PBXGroup;
 			children = (
-				8158F3F71C89D2AD00B13109 /* DynamicSpriteBatcher.cpp */,
-				8158F3F81C89D2AD00B13109 /* DynamicSpriteBatcher.h */,
-				8158F3F91C89D2AD00B13109 /* SpriteBatch.cpp */,
-				8158F3FA1C89D2AD00B13109 /* SpriteBatch.h */,
 				8158F3FB1C89D2AD00B13109 /* SpriteComponent.cpp */,
 				8158F3FC1C89D2AD00B13109 /* SpriteComponent.h */,
 				81CA86B61D2190DB002CE6A0 /* SpriteMeshBuilder.cpp */,
@@ -3407,7 +3397,6 @@
 				8158F6861C89D2AD00B13109 /* State.cpp in Sources */,
 				8158F6D71C89D2AD00B13109 /* ParticleAffector.cpp in Sources */,
 				8158F7241C89D2AD00B13109 /* UILayoutDef.cpp in Sources */,
-				8158F6F41C89D2AD00B13109 /* DynamicSpriteBatcher.cpp in Sources */,
 				8158F6F01C89D2AD00B13109 /* ParticleEffect.cpp in Sources */,
 				8158F7FA1C89D2AD00B13109 /* RenderCapabilities.cpp in Sources */,
 				8158F6CF1C89D2AD00B13109 /* StaticModelComponent.cpp in Sources */,
@@ -3630,7 +3619,6 @@
 				8158F6681C89D2AD00B13109 /* EventConnection.cpp in Sources */,
 				8158F6661C89D2AD00B13109 /* PrimitiveEntityFactory.cpp in Sources */,
 				8158F7C71C89D2AD00B13109 /* DialogueBoxSystem.mm in Sources */,
-				8158F6F51C89D2AD00B13109 /* SpriteBatch.cpp in Sources */,
 				8158F6721C89D2AD00B13109 /* ImageFormatConverter.cpp in Sources */,
 				81A55DFB1CFD8AD600C9F0D6 /* LoadMaterialGroupRenderCommand.cpp in Sources */,
 				8158F6BB1C89D2AD00B13109 /* OrthographicCameraComponent.cpp in Sources */,
