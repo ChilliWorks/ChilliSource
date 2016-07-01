@@ -78,7 +78,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		//-----------------------------------------------
 		WebView::WebView()
-            : m_webView(nil), m_dismissButton(nil), m_currentState(WebViewState::k_inactive), m_activityIndicator(nil), m_webViewDelegate(nil), m_dismissButtonRelativeSize(0.0f)
+            : m_webView(nil), m_dismissButton(nil), m_currentState(WebView::State::k_inactive), m_activityIndicator(nil), m_webViewDelegate(nil), m_dismissButtonRelativeSize(0.0f)
 		{
 		}
         //-------------------------------------------------------
@@ -93,10 +93,10 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                CS_ASSERT(m_currentState == WebViewState::k_inactive, "Cannot present a web view while one is already displayed, or is being dismissed.");
+                CS_ASSERT(m_currentState == WebView::State::k_inactive, "Cannot present a web view while one is already displayed, or is being dismissed.");
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Can't present webview outside of main thread.");
                 
-                m_currentState = WebViewState::k_presented;
+                m_currentState = WebView::State::k_presented;
                 
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
@@ -132,10 +132,10 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                CS_ASSERT(m_currentState == WebViewState::k_inactive, "Cannot present a web view while one is already displayed, or is being dismissed.");
+                CS_ASSERT(m_currentState == WebView::State::k_inactive, "Cannot present a web view while one is already displayed, or is being dismissed.");
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Can't present webview outside of main thread.");
                 
-                m_currentState = WebViewState::k_presented;
+                m_currentState = WebView::State::k_presented;
                 
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
@@ -202,7 +202,7 @@ namespace CSBackend
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to dismiss Web View outside of main thread.");
                 CS_ASSERT(IsPresented(), "Cannot dismiss non-presented webview.");
                 
-                m_currentState = WebViewState::k_dismissing;
+                m_currentState = WebView::State::k_dismissing;
                 
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
@@ -236,7 +236,7 @@ namespace CSBackend
                         delegate();
                     }
                     
-                    m_currentState = WebViewState::k_inactive;
+                    m_currentState = WebView::State::k_inactive;
                 });
             }
 		}
@@ -244,7 +244,7 @@ namespace CSBackend
         //---------------------------------------------------------
         bool WebView::IsPresented() const
         {
-            return (m_currentState == WebViewState::k_presented);
+            return (m_currentState == WebView::State::k_presented);
         }
         //---------------------------------------------------------
         //---------------------------------------------------------

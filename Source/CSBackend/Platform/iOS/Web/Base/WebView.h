@@ -211,7 +211,7 @@ namespace CSBackend
             
             f32 m_dismissButtonRelativeSize;
 			
-            WebViewState m_currentState = WebViewState::k_inactive;
+            WebView::State m_currentState = WebView::State::k_inactive;
 		};
 	}
 }

@@ -45,7 +45,7 @@ namespace CSBackend
         //-------------------------------------------------------
         //-------------------------------------------------------
         EmailComposer::EmailComposer()
-            : m_currentState(EmailComposerState::k_inactive), m_emailComposerDelegate(nil), m_viewController(nil), m_rootViewController(nil)
+            : m_currentState(EmailComposer::State::k_inactive), m_emailComposerDelegate(nil), m_viewController(nil), m_rootViewController(nil)
 		{
 		}
         //------------------------------------------------------
@@ -70,10 +70,10 @@ namespace CSBackend
         {
             @autoreleasepool
             {
-                CS_ASSERT(m_currentState == EmailComposerState::k_inactive, "Cannot present the email composer when it is already presented, or while dismissing.");
+                CS_ASSERT(m_currentState == EmailComposer::State::k_inactive, "Cannot present the email composer when it is already presented, or while dismissing.");
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to present Email Composer outside of main thread.");
                 
-                m_currentState = EmailComposerState::k_presented;
+                m_currentState = EmailComposer::State::k_presented;
                 
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
@@ -152,7 +152,7 @@ namespace CSBackend
         //-------------------------------------------------------
         bool EmailComposer::IsPresented()
         {
-            return (m_currentState == EmailComposerState::k_presented);
+            return (m_currentState == EmailComposer::State::k_presented);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -163,7 +163,7 @@ namespace CSBackend
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to dismiss Email Composer outside of main thread.");
                 CS_ASSERT(IsPresented(), "Cannot dismiss non-presented email composer.");
                 
-                m_currentState = EmailComposerState::k_dismissing;
+                m_currentState = EmailComposer::State::k_dismissing;
                 
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& tastContext)
                 {
@@ -179,7 +179,7 @@ namespace CSBackend
                         delegate(SendResult::k_cancelled);
                     }
                     
-                    m_currentState = EmailComposerState::k_inactive;
+                    m_currentState = EmailComposer::State::k_inactive;
                 });
             }
 		}

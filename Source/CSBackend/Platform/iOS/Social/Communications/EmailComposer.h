@@ -158,7 +158,7 @@ namespace CSBackend
 			EmailComposerDelegate* m_emailComposerDelegate;
 			MFMailComposeViewController* m_viewController;
             UIViewController* m_rootViewController;
-            EmailComposerState m_currentState = EmailComposerState::k_inactive;
+            EmailComposer::State m_currentState = EmailComposer::State::k_inactive;
 		};
 		 
 	}

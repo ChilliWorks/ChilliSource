@@ -70,17 +70,6 @@ namespace ChilliSource
             k_html
         };
         //-------------------------------------------------------
-        /// Describes the current state of the system.
-        ///
-        /// @author Jordan Brown
-        //-------------------------------------------------------
-        enum class EmailComposerState
-        {
-            k_inactive,
-            k_presented,
-            k_dismissing
-        };
-        //-------------------------------------------------------
         /// A container for information describing a single
         /// attachment file.
         ///
@@ -155,7 +144,17 @@ namespace ChilliSource
         virtual ~EmailComposer() {};
     protected:
         friend class State;
-        
+        //-------------------------------------------------------
+        /// Describes the current state of the composer.
+        ///
+        /// @author Jordan Brown
+        //-------------------------------------------------------
+        enum class State
+        {
+            k_inactive,
+            k_presented,
+            k_dismissing
+        };
         //-------------------------------------------------------
         /// Creates a new instance of the email composition
         /// activity.
