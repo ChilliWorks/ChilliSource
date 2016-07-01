@@ -205,6 +205,19 @@ namespace ChilliSource
             return VertexFormat(elements);
         }
         //-----------------------------------------------------------------------------
+        /// Calculates a bounding sphere from the given AABB.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_aabb - The AABB from which to generate a bounding sphere.
+        ///
+        /// @return The bounding sphere generated.
+        //-----------------------------------------------------------------------------
+        Sphere CalcBoundingSphere(const AABB& in_aabb) noexcept
+        {
+            return Sphere(in_aabb.Centre(), in_aabb.GetSize().Length() * 0.5f);
+        }
+        //-----------------------------------------------------------------------------
         /// Reads the sub-mesh header section of the file
         ///
         /// @author Ian Copland
@@ -416,13 +429,15 @@ namespace ChilliSource
                 CS_ASSERT(modelHeader.m_indexFormat == IndexFormat::k_short, "Invalid index format.");
                 constexpr u32 k_indexSize = 2;
                 auto meshData = ReadMeshData(meshStream.get(), meshHeader.m_numVertices * modelHeader.m_vertexFormat.GetSize(), meshHeader.m_numIndices * k_indexSize, quantities.m_numJoints);
+                auto meshBoundingSphere = CalcBoundingSphere(meshHeader.m_aabb);
                 
-                meshDescs.push_back(MeshDesc(meshHeader.m_name, PolygonType::k_triangle, modelHeader.m_vertexFormat, modelHeader.m_indexFormat, meshHeader.m_aabb, meshHeader.m_numVertices, meshHeader.m_numIndices,
-                                             std::move(meshData.m_vertexData), std::move(meshData.m_indexData), std::move(meshData.m_inverseBindPoses)));
+                meshDescs.push_back(MeshDesc(meshHeader.m_name, PolygonType::k_triangle, modelHeader.m_vertexFormat, modelHeader.m_indexFormat, meshHeader.m_aabb, meshBoundingSphere, meshHeader.m_numVertices,
+                                             meshHeader.m_numIndices, std::move(meshData.m_vertexData), std::move(meshData.m_indexData), std::move(meshData.m_inverseBindPoses)));
                 
             }
             
-            out_modelDesc = std::move(ModelDesc(std::move(meshDescs), modelHeader.m_aabb, skeletonDesc));
+            auto modelBoundingSphere = CalcBoundingSphere(modelHeader.m_aabb);
+            out_modelDesc = std::move(ModelDesc(std::move(meshDescs), modelHeader.m_aabb, modelBoundingSphere, skeletonDesc));
 
             return true;
         }

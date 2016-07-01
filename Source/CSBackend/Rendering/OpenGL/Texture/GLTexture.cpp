@@ -25,6 +25,7 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 
+#include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
 #include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
 
@@ -273,6 +274,8 @@ namespace CSBackend
             
             if(enableMipmapping)
             {
+                CS_ASSERT(CS::MathUtils::IsPowerOfTwo(dimensions.x) && CS::MathUtils::IsPowerOfTwo(dimensions.y), "Mipmapped images must be a power of two.");
+                
                 glGenerateMipmap(GL_TEXTURE_2D);
             }
             

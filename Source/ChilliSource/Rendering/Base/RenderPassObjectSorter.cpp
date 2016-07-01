@@ -68,7 +68,7 @@ namespace ChilliSource
             }
             else
             {
-                return (wvpA.GetTranslation().z < wvpB.GetTranslation().z);
+                return (wvpA.GetTranslation().z > wvpB.GetTranslation().z);
             }
         });
     }

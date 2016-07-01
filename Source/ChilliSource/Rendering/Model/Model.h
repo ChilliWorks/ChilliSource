@@ -70,6 +70,12 @@ namespace ChilliSource
         
         /// This must not be called until the model is built and loaded.
         ///
+        /// @return The local space bounding sphere of the Model.
+        ///
+        const Sphere& GetBoundingSphere() const noexcept;
+        
+        /// This must not be called until the model is built and loaded.
+        ///
         /// @return The skeleton.
         ///
         const Skeleton& GetSkeleton() const noexcept;
@@ -138,6 +144,7 @@ namespace ChilliSource
         std::vector<const RenderMesh*> m_renderMeshes;
         Skeleton m_skeleton;
         AABB m_aabb;
+        Sphere m_boundingSphere;
     };
 }
 

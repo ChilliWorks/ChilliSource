@@ -87,13 +87,14 @@ namespace ChilliSource
             auto vertexFormat = VertexFormat::k_staticMesh;
             auto indexFormat = IndexFormat::k_short;
             AABB aabb(Vector3::k_zero, Vector3(in_size.x, 0.0f, in_size.y));
+            Sphere boundingSphere(Vector3::k_zero, in_size.Length() * 0.5f);
             std::unique_ptr<const u8[]> vertexData(reinterpret_cast<const u8*>(vertices));
             std::unique_ptr<const u8[]> indexData(reinterpret_cast<const u8*>(indices));
             
             std::vector<MeshDesc> meshDescs;
-            meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, k_numVertices, k_numVertices, std::move(vertexData), std::move(indexData)));
+            meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, boundingSphere, k_numVertices, k_numVertices, std::move(vertexData), std::move(indexData)));
             
-            return ModelDesc(std::move(meshDescs), aabb);
+            return ModelDesc(std::move(meshDescs), aabb, boundingSphere);
         }
         //------------------------------------------------------------------------------
         /// Creates a new model description describing a box model.
@@ -220,13 +221,14 @@ namespace ChilliSource
             auto vertexFormat = VertexFormat::k_staticMesh;
             auto indexFormat = IndexFormat::k_short;
             AABB aabb(Vector3::k_zero, in_size);
+            Sphere boundingSphere(Vector3::k_zero, in_size.Length() / 0.5f);
             std::unique_ptr<const u8[]> vertexData(reinterpret_cast<const u8*>(vertices));
             std::unique_ptr<const u8[]> indexData(reinterpret_cast<const u8*>(indices));
             
             std::vector<MeshDesc> meshDescs;
-            meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, k_numVertices, k_numIndices, std::move(vertexData), std::move(indexData)));
+            meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, boundingSphere, k_numVertices, k_numIndices, std::move(vertexData), std::move(indexData)));
             
-            return ModelDesc(std::move(meshDescs), aabb);
+            return ModelDesc(std::move(meshDescs), aabb, boundingSphere);
         }
     }
     

@@ -40,6 +40,13 @@ namespace ChilliSource
             const f32 k_degreesToRadians = 0.0174532925f;
             const f32 k_radiansToDegrees = 57.2957795f;
         }
+        
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        bool IsPowerOfTwo(u32 in_value) noexcept
+        {
+            return (in_value > 0) && ((in_value & (~in_value + 1)) == in_value);
+        }
         //---------------------------------------------------------
         //---------------------------------------------------------
         u32 NextPowerOfTwo(u32 in_value)

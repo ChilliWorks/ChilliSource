@@ -55,6 +55,7 @@ namespace ChilliSource
         DestroyRenderMeshes();
         
         m_aabb = modelDesc.GetAABB();
+        m_boundingSphere = modelDesc.GetBoundingSphere();
         m_skeleton = Skeleton(modelDesc.GetSkeletonDesc());
         
         auto renderMeshManager = Application::Get()->GetSystem<RenderMeshManager>();
@@ -69,7 +70,7 @@ namespace ChilliSource
             auto indexFormat = meshDesc.GetIndexFormat();
             auto numVertices = meshDesc.GetNumVertices();
             auto numIndices = meshDesc.GetNumIndices();
-            Sphere boundingSphere(Vector3::k_zero, 1.0f);
+            auto boundingSphere = meshDesc.GetBoundingSphere();
             auto vertexData = meshDesc.ClaimVertexData();
             auto indexData = meshDesc.ClaimIndexData();
             u32 vertexDataSize = meshDesc.GetNumVertices() * meshDesc.GetVertexFormat().GetSize();
@@ -87,6 +88,15 @@ namespace ChilliSource
         CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
         
         return m_aabb;
+    }
+    
+    //------------------------------------------------------------------------------
+    const Sphere& Model::GetBoundingSphere() const noexcept
+    {
+        CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access a model before it is loaded.");
+        CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
+        
+        return m_boundingSphere;
     }
     
     //------------------------------------------------------------------------------

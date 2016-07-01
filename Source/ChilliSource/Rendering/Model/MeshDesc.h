@@ -59,6 +59,8 @@ namespace ChilliSource
         ///     The format of a single index.
         /// @param aabb
         ///     The local AABB of the mesh.
+        /// @parma boundingSphere
+        ///     The local bounding sphere of the mesh.
         /// @param numVertices
         ///     The number of vertices in the mesh.
         /// @param numIndices
@@ -68,7 +70,7 @@ namespace ChilliSource
         /// @param indexData
         ///     The index data for the mesh.
         ///
-        MeshDesc(const std::string& name, PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, const AABB& aabb, u32 numVertices, u32 numIndices,
+        MeshDesc(const std::string& name, PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, const AABB& aabb, const Sphere& boundingSphere, u32 numVertices, u32 numIndices,
                  std::unique_ptr<const u8[]> vertexData, std::unique_ptr<const u8[]> indexData) noexcept;
         
         /// Creates a new mesh description with the given format, mesh data and inverse bind pose
@@ -95,7 +97,7 @@ namespace ChilliSource
         /// @param inverseBindPoseMatrices
         ///     The inverse bind pose matices.
         ///
-        MeshDesc(const std::string& name, PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, const AABB& aabb, u32 numVertices, u32 numIndices,
+        MeshDesc(const std::string& name, PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, const AABB& aabb, const Sphere& boundingSphere, u32 numVertices, u32 numIndices,
                  std::unique_ptr<const u8[]> vertexData, std::unique_ptr<const u8[]> indexData, std::vector<Matrix4> inverseBindPoseMatrices) noexcept;
         
         /// @return The name of the mesh
@@ -117,6 +119,10 @@ namespace ChilliSource
         /// @return The local AABB of the mesh.
         ///
         const AABB& GetAABB() const noexcept { return m_aabb; }
+        
+        /// @return The local bounding sphere of the mesh.
+        ///
+        const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
         
         /// @return The number of vertices in the mesh.
         ///
@@ -152,6 +158,7 @@ namespace ChilliSource
         VertexFormat m_vertexFormat;
         IndexFormat m_indexFormat;
         AABB m_aabb;
+        Sphere m_boundingSphere;
         u32 m_numVertices;
         u32 m_numIndices;
         std::unique_ptr<const u8[]> m_vertexData;

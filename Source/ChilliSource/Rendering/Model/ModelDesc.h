@@ -53,8 +53,10 @@ namespace ChilliSource
         ///     The list of mesh descriptions.
         /// @param aabb
         ///     The local AABB of the model.
+        /// @param boundingSphere
+        ///     The local bounding sphere of the model.
         ///
-        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb) noexcept;
+        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere) noexcept;
         
         /// Creates a new model description with the given mesh data, bounds and skeleton
         /// description.
@@ -64,10 +66,12 @@ namespace ChilliSource
         ///     mesh data.
         /// @param aabb
         ///     The local AABB of the model.
+        /// @param boundingSphere
+        ///     The local bounding sphere of the model.
         /// @param skeletonDesc
         ///     The skeleton description.
         ///
-        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const SkeletonDesc& skeletonDesc) noexcept;
+        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, const SkeletonDesc& skeletonDesc) noexcept;
         
         /// @return The list of mesh descriptions.
         ///
@@ -93,6 +97,10 @@ namespace ChilliSource
         ///
         const AABB& GetAABB() const noexcept { return m_aabb;  }
         
+        /// @return The local bounding sphere of the mode.
+        ///
+        const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere;  }
+        
         /// @return The skeleton description.
         ///
         const SkeletonDesc& GetSkeletonDesc() const noexcept { return m_skeletonDesc; }
@@ -100,6 +108,7 @@ namespace ChilliSource
     private:
         std::vector<MeshDesc> m_meshDescs;
         AABB m_aabb;
+        Sphere m_boundingSphere;
         SkeletonDesc m_skeletonDesc;
     };
 }

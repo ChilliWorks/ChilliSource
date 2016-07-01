@@ -35,7 +35,6 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
 #include <functional>
@@ -277,19 +276,32 @@ namespace ChilliSource
         AlignmentAnchor GetOriginAlignment() const;
         
     private:
-        //----------------------------------------------------
-        /// Triggered when the component is attached to
-        /// an entity on the scene
+        //------------------------------------------------------------
+        /// Triggered when the component is attached to an entity on
+        /// the scene
         ///
         /// @author S Downie
-        //----------------------------------------------------
+        //------------------------------------------------------------
         void OnAddedToScene() override;
-        //----------------------------------------------------
-        /// Triggered when the component is removed from
-        /// an entity on the scene
+        //------------------------------------------------------------
+        /// Called during the Render Snapshot phase of the render
+        /// pipeline to capture all render primitives in the scene.
+        /// This builds a new dynamic mesh for the sprite described
+        /// by this component and adds a new render object which uses
+        /// it.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The snapshot containing all
+        /// data pertaining to a single frame.
+        //------------------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        //------------------------------------------------------------
+        /// Triggered when the component is removed from an entity on
+        /// the scene
         ///
         /// @author S Downie
-        //----------------------------------------------------
+        //------------------------------------------------------------
         void OnRemovedFromScene() override;
         //------------------------------------------------------------
         /// On Transform Changed
@@ -298,22 +310,6 @@ namespace ChilliSource
         /// We must rebuild our sprite data
         //------------------------------------------------------------
         void OnTransformChanged();
-        //-----------------------------------------------------------
-        /// If the transform cache is invalid we must calculate
-        /// the corner positions from the new world transform
-        ///
-        /// @author S Downie
-        //-----------------------------------------------------------
-        void UpdateVertexPositions();
-        //-----------------------------------------------------------
-        /// If the UVs change cache is invalid we must update the
-        /// sprite data vertices
-        ///
-        /// @author S Downie
-        ///
-        /// @param UVs
-        //-----------------------------------------------------------
-        void UpdateVertexUVs(const UVs& in_uvs);
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -354,9 +350,6 @@ namespace ChilliSource
         u32 m_hashedTextureAtlasId = 0;
     
         SizePolicyDelegate m_sizePolicyDelegate;
-        
-        SpriteBatch::SpriteData m_spriteData;
-    
         Vector2 m_cachedTextureSize;
         Vector2 m_originalSize;
         
