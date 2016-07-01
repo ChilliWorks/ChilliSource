@@ -90,6 +90,11 @@ namespace ChilliSource
                 m_mainThreadTaskPool->AddTasks(in_tasks);
                 break;
             }
+            case TaskType::k_system:
+            {
+                m_systemThreadTaskPool->AddTasks(in_tasks);
+                break;
+            }
             case TaskType::k_gameLogic:
             {
                 std::vector<Task> gameLogicTasks;
@@ -173,6 +178,12 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
+    void TaskScheduler::ExecuteSystemThreadTasks() noexcept
+    {
+        m_systemThreadTaskPool->PerformTasks();
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
     void TaskScheduler::StartNextFileTask(const Task& in_task) noexcept
     {
         std::vector<Task> tasks;
@@ -214,7 +225,8 @@ namespace ChilliSource
         
         m_smallTaskPool = TaskPoolUPtr(new TaskPool(TaskType::k_small, threadsPerPool));
         m_largeTaskPool = TaskPoolUPtr(new TaskPool(TaskType::k_large, threadsPerPool));
-        m_mainThreadTaskPool = MainThreadTaskPoolUPtr(new MainThreadTaskPool());
+        m_mainThreadTaskPool = SingleThreadTaskPoolUPtr(new SingleThreadTaskPool(TaskType::k_mainThread));
+        m_systemThreadTaskPool = SingleThreadTaskPoolUPtr(new SingleThreadTaskPool(TaskType::k_system));
 
         m_mainThreadId = std::this_thread::get_id();
     }

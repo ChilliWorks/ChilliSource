@@ -427,6 +427,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::Update(f32 deltaTime, TimeIntervalSecs timestamp) noexcept
     {
+
 #if CS_ENABLE_DEBUG
         //When debugging we may have breakpoints so restrict the time between
         //updates to something feasible.

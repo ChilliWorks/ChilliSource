@@ -598,6 +598,9 @@ namespace CSBackend
 					}
 				}
 
+                //TODO: find a better way to execute this
+                ChilliSource::Application::Get()->GetTaskScheduler()->ExecuteSystemThreadTasks();
+
 				auto appCurrentTime = clock.getElapsedTime().asSeconds();
 
 				auto deltaTime = (appCurrentTime - appPreviousTime);

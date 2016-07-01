@@ -840,9 +840,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
@@ -1244,6 +1241,21 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTextureUnitManager.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.cpp">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.cpp">
+      <Filter>ChilliSource\Input\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryType.cpp">
+      <Filter>ChilliSource\Input\TextEntry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.cpp">
+      <Filter>ChilliSource\Input\TextEntry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2174,9 +2186,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
@@ -2632,6 +2641,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderLayer.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.h">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryType.h">
+      <Filter>ChilliSource\Input\TextEntry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.h">
+      <Filter>ChilliSource\Input\TextEntry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
