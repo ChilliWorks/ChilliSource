@@ -88,7 +88,7 @@ namespace ChilliSource
         
         /// @return The type of object this describes.
         ///
-        Type GetType() const { return m_type; }
+        Type GetType() const noexcept { return m_type; }
         
         /// @return The render material that should be used when rendering this object.
         ///

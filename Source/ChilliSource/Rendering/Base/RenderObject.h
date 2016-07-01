@@ -92,7 +92,7 @@ namespace ChilliSource
         
         /// @return The mesh type of object this describes.
         ///
-        Type GetType() const { return m_type; }
+        Type GetType() const noexcept { return m_type; }
         
         /// @return The material group that should be used when rendering this object.
         ///
