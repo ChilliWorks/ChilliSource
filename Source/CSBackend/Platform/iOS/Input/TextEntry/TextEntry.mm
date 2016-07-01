@@ -69,57 +69,64 @@ namespace CSBackend
         //-------------------------------------------------------
         void TextEntry::Activate(const std::string& in_text, ChilliSource::TextEntryType in_type, ChilliSource::TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            if (IsActive() == false && [m_textView canBecomeFirstResponder])
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                SetType(in_type);
-                SetCapitalisation(in_capitalisation);
-                SetTextBuffer(in_text);
-                m_textBufferChangedDelegate = in_changeDelegate;
-                m_textInputDeactivatedDelegate = in_deactivateDelegate;
-                
-                [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
-				[m_textView becomeFirstResponder];
-            }
-            
+                if (IsActive() == false && [m_textView canBecomeFirstResponder])
+                {
+                    SetType(in_type);
+                    SetCapitalisation(in_capitalisation);
+                    SetTextBuffer(in_text);
+                    m_textBufferChangedDelegate = in_changeDelegate;
+                    m_textInputDeactivatedDelegate = in_deactivateDelegate;
+                    
+                    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
+                    [m_textView becomeFirstResponder];
+                }
+            });
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void TextEntry::Deactivate()
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            if (IsActive() == true)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                [m_textView resignFirstResponder];
-				[m_textView removeFromSuperview];
-            
-                if(m_textInputDeactivatedDelegate != nullptr)
+                if (IsActive() == true)
                 {
-                    auto delegate = m_textInputDeactivatedDelegate;
-                    m_textInputDeactivatedDelegate = nullptr;
-                    delegate();
+                    [m_textView resignFirstResponder];
+                    [m_textView removeFromSuperview];
+                    
+                    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                    {
+                        if(m_textInputDeactivatedDelegate != nullptr)
+                        {
+                            auto delegate = m_textInputDeactivatedDelegate;
+                            m_textInputDeactivatedDelegate = nullptr;
+                            delegate();
+                        }
+                    });
                 }
-            }
+            });
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         bool TextEntry::IsActive() const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
             return m_textView.isFirstResponder;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         const std::string& TextEntry::GetTextBuffer() const
         {
+            std::unique_lock<std::mutex> lock(m_mutex);
             return m_text;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void TextEntry::SetTextBuffer(const std::string& in_text)
         {
-            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                std::unique_lock<std::mutex> lock(m_mutex);
                 m_text = in_text;
                 NSString* text = [NSStringUtils newNSStringWithUTF8String:m_text];
                 m_textView.text = text;
@@ -179,6 +186,7 @@ namespace CSBackend
         bool TextEntry::OnTextUpdated(NSString* in_text)
         {
             bool acceptText = true;
+            
             auto text = [NSStringUtils newUTF8StringWithNSString:in_text];
             
             if(m_textBufferChangedDelegate != nullptr)

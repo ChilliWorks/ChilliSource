@@ -30,7 +30,9 @@
 
 #import <CSBackend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 
+#import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Math/MathUtils.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #import <CoreMotion/CoreMotion.h>
 #import <Foundation/Foundation.h>
@@ -77,11 +79,14 @@ namespace CSBackend
         //----------------------------------------------------
         void Accelerometer::StartUpdating()
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to start accelerometer updating from background thread.");
             if (m_isUpdating == false)
             {
                 m_isUpdating = true;
-                [m_motionManager startAccelerometerUpdates];
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+                {
+                    [m_motionManager startAccelerometerUpdates];
+                });
             }
         }
         //----------------------------------------------------
@@ -124,11 +129,14 @@ namespace CSBackend
         //----------------------------------------------------
         void Accelerometer::StopUpdating()
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to stop accelerometer updating from background thread.");
             if (m_isUpdating == true)
             {
                 m_isUpdating = false;
-                [m_motionManager stopAccelerometerUpdates];
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+                {
+                    [m_motionManager stopAccelerometerUpdates];
+                });
             }
         }
         //----------------------------------------------------
