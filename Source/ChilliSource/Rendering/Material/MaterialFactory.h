@@ -1,8 +1,4 @@
 //
-//  MaterialFactory.h
-//  Chilli Source
-//  Created by Scott Downie on 5/08/2013.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2013 Tag Games Limited
@@ -34,36 +30,62 @@
 
 namespace ChilliSource
 {
-    //-------------------------------------------------------------------------
-    /// Factory for creating material resources based on rendering type
+    /// A convenience factory for creating new materials of the requested types.
     ///
-    /// @author S Downie
-    //-------------------------------------------------------------------------
+    /// This is not thread-safe and must be called from the main thread.
+    ///
     class MaterialFactory final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(MaterialFactory);
-        //---------------------------------------------------
-        /// @author S Downie
+
+        /// Allows querying of whether or not this system implements the interface described by the
+        /// given interface Id. Typically this is not called directly as the templated equivalent
+        /// IsA<Interface>() is preferred.
         ///
-        /// @param Interface ID
+        /// @param interfaceId
+        ///     The Id of the interface.
         ///
-        /// @return Whether the object is of the same interface
-        //---------------------------------------------------
-        bool IsA(InterfaceIDType in_interfaceId) const override;
-        //---------------------------------------------------
-        /// Create a material with no shader programs.
-        /// The shader programs must be specified by the
-        /// user before using the material
+        /// @return Whether or not the interface is implemented.
         ///
-        /// @author S Downie
+        bool IsA(InterfaceIDType interfaceId) const noexcept override;
+        
+        /// Creates a new custom material, on which all shader settings can be changed. The shading
+        /// type defaults to Unlit, but other types can be set. The types of mesh that the material
+        /// can be used with depends on the shading type set.
         ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
+        /// The material must have it's load state set manually to loaded before it can be used.
         ///
-        /// @param Empty new material
-        //---------------------------------------------------
-        MaterialSPtr CreateCustom(const std::string& in_uniqueId) const;
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
+        ///
+        /// @return The new empty, mutable material.
+        ///
+        MaterialSPtr CreateCustom(const std::string& uniqueId) const noexcept;
+        
+        /// Creates a new material with unlit materials that can be used with static meshes, animated
+        /// meshes and sprites.
+        ///
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
+        /// @param texture
+        ///     The texture that the material will use.
+        ///
+        MaterialCSPtr CreateUnlit(const std::string& uniqueId, const TextureCSPtr& texture) const noexcept;
+        
+        /// Creates a new material with unlit materials that can be used with static meshes and animated
+        /// meshes.
+        ///
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
+        /// @param texture
+        ///     The texture that the material will use.
+        ///
+        MaterialCSPtr CreateBlinn(const std::string& uniqueId, const TextureCSPtr& texture) const noexcept;
+        
         //---------------------------------------------------
         /// Create a material to render UI
         ///

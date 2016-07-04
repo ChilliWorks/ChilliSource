@@ -118,14 +118,47 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateBlinnShadowedRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour,
+                                                                                                         const Colour& diffuseColour, const Colour& specularColour) noexcept
+    {
+        std::vector<const RenderTexture*> renderTextures { renderTexture };
+        
+        //TODO: Create RenderMaterials from pools.
+        auto staticMeshBaseRM = RenderMaterialUPtr(new RenderMaterial(m_staticMeshBlinnBase->GetRenderShader(), renderTextures, false, true, true, true, true, BlendMode::k_one, BlendMode::k_oneMinusSourceAlpha,
+                                                                      CullFace::k_back, emissiveColour, ambientColour, Colour::k_black, Colour::k_black));
+        auto staticMeshDirectionalRM = RenderMaterialUPtr(new RenderMaterial(m_staticMeshBlinnShadowedDirectional->GetRenderShader(), renderTextures, true, true, false, true, true, BlendMode::k_one, BlendMode::k_one,
+                                                                             CullFace::k_back, Colour::k_black, Colour::k_black, diffuseColour, specularColour));
+        
+        //TODO: Add support for animated vertex format.
+        
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticMeshRenderMaterials {};
+        staticMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticMeshBaseRM.get();
+        staticMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticMeshDirectionalRM.get();
+        
+        std::vector<RenderMaterialGroup::Collection> collections { RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticMeshRenderMaterials) };
+        
+        std::vector<RenderMaterialUPtr> renderMaterials;
+        renderMaterials.push_back(std::move(staticMeshBaseRM));
+        renderMaterials.push_back(std::move(staticMeshDirectionalRM));
+        
+        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
+        auto renderMaterialGroupRaw = renderMaterialGroup.get();
+        AddRenderMaterialGroup(std::move(renderMaterialGroup));
+        
+        return renderMaterialGroupRaw;
+    }
+    
+    //------------------------------------------------------------------------------
     void ForwardRenderMaterialGroupManager::OnInit() noexcept
     {
         auto resourcePool = Application::Get()->GetResourcePool();
         
-        m_staticMeshUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static.csshader");
-        m_staticMeshBlinnBase = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader");
-        m_staticMeshBlinnDirectional = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnDirectional.csshader");
-        m_spriteUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Sprite.csshader");
+        m_spriteUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Sprite-Unlit-Base.csshader");
+        
+        m_staticMeshUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-Unlit-Base.csshader");
+        m_staticMeshBlinnBase = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-Blinn-Base.csshader");
+        m_staticMeshBlinnDirectional = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-Blinn-Directional.csshader");
+        m_staticMeshBlinnShadowedDirectional = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-BlinnShadowed-Directional.csshader");
     }
     
     //------------------------------------------------------------------------------
