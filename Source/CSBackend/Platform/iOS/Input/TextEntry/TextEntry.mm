@@ -81,6 +81,7 @@ namespace CSBackend
                     
                     [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
                     [m_textView becomeFirstResponder];
+                    m_isActive = true;
                 }
             });
         }
@@ -92,6 +93,7 @@ namespace CSBackend
             {
                 if (IsActive() == true)
                 {
+                    m_isActive = false;
                     [m_textView resignFirstResponder];
                     [m_textView removeFromSuperview];
                     
@@ -112,7 +114,7 @@ namespace CSBackend
         bool TextEntry::IsActive() const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-            return m_textView.isFirstResponder;
+            return m_isActive;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -137,67 +139,76 @@ namespace CSBackend
         //-------------------------------------------------------
         void TextEntry::SetType(ChilliSource::TextEntryType in_type)
         {
-            if(m_textView != nullptr)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                switch (in_type)
+                if(m_textView != nullptr)
                 {
-                    case ChilliSource::TextEntryType::k_text:
-                        m_textView.keyboardType = UIKeyboardTypeASCIICapable;
-                        break;
-                    case ChilliSource::TextEntryType::k_numeric:
-                        m_textView.keyboardType = UIKeyboardTypeNumberPad;
-                        break;
-                    default:
-                        CS_LOG_ERROR("Invalid keyboard type passed to keyboard!");
-                        m_textView.keyboardType = UIKeyboardTypeASCIICapable;
-                        break;
+                    switch (in_type)
+                    {
+                        case ChilliSource::TextEntryType::k_text:
+                            m_textView.keyboardType = UIKeyboardTypeASCIICapable;
+                            break;
+                        case ChilliSource::TextEntryType::k_numeric:
+                            m_textView.keyboardType = UIKeyboardTypeNumberPad;
+                            break;
+                        default:
+                            CS_LOG_ERROR("Invalid keyboard type passed to keyboard!");
+                            m_textView.keyboardType = UIKeyboardTypeASCIICapable;
+                            break;
+                    }
                 }
-            }
+            });
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void TextEntry::SetCapitalisation(ChilliSource::TextEntryCapitalisation in_capitalisation)
         {
-            if(m_textView != nullptr)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                switch (in_capitalisation)
+                if(m_textView != nullptr)
                 {
-                    case ChilliSource::TextEntryCapitalisation::k_none:
-                        m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
-                        break;
-                    case ChilliSource::TextEntryCapitalisation::k_words:
-                        m_textView.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                        break;
-                    case ChilliSource::TextEntryCapitalisation::k_sentences:
-                        m_textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
-                        break;
-                    case ChilliSource::TextEntryCapitalisation::k_all:
-                        m_textView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
-                        break;
-                    default:
-                        CS_LOG_WARNING("Unknown Capitalisation Method");
-                        m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
-                        break;
+                    switch (in_capitalisation)
+                    {
+                        case ChilliSource::TextEntryCapitalisation::k_none:
+                            m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                            break;
+                        case ChilliSource::TextEntryCapitalisation::k_words:
+                            m_textView.autocapitalizationType = UITextAutocapitalizationTypeWords;
+                            break;
+                        case ChilliSource::TextEntryCapitalisation::k_sentences:
+                            m_textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+                            break;
+                        case ChilliSource::TextEntryCapitalisation::k_all:
+                            m_textView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
+                            break;
+                        default:
+                            CS_LOG_WARNING("Unknown Capitalisation Method");
+                            m_textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                            break;
+                    }
                 }
-            }
+            });
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void TextEntry::OnTextUpdated(NSString* in_text)
         {
-            bool acceptText = true;
-            
             auto text = [NSStringUtils newUTF8StringWithNSString:in_text];
             
-            if(m_textBufferChangedDelegate != nullptr)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
-                acceptText = m_textBufferChangedDelegate(text);
-            }
-            
-            if(acceptText == true)
-            {
-                SetTextBuffer(text);
-            }
+                bool acceptText = true;
+                    
+                if(m_textBufferChangedDelegate != nullptr)
+                {
+                    acceptText = m_textBufferChangedDelegate(text);
+                }
+                
+                if(acceptText == true)
+                {
+                    SetTextBuffer(text);
+                }
+            });
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

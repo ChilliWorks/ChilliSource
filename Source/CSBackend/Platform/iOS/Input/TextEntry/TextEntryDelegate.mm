@@ -61,11 +61,8 @@
 //---------------------------------------------------------
 -(BOOL) textField:(UITextField*)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString*)string
 {
-    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
-    {
-        NSString* updateText = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        textEntry->OnTextUpdated(updateText);
-    });
+    NSString* updateText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    textEntry->OnTextUpdated(updateText);
     
     return false;
 }

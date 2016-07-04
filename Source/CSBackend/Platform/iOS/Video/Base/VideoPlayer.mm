@@ -89,7 +89,7 @@ namespace CSBackend
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         VideoPlayer::VideoPlayer()
-            : m_moviePlayerController(nil), m_tapListener(nil), m_currentState(VideoPlayer::State::k_inactive), m_dismissWithTap(false), m_videoOverlayView(nil), m_subtitlesRenderer(nil)
+            : m_moviePlayerController(nil), m_tapListener(nil), m_currentState(State::k_inactive), m_dismissWithTap(false), m_videoOverlayView(nil), m_subtitlesRenderer(nil)
         {
         }
 		//--------------------------------------------------------------
@@ -102,47 +102,41 @@ namespace CSBackend
         //--------------------------------------------------------------
         void VideoPlayer::Present(ChilliSource::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap, const ChilliSource::Colour& in_backgroundColour)
         {
-            @autoreleasepool
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present video on background thread.");
+            
+            auto previousState = m_currentState.exchange(State::k_loading);
+            CS_ASSERT(previousState == State::k_inactive, "Cannot present video while a video is already playing.");
+            
+            m_completionDelegateConnection = std::move(in_delegateConnection);
+            
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                CS_ASSERT(m_currentState == VideoPlayer::State::k_inactive, "Cannot present video while a video is already playing.");
-                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present video on background thread.");
-                
-                m_completionDelegateConnection = std::move(in_delegateConnection);
-                
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+                m_backgroundColour = in_backgroundColour;
+                m_dismissWithTap = in_dismissWithTap;
+
+                auto fileSystem = ChilliSource::Application::Get()->GetFileSystem();
+                std::string filePath;
+                if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_fileName) == false)
                 {
-                    m_backgroundColour = in_backgroundColour;
+                    filePath = fileSystem->GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_fileName;
+                }
+                else
+                {
+                    filePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + in_fileName;
+                }
 
-                    auto fileSystem = ChilliSource::Application::Get()->GetFileSystem();
-                    std::string filePath;
-                    if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_fileName) == false)
-                    {
-                        filePath = fileSystem->GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_fileName;
-                    }
-                    else
-                    {
-                        filePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + in_fileName;
-                    }
-
-                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:filePath];
-                    NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
-                    [urlString release];
-                    
-                    m_moviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
-                    
-                    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, m_moviePlayerController);
-                    
-                    std::unique_lock<std::mutex> lock(m_mutex);
-                    m_currentState = VideoPlayer::State::k_preparing;
-                    lock.unlock();
-                    
-                    Prepare();
-                    
-                    m_dismissWithTap = in_dismissWithTap;
-                    
-                    ListenForMoviePlayerNotifications();
-                });
-            }
+                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:filePath];
+                NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
+                [urlString release];
+                
+                m_moviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
+                
+                AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, m_moviePlayerController);
+                
+                ListenForMoviePlayerNotifications();
+                
+                Prepare();
+            });
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
@@ -174,9 +168,9 @@ namespace CSBackend
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        bool VideoPlayer::IsPresented()
+        bool VideoPlayer::IsPresented() const noexcept
         {
-            return (m_currentState != VideoPlayer::State::k_inactive);
+            return (m_currentState != State::k_inactive);
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -189,27 +183,23 @@ namespace CSBackend
         //---------------------------------------------------------------
         void VideoPlayer::Prepare()
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            CS_ASSERT(m_currentState == VideoPlayer::State::k_preparing, "Video player not presented, cannot prepare to play video.");
+            auto previousState = m_currentState.exchange(State::k_ready);
+            CS_ASSERT(previousState == State::k_loading, "Video player not presented, cannot prepare to play video.");
             
             [m_moviePlayerController setControlStyle:MPMovieControlStyleNone];
             [m_moviePlayerController setFullscreen:YES];
             [m_moviePlayerController setRepeatMode:MPMovieRepeatModeNone];
             [m_moviePlayerController prepareToPlay];
-            
-            m_currentState = VideoPlayer::State::k_ready;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
         void VideoPlayer::Play()
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            CS_ASSERT(m_currentState == VideoPlayer::State::k_ready, "Video player not prepared to play video yet, cannot play.");
+            auto previousState = m_currentState.exchange(State::k_playing);
+            CS_ASSERT(previousState == State::k_ready, "Video player not prepared to play video yet, cannot play.");
             
             CreateVideoOverlay();
             [m_moviePlayerController play];
-            
-            m_currentState = VideoPlayer::State::k_playing;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -277,8 +267,8 @@ namespace CSBackend
         //---------------------------------------------------------------
         void VideoPlayer::OnPlaybackFinished()
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            CS_ASSERT(m_currentState == VideoPlayer::State::k_playing, "Playback finished should only happen once per playing video.");
+            auto previousState = m_currentState.exchange(State::k_inactive);
+            CS_ASSERT(previousState == State::k_playing, "Playback finished should only happen once per playing video.");
             
             DeleteVideoOverlay();
             
@@ -296,13 +286,9 @@ namespace CSBackend
             
             [[NSNotificationAdapter sharedInstance] StopListeningForMPPlaybackDidFinish];
             m_moviePlayerPlaybackFinishedConnection = nullptr;
-            lock.unlock();
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
-                std::unique_lock<std::mutex> taskLock(m_mutex);
-                m_currentState = VideoPlayer::State::k_inactive;
-                
                 if (m_completionDelegateConnection != nullptr)
                 {
                     auto delegateConnection = std::move(m_completionDelegateConnection);
@@ -317,11 +303,9 @@ namespace CSBackend
         {
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                std::unique_lock<std::mutex> lock(m_mutex);
-                
                 if (m_moviePlayerController != nil)
                 {
-                    if (m_currentState == VideoPlayer::State::k_playing || m_currentState == VideoPlayer::State::k_ready)
+                    if (m_currentState == State::k_playing || m_currentState == State::k_ready)
                     {
                         [m_moviePlayerController play];
                     }

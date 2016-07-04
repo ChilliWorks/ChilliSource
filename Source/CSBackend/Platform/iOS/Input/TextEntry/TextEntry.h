@@ -149,6 +149,8 @@ namespace CSBackend
             //-------------------------------------------------------
             void SetCapitalisation(ChilliSource::TextEntryCapitalisation in_capitalisation);
             
+            bool m_isActive = false;
+            
             UITextField* m_textView;
             TextEntryDelegate* m_delegate;
             TextBufferChangedDelegate m_textBufferChangedDelegate;

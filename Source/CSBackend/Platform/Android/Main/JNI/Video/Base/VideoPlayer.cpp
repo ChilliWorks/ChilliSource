@@ -190,7 +190,7 @@ namespace CSBackend
 		}
         //--------------------------------------------------------
         //--------------------------------------------------------
-        bool VideoPlayer::IsPresented()
+        bool VideoPlayer::IsPresented() const noexcept
         {
             return m_isPlaying;
         }

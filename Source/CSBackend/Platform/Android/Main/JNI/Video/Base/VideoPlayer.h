@@ -115,7 +115,7 @@ namespace CSBackend
             ///
             /// @author Jordan Brown
             //-------------------------------------------------------
-            bool IsPresented() override;
+            bool IsPresented() const noexcept override;
         private:
             friend ChilliSource::VideoPlayerUPtr ChilliSource::VideoPlayer::Create();
             //------------------------------------------------------------------------------

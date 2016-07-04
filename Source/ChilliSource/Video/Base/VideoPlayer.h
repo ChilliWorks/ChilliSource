@@ -92,7 +92,7 @@ namespace ChilliSource
         ///
         /// @author Jordan Brown
         //-------------------------------------------------------
-        virtual bool IsPresented() = 0;
+        virtual bool IsPresented() const noexcept = 0;
         //--------------------------------------------------------
         /// Destructor
         ///
@@ -101,18 +101,6 @@ namespace ChilliSource
         virtual ~VideoPlayer(){}
     protected:
         friend class State;
-        //-------------------------------------------------------
-        /// Represents the current state of the video player.
-        ///
-        /// @author Jordan Brown
-        //-------------------------------------------------------
-        enum class State
-        {
-            k_inactive,
-            k_preparing,
-            k_ready,
-            k_playing
-        };
         //-------------------------------------------------------
         /// Create the platform dependent backend
         ///

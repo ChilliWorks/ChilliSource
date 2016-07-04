@@ -32,6 +32,7 @@
 #import <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Video/Base/VideoPlayer.h>
 
+#import <atomic>
 #import <mutex>
 
 @class MPMoviePlayerController;
@@ -111,10 +112,21 @@ namespace CSBackend
             ///
             /// @author Jordan Brown
             //-------------------------------------------------------
-            bool IsPresented() override;
+            bool IsPresented() const noexcept override;
         private:
-            
             friend ChilliSource::VideoPlayerUPtr ChilliSource::VideoPlayer::Create();
+            //-------------------------------------------------------
+            /// Represents the current state of the video player.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            enum class State
+            {
+                k_inactive,
+                k_loading,
+                k_ready,
+                k_playing
+            };
             //--------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -215,7 +227,7 @@ namespace CSBackend
         private:
             ChilliSource::Screen* m_screen;
             
-            VideoPlayer::State m_currentState = VideoPlayer::State::k_inactive;
+            std::atomic<State> m_currentState;
             MPMoviePlayerController* m_moviePlayerController;
             
             bool m_dismissWithTap;
@@ -230,8 +242,6 @@ namespace CSBackend
             ChilliSource::EventConnectionUPtr m_moviePlayerPlaybackFinishedConnection;
             
             VideoCompleteDelegate::Connection m_completionDelegateConnection;
-            
-            std::mutex m_mutex;
         };
     }
 }
