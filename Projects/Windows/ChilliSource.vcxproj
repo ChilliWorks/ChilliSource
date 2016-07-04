@@ -130,8 +130,10 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IContextRestorer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandBufferManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandCompiler.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp" />
@@ -318,7 +320,7 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequest.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.cpp" />
@@ -546,9 +548,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IContextRestorer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandBufferManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h" />
@@ -778,7 +782,7 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequest.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLIncludes.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h" />
