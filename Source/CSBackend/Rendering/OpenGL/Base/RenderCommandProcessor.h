@@ -51,7 +51,7 @@ namespace CSBackend
             /// @param renderCommandBuffer
             ///     The buffer of render commands that should be processed.
             ///
-            void Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept override;
+            void Process(ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept override;
             
         private:
             /// Initialises the render command processor. This is deferred until Process is first called

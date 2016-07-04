@@ -67,7 +67,7 @@ namespace ChilliSource
         ///
         /// @return The number of render command lists required.
         ///
-        u32 CalcNumRenderCommandLists(const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const RenderCommandList* preRenderCommandList, const RenderCommandList* postRenderCommandList) noexcept
+        u32 CalcNumRenderCommandLists(const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, RenderCommandList* preRenderCommandList, RenderCommandList* postRenderCommandList) noexcept
         {
             u32 count = 0;
             
@@ -143,7 +143,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandBufferCUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
+    RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
                                                                     const Colour& clearColour, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept
     {
         u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());

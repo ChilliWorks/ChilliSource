@@ -78,7 +78,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void RenderCommandProcessor::Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept
+        void RenderCommandProcessor::Process(ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept
         {
             if (m_initRequired)
             {
@@ -86,9 +86,9 @@ namespace CSBackend
                 Init();
             }
             
-            for (const auto& renderCommandList : renderCommandBuffer->GetQueue())
+            for(u32 i = 0; i < renderCommandBuffer->GetNumSlots(); ++i)
             {
-                for (const auto& renderCommand : renderCommandList->GetOrderedList())
+                for (auto& renderCommand : renderCommandBuffer->GetRenderCommandList(i)->GetOrderedList())
                 {
                     switch (renderCommand->GetType())
                     {

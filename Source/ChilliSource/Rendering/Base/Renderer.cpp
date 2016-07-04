@@ -28,15 +28,11 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
+#include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 #include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
 
 namespace ChilliSource
 {
-    namespace
-    {
-        constexpr u32 k_maxQueueSize = 1;
-    }
-    
     CS_DEFINE_NAMEDTYPE(Renderer);
     
     //------------------------------------------------------------------------------
@@ -47,7 +43,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black)
+    : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black)
     {
         //TODO: Handle forward vs deferred rendering
         m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
@@ -58,7 +54,11 @@ namespace ChilliSource
     {
         return (Renderer::InterfaceID == interfaceId);
     }
-    
+    //------------------------------------------------------------------------------
+    void Renderer::OnInit() noexcept
+    {
+        m_commandRecycleSystem = Application::Get()->GetSystem<RenderCommandBufferManager>();
+    }
     //------------------------------------------------------------------------------
     void Renderer::ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept
     {
@@ -83,7 +83,7 @@ namespace ChilliSource
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
             auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(preRenderCommandList), std::move(postRenderCommandList));
             
-            WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
+            m_commandRecycleSystem->WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
             EndRenderPrep();
         });
     }
@@ -91,7 +91,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Renderer::ProcessRenderCommandBuffer() noexcept
     {
-        auto renderCommandBuffer = WaitThenPopCommandBuffer();
+        auto renderCommandBuffer = m_commandRecycleSystem->WaitThenPopCommandBuffer();
         m_renderCommandProcessor->Process(renderCommandBuffer.get());
     }
     
@@ -114,38 +114,5 @@ namespace ChilliSource
         std::unique_lock<std::mutex> lock(m_renderPrepMutex);
         m_renderPrepActive = false;
         m_renderPrepCondition.notify_all();
-    }
-    
-    //------------------------------------------------------------------------------
-    void Renderer::WaitThenPushCommandBuffer(RenderCommandBufferCUPtr renderCommandBuffer) noexcept
-    {
-        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
-        
-        while (m_renderCommandBuffers.size() >= k_maxQueueSize)
-        {
-            m_renderCommandBuffersCondition.wait(lock);
-        }
-        
-        m_renderCommandBuffers.push_back(std::move(renderCommandBuffer));
-        
-        m_renderCommandBuffersCondition.notify_all();
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderCommandBufferCUPtr Renderer::WaitThenPopCommandBuffer() noexcept
-    {
-        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
-        
-        while (m_renderCommandBuffers.empty())
-        {
-            m_renderCommandBuffersCondition.wait(lock);
-        }
-        
-        auto renderCommandBuffer = std::move(m_renderCommandBuffers.front());
-        m_renderCommandBuffers.pop_front();
-        
-        m_renderCommandBuffersCondition.notify_all();
-        
-        return renderCommandBuffer;
     }
 }

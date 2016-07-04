@@ -26,13 +26,15 @@
 //  THE SOFTWARE.
 //
 
+//#ifdef CS_TARGETPLATFORM_IOS //Remove
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <CSBackend/Rendering/OpenGL/Base/ContextRestorer.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace CSBackend
 {
@@ -42,28 +44,22 @@ namespace CSBackend
         /// Shaders and most textures can be recreated from file,
         /// however the mesh buffers must have a snap shot taken
         //-----------------------------------------------------
-        void ContextRestorer::Backup()
+        void GLContextRestorer::Backup() noexcept
         {
-            //TODO: Re-implement in new system
-//            if(m_hasContextBeenBackedUp == false)
-//            {
-//                for(auto& buffer : m_meshBuffers)
-//                {
-//                    buffer->Backup();
-//                }
-//                
-//                m_hasContextBeenBackedUp = true;
-//            }
+            if(m_hasContextBeenBackedUp == false)
+            {
+                m_hasContextBeenBackedUp = true;
+            }
         }
         //-----------------------------------------------------
         /// Rebuild the shaders and textures from file. Re-upload
         /// the mesh buffers
         //-----------------------------------------------------
-        void ContextRestorer::Restore()
+        void GLContextRestorer::Restore() noexcept
         {
-            //TODO: Re-implement in new system
-//            if(m_hasContextBeenBackedUp == true)
-//            {
+            if(m_hasContextBeenBackedUp == true)
+            {
+                //TODO: Restore correctly.
 //                ChilliSource::ResourcePool* resourcePool = ChilliSource::Application::Get()->GetResourcePool();
 //                
 //                //---Shaders
@@ -80,32 +76,14 @@ namespace CSBackend
 //				{
 //                    if (texture->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
 //                    {
-//                        Texture* glTexture = static_cast<Texture*>(const_cast<ChilliSource::Texture*>(texture.get()));
-//                        glTexture->Restore();
+//                        ChilliSource::Texture* glTexture = static_cast<ChilliSource::Texture*>(const_cast<ChilliSource::Texture*>(texture.get()));
+////                        glTexture->Restore();
 //                    }
 //                }
 //                resourcePool->RefreshResources<ChilliSource::Texture>();
 //                
-//                //---Cubemaps
-//                auto allCubemaps = resourcePool->GetAllResources<ChilliSource::Cubemap>();
-//                for (const auto& cubemap : allCubemaps)
-//				{
-//					if (cubemap->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
-//                    {
-//                        Cubemap* glCubemap = static_cast<Cubemap*>(const_cast<ChilliSource::Cubemap*>(cubemap.get()));
-//                        glCubemap->Restore();
-//                    }
-//                }
-//                resourcePool->RefreshResources<ChilliSource::Cubemap>();
-//                
-//                //---Meshes
-//                for(auto& buffer : m_meshBuffers)
-//                {
-//                    buffer->Restore();
-//                }
-//                
 //                m_hasContextBeenBackedUp = false;
-//            }
+            }
         }
     }
 }

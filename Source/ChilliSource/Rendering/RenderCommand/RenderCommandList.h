@@ -164,10 +164,10 @@ namespace ChilliSource
 
         /// @return The ordered list of render commands.
         ///
-        const std::vector<const RenderCommand*>& GetOrderedList() const noexcept { return m_orderedCommands; };
+        std::vector<RenderCommand*>& GetOrderedList() noexcept { return m_orderedCommands; };
         
     private:
-        std::vector<const RenderCommand*> m_orderedCommands;
+        std::vector<RenderCommand*> m_orderedCommands;
         std::vector<RenderCommandUPtr> m_renderCommands; //TODO: This should be changed to a series of pools of individial render command types.
     };
 }

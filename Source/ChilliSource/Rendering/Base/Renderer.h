@@ -27,6 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Rendering/Base/IContextRestorer.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
@@ -84,6 +85,10 @@ namespace ChilliSource
         ///
         bool IsA(InterfaceIDType interfaceId) const noexcept override;
         
+        /// Initialisation called when all App Systems have been created.
+        ///
+        void OnInit() noexcept override;
+        
         /// Performs the Scene Snapshot through to the Render Command Queue Compilation Stages and
         /// then stores the output render command buffer render to later be processed by the
         /// ProcessRenderCommandBuffer() method.
@@ -129,21 +134,6 @@ namespace ChilliSource
         ///
         void EndRenderPrep() noexcept;
         
-        /// If the queue of command buffers is full then this waits until one has been popped to continue.
-        /// It then adds the given render buffer and notifies any threads which are waiting.
-        ///
-        /// @param renderCommandBuffer
-        ///     The render command buffer which should be pushed. Must be moved.
-        ///
-        void WaitThenPushCommandBuffer(RenderCommandBufferCUPtr renderCommandBuffer) noexcept;
-        
-        /// If the queue of command buffers is empty then this waits until one has been pushed to continue.
-        /// It pops a command buffer from the list and notifies any threads which are waiting.
-        ///
-        /// @return The render command buffer which has been popped.
-        ///
-        RenderCommandBufferCUPtr WaitThenPopCommandBuffer() noexcept;
-        
         IRenderPassCompilerUPtr m_renderPassCompiler;
         IRenderCommandProcessorUPtr m_renderCommandProcessor;
         
@@ -153,9 +143,7 @@ namespace ChilliSource
         std::condition_variable m_renderPrepCondition;
         bool m_renderPrepActive = false;
         
-        std::mutex m_renderCommandBuffersMutex;
-        std::condition_variable m_renderCommandBuffersCondition;
-        std::deque<RenderCommandBufferCUPtr> m_renderCommandBuffers;
+        RenderCommandBufferManager* m_commandRecycleSystem = nullptr;
     };
 }
 

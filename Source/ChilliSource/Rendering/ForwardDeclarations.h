@@ -40,6 +40,7 @@ namespace ChilliSource
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(CanvasMaterialPool);
     CS_FORWARDDECLARE_CLASS(CanvasRenderer);
+    CS_FORWARDDECLARE_CLASS(IContextRestorer);
     CS_FORWARDDECLARE_CLASS(IRenderCommandProcessor);
     CS_FORWARDDECLARE_CLASS(IRenderPassCompiler);
     CS_FORWARDDECLARE_CLASS(ForwardRenderPassCompiler);
@@ -177,6 +178,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandBuffer);
+    CS_FORWARDDECLARE_CLASS(RenderCommandBufferManager);
     CS_FORWARDDECLARE_CLASS(RenderCommandList);
     CS_FORWARDDECLARE_CLASS(UnloadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMeshRenderCommand);

@@ -22,45 +22,33 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_IRENDERCOMMANDPROCESSOR_H_
-#define _CHILLISOURCE_RENDERING_BASE_IRENDERCOMMANDPROCESSOR_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_ICONTEXTRESTORER_H_
+#define _CHILLISOURCE_RENDERING_BASE_ICONTEXTRESTORER_H_
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <vector>
-
 namespace ChilliSource
 {
-    /// The interface for RenderCommand processors. A render command processor takes a
-    /// RenderCommandBuffer and performs each action described by the RenderCommands it
-    /// is comprised of. The actions performed depend on the render API that the
-    /// processor represents.
-    ///
-    /// This is not thread safe and must be executed on the render thread.
-    ///
-    class IRenderCommandProcessor
+    class IContextRestorer
     {
     public:
-        CS_DECLARE_NOCOPY(IRenderCommandProcessor);
-        
-        IRenderCommandProcessor() = default;
-        
-        /// Creates a new instance of the render command processor. The specific processor
-        /// type depends on the current platform.
+        /// Creates a new instance of the context restorer depending on the current
+        /// platform. If the current platform does not need to have its context restored
+        /// then nullptr will be returned.
         ///
         /// @return The newly created instance.
         ///
-        static IRenderCommandProcessorUPtr Create() noexcept;
+        static IContextRestorerUPtr Create() noexcept;
         
-        /// Processes the given render command buffer, performing the required actions for
-        /// each command as per the render API that this represents.
+        /// Take a snapshot of the GL context for resources
+        /// that cannot be recreated from file and store them
+        /// so they can be recreated
         ///
-        /// @param renderCommandBuffer
-        ///     The buffer of render commands that should be processed.
-        ///
-        virtual void Process(ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept = 0;
+        virtual void Backup() = 0;
         
-        virtual ~IRenderCommandProcessor() noexcept {}
+        /// Recreate the GL context with the backed up resources
+        ///
+        virtual void Restore() = 0;
     };
 }
 

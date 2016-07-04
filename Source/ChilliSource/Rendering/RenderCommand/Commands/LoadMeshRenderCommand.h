@@ -49,6 +49,13 @@ namespace ChilliSource
         ///
         const u8* GetVertexData() const noexcept { return m_vertexData.get(); }
         
+        /// Moves the Vertex data out of this class. Use with caution as this command
+        /// will be in a broken state after this is used.
+        ///
+        /// @return The vertex data buffer.
+        ///
+        std::unique_ptr<const u8[]> ClaimVertexData() noexcept { return std::move(m_vertexData); }
+        
         /// @return The size of the vertex data buffer.
         ///
         u32 GetVertexDataSize() const noexcept { return m_vertexDataSize; }
@@ -56,6 +63,13 @@ namespace ChilliSource
         /// @return The index data buffer.
         ///
         const u8* GetIndexData() const noexcept { return m_indexData.get(); }
+        
+        /// Moves the Index data out of this class. Use with caution as this command
+        /// will be in a broken state after this is used.
+        ///
+        /// @return The index data buffer.
+        ///
+        std::unique_ptr<const u8[]> ClaimIndexData() noexcept { return std::move(m_indexData); }
         
         /// @return The size of the index data buffer.
         ///

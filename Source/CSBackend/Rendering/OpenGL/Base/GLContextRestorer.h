@@ -1,11 +1,7 @@
 //
-//  ContextRestorer.h
-//  Chilli Source
-//  Created by Scott Downie on 14/04/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_BASE_CONTEXTRESTORER_H_
-#define _CSBACKEND_RENDERING_OPENGL_BASE_CONTEXTRESTORER_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_BASE_GLCONTEXTRESTORER_H_
+#define _CSBACKEND_RENDERING_OPENGL_BASE_GLCONTEXTRESTORER_H_
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Base/IContextRestorer.h>
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #include <vector>
@@ -40,39 +37,31 @@ namespace CSBackend
 {
     namespace OpenGL
     {
-        //---------------------------------------------------------
         /// OpenGL on Android has its context killed whenever the
         /// app is suspended. This means all GL resources such
         /// as textures, shaders and buffers are destroyed and
         /// must be recreated on resume.
         ///
-        /// @author S Downie
-        //---------------------------------------------------------
-        class ContextRestorer final
+        class GLContextRestorer final : public ChilliSource::IContextRestorer
         {
         public:
             
-            CS_DECLARE_NOCOPY(ContextRestorer);
-            //-----------------------------------------------------
+            CS_DECLARE_NOCOPY(GLContextRestorer);
+            
             /// Constructor
             ///
-            /// @author S Downie
-            //-----------------------------------------------------
-            ContextRestorer() = default;
-            //-----------------------------------------------------
+            GLContextRestorer() = default;
+            
             /// Take a snapshot of the GL context for resources
             /// that cannot be recreated from file and store them
             /// so they can be recreated
             ///
-            /// @author S Downie
-            //-----------------------------------------------------
-            void Backup();
-            //-----------------------------------------------------
+            void Backup() noexcept override;
+            
             /// Recreate the GL context with the backed up resources
             ///
-            /// @author S Downie
-            //-----------------------------------------------------
-            void Restore();
+            void Restore() noexcept override;
+            
         private:
             
             bool m_hasContextBeenBackedUp = false;

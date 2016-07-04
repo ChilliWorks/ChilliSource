@@ -55,6 +55,7 @@
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
@@ -293,6 +294,7 @@ namespace ChilliSource
         CreateSystem<TextEntry>();
         
         //Rendering
+        CreateSystem<RenderCommandBufferManager>();
         m_renderer = CreateSystem<Renderer>();
         CreateSystem<RenderMaterialGroupManager>();
         CreateSystem<RenderMeshManager>();

@@ -49,6 +49,13 @@ namespace ChilliSource
         ///
         const u8* GetTextureData() const noexcept { return m_textureData.get(); }
         
+        /// Moves the texture data out of this class. Use with caution as this command
+        /// will be in a broken state after this is used.
+        ///
+        /// @return The data describing the texture.
+        ///
+        std::unique_ptr<const u8[]> ClaimTextureData() noexcept { return std::move(m_textureData); }
+        
         /// @return The size of the texture data in bytes.
         ///
         u32 GetTextureDataSize() const noexcept { return m_textureDataSize; }
