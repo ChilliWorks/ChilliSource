@@ -103,47 +103,50 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
     {
-        auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
-        auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
-        
-        std::unique_lock<std::mutex>(m_commandBufferMutex);
-        
-        for(auto& command : m_pendingShaderLoadCommands)
+        if(!m_discardCommands)
         {
-            preRenderCommandList->AddLoadShaderCommand(command.m_renderShader, command.m_vertexShader, command.m_fragmentShader);
+            auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
+            auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
+            
+            std::unique_lock<std::mutex>(m_commandBufferMutex);
+            
+            for(auto& command : m_pendingShaderLoadCommands)
+            {
+                preRenderCommandList->AddLoadShaderCommand(command.m_renderShader, command.m_vertexShader, command.m_fragmentShader);
+            }
+            
+            for(auto& command : m_pendingTextureLoadCommands)
+            {
+                preRenderCommandList->AddLoadTextureCommand(command.m_renderTexture, std::move(command.m_textureData), command.m_textureDataSize);
+            }
+            
+            for(auto& command : m_pendingMeshLoadCommands)
+            {
+                preRenderCommandList->AddLoadMeshCommand(command.m_renderMesh, std::move(command.m_vertexData), command.m_vertexDataSize, std::move(command.m_indexData), command.m_indexDataSize);
+            }
+            
+            for(auto& command : m_pendingShaderUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadShaderCommand(std::move(command));
+            }
+            
+            for(auto& command : m_pendingTextureUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadTextureCommand(std::move(command));
+            }
+            
+            for(auto& command : m_pendingMeshUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadMeshCommand(std::move(command));
+            }
+            
+            m_pendingShaderLoadCommands.clear();
+            m_pendingTextureLoadCommands.clear();
+            m_pendingMeshLoadCommands.clear();
+            m_pendingShaderUnloadCommands.clear();
+            m_pendingTextureUnloadCommands.clear();
+            m_pendingMeshUnloadCommands.clear();
         }
-        
-        for(auto& command : m_pendingTextureLoadCommands)
-        {
-            preRenderCommandList->AddLoadTextureCommand(command.m_renderTexture, std::move(command.m_textureData), command.m_textureDataSize);
-        }
-        
-        for(auto& command : m_pendingMeshLoadCommands)
-        {
-            preRenderCommandList->AddLoadMeshCommand(command.m_renderMesh, std::move(command.m_vertexData), command.m_vertexDataSize, std::move(command.m_indexData), command.m_indexDataSize);
-        }
-        
-        for(auto& command : m_pendingShaderUnloadCommands)
-        {
-            postRenderCommandList->AddUnloadShaderCommand(std::move(command));
-        }
-        
-        for(auto& command : m_pendingTextureUnloadCommands)
-        {
-            postRenderCommandList->AddUnloadTextureCommand(std::move(command));
-        }
-        
-        for(auto& command : m_pendingMeshUnloadCommands)
-        {
-            postRenderCommandList->AddUnloadMeshCommand(std::move(command));
-        }
-        
-        m_pendingShaderLoadCommands.clear();
-        m_pendingTextureLoadCommands.clear();
-        m_pendingMeshLoadCommands.clear();
-        m_pendingShaderUnloadCommands.clear();
-        m_pendingTextureUnloadCommands.clear();
-        m_pendingMeshUnloadCommands.clear();
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::RecycleCommands(const RenderCommandBufferUPtr& commands) noexcept
