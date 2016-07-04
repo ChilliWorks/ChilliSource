@@ -191,7 +191,8 @@ namespace ChilliSource
         /// @param in_translation - The translation to
         /// apply.
         /// @param in_scale - The scale to apply.
-        /// @return Whether point intersects the circle
+        ///
+        /// @return The transformed sphere.
         //-----------------------------------------------
         static Sphere Transform(const Sphere& in_sphere, const Vector3& in_translation, const Vector3& in_scale) noexcept;
         
