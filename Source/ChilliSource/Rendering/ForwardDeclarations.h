@@ -195,8 +195,6 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Sprite
     //------------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(DynamicSpriteBatch);
-    CS_FORWARDDECLARE_CLASS(SpriteBatch);
     CS_FORWARDDECLARE_CLASS(SpriteComponent);
     //------------------------------------------------------------
     /// Texture

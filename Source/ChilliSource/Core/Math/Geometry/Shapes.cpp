@@ -189,6 +189,19 @@ namespace ChilliSource
     /// Container for a sphere with it's origin 
     /// at centre
     //================================================
+    //-----------------------------------------------
+    //-----------------------------------------------
+    Sphere Sphere::Transform(const Sphere& in_sphere, const Vector3& in_translation, const Vector3& in_scale) noexcept
+    {
+        f32 maxScaleComponent = std::max(std::max(in_scale.x, in_scale.y), in_scale.z);
+        
+        auto centre = in_translation + in_sphere.vOrigin;
+        auto radius = maxScaleComponent * in_sphere.fRadius;
+        
+        return Sphere(centre, radius);
+    }
+    //-----------------------------------------------
+    //-----------------------------------------------
     Sphere::Sphere(const Vector3 &invOrigin, const f32 infRadius) : vOrigin(invOrigin), fRadius(infRadius)
     {
     }

@@ -40,7 +40,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void ParticleDrawable::Draw(const CameraComponent* in_camera)
+    void ParticleDrawable::Draw(RenderSnapshot& in_renderSnapshot) noexcept
     {
         m_concurrentParticleData->Lock();
 
@@ -50,7 +50,7 @@ namespace ChilliSource
             ActivateParticle(m_concurrentParticleData->GetParticles(), index);
         }
 
-        DrawParticles(m_concurrentParticleData->GetParticles(), in_camera);
+        DrawParticles(m_concurrentParticleData->GetParticles(), in_renderSnapshot);
 
         m_concurrentParticleData->Unlock();
     }

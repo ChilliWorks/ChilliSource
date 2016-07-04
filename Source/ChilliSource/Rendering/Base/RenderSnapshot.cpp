@@ -27,17 +27,9 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderSnapshot::RenderSnapshot(const Integer2& resolution, const Colour& clearColour) noexcept
-        : m_resolution(resolution), m_clearColour(clearColour), m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
+    RenderSnapshot::RenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& in_renderCamera) noexcept
+        : m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(in_renderCamera), m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
     {
-    }
-    
-    //------------------------------------------------------------------------------
-    void RenderSnapshot::SetRenderCamera(const RenderCamera& renderCamera) noexcept
-    {
-        CS_ASSERT(!m_renderCameraClaimed, "Render camera cannot be set after it has been claimed.");
-        
-        m_renderCamera = renderCamera;
     }
     
     //------------------------------------------------------------------------------
@@ -94,15 +86,6 @@ namespace ChilliSource
         CS_ASSERT(m_postRenderCommandList, "Post-RenderCommandList cannot be modified after it has been claimed.");
         
         return m_postRenderCommandList.get();
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderCamera RenderSnapshot::ClaimRenderCamera() noexcept
-    {
-        CS_ASSERT(!m_renderCameraClaimed, "Render camera has already been claimed.");
-        
-        m_renderCameraClaimed = true;
-        return std::move(m_renderCamera);
     }
     
     //------------------------------------------------------------------------------

@@ -263,7 +263,7 @@ namespace ChilliSource
             constexpr f32 k_near = 0.0f;
             constexpr f32 k_far = 1.0f;
             auto projMatrix = Matrix4::CreateOrthographicProjectionLH(0, renderFrame.GetResolution().x, 0, renderFrame.GetResolution().y, k_near, k_far);
-            RenderCamera uiCamera(Matrix4::k_identity, projMatrix);
+            RenderCamera uiCamera(Matrix4::k_identity, projMatrix, Quaternion::k_identity);
             
             auto uiRenderObjects = GetLayerRenderObjects(RenderLayer::k_ui, renderFrame.GetRenderObjects());
             auto visibleUIRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, uiCamera, uiRenderObjects);

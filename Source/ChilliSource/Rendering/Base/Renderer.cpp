@@ -47,7 +47,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black)
+        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black, RenderCamera())
     {
         //TODO: Handle forward vs deferred rendering
         m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
@@ -71,7 +71,7 @@ namespace ChilliSource
         {
             auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
-            auto renderCamera = m_currentSnapshot.ClaimRenderCamera();
+            auto renderCamera = m_currentSnapshot.GetRenderCamera();
             auto renderAmbientLights = m_currentSnapshot.ClaimRenderAmbientLights();
             auto renderDirectionalLights = m_currentSnapshot.ClaimRenderDirectionalLights();
             auto renderPointLights = m_currentSnapshot.ClaimRenderPointLights();

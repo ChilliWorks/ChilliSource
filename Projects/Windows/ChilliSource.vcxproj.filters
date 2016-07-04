@@ -663,12 +663,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.cpp">
       <Filter>ChilliSource\Rendering\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.cpp">
-      <Filter>ChilliSource\Rendering\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.cpp">
-      <Filter>ChilliSource\Rendering\Sprite</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.cpp">
       <Filter>ChilliSource\Rendering\Sprite</Filter>
     </ClCompile>
@@ -1963,12 +1957,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.h">
       <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.h">
-      <Filter>ChilliSource\Rendering\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.h">
-      <Filter>ChilliSource\Rendering\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.h">
       <Filter>ChilliSource\Rendering\Sprite</Filter>
