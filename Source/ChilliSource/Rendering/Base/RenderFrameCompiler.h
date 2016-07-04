@@ -42,6 +42,8 @@ namespace ChilliSource
         /// a single immutable construct. During compilation all render jobs are performed
         /// to generate additional render primitives.
         ///
+        /// @param resolution
+        ///     The resolution of the viewport.
         /// @param renderCamera
         ///     The camera used for the frame.
         /// @param renderAmbientLights
@@ -55,8 +57,9 @@ namespace ChilliSource
         ///
         /// @return The compiled render frame.
         ///
-        RenderFrame CompileRenderFrame(const RenderCamera& renderCamera, const std::vector<RenderAmbientLight>& renderAmbientLights, const std::vector<RenderDirectionalLight>& renderDirectionalLights,
-                                       const std::vector<RenderPointLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept;
+        RenderFrame CompileRenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const std::vector<RenderAmbientLight>& renderAmbientLights,
+                                       const std::vector<RenderDirectionalLight>& renderDirectionalLights, const std::vector<RenderPointLight>& renderPointLights,
+                                       const std::vector<RenderObject>& renderObjects) noexcept;
     }
 }
 

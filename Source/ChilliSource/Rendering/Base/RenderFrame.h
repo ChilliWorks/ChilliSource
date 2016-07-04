@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_BASE_RENDERFRAME_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
 #include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
@@ -45,6 +46,8 @@ namespace ChilliSource
     public:
         /// Creates a new instance with the given camera, lights and objects.
         ///
+        /// @param resolution
+        ///     The resolution of the viewport.
         /// @param renderCamera
         ///     The camera used for the frame.
         /// @param renderAmbientLight
@@ -57,8 +60,12 @@ namespace ChilliSource
         /// @param renderObjects
         ///     A list of objects in the frame.
         ///
-        RenderFrame(const RenderCamera& renderCamera, const RenderAmbientLight& renderAmbientLight, const std::vector<RenderDirectionalLight>& renderDirectionalLights,
+        RenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const RenderAmbientLight& renderAmbientLight, const std::vector<RenderDirectionalLight>& renderDirectionalLights,
                     const std::vector<RenderPointLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept;
+        
+        /// @return The resolution of the viewport.
+        ///
+        const Integer2& GetResolution() const noexcept { return m_resolution; }
         
         /// @return The camera used for the frame.
         ///
@@ -82,6 +89,7 @@ namespace ChilliSource
         const std::vector<RenderObject>& GetRenderObjects() const noexcept { return m_renderObjects; }
         
     private:
+        Integer2 m_resolution;
         RenderCamera m_renderCamera;
         RenderAmbientLight m_renderAmbientLight;
         std::vector<RenderDirectionalLight> m_renderDirectionalLights;

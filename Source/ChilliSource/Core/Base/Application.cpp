@@ -357,9 +357,21 @@ namespace ChilliSource
         auto activeState = m_stateManager->GetActiveState();
         CS_ASSERT(activeState, "Must have active state.");
         
-        auto clearColour = activeState->GetScene()->GetClearColour();
+        auto scene = activeState->GetScene();
+        auto clearColour = scene->GetClearColour();
+        auto camera = scene->GetActiveCamera();
         
-        RenderSnapshot renderSnapshot(resolution, clearColour);
+        RenderCamera renderCamera;
+        if (camera)
+        {
+            Entity* cameraEntity = camera->GetEntity();
+            CS_ASSERT(cameraEntity, "Active CameraComponent must be attached to an entity.");
+            
+            const auto& transform = cameraEntity->GetTransform();
+            renderCamera = RenderCamera(transform.GetWorldTransform(), camera->GetProjection(), transform.GetWorldOrientation());
+        }
+        
+        RenderSnapshot renderSnapshot(resolution, clearColour, renderCamera);
         for (const AppSystemUPtr& system : m_systems)
         {
             system->OnRenderSnapshot(renderSnapshot);

@@ -22,15 +22,17 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderFrame.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderFrame::RenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const RenderAmbientLight& renderAmbientLight, const std::vector<RenderDirectionalLight>& renderDirectionalLights,
-                             const std::vector<RenderPointLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept
-        : m_resolution(resolution), m_renderCamera(renderCamera), m_renderAmbientLight(renderAmbientLight), m_renderDirectionalLights(renderDirectionalLights), m_renderPointLights(renderPointLights),
-          m_renderObjects(renderObjects)
+    RenderDynamicMesh::RenderDynamicMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+                      ByteBuffer vertexData, ByteBuffer indexData) noexcept
+    : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere),
+      m_vertexData(std::move(vertexData)), m_indexData(std::move(indexData))
     {
+        CS_ASSERT(m_vertexData.GetLength() <= k_maxVertexDataSize, "Vertex data too large.");
+        CS_ASSERT(m_indexData.GetLength() <= k_maxIndexDataSize, "Index data too large.");
     }
 }

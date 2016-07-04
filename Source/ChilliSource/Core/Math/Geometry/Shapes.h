@@ -175,6 +175,27 @@ namespace ChilliSource
     class Sphere
     {
     public:
+        //-----------------------------------------------
+        /// Transforms the given sphere by the given
+        /// translation and scale. This can be used to
+        /// transform the sphere from local to world
+        /// space as rotation has no effect.
+        ///
+        /// Note that the sphere remains spherical; the
+        /// radius is scaled by the highest of the scale
+        /// vector components.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_sphere - The sphere to transform.
+        /// @param in_translation - The translation to
+        /// apply.
+        /// @param in_scale - The scale to apply.
+        ///
+        /// @return The transformed sphere.
+        //-----------------------------------------------
+        static Sphere Transform(const Sphere& in_sphere, const Vector3& in_translation, const Vector3& in_scale) noexcept;
+        
         Sphere(){}
         Sphere(const Vector3 &invOrigin, const f32 infRadius);
         //-----------------------------------------------

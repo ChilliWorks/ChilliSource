@@ -70,6 +70,12 @@ namespace ChilliSource
         
         /// This must not be called until the model is built and loaded.
         ///
+        /// @return The local space bounding sphere of the Model.
+        ///
+        const Sphere& GetBoundingSphere() const noexcept;
+        
+        /// This must not be called until the model is built and loaded.
+        ///
         /// @return The skeleton.
         ///
         const Skeleton& GetSkeleton() const noexcept;
@@ -120,7 +126,6 @@ namespace ChilliSource
     private:
         friend class ResourcePool;
         friend class CSModelProvider;
-        friend class MeshBatch;
         
         /// A factory method for creating new, empty instances of the resource. This must only be
         /// called by ResourcePool.
@@ -139,6 +144,7 @@ namespace ChilliSource
         std::vector<const RenderMesh*> m_renderMeshes;
         Skeleton m_skeleton;
         AABB m_aabb;
+        Sphere m_boundingSphere;
     };
 }
 

@@ -27,20 +27,20 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    MeshDesc::MeshDesc(const std::string& name, PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, const AABB& aabb, u32 numVertices, u32 numIndices, std::unique_ptr<const u8[]> vertexData,
-                       std::unique_ptr<const u8[]> indexData) noexcept
-        : m_name(name), m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_aabb(aabb), m_numVertices(numVertices), m_numIndices(numIndices), m_vertexData(std::move(vertexData)),
-          m_indexData(std::move(indexData))
+    MeshDesc::MeshDesc(const std::string& name, PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, const AABB& aabb, const Sphere& boundingSphere,
+                       u32 numVertices, u32 numIndices, std::unique_ptr<const u8[]> vertexData, std::unique_ptr<const u8[]> indexData) noexcept
+        : m_name(name), m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_aabb(aabb), m_boundingSphere(boundingSphere), m_numVertices(numVertices),
+          m_numIndices(numIndices), m_vertexData(std::move(vertexData)), m_indexData(std::move(indexData))
     {
         CS_ASSERT(m_vertexData, "Mesh must not have vertex data.");
         CS_ASSERT(m_indexData, "Mesh must not have vertex data.");
     }
     
     //------------------------------------------------------------------------------
-    MeshDesc::MeshDesc(const std::string& name, PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, const AABB& aabb, u32 numVertices, u32 numIndices, std::unique_ptr<const u8[]> vertexData,
-                       std::unique_ptr<const u8[]> indexData, std::vector<Matrix4> inverseBindPoseMatrices) noexcept
-        : m_name(name), m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_aabb(aabb), m_numVertices(numVertices), m_numIndices(numIndices), m_vertexData(std::move(vertexData)),
-          m_indexData(std::move(indexData)), m_inverseBindPoseMatrixes(std::move(inverseBindPoseMatrices))
+    MeshDesc::MeshDesc(const std::string& name, PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, const AABB& aabb, const Sphere& boundingSphere,
+                       u32 numVertices, u32 numIndices, std::unique_ptr<const u8[]> vertexData, std::unique_ptr<const u8[]> indexData, std::vector<Matrix4> inverseBindPoseMatrices) noexcept
+        : m_name(name), m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_aabb(aabb), m_boundingSphere(boundingSphere), m_numVertices(numVertices),
+          m_numIndices(numIndices), m_vertexData(std::move(vertexData)), m_indexData(std::move(indexData)), m_inverseBindPoseMatrixes(std::move(inverseBindPoseMatrices))
     {
         CS_ASSERT(m_vertexData, "Mesh must not have vertex data.");
         CS_ASSERT(m_indexData, "Mesh must not have vertex data.");

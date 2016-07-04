@@ -32,10 +32,14 @@
 #include <ChilliSource/Core/Base/ColourUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/State/State.h>
+#include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
+#include <ChilliSource/Rendering/Sprite/SpriteMeshBuilder.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Base/Canvas.h>
 
@@ -65,7 +69,7 @@ namespace ChilliSource
                 in_transform.m[0], in_transform.m[1], in_transform.m[2], 0,
                 in_transform.m[3], in_transform.m[4], in_transform.m[5], 0,
                 0, 0, 1, 0,
-                in_transform.m[6], in_transform.m[7], in_transform.m[8], 1);
+                in_transform.m[6], in_transform.m[7], 0, 1);
         }
         //----------------------------------------------------------------------------
         /// Get the width of the character
@@ -337,82 +341,6 @@ namespace ChilliSource
                 character.m_position.y -= verticalOffset;
             }
         }
-        //-----------------------------------------------------
-        /// Build the sprite from the given data
-        ///
-        /// @author S Downie
-        ///
-        /// @param Transform
-        /// @param Size
-        /// @param Offset from top left
-        /// @param UVs
-        /// @param Colour
-        /// @param Alignment
-        /// @param [Out] Sprite
-        //-----------------------------------------------------
-        void UpdateSpriteData(const Matrix4& in_transform, const Vector2& in_size, const Vector2& in_offset, const UVs& in_UVs, const Colour& in_colour, AlignmentAnchor in_alignment,
-                              SpriteBatch::SpriteData& out_sprite)
-        {
-            const f32 k_nearClipDistance = 2.0f;
-
-            ByteColour Col = ColourUtils::ColourToByteColour(in_colour);
-            
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = Col;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = Col;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].Col = Col;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].Col = Col;
-            
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.x = in_UVs.m_u;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.y = in_UVs.m_v;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.x = in_UVs.m_u;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.y = in_UVs.m_v + in_UVs.m_t;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = in_UVs.m_v;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = in_UVs.m_u + in_UVs.m_s;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = in_UVs.m_v + in_UVs.m_t;
-
-            Vector2 vHalfSize(in_size.x * 0.5f, in_size.y * 0.5f);
-            Vector2 anchorPoint = GetAnchorPoint(in_alignment, vHalfSize);
-
-            Vector4 vCentrePos(-anchorPoint.x, -anchorPoint.y, 0, 0);
-            Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
-            
-            Vector4 offsetTL(in_offset.x, in_offset.y, 0.0f, 0.0f);
-            
-            const Matrix4& matTransform(in_transform);
-            vTemp += (vCentrePos + offsetTL);
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = vTemp * matTransform;
-            
-            vTemp.x = vHalfSize.x;
-            vTemp.y = vHalfSize.y;
-            
-            vTemp += (vCentrePos + offsetTL);
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = vTemp * matTransform;
-            
-            vTemp.x = -vHalfSize.x;
-            vTemp.y = -vHalfSize.y;
-            
-            vTemp += (vCentrePos + offsetTL);
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = vTemp * matTransform;
-            
-            vTemp.x = vHalfSize.x;
-            vTemp.y = -vHalfSize.y;
-            
-            vTemp += (vCentrePos + offsetTL);
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = vTemp * matTransform;
-            
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos.z = -k_nearClipDistance;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos.w = 1.0f;
-            
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos.z = -k_nearClipDistance;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos.w = 1.0f;
-            
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos.z = -k_nearClipDistance;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos.w = 1.0f;
-            
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos.z = -k_nearClipDistance;
-            out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos.w = 1.0f;
-        }
         //----------------------------------------------------------------------------
         /// Adds an ellipsis to the end of the line of text without increasing the
         /// width of the line of text beyond the given length. If required, characters
@@ -683,6 +611,39 @@ namespace ChilliSource
                 return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, Vector2(min, midpointScale), in_currentIteration);
             }
         }
+        
+        /// Creates a new render object containing a dynamic mesh that describes the sprite and
+        /// adds it to the snapshot.
+        ///
+        /// @param renderSnapshot
+        ///     The render snapshot.
+        /// @param localPosition
+        ///     The local position of the sprite. This is often used to represent the sprite offset
+        ///     when cropping when texture packing.
+        /// @param localSize
+        ///     The local size of the sprite.
+        /// @param uvs
+        ///     The UVs of the sprite.
+        /// @param colour
+        ///     The colour of the sprite.
+        /// @param alignmentAnchor
+        ///     The alignmentAnchor of the sprite.
+        /// @param worldMatrix
+        ///     The world matrix of the sprite.
+        /// @param material
+        ///     The material of the sprite.
+        /// @param priority
+        ///     the order priority of the render object.
+        ///
+        void AddSpriteRenderObject(RenderSnapshot* renderSnapshot, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour,
+                                   AlignmentAnchor alignmentAnchor, const Matrix4& worldMatrix, const MaterialCSPtr& material, u32 priority) noexcept
+        {
+            auto renderDynamicMesh = SpriteMeshBuilder::Build(localPosition, localSize, uvs, colour, alignmentAnchor);
+            auto boundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldMatrix.GetTranslation(), Vector3(localSize, 0.0f));
+            
+            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, RenderLayer::k_ui, priority));
+            renderSnapshot->AddRenderDynamicMesh(std::move(renderDynamicMesh));
+        }
     }
 
     
@@ -707,10 +668,6 @@ namespace ChilliSource
         m_resourcePool = Application::Get()->GetResourcePool();
         CS_ASSERT(m_resourcePool != nullptr, "Must have a resource pool");
 
-        //TODO: Re-implement in new system
-//        RenderSystem* renderSystem = Application::Get()->GetRenderSystem();
-//        CS_ASSERT(renderSystem != nullptr, "Canvas renderer cannot find render system");
-
         m_screen = Application::Get()->GetSystem<Screen>();
         CS_ASSERT(m_screen != nullptr, "Canvas renderer cannot find screen system");
 
@@ -718,87 +675,71 @@ namespace ChilliSource
         CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
         
         m_materialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory));
-        
-        //TODO: Re-implement in new system
-//        m_overlayBatcher = DynamicSpriteBatchUPtr(new DynamicSpriteBatch(renderSystem));
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    void CanvasRenderer::Render(Canvas* in_canvas)
-    {
-        CS_ASSERT(in_canvas != nullptr, "Canvas cannot render null UI canvas");
-
-        in_canvas->Draw(this);
-
-        m_overlayBatcher->DisableScissoring();
-        m_overlayBatcher->ForceRender();
-
-        m_materialPool->Clear();
-        m_canvasSprite.pMaterial = nullptr;
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     void CanvasRenderer::PushClipBounds(const Vector2& in_blPosition, const Vector2& in_size)
     {
-        if(m_scissorPositions.empty())
-        {
-            m_scissorPositions.push_back(in_blPosition);
-            m_scissorSizes.push_back(in_size);
-        }
-        else
-        {
-            Vector2 vOldBottomLeft = m_scissorPositions.back();
-            Vector2 vOldTopRight = m_scissorSizes.back() + vOldBottomLeft;
-            Vector2 vNewBottomLeft = in_blPosition;
-            Vector2 vNewTopRight = in_blPosition + in_size;
-
-            //If the scissor region extends outside the bounds of the screen this is undefined behaviour and
-            //the render system may wrap the values causing artefacts. We clamp them here to make sure this
-            //doesn't happen.
-            vNewBottomLeft.x = MathUtils::Clamp(std::max(vNewBottomLeft.x, vOldBottomLeft.x), 0.0f, m_screen->GetResolution().x);
-            vNewBottomLeft.y = MathUtils::Clamp(std::max(vNewBottomLeft.y, vOldBottomLeft.y), 0.0f, m_screen->GetResolution().y);
-
-            vNewTopRight.x = MathUtils::Clamp(std::min(vNewTopRight.x, vOldTopRight.x), 0.0f, m_screen->GetResolution().x);
-            vNewTopRight.y = MathUtils::Clamp(std::min(vNewTopRight.y, vOldTopRight.y), 0.0f, m_screen->GetResolution().y);
-
-            Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
-
-            m_scissorPositions.push_back(vNewBottomLeft);
-            m_scissorSizes.push_back(vNewSize);
-        }
-
-        m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
+        //TODO: Handle scissoring.
+        
+//        if(m_scissorPositions.empty())
+//        {
+//            m_scissorPositions.push_back(in_blPosition);
+//            m_scissorSizes.push_back(in_size);
+//        }
+//        else
+//        {
+//            Vector2 vOldBottomLeft = m_scissorPositions.back();
+//            Vector2 vOldTopRight = m_scissorSizes.back() + vOldBottomLeft;
+//            Vector2 vNewBottomLeft = in_blPosition;
+//            Vector2 vNewTopRight = in_blPosition + in_size;
+//
+//            //If the scissor region extends outside the bounds of the screen this is undefined behaviour and
+//            //the render system may wrap the values causing artefacts. We clamp them here to make sure this
+//            //doesn't happen.
+//            vNewBottomLeft.x = MathUtils::Clamp(std::max(vNewBottomLeft.x, vOldBottomLeft.x), 0.0f, m_screen->GetResolution().x);
+//            vNewBottomLeft.y = MathUtils::Clamp(std::max(vNewBottomLeft.y, vOldBottomLeft.y), 0.0f, m_screen->GetResolution().y);
+//
+//            vNewTopRight.x = MathUtils::Clamp(std::min(vNewTopRight.x, vOldTopRight.x), 0.0f, m_screen->GetResolution().x);
+//            vNewTopRight.y = MathUtils::Clamp(std::min(vNewTopRight.y, vOldTopRight.y), 0.0f, m_screen->GetResolution().y);
+//
+//            Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
+//
+//            m_scissorPositions.push_back(vNewBottomLeft);
+//            m_scissorSizes.push_back(vNewSize);
+//        }
+//
+//        m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     void CanvasRenderer::PopClipBounds()
     {
-        if(!m_scissorPositions.empty())
-        {
-            m_scissorPositions.erase(m_scissorPositions.end()-1);
-            m_scissorSizes.erase(m_scissorSizes.end()-1);
-
-            if(!m_scissorPositions.empty())
-            {
-                m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
-            }
-        }
-
-        if(m_scissorPositions.empty())
-        {
-            m_overlayBatcher->DisableScissoring();
-        }
+        //TODO: Handle scissoring.
+        
+//        if(!m_scissorPositions.empty())
+//        {
+//            m_scissorPositions.erase(m_scissorPositions.end()-1);
+//            m_scissorSizes.erase(m_scissorSizes.end()-1);
+//
+//            if(!m_scissorPositions.empty())
+//            {
+//                m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
+//            }
+//        }
+//
+//        if(m_scissorPositions.empty())
+//        {
+//            m_overlayBatcher->DisableScissoring();
+//        }
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     void CanvasRenderer::DrawBox(const Matrix3& in_transform, const Vector2& in_size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& in_UVs,
                                  const Colour& in_colour, AlignmentAnchor in_anchor)
     {
-        m_canvasSprite.pMaterial = m_materialPool->GetMaterial(in_texture);
-
-        UpdateSpriteData(Convert2DTransformTo3D(in_transform), in_size, in_offset, in_UVs, in_colour, in_anchor, m_canvasSprite);
-
-        m_overlayBatcher->Render(m_canvasSprite);
+        auto material = m_materialPool->GetMaterial(in_texture);
+        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(in_offset, 0.0f), in_size, in_UVs, in_colour, in_anchor, Convert2DTransformTo3D(in_transform), material, m_nextPriority++);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
@@ -869,7 +810,7 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Matrix3& in_transform, const Colour& in_colour, const TextureCSPtr& in_texture)
     {
-        m_canvasSprite.pMaterial = m_materialPool->GetMaterial(in_texture);
+        auto material = m_materialPool->GetMaterial(in_texture);
 
         Matrix4 matTransform = Convert2DTransformTo3D(in_transform);
         Matrix4 matTransformedLocal;
@@ -877,17 +818,32 @@ namespace ChilliSource
         for (const auto& character : in_characters)
         {
             matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
-            UpdateSpriteData(matTransformedLocal, character.m_packedImageSize, Vector2::k_zero, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
-            m_overlayBatcher->Render(m_canvasSprite);
+            AddSpriteRenderObject(m_currentRenderSnapshot, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
         }
+    }
+    //----------------------------------------------------------------------------
+    //----------------------------------------------------------------------------
+    void CanvasRenderer::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        auto activeState = CS::Application::Get()->GetStateManager()->GetActiveState();
+        CS_ASSERT(activeState, "must have active state.");
+        
+        auto activeUICanvas = activeState->GetUICanvas();
+        CS_ASSERT(activeUICanvas != nullptr, "Cannot render null UI canvas");
+        
+        m_currentRenderSnapshot = &in_renderSnapshot;
+        m_nextPriority = 0;
+        
+        activeUICanvas->Draw(this);
+        
+        m_currentRenderSnapshot = nullptr;
+        
+        m_materialPool->Clear();
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     void CanvasRenderer::OnDestroy()
     {
-        m_overlayBatcher = nullptr;
-        m_canvasSprite.pMaterial = nullptr;
-        
         m_materialPool->Clear();
         m_materialPool.reset();
     }

@@ -22,46 +22,25 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_CAMERARENDERPASSGROUP_H_
-#define _CHILLISOURCE_RENDERING_BASE_CAMERARENDERPASSGROUP_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERLAYER_H_
+#define _CHILLISOURCE_RENDERING_BASE_RENDERLAYER_H_
 
 #include <ChilliSource/ChilliSource.h>
 
-#include <ChilliSource/Rendering/Base/RenderPass.h>
-#include <ChilliSource/Rendering/Camera/RenderCamera.h>
-
-#include <vector>
-
 namespace ChilliSource
 {
-    /// Provides the ability to group a number of render passes based on them sharing
-    /// the same camera
+    /// An enum describing the different render layers. These are used to filter different
+    /// render objects into different groups.
     ///
-    /// This is immutable and therefore thread-safe
+    /// "Standard": The standard scene layer, rendered using the main camera.
     ///
-    class CameraRenderPassGroup final
+    /// "UI": The UI layer, rendered using an orthographic camera with the same resolution as
+    /// the viewport.
+    ///
+    enum class RenderLayer
     {
-    public:
-        CameraRenderPassGroup() = default;
-        
-        /// @param camera
-        ///     The camera to use for this pass
-        /// @param renderPasses
-        ///     The list of render passes to carry out with the camera
-        ///
-        CameraRenderPassGroup(const RenderCamera& camera, const std::vector<RenderPass>& renderPasses) noexcept;
-        
-        /// @return The camera to use for rendering the group
-        ///
-        const RenderCamera& GetCamera() const noexcept { return m_camera; }
-        
-        /// @return The list of render passes in this group
-        ///
-        const std::vector<RenderPass>& GetRenderPasses() const noexcept { return m_renderPasses; }
-        
-    private:
-        RenderCamera m_camera;
-        std::vector<RenderPass> m_renderPasses;
+        k_standard,
+        k_ui
     };
 }
 

@@ -27,6 +27,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Rendering/Base/RenderLayer.h>
 #include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
@@ -40,6 +42,14 @@ namespace ChilliSource
     class RenderObject final
     {
     public:
+        /// An enum describing the type of mesh this object represents.
+        ///
+        enum class Type
+        {
+            k_static,
+            k_dynamic
+        };
+        
         /// Creates a new instance with the given material group, mesh and transform data.
         ///
         /// @param renderMaterialGroup
@@ -48,25 +58,83 @@ namespace ChilliSource
         ///     The mesh that should be used when rendering this object.
         /// @param worldMatrix
         ///     The world matrix describing the transform of the object.
+        /// @param boundingSphere
+        ///     The world space bounding sphere of the object. This should be build using the local mesh
+        ///     bounding sphere.
+        /// @param renderLayer
+        ///     The layer the object should be rendered into.
+        /// @param priority
+        ///     (Optional) The order priority of the render object; lower values will be rendered first.
+        ///     This may or may not be used depending on the render pass the object will be included in.
+        ///     Objects with the same order value will return in an undefined order. Defaults to 0.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer, u32 priority = 0) noexcept;
+        
+        /// Creates a new instance with the given material group, mesh and transform data.
+        ///
+        /// @param renderMaterialGroup
+        ///     The material group that should be used when rendering this object.
+        /// @param renderDynamicMesh
+        ///     The dynamic mesh that should be used when rendering this object.
+        /// @param worldMatrix
+        ///     The world matrix describing the transform of the object.
+        /// @param boundingSphere
+        ///     The world space bounding sphere of the object. This should be build using the local mesh
+        ///     bounding sphere.
+        /// @param renderLayer
+        ///     The layer the object should be rendered into.
+        /// @param priority
+        ///     (Optional) The order priority of the render object; lower values will be rendered first.
+        ///     This may or may not be used depending on the sort algorithm used, as is the order
+        ///     of objects with the same priority. Defaults to 0.
+        ///
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer, u32 priority = 0) noexcept;
+        
+        /// @return The mesh type of object this describes.
+        ///
+        Type GetType() const noexcept { return m_type; }
         
         /// @return The material group that should be used when rendering this object.
         ///
         const RenderMaterialGroup* GetRenderMaterialGroup() const noexcept { return m_renderMaterialGroup; }
         
-        /// @return The mesh that should be used when rendering this object.
+        /// @return The static mesh that should be used when rendering this object if this is a
+        ///     static mesh object, otherwise this will return nullptr.
         ///
         const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
+        
+        /// @return The dynamic mesh that should be used when rendering this object if this is
+        ///     a dynamic mesh object, otherwise this will return nullptr.
+        ///
+        const RenderDynamicMesh* GetRenderDynamicMesh() const noexcept { return m_renderDynamicMesh; }
         
         /// @return The world matrix describing the transform of the object.
         ///
         const Matrix4& GetWorldMatrix() const noexcept { return m_worldMatrix; }
         
+        /// @return The world space bounding sphere of the object.
+        ///
+        const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
+        
+        /// @return The layer the object should be rendered into.
+        ///
+        RenderLayer GetRenderLayer() const noexcept { return m_renderLayer; }
+        
+        /// @return The order priority of the render object; lower values will be rendered first.
+        ///     This may or may not be used depending on the sort algorithm used, as is the order
+        ///     of objects with the same priority.
+        ///
+        u32 GetPriority() const noexcept { return m_priority; }
+        
     private:
+        Type m_type;
         const RenderMaterialGroup* m_renderMaterialGroup;
-        const RenderMesh* m_renderMesh;
+        const RenderMesh* m_renderMesh = nullptr;
+        const RenderDynamicMesh* m_renderDynamicMesh = nullptr;
         Matrix4 m_worldMatrix;
+        Sphere m_boundingSphere;
+        RenderLayer m_renderLayer;
+        u32 m_priority;
     };
 }
 

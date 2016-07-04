@@ -128,7 +128,7 @@ namespace CSBackend
 
             CS_ASSERT(!m_stream.fail(), "Unexpected error occured in filestream");
 
-            std::unique_ptr<u8> uniqueData(reinterpret_cast<u8*>(data));
+            std::unique_ptr<const u8[]> uniqueData(reinterpret_cast<u8*>(data));
 
             return ChilliSource::ByteBufferUPtr(new ChilliSource::ByteBuffer(std::move(uniqueData), maxValidLength));
         }

@@ -50,23 +50,34 @@ namespace ChilliSource
         //TODO: Create RenderMaterials from pools.
         auto staticMeshRM = RenderMaterialUPtr(new RenderMaterial(m_staticMeshUnlit->GetRenderShader(), renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled,
                                                                   isFaceCullingEnabled, sourceBlendMode, destinationBlendMode, cullFace, emissiveColour, ambientColour, Colour::k_black, Colour::k_black));
+        auto spriteRM = RenderMaterialUPtr(new RenderMaterial(m_spriteUnlit->GetRenderShader(), renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled,
+                                                              isFaceCullingEnabled, sourceBlendMode, destinationBlendMode, cullFace, emissiveColour, ambientColour, Colour::k_black, Colour::k_black));
         
-        //TODO: Add support for other standard vertex formats.
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> statisMeshRenderMaterials {};
+        //TODO: Add support for animated vertex format.
+        
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticMeshRenderMaterials {};
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> spriteMeshRenderMaterials {};
         
         if (isTransparencyEnabled)
         {
-            statisMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = staticMeshRM.get();
+            staticMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = staticMeshRM.get();
+            spriteMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = spriteRM.get();
         }
         else
         {
-            statisMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticMeshRM.get();
+            staticMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticMeshRM.get();
+            spriteMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = spriteRM.get();
         }
         
-        std::vector<RenderMaterialGroup::Collection> collections { RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, statisMeshRenderMaterials) };
+        std::vector<RenderMaterialGroup::Collection> collections
+        {
+            RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticMeshRenderMaterials),
+            RenderMaterialGroup::Collection(VertexFormat::k_sprite, spriteMeshRenderMaterials)
+        };
         
         std::vector<RenderMaterialUPtr> renderMaterials;
         renderMaterials.push_back(std::move(staticMeshRM));
+        renderMaterials.push_back(std::move(spriteRM));
 
         RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
@@ -87,12 +98,13 @@ namespace ChilliSource
         auto staticMeshDirectionalRM = RenderMaterialUPtr(new RenderMaterial(m_staticMeshBlinnDirectional->GetRenderShader(), renderTextures, true, true, false, true, true, BlendMode::k_one, BlendMode::k_one,
                                                                              CullFace::k_back, Colour::k_black, Colour::k_black, diffuseColour, specularColour));
         
-        //TODO: Add support for other standard vertex formats.
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> statisMeshRenderMaterials {};
-        statisMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticMeshBaseRM.get();
-        statisMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticMeshDirectionalRM.get();
+        //TODO: Add support for animated vertex format.
         
-        std::vector<RenderMaterialGroup::Collection> collections { RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, statisMeshRenderMaterials) };
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticMeshRenderMaterials {};
+        staticMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticMeshBaseRM.get();
+        staticMeshRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticMeshDirectionalRM.get();
+        
+        std::vector<RenderMaterialGroup::Collection> collections { RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticMeshRenderMaterials) };
         
         std::vector<RenderMaterialUPtr> renderMaterials;
         renderMaterials.push_back(std::move(staticMeshBaseRM));
@@ -113,6 +125,7 @@ namespace ChilliSource
         m_staticMeshUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static.csshader");
         m_staticMeshBlinnBase = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader");
         m_staticMeshBlinnDirectional = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnDirectional.csshader");
+        m_spriteUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Sprite.csshader");
     }
     
     //------------------------------------------------------------------------------

@@ -52,6 +52,7 @@ namespace CSBackend
         /// Model
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLMesh);
+        CS_FORWARDDECLARE_CLASS(GLDynamicMesh);
         //----------------------------------------------------
         /// Shader
         //----------------------------------------------------
@@ -60,7 +61,7 @@ namespace CSBackend
         /// Texture
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLTexture);
-        CS_FORWARDDECLARE_CLASS(TextureUnitManager);
+        CS_FORWARDDECLARE_CLASS(GLTextureUnitManager);
     }
 }
 

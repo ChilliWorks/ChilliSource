@@ -38,19 +38,19 @@ namespace ChilliSource
     ///
     namespace RenderPassVisibilityChecker
     {
-        /// Parses a collection of RenderPassObjects and generates a list of them that are considered
+        /// Parses a collection of RenderObjects and generates a list of them that are considered
         /// to be visible and within the passed camera's view frustrum.
         ///
         /// @param taskContext
         ///     Context to manage any spawned tasks
         /// @param camera
         ///     The camera who will decide the objects visibility
-        /// @param renderPassObjects
-        ///     The collection of RenderPassObjects whos visibility is to be checked
+        /// @param renderObjects
+        ///     The collection of RenderObjects whos visibility is to be checked
         ///
-        /// @return Collection of visible RenderPassObjects
+        /// @return Collection of visible RenderObjects
         ///
-        std::vector<RenderPassObject> CalculateVisibleObjects(const TaskContext& taskContext, const RenderCamera& camera, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        std::vector<RenderObject> CalculateVisibleObjects(const TaskContext& taskContext, const RenderCamera& camera, const std::vector<RenderObject>& renderObjects) noexcept;
     }
 }
 

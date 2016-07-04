@@ -194,6 +194,14 @@ namespace ChilliSource
     {
         return m_clearColour;
     }
+    //------------------------------------------------------
+    //------------------------------------------------------
+    void Scene::SetActiveCamera(CameraComponent* in_cameraComponent) noexcept
+    {
+        CS_ASSERT(!in_cameraComponent != !m_activeCameraComponent, "A camera component cannot be activated while another is active, nor can it be deactived if there isn't currently one active.");
+        
+        m_activeCameraComponent = in_cameraComponent;
+    }
     //--------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------
     void Scene::QuerySceneForIntersection(const Ray &in_ray, std::vector<VolumeComponent*>& out_volumeComponents)

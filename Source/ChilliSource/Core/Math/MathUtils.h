@@ -49,6 +49,17 @@ namespace ChilliSource
         const f32 k_pi = 3.1415926536f;
         
         //---------------------------------------------------------
+        /// Evaluates whether or not the given integer value is a
+        /// power of two.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_value - The value to check.
+        ///
+        /// @return Whether or not it is a power of two.
+        //---------------------------------------------------------
+        bool IsPowerOfTwo(u32 in_value) noexcept;
+        //---------------------------------------------------------
         /// @author S McGaw
         ///
         /// @param Value

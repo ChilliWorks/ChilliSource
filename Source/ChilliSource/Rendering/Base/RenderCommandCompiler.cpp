@@ -24,6 +24,7 @@
 
 #include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
 
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
@@ -118,23 +119,46 @@ namespace ChilliSource
             CS_ASSERT(renderPassObjects.size() > 0, "Cannot compile a pass with no objects.");
             
             const RenderMaterial* currentMaterial = nullptr;
-            const RenderMesh* currentMesh = nullptr;
+            const RenderMesh* currentStaticMesh = nullptr;
+            const RenderDynamicMesh* currentDynamicMesh = nullptr;
             
             for (const auto& renderPassObject : renderPassObjects)
             {
                 if (renderPassObject.GetRenderMaterial() != currentMaterial)
                 {
                     currentMaterial = renderPassObject.GetRenderMaterial();
-                    currentMesh = nullptr;
+                    currentStaticMesh = nullptr;
                     
                     renderCommandList->AddApplyMaterialCommand(currentMaterial);
                 }
                 
-                if (renderPassObject.GetRenderMesh() != currentMesh)
+                switch (renderPassObject.GetType())
                 {
-                    currentMesh = renderPassObject.GetRenderMesh();
-                    
-                    renderCommandList->AddApplyMeshCommand(currentMesh);
+                    case RenderPassObject::Type::k_static:
+                    {
+                        if (renderPassObject.GetRenderMesh() != currentStaticMesh)
+                        {
+                            currentStaticMesh = renderPassObject.GetRenderMesh();
+                            currentDynamicMesh = nullptr;
+                            
+                            renderCommandList->AddApplyMeshCommand(currentStaticMesh);
+                        }
+                        break;
+                    }
+                    case RenderPassObject::Type::k_dynamic:
+                    {
+                        if (renderPassObject.GetRenderDynamicMesh() != currentDynamicMesh)
+                        {
+                            currentStaticMesh = nullptr;
+                            currentDynamicMesh = renderPassObject.GetRenderDynamicMesh();
+                            
+                            renderCommandList->AddApplyDynamicMeshCommand(currentDynamicMesh);
+                        }
+                        break;
+                    }
+                    default:
+                        CS_LOG_FATAL("Invalid RenderPassObject type.");
+                        break;
                 }
                 
                 renderCommandList->AddRenderInstanceCommand(renderPassObject.GetWorldMatrix());
@@ -144,10 +168,12 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
-                                                                    const Colour& clearColour, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept
+                                                                          const Colour& clearColour, std::vector<RenderDynamicMeshUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList,
+                                                                          RenderCommandListUPtr postRenderCommandList) noexcept
     {
         u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());
-        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(numLists));
+        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(numLists, std::move(renderDynamicMeshes)));
+        std::vector<Task> tasks;
         u32 currentList = 0;
         
         if (preRenderCommandList->GetOrderedList().size() > 0)
@@ -170,7 +196,11 @@ namespace ChilliSource
                     {
                         if (renderPass.GetRenderPassObjects().size() > 0)
                         {
-                            CompileRenderCommandsForPass(renderPass, renderCommandBuffer->GetRenderCommandList(currentList++));
+                            auto renderCommandList = renderCommandBuffer->GetRenderCommandList(currentList++);
+                            tasks.push_back([=, &renderPass](const TaskContext& innerTaskContext)
+                            {
+                                CompileRenderCommandsForPass(renderPass, renderCommandList);
+                            });
                         }
                     }
                 }
@@ -183,6 +213,8 @@ namespace ChilliSource
         {
             *renderCommandBuffer->GetRenderCommandList(currentList++) = std::move(*postRenderCommandList);
         }
+        
+        taskContext.ProcessChildTasks(tasks);
         
         return std::move(renderCommandBuffer);
     }

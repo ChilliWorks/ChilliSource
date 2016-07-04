@@ -22,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_MODEL_GLMESH_H_
-#define _CSBACKEND_RENDERING_OPENGL_MODEL_GLMESH_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_MODEL_GLMESHUTILS_H_
+#define _CSBACKEND_RENDERING_OPENGL_MODEL_GLMESHUTILS_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
@@ -35,48 +35,34 @@ namespace CSBackend
 {
     namespace OpenGL
     {
-        /// A container for all functionality pertaining to a single OpenGL mesh, including
-        /// loading, unloading and binding the mesh. Binding includes setting up the relevant
-        /// shader attributes.
+        /// A series of utility methods pertaining to OpenGL meshes, such as conversions
+        /// from ChilliSource formats to OpenGL formats.
         ///
         /// This is not thread-safe and should only be accessed from the render thread.
         ///
-        class GLMesh final
+        namespace GLMeshUtils
         {
-        public:
-            CS_DECLARE_NOCOPY(GLMesh);
+            /// @param dataType
+            ///     The vertex element data type.
+            ///
+            /// @return the OpenGL type for the requested data type.
+            ///
+            GLenum GetGLType(ChilliSource::VertexFormat::DataType dataType) noexcept;
             
-            /// Creates a new OpenGL mesh with the given mesh data and description.
+            /// @param elementType
+            ///     The vertex element type.
             ///
-            /// @param vertexFormat
-            ///     The vertex format.
-            /// @param vertexData
-            ///     The vertex data.
-            /// @param vertexDataSize
-            ///     The size of the vertex data.
-            /// @param indexData
-            ///     The size of the index data.
-            /// @param indexDataSize
-            ///     The size of the index data.
+            /// @return Whether or not the value is normalised for the given element type.
             ///
-            GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
+            GLboolean IsNormalised(ChilliSource::VertexFormat::ElementType elementType) noexcept;
             
-            /// Binds the mesh for use and applies attibutes to the given shader.
+            /// @param elementType
+            ///     The vertex element type.
             ///
-            /// @param glShader
-            ///     The shader to apply attributes to.
+            /// @return The attribute name for the given element type.
             ///
-            void Bind(GLShader* glShader) noexcept;
-            
-            /// Destroys the OpenGL mesh that this represents.
-            ///
-            ~GLMesh() noexcept;
-            
-        private:
-            ChilliSource::VertexFormat m_vertexFormat;
-            GLuint m_vertexBufferHandle = 0;
-            GLuint m_indexBufferHandle = 0;
-        };
+            const char* GetAttributeName(ChilliSource::VertexFormat::ElementType elementType) noexcept;
+        }
     }
 }
 

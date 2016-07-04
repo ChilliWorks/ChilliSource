@@ -44,7 +44,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(IRenderCommandProcessor);
     CS_FORWARDDECLARE_CLASS(IRenderPassCompiler);
     CS_FORWARDDECLARE_CLASS(ForwardRenderPassCompiler);
-    CS_FORWARDDECLARE_CLASS(MeshBatch);
     CS_FORWARDDECLARE_CLASS(RenderCapabilities);
     CS_FORWARDDECLARE_CLASS(RenderComponentFactory);
     CS_FORWARDDECLARE_CLASS(Renderer);
@@ -62,6 +61,7 @@ namespace ChilliSource
     enum class DepthTestComparison;
     enum class ForwardRenderPasses;
     enum class HorizontalTextJustification;
+    enum class RenderLayer;
     enum class SizePolicy;
     enum class SurfaceFormat;
     enum class VerticalTextJustification;
@@ -107,6 +107,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(Model);
     CS_FORWARDDECLARE_CLASS(ModelDesc);
     CS_FORWARDDECLARE_CLASS(PrimitiveModelFactory);
+    CS_FORWARDDECLARE_CLASS(RenderDynamicMesh);
     CS_FORWARDDECLARE_CLASS(RenderMesh);
     CS_FORWARDDECLARE_CLASS(RenderMeshManager);
     CS_FORWARDDECLARE_CLASS(Skeleton);
@@ -168,6 +169,7 @@ namespace ChilliSource
     /// Render Command
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(ApplyCameraRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplyDynamicMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginRenderCommand);
@@ -180,11 +182,11 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderCommandBuffer);
     CS_FORWARDDECLARE_CLASS(RenderCommandBufferManager);
     CS_FORWARDDECLARE_CLASS(RenderCommandList);
+    CS_FORWARDDECLARE_CLASS(RenderInstanceRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadTextureRenderCommand);
-    CS_FORWARDDECLARE_CLASS(RenderInstanceRenderCommand);
     //------------------------------------------------------------
     /// Shader
     //------------------------------------------------------------
@@ -195,8 +197,6 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Sprite
     //------------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(DynamicSpriteBatch);
-    CS_FORWARDDECLARE_CLASS(SpriteBatch);
     CS_FORWARDDECLARE_CLASS(SpriteComponent);
     //------------------------------------------------------------
     /// Texture

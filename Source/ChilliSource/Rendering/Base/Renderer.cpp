@@ -43,7 +43,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-    : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black)
+        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black, RenderCamera())
     {
         //TODO: Handle forward vs deferred rendering
         m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
@@ -71,17 +71,19 @@ namespace ChilliSource
         {
             auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
-            auto renderCamera = m_currentSnapshot.ClaimRenderCamera();
+            auto renderCamera = m_currentSnapshot.GetRenderCamera();
             auto renderAmbientLights = m_currentSnapshot.ClaimRenderAmbientLights();
             auto renderDirectionalLights = m_currentSnapshot.ClaimRenderDirectionalLights();
             auto renderPointLights = m_currentSnapshot.ClaimRenderPointLights();
             auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
+            auto renderDynamicMeshes = m_currentSnapshot.ClaimRenderDynamicMeshes();
             auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();
             auto postRenderCommandList = m_currentSnapshot.ClaimPostRenderCommandList();
             
-            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
+            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(preRenderCommandList), std::move(postRenderCommandList));
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(renderDynamicMeshes),
+                                                                                    std::move(preRenderCommandList), std::move(postRenderCommandList));
             
             m_commandRecycleSystem->WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
             EndRenderPrep();

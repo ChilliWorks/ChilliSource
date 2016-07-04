@@ -359,7 +359,7 @@ namespace ChilliSource
                     m_renderMaterialGroup = CreateUnlitRenderMaterialGroup();
                     break;
                 case ShadingType::k_blinn:
-                    m_renderMaterialGroup = CreateUnlitRenderMaterialGroup();
+                    m_renderMaterialGroup = CreateBlinnRenderMaterialGroup();
                     break;
             }
         }

@@ -27,14 +27,14 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ModelDesc::ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb) noexcept
-        : m_meshDescs(std::move(meshDescs)), m_aabb(aabb)
+    ModelDesc::ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere) noexcept
+        : m_meshDescs(std::move(meshDescs)), m_aabb(aabb), m_boundingSphere(boundingSphere)
     {
     }
     
     //------------------------------------------------------------------------------
-    ModelDesc::ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const SkeletonDesc& skeletonDesc) noexcept
-        : m_meshDescs(std::move(meshDescs)), m_aabb(aabb), m_skeletonDesc(skeletonDesc)
+    ModelDesc::ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, const SkeletonDesc& skeletonDesc) noexcept
+        : m_meshDescs(std::move(meshDescs)), m_aabb(aabb), m_boundingSphere(boundingSphere), m_skeletonDesc(skeletonDesc)
     {
     }
     

@@ -55,8 +55,8 @@ namespace ChilliSource
         struct BillboardData
         {
             UVs m_uvs;
-            Vector2 m_bottomLeft;
-            Vector2 m_topRight;
+            Vector2 m_localCentre;
+            Vector2 m_localSize;
         };
         //----------------------------------------------------------------
         /// Constructor.
@@ -83,9 +83,10 @@ namespace ChilliSource
         /// @author Ian Copland
         ///
         /// @param The particle draw data.
-        /// @param The camera component used to render.
+        /// @param in_renderSnapshot - The render snapshot that particles
+        /// will be added to.
         //----------------------------------------------------------------
-        void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) override;
+        void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) override;
         //----------------------------------------------------------------
         /// Builds the billboard image data from the provided texture
         /// or texture atlas.
@@ -108,9 +109,10 @@ namespace ChilliSource
         /// @author Ian Copland
         ///
         /// @param The particle draw data.
-        /// @param The camera component used to render.
+        /// @param in_renderSnapshot - The render snapshot that particles
+        /// will be added to.
         //----------------------------------------------------------------
-        void DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
+        void DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) const;
         //----------------------------------------------------------------
         /// Draws the particles without taking into account the world
         /// space transform of the owning entity as the particles are
@@ -119,9 +121,10 @@ namespace ChilliSource
         /// @author Ian Copland
         ///
         /// @param The particle draw data.
-        /// @param The camera component used to render.
+        /// @param in_renderSnapshot - The render snapshot that particles
+        /// will be added to.
         //----------------------------------------------------------------
-        void DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
+        void DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) const;
 
         const StaticBillboardParticleDrawableDef* m_billboardDrawableDef;
         std::unique_ptr <dynamic_array<BillboardData>> m_billboards;

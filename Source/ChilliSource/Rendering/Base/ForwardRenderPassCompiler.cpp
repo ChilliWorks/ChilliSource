@@ -32,14 +32,85 @@
 #include <ChilliSource/Rendering/Base/RenderPassObject.h>
 #include <ChilliSource/Rendering/Base/RenderPassObjectSorter.h>
 #include <ChilliSource/Rendering/Base/RenderPassVisibilityChecker.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 
 
 namespace ChilliSource
 {
     namespace
     {
-        constexpr u32 k_reservedRenderPasses = 2;//Base + Transparent
-        constexpr u32 k_targetRenderPassGroups = 1;//Main
+        /// Converts the given RenderObject to a RenderPassObject using the given RenderMaterial.
+        /// if the given RenderMaterial does not exist in the RenderMaterialGroup contained by
+        /// the RenderObject, then this will assert.
+        ///
+        /// @param renderObject
+        ///     The renderObject to convert.
+        /// @param renderMaterial
+        ///     The render material that should be used by the new RenderPassObject.
+        ///
+        /// @return The new RenderPassObject.
+        ///
+        RenderPassObject ConvertToRenderPassObject(const RenderObject& renderObject, const RenderMaterial* renderMaterial) noexcept
+        {
+            CS_ASSERT(renderObject.GetRenderMaterialGroup()->Contains(renderMaterial), "Invalid render material.");
+            
+            switch (renderObject.GetType())
+            {
+                case RenderObject::Type::k_static:
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(), renderObject.GetPriority());
+                case RenderObject::Type::k_dynamic:
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderDynamicMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(), renderObject.GetPriority());
+                default:
+                    CS_LOG_FATAL("Invalid RenderObject type.");
+                    return RenderPassObject(nullptr, reinterpret_cast<const RenderMesh*>(NULL), Matrix4::k_identity, Sphere(), 0);
+            }
+        }
+        
+        /// Returns the vertex format of the given render object.
+        ///
+        /// @param renderObject
+        ///     The render object.
+        ///
+        /// @return The vertex format.
+        ///
+        const VertexFormat& GetVertexFormat(const RenderObject& renderObject)
+        {
+            switch (renderObject.GetType())
+            {
+                case RenderObject::Type::k_static:
+                    return renderObject.GetRenderMesh()->GetVertexFormat();
+                case RenderObject::Type::k_dynamic:
+                    return renderObject.GetRenderDynamicMesh()->GetVertexFormat();
+                default:
+                    CS_LOG_FATAL("Invalid RenderObject type.");
+                    return renderObject.GetRenderMesh()->GetVertexFormat();
+            }
+        }
+        
+        /// Filters the given list of objects to return only the objects which are a part of the requested
+        /// layer.
+        ///
+        /// @param renderLayer
+        ///     The render layer to filter on.
+        /// @param renderObjects
+        ///     The list of render objects which should be filtered.
+        ///
+        /// @return The list of render objects for the requested layer.
+        ///
+        std::vector<RenderObject> GetLayerRenderObjects(RenderLayer renderLayer, const std::vector<RenderObject>& renderObjects) noexcept
+        {
+            std::vector<RenderObject> layerRenderObjects;
+            
+            for (const auto& renderObject : renderObjects)
+            {
+                if (renderObject.GetRenderLayer() == renderLayer)
+                {
+                    layerRenderObjects.push_back(renderObject);
+                }
+            }
+            
+            return layerRenderObjects;
+        }
         
         /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
         /// each RenderObject that has a Base pass defined.
@@ -55,11 +126,11 @@ namespace ChilliSource
             
             for (const auto& renderObject : renderObjects)
             {
-                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(ChilliSource::VertexFormat::k_staticMesh, static_cast<u32>(ForwardRenderPasses::k_base));
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_base));
                 
                 if (renderMaterial)
                 {
-                    baseRenderPassObjects.push_back(RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix()));
+                    baseRenderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
                 }
             }
             
@@ -80,11 +151,11 @@ namespace ChilliSource
             
             for (const auto& renderObject : renderObjects)
             {
-                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(ChilliSource::VertexFormat::k_staticMesh, static_cast<u32>(ForwardRenderPasses::k_directionalLight));
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_directionalLight));
                 
                 if (renderMaterial)
                 {
-                    baseRenderPassObjects.push_back(RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix()));
+                    baseRenderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
                 }
             }
             
@@ -105,81 +176,15 @@ namespace ChilliSource
             
             for (const auto& renderObject : renderObjects)
             {
-                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(ChilliSource::VertexFormat::k_staticMesh, static_cast<u32>(ForwardRenderPasses::k_transparent));
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_transparent));
                 
                 if (renderMaterial)
                 {
-                    transparentRenderPassObjects.push_back(RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix()));
+                    transparentRenderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
                 }
             }
             
             return transparentRenderPassObjects;
-        }
-        
-        /// Gather all sorted visible RenderPassObjects into a RenderPass with the passed in light source.
-        ///
-        /// @param taskContext
-        ///     Context to manage any spawned tasks
-        /// @param camera
-        ///     The camera to use for this pass
-        /// @param light
-        ///     The ambient light to use for this pass
-        /// @param renderPassObjects
-        ///     The render pass objects to use
-        ///
-        /// @return The list of target render pass groups
-        ///
-        RenderPass CompileRenderPass(const TaskContext& taskContext, const RenderCamera& camera, const RenderAmbientLight& light, const std::vector<RenderPassObject>& renderPassObjects,
-                                     const RenderPassObjectSorter::SortFunc& sort) noexcept
-        {
-            auto visibleRenderPassObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, camera, renderPassObjects);
-            sort(camera, visibleRenderPassObjects);
-            
-            return RenderPass(light, visibleRenderPassObjects);
-        }
-        
-        /// Gather all sorted visible RenderPassObjects into a RenderPass with the passed in light source.
-        ///
-        /// @param taskContext
-        ///     Context to manage any spawned tasks
-        /// @param camera
-        ///     The camera to use for this pass
-        /// @param light
-        ///     The directional light to use for this pass
-        /// @param renderPassObjects
-        ///     The render pass objects to use
-        ///
-        /// @return The list of target render pass groups
-        ///
-        RenderPass CompileRenderPass(const TaskContext& taskContext, const RenderCamera& camera, const RenderDirectionalLight& light, const std::vector<RenderPassObject>& renderPassObjects,
-                                     const RenderPassObjectSorter::SortFunc& sort) noexcept
-        {
-            auto visibleRenderPassObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, camera, renderPassObjects);
-            sort(camera, visibleRenderPassObjects);
-            
-            return RenderPass(light, visibleRenderPassObjects);
-        }
-        
-        /// Gather all sorted visible RenderPassObjects into a RenderPass with the passed in light source.
-        ///
-        /// @param taskContext
-        ///     Context to manage any spawned tasks
-        /// @param camera
-        ///     The camera to use for this pass
-        /// @param light
-        ///     The point light to use for this pass
-        /// @param renderPassObjects
-        ///     The render pass objects to use
-        ///
-        /// @return The list of target render pass groups
-        ///
-        RenderPass CompileRenderPass(const TaskContext& taskContext, const RenderCamera& camera, const RenderPointLight& light, const std::vector<RenderPassObject>& renderPassObjects,
-                                     const RenderPassObjectSorter::SortFunc& sort) noexcept
-        {
-            auto visibleRenderPassObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, camera, renderPassObjects);
-            sort(camera, visibleRenderPassObjects);
-            
-            return RenderPass(light, visibleRenderPassObjects);
         }
         
         /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
@@ -195,40 +200,86 @@ namespace ChilliSource
         ///
         CameraRenderPassGroup CompleSceneCameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
         {
+            constexpr u32 k_reservedRenderPasses = 2; // Base + Transparent
+            
+            auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
+            auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
+            
             const u32 numPasses = k_reservedRenderPasses + u32(renderFrame.GetRenderDirectionalLights().size()) + u32(renderFrame.GetRenderPointLights().size());
             std::vector<RenderPass> renderPasses(numPasses);
             std::vector<Task> tasks;
             u32 nextPassIndex = 0;
             
+            // Base pass
             u32 basePassIndex = nextPassIndex++;
-            tasks.push_back([=, &renderPasses, &renderFrame](const TaskContext& innerTaskContext)
+            tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
             {
-                auto renderPassObjects = GetBaseRenderPassObjects(renderFrame.GetRenderObjects());
-                renderPasses[basePassIndex] = CompileRenderPass(innerTaskContext, renderFrame.GetRenderCamera(), renderFrame.GetRenderAmbientLight(), renderPassObjects, RenderPassObjectSorter::OpaqueSort);
+                auto renderPassObjects = GetBaseRenderPassObjects(visibleStandardRenderObjects);
+                RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
+                renderPasses[basePassIndex] = RenderPass(renderFrame.GetRenderAmbientLight(), renderPassObjects);
             });
             
+            // Directional light pass
             for (const auto& directionalLight : renderFrame.GetRenderDirectionalLights())
             {
                 u32 directionLightPassIndex = nextPassIndex++;
-                tasks.push_back([=, &renderPasses, &renderFrame](const TaskContext& innerTaskContext)
+                tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
                 {
-                    auto renderPassObjects = GetDirectionalLightRenderPassObjects(renderFrame.GetRenderObjects());
-                    renderPasses[directionLightPassIndex] = CompileRenderPass(innerTaskContext, renderFrame.GetRenderCamera(), directionalLight, renderPassObjects, RenderPassObjectSorter::OpaqueSort);
+                    auto renderPassObjects = GetDirectionalLightRenderPassObjects(visibleStandardRenderObjects);
+                    RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
+                    renderPasses[directionLightPassIndex] = RenderPass(directionalLight, renderPassObjects);
                 });
             }
             
-            //TODO:Point lights
+            //TODO: Point light pass
             
+            // Transparent pass
             u32 transparentPassIndex = nextPassIndex++;
-            tasks.push_back([=, &renderPasses, &renderFrame](const TaskContext& innerTaskContext)
+            tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
             {
-                auto renderPassObjects = GetTransparentRenderPassObjects(renderFrame.GetRenderObjects());
-                renderPasses[transparentPassIndex] = CompileRenderPass(innerTaskContext, renderFrame.GetRenderCamera(), renderFrame.GetRenderAmbientLight(), renderPassObjects, RenderPassObjectSorter::TransparentSort);
+                auto renderPassObjects = GetTransparentRenderPassObjects(visibleStandardRenderObjects);
+                RenderPassObjectSorter::TransparentSort(renderFrame.GetRenderCamera(), renderPassObjects);
+                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetRenderAmbientLight(), renderPassObjects);
             });
             
             taskContext.ProcessChildTasks(tasks);
             
             return CameraRenderPassGroup(renderFrame.GetRenderCamera(), renderPasses);
+        }
+        
+        /// Gathers all UI render objects in the frame that are to be rendered to the default Render Target
+        /// and compiles them into RenderPasses. These render passes are then compiled into a
+        /// CameraRenderPassGroup which uses the UI camera.
+        ///
+        /// @param taskContext
+        ///     Context to manage any spawned tasks
+        /// @param renderFrame
+        ///     Current frame data
+        ///
+        /// @return The generated CameraRenderPassGroup
+        ///
+        CameraRenderPassGroup CompileUICameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
+        {
+            constexpr f32 k_near = 0.0f;
+            constexpr f32 k_far = 1.0f;
+            auto projMatrix = Matrix4::CreateOrthographicProjectionLH(0, renderFrame.GetResolution().x, 0, renderFrame.GetResolution().y, k_near, k_far);
+            RenderCamera uiCamera(Matrix4::k_identity, projMatrix, Quaternion::k_identity);
+            
+            auto uiRenderObjects = GetLayerRenderObjects(RenderLayer::k_ui, renderFrame.GetRenderObjects());
+            auto visibleUIRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, uiCamera, uiRenderObjects);
+            
+            auto uiRenderPassObjects = GetTransparentRenderPassObjects(visibleUIRenderObjects);
+            CS_ASSERT(visibleUIRenderObjects.size() == uiRenderPassObjects.size(), "Invalid number of render pass objects in transparent pass. All render objects in the UI layer should have a transparent material.");
+            
+            RenderPassObjectSorter::PrioritySort(uiRenderPassObjects);
+            
+            std::vector<RenderPass> renderPasses;
+            if (uiRenderPassObjects.size() > 0)
+            {
+                renderPasses.push_back(RenderPass(renderFrame.GetRenderAmbientLight(), uiRenderPassObjects));
+            }
+            
+            return CameraRenderPassGroup(uiCamera, renderPasses);
         }
         
         /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
@@ -243,28 +294,50 @@ namespace ChilliSource
         ///
         TargetRenderPassGroup CompileMainTargetRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
         {
-            std::vector<CameraRenderPassGroup> cameraRenderPassGroup;
-            cameraRenderPassGroup.push_back(CompleSceneCameraRenderPassGroup(taskContext, renderFrame));
-            //TODO::GUI
+            constexpr u32 k_numGroups = 2;
             
-            return TargetRenderPassGroup(cameraRenderPassGroup);
+            std::vector<CameraRenderPassGroup> cameraRenderPassGroups(k_numGroups);
+            std::vector<Task> tasks;
+            u32 nextIndex = 0;
+            
+            // Scene camera group
+            u32 sceneIndex = nextIndex++;
+            tasks.push_back([=, &cameraRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
+            {
+                cameraRenderPassGroups[sceneIndex] = CompleSceneCameraRenderPassGroup(innerTaskContext, renderFrame);
+            });
+            
+            // UI Camera group
+            u32 uiIndex = nextIndex++;
+            tasks.push_back([=, &cameraRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
+            {
+                cameraRenderPassGroups[uiIndex] = CompileUICameraRenderPassGroup(innerTaskContext, renderFrame);
+            });
+            
+            taskContext.ProcessChildTasks(tasks);
+            
+            return TargetRenderPassGroup(cameraRenderPassGroups);
         }
     }
     
     //------------------------------------------------------------------------------
     std::vector<TargetRenderPassGroup> ForwardRenderPassCompiler::CompileTargetRenderPassGroups(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
     {
+        constexpr u32 k_targetRenderPassGroups = 1; // Main
+        
         std::vector<TargetRenderPassGroup> targetRenderPassGroups(k_targetRenderPassGroups);
         std::vector<Task> tasks;
         u32 nextPassIndex = 0;
         
+        //TODO: Shadow target
+        
+        // Main target
         u32 mainPassIndex = nextPassIndex++;
         tasks.push_back([=, &targetRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
         {
             targetRenderPassGroups[mainPassIndex] = CompileMainTargetRenderPassGroup(innerTaskContext, renderFrame);
         });
         
-        //TODO:Shadows
         taskContext.ProcessChildTasks(tasks);
         
         return targetRenderPassGroups;

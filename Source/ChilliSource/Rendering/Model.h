@@ -40,6 +40,7 @@
 #include <ChilliSource/Rendering/Model/ModelDesc.h>
 #include <ChilliSource/Rendering/Model/PolygonType.h>
 #include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 #include <ChilliSource/Rendering/Model/RenderMeshManager.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>

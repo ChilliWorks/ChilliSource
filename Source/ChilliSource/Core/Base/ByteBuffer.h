@@ -37,9 +37,11 @@ namespace ChilliSource
     class ByteBuffer final
     {
     public:
-
 		CS_DECLARE_NOCOPY(ByteBuffer);
-
+        
+        ByteBuffer(ByteBuffer&&) = default;
+        ByteBuffer& operator=(ByteBuffer&&) = default;
+        
         /// Constructor
         ///
         /// @param data
@@ -47,7 +49,7 @@ namespace ChilliSource
         /// @param length
         ///     The length of the data
         ///
-        ByteBuffer(std::unique_ptr<const u8> data, u64 length) noexcept;
+        ByteBuffer(std::unique_ptr<const u8[]> data, u32 length) noexcept;
         
         /// Gets the pointer to the start of the data.
         /// This should never be modified directly.
@@ -58,12 +60,11 @@ namespace ChilliSource
         
         /// @return The length of the data stored
         ///
-        u64 GetLength() const noexcept;
+        u32 GetLength() const noexcept;
         
     private:
-        
-        std::unique_ptr<const u8> m_data;
-        u64 m_length;
+        std::unique_ptr<const u8[]> m_data;
+        u32 m_length;
     };
 }
 

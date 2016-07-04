@@ -33,6 +33,7 @@
 #include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
 #include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
 #include <ChilliSource/Rendering/Lighting/RenderPointLight.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
 #include <vector>
@@ -62,8 +63,11 @@ namespace ChilliSource
         ///     The viewport resolution.
         /// @param clearColour
         ///     The clear colour
+        /// @param renderCamera
+        ///     The main camera that will be used to render the scene. Currently only one camera per
+        ///     scene is supported.
         ///
-        RenderSnapshot(const Integer2& resolution, const Colour& clearColour) noexcept;
+        RenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
         
         /// @return The viewport resolution.
         ///
@@ -73,13 +77,9 @@ namespace ChilliSource
         ///
         const Colour& GetClearColour() const noexcept { return m_clearColour; }
         
-        /// Sets the main camera that will be used to render the scene. Currently only one camera per scene
-        /// is supported.
+        /// @return  The main camera that will be used to render the scene.
         ///
-        /// @param renderCamera
-        ///     The main camera that will be used to render the scene.
-        ///
-        void SetRenderCamera(const RenderCamera& renderCamera) noexcept;
+        RenderCamera GetRenderCamera() noexcept { return m_renderCamera; }
         
         /// Adds an ambient light to the render snapshot.
         ///
@@ -109,6 +109,12 @@ namespace ChilliSource
         ///
         void AddRenderObject(const RenderObject& renderObject) noexcept;
         
+        /// Adds a RenderDynamicMesh to the snapshot. This will be deleted at the end of the frame.
+        ///
+        /// @param The render dynamic mesh.
+        ///
+        void AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept;
+        
         /// @return A modifiable version of the pre render command list. This can be used to populate
         ///     The list with additional commands.
         ///
@@ -118,12 +124,6 @@ namespace ChilliSource
         ///     populate the list with additional commands.
         ///
         RenderCommandList* GetPostRenderCommandList() noexcept;
-        
-        /// Moves the camera from the snapshot to a new external owner.
-        ///
-        /// @return The moved render camera.
-        ///
-        RenderCamera ClaimRenderCamera() noexcept;
         
         /// Moves the list of ambient lights to a new external owner.
         ///
@@ -149,6 +149,12 @@ namespace ChilliSource
         ///
         std::vector<RenderObject> ClaimRenderObjects() noexcept;
         
+        /// Moves the list of render dynamic meshes to a new external owner.
+        ///
+        /// @return The moved list of dynamic meshes.
+        ///
+        std::vector<RenderDynamicMeshUPtr> ClaimRenderDynamicMeshes() noexcept;
+        
         /// Moves the pre render command list to a new external owner.
         ///
         /// @return The moved pre render command list.
@@ -169,6 +175,7 @@ namespace ChilliSource
         std::vector<RenderDirectionalLight> m_renderDirectionalLights;
         std::vector<RenderPointLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
+        std::vector<RenderDynamicMeshUPtr> m_renderDynamicMeshes;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
         
@@ -177,6 +184,7 @@ namespace ChilliSource
         bool m_renderDirectionalLightsClaimed = false;
         bool m_renderPointLightsClaimed = false;
         bool m_renderObjectsClaimed = false;
+        bool m_renderDynamicMeshesClaimed = false;
     };
 };
 

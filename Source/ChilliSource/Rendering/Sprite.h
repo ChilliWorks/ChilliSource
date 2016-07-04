@@ -31,8 +31,7 @@
 #define _CHILLISOURCE_RENDERING_SPRITE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
-#include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
+#include <ChilliSource/Rendering/Sprite/SpriteMeshBuilder.h>
 
 #endif

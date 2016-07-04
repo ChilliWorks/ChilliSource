@@ -39,23 +39,13 @@ namespace ChilliSource
     ///
     namespace RenderPassObjectSorter
     {
-        /// Defines a delegate to allow for custom render sorting
-        ///
-        /// @param camera
-        ///     The camera to use to determine z-distance
-        /// @param renderPassObjects
-        ///     The list of render pass objects to sort
-        ///
-        using SortFunc = std::function<void(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects)>;
-    
-        
         /// Sorts a collection of opaque RenderPassObjects based on if they share a material
         /// and then by z position (Front to back)
         ///
         /// @param camera
-        ///     The camera to use to determine z-distance
+        ///     The camera to use to determine z-distance.
         /// @param renderPassObjects
-        ///     The list of render pass objects to sort
+        ///     The list of render pass objects to sort.
         ///
         void OpaqueSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
         
@@ -64,9 +54,17 @@ namespace ChilliSource
         /// @param camera
         ///     The camera to use to determine z-distance
         /// @param renderPassObjects
-        ///     The list of render pass objects to sort
+        ///     The list of render pass objects to sort.
         ///
         void TransparentSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        
+        /// Sorts a collection of RenderPassObjects based on their priority value. Lower priority values
+        /// will be rendered first. If objects have the same priority then they will be ordered by material.
+        ///
+        /// @param renderPassObjects
+        ///     The list of render pass objects to sort.
+        ///
+        void PrioritySort(std::vector<RenderPassObject>& renderPassObjects) noexcept;
     };
 }
 

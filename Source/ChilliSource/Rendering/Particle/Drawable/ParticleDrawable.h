@@ -68,9 +68,10 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param The camera component used to render.
+        /// @param in_renderSnapshot - The render snapshot that particles
+        /// will be added to.
         //----------------------------------------------------------------
-        void Draw(const CameraComponent* in_camera);
+        void Draw(RenderSnapshot& in_renderSnapshot) noexcept;
         //----------------------------------------------------------------
         /// Destructor
         ///
@@ -111,10 +112,12 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param The particle draw data.
-        /// @param The camera component used to render.
+        /// @param in_particleData - The particle draw data.
+        /// @param in_renderSnapshot - The render snapshot that particles
+        /// will be added to.
         //----------------------------------------------------------------
-        virtual void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) = 0;
+        virtual void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) = 0;
+        
     private:
         const Entity* m_entity = nullptr;
         const ParticleDrawableDef* m_drawableDef = nullptr;

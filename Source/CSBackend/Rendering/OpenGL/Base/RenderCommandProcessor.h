@@ -28,7 +28,8 @@
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
-#include <CSBackend/Rendering/OpenGL/Texture/TextureUnitManager.h>
+#include <CSBackend/Rendering/OpenGL/Model/GLDynamicMesh.h>
+#include <CSBackend/Rendering/OpenGL/Texture/GLTextureUnitManager.h>
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
@@ -109,6 +110,13 @@ namespace CSBackend
             ///
             void ApplyMesh(const ChilliSource::ApplyMeshRenderCommand* renderCommand) noexcept;
             
+            /// Applies the given dynamic mesh to the OpenGL Context.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyDynamicMesh(const ChilliSource::ApplyDynamicMeshRenderCommand* renderCommand) noexcept;
+            
             /// Renders an instance of the mesh described by the current OpenGL context state. A camera,
             /// material and mesh must all currently be appled to the context.
             ///
@@ -148,11 +156,14 @@ namespace CSBackend
             
             bool m_initRequired = true;
             
-            TextureUnitManagerUPtr m_textureUnitManager;
+            GLTextureUnitManagerUPtr m_textureUnitManager;
+            GLDynamicMeshUPtr m_glDynamicMesh;
+            
             GLCamera m_currentCamera;
             const ChilliSource::RenderShader* m_currentShader = nullptr;
             const ChilliSource::RenderMaterial* m_currentMaterial = nullptr;
             const ChilliSource::RenderMesh* m_currentMesh = nullptr;
+            const ChilliSource::RenderDynamicMesh* m_currentDynamicMesh = nullptr;
         };
     }
 }

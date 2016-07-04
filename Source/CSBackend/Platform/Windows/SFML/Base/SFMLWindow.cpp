@@ -511,13 +511,8 @@ namespace CSBackend
 				appPreviousTime = appCurrentTime;
 
                 m_lifecycleManager->Render();
+                m_window.display();
 			}
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void SFMLWindow::Display()
-		{
-			m_window.display();
 		}
 		//--------------------------------------------
 		//--------------------------------------------

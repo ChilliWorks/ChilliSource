@@ -22,76 +22,84 @@
 //  THE SOFTWARE.
 //
 
-#include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
+#include <CSBackend/Rendering/OpenGL/Model/GLDynamicMesh.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMeshUtils.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+
+#include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
         //------------------------------------------------------------------------------
-        GLMesh::GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept
-            : m_vertexFormat(vertexFormat)
+        GLDynamicMesh::GLDynamicMesh(u32 vertexDataSize, u32 indexDataSize) noexcept
+        : m_maxVertexDataSize(vertexDataSize), m_maxIndexDataSize(indexDataSize)
         {
             glGenBuffers(1, &m_vertexBufferHandle);
             CS_ASSERT(m_vertexBufferHandle != 0, "Invalid vertex buffer.");
             
-            if(indexData)
+            if(indexDataSize > 0)
             {
                 glGenBuffers(1, &m_indexBufferHandle);
                 CS_ASSERT(m_vertexBufferHandle != 0, "Invalid index buffer.");
             }
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
-            glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, m_maxVertexDataSize, nullptr, GL_DYNAMIC_DRAW);
             
-            if(indexData)
+            if(indexDataSize > 0)
             {
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataSize, indexData, GL_STATIC_DRAW);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_maxIndexDataSize, nullptr, GL_DYNAMIC_DRAW);
             }
             
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating GLMesh.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating GLDynamicMesh.");
         }
         
         //------------------------------------------------------------------------------
-        void GLMesh::Bind(GLShader* glShader) noexcept
+        void GLDynamicMesh::Bind(GLShader* glShader, const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept
         {
             //TODO: This should be pre-calculated.
             GLint maxVertexAttributes = 0;
             glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
-            CS_ASSERT(u32(maxVertexAttributes) >= m_vertexFormat.GetNumElements(), "Too many vertex elements.");
+            CS_ASSERT(u32(maxVertexAttributes) >= vertexFormat.GetNumElements(), "Too many vertex elements.");
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, vertexData);
+            
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
+            if (m_indexBufferHandle != 0)
+            {
+                glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexDataSize, indexData);
+            }
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding GLMesh.");
             
-            for (u32 i = 0; i < m_vertexFormat.GetNumElements(); ++i)
+            for (u32 i = 0; i < vertexFormat.GetNumElements(); ++i)
             {
                 glEnableVertexAttribArray(i);
                 
-                auto elementType = m_vertexFormat.GetElement(i);
+                auto elementType = vertexFormat.GetElement(i);
                 auto name = GLMeshUtils::GetAttributeName(elementType);
                 auto numComponents = ChilliSource::VertexFormat::GetNumComponents(elementType);
                 auto type = GLMeshUtils::GetGLType(ChilliSource::VertexFormat::GetDataType(elementType));
                 auto normalised = GLMeshUtils::IsNormalised(elementType);
-                auto offset = reinterpret_cast<const GLvoid*>(u64(m_vertexFormat.GetElementOffset(i)));
+                auto offset = reinterpret_cast<const GLvoid*>(u64(vertexFormat.GetElementOffset(i)));
                 
-                glShader->SetAttribute(name, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
+                glShader->SetAttribute(name, numComponents, type, normalised, vertexFormat.GetSize(), offset);
             }
             
-            for (s32 i = m_vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
+            for (s32 i = vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
             {
                 glDisableVertexAttribArray(i);
             }
         }
         
         //------------------------------------------------------------------------------
-        GLMesh::~GLMesh() noexcept
+        GLDynamicMesh::~GLDynamicMesh() noexcept
         {
             //TODO: Handle context loss
             
@@ -101,7 +109,7 @@ namespace CSBackend
                 glDeleteBuffers(1, &m_indexBufferHandle);
             }
             
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting GLMesh.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting GLDynamicMesh.");
         }
     }
 }

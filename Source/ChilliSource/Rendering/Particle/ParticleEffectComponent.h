@@ -354,6 +354,14 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void UpdateStoppingState(f32 in_deltaTime);
         //----------------------------------------------------------------
+        /// Called during the render snapshot phase of the render pipeline
+        /// to acquire all render primitives in the scene. This adds new
+        /// render objects for each a particle in the effect.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        //----------------------------------------------------------------
         /// Called when the entities transform changes. This invalidates
         /// the bounding shape cache.
         ///

@@ -22,20 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <CSBackend/Rendering/OpenGL/Base/ContextState.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 
-namespace CSBackend
+namespace ChilliSource
 {
-    namespace OpenGL
+    //------------------------------------------------------------------------------
+    ApplyDynamicMeshRenderCommand::ApplyDynamicMeshRenderCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept
+    : RenderCommand(Type::k_applyDynamicMesh), m_renderDynamicMesh(renderDynamicMesh)
     {
-        //------------------------------------------------------------------------------
-        void ContextState::Reset() noexcept
-        {
-            m_glCamera = GLCamera();
-            m_renderMesh = nullptr;
-            m_renderShader = nullptr;
-            m_renderTexture = nullptr;
-            m_renderMaterial = nullptr;
-        }
     }
 }

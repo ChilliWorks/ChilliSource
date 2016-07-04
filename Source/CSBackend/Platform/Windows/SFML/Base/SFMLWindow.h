@@ -192,13 +192,6 @@ namespace CSBackend
 			/// @return A list of resolutions supported by the display
 			//----------------------------------------------------------
 			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const;
-			//-------------------------------------------------
-			/// Flush to the display. Should be called at end
-			/// if each frame
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void Display();
 			//----------------------------------------------------
 			/// Hide the window cursor
 			///

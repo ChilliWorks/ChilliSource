@@ -29,10 +29,13 @@
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
+#include <ChilliSource/Rendering/Model/IndexFormat.h>
 #include <ChilliSource/Rendering/Model/PolygonType.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
@@ -60,7 +63,7 @@ namespace CSBackend
             ///
             /// @return The OpenGL polygon type.
             ///
-            GLenum ToGLPolygonType(ChilliSource::PolygonType polygonType)
+            GLenum ToGLPolygonType(ChilliSource::PolygonType polygonType) noexcept
             {
                 switch(polygonType)
                 {
@@ -74,6 +77,25 @@ namespace CSBackend
                         CS_LOG_FATAL("Invalid polygon type.");
                         return GL_TRIANGLES;
                 };
+            }
+            
+            /// Converts from a ChilliSource IndexFormat to an OpenGL type.
+            ///
+            /// @param indexFormat
+            ///     The index format to convert.
+            ///
+            /// @return The OpenGL type.
+            ///
+            GLenum ToGLIndexType(ChilliSource::IndexFormat indexFormat) noexcept
+            {
+                switch (indexFormat)
+                {
+                    case ChilliSource::IndexFormat::k_short:
+                        return GL_UNSIGNED_SHORT;
+                    default:
+                        CS_LOG_FATAL("Invalid index format.");
+                        return GL_UNSIGNED_SHORT;
+                }
             }
         }
         
@@ -116,6 +138,9 @@ namespace CSBackend
                         case ChilliSource::RenderCommand::Type::k_applyMesh:
                             ApplyMesh(static_cast<const ChilliSource::ApplyMeshRenderCommand*>(renderCommand));
                             break;
+                        case ChilliSource::RenderCommand::Type::k_applyDynamicMesh:
+                            ApplyDynamicMesh(static_cast<const ChilliSource::ApplyDynamicMeshRenderCommand*>(renderCommand));
+                            break;
                         case ChilliSource::RenderCommand::Type::k_renderInstance:
                             RenderInstance(static_cast<const ChilliSource::RenderInstanceRenderCommand*>(renderCommand));
                             break;
@@ -145,7 +170,8 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::Init() noexcept
         {
-            m_textureUnitManager = TextureUnitManagerUPtr(new TextureUnitManager());
+            m_textureUnitManager = GLTextureUnitManagerUPtr(new GLTextureUnitManager());
+            m_glDynamicMesh = GLDynamicMeshUPtr(new GLDynamicMesh(ChilliSource::RenderDynamicMesh::k_maxVertexDataSize, ChilliSource::RenderDynamicMesh::k_maxIndexDataSize));
             
             ResetCache();
         }
@@ -186,8 +212,7 @@ namespace CSBackend
             auto renderMesh = renderCommand->GetRenderMesh();
             
             //TODO: Should be pooled.
-            auto glMesh = new GLMesh(renderMesh->GetPolygonType(), renderMesh->GetVertexFormat(), renderMesh->GetIndexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(),
-                                     renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
+            auto glMesh = new GLMesh(renderMesh->GetVertexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
             
             renderMesh->SetExtraData(glMesh);
         }
@@ -230,6 +255,7 @@ namespace CSBackend
                 if (m_currentShader != renderShader)
                 {
                     m_currentMesh = nullptr;
+                    m_currentDynamicMesh = nullptr;
                     m_currentShader = renderShader;
                     
                     glShader->Bind();
@@ -251,6 +277,7 @@ namespace CSBackend
             if (m_currentMesh != renderMesh)
             {
                 m_currentMesh = renderMesh;
+                m_currentDynamicMesh = nullptr;
                 
                 auto glMesh = reinterpret_cast<GLMesh*>(m_currentMesh->GetExtraData());
                 auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
@@ -259,23 +286,61 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyDynamicMesh(const ChilliSource::ApplyDynamicMeshRenderCommand* renderCommand) noexcept
+        {
+            CS_ASSERT(m_currentMaterial, "A material must be applied before applying mesh.");
+            CS_ASSERT(m_currentShader, "A shader must be applied before applying mesh.");
+            
+            auto renderDynamicMesh = renderCommand->GetRenderDynamicMesh();
+            if (m_currentDynamicMesh != renderDynamicMesh)
+            {
+                m_currentMesh = nullptr;
+                m_currentDynamicMesh = renderDynamicMesh;
+                
+                auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
+                const auto& vertexFormat = m_currentDynamicMesh->GetVertexFormat();
+                auto vertexData = m_currentDynamicMesh->GetVertexData().GetData();
+                auto vertexDataSize = m_currentDynamicMesh->GetVertexData().GetLength();
+                auto indexData = m_currentDynamicMesh->GetIndexData().GetData();
+                auto indexDataSize = m_currentDynamicMesh->GetIndexData().GetLength();
+                
+                m_glDynamicMesh->Bind(glShader, vertexFormat, vertexData, vertexDataSize, indexData, indexDataSize);
+            }
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::RenderInstance(const ChilliSource::RenderInstanceRenderCommand* renderCommand) noexcept
         {
             CS_ASSERT(m_currentMaterial, "A material must be applied before rendering a mesh.");
             CS_ASSERT(m_currentShader, "A shader must be applied before rendering a mesh.");
-            CS_ASSERT(m_currentShader, "A mesh must be applied before rendering.");
+            CS_ASSERT(m_currentMesh || m_currentDynamicMesh, "A mesh must be applied before rendering.");
+            CS_ASSERT(!m_currentMesh != !m_currentDynamicMesh, "Both mesh types are currently bound, this shouldn't be possible.");
             
             auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
-            glShader->SetUniform("u_wvpMat", renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform("u_normalMat", ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(GLShader::k_defaultUniformWVPMat, renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(GLShader::k_defaultUniformNormalMat, ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
             
-            if (m_currentMesh->GetNumIndices() > 0)
+            if (m_currentMesh)
             {
-                glDrawElements(ToGLPolygonType(m_currentMesh->GetPolygonType()), m_currentMesh->GetNumIndices(), GL_UNSIGNED_SHORT, 0);
+                if (m_currentMesh->GetNumIndices() > 0)
+                {
+                    glDrawElements(ToGLPolygonType(m_currentMesh->GetPolygonType()), m_currentMesh->GetNumIndices(), ToGLIndexType(m_currentMesh->GetIndexFormat()), 0);
+                }
+                else
+                {
+                    glDrawArrays(ToGLPolygonType(m_currentMesh->GetPolygonType()), 0, m_currentMesh->GetNumVertices());
+                }
             }
             else
             {
-                glDrawArrays(ToGLPolygonType(m_currentMesh->GetPolygonType()), 0, m_currentMesh->GetNumVertices());
+                if (m_currentDynamicMesh->GetNumIndices() > 0)
+                {
+                    glDrawElements(ToGLPolygonType(m_currentDynamicMesh->GetPolygonType()), m_currentDynamicMesh->GetNumIndices(), ToGLIndexType(m_currentDynamicMesh->GetIndexFormat()), 0);
+                }
+                else
+                {
+                    glDrawArrays(ToGLPolygonType(m_currentDynamicMesh->GetPolygonType()), 0, m_currentDynamicMesh->GetNumVertices());
+                }
             }
         }
         
@@ -324,6 +389,7 @@ namespace CSBackend
             m_textureUnitManager->Reset();
             m_currentCamera = GLCamera();
             m_currentMesh = nullptr;
+            m_currentDynamicMesh = nullptr;
             m_currentShader = nullptr;
             m_currentMaterial = nullptr;
         }

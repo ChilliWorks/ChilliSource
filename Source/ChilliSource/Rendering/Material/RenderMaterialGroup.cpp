@@ -35,10 +35,24 @@ namespace ChilliSource
         : m_renderMaterials(std::move(renderMaterials)), m_collections(collections)
     {
         m_renderMaterialsRaw.reserve(m_renderMaterials.size());
-        for (const auto& renderMaterial : renderMaterials)
+        for (const auto& renderMaterial : m_renderMaterials)
         {
             m_renderMaterialsRaw.push_back(renderMaterial.get());
         }
+    }
+    
+    //------------------------------------------------------------------------------
+    bool RenderMaterialGroup::Contains(const RenderMaterial* renderMaterial) const noexcept
+    {
+        for (const auto& material : m_renderMaterialsRaw)
+        {
+            if (material == renderMaterial)
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     //------------------------------------------------------------------------------

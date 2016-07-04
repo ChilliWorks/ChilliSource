@@ -119,6 +119,7 @@ namespace ChilliSource
         ShaderCSPtr m_staticMeshUnlit;
         ShaderCSPtr m_staticMeshBlinnBase;
         ShaderCSPtr m_staticMeshBlinnDirectional;
+        ShaderCSPtr m_spriteUnlit;
     };
 }
 

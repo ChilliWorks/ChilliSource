@@ -22,46 +22,38 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_CAMERARENDERPASSGROUP_H_
-#define _CHILLISOURCE_RENDERING_BASE_CAMERARENDERPASSGROUP_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYDYNAMICMESHRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYDYNAMICMESHRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
-
-#include <ChilliSource/Rendering/Base/RenderPass.h>
-#include <ChilliSource/Rendering/Camera/RenderCamera.h>
-
-#include <vector>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 namespace ChilliSource
 {
-    /// Provides the ability to group a number of render passes based on them sharing
-    /// the same camera
+    /// A render command for applying the given render dynamic mesh to the current context state.
     ///
-    /// This is immutable and therefore thread-safe
+    /// This must be instantiated via a RenderCommandList.
     ///
-    class CameraRenderPassGroup final
+    /// This is immutable and therefore thread-safe.
+    ///
+    class ApplyDynamicMeshRenderCommand final : public RenderCommand
     {
     public:
-        CameraRenderPassGroup() = default;
-        
-        /// @param camera
-        ///     The camera to use for this pass
-        /// @param renderPasses
-        ///     The list of render passes to carry out with the camera
+        /// @return The render mesh to apply.
         ///
-        CameraRenderPassGroup(const RenderCamera& camera, const std::vector<RenderPass>& renderPasses) noexcept;
-        
-        /// @return The camera to use for rendering the group
-        ///
-        const RenderCamera& GetCamera() const noexcept { return m_camera; }
-        
-        /// @return The list of render passes in this group
-        ///
-        const std::vector<RenderPass>& GetRenderPasses() const noexcept { return m_renderPasses; }
+        const RenderDynamicMesh* GetRenderDynamicMesh() const noexcept { return m_renderDynamicMesh; };
         
     private:
-        RenderCamera m_camera;
-        std::vector<RenderPass> m_renderPasses;
+        friend class RenderCommandList;
+        
+        /// Creates a new instance with the given render dynamic mesh.
+        ///
+        /// @param renderDynamicMesh
+        ///     The render dynamic mesh to apply.
+        ///
+        ApplyDynamicMeshRenderCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept;
+        
+        const RenderDynamicMesh* m_renderDynamicMesh;
     };
 }
 

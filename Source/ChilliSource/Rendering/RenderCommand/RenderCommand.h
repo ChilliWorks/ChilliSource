@@ -54,6 +54,7 @@ namespace ChilliSource
             k_applyCamera,
             k_applyMaterial,
             k_applyMesh,
+            k_applyDynamicMesh,
             k_renderInstance,
             k_end,
             k_unloadMesh,
