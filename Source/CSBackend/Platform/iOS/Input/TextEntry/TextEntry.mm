@@ -183,7 +183,7 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool TextEntry::OnTextUpdated(NSString* in_text)
+        void TextEntry::OnTextUpdated(NSString* in_text)
         {
             bool acceptText = true;
             
@@ -196,10 +196,8 @@ namespace CSBackend
             
             if(acceptText == true)
             {
-                m_text = text;
+                SetTextBuffer(text);
             }
-            
-            return acceptText;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

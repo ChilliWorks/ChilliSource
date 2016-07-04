@@ -108,15 +108,10 @@ namespace CSBackend
             //-------------------------------------------------------
             /// Called when the keyboard text is updated.
             ///
-            /// The delegate called in this method will run on a
-            /// background thread, and should only perform text
-            /// validation.
-            ///
             /// @author S Downie
             ///
-            /// @param The new text.
             //-------------------------------------------------------
-			bool OnTextUpdated(NSString* in_text);
+			void OnTextUpdated(NSString* in_text);
             //-------------------------------------------------------
             /// Destructor.
             ///

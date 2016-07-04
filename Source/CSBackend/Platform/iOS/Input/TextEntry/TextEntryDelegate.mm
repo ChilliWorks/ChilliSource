@@ -32,6 +32,9 @@
 
 #import <CSBackend/Platform/iOS/Input/TextEntry/TextEntry.h>
 
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
+
 @implementation TextEntryDelegate
 
 //---------------------------------------------------------
@@ -58,9 +61,13 @@
 //---------------------------------------------------------
 -(BOOL) textField:(UITextField*)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString*)string
 {
-    NSString* updateText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+    {
+        NSString* updateText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textEntry->OnTextUpdated(updateText);
+    });
     
-    return textEntry->OnTextUpdated(updateText);
+    return false;
 }
 //---------------------------------------------------------
 /// @author S Downie
