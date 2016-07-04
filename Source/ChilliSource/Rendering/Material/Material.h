@@ -64,7 +64,8 @@ namespace ChilliSource
         enum class ShadingType
         {
             k_unlit,
-            k_blinn
+            k_blinn,
+            k_blinnShadowed
         };
         //----------------------------------------------------------
         /// @author S Downie

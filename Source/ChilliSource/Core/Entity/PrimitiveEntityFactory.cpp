@@ -98,17 +98,13 @@ namespace ChilliSource
         
         if (material == nullptr)
         {
+            const Colour specularColour(0.5f, 0.5f, 0.5f, 1.0f);
+            const f32 shininess = 10.0f;
+            
             auto texture = m_resourcePool->LoadResource<Texture>(StorageLocation::k_chilliSource, "Textures/Blank.csimage");
             
-            //TODO: Change back to creating shadowed once that is supported in the new renderer.
-            auto mutableMaterial = m_materialFactory->CreateStaticBlinn(materialName, texture);
-            mutableMaterial->SetEmissive(Colour::k_black);
-            mutableMaterial->SetAmbient(in_colour);
-            mutableMaterial->SetDiffuse(in_colour);
-            mutableMaterial->SetSpecular(Colour(0.5f, 0.5f, 0.5f, 10.0f));
-            mutableMaterial->SetLoadState(Resource::LoadState::k_loaded);
-            
-            material = mutableMaterial;
+            //TODO: Change back to blinn shadowed once that is supported in the new renderer.
+            material = m_materialFactory->CreateBlinn(materialName, texture, Colour::k_black, in_colour, in_colour, specularColour, shininess);
         }
         
         return material;

@@ -28,23 +28,30 @@
 
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
+
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(AmbientLightComponent);
     
     //----------------------------------------------------------
-    /// Is A
     //----------------------------------------------------------
     bool AmbientLightComponent::IsA(InterfaceIDType inInterfaceID) const
     {
         return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == AmbientLightComponent::InterfaceID;
     }
     //----------------------------------------------------------
-    /// Get Light Matrix
     //----------------------------------------------------------
     const Matrix4& AmbientLightComponent::GetLightMatrix() const
     {
         return mmatLight;
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    void AmbientLightComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        in_renderSnapshot.AddRenderAmbientLight(RenderAmbientLight());
     }
 }
 

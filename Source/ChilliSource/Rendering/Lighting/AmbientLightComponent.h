@@ -53,6 +53,20 @@ namespace ChilliSource
         /// @return Light transform
         //----------------------------------------------------------
         const Matrix4& GetLightMatrix() const override;
+        
+    private:
+        //----------------------------------------------------------
+        /// This is called during the render snapshot stage of the
+        /// render pipeline to collect a copy of the current state
+        /// of the renderable portion of the scene. This will add
+        /// all relevant light data to this snapshot.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return in_renderSnapshot - The snapshot that the
+        /// light data will be added to.
+        //----------------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
     };
 }
 

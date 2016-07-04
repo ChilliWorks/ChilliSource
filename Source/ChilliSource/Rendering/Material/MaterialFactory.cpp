@@ -1,8 +1,4 @@
 //
-//  MaterialFactory.cpp
-//  Chilli Source
-//  Created by Scott Downie on 5/08/2013.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2013 Tag Games Limited
@@ -38,280 +34,64 @@ namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(MaterialFactory);
     
-    //-------------------------------------------------------
-    //-------------------------------------------------------
-    MaterialFactoryUPtr MaterialFactory::Create()
+    //------------------------------------------------------------------------------
+    MaterialFactoryUPtr MaterialFactory::Create() noexcept
     {
         return MaterialFactoryUPtr(new MaterialFactory());
     }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    bool MaterialFactory::IsA(InterfaceIDType in_interfaceId) const
+    
+    //------------------------------------------------------------------------------
+    bool MaterialFactory::IsA(InterfaceIDType interfaceId) const noexcept
     {
-        return in_interfaceId == MaterialFactory::InterfaceID;
+        return interfaceId == MaterialFactory::InterfaceID;
     }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateCustom(const std::string& in_uniqueId) const
+    
+    //------------------------------------------------------------------------------
+    MaterialCSPtr MaterialFactory::CreateUnlit(const std::string& uniqueId, const TextureCSPtr& texture, bool isTransparent, const Colour& colour) const noexcept
+    {
+        MaterialSPtr material(CreateCustom(uniqueId));
+        material->SetShadingType(Material::ShadingType::k_unlit);
+        material->AddTexture(texture);
+        material->SetTransparencyEnabled(isTransparent);
+        material->SetEmissive(colour);
+        material->SetLoadState(Resource::LoadState::k_loaded);
+        return material;
+    }
+    
+    //------------------------------------------------------------------------------
+    MaterialCSPtr MaterialFactory::CreateBlinn(const std::string& uniqueId, const TextureCSPtr& texture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
+                              const Colour& specularColour, f32 shininess) const noexcept
+    {
+        MaterialSPtr material(CreateCustom(uniqueId));
+        material->SetShadingType(Material::ShadingType::k_blinn);
+        material->AddTexture(texture);
+        material->SetEmissive(emissiveColour);
+        material->SetAmbient(ambientColour);
+        material->SetDiffuse(diffuseColour);
+        material->SetSpecular(Colour(specularColour.r, specularColour.g, specularColour.b, shininess));
+        material->SetLoadState(Resource::LoadState::k_loaded);
+        return material;
+    }
+    
+    //------------------------------------------------------------------------------
+    MaterialCSPtr MaterialFactory::CreateBlinnShadowed(const std::string& uniqueId, const TextureCSPtr& texture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
+                                      const Colour& specularColour, f32 shininess) const noexcept
+    {
+        MaterialSPtr material(CreateCustom(uniqueId));
+        material->SetShadingType(Material::ShadingType::k_blinnShadowed);
+        material->AddTexture(texture);
+        material->SetEmissive(emissiveColour);
+        material->SetAmbient(ambientColour);
+        material->SetDiffuse(diffuseColour);
+        material->SetSpecular(Colour(specularColour.r, specularColour.g, specularColour.b, shininess));
+        material->SetLoadState(Resource::LoadState::k_loaded);
+        return material;
+    }
+    
+    //------------------------------------------------------------------------------
+    MaterialSPtr MaterialFactory::CreateCustom(const std::string& uniqueId) const noexcept
     {
         ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-        return resourcePool->CreateResource<Material>(in_uniqueId);
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateGUI(const std::string& in_uniqueId) const
-    {
-        MaterialSPtr material(CreateCustom(in_uniqueId));
-        
-        material->SetShadingType(Material::ShadingType::k_unlit);
-        material->SetTransparencyEnabled(true);
-        material->SetCullFace(CullFace::k_back);
-        material->SetFaceCullingEnabled(true);
-        material->SetDepthTestEnabled(false);
-        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateSprite(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        MaterialSPtr material(CreateCustom(in_uniqueId));
-        material->SetShadingType(Material::ShadingType::k_unlit);
-        material->AddTexture(in_texture);
-        material->SetTransparencyEnabled(false);
-        material->SetCullFace(CullFace::k_back);
-        material->SetFaceCullingEnabled(false);
-        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateStatic(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        MaterialSPtr material(CreateCustom(in_uniqueId));
-        material->SetShadingType(Material::ShadingType::k_unlit);
-        material->AddTexture(in_texture);
-        material->SetTransparencyEnabled(false);
-        material->SetCullFace(CullFace::k_back);
-        material->SetFaceCullingEnabled(true);
-        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateStaticAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        MaterialSPtr material(CreateCustom(in_uniqueId));
-        material->SetShadingType(Material::ShadingType::k_unlit);
-        material->AddTexture(in_texture);
-        material->SetTransparencyEnabled(false);
-        material->SetCullFace(CullFace::k_back);
-        material->SetFaceCullingEnabled(true);
-        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateStaticBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        MaterialSPtr material(CreateCustom(in_uniqueId));
-        material->SetShadingType(Material::ShadingType::k_blinn);
-        material->AddTexture(in_texture);
-        material->SetTransparencyEnabled(false);
-        material->SetCullFace(CullFace::k_back);
-        material->SetFaceCullingEnabled(true);
-        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateStaticBlinnShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        //TODO: Re-add support
-        CS_LOG_FATAL("Unsupported: Yet to be implemented.");
-        return nullptr;
-        
-//        MaterialSPtr material(CreateCustom(in_uniqueId));
-//        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-//        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
-//        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnShadowedDirectional.csshader"));
-//        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPoint.csshader"));
-//        material->AddTexture(in_texture);
-//        material->SetTransparencyEnabled(false);
-//        material->SetCullFace(CullFace::k_back);
-//        material->SetFaceCullingEnabled(true);
-//        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        //TODO: Re-add support
-        CS_LOG_FATAL("Unsupported: Yet to be implemented.");
-        return nullptr;
-        
-//        MaterialSPtr material(CreateCustom(in_uniqueId));
-//        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-//        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
-//        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexDirectional.csshader"));
-//        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexPoint.csshader"));
-//        material->AddTexture(in_texture);
-//        material->SetTransparencyEnabled(false);
-//        material->SetCullFace(CullFace::k_back);
-//        material->SetFaceCullingEnabled(true);
-//        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        //TODO: Re-add support
-        CS_LOG_FATAL("Unsupported: Yet to be implemented.");
-        return nullptr;
-        
-//        MaterialSPtr material(CreateCustom(in_uniqueId));
-//        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-//        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticAmbient.csshader"));
-//        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexShadowedDirectional.csshader"));
-//        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticBlinnPerVertexPoint.csshader"));
-//        material->AddTexture(in_texture);
-//        material->SetTransparencyEnabled(false);
-//        material->SetCullFace(CullFace::k_back);
-//        material->SetFaceCullingEnabled(true);
-//        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateStaticDirectionalShadowMap(const std::string& in_uniqueId) const
-    {
-        //TODO: Re-add support
-        CS_LOG_FATAL("Unsupported: Yet to be implemented.");
-        return nullptr;
-        
-//        MaterialSPtr material(CreateCustom(in_uniqueId));
-//        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-//        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticDirectionalShadowMap.csshader"));
-//        material->SetTransparencyEnabled(false);
-//        material->SetCullFace(CullFace::k_back);
-//        material->SetFaceCullingEnabled(true);
-//        
-//#ifdef CS_ENABLE_DEBUGSHADOW
-//        material->SetColourWriteEnabled(true);
-//#else
-//        material->SetColourWriteEnabled(false);
-//#endif
-//        
-//        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateAnimated(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        MaterialSPtr material(CreateCustom(in_uniqueId));
-        material->SetShadingType(Material::ShadingType::k_unlit);
-        material->AddTexture(in_texture);
-        material->SetTransparencyEnabled(false);
-        material->SetCullFace(CullFace::k_back);
-        material->SetFaceCullingEnabled(true);
-        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        MaterialSPtr material(CreateCustom(in_uniqueId));
-        material->SetShadingType(Material::ShadingType::k_unlit);
-        material->AddTexture(in_texture);
-        material->SetTransparencyEnabled(false);
-        material->SetCullFace(CullFace::k_back);
-        material->SetFaceCullingEnabled(true);
-        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        MaterialSPtr material(CreateCustom(in_uniqueId));
-        material->SetShadingType(Material::ShadingType::k_blinn);
-        material->AddTexture(in_texture);
-        material->SetTransparencyEnabled(false);
-        material->SetCullFace(CullFace::k_back);
-        material->SetFaceCullingEnabled(true);
-        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateAnimatedBlinnShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        //TODO: Re-add support
-        CS_LOG_FATAL("Unsupported: Yet to be implemented.");
-        return nullptr;
-        
-//        MaterialSPtr material(CreateCustom(in_uniqueId));
-//        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-//        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
-//        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnShadowedDirectional.csshader"));
-//        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPoint.csshader"));
-//        material->AddTexture(in_texture);
-//        material->SetTransparencyEnabled(false);
-//        material->SetCullFace(CullFace::k_back);
-//        material->SetFaceCullingEnabled(true);
-//        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        //TODO: Re-add support
-        CS_LOG_FATAL("Unsupported: Yet to be implemented.");
-        return nullptr;
-        
-//        MaterialSPtr material(CreateCustom(in_uniqueId));
-//        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-//        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
-//        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexDirectional.csshader"));
-//        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexPoint.csshader"));
-//        material->AddTexture(in_texture);
-//        material->SetTransparencyEnabled(false);
-//        material->SetCullFace(CullFace::k_back);
-//        material->SetFaceCullingEnabled(true);
-//        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const
-    {
-        //TODO: Re-add support
-        CS_LOG_FATAL("Unsupported: Yet to be implemented.");
-        return nullptr;
-        
-//        MaterialSPtr material(CreateCustom(in_uniqueId));
-//        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-//        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedAmbient.csshader"));
-//        material->SetShader(ShaderPass::k_directional, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexShadowedDirectional.csshader"));
-//        material->SetShader(ShaderPass::k_point, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedBlinnPerVertexPoint.csshader"));
-//        material->AddTexture(in_texture);
-//        material->SetTransparencyEnabled(false);
-//        material->SetCullFace(CullFace::k_back);
-//        material->SetFaceCullingEnabled(true);
-//        return material;
-    }
-    //---------------------------------------------------
-    //---------------------------------------------------
-    MaterialSPtr MaterialFactory::CreateAnimatedDirectionalShadowMap(const std::string& in_uniqueId) const
-    {
-        //TODO: Re-add support
-        CS_LOG_FATAL("Unsupported: Yet to be implemented.");
-        return nullptr;
-        
-//        MaterialSPtr material(CreateCustom(in_uniqueId));
-//        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-//        material->SetShader(ShaderPass::k_ambient, resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/AnimatedDirectionalShadowMap.csshader"));
-//        material->SetTransparencyEnabled(false);
-//        material->SetCullFace(CullFace::k_back);
-//        material->SetFaceCullingEnabled(true);
-//        
-//#ifdef CS_ENABLE_DEBUGSHADOW
-//        material->SetColourWriteEnabled(true);
-//#else
-//        material->SetColourWriteEnabled(false);
-//#endif
-//        
-//        return material;
+        return resourcePool->CreateResource<Material>(uniqueId);
     }
 }
