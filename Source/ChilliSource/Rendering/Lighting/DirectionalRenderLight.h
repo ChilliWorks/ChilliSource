@@ -34,14 +34,14 @@ namespace ChilliSource
     /// A standard-layout container for data the renderer needs which pertains to a single
     /// direction light, such as the colour and direction.
     ///
-    class RenderDirectionalLight final
+    class DirectionalRenderLight final
     {
     public:
         
         /// Creates a new instance of the container with default black colour and v-down direction
         /// with no shadow map.
         ///
-        RenderDirectionalLight() noexcept;
+        DirectionalRenderLight() noexcept;
         
         /// Creates a new instance of the container with the given light colour and direction
         /// with no shadow map.
@@ -51,7 +51,7 @@ namespace ChilliSource
         /// @param direction
         ///     The direction of the light.
         ///
-        RenderDirectionalLight(const Colour& colour, const Vector3& direction) noexcept;
+        DirectionalRenderLight(const Colour& colour, const Vector3& direction) noexcept;
         
         /// Creates a new instance of the container with the given light colour and direction
         /// and shadow map data.
@@ -68,7 +68,7 @@ namespace ChilliSource
         /// @param shadowMapRenderTexture
         ///     The render texture which should be used for the shadow map.
         ///
-        RenderDirectionalLight(const Colour& colour, const Vector3& direction, const Matrix4& lightMatrix, f32 shadowTolerance/*, const RenderTexture* shadowMapRenderTexture*/) noexcept;
+        DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightMatrix, f32 shadowTolerance/*, const RenderTexture* shadowMapRenderTexture*/) noexcept;
         
         /// @return The colour of the light.
         ///

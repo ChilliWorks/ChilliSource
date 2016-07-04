@@ -1,8 +1,4 @@
 //
-//  AmbientLightComponent.h
-//  Chilli Source
-//  Created by Scott Downie on 28/01/2014.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2014 Tag Games Limited
@@ -30,43 +26,73 @@
 #define _CHILLISOURCE_RENDERING_AMBIENTLIGHTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Lighting/LightComponent.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Entity/Component.h>
 
 namespace ChilliSource
 {
-    class AmbientLightComponent : public LightComponent
+    /// A component which describes an ambient light. While this is in the scene, all
+    /// lit objects will have the light colour descibed applied to it.
+    ///
+    /// This is not thread-safe and should only be accessed from the main thread.
+    ///
+    class AmbientLightComponent final : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(AmbientLightComponent);
         
-        //----------------------------------------------------------
-        /// Is A
+        /// Creates a new ambient light with the given colour and intensity.
         ///
-        /// Returns if it is of the type given
-        /// @param Comparison Type
-        /// @return Whether the class matches the comparison type
-        //----------------------------------------------------------
-        bool IsA(InterfaceIDType inInterfaceID) const override;
-        //----------------------------------------------------------
-        /// Get Light Matrix
+        /// @param colour
+        ///     The colour of the ambient light.
+        /// @param intensity
+        ///     (Optional) The intensity of the ambient light. This defaults to 1.0.
         ///
-        /// @return Light transform
-        //----------------------------------------------------------
-        const Matrix4& GetLightMatrix() const override;
+        AmbientLightComponent(const Colour& colour, f32 intensity = 1.0f) noexcept;
+        
+        /// Allows querying of whether or not this system implements the interface described by the
+        /// given interface Id. Typically this is not called directly as the templated equivalent
+        /// IsA<Interface>() is preferred.
+        ///
+        /// @param interfaceId
+        ///     The Id of the interface.
+        ///
+        /// @return Whether or not the interface is implemented.
+        ///
+        bool IsA(InterfaceIDType interfaceId) const noexcept override;
+        
+        /// @return The colour of the ambient light.
+        ///
+        void SetColour(const Colour& colour) noexcept { m_colour = colour; }
+        
+        /// @return The intensity of the ambient light.
+        ///
+        void SetIntensity(f32 intensity) noexcept { m_intensity = intensity; }
+        
+        /// @return The colour of the ambient light.
+        ///
+        const Colour& GetColour() const noexcept { return m_colour; }
+        
+        /// @return The intensity of the ambient light.
+        ///
+        f32 GetIntensity() const noexcept { return m_intensity; }
+        
+        /// @return The colour of the ambient light with the intesity applied to it.
+        ///
+        Colour GetFinalColour() const noexcept { return m_colour * m_intensity; }
         
     private:
-        //----------------------------------------------------------
-        /// This is called during the render snapshot stage of the
-        /// render pipeline to collect a copy of the current state
-        /// of the renderable portion of the scene. This will add
-        /// all relevant light data to this snapshot.
+        /// This is called during the render snapshot stage of the render pipeline to collect a copy of
+        /// the current state of the renderable portion of the scene. This will add all relevant light
+        /// data to this snapshot.
         ///
-        /// @author Ian Copland
+        /// @return renderSnapshot
+        ///     The snapshot that the light data will be added to.
         ///
-        /// @return in_renderSnapshot - The snapshot that the
-        /// light data will be added to.
-        //----------------------------------------------------------
-        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        
+        Colour m_colour;
+        f32 m_intensity;
     };
 }
 

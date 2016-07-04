@@ -29,6 +29,7 @@
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyAmbientLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>

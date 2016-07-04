@@ -22,54 +22,37 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_LIGHTING_RENDERPOINTLIGHT_H_
-#define _CHILLISOURCE_RENDERING_LIGHTING_RENDERPOINTLIGHT_H_
+#ifndef _CHILLISOURCE_RENDERING_LIGHTING_RENDERAMBIENTLIGHT_H_
+#define _CHILLISOURCE_RENDERING_LIGHTING_RENDERAMBIENTLIGHT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Math/Vector3.h>
 
 namespace ChilliSource
 {
     /// A standard-layout container for data the renderer needs which pertains to a single
-    /// point light, such as the colour and position.
-    ///
-    class RenderPointLight final
+    /// ambient light, such as the colour.
+    class AmbientRenderLight final
     {
     public:
         
-        /// Creates a new instance of the container with default black colour with
-        /// position and attenuation zeroed.
+        /// Creates a new instance of the container with default black colour.
         ///
-        RenderPointLight() noexcept;
+        AmbientRenderLight() noexcept;
         
-        /// Creates a new instance of the container with the given light colour and position.
+        /// Creates a new instance of the container with the given light colour.
         ///
         /// @param colour
         ///     The colour of the light.
-        /// @param position
-        ///     The position of the light.
-        /// @param attenuation
-        ///     The attenuation of the light.
         ///
-        RenderPointLight(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept;
+        AmbientRenderLight(const Colour& colour) noexcept;
         
         /// @return The colour of the light.
         ///
         const Colour& GetColour() const noexcept { return m_colour; }
         
-        /// @return The position of the light.
-        ///
-        const Vector3& GetPosition() const noexcept { return m_position; }
-        
-        /// @return The attenuation of the light.
-        ///
-        const Vector3& GetAttenuation() const noexcept { return m_attenuation; }
-        
     private:
         Colour m_colour;
-        Vector3 m_position;
-        Vector3 m_attenuation;
     };
 }
 

@@ -52,15 +52,6 @@ namespace CSBackend
         public:
             CS_DECLARE_NOCOPY(GLShader);
             
-            static const std::string k_defaultUniformWVPMat;
-            static const std::string k_defaultUniformWorldMat;
-            static const std::string k_defaultUniformNormalMat;
-            static const std::string k_defaultUniformCameraPos;
-            static const std::string k_defaultUniformEmissive;
-            static const std::string k_defaultUniformAmbient;
-            static const std::string k_defaultUniformDiffuse;
-            static const std::string k_defaultUniformSpecular;
-            
             static const std::string k_attributePosition;
             static const std::string k_attributeNormal;
             static const std::string k_attributeTexCoord;

@@ -22,15 +22,41 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderFrame.h>
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYAMBIENTLIGHTRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYAMBIENTLIGHTRENDERCOMMAND_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    RenderFrame::RenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight, const std::vector<DirectionalRenderLight>& renderDirectionalLights,
-                             const std::vector<PointRenderLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept
-        : m_resolution(resolution), m_renderCamera(renderCamera), m_renderAmbientLight(renderAmbientLight), m_renderDirectionalLights(renderDirectionalLights), m_renderPointLights(renderPointLights),
-          m_renderObjects(renderObjects)
+    /// A render command for applying the described ambient light to the current context
+    /// state.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class ApplyAmbientLightRenderCommand final : public RenderCommand
     {
-    }
+    public:
+        /// @return The colour of the ambient light.
+        ///
+        const Colour& GetColour() const noexcept { return m_colour; };
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Creates a new instance with the given light colour.
+        ///
+        /// @param colour
+        ///     The ambient light colour.
+        ///
+        ApplyAmbientLightRenderCommand(const Colour& colour) noexcept;
+        
+        Colour m_colour;
+    };
 }
+
+#endif

@@ -205,7 +205,7 @@ namespace ChilliSource
             auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
             auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
             
-            const u32 numPasses = k_reservedRenderPasses + u32(renderFrame.GetRenderDirectionalLights().size()) + u32(renderFrame.GetRenderPointLights().size());
+            const u32 numPasses = k_reservedRenderPasses + u32(renderFrame.GetDirectionalRenderLights().size()) + u32(renderFrame.GetPointRenderLights().size());
             std::vector<RenderPass> renderPasses(numPasses);
             std::vector<Task> tasks;
             u32 nextPassIndex = 0;
@@ -216,11 +216,11 @@ namespace ChilliSource
             {
                 auto renderPassObjects = GetBaseRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                renderPasses[basePassIndex] = RenderPass(renderFrame.GetRenderAmbientLight(), renderPassObjects);
+                renderPasses[basePassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), renderPassObjects);
             });
             
             // Directional light pass
-            for (const auto& directionalLight : renderFrame.GetRenderDirectionalLights())
+            for (const auto& directionalLight : renderFrame.GetDirectionalRenderLights())
             {
                 u32 directionLightPassIndex = nextPassIndex++;
                 tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
@@ -239,7 +239,7 @@ namespace ChilliSource
             {
                 auto renderPassObjects = GetTransparentRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::TransparentSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetRenderAmbientLight(), renderPassObjects);
+                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), renderPassObjects);
             });
             
             taskContext.ProcessChildTasks(tasks);
@@ -276,7 +276,7 @@ namespace ChilliSource
             std::vector<RenderPass> renderPasses;
             if (uiRenderPassObjects.size() > 0)
             {
-                renderPasses.push_back(RenderPass(renderFrame.GetRenderAmbientLight(), uiRenderPassObjects));
+                renderPasses.push_back(RenderPass(renderFrame.GetAmbientRenderLight(), uiRenderPassObjects));
             }
             
             return CameraRenderPassGroup(uiCamera, renderPasses);

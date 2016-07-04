@@ -57,8 +57,8 @@ namespace ChilliSource
         ///
         /// @return The compiled render frame.
         ///
-        RenderFrame CompileRenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const std::vector<RenderAmbientLight>& renderAmbientLights,
-                                       const std::vector<RenderDirectionalLight>& renderDirectionalLights, const std::vector<RenderPointLight>& renderPointLights,
+        RenderFrame CompileRenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const std::vector<AmbientRenderLight>& renderAmbientLights,
+                                       const std::vector<DirectionalRenderLight>& renderDirectionalLights, const std::vector<PointRenderLight>& renderPointLights,
                                        const std::vector<RenderObject>& renderObjects) noexcept;
     }
 }

@@ -144,13 +144,17 @@ namespace ChilliSource
         OrthographicCameraComponentUPtr CreateOrthographicCameraComponent(f32 in_near, f32 in_far);
         //---------------------------------------------------------------------------
         /// Create a new light component that is applied in the ambient render pass.
-        /// This light simulates global light scattering as a base colour
+        /// This light simulates global light scattering as a base colour.
         ///
-        /// @author S Downie
+        /// @author Ian Copland
         ///
-        /// @return Ownership of new ambient light component
+        /// @param in_colour - The colour of the ambient light.
+        /// @param in_intensity - (Optional) The intensity of the ambient light. This
+        /// defaults to 1.0.
+        ///
+        /// @return The new ambient light component.
         //---------------------------------------------------------------------------
-        AmbientLightComponentUPtr CreateAmbientLightComponent() const;
+        AmbientLightComponentUPtr CreateAmbientLightComponent(const Colour& in_colour, f32 in_intensity = 1.0f) const noexcept;
         //---------------------------------------------------------------------------
         /// Create a new light component that is applied in the diffuse render pass.
         /// This light simulates direct light from an infinitely far away light source

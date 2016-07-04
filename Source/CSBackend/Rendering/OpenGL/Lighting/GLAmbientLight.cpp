@@ -22,18 +22,29 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Lighting/RenderPointLight.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLAmbientLight.h>
 
-namespace ChilliSource
+#include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+
+namespace CSBackend
 {
-    //------------------------------------------------------------------------------
-    RenderPointLight::RenderPointLight() noexcept
-        : m_colour(Colour::k_black), m_position(Vector3::k_zero), m_attenuation(1.0f, 0.0f, 0.0f)
+    namespace OpenGL
     {
-    }
-    //------------------------------------------------------------------------------
-    RenderPointLight::RenderPointLight(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept
-        : m_colour(colour), m_position(position), m_attenuation(attenuation)
-    {
+        namespace
+        {
+            const std::string k_uniformLightCol = "u_lightCol";
+        }
+        
+        //------------------------------------------------------------------------------
+        GLAmbientLight::GLAmbientLight(const ChilliSource::Colour& colour) noexcept
+            : m_colour(colour)
+        {
+        }
+            
+        //------------------------------------------------------------------------------
+        void GLAmbientLight::Apply(GLShader* glShader) const noexcept
+        {
+            glShader->SetUniform(k_uniformLightCol, m_colour, GLShader::FailurePolicy::k_silent);
+        }
     }
 }

@@ -22,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_SHADER_GLCAMERA_H_
-#define _CSBACKEND_RENDERING_OPENGL_SHADER_GLCAMERA_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_CAMERA_GLCAMERA_H_
+#define _CSBACKEND_RENDERING_OPENGL_CAMERA_GLCAMERA_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
@@ -61,6 +61,15 @@ namespace CSBackend
             /// @return The view projection matrix of the camera.
             ///
             const ChilliSource::Matrix4& GetViewProjectionMatrix() const noexcept { return m_viewProjectionMatrix; }
+            
+            /// Applies the camera to the given shader.
+            ///
+            /// This must be called on the render thread.
+            ///
+            /// @param glShader
+            ///     The shader the camera data should be applied to.
+            ///
+            void Apply(GLShader* glShader) const noexcept;
             
         private:
             ChilliSource::Vector3 m_position;

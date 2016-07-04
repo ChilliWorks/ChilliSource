@@ -128,10 +128,9 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    AmbientLightComponentUPtr RenderComponentFactory::CreateAmbientLightComponent() const
+    AmbientLightComponentUPtr RenderComponentFactory::CreateAmbientLightComponent(const Colour& in_colour, f32 in_intensity) const noexcept
     {
-        AmbientLightComponentUPtr pLight(new AmbientLightComponent());
-        return pLight;
+        return AmbientLightComponentUPtr(new AmbientLightComponent(in_colour, in_intensity));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------

@@ -22,24 +22,24 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderDirectionalLight::RenderDirectionalLight() noexcept
+    DirectionalRenderLight::DirectionalRenderLight() noexcept
         : m_colour(Colour::k_black), m_direction(Vector3::k_unitNegativeY)
     {
     }
     
     //------------------------------------------------------------------------------
-    RenderDirectionalLight::RenderDirectionalLight(const Colour& colour, const Vector3& direction) noexcept
+    DirectionalRenderLight::DirectionalRenderLight(const Colour& colour, const Vector3& direction) noexcept
         : m_colour(colour), m_direction(direction)
     {
     }
     
     //------------------------------------------------------------------------------
-    RenderDirectionalLight::RenderDirectionalLight(const Colour& colour, const Vector3& direction, const Matrix4& lightMatrix, f32 shadowTolerance/*, const RenderTexture* shadowMapTexture*/) noexcept
+    DirectionalRenderLight::DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightMatrix, f32 shadowTolerance/*, const RenderTexture* shadowMapTexture*/) noexcept
         : m_colour(colour), m_direction(direction), m_lightMatrix(lightMatrix), m_shadowTolerance(shadowTolerance)//, m_shadowMapTexture(shadowMapTexture)
     {
     }

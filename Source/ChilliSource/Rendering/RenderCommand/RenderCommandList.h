@@ -109,6 +109,13 @@ namespace ChilliSource
         ///
         void AddApplyCameraCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept;
         
+        /// Creates and adds a new apply ambient light command to the render command list.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        ///
+        void AddApplyAmbientLightCommand(const Colour& colour) noexcept;
+        
         /// Creates and adds a new apply material command to the render command list.
         ///
         /// @param renderMaterial

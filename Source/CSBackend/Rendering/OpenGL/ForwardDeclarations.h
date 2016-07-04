@@ -49,6 +49,11 @@ namespace CSBackend
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLCamera);
         //----------------------------------------------------
+        /// Lighting
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(GLAmbientLight);
+        CS_FORWARDDECLARE_CLASS(GLLight);
+        //----------------------------------------------------
         /// Model
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLMesh);

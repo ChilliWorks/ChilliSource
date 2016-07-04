@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,18 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
-
-#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(AmbientLightComponent);
-    
     //------------------------------------------------------------------------------
-    AmbientLightComponent::AmbientLightComponent(const Colour& colour, f32 intensity) noexcept
-        : m_colour(colour), m_intensity(intensity)
+    AmbientRenderLight::AmbientRenderLight() noexcept
+        : m_colour(Colour::k_black)
     {
     }
-    
     //------------------------------------------------------------------------------
-    bool AmbientLightComponent::IsA(InterfaceIDType interfaceId) const noexcept
+    AmbientRenderLight::AmbientRenderLight(const Colour& colour) noexcept
+        : m_colour(colour)
     {
-        return AmbientLightComponent::InterfaceID == interfaceId;
-    }
-    
-    //------------------------------------------------------------------------------
-    void AmbientLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
-    {
-        renderSnapshot.AddAmbientRenderLight(AmbientRenderLight(GetFinalColour()));
     }
 }
-

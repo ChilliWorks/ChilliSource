@@ -72,9 +72,9 @@ namespace ChilliSource
             auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
             auto renderCamera = m_currentSnapshot.GetRenderCamera();
-            auto renderAmbientLights = m_currentSnapshot.ClaimRenderAmbientLights();
-            auto renderDirectionalLights = m_currentSnapshot.ClaimRenderDirectionalLights();
-            auto renderPointLights = m_currentSnapshot.ClaimRenderPointLights();
+            auto renderAmbientLights = m_currentSnapshot.ClaimAmbientRenderLights();
+            auto renderDirectionalLights = m_currentSnapshot.ClaimDirectionalRenderLights();
+            auto renderPointLights = m_currentSnapshot.ClaimPointRenderLights();
             auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
             auto renderDynamicMeshes = m_currentSnapshot.ClaimRenderDynamicMeshes();
             auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();

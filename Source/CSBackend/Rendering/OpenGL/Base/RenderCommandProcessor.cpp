@@ -24,6 +24,7 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
+#include <CSBackend/Rendering/OpenGL/Lighting/GLAmbientLight.h>
 #include <CSBackend/Rendering/OpenGL/Material/GLMaterial.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
@@ -34,6 +35,7 @@
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyAmbientLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
@@ -56,6 +58,10 @@ namespace CSBackend
     {
         namespace
         {
+            const std::string k_uniformWVPMat = "u_wvpMat";
+            const std::string k_uniformWorldMat = "u_worldMat";
+            const std::string k_uniformNormalMat = "u_normalMat";
+            
             /// Converts from a ChilliSource polygon type to a OpenGL polygon type.
             ///
             /// @param blendMode
@@ -131,6 +137,9 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyCamera:
                             ApplyCamera(static_cast<const ChilliSource::ApplyCameraRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applyAmbientLight:
+                            ApplyAmbientLight(static_cast<const ChilliSource::ApplyAmbientLightRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyMaterial:
                             ApplyMaterial(static_cast<const ChilliSource::ApplyMaterialRenderCommand*>(renderCommand));
@@ -243,6 +252,14 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyAmbientLight(const ChilliSource::ApplyAmbientLightRenderCommand* renderCommand) noexcept
+        {
+            m_currentMaterial = nullptr;
+            
+            m_currentLight = GLLightUPtr(new GLAmbientLight(renderCommand->GetColour()));
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::ApplyMaterial(const ChilliSource::ApplyMaterialRenderCommand* renderCommand) noexcept
         {
             auto renderMaterial = renderCommand->GetRenderMaterial();
@@ -263,7 +280,14 @@ namespace CSBackend
                 
                 m_textureUnitManager->Bind(m_currentMaterial->GetRenderTextures());
                 
-                GLMaterial::Apply(renderMaterial, m_currentCamera, glShader);
+                m_currentCamera.Apply(glShader);
+                
+                if (m_currentLight)
+                {
+                    m_currentLight->Apply(glShader);
+                }
+                
+                GLMaterial::Apply(renderMaterial, glShader);
             }
         }
         
@@ -317,8 +341,8 @@ namespace CSBackend
             CS_ASSERT(!m_currentMesh != !m_currentDynamicMesh, "Both mesh types are currently bound, this shouldn't be possible.");
             
             auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
-            glShader->SetUniform(GLShader::k_defaultUniformWVPMat, renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform(GLShader::k_defaultUniformNormalMat, ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformWVPMat, renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformNormalMat, ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
             
             if (m_currentMesh)
             {
@@ -388,6 +412,7 @@ namespace CSBackend
         {
             m_textureUnitManager->Reset();
             m_currentCamera = GLCamera();
+            m_currentLight.reset();
             m_currentMesh = nullptr;
             m_currentDynamicMesh = nullptr;
             m_currentShader = nullptr;

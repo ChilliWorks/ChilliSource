@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,38 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
+#ifndef _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLLIGHT_H_
+#define _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLLIGHT_H_
 
-#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
-#include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
-namespace ChilliSource
+#include <ChilliSource/ChilliSource.h>
+
+namespace CSBackend
 {
-    CS_DEFINE_NAMEDTYPE(AmbientLightComponent);
-    
-    //------------------------------------------------------------------------------
-    AmbientLightComponent::AmbientLightComponent(const Colour& colour, f32 intensity) noexcept
-        : m_colour(colour), m_intensity(intensity)
+    namespace OpenGL
     {
-    }
-    
-    //------------------------------------------------------------------------------
-    bool AmbientLightComponent::IsA(InterfaceIDType interfaceId) const noexcept
-    {
-        return AmbientLightComponent::InterfaceID == interfaceId;
-    }
-    
-    //------------------------------------------------------------------------------
-    void AmbientLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
-    {
-        renderSnapshot.AddAmbientRenderLight(AmbientRenderLight(GetFinalColour()));
+        /// The base class for all OpenGL light objects. This is used to apply the appropriate
+        /// lighting data to the active shader.
+        ///
+        /// The underlying light object should be immutable and therefore thread-safe, but apply
+        /// must be called on the render thread.
+        ///
+        class GLLight
+        {
+        public:
+            /// Applies the light to the given shader.
+            ///
+            /// This must be called on the render thread.
+            ///
+            /// @param glShader
+            ///     The shader the light data should be applied to.
+            ///
+            virtual void Apply(GLShader* glShader) const noexcept = 0;
+            
+            virtual ~GLLight() {}
+        };
     }
 }
 
+#endif
