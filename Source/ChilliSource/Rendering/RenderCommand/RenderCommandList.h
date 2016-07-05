@@ -169,12 +169,20 @@ namespace ChilliSource
         ///
         void AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept;
 
+        /// @return The number of render commands in the list.
+        ///
+        u32 GetNumCommands() const noexcept { return u32(m_renderCommands.size()); }
+        
         /// @return The ordered list of render commands.
         ///
-        std::vector<RenderCommand*>& GetOrderedList() noexcept { return m_orderedCommands; };
+        const std::vector<const RenderCommand*>& GetOrderedList() const noexcept { return m_orderedCommands; };
+        
+        /// @return The RenderCommand at the given index
+        ///
+        RenderCommand* GetCommand(u32 index) noexcept;
         
     private:
-        std::vector<RenderCommand*> m_orderedCommands;
+        std::vector<const RenderCommand*> m_orderedCommands;
         std::vector<RenderCommandUPtr> m_renderCommands; //TODO: This should be changed to a series of pools of individial render command types.
     };
 }

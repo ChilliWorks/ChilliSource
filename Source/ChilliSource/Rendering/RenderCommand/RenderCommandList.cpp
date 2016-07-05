@@ -176,4 +176,11 @@ namespace ChilliSource
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
     }
+    //------------------------------------------------------------------------------
+    RenderCommand* RenderCommandList::GetCommand(u32 index) noexcept
+    {
+        CS_ASSERT(index < GetNumCommands(), "Index out of bounds.");
+        
+        return m_renderCommands[index].get();
+    }
 }

@@ -68,7 +68,7 @@ namespace ChilliSource
         ///
         /// @return The number of render command lists required.
         ///
-        u32 CalcNumRenderCommandLists(const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, RenderCommandList* preRenderCommandList, RenderCommandList* postRenderCommandList) noexcept
+        u32 CalcNumRenderCommandLists(const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const RenderCommandList* preRenderCommandList, const RenderCommandList* postRenderCommandList) noexcept
         {
             u32 count = 0;
             

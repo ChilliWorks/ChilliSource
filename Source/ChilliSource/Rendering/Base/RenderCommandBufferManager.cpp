@@ -74,7 +74,7 @@ namespace ChilliSource
         {
             for(const auto& buffer : m_renderCommandBuffers)
             {
-                RecycleRenderCommandBuffer(buffer);
+                RecycleRenderCommandBuffer(buffer.get());
             }
             
             m_renderCommandBuffers.clear();
@@ -134,7 +134,7 @@ namespace ChilliSource
         }
     }
     //------------------------------------------------------------------------------
-    void RenderCommandBufferManager::RecycleRenderCommandBuffer(const RenderCommandBufferUPtr& commands) noexcept
+    void RenderCommandBufferManager::RecycleRenderCommandBuffer(RenderCommandBuffer* commands) noexcept
     {
         for(u32 i = 0; i < commands->GetNumSlots(); ++i)
         {
@@ -149,19 +149,10 @@ namespace ChilliSource
         //Iterate the queue and store any recyclable commands for reinsertion later. If a command
         //is recycled then we remove from the list. We do not need to delete the command as that is still owned
         //by the command queue
-        auto orderedList = renderCommandList->GetOrderedList();
-        auto it = orderedList.begin();
-        while(it != orderedList.end())
+        
+        for(u32 i = 0; i < renderCommandList->GetNumCommands(); ++i)
         {
-            bool processed = RecycleCommand((*it));
-            if(processed)
-            {
-                it = orderedList.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
+            RecycleCommand(renderCommandList->GetCommand(i));
         }
     }
     //------------------------------------------------------------------------------
@@ -245,7 +236,7 @@ namespace ChilliSource
         
         if(m_discardCommands)
         {
-            RecycleRenderCommandBuffer(renderCommandBuffer);
+            RecycleRenderCommandBuffer(renderCommandBuffer.get());
         }
         else
         {
@@ -255,7 +246,7 @@ namespace ChilliSource
         m_renderCommandBuffersCondition.notify_all();
     }
     //------------------------------------------------------------------------------
-    RenderCommandBufferUPtr RenderCommandBufferManager::WaitThenPopCommandBuffer() noexcept
+    RenderCommandBufferCUPtr RenderCommandBufferManager::WaitThenPopCommandBuffer() noexcept
     {
         std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
         
@@ -269,6 +260,6 @@ namespace ChilliSource
         
         m_renderCommandBuffersCondition.notify_all();
         
-        return renderCommandBuffer;
+        return std::move(renderCommandBuffer);
     }
 }

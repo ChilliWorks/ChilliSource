@@ -76,7 +76,7 @@ namespace ChilliSource
         ///
         /// @return The render command buffer which has been popped.
         ///
-        RenderCommandBufferUPtr WaitThenPopCommandBuffer() noexcept;
+        RenderCommandBufferCUPtr WaitThenPopCommandBuffer() noexcept;
         
     private:
         friend class Application;
@@ -126,7 +126,7 @@ namespace ChilliSource
         /// @param commands
         ///     The RenderCommandBuffer to recycle.
         ///
-        void RecycleRenderCommandBuffer(const RenderCommandBufferUPtr& commands) noexcept;
+        void RecycleRenderCommandBuffer(RenderCommandBuffer* commands) noexcept;
         
         /// Called to process a command queue and extract load/unload commands that we
         /// can recycle and store for use next frame.
