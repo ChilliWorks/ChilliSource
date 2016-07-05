@@ -184,15 +184,19 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         DirectionalLightComponentUPtr CreateDirectionalLightComponent(DirectionalLightComponent::ShadowQuality in_shadowQuality, const Colour& in_colour, f32 in_intensity = 1.0f) const noexcept;
         //---------------------------------------------------------------------------
-        /// Create a new light component that is applied in the diffuse render pass.
-        /// This light simulates direct light from nearby light sources where the light
-        /// is omni-directional
+        /// Create a new point light component. This light simulates direct light
+        /// from nearby light sources where the light is omni-directional.
         ///
-        /// @author S Downie
+        /// @author Ian Copland
         ///
-        /// @return Ownership of new point light component
+        /// @param in_colour - The colour of the point light.
+        /// @param in_radius - The radius of the point light.
+        /// @param in_intensity - (Optional) The intensity of the point light. This
+        /// defaults to 1.0.
+        ///
+        /// @return The new point light component.
         //---------------------------------------------------------------------------
-        PointLightComponentUPtr CreatePointLightComponent() const;
+        PointLightComponentUPtr CreatePointLightComponent(const Colour& in_colour, f32 in_radius, f32 in_intensity = 1.0f) const noexcept;
         //---------------------------------------------------------------------------
         /// @author Ian Copland
         ///

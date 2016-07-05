@@ -133,6 +133,18 @@ namespace ChilliSource
         ///
         void AddApplyDirectionalLightCommand(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept;
         
+        /// Creates and adds a new apply point light command to the render command list.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        /// @param position
+        ///     The world space position of the light.
+        /// @param attenuation
+        ///     The vector containing the constant, linear and quadratic attenuation values of the
+        ///     light.
+        ///
+        void AddApplyPointLightCommand(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept;
+        
         /// Creates and adds a new apply material command to the render command list.
         ///
         /// @param renderMaterial

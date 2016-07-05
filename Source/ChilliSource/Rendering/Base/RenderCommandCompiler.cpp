@@ -115,8 +115,10 @@ namespace ChilliSource
             switch (renderPass.GetLightType())
             {
                 case RenderPass::LightType::k_none:
+                {
                     renderCommandList->AddApplyAmbientLightCommand(Colour::k_black);
                     break;
+                }
                 case RenderPass::LightType::k_ambient:
                 {
                     const auto& ambientLight = renderPass.GetAmbientLight();
@@ -131,11 +133,16 @@ namespace ChilliSource
                     break;
                 }
                 case RenderPass::LightType::k_point:
-                    // Handle point.
+                {
+                    const auto& pointLight = renderPass.GetPointLight();
+                    renderCommandList->AddApplyPointLightCommand(pointLight.GetColour(), pointLight.GetPosition(), pointLight.GetAttenuation());
                     break;
+                }
                 default:
+                {
                     CS_LOG_FATAL("Invalid light type.");
                     break;
+                }
             }
         }
         

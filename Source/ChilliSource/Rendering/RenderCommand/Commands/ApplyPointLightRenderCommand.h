@@ -22,61 +22,56 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_LIGHTING_RENDERPOINTLIGHT_H_
-#define _CHILLISOURCE_RENDERING_LIGHTING_RENDERPOINTLIGHT_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYPOINTLIGHTRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYPOINTLIGHTRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 namespace ChilliSource
 {
-    /// A standard-layout container for data the renderer needs which pertains to a single
-    /// point light, such as the colour and position.
+    /// A render command for applying the described point light to the current context state.
     ///
-    class PointRenderLight final
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class ApplyPointLightRenderCommand final : public RenderCommand
     {
     public:
-        
-        /// Creates a new instance of the container with default black colour with
-        /// position and attenuation zeroed.
-        ///
-        PointRenderLight() noexcept;
-        
-        /// Creates a new instance of the container with the given light colour and position.
-        ///
-        /// @param colour
-        ///     The colour of the light.
-        /// @param position
-        ///     The position of the light.
-        /// @param attenuation
-        ///     The attenuation of the light.
-        /// @param rangeOfInfluence
-        ///     The range of influence of the light.
-        ///
-        PointRenderLight(const Colour& colour, const Vector3& position, const Vector3& attenuation, f32 rangeOfInfluence) noexcept;
-        
         /// @return The colour of the light.
         ///
         const Colour& GetColour() const noexcept { return m_colour; }
         
-        /// @return The position of the light.
+        /// @return The world space position of the light.
         ///
         const Vector3& GetPosition() const noexcept { return m_position; }
         
-        /// @return The attenuation of the light.
+        /// @return The vector containing the constant, linear and quadratic attenuation values of the
+        ///     light.
         ///
         const Vector3& GetAttenuation() const noexcept { return m_attenuation; }
         
-        /// @return The range of influence of the light.
-        ///
-        f32 GetRangeOfInfluence() const noexcept { return m_rangeOfInfluence; }
-        
     private:
+        friend class RenderCommandList;
+        
+        /// Creates a new instance with the given light colour, position and attenuation.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        /// @param position
+        ///     The world space position of the light.
+        /// @param attenuation
+        ///     The vector containing the constant, linear and quadratic attenuation values of the
+        ///     light.
+        ///
+        ApplyPointLightRenderCommand(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept;
+        
         Colour m_colour;
         Vector3 m_position;
         Vector3 m_attenuation;
-        f32 m_rangeOfInfluence;
     };
 }
 

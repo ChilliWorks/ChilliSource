@@ -24,6 +24,7 @@
 
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
 
+#include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
 #include <ChilliSource/Rendering/Base/RenderFrame.h>
@@ -147,7 +148,7 @@ namespace ChilliSource
         ///
         std::vector<RenderPassObject> GetDirectionalLightRenderPassObjects(const std::vector<RenderObject>& renderObjects) noexcept
         {
-            std::vector<RenderPassObject> baseRenderPassObjects;
+            std::vector<RenderPassObject> renderPassObjects;
             
             for (const auto& renderObject : renderObjects)
             {
@@ -155,11 +156,41 @@ namespace ChilliSource
                 
                 if (renderMaterial)
                 {
-                    baseRenderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
+                    renderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
                 }
             }
             
-            return baseRenderPassObjects;
+            return renderPassObjects;
+        }
+        
+        /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
+        /// each RenderObject that has a PointLight pass defined, and is within the range
+        /// of influence of the given light.
+        ///
+        /// @param renderObjects
+        ///     A list of RenderObjects to parse
+        /// @param pointRenderLight
+        ///     The render light to get objects for.
+        ///
+        /// @return A collection of RenderPassObjects for the render light pass.
+        ///
+        std::vector<RenderPassObject> GetPointLightRenderPassObjects(const std::vector<RenderObject>& renderObjects, const PointRenderLight& pointRenderLight) noexcept
+        {
+            Sphere pointLightBoundingSphere(pointRenderLight.GetPosition(), pointRenderLight.GetRangeOfInfluence());
+            
+            std::vector<RenderPassObject> renderPassObjects;
+            
+            for (const auto& renderObject : renderObjects)
+            {
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_pointLight));
+                
+                if (renderMaterial && pointLightBoundingSphere.Contains(renderObject.GetBoundingSphere()))
+                {
+                    renderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
+                }
+            }
+            
+            return renderPassObjects;
         }
         
         /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
@@ -231,7 +262,17 @@ namespace ChilliSource
                 });
             }
             
-            //TODO: Point light pass
+            // Point light pass
+            for (const auto& pointLight : renderFrame.GetPointRenderLights())
+            {
+                u32 pointLightPassIndex = nextPassIndex++;
+                tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
+                {
+                    auto renderPassObjects = GetPointLightRenderPassObjects(visibleStandardRenderObjects, pointLight);
+                    RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
+                    renderPasses[pointLightPassIndex] = RenderPass(pointLight, renderPassObjects);
+                });
+            }
             
             // Transparent pass
             u32 transparentPassIndex = nextPassIndex++;

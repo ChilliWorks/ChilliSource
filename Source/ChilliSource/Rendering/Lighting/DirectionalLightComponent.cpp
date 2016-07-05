@@ -139,11 +139,11 @@ namespace ChilliSource
     {
         auto& transform = GetEntity()->GetTransform();
         
-        m_direction = Vector3::Rotate(Vector3::k_unitPositiveZ, GetEntity()->GetTransform().GetWorldOrientation());
+        m_direction = Vector3::Rotate(Vector3::k_unitPositiveZ, transform.GetWorldOrientation());
         m_lightView = Matrix4::Inverse(transform.GetWorldTransform());
         m_lightViewProjection = m_lightView * m_lightProjection;
         
-        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
+        m_transformChangedConnection = transform.GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
     }
     
     //------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ namespace ChilliSource
     {
         auto& transform = GetEntity()->GetTransform();
         
-        m_direction = Vector3::Rotate(Vector3::k_unitPositiveZ, GetEntity()->GetTransform().GetWorldOrientation());
+        m_direction = Vector3::Rotate(Vector3::k_unitPositiveZ, transform.GetWorldOrientation());
         m_lightView = Matrix4::Inverse(transform.GetWorldTransform());
         m_lightViewProjection = m_lightView * m_lightProjection;
     }

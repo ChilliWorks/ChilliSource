@@ -54,6 +54,7 @@ namespace CSBackend
         CS_FORWARDDECLARE_CLASS(GLAmbientLight);
         CS_FORWARDDECLARE_CLASS(GLDirectionalLight);
         CS_FORWARDDECLARE_CLASS(GLLight);
+        CS_FORWARDDECLARE_CLASS(GLPointLight);
         //----------------------------------------------------
         /// Model
         //----------------------------------------------------

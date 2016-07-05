@@ -118,6 +118,16 @@ namespace CSBackend
             ///
             void ApplyDirectionalLight(const ChilliSource::ApplyDirectionalLightRenderCommand* renderCommand) noexcept;
             
+            /// Caches the given point light data and invalidates all other light data. All applied materials
+            /// after this will use this data.
+            ///
+            /// The currently applied material will be invalidated and needs to be re-applied.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyPointLight(const ChilliSource::ApplyPointLightRenderCommand* renderCommand) noexcept;
+            
             /// Applies the given material to the OpenGL Context. The cached camera data will be used.
             ///
             /// @param renderCommand

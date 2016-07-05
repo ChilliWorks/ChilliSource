@@ -26,6 +26,7 @@
 
 #include <CSBackend/Rendering/OpenGL/Lighting/GLAmbientLight.h>
 #include <CSBackend/Rendering/OpenGL/Lighting/GLDirectionalLight.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLPointLight.h>
 #include <CSBackend/Rendering/OpenGL/Material/GLMaterial.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
@@ -42,6 +43,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/EndRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
@@ -145,6 +147,9 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyDirectionalLight:
                             ApplyDirectionalLight(static_cast<const ChilliSource::ApplyDirectionalLightRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applyPointLight:
+                            ApplyPointLight(static_cast<const ChilliSource::ApplyPointLightRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyMaterial:
                             ApplyMaterial(static_cast<const ChilliSource::ApplyMaterialRenderCommand*>(renderCommand));
@@ -274,6 +279,14 @@ namespace CSBackend
         }
 
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyPointLight(const ChilliSource::ApplyPointLightRenderCommand* renderCommand) noexcept
+        {
+            m_currentMaterial = nullptr;
+            
+            m_currentLight = GLLightUPtr(new GLPointLight(renderCommand->GetColour(), renderCommand->GetPosition(), renderCommand->GetAttenuation()));
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::ApplyMaterial(const ChilliSource::ApplyMaterialRenderCommand* renderCommand) noexcept
         {
             auto renderMaterial = renderCommand->GetRenderMaterial();
@@ -355,6 +368,7 @@ namespace CSBackend
             CS_ASSERT(!m_currentMesh != !m_currentDynamicMesh, "Both mesh types are currently bound, this shouldn't be possible.");
             
             auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
+            glShader->SetUniform(k_uniformWorldMat, renderCommand->GetWorldMatrix(), GLShader::FailurePolicy::k_silent);
             glShader->SetUniform(k_uniformWVPMat, renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
             glShader->SetUniform(k_uniformNormalMat, ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
             

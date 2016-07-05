@@ -38,7 +38,7 @@ namespace ChilliSource
     ///
     /// This is not thread-safe and should only be accessed from the main thread.
     ///
-    class DirectionalLightComponent : public Component
+    class DirectionalLightComponent final : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(DirectionalLightComponent);
@@ -85,11 +85,11 @@ namespace ChilliSource
         ///
         bool IsA(InterfaceIDType interfaceId) const noexcept override;
         
-        /// @return The colour of the ambient light.
+        /// @return The colour of the directional light.
         ///
         void SetColour(const Colour& colour) noexcept { m_colour = colour; }
         
-        /// @return The intensity of the ambient light.
+        /// @return The intensity of the directional light.
         ///
         void SetIntensity(f32 intensity) noexcept { m_intensity = intensity; }
         
@@ -122,15 +122,15 @@ namespace ChilliSource
         ///
         void SetShadowVolume(f32 width, f32 height, f32 near, f32 far) noexcept;
         
-        /// @return The colour of the ambient light.
+        /// @return The colour of the directional light.
         ///
         const Colour& GetColour() const noexcept { return m_colour; }
         
-        /// @return The intensity of the ambient light.
+        /// @return The intensity of the directional light.
         ///
         f32 GetIntensity() const noexcept { return m_intensity; }
         
-        /// @return The colour of the ambient light with the intesity applied to it.
+        /// @return The colour of the directional light with the intesity applied to it.
         ///
         Colour GetFinalColour() const noexcept { return m_colour * m_intensity; }
         

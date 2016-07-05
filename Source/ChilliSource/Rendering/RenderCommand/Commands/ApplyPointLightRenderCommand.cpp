@@ -22,18 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    PointRenderLight::PointRenderLight() noexcept
-        : m_colour(Colour::k_black), m_position(Vector3::k_zero), m_attenuation(1.0f, 0.0f, 0.0f), m_rangeOfInfluence(0.0f)
-    {
-    }
-    //------------------------------------------------------------------------------
-    PointRenderLight::PointRenderLight(const Colour& colour, const Vector3& position, const Vector3& attenuation, f32 rangeOfInfluence) noexcept
-        : m_colour(colour), m_position(position), m_attenuation(attenuation), m_rangeOfInfluence(rangeOfInfluence)
+    ApplyPointLightRenderCommand::ApplyPointLightRenderCommand(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept
+        : RenderCommand(Type::k_applyPointLight), m_colour(colour), m_position(position), m_attenuation(attenuation)
     {
     }
 }

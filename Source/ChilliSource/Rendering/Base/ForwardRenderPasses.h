@@ -35,6 +35,9 @@ namespace ChilliSource
     /// * The directional light pass. For each directional light in the scene, a pass over all lit,
     ///   opaque objects in the scene is performed. This renders the applied lighting additively to
     ///   the base pass and does not write to the depth buffer.
+    /// * The point light pass. For each point light in the scene, a pass over all lit opaque objects
+    ///   within the range of influence of the light is performed. This renders the applied lighting
+    ///   additively to the previous passes and does not write to the depth buffer.
     /// * The transparent pass. This render all transparent objects in the scene with only ambient
     ///   lighting. The depth buffer is not written to; the objects are first sorted to ensure no
     ///   artefacts occur.
@@ -43,6 +46,7 @@ namespace ChilliSource
     {
         k_base,
         k_directionalLight,
+        k_pointLight,
         k_transparent
     };
 }

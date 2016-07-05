@@ -46,7 +46,7 @@ GLSL
         uniform highp mat4 u_wvpMat;
         uniform highp mat4 u_worldMat;
         uniform highp mat4 u_normalMat;
-        uniform lowp vec3 u_cameraPos;
+        uniform highp vec3 u_cameraPos;
 
         //varyings
         varying mediump vec3 vvLightDir;

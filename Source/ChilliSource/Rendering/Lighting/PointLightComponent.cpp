@@ -30,152 +30,90 @@
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
 
 #include <limits>
 
 namespace ChilliSource
 {
+    namespace
+    {
+        constexpr f32 m_defaultMinLightInfluence = 0.05f;
+    }
+    
     CS_DEFINE_NAMEDTYPE(PointLightComponent);
 
-    //----------------------------------------------------------
-    /// Constructor
-    //----------------------------------------------------------
-    PointLightComponent::PointLightComponent()
-        : mbMatrixCacheValid(false), mfRadius(1.0f), mfMinLightInfluence(0.05f), mfRangeOfInfluence(0.0f), mfConstantAttenuation(0.0f), mfLinearAttenuation(0.0f), mfQuadraticAttenuation(0.0f)
+    //------------------------------------------------------------------------------
+    PointLightComponent::PointLightComponent(const Colour& colour, f32 radius, f32 intensity) noexcept
+        : m_colour(colour), m_intensity(intensity)
     {
-        SetRadius(mfRadius);
-        SetMinLightInfluence(mfMinLightInfluence);
+        SetRadius(radius);
+        SetMinLightInfluence(m_defaultMinLightInfluence);
     }
-    //----------------------------------------------------------
-    /// Is A
-    //----------------------------------------------------------
-    bool PointLightComponent::IsA(InterfaceIDType inInterfaceID) const
+    
+    //------------------------------------------------------------------------------
+    bool PointLightComponent::IsA(InterfaceIDType interfaceId) const noexcept
     {
-        return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == PointLightComponent::InterfaceID;
+        return (PointLightComponent::InterfaceID == interfaceId);
     }
-    //----------------------------------------------------------
-    /// Set Radius
-    //----------------------------------------------------------
-    void PointLightComponent::SetRadius(f32 infRadius)
+    
+    //------------------------------------------------------------------------------
+    void PointLightComponent::SetRadius(f32 radius) noexcept
     {
-        mfRadius = infRadius;
-        mbCacheValid = false;
-    }
-    //----------------------------------------------------------
-    /// Set Min Light Influence
-    //----------------------------------------------------------
-    void PointLightComponent::SetMinLightInfluence(f32 infMinLightInfluence)
-    {
-        mfMinLightInfluence = infMinLightInfluence;
-        mbCacheValid = false;
-    }
-    //----------------------------------------------------------
-    /// Get Radius
-    //----------------------------------------------------------
-    f32 PointLightComponent::GetRadius() const
-    {
-        return mfRadius;
-    }
-    //----------------------------------------------------------
-    /// Get Min Light Influence
-    //----------------------------------------------------------
-    f32 PointLightComponent::GetMinLightInfluence() const
-    {
-        return mfMinLightInfluence;
-    }
-    //----------------------------------------------------------
-    /// Get Constant Attenuation
-    //----------------------------------------------------------
-    f32 PointLightComponent::GetConstantAttenuation() const
-    {
-        return mfConstantAttenuation;
-    }
-    //----------------------------------------------------------
-    /// Get Linear Attenuation
-    //----------------------------------------------------------
-    f32 PointLightComponent::GetLinearAttenuation() const
-    {
-        return mfLinearAttenuation;
-    }
-    //----------------------------------------------------------
-    /// Get Quadratic Attenuation
-    //----------------------------------------------------------
-    f32 PointLightComponent::GetQuadraticAttenuation() const
-    {
-        return mfQuadraticAttenuation;
-    }
-    //----------------------------------------------------------
-    /// Get Range Of Influence
-    //----------------------------------------------------------
-    f32 PointLightComponent::GetRangeOfInfluence() const
-    {
-        return mfRangeOfInfluence;
-    }
-    //----------------------------------------------------------
-    /// Get Light Matrix
-    //----------------------------------------------------------
-    const Matrix4& PointLightComponent::GetLightMatrix() const
-    {
-        //The point light matrix is simply a light view matrix
-        //as the projection is done in the shader
-        if(mbMatrixCacheValid == false && GetEntity() != nullptr)
-        {
-            mmatLight = Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
-            mbMatrixCacheValid = true;
-        }
+        CS_ASSERT(radius > 0.0f, "Point light radius must be greater than zero.");
         
-        return mmatLight;
+        m_radius = radius;
+        
+        m_attenuation.x = 1;
+        m_attenuation.y = 2 / m_radius;
+        m_attenuation.z = 1 / (m_radius * m_radius);
+        
+        CalcRangeOfInfluence();
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void PointLightComponent::OnAddedToScene()
+    
+    //------------------------------------------------------------------------------
+    void PointLightComponent::SetMinLightInfluence(f32 minLightInfluence) noexcept
     {
-        m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged));
+        CS_ASSERT(minLightInfluence > 0.0f, "Point light min light influence must be greater than zero.");
+        
+        m_minLightInfluence = minLightInfluence;
+        
+        CalcRangeOfInfluence();
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void PointLightComponent::OnRemovedFromScene()
+    
+    //------------------------------------------------------------------------------
+    void PointLightComponent::CalcRangeOfInfluence() noexcept
     {
-        m_transformChangedConnection = nullptr;
+        m_rangeOfInfluence = m_radius * (sqrt(GetIntensity() / m_minLightInfluence) + 1);
     }
-    //----------------------------------------------------
-    /// On Entity Transform Changed
-    //----------------------------------------------------
-    void PointLightComponent::OnEntityTransformChanged()
+    
+    //------------------------------------------------------------------------------
+    void PointLightComponent::OnAddedToScene() noexcept
     {
-        mbMatrixCacheValid = false;
-        mbCacheValid = false;
+        auto& transform = GetEntity()->GetTransform();
+        
+        m_lightPosition = transform.GetWorldPosition();
+        
+        m_transformChangedConnection = transform.GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged));
     }
-    //----------------------------------------------------
-    /// Calculate Lighting Values
-    //----------------------------------------------------
-    void PointLightComponent::CalculateLightingValues()
+    
+    //------------------------------------------------------------------------------
+    void PointLightComponent::OnEntityTransformChanged() noexcept
     {
-        if (mfRadius > 0.0f)
-        {
-            mfConstantAttenuation = 1;
-            mfLinearAttenuation = 2 / mfRadius;
-            mfQuadraticAttenuation = 1 / (mfRadius * mfRadius);
-            
-            if (mfMinLightInfluence > 0.0f)
-            {
-                mfRangeOfInfluence = mfRadius * (sqrt(GetIntensity() / mfMinLightInfluence) + 1);
-            }
-            else
-            {
-                //if the min light influence is 0 or below this indicates that the range of influence is infinite, so set to max.
-                mfRangeOfInfluence = std::numeric_limits<f32>::max();
-            }
-        }
-        else
-        {
-            //if the light radius is 0 or below then the attenuation no longer makes sense, so set all to 0. Ensure a divide by 0 wont occur in the shader
-            //by leaving the constant attenuation as 1.
-            mfConstantAttenuation = 1.0f;
-            mfLinearAttenuation = 0.0f;
-            mfQuadraticAttenuation = 0.0f;
-            mfRangeOfInfluence = 0.0f;
-        }
+        m_lightPosition = GetEntity()->GetTransform().GetWorldPosition();
+    }
+    
+    //------------------------------------------------------------------------------
+    void PointLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    {
+        renderSnapshot.AddPointRenderLight(PointRenderLight(GetFinalColour(), m_lightPosition, m_attenuation, m_rangeOfInfluence));
+    }
+    
+    //------------------------------------------------------------------------------
+    void PointLightComponent::OnRemovedFromScene() noexcept
+    {
+        m_transformChangedConnection.reset();
     }
 }
 
