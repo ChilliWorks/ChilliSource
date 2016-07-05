@@ -103,35 +103,47 @@ namespace ChilliSource
             
             for(auto& command : m_pendingTextureLoadCommands)
             {
-                preRenderCommandList->AddLoadTextureCommand(command.GetRenderTexture(), std::move(command.ClaimTextureData()), command.GetTextureDataSize());
+                preRenderCommandList->AddLoadTextureCommand(command.GetRenderTexture(), command.ClaimTextureData(), command.GetTextureDataSize());
             }
             
             for(auto& command : m_pendingMeshLoadCommands)
             {
-                preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), std::move(command.ClaimVertexData()), command.GetVertexDataSize(), std::move(command.ClaimIndexData()), command.GetIndexDataSize());
+                preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), command.ClaimVertexData(), command.GetVertexDataSize(), command.ClaimIndexData(), command.GetIndexDataSize());
+            }
+            
+            for(auto& command : m_pendingMaterialGroupLoadCommands)
+            {
+                preRenderCommandList->AddLoadMaterialGroupCommand(command.GetRenderMaterialGroup());
             }
             
             for(auto& command : m_pendingShaderUnloadCommands)
             {
-                postRenderCommandList->AddUnloadShaderCommand(std::move(command));
+                postRenderCommandList->AddUnloadShaderCommand(command.ClaimRenderShader());
             }
             
             for(auto& command : m_pendingTextureUnloadCommands)
             {
-                postRenderCommandList->AddUnloadTextureCommand(std::move(command));
+                postRenderCommandList->AddUnloadTextureCommand(command.ClaimRenderTexture());
             }
             
             for(auto& command : m_pendingMeshUnloadCommands)
             {
-                postRenderCommandList->AddUnloadMeshCommand(std::move(command));
+                postRenderCommandList->AddUnloadMeshCommand(command.ClaimRenderMesh());
+            }
+            
+            for(auto& command : m_pendingMaterialGroupUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadMaterialGroupCommand(command.ClaimRenderMaterialGroup());
             }
             
             m_pendingShaderLoadCommands.clear();
             m_pendingTextureLoadCommands.clear();
             m_pendingMeshLoadCommands.clear();
+            m_pendingMaterialGroupLoadCommands.clear();
             m_pendingShaderUnloadCommands.clear();
             m_pendingTextureUnloadCommands.clear();
             m_pendingMeshUnloadCommands.clear();
+            m_pendingMaterialGroupUnloadCommands.clear();
         }
     }
     //------------------------------------------------------------------------------
@@ -159,38 +171,50 @@ namespace ChilliSource
         {
             case RenderCommand::Type::k_loadShader:
             {
-                LoadShaderRenderCommand* command = dynamic_cast<LoadShaderRenderCommand*>(renderCommand);
+                LoadShaderRenderCommand* command = static_cast<LoadShaderRenderCommand*>(renderCommand);
                 m_pendingShaderLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_loadTexture:
             {
-                LoadTextureRenderCommand* command = dynamic_cast<LoadTextureRenderCommand*>(renderCommand);
+                LoadTextureRenderCommand* command = static_cast<LoadTextureRenderCommand*>(renderCommand);
                 m_pendingTextureLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_loadMesh:
             {
-                LoadMeshRenderCommand* command = dynamic_cast<LoadMeshRenderCommand*>(renderCommand);
+                LoadMeshRenderCommand* command = static_cast<LoadMeshRenderCommand*>(renderCommand);
                 m_pendingMeshLoadCommands.push_back(std::move(*command));
+                break;
+            }
+            case RenderCommand::Type::k_loadMaterialGroup:
+            {
+                LoadMaterialGroupRenderCommand* command = static_cast<LoadMaterialGroupRenderCommand*>(renderCommand);
+                m_pendingMaterialGroupLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_unloadShader:
             {
-                UnloadShaderRenderCommand* command = dynamic_cast<UnloadShaderRenderCommand*>(renderCommand);
-                m_pendingShaderUnloadCommands.push_back(std::move(command->ClaimRenderShader()));
+                UnloadShaderRenderCommand* command = static_cast<UnloadShaderRenderCommand*>(renderCommand);
+                m_pendingShaderUnloadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_unloadTexture:
             {
-                UnloadTextureRenderCommand* command = dynamic_cast<UnloadTextureRenderCommand*>(renderCommand);
-                m_pendingTextureUnloadCommands.push_back(std::move(command->ClaimRenderTexture()));
+                UnloadTextureRenderCommand* command = static_cast<UnloadTextureRenderCommand*>(renderCommand);
+                m_pendingTextureUnloadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_unloadMesh:
             {
-                UnloadMeshRenderCommand* command = dynamic_cast<UnloadMeshRenderCommand*>(renderCommand);
-                m_pendingMeshUnloadCommands.push_back(std::move(command->ClaimRenderMesh()));
+                UnloadMeshRenderCommand* command = static_cast<UnloadMeshRenderCommand*>(renderCommand);
+                m_pendingMeshUnloadCommands.push_back(std::move(*command));
+                break;
+            }
+            case RenderCommand::Type::k_unloadMaterialGroup:
+            {
+                UnloadMaterialGroupRenderCommand* command = static_cast<UnloadMaterialGroupRenderCommand*>(renderCommand);
+                m_pendingMaterialGroupUnloadCommands.push_back(std::move(*command));
                 break;
             }
             default:

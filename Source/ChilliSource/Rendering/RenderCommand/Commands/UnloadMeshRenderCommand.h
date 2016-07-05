@@ -45,10 +45,10 @@ namespace ChilliSource
         ///
         const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh.get(); }
         
-        /// Takes ownership of the RenderTexture from this class. This will leave
+        /// Takes ownership of the RenderMesh from this class. This will leave
         /// this command in an unusable state and should be used with caution.
         ///
-        /// @return The render texture that should be unloaded.
+        /// @return The render mesh that should be unloaded.
         ///
         RenderMeshUPtr ClaimRenderMesh() noexcept;
         

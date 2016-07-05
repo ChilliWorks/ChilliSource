@@ -28,11 +28,15 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-#include <ChilliSource/Rendering/Base/IContextRestorer.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
@@ -151,10 +155,12 @@ namespace ChilliSource
         std::vector<LoadShaderRenderCommand> m_pendingShaderLoadCommands;
         std::vector<LoadTextureRenderCommand> m_pendingTextureLoadCommands;
         std::vector<LoadMeshRenderCommand> m_pendingMeshLoadCommands;
+        std::vector<LoadMaterialGroupRenderCommand> m_pendingMaterialGroupLoadCommands;
         
-        std::vector<RenderShaderUPtr> m_pendingShaderUnloadCommands;
-        std::vector<RenderTextureUPtr> m_pendingTextureUnloadCommands;
-        std::vector<RenderMeshUPtr> m_pendingMeshUnloadCommands;
+        std::vector<UnloadShaderRenderCommand> m_pendingShaderUnloadCommands;
+        std::vector<UnloadTextureRenderCommand> m_pendingTextureUnloadCommands;
+        std::vector<UnloadMeshRenderCommand> m_pendingMeshUnloadCommands;
+        std::vector<UnloadMaterialGroupRenderCommand> m_pendingMaterialGroupUnloadCommands;
         
         std::atomic_bool m_discardCommands;
         
