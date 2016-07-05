@@ -251,7 +251,10 @@ namespace CSBackend
 						jstring jFontName = JavaUtils::CreateJStringFromSTDString(style->m_fontName);
 						jstring jAlignment = JavaUtils::CreateJStringFromSTDString(alignment);
 
-						s64 subtitleID = m_javaSystem->CallLongMethod("createSubtitle", jText, jFontName, style->m_fontSize, jAlignment, style->m_bounds.Left(), style->m_bounds.Bottom(), style->m_bounds.vSize.x, style->m_bounds.vSize.y);
+                        CS_LOG_WARNING("VideoPlayer: Center X: " + CS::ToString(style->m_bounds.vOrigin.x) + " | Center Y: " + CS::ToString(style->m_bounds.vOrigin.y) + " | Width: " + CS::ToString(style->m_bounds.vSize.x) + " | Height: " + CS::ToString(style->m_bounds.vSize.y));
+                        CS_LOG_WARNING("VideoPlayer: Left(): " + CS::ToString(style->m_bounds.Left()) + " | Bottom(): " + CS::ToString(style->m_bounds.Bottom()) + " | Bottom: ");
+
+						s64 subtitleID = m_javaSystem->CallLongMethod("createSubtitle", jText, jFontName, style->m_fontSize, jAlignment, style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
 						m_javaSystem->CallVoidMethod("setSubtitleColour", subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
 
 						JavaUtils::DeleteLocalRef(jAlignment);
