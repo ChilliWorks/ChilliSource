@@ -37,15 +37,15 @@
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(RenderCommandBufferManager);
-    
     namespace
     {
         constexpr u32 k_maxQueueSize = 1;
     }
     
+    CS_DEFINE_NAMEDTYPE(RenderCommandBufferManager);
+    
     RenderCommandBufferManager::RenderCommandBufferManager()
-    :m_contextRestorer(IContextRestorer::Create()), m_discardCommands(false)
+        : m_discardCommands(false)
     {
     }
     //------------------------------------------------------------------------------
@@ -62,16 +62,6 @@ namespace ChilliSource
     void RenderCommandBufferManager::OnResume() noexcept
     {
         m_discardCommands = false;
-        
-//      if(m_initialised)
-//      {
-//        if(m_contextRestorer)
-//        {
-//            m_contextRestorer->Restore();
-//        }
-//      }
-        
-        m_initialised = true;
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::OnSystemSuspend() noexcept
@@ -84,7 +74,7 @@ namespace ChilliSource
         {
             for(const auto& buffer : m_renderCommandBuffers)
             {
-                RecycleCommands(buffer);
+                RecycleRenderCommandBuffer(buffer);
             }
             
             m_renderCommandBuffers.clear();
@@ -94,11 +84,6 @@ namespace ChilliSource
         
         //Notify the condition since we have updated the command buffer
         m_renderCommandBuffersCondition.notify_all();
-        
-        if(m_contextRestorer)
-        {
-            m_contextRestorer->Backup();
-        }
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
@@ -149,28 +134,29 @@ namespace ChilliSource
         }
     }
     //------------------------------------------------------------------------------
-    void RenderCommandBufferManager::RecycleCommands(const RenderCommandBufferUPtr& commands) noexcept
+    void RenderCommandBufferManager::RecycleRenderCommandBuffer(const RenderCommandBufferUPtr& commands) noexcept
     {
         for(u32 i = 0; i < commands->GetNumSlots(); ++i)
         {
-            RecycleCommandQueue(commands->GetRenderCommandList(i)->GetOrderedList());
+            RecycleCommandList(commands->GetRenderCommandList(i));
         }
     }
     //------------------------------------------------------------------------------
-    void RenderCommandBufferManager::RecycleCommandQueue(std::vector<RenderCommand*>& renderCommandQueue) noexcept
+    void RenderCommandBufferManager::RecycleCommandList(RenderCommandList* renderCommandList) noexcept
     {
         std::unique_lock<std::mutex>(m_commandBufferMutex);
         
         //Iterate the queue and store any recyclable commands for reinsertion later. If a command
         //is recycled then we remove from the list. We do not need to delete the command as that is still owned
         //by the command queue
-        auto it = renderCommandQueue.begin();
-        while(it != renderCommandQueue.end())
+        auto orderedList = renderCommandList->GetOrderedList();
+        auto it = orderedList.begin();
+        while(it != orderedList.end())
         {
             bool processed = RecycleCommand((*it));
             if(processed)
             {
-                it = renderCommandQueue.erase(it);
+                it = orderedList.erase(it);
             }
             else
             {
@@ -259,7 +245,7 @@ namespace ChilliSource
         
         if(m_discardCommands)
         {
-            RecycleCommands(renderCommandBuffer);
+            RecycleRenderCommandBuffer(renderCommandBuffer);
         }
         else
         {

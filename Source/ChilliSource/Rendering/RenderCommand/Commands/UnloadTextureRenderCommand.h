@@ -50,7 +50,7 @@ namespace ChilliSource
         ///
         /// @return The render texture that should be unloaded.
         ///
-        RenderTextureUPtr ClaimRenderTexture() noexcept { return std::move(m_renderTexture); }
+        RenderTextureUPtr ClaimRenderTexture() noexcept;
         
     private:
         friend class RenderCommandList;

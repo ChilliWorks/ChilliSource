@@ -63,30 +63,6 @@ namespace ChilliSource
         ///
         bool IsA(InterfaceIDType interfaceId) const noexcept override;
         
-        /// Called when the app system is resumed.
-        ///
-        /// Called on the main thread.
-        ///
-        void OnResume() noexcept override;
-        
-        /// Called when the application delegate is suspended. This
-        /// event is called directly from the platform application
-        /// implementation and will be called before the lifecycle
-        /// counterpart.
-        ///
-        /// This should only be called from the render thread by the
-        /// lifecycle manager.
-        ///
-        void OnSystemSuspend() noexcept;
-        
-        /// Will iterate an RenderCommandBuffer and extract any commands that can
-        /// be recycled for next frame.
-        ///
-        /// @param commands
-        ///     The RenderCommandBuffer to recycle.
-        ///
-        void RecycleCommands(const RenderCommandBufferUPtr& commands) noexcept;
-        
         /// If the queue of command buffers is full then this waits until one has been popped to continue.
         /// It then adds the given render buffer and notifies any threads which are waiting.
         ///
@@ -102,10 +78,9 @@ namespace ChilliSource
         ///
         RenderCommandBufferUPtr WaitThenPopCommandBuffer() noexcept;
         
-        ~RenderCommandBufferManager() noexcept {}
-        
     private:
         friend class Application;
+        friend class LifecycleManager;
         
         /// Command data for loading a texture
         ///
@@ -144,22 +119,22 @@ namespace ChilliSource
         /// @return The new instance of the system.
         ///
         static RenderCommandBufferManagerUPtr Create() noexcept;
-        
-        /// Called during the Render Snapshot stage of the render pipeline. All pending load commands
-        /// are added to the render snapshot.
+
+        /// Will iterate an RenderCommandBuffer and extract any commands that can be recycled
+        /// for next frame.
         ///
-        /// @param renderSnapshot
-        ///     The render shapshot for storing snapshotted data.
+        /// @param commands
+        ///     The RenderCommandBuffer to recycle.
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        void RecycleRenderCommandBuffer(const RenderCommandBufferUPtr& commands) noexcept;
         
         /// Called to process a command queue and extract load/unload commands that we
         /// can recycle and store for use next frame.
         ///
-        /// @param renderCommandQueue
-        ///     The render command queue to recycle
+        /// @param renderCommandList
+        ///     The render command list to recycle
         ///
-        void RecycleCommandQueue(std::vector<RenderCommand*>& renderCommandQueue) noexcept;
+        void RecycleCommandList(RenderCommandList* renderCommandList) noexcept;
         
         /// Called to proccess a command to be recycled. Will decide if its a valid
         /// recyclable command and then take a copy of its data so we can recreate the
@@ -171,6 +146,30 @@ namespace ChilliSource
         /// @return If the command was processed
         ///
         bool RecycleCommand(RenderCommand* renderCommand) noexcept;
+        
+        /// Called when the app system is resumed.
+        ///
+        /// Called on the main thread.
+        ///
+        void OnResume() noexcept override;
+        
+        /// Called during the Render Snapshot stage of the render pipeline. All pending load commands
+        /// are added to the render snapshot.
+        ///
+        /// @param renderSnapshot
+        ///     The render shapshot for storing snapshotted data.
+        ///
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        
+        /// Called when the application delegate is suspended. This event is called directly
+        /// from the platform application implementation and will be called before the lifecycle
+        /// counterpart.
+        ///
+        /// This should only be called from the render thread by the
+        /// lifecycle manager.
+        ///
+        void OnSystemSuspend() noexcept;
+        
         
     private:
         
@@ -184,9 +183,7 @@ namespace ChilliSource
         std::vector<RenderTextureUPtr> m_pendingTextureUnloadCommands;
         std::vector<RenderMeshUPtr> m_pendingMeshUnloadCommands;
         
-        IContextRestorerUPtr m_contextRestorer;
         std::atomic_bool m_discardCommands;
-        bool m_initialised = false;
         
         std::mutex m_renderCommandBuffersMutex;
         std::condition_variable m_renderCommandBuffersCondition;
