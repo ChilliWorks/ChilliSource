@@ -194,7 +194,6 @@ public class SubtitlesView extends ViewGroup
             int dwAbsoluteBottom = (int)(dwHeight * fRelativeBottom);
 
 			textView.getValue().measure(MeasureSpec.makeMeasureSpec(dwAbsoluteRight - dwAbsoluteLeft, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(dwAbsoluteBottom - dwAbsoluteTop, MeasureSpec.EXACTLY));
-			android.util.Log.e("ChilliSource", "Java:  Left: " + dwAbsoluteLeft + " | Top: " + dwAbsoluteTop + " | Right: " + dwAbsoluteRight + " | Bottom:" + dwAbsoluteBottom);
 			textView.getValue().layout(dwAbsoluteLeft, dwAbsoluteTop, dwAbsoluteRight, dwAbsoluteBottom);
 		}
 	}
