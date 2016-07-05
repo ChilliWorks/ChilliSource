@@ -120,9 +120,7 @@ namespace ChilliSource
         /// @param renderCommand
         ///     The render command to recycle or ignore
         ///
-        /// @return If the command was processed
-        ///
-        bool RecycleCommand(RenderCommand* renderCommand) noexcept;
+        void RecycleCommand(RenderCommand* renderCommand) noexcept;
         
         /// Called when the app system is resumed.
         ///

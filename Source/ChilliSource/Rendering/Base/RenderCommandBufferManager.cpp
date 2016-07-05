@@ -165,7 +165,7 @@ namespace ChilliSource
         }
     }
     //------------------------------------------------------------------------------
-    bool RenderCommandBufferManager::RecycleCommand(RenderCommand* renderCommand) noexcept
+    void RenderCommandBufferManager::RecycleCommand(RenderCommand* renderCommand) noexcept
     {
         switch(renderCommand->GetType())
         {
@@ -219,11 +219,9 @@ namespace ChilliSource
             }
             default:
             {
-                return false;
+                break;
             }
         }
-        
-        return true;
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::WaitThenPushCommandBuffer(RenderCommandBufferUPtr renderCommandBuffer) noexcept
