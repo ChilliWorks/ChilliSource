@@ -22,54 +22,27 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_LIGHTING_RENDERDIRECTIONALLIGHT_H_
-#define _CHILLISOURCE_RENDERING_LIGHTING_RENDERDIRECTIONALLIGHT_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYDIRECTIONALLIGHTRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYDIRECTIONALLIGHTRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 namespace ChilliSource
 {
-    /// A standard-layout container for data the renderer needs which pertains to a single
-    /// direction light, such as the colour and direction.
+    /// A render command for applying the described directional light to the current context
+    /// state.
     ///
-    class DirectionalRenderLight final
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class ApplyDirectionalLightRenderCommand final : public RenderCommand
     {
     public:
-        
-        /// Creates a new instance of the container with default black colour and v-down direction
-        /// with no shadow map.
-        ///
-        DirectionalRenderLight() noexcept;
-        
-        /// Creates a new instance of the container with the given light colour and direction
-        /// with no shadow map.
-        ///
-        /// @param colour
-        ///     The colour of the light.
-        /// @param direction
-        ///     The direction of the light.
-        ///
-        DirectionalRenderLight(const Colour& colour, const Vector3& direction) noexcept;
-        
-        /// Creates a new instance of the container with the given light colour and direction
-        /// and shadow map data.
-        ///
-        /// @param colour
-        ///     The colour of the light.
-        /// @param direction
-        ///     The direction of the light.
-        /// @param lightViewProjection
-        ///     The view projection matrix of the light which is used as the camera when rendering
-        ///     the shadow map.
-        /// @param shadowTolerance
-        ///     The tolerence used to judge if an object is in shadow.
-        /// @param shadowMapRenderTexture
-        ///     The render texture which should be used for the shadow map.
-        ///
-        DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept;
-        
         /// @return The colour of the light.
         ///
         const Colour& GetColour() const noexcept { return m_colour; }
@@ -93,11 +66,30 @@ namespace ChilliSource
         const RenderTexture* GetShadowMapRenderTexture() const noexcept { return m_shadowMapRenderTexture; }
         
     private:
+        friend class RenderCommandList;
+        
+        /// Creates a new instance with the given light colour.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        /// @param direction
+        ///     The direction of the light.
+        /// @param lightViewProjection
+        ///     The view projection matrix of the light which is used as the camera when rendering
+        ///     the shadow map.
+        /// @param shadowTolerance
+        ///     The tolerence used to judge if an object is in shadow.
+        /// @param shadowMapRenderTexture
+        ///     The render texture which should be used for the shadow map. Can be null if there is no
+        ///     shadow map.
+        ///
+        ApplyDirectionalLightRenderCommand(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept;
+        
         Colour m_colour;
         Vector3 m_direction;
         Matrix4 m_lightViewProjection;
-        f32 m_shadowTolerance = 0.0f;
-        const RenderTexture* m_shadowMapRenderTexture = nullptr;
+        f32 m_shadowTolerance;
+        const RenderTexture* m_shadowMapRenderTexture;
     };
 }
 

@@ -53,6 +53,7 @@ namespace ChilliSource
             k_begin,
             k_applyCamera,
             k_applyAmbientLight,
+            k_applyDirectionalLight,
             k_applyMaterial,
             k_applyMesh,
             k_applyDynamicMesh,

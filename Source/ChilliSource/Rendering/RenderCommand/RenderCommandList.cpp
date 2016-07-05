@@ -26,6 +26,7 @@
 
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyAmbientLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDirectionalLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
@@ -101,6 +102,15 @@ namespace ChilliSource
     void RenderCommandList::AddApplyAmbientLightCommand(const Colour& colour) noexcept
     {
         RenderCommandUPtr renderCommand(new ApplyAmbientLightRenderCommand(colour));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplyDirectionalLightCommand(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplyDirectionalLightRenderCommand(colour, direction, lightViewProjection, shadowTolerance, shadowMapRenderTexture));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));

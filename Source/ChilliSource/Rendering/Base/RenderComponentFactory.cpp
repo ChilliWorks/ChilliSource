@@ -41,6 +41,7 @@
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 #include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
@@ -134,10 +135,15 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    DirectionalLightComponentUPtr RenderComponentFactory::CreateDirectionalLightComponent(u32 in_shadowMapRes) const
+    DirectionalLightComponentUPtr RenderComponentFactory::CreateDirectionalLightComponent(const Colour& in_colour, f32 in_intensity) const noexcept
     {
-        DirectionalLightComponentUPtr pLight(new DirectionalLightComponent(in_shadowMapRes));
-        return pLight;
+        return DirectionalLightComponentUPtr(new DirectionalLightComponent(in_colour, in_intensity));
+    }
+    //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
+    DirectionalLightComponentUPtr RenderComponentFactory::CreateDirectionalLightComponent(DirectionalLightComponent::ShadowQuality in_shadowQuality, const Colour& in_colour, f32 in_intensity) const noexcept
+    {
+        return DirectionalLightComponentUPtr(new DirectionalLightComponent(in_shadowQuality, in_colour, in_intensity));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------

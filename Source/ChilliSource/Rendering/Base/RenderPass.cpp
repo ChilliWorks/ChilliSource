@@ -27,26 +27,32 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
+    RenderPass::RenderPass() noexcept
+        : m_lightType(LightType::k_none), m_ambientLight(AmbientRenderLight(Colour::k_black))
+    {
+    }
+    
+    //------------------------------------------------------------------------------
     RenderPass::RenderPass(const std::vector<RenderPassObject>& renderPassObjects) noexcept
-        : m_renderPassObjects(renderPassObjects), m_lightType(LightType::k_none)
+        : m_renderPassObjects(renderPassObjects), m_lightType(LightType::k_none), m_ambientLight(AmbientRenderLight(Colour::k_black))
     {
     }
     
     //------------------------------------------------------------------------------
     RenderPass::RenderPass(const AmbientRenderLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
-        : m_ambientLight(light), m_renderPassObjects(renderPassObjects), m_lightType(LightType::k_ambient)
+        : m_renderPassObjects(renderPassObjects), m_lightType(LightType::k_ambient), m_ambientLight(light)
     {
     }
     
     //------------------------------------------------------------------------------
     RenderPass::RenderPass(const PointRenderLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
-        : m_pointLight(light), m_renderPassObjects(renderPassObjects), m_lightType(LightType::k_point)
+        : m_renderPassObjects(renderPassObjects), m_lightType(LightType::k_point), m_pointLight(light)
     {
     }
     
     //------------------------------------------------------------------------------
     RenderPass::RenderPass(const DirectionalRenderLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
-        : m_directionalLight(light), m_renderPassObjects(renderPassObjects), m_lightType(LightType::k_directional)
+        : m_renderPassObjects(renderPassObjects), m_lightType(LightType::k_directional), m_directionalLight(light)
     {
     }
     

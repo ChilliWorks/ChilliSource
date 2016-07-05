@@ -25,6 +25,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
 #include <CSBackend/Rendering/OpenGL/Lighting/GLAmbientLight.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLDirectionalLight.h>
 #include <CSBackend/Rendering/OpenGL/Material/GLMaterial.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
@@ -36,6 +37,7 @@
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyAmbientLightRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDirectionalLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
@@ -140,6 +142,9 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyAmbientLight:
                             ApplyAmbientLight(static_cast<const ChilliSource::ApplyAmbientLightRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applyDirectionalLight:
+                            ApplyDirectionalLight(static_cast<const ChilliSource::ApplyDirectionalLightRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyMaterial:
                             ApplyMaterial(static_cast<const ChilliSource::ApplyMaterialRenderCommand*>(renderCommand));
@@ -259,6 +264,15 @@ namespace CSBackend
             m_currentLight = GLLightUPtr(new GLAmbientLight(renderCommand->GetColour()));
         }
         
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyDirectionalLight(const ChilliSource::ApplyDirectionalLightRenderCommand* renderCommand) noexcept
+        {
+            m_currentMaterial = nullptr;
+            
+            m_currentLight = GLLightUPtr(new GLDirectionalLight(renderCommand->GetColour(), renderCommand->GetDirection(), renderCommand->GetLightViewProjection(),
+                                                                renderCommand->GetShadowTolerance(), renderCommand->GetShadowMapRenderTexture()));
+        }
+
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::ApplyMaterial(const ChilliSource::ApplyMaterialRenderCommand* renderCommand) noexcept
         {

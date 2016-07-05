@@ -115,7 +115,7 @@ namespace ChilliSource
             switch (renderPass.GetLightType())
             {
                 case RenderPass::LightType::k_none:
-                    // Handle none.
+                    renderCommandList->AddApplyAmbientLightCommand(Colour::k_black);
                     break;
                 case RenderPass::LightType::k_ambient:
                 {
@@ -124,8 +124,12 @@ namespace ChilliSource
                     break;
                 }
                 case RenderPass::LightType::k_directional:
-                    // Handle directional.
+                {
+                    const auto& directionalLight = renderPass.GetDirectionalLight();
+                    renderCommandList->AddApplyDirectionalLightCommand(directionalLight.GetColour(), directionalLight.GetDirection(), directionalLight.GetLightViewProjection(),
+                                                                       directionalLight.GetShadowTolerance(), directionalLight.GetShadowMapRenderTexture());
                     break;
+                }
                 case RenderPass::LightType::k_point:
                     // Handle point.
                     break;

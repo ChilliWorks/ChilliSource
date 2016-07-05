@@ -169,6 +169,7 @@ namespace ChilliSource
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(ApplyAmbientLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyCameraRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplyDirectionalLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyDynamicMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);

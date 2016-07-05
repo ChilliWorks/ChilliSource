@@ -22,34 +22,47 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLAMBIENTLIGHT_H_
-#define _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLAMBIENTLIGHT_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLDIRECTIONALLIGHT_H_
+#define _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLDIRECTIONALLIGHT_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <CSBackend/Rendering/OpenGL/Lighting/GLLight.h>
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
-        /// The ambient OpenGL light object, which stores the ambient light colour and provides
-        /// the means to apply this colour to a shader.
+        /// The directional OpenGL light object, which stores the direction light data and provides
+        /// the means to apply the data to a shader.
         ///
         /// This is immutable and therefore thread-safe, but apply must be called on the render
         /// thread.
         ///
-        class GLAmbientLight final : public GLLight
+        class GLDirectionalLight final : public GLLight
         {
         public:
-            /// Creates a new instance with the given colour.
+            /// Creates a new instance with the given directional light information. 
             ///
             /// @param colour
-            ///     The ambient light colour.
+            ///     The colour of the light.
+            /// @param direction
+            ///     The direction of the light.
+            /// @param lightViewProjection
+            ///     The view projection matrix of the light which is used as the camera when rendering
+            ///     the shadow map.
+            /// @param shadowTolerance
+            ///     The tolerence used to judge if an object is in shadow.
+            /// @param shadowMapRenderTexture
+            ///     The render texture which should be used for the shadow map. Can be null if there is no
+            ///     shadow map.
             ///
-            GLAmbientLight(const ChilliSource::Colour& colour) noexcept;
+            GLDirectionalLight(const ChilliSource::Colour& colour, const ChilliSource::Vector3& direction, const ChilliSource::Matrix4& lightViewProjection, f32 shadowTolerance,
+                               const ChilliSource::RenderTexture* shadowMapRenderTexture) noexcept;
             
             /// Applies the light to the given shader.
             ///
@@ -62,6 +75,10 @@ namespace CSBackend
             
         private:
             ChilliSource::Colour m_colour;
+            ChilliSource::Vector3 m_direction;
+            ChilliSource::Matrix4 m_lightViewProjection;
+            f32 m_shadowTolerance;
+            const ChilliSource::RenderTexture* m_shadowMapRenderTexture;
         };
     }
 }

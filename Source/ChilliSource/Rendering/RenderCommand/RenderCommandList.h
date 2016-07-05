@@ -116,6 +116,23 @@ namespace ChilliSource
         ///
         void AddApplyAmbientLightCommand(const Colour& colour) noexcept;
         
+        /// Creates and adds a new apply directional light command to the render command list.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        /// @param direction
+        ///     The direction of the light.
+        /// @param lightViewProjection
+        ///     The view projection matrix of the light which is used as the camera when rendering
+        ///     the shadow map.
+        /// @param shadowTolerance
+        ///     The tolerence used to judge if an object is in shadow.
+        /// @param shadowMapRenderTexture
+        ///     The render texture which should be used for the shadow map. Can be null if there is no
+        ///     shadow map.
+        ///
+        void AddApplyDirectionalLightCommand(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept;
+        
         /// Creates and adds a new apply material command to the render command list.
         ///
         /// @param renderMaterial

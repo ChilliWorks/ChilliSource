@@ -290,6 +290,8 @@
 		817EA3541CFC3B0C00828E08 /* RenderMaterialGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817EA3521CFC3B0C00828E08 /* RenderMaterialGroupManager.cpp */; };
 		8184CE8D1D0EFBC600E35BE8 /* IRenderCommandProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8184CE8B1D0EFBC600E35BE8 /* IRenderCommandProcessor.cpp */; };
 		8184CE901D0EFF9100E35BE8 /* RenderCommandProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8184CE8E1D0EFF9100E35BE8 /* RenderCommandProcessor.cpp */; };
+		818639721D2BE62100FE085B /* ApplyDirectionalLightRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818639701D2BE62100FE085B /* ApplyDirectionalLightRenderCommand.cpp */; };
+		818639751D2BE97C00FE085B /* GLDirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818639731D2BE97C00FE085B /* GLDirectionalLight.cpp */; };
 		818BC49C1CFDE6D9001DC484 /* CameraRenderPassGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4931CFDE6D9001DC484 /* CameraRenderPassGroup.cpp */; };
 		818BC49D1CFDE6D9001DC484 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4961CFDE6D9001DC484 /* RenderPass.cpp */; };
 		818BC49E1CFDE6D9001DC484 /* RenderPassObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818BC4981CFDE6D9001DC484 /* RenderPassObject.cpp */; };
@@ -1090,6 +1092,10 @@
 		8184CE8C1D0EFBC600E35BE8 /* IRenderCommandProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRenderCommandProcessor.h; sourceTree = "<group>"; };
 		8184CE8E1D0EFF9100E35BE8 /* RenderCommandProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommandProcessor.cpp; sourceTree = "<group>"; };
 		8184CE8F1D0EFF9100E35BE8 /* RenderCommandProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandProcessor.h; sourceTree = "<group>"; };
+		818639701D2BE62100FE085B /* ApplyDirectionalLightRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplyDirectionalLightRenderCommand.cpp; sourceTree = "<group>"; };
+		818639711D2BE62100FE085B /* ApplyDirectionalLightRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplyDirectionalLightRenderCommand.h; sourceTree = "<group>"; };
+		818639731D2BE97C00FE085B /* GLDirectionalLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDirectionalLight.cpp; sourceTree = "<group>"; };
+		818639741D2BE97C00FE085B /* GLDirectionalLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLDirectionalLight.h; sourceTree = "<group>"; };
 		818BC4931CFDE6D9001DC484 /* CameraRenderPassGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraRenderPassGroup.cpp; sourceTree = "<group>"; };
 		818BC4941CFDE6D9001DC484 /* CameraRenderPassGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraRenderPassGroup.h; sourceTree = "<group>"; };
 		818BC4951CFDE6D9001DC484 /* IRenderPassCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRenderPassCompiler.h; sourceTree = "<group>"; };
@@ -2933,6 +2939,8 @@
 				817B8F891D2AE21300273F4B /* GLAmbientLight.cpp */,
 				817B8F8A1D2AE21300273F4B /* GLAmbientLight.h */,
 				817B8F8C1D2AE21300273F4B /* GLLight.h */,
+				818639731D2BE97C00FE085B /* GLDirectionalLight.cpp */,
+				818639741D2BE97C00FE085B /* GLDirectionalLight.h */,
 			);
 			path = Lighting;
 			sourceTree = "<group>";
@@ -2958,6 +2966,8 @@
 				817B8F851D2ACD8200273F4B /* ApplyAmbientLightRenderCommand.h */,
 				81B3D3431D130C6400F17401 /* ApplyCameraRenderCommand.cpp */,
 				81B3D3441D130C6400F17401 /* ApplyCameraRenderCommand.h */,
+				818639701D2BE62100FE085B /* ApplyDirectionalLightRenderCommand.cpp */,
+				818639711D2BE62100FE085B /* ApplyDirectionalLightRenderCommand.h */,
 				818C15061D22F0A3001D639B /* ApplyDynamicMeshRenderCommand.cpp */,
 				818C15071D22F0A3001D639B /* ApplyDynamicMeshRenderCommand.h */,
 				81B3D3451D130C6400F17401 /* ApplyMaterialRenderCommand.cpp */,
@@ -3581,6 +3591,7 @@
 				8158F7CF1C89D2AD00B13109 /* Accelerometer.mm in Sources */,
 				8158F6A51C89D2AD00B13109 /* ContentManagementSystem.cpp in Sources */,
 				8158F7251C89D2AD00B13109 /* VListUILayout.cpp in Sources */,
+				818639751D2BE97C00FE085B /* GLDirectionalLight.cpp in Sources */,
 				8158F72D1C89D2AD00B13109 /* TextIcon.cpp in Sources */,
 				81B3D3541D130C6400F17401 /* RenderInstanceRenderCommand.cpp in Sources */,
 				8119916A1CFEED470078C246 /* ModelDesc.cpp in Sources */,
@@ -3626,6 +3637,7 @@
 				817B8F861D2ACD8200273F4B /* ApplyAmbientLightRenderCommand.cpp in Sources */,
 				8158F6911C89D2AD00B13109 /* CoreTimer.cpp in Sources */,
 				8158F6F11C89D2AD00B13109 /* ParticleEffectComponent.cpp in Sources */,
+				818639721D2BE62100FE085B /* ApplyDirectionalLightRenderCommand.cpp in Sources */,
 				8158F7DD1C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */,
 				8158F67B1C89D2AD00B13109 /* MathUtils.cpp in Sources */,
 				8158F6601C89D2AD00B13109 /* HashMD5.cpp in Sources */,

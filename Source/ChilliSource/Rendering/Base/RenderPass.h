@@ -56,7 +56,7 @@ namespace ChilliSource
             k_point
         };
         
-        RenderPass() = default;
+        RenderPass() noexcept;
         
         /// @param renderPassObjects
         ///     The list of render pass objects for this pass
@@ -114,12 +114,15 @@ namespace ChilliSource
         const std::vector<RenderPassObject>& GetRenderPassObjects() const noexcept { return m_renderPassObjects; }
         
     private:
-        AmbientRenderLight m_ambientLight;
-        PointRenderLight m_pointLight;
-        DirectionalRenderLight m_directionalLight;
-        
         std::vector<RenderPassObject> m_renderPassObjects;
         LightType m_lightType;
+        
+        union
+        {
+            AmbientRenderLight m_ambientLight;
+            PointRenderLight m_pointLight;
+            DirectionalRenderLight m_directionalLight;
+        };
     };
 }
 #endif
