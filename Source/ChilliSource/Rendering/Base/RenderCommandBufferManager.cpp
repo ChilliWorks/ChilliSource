@@ -44,14 +44,15 @@ namespace ChilliSource
     
     CS_DEFINE_NAMEDTYPE(RenderCommandBufferManager);
     
-    RenderCommandBufferManager::RenderCommandBufferManager()
-        : m_discardCommands(false)
-    {
-    }
     //------------------------------------------------------------------------------
     RenderCommandBufferManagerUPtr RenderCommandBufferManager::Create() noexcept
     {
         return RenderCommandBufferManagerUPtr(new RenderCommandBufferManager());
+    }
+    //------------------------------------------------------------------------------
+    RenderCommandBufferManager::RenderCommandBufferManager()
+    : m_discardCommands(false)
+    {
     }
     //------------------------------------------------------------------------------
     bool RenderCommandBufferManager::IsA(InterfaceIDType interfaceId) const noexcept
@@ -97,17 +98,17 @@ namespace ChilliSource
             
             for(auto& command : m_pendingShaderLoadCommands)
             {
-                preRenderCommandList->AddLoadShaderCommand(command.m_renderShader, command.m_vertexShader, command.m_fragmentShader);
+                preRenderCommandList->AddLoadShaderCommand(command.GetRenderShader(), command.GetVertexShader(), command.GetFragmentShader());
             }
             
             for(auto& command : m_pendingTextureLoadCommands)
             {
-                preRenderCommandList->AddLoadTextureCommand(command.m_renderTexture, std::move(command.m_textureData), command.m_textureDataSize);
+                preRenderCommandList->AddLoadTextureCommand(command.GetRenderTexture(), std::move(command.ClaimTextureData()), command.GetTextureDataSize());
             }
             
             for(auto& command : m_pendingMeshLoadCommands)
             {
-                preRenderCommandList->AddLoadMeshCommand(command.m_renderMesh, std::move(command.m_vertexData), command.m_vertexDataSize, std::move(command.m_indexData), command.m_indexDataSize);
+                preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), std::move(command.ClaimVertexData()), command.GetVertexDataSize(), std::move(command.ClaimIndexData()), command.GetIndexDataSize());
             }
             
             for(auto& command : m_pendingShaderUnloadCommands)
@@ -146,10 +147,6 @@ namespace ChilliSource
     {
         std::unique_lock<std::mutex>(m_commandBufferMutex);
         
-        //Iterate the queue and store any recyclable commands for reinsertion later. If a command
-        //is recycled then we remove from the list. We do not need to delete the command as that is still owned
-        //by the command queue
-        
         for(u32 i = 0; i < renderCommandList->GetNumCommands(); ++i)
         {
             RecycleCommand(renderCommandList->GetCommand(i));
@@ -163,39 +160,19 @@ namespace ChilliSource
             case RenderCommand::Type::k_loadShader:
             {
                 LoadShaderRenderCommand* command = dynamic_cast<LoadShaderRenderCommand*>(renderCommand);
-                
-                ShaderLoadCommand loadCommand;
-                loadCommand.m_fragmentShader = command->GetFragmentShader();
-                loadCommand.m_vertexShader = command->GetVertexShader();
-                loadCommand.m_renderShader = command->GetRenderShader();
-                
-                m_pendingShaderLoadCommands.push_back(std::move(loadCommand));
+                m_pendingShaderLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_loadTexture:
             {
                 LoadTextureRenderCommand* command = dynamic_cast<LoadTextureRenderCommand*>(renderCommand);
-                
-                TextureLoadCommand loadCommand;
-                loadCommand.m_textureDataSize = command->GetTextureDataSize();
-                loadCommand.m_textureData = command->ClaimTextureData();
-                loadCommand.m_renderTexture = command->GetRenderTexture();
-                
-                m_pendingTextureLoadCommands.push_back(std::move(loadCommand));
+                m_pendingTextureLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_loadMesh:
             {
                 LoadMeshRenderCommand* command = dynamic_cast<LoadMeshRenderCommand*>(renderCommand);
-                
-                MeshLoadCommand loadCommand;
-                loadCommand.m_indexDataSize = command->GetIndexDataSize();
-                loadCommand.m_indexData = command->ClaimIndexData();
-                loadCommand.m_vertexDataSize = command->GetVertexDataSize();
-                loadCommand.m_vertexData = command->ClaimVertexData();
-                loadCommand.m_renderMesh = command->GetRenderMesh();
-                
-                m_pendingMeshLoadCommands.push_back(std::move(loadCommand));
+                m_pendingMeshLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_unloadShader:

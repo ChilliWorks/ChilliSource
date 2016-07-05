@@ -30,6 +30,8 @@
 
 #include <ChilliSource/Rendering/Base/IContextRestorer.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
@@ -81,38 +83,7 @@ namespace ChilliSource
     private:
         friend class Application;
         friend class LifecycleManager;
-        
-        /// Command data for loading a texture
-        ///
-        struct TextureLoadCommand final
-        {
-            std::unique_ptr<const u8[]> m_textureData;
-            u32 m_textureDataSize = 0;
-            RenderTexture* m_renderTexture = nullptr;
-        };
-        
-        /// Command data for loading a shader
-        ///
-        struct ShaderLoadCommand final
-        {
-            std::string m_vertexShader;
-            std::string m_fragmentShader;
-            RenderShader* m_renderShader = nullptr;
-        };
-        
-        /// Command data for loading a mesh
-        ///
-        struct MeshLoadCommand final
-        {
-            RenderMesh* m_renderMesh = nullptr;
-            std::unique_ptr<const u8[]> m_vertexData;
-            u32 m_vertexDataSize = 0;
-            std::unique_ptr<const u8[]> m_indexData;
-            u32 m_indexDataSize = 0;
-        };
-        
-        RenderCommandBufferManager();
-        
+
         /// A factory method for creating new instances of the system. This must be called by
         /// Application.
         ///
@@ -120,6 +91,8 @@ namespace ChilliSource
         ///
         static RenderCommandBufferManagerUPtr Create() noexcept;
 
+        RenderCommandBufferManager();
+        
         /// Will iterate an RenderCommandBuffer and extract any commands that can be recycled
         /// for next frame.
         ///
@@ -175,9 +148,9 @@ namespace ChilliSource
         
         std::mutex m_commandBufferMutex;
         
-        std::vector<ShaderLoadCommand> m_pendingShaderLoadCommands;
-        std::vector<TextureLoadCommand> m_pendingTextureLoadCommands;
-        std::vector<MeshLoadCommand> m_pendingMeshLoadCommands;
+        std::vector<LoadShaderRenderCommand> m_pendingShaderLoadCommands;
+        std::vector<LoadTextureRenderCommand> m_pendingTextureLoadCommands;
+        std::vector<LoadMeshRenderCommand> m_pendingMeshLoadCommands;
         
         std::vector<RenderShaderUPtr> m_pendingShaderUnloadCommands;
         std::vector<RenderTextureUPtr> m_pendingTextureUnloadCommands;
