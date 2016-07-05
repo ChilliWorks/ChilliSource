@@ -97,11 +97,17 @@ namespace CSBackend
             //-------------------------------------------------------
             /// @author S Downie
             ///
+            /// This isn't thread-safe, and should only be called
+            /// on the system thread. Used by SubtitlesRenderer.
+            ///
             /// @return The current time though the video.
 			//-------------------------------------------------------
 			f32 GetCurrentTime() const;
             //-------------------------------------------------------
             /// @author Ian Copland
+            ///
+            /// This isn't thread-safe, and should only be called
+            /// on the system thread. Used by SubtitlesRenderer.
             ///
             /// @return the actual dimensions of the playing video.
             //-------------------------------------------------------

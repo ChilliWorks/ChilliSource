@@ -183,6 +183,7 @@
     }
     
     [inpTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:(fFade * pStyle->m_colour.a)]];
+    [self SetAlignment: inpTextView WithAnchor: pStyle->m_alignment];
 }
 //--------------------------------------------------------
 /// Remove Text View
@@ -212,7 +213,8 @@
         case ChilliSource::AlignmentAnchor::k_middleRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
-            f32 fContentSize = [inpView contentSize].height;
+            CGSize textViewSize = [inpView sizeThatFits:CGSizeMake(inpView.frame.size.width, FLT_MAX)];
+            f32 fContentSize = textViewSize.height;
             f32 fOffset = (fBoxSize - fContentSize);
             if (fOffset < 0.0f)
             {
@@ -234,6 +236,7 @@
             {
                 fOffset = 0.0f;
             }
+            CGPoint newOffset = (CGPoint){.x = 0.0f, .y = -fOffset};
             inpView.contentOffset = (CGPoint){.x = 0.0f, .y = -fOffset};
             break;
         }

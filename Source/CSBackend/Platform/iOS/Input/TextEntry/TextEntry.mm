@@ -69,10 +69,14 @@ namespace CSBackend
         //-------------------------------------------------------
         void TextEntry::Activate(const std::string& in_text, ChilliSource::TextEntryType in_type, ChilliSource::TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
         {
+            m_isActive = true;
+            
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                if (IsActive() == false && [m_textView canBecomeFirstResponder])
+                if (m_isViewSetup == false && [m_textView canBecomeFirstResponder])
                 {
+                    m_isViewSetup = true;
+                    
                     SetType(in_type);
                     SetCapitalisation(in_capitalisation);
                     SetTextBuffer(in_text);
@@ -81,7 +85,6 @@ namespace CSBackend
                     
                     [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
                     [m_textView becomeFirstResponder];
-                    m_isActive = true;
                 }
             });
         }
@@ -89,11 +92,14 @@ namespace CSBackend
         //-------------------------------------------------------
         void TextEntry::Deactivate()
         {
+            m_isActive = false;
+            
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                if (IsActive() == true)
+                if (m_isViewSetup == true)
                 {
-                    m_isActive = false;
+                    m_isViewSetup = false;
+                    
                     [m_textView resignFirstResponder];
                     [m_textView removeFromSuperview];
                     
@@ -113,7 +119,6 @@ namespace CSBackend
         //-------------------------------------------------------
         bool TextEntry::IsActive() const
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
             return m_isActive;
         }
         //-------------------------------------------------------

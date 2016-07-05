@@ -89,6 +89,8 @@ namespace CSBackend
             //-------------------------------------------------------
             /// @author S Downie
             ///
+            /// This should only be called from the main thread.
+            ///
             /// @return Whether or not text input is currently
             /// enabled.
             //-------------------------------------------------------
@@ -150,6 +152,7 @@ namespace CSBackend
             void SetCapitalisation(ChilliSource::TextEntryCapitalisation in_capitalisation);
             
             bool m_isActive = false;
+            bool m_isViewSetup = false;
             
             UITextField* m_textView;
             TextEntryDelegate* m_delegate;
