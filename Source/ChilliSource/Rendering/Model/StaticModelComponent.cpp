@@ -326,7 +326,7 @@ namespace ChilliSource
             const auto& transform = GetEntity()->GetTransform();
             auto boundingSphere = Sphere::Transform(renderMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
             
-            in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform(), boundingSphere, RenderLayer::k_standard));
+            in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform(), boundingSphere, m_shadowCastingEnabled, RenderLayer::k_standard));
         }
     }
     

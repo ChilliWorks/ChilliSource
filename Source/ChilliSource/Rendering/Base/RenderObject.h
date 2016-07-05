@@ -61,6 +61,9 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     The world space bounding sphere of the object. This should be build using the local mesh
         ///     bounding sphere.
+        /// @param shouldCastShadows
+        ///     Whether or not the render object will try to cast shadows. Whether or not a shadow is
+        ///     actually cast is determined by the objects materials, and the lights in the scene.
         /// @param renderLayer
         ///     The layer the object should be rendered into.
         /// @param priority
@@ -68,7 +71,8 @@ namespace ChilliSource
         ///     This may or may not be used depending on the render pass the object will be included in.
         ///     Objects with the same order value will return in an undefined order. Defaults to 0.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer, u32 priority = 0) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, bool shouldCastShadows,
+                     RenderLayer renderLayer, u32 priority = 0) noexcept;
         
         /// Creates a new instance with the given material group, mesh and transform data.
         ///
@@ -81,6 +85,9 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     The world space bounding sphere of the object. This should be build using the local mesh
         ///     bounding sphere.
+        /// @param shouldCastShadows
+        ///     Whether or not the render object will try to cast shadows. Whether or not a shadow is
+        ///     actually cast is determined by the objects materials, and the lights in the scene.
         /// @param renderLayer
         ///     The layer the object should be rendered into.
         /// @param priority
@@ -88,7 +95,8 @@ namespace ChilliSource
         ///     This may or may not be used depending on the sort algorithm used, as is the order
         ///     of objects with the same priority. Defaults to 0.
         ///
-        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, RenderLayer renderLayer, u32 priority = 0) noexcept;
+        RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, bool shouldCastShadows,
+                     RenderLayer renderLayer, u32 priority = 0) noexcept;
         
         /// @return The mesh type of object this describes.
         ///
@@ -98,13 +106,13 @@ namespace ChilliSource
         ///
         const RenderMaterialGroup* GetRenderMaterialGroup() const noexcept { return m_renderMaterialGroup; }
         
-        /// @return The static mesh that should be used when rendering this object if this is a
-        ///     static mesh object, otherwise this will return nullptr.
+        /// @return The static mesh that should be used when rendering this object if this is a static mesh
+        ///     object, otherwise this will return nullptr.
         ///
         const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; }
         
-        /// @return The dynamic mesh that should be used when rendering this object if this is
-        ///     a dynamic mesh object, otherwise this will return nullptr.
+        /// @return The dynamic mesh that should be used when rendering this object if this is a dynamic mesh
+        ///     object, otherwise this will return nullptr.
         ///
         const RenderDynamicMesh* GetRenderDynamicMesh() const noexcept { return m_renderDynamicMesh; }
         
@@ -116,13 +124,18 @@ namespace ChilliSource
         ///
         const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
         
+        /// @return Whether or not the render object will try to cast shadows. Whether or not a shadow is
+        ///     actually cast is determined by the objects materials, and the lights in the scene.
+        ///
+        bool ShouldCastShadows() const noexcept { return m_shouldCastShadows; }
+        
         /// @return The layer the object should be rendered into.
         ///
         RenderLayer GetRenderLayer() const noexcept { return m_renderLayer; }
         
-        /// @return The order priority of the render object; lower values will be rendered first.
-        ///     This may or may not be used depending on the sort algorithm used, as is the order
-        ///     of objects with the same priority.
+        /// @return The order priority of the render object; lower values will be rendered first. This may or
+        ///     may not be used depending on the sort algorithm used, as is the order of objects with the
+        ///     same priority.
         ///
         u32 GetPriority() const noexcept { return m_priority; }
         
@@ -133,6 +146,7 @@ namespace ChilliSource
         const RenderDynamicMesh* m_renderDynamicMesh = nullptr;
         Matrix4 m_worldMatrix;
         Sphere m_boundingSphere;
+        bool m_shouldCastShadows;
         RenderLayer m_renderLayer;
         u32 m_priority;
     };

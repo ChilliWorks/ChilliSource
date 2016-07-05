@@ -135,12 +135,13 @@ namespace ChilliSource
         
         ForwardRenderMaterialGroupManager() = default;
         
-        ShaderCSPtr m_staticMeshUnlit;
-        ShaderCSPtr m_staticMeshBlinnBase;
-        ShaderCSPtr m_staticMeshBlinnDirectional;
-        ShaderCSPtr m_staticMeshBlinnPoint;
-        ShaderCSPtr m_staticMeshBlinnShadowedDirectional;
         ShaderCSPtr m_spriteUnlit;
+        ShaderCSPtr m_staticShadowMap;
+        ShaderCSPtr m_staticUnlit;
+        ShaderCSPtr m_staticBlinnBase;
+        ShaderCSPtr m_staticBlinnDirectional;
+        ShaderCSPtr m_staticBlinnPoint;
+        ShaderCSPtr m_staticBlinnShadowedDirectional;
     };
 }
 

@@ -27,17 +27,17 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderObject::RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere,
+    RenderObject::RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, bool shouldCastShadows,
                                RenderLayer renderLayer, u32 priority) noexcept
-        : m_type(Type::k_static), m_renderMaterialGroup(renderMaterialGroup), m_renderMesh(renderMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere),
+        : m_type(Type::k_static), m_renderMaterialGroup(renderMaterialGroup), m_renderMesh(renderMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere), m_shouldCastShadows(shouldCastShadows),
           m_renderLayer(renderLayer), m_priority(priority)
     {
     }
     
     //------------------------------------------------------------------------------
-    RenderObject::RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere,
+    RenderObject::RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, bool shouldCastShadows,
                                RenderLayer renderLayer, u32 priority) noexcept
-        : m_type(Type::k_dynamic), m_renderMaterialGroup(renderMaterialGroup), m_renderDynamicMesh(renderDynamicMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere),
+        : m_type(Type::k_dynamic), m_renderMaterialGroup(renderMaterialGroup), m_renderDynamicMesh(renderDynamicMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere), m_shouldCastShadows(shouldCastShadows),
           m_renderLayer(renderLayer), m_priority(priority)
     {
     }

@@ -40,7 +40,7 @@ namespace ChilliSource
 {
     namespace
     {
-        constexpr f32 k_defaultShadowTolerance = 0.075f;
+        constexpr f32 k_defaultShadowTolerance = 0.01f;
         constexpr f32 k_defaultShadowVolumeWidth = 50.0f;
         constexpr f32 k_defaultShadowVolumeHeight = 50.0f;
         constexpr f32 k_defaultShadowVolumeNear = 5.0f;
@@ -161,7 +161,7 @@ namespace ChilliSource
     {
         if (m_shadowMap)
         {
-            //TODO: Handle shadow map
+            renderSnapshot.AddDirectionalRenderLight(DirectionalRenderLight(GetFinalColour(), m_direction, m_lightViewProjection, m_shadowTolerance, m_shadowMap->GetRenderTexture()));
         }
         else
         {
