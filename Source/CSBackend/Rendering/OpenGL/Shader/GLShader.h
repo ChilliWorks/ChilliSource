@@ -204,6 +204,11 @@ namespace CSBackend
             ///
             void SetAttribute(const std::string& name, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
             
+            /// Called when the GLContext has been lost. Function will set a flag to handle safe
+            /// destructing of this object, preventing us from trying to delete invalid memory.
+            ///
+            void OnGLContextLost() noexcept { m_contextLost = true; }
+            
             /// Unloads the opengl shader.
             ///
             ~GLShader() noexcept;
@@ -231,6 +236,8 @@ namespace CSBackend
             GLuint m_programId = 0;
             std::unordered_map<std::string, GLint> m_uniformHandles;
             std::unordered_map<std::string, GLint> m_attributeHandles;
+            
+            bool m_contextLost = false;
         };
     }
 }

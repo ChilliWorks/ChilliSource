@@ -68,6 +68,11 @@ namespace CSBackend
             ///
             void Bind(GLShader* glShader) noexcept;
             
+            /// Called when the GLContext has been lost. Function will set a flag to handle safe
+            /// destructing of this object, preventing us from trying to delete invalid memory.
+            ///
+            void OnGLContextLost() noexcept { m_contextLost = true; }
+            
             /// Destroys the OpenGL mesh that this represents.
             ///
             ~GLMesh() noexcept;
@@ -76,6 +81,8 @@ namespace CSBackend
             ChilliSource::VertexFormat m_vertexFormat;
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
+            
+            bool m_contextLost = false;
         };
     }
 }

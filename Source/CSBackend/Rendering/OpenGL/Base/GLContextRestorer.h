@@ -25,7 +25,8 @@
 #ifndef _CSBACKEND_RENDERING_OPENGL_BASE_GLCONTEXTRESTORER_H_
 #define _CSBACKEND_RENDERING_OPENGL_BASE_GLCONTEXTRESTORER_H_
 
-#ifdef CS_TARGETPLATFORM_ANDROID
+//#ifdef CS_TARGETPLATFORM_IOS //Remove
+//#ifdef CS_TARGETPLATFORM_ANDROID
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/IContextRestorer.h>
@@ -69,6 +70,6 @@ namespace CSBackend
     }
 }
 
-#endif
+//#endif
 
 #endif

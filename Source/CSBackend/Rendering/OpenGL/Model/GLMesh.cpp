@@ -93,15 +93,16 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLMesh::~GLMesh() noexcept
         {
-            //TODO: Handle context loss
-            
-            glDeleteBuffers(1, &m_vertexBufferHandle);
-            if(m_indexBufferHandle != 0)
+            if(!m_contextLost)
             {
-                glDeleteBuffers(1, &m_indexBufferHandle);
+                glDeleteBuffers(1, &m_vertexBufferHandle);
+                if(m_indexBufferHandle != 0)
+                {
+                    glDeleteBuffers(1, &m_indexBufferHandle);
+                }
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting GLMesh.");
             }
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting GLMesh.");
         }
     }
 }
