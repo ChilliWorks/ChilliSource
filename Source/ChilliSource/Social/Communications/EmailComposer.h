@@ -133,12 +133,6 @@ namespace ChilliSource
         //-------------------------------------------------------
         virtual bool IsPresented() = 0;
         //-------------------------------------------------------
-        /// Dismisses the activity if it is currently displayed.
-        ///
-        /// @author S Downie
-        //-------------------------------------------------------
-        virtual void Dismiss() = 0;
-        //-------------------------------------------------------
         /// Destructor
         //-------------------------------------------------------
         virtual ~EmailComposer() {};

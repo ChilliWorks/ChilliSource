@@ -103,12 +103,6 @@ namespace CSBackend
             //-------------------------------------------------------
             bool IsPresented() override;
             //-------------------------------------------------------
-            /// Dismisses the activity if it is currently displayed.
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-			void Dismiss() override;
-            //-------------------------------------------------------
             /// Called when the result is received from the email
             /// composition view controller. This is for internal
             /// use and should not be called manually by the user.
@@ -158,7 +152,7 @@ namespace CSBackend
 			EmailComposerDelegate* m_emailComposerDelegate;
 			MFMailComposeViewController* m_viewController;
             UIViewController* m_rootViewController;
-            EmailComposer::State m_currentState = EmailComposer::State::k_inactive;
+            bool m_isPresented = false;
 		};
 		 
 	}

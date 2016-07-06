@@ -31,6 +31,7 @@
 #import <CSBackend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 
 #import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Base/AppConfig.h>
 #import <ChilliSource/Core/Math/MathUtils.h>
 #import <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -85,7 +86,10 @@ namespace CSBackend
                 m_isUpdating = true;
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
-                    [m_motionManager startAccelerometerUpdates];
+                    [m_motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMAccelerometerData *accelerometerData, NSError *error)
+                    {
+                        OnAccelerationUpdated(accelerometerData, error);
+                    }];
                 });
             }
         }
@@ -93,31 +97,8 @@ namespace CSBackend
         //----------------------------------------------------
         ChilliSource::Vector3 Accelerometer::GetAcceleration() const
         {
-            ChilliSource::Matrix4 orientationTransform;
-            switch ([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation)
-            {
-                case UIInterfaceOrientationPortrait:
-                    orientationTransform = ChilliSource::Matrix4::k_identity;
-                    break;
-                case UIInterfaceOrientationLandscapeLeft:
-                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi * 1.5f);
-                    break;
-                case UIInterfaceOrientationLandscapeRight:
-                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi * 0.5f);
-                    break;
-                case UIInterfaceOrientationPortraitUpsideDown:
-                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi);
-                    break;
-                default:
-                    CS_LOG_ERROR("Unknown orientation!");
-                    orientationTransform = ChilliSource::Matrix4::k_identity;
-                    break;
-            }
-            
-            CMAcceleration acceleration(m_motionManager.accelerometerData.acceleration);
-            ChilliSource::Vector3 deviceSpaceAcceleration(acceleration.x, acceleration.y, acceleration.z);
-            deviceSpaceAcceleration.Transform3x4(orientationTransform);
-            return deviceSpaceAcceleration;
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to get current acceleration from background thread.");
+            return m_acceleration;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -144,16 +125,41 @@ namespace CSBackend
         void Accelerometer::OnInit()
         {
             m_motionManager = [[CMMotionManager alloc] init];
-            m_motionManager.accelerometerUpdateInterval = 0.033;
+            m_motionManager.accelerometerUpdateInterval = 1.0f / ChilliSource::Application::Get()->GetAppConfig()->GetPreferredFPS();
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Accelerometer::OnUpdate(f32 in_deltaTime)
+        void Accelerometer::OnAccelerationUpdated(CMAccelerometerData* accelerometerData, NSError *error) noexcept
         {
-            if(m_isUpdating)
+            ChilliSource::Matrix4 orientationTransform;
+            switch ([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation)
             {
-                m_accelerationUpdatedEvent.NotifyConnections(GetAcceleration());
+                case UIInterfaceOrientationPortrait:
+                    orientationTransform = ChilliSource::Matrix4::k_identity;
+                    break;
+                case UIInterfaceOrientationLandscapeLeft:
+                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi * 1.5f);
+                    break;
+                case UIInterfaceOrientationLandscapeRight:
+                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi * 0.5f);
+                    break;
+                case UIInterfaceOrientationPortraitUpsideDown:
+                    orientationTransform = ChilliSource::Matrix4::CreateRotationZ(ChilliSource::MathUtils::k_pi);
+                    break;
+                default:
+                    CS_LOG_ERROR("Unknown orientation!");
+                    orientationTransform = ChilliSource::Matrix4::k_identity;
+                    break;
             }
+            
+            ChilliSource::Vector3 newAcceleration(accelerometerData.acceleration.x, accelerometerData.acceleration.y, accelerometerData.acceleration.z);
+            newAcceleration.Transform3x4(orientationTransform);
+            
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                m_acceleration = newAcceleration;
+                m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);
+            });
         }
         //----------------------------------------------------
         //----------------------------------------------------

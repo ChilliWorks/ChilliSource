@@ -35,6 +35,7 @@
 #import <CSBackend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Base/LifecycleManager.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 CSAppDelegate* singletonInstance = nil;
 
@@ -303,6 +304,8 @@ CSAppDelegate* singletonInstance = nil;
         {
             [EAGLContext setCurrentContext:view.context];
         }
+        
+        ChilliSource::Application::Get()->GetTaskScheduler()->ExecuteSystemThreadTasks();
         
         m_lifecycleManager->Render();
     }

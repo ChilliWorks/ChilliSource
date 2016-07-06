@@ -76,7 +76,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		//-----------------------------------------------
 		WebView::WebView()
-            : m_webView(nil), m_dismissButton(nil), m_isPresented(false), m_activityIndicator(nil), m_webViewDelegate(nil), m_dismissButtonRelativeSize(0.0f)
+            : m_webView(nil), m_dismissButton(nil), m_currentState(State::k_inactive), m_activityIndicator(nil), m_webViewDelegate(nil), m_dismissButtonRelativeSize(0.0f)
 		{
 		}
         //-------------------------------------------------------
@@ -91,9 +91,9 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
+                CS_ASSERT(m_currentState == State::k_inactive, "Cannot present a web view while one is already displayed.");
                 
-                m_isPresented = true;
+                m_currentState = State::k_presented;
                 m_dismissedDelegate = in_delegate;
                 m_linkHandlerDelegate = in_customLinkHandler;
                 m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
@@ -125,9 +125,9 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
+                CS_ASSERT(m_currentState == State::k_inactive, "Cannot present a web view while one is already displayed.");
                 
-                m_isPresented = true;
+                m_currentState = State::k_presented;
                 m_dismissedDelegate = in_delegate;
                 m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
                 m_linkHandlerDelegate = in_customLinkHandler;
@@ -188,7 +188,7 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                if(m_isPresented == true)
+                if(m_currentState == State::k_presented)
                 {
                     if (m_activityIndicator != nil)
                     {
@@ -210,7 +210,7 @@ namespace CSBackend
                     [m_webView release];
                     m_webView = nil;
                     
-                    m_isPresented = false;
+                    m_currentState = State::k_inactive;
                     
                     if (m_dismissedDelegate)
                     {
@@ -225,7 +225,7 @@ namespace CSBackend
         //---------------------------------------------------------
         bool WebView::IsPresented() const
         {
-            return m_isPresented;
+            return (m_currentState != State::k_inactive);
         }
         //---------------------------------------------------------
         //---------------------------------------------------------

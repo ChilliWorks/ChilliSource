@@ -87,12 +87,16 @@ namespace CSBackend
         void LocalNotificationSystem::SetEnabled(bool in_enabled)
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to enable/disable notifications outside of main thread.");
-            m_enabled = in_enabled;
             
-            if (m_enabled == false)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                CancelAll();
-            }
+                m_enabled = in_enabled;
+                
+                if (m_enabled == false)
+                {
+                    CancelAll();
+                }
+            });
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -101,70 +105,75 @@ namespace CSBackend
             @autoreleasepool
             {
                 CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to schedule notification outside of main thread.");
-                //Clean-up any duplicates from recently added
-                for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
-                {
-                    if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
-                    {
-                        [m_recentlyAddedNotifications removeObject:nsNotification];
-                    }
-                }
                 
-                if (m_enabled == true)
+                
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
-                    //Create the notifications
-                    UILocalNotification* nsNotification = [[[UILocalNotification alloc] init] autorelease];
-                    nsNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)in_time];
-                    nsNotification.timeZone = [NSTimeZone defaultTimeZone];
-                    nsNotification.alertAction = @"View";
-                    
-                    NSString* body = [NSStringUtils newNSStringWithUTF8String:in_params.GetValue("Body")];
-                    nsNotification.alertBody = body;
-                    [body release];
-                    
-                    if(in_params.HasKey("Sound") == true)
+                    //Clean-up any duplicates from recently added
+                    for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
                     {
-                        NSString* sound = [NSStringUtils newNSStringWithUTF8String:in_params.GetValue("Sound")];
-                        nsNotification.soundName = sound;
-                        [sound release];
-                    }
-                    else
-                    {
-                        nsNotification.soundName = UILocalNotificationDefaultSoundName;
+                        if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
+                        {
+                            [m_recentlyAddedNotifications removeObject:nsNotification];
+                        }
                     }
                     
-                    nsNotification.applicationIconBadgeNumber = 1;
-                    
-                    NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
-                    for(ChilliSource::ParamDictionary::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
+                    if (m_enabled == true)
                     {
-                        NSString* key = [NSStringUtils newNSStringWithUTF8String:it->first];
-                        NSString* value = [NSStringUtils newNSStringWithUTF8String:it->second];
-                        [nsParams setObject:key forKey:value];
-                        [key release];
-                        [value release];
+                        //Create the notifications
+                        UILocalNotification* nsNotification = [[[UILocalNotification alloc] init] autorelease];
+                        nsNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)in_time];
+                        nsNotification.timeZone = [NSTimeZone defaultTimeZone];
+                        nsNotification.alertAction = @"View";
+                        
+                        NSString* body = [NSStringUtils newNSStringWithUTF8String:in_params.GetValue("Body")];
+                        nsNotification.alertBody = body;
+                        [body release];
+                        
+                        if(in_params.HasKey("Sound") == true)
+                        {
+                            NSString* sound = [NSStringUtils newNSStringWithUTF8String:in_params.GetValue("Sound")];
+                            nsNotification.soundName = sound;
+                            [sound release];
+                        }
+                        else
+                        {
+                            nsNotification.soundName = UILocalNotificationDefaultSoundName;
+                        }
+                        
+                        nsNotification.applicationIconBadgeNumber = 1;
+                        
+                        NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
+                        for(ChilliSource::ParamDictionary::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
+                        {
+                            NSString* key = [NSStringUtils newNSStringWithUTF8String:it->first];
+                            NSString* value = [NSStringUtils newNSStringWithUTF8String:it->second];
+                            [nsParams setObject:key forKey:value];
+                            [key release];
+                            [value release];
+                        }
+                        
+                        //Encode the type ID into the notification so we can retrieve it at the other end
+                        NSDictionary* pInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [NSNumber numberWithUnsignedInt:(u32)in_id], @"ID",
+                                               [NSNumber numberWithUnsignedInt:(u32)in_priority], @"Priority",
+                                               nsParams, @"Params",
+                                               nil];
+                        
+                        nsNotification.userInfo = pInfo;
+                        
+                        // pInfo dictionary retains the pParams dictionary on insertion so we need to release
+                        [nsParams release];
+                        
+                        //Schedule this baby
+                        [[UIApplication sharedApplication] scheduleLocalNotification:nsNotification];
+                        
+                        //Unfortunately it seems that scheduling a notification doesn't immediately add it to the notifications list
+                        //and subsequent attempts to cancel or retrieve it may fail. In order to workaround this we need to maintain our
+                        //own list of recently added notifications.
+                        [m_recentlyAddedNotifications addObject:nsNotification];
                     }
-                    
-                    //Encode the type ID into the notification so we can retrieve it at the other end
-                    NSDictionary* pInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                           [NSNumber numberWithUnsignedInt:(u32)in_id], @"ID",
-                                           [NSNumber numberWithUnsignedInt:(u32)in_priority], @"Priority",
-                                           nsParams, @"Params",
-                                           nil];
-                    
-                    nsNotification.userInfo = pInfo;
-                    
-                    // pInfo dictionary retains the pParams dictionary on insertion so we need to release
-                    [nsParams release];
-                    
-                    //Schedule this baby
-                    [[UIApplication sharedApplication] scheduleLocalNotification:nsNotification];
-                    
-                    //Unfortunately it seems that scheduling a notification doesn't immediately add it to the notifications list
-                    //and subsequent attempts to cancel or retrieve it may fail. In order to workaround this we need to maintain our
-                    //own list of recently added notifications.
-                    [m_recentlyAddedNotifications addObject:nsNotification];
-                }
+                });
             }
         }
         //--------------------------------------------------------
@@ -172,6 +181,7 @@ namespace CSBackend
         void LocalNotificationSystem::GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to retrieve scheduled notifications outside of main thread.");
+            
             for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
 			{
                 TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
@@ -206,37 +216,45 @@ namespace CSBackend
         void LocalNotificationSystem::CancelByID(ChilliSource::Notification::ID in_id)
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel notification outside of main thread.");
-			for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
-			{
-				ChilliSource::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
-				
-				if(notificationId == in_id)
-				{
-					[[UIApplication sharedApplication] cancelLocalNotification:nsNotification];
-				}
-                
-                if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
-                {
-                    [m_recentlyAddedNotifications removeObject:nsNotification];
-                }
-			}
             
-            for(UILocalNotification* nsNotification in m_recentlyAddedNotifications)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                ChilliSource::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
-                
-                if(notificationId == in_id)
+                for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
                 {
-                    [[UIApplication sharedApplication] cancelLocalNotification:nsNotification];
+                    ChilliSource::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
+                    
+                    if(notificationId == in_id)
+                    {
+                        [[UIApplication sharedApplication] cancelLocalNotification:nsNotification];
+                    }
+                    
+                    if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
+                    {
+                        [m_recentlyAddedNotifications removeObject:nsNotification];
+                    }
                 }
-            }
+                
+                for(UILocalNotification* nsNotification in m_recentlyAddedNotifications)
+                {
+                    ChilliSource::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
+                    
+                    if(notificationId == in_id)
+                    {
+                        [[UIApplication sharedApplication] cancelLocalNotification:nsNotification];
+                    }
+                }
+            });
         }
         //------------------------------------------------
         //------------------------------------------------
         void LocalNotificationSystem::CancelAll()
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel all notifications outside of main thread.");
-            [[UIApplication sharedApplication] cancelAllLocalNotifications];
+            
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                [[UIApplication sharedApplication] cancelAllLocalNotifications];
+            });
         }
         //--------------------------------------------------
         //---------------------------------------------------
