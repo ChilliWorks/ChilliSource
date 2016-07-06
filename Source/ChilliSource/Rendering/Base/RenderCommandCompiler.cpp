@@ -129,6 +129,8 @@ namespace ChilliSource
                 case RenderPass::LightType::k_directional:
                 {
                     const auto& directionalLight = renderPass.GetDirectionalLight();
+                    auto viewProj = Matrix4::Inverse(directionalLight.GetLightWorldMatrix()) * directionalLight.GetLightProjectionMatrix();
+                    
                     const auto& shadowMapTarget = directionalLight.GetShadowMapTarget();
                     const RenderTexture* shadowMapTexture = nullptr;
                     if (shadowMapTarget)
@@ -137,8 +139,7 @@ namespace ChilliSource
                         CS_ASSERT(shadowMapTexture, "Shadow map target must have depth texture.");
                     }
                     
-                    renderCommandList->AddApplyDirectionalLightCommand(directionalLight.GetColour(), directionalLight.GetDirection(), directionalLight.GetLightViewProjection(),
-                                                                       directionalLight.GetShadowTolerance(), shadowMapTexture);
+                    renderCommandList->AddApplyDirectionalLightCommand(directionalLight.GetColour(), directionalLight.GetDirection(), viewProj, directionalLight.GetShadowTolerance(), shadowMapTexture);
                     break;
                 }
                 case RenderPass::LightType::k_point:
@@ -266,7 +267,10 @@ namespace ChilliSource
             *renderCommandBuffer->GetRenderCommandList(currentList++) = std::move(*postRenderCommandList);
         }
         
-        taskContext.ProcessChildTasks(tasks);
+        if (tasks.size() > 0)
+        {
+            taskContext.ProcessChildTasks(tasks);
+        }
         
         return std::move(renderCommandBuffer);
     }

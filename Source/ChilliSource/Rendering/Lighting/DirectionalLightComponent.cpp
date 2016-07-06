@@ -100,7 +100,6 @@ namespace ChilliSource
     void DirectionalLightComponent::SetShadowVolume(f32 width, f32 height, f32 near, f32 far) noexcept
     {
         m_lightProjection = Matrix4::CreateOrthographicProjectionLH(width, height, near, far);
-        m_lightViewProjection = m_lightView * m_lightProjection;
     }
     
     //------------------------------------------------------------------------------
@@ -152,8 +151,6 @@ namespace ChilliSource
         auto& transform = GetEntity()->GetTransform();
         
         m_direction = Vector3::Rotate(Vector3::k_unitPositiveZ, transform.GetWorldOrientation());
-        m_lightView = Matrix4::Inverse(transform.GetWorldTransform());
-        m_lightViewProjection = m_lightView * m_lightProjection;
         
         m_transformChangedConnection = transform.GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
     }
@@ -164,8 +161,6 @@ namespace ChilliSource
         auto& transform = GetEntity()->GetTransform();
         
         m_direction = Vector3::Rotate(Vector3::k_unitPositiveZ, transform.GetWorldOrientation());
-        m_lightView = Matrix4::Inverse(transform.GetWorldTransform());
-        m_lightViewProjection = m_lightView * m_lightProjection;
     }
     
     //------------------------------------------------------------------------------
@@ -173,7 +168,10 @@ namespace ChilliSource
     {
         if (m_shadowMap)
         {
-            renderSnapshot.AddDirectionalRenderLight(DirectionalRenderLight(GetFinalColour(), m_direction, m_lightViewProjection, m_shadowTolerance, m_shadowMapTarget));
+            const auto& transform = GetEntity()->GetTransform();
+            auto worldMatrix = transform.GetWorldTransform();
+            auto orientation = transform.GetWorldOrientation();
+            renderSnapshot.AddDirectionalRenderLight(DirectionalRenderLight(GetFinalColour(), m_direction, worldMatrix, m_lightProjection, orientation, m_shadowTolerance, m_shadowMapTarget));
         }
         else
         {

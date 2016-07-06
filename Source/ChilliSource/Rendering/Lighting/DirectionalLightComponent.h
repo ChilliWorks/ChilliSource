@@ -183,8 +183,6 @@ namespace ChilliSource
         
         Vector3 m_direction;
         Matrix4 m_lightProjection;
-        Matrix4 m_lightView;
-        Matrix4 m_lightViewProjection;
         Integer2 m_shadowMapResolution;
         s32 m_shadowMapId = -1;
         TextureCSPtr m_shadowMap;

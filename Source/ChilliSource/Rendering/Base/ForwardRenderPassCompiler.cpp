@@ -109,7 +109,7 @@ namespace ChilliSource
                 }
             }
             
-            return numShadowCastingLights;
+            return k_reservedTargets + numShadowCastingLights;
         }
         
         /// Calculates main scene passes in the given render frame.
@@ -325,7 +325,7 @@ namespace ChilliSource
             {
                 auto renderPassObjects = GetBaseRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                renderPasses[basePassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), renderPassObjects);
+                renderPasses[basePassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), std::move(renderPassObjects));
             });
             
             // Directional light pass
@@ -336,7 +336,7 @@ namespace ChilliSource
                 {
                     auto renderPassObjects = GetDirectionalLightRenderPassObjects(visibleStandardRenderObjects, directionalLight);
                     RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                    renderPasses[directionLightPassIndex] = RenderPass(directionalLight, renderPassObjects);
+                    renderPasses[directionLightPassIndex] = RenderPass(directionalLight, std::move(renderPassObjects));
                 });
             }
             
@@ -348,7 +348,7 @@ namespace ChilliSource
                 {
                     auto renderPassObjects = GetPointLightRenderPassObjects(visibleStandardRenderObjects, pointLight);
                     RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                    renderPasses[pointLightPassIndex] = RenderPass(pointLight, renderPassObjects);
+                    renderPasses[pointLightPassIndex] = RenderPass(pointLight, std::move(renderPassObjects));
                 });
             }
             
@@ -358,12 +358,12 @@ namespace ChilliSource
             {
                 auto renderPassObjects = GetTransparentRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::TransparentSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), renderPassObjects);
+                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), std::move(renderPassObjects));
             });
             
             taskContext.ProcessChildTasks(tasks);
             
-            return CameraRenderPassGroup(renderFrame.GetRenderCamera(), renderPasses);
+            return CameraRenderPassGroup(renderFrame.GetRenderCamera(), std::move(renderPasses));
         }
         
         /// Gathers all UI render objects in the frame that are to be rendered to the default Render Target
@@ -395,10 +395,10 @@ namespace ChilliSource
             std::vector<RenderPass> renderPasses;
             if (uiRenderPassObjects.size() > 0)
             {
-                renderPasses.push_back(RenderPass(renderFrame.GetAmbientRenderLight(), uiRenderPassObjects));
+                renderPasses.push_back(RenderPass(std::move(uiRenderPassObjects)));
             }
             
-            return CameraRenderPassGroup(uiCamera, renderPasses);
+            return CameraRenderPassGroup(uiCamera, std::move(renderPasses));
         }
         
         /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
@@ -435,7 +435,7 @@ namespace ChilliSource
             
             taskContext.ProcessChildTasks(tasks);
             
-            return TargetRenderPassGroup(cameraRenderPassGroups);
+            return TargetRenderPassGroup(std::move(cameraRenderPassGroups));
         }
         
         /// Gather all render objects in the frame that are to be renderered into a shadow RenderTarget
@@ -454,17 +454,21 @@ namespace ChilliSource
         {
             CS_ASSERT(directionalRenderLight.GetShadowMapTarget(), "Cannot compile shadow map target with light that has no shadow map target.");
             
-            //TODO: Correctly setup camera.
-            RenderCamera camera;
+            RenderCamera camera(directionalRenderLight.GetLightWorldMatrix(), directionalRenderLight.GetLightProjectionMatrix(), directionalRenderLight.GetLightOrientation());
             
             auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
             auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
             auto renderPassObjects = GetShadowMapRenderPassObjects(visibleStandardRenderObjects);
             RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
-            auto renderPass = RenderPass(renderPassObjects);
+            RenderPass renderPass(std::move(renderPassObjects));
             
-            CameraRenderPassGroup camerRenderPassGroup(camera, { renderPass });
-            return TargetRenderPassGroup(directionalRenderLight.GetShadowMapTarget(), { camerRenderPassGroup });
+            std::vector<RenderPass> renderPasses;
+            renderPasses.push_back(std::move(renderPass));
+            CameraRenderPassGroup cameraRenderPassGroup(camera, std::move(renderPasses));
+            
+            std::vector<CameraRenderPassGroup> cameraRenderPassGroups;
+            cameraRenderPassGroups.push_back(std::move(cameraRenderPassGroup));
+            return TargetRenderPassGroup(directionalRenderLight.GetShadowMapTarget(), std::move(cameraRenderPassGroups));
         }
     }
     
@@ -500,4 +504,4 @@ namespace ChilliSource
         
         return targetRenderPassGroups;
     }
-} 
+}

@@ -45,6 +45,7 @@ namespace ChilliSource
     class RenderPass final
     {
     public:
+        CS_DECLARE_NOCOPY(RenderPass);
         
         /// Enum describing the light types a pass can hold
         ///
@@ -57,32 +58,34 @@ namespace ChilliSource
         };
         
         RenderPass() noexcept;
+        RenderPass(RenderPass&&) = default;
+        RenderPass& operator=(RenderPass&&) = default;
         
         /// @param renderPassObjects
-        ///     The list of render pass objects for this pass
+        ///     The list of render pass objects for this pass. Should be moved.
         ///
-        RenderPass(const std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        RenderPass(std::vector<RenderPassObject> renderPassObjects) noexcept;
         
         /// @param light
         ///     The ambient light to use for this pass
         /// @param renderPassObjects
-        ///     The list of render pass objects for this pass
+        ///     The list of render pass objects for this pass. Should be moved.
         ///
-        RenderPass(const AmbientRenderLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        RenderPass(const AmbientRenderLight& light, std::vector<RenderPassObject> renderPassObjects) noexcept;
         
         /// @param light
         ///     The point light to use for this pass
         /// @param renderPassObjects
-        ///     The list of render pass objects for this pass
+        ///     The list of render pass objects for this pass. Should be moved.
         ///
-        RenderPass(const PointRenderLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        RenderPass(const PointRenderLight& light, std::vector<RenderPassObject> renderPassObjects) noexcept;
         
         /// @param light
         ///     The directional light to use for this pass
         /// @param renderPassObjects
-        ///     The list of render pass objects for this pass
+        ///     The list of render pass objects for this pass. Should be moved.
         ///
-        RenderPass(const DirectionalRenderLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept;
+        RenderPass(const DirectionalRenderLight& light, std::vector<RenderPassObject> renderPassObjects) noexcept;
         
         /// @return The light type set for this pass
         ///

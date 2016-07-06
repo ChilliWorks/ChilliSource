@@ -39,8 +39,10 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    DirectionalRenderLight::DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTargetGroup* shadowMapTarget) noexcept
-        : m_colour(colour), m_direction(direction), m_lightViewProjection(lightViewProjection), m_shadowTolerance(shadowTolerance), m_shadowMapTarget(shadowMapTarget)
+    DirectionalRenderLight::DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightWorldMatrix, const Matrix4& lightProjectionMatrix, const Quaternion& lightOrientation,
+                                                   f32 shadowTolerance, const RenderTargetGroup* shadowMapTarget) noexcept
+        : m_colour(colour), m_direction(direction), m_lightWorldMatrix(lightWorldMatrix), m_lightProjectionMatrix(lightProjectionMatrix), m_lightOrientation(lightOrientation),
+          m_shadowTolerance(shadowTolerance), m_shadowMapTarget(shadowMapTarget)
     {
         CS_ASSERT(m_shadowMapTarget, "Shadow map target cannot be null.");
     }
