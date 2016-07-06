@@ -29,7 +29,6 @@
 #include <CSBackend/Rendering/OpenGL/Base/RenderTarget.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
-#include <CSBackend/Rendering/OpenGL/Texture/Texture.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
@@ -177,63 +176,64 @@ namespace CSBackend
         //------------------------------------------------------
         void RenderTarget::SetTargetTextures(const ChilliSource::TextureSPtr& inpColourTexture, const ChilliSource::TextureSPtr& inpDepthTexture)
         {
-            DeleteRenderBuffer(&mRenderBuffer);
-            DeleteRenderBuffer(&mDepthBuffer);
-            BindFrameBuffer(mFrameBuffer);
-            
-            m_colourTexture = inpColourTexture;
-            m_depthTexture = inpDepthTexture;
-			
-            if (m_colourTexture != nullptr)
-            {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(m_colourTexture)->GetTextureHandle(), 0);
-            }
-//Regular OpenGL must always have a colour buffer bound
-#ifdef CS_OPENGLVERSION_STANDARD
-			else
-			{
-				if (CreateAndAttachColourBuffer() == false)
-				{
-					CS_LOG_ERROR("Failed to attach Colour Buffer to render target.");
-				}
-			}
-#endif
-            if (m_depthTexture != nullptr)
-            {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(m_depthTexture)->GetTextureHandle(), 0);
-            }
-            else
-            {
-                if (CreateAndAttachDepthBuffer() == false)
-                {
-                    CS_LOG_ERROR("Failed to attach Depth Buffer to render target.");
-                }
-            }
-            
-#ifdef CS_ENABLE_DEBUG
-            GLenum eStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            switch(eStatus)
-            {
-                case GL_FRAMEBUFFER_COMPLETE:
-                    break;
-                case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-                    CS_LOG_ERROR("Render Target's frame buffer has incomplete attachment!");
-                    break;
-#ifdef CS_OPENGLVERSION_ES
-                case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
-                    CS_LOG_ERROR("Render Target's frame buffer has incomplete dimensions!");
-                    break;
-#endif
-                case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-                    CS_LOG_ERROR("Render Target's frame buffer has missing attachment!");
-                    break;
-                case GL_FRAMEBUFFER_UNSUPPORTED:
-                    CS_LOG_ERROR("Render Target's frame buffer is unsupported!");
-                    break;
-            }
-#endif
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting render target textures.");
+            //TODO: Re-add render target texture support
+//            DeleteRenderBuffer(&mRenderBuffer);
+//            DeleteRenderBuffer(&mDepthBuffer);
+//            BindFrameBuffer(mFrameBuffer);
+//            
+//            m_colourTexture = inpColourTexture;
+//            m_depthTexture = inpDepthTexture;
+//			
+//            if (m_colourTexture != nullptr)
+//            {
+//                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(m_colourTexture)->GetTextureHandle(), 0);
+//            }
+////Regular OpenGL must always have a colour buffer bound
+//#ifdef CS_OPENGLVERSION_STANDARD
+//			else
+//			{
+//				if (CreateAndAttachColourBuffer() == false)
+//				{
+//					CS_LOG_ERROR("Failed to attach Colour Buffer to render target.");
+//				}
+//			}
+//#endif
+//            if (m_depthTexture != nullptr)
+//            {
+//                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(m_depthTexture)->GetTextureHandle(), 0);
+//            }
+//            else
+//            {
+//                if (CreateAndAttachDepthBuffer() == false)
+//                {
+//                    CS_LOG_ERROR("Failed to attach Depth Buffer to render target.");
+//                }
+//            }
+//            
+//#ifdef CS_ENABLE_DEBUG
+//            GLenum eStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+//            switch(eStatus)
+//            {
+//                case GL_FRAMEBUFFER_COMPLETE:
+//                    break;
+//                case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+//                    CS_LOG_ERROR("Render Target's frame buffer has incomplete attachment!");
+//                    break;
+//#ifdef CS_OPENGLVERSION_ES
+//                case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
+//                    CS_LOG_ERROR("Render Target's frame buffer has incomplete dimensions!");
+//                    break;
+//#endif
+//                case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+//                    CS_LOG_ERROR("Render Target's frame buffer has missing attachment!");
+//                    break;
+//                case GL_FRAMEBUFFER_UNSUPPORTED:
+//                    CS_LOG_ERROR("Render Target's frame buffer is unsupported!");
+//                    break;
+//            }
+//#endif
+//            
+//            CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting render target textures.");
         }
         //------------------------------------------------------
         //------------------------------------------------------

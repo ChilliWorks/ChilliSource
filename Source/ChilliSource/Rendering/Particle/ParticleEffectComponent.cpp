@@ -216,7 +216,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     bool ParticleEffectComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (RenderComponent::InterfaceID == in_interfaceId || ParticleEffectComponent::InterfaceID == in_interfaceId);
+        return (VolumeComponent::InterfaceID == in_interfaceId || ParticleEffectComponent::InterfaceID == in_interfaceId);
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
@@ -632,17 +632,6 @@ namespace ChilliSource
                 m_firstFrame = false;
                 m_accumulatedDeltaTime = 0.0f;
             }
-        }
-    }
-    //-------------------------------------------------------
-    //-------------------------------------------------------
-    void ParticleEffectComponent::Render(RenderSystem* in_renderSystem, CameraComponent* in_camera, ShaderPass in_shaderPass)
-    {
-        if (m_particleEffect != nullptr && (m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping))
-        {
-            CS_ASSERT(m_drawable != nullptr, "Cannot render without a drawable.");
-
-            m_drawable->Draw(in_camera);
         }
     }
     //----------------------------------------------------------------

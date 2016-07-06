@@ -34,5 +34,6 @@
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
 #include <ChilliSource/Rendering/Camera/PerspectiveCameraComponent.h>
+#include <ChilliSource/Rendering/Camera/RenderCamera.h>
 
 #endif

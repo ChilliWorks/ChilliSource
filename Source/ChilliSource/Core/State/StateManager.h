@@ -183,8 +183,8 @@ namespace ChilliSource
         //---------------------------------------------------------
         void ForegroundStates();
         //---------------------------------------------------------
-        /// Updates the current state with the time
-        /// since last update
+        /// Updates the current state with the time since last
+        /// update
         ///
         /// @author S Downie
         ///
@@ -192,14 +192,25 @@ namespace ChilliSource
         //---------------------------------------------------------
         void UpdateStates(f32 in_timeSinceLastUpdate);
         //---------------------------------------------------------
-        /// Updates the current state with the time
-        /// since last update. This is called at a fixed interval
+        /// Updates the current state with the time since last
+        /// update. This is called at a fixed interval
         ///
         /// @author S Downie
         ///
         /// @param Fixed time since last update in seconds
         //---------------------------------------------------------
         void FixedUpdateStates(f32 in_fixedTimeSinceLastUpdate);
+        //---------------------------------------------------------
+        /// Sends the render snapshot event to the active state,
+        /// allowing it to snapshot data which pertains to the
+        /// renderer.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render snapshot object
+        /// which contains all snapshotted data.
+        //---------------------------------------------------------
+        void RenderSnapshotStates(RenderSnapshot& in_renderSnapshot) noexcept;
         //---------------------------------------------------------
         /// Triggered by the application when the system is
         /// pushed to the background. Forwards to states.

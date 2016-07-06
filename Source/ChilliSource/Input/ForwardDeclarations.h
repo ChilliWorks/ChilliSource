@@ -72,6 +72,8 @@ namespace ChilliSource
     /// Text Entry
     //--------------------------------------------------
     CS_FORWARDDECLARE_CLASS(TextEntry);
+    enum class TextEntryType;
+    enum class TextEntryCapitalisation;
 }
 
 #endif

@@ -32,8 +32,8 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
+#include <ChilliSource/Rendering/Model/Model.h>
+#include <ChilliSource/Rendering/Model/ModelDesc.h>
 
 namespace ChilliSource
 {
@@ -47,62 +47,34 @@ namespace ChilliSource
         struct Vertex
         {
             Vector4 m_position;
-            Vector2 m_texCoord;
             Vector3 m_normal;
+            Vector2 m_texCoord;
         };
         //------------------------------------------------------------------------------
-        /// Creates a new mesh descriptor describing a plane model.
+        /// Creates a new model description describing a plane model.
         ///
         /// @author Ian Copland
         ///
         /// @param in_size - The size of the model.
         /// @param in_textureRepeat - The number of times the texture is repeated.
         ///
-        /// @return The new mesh descriptor.
+        /// @return The new model description.
         //------------------------------------------------------------------------------
-        MeshDescriptor CreatePlaneDesc(const Vector2& in_size, const Vector2& in_textureRepeat)
+        ModelDesc CreatePlaneDesc(const Vector2& in_size, const Vector2& in_textureRepeat)
         {
-            Vector2 halfSize = in_size * 0.5f;
+            constexpr u32 k_numVertices = 4;
+            constexpr u32 k_numIndices = 6;
+            const Vector2 halfSize = in_size * 0.5f;
+
+            // Vertices
+            Vertex* vertices = new Vertex[k_numVertices];
+            vertices[0] = { Vector4(-halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[1] = { Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[2] = { Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[3] = { Vector4(halfSize.x, 0.0f, halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
-            //Setup the mesh description
-            MeshDescriptor meshDescriptor;
-            meshDescriptor.mFeatures.mbHasMaterial = false;
-            meshDescriptor.mFeatures.mbHasAnimationData = false;
-            meshDescriptor.mudwIndexSize = sizeof(u16);
-            
-            //Setup vertex description
-            VertexElement vertexDec[3];
-            vertexDec[0].eType = VertexDataType::k_float4;
-            vertexDec[0].eSemantic = VertexDataSemantic::k_position;
-            vertexDec[1].eType = VertexDataType::k_float2;
-            vertexDec[1].eSemantic = VertexDataSemantic::k_uv;
-            vertexDec[2].eType = VertexDataType::k_float3;
-            vertexDec[2].eSemantic = VertexDataSemantic::k_normal;
-            meshDescriptor.mVertexDeclaration = VertexDeclaration(3, vertexDec);
-            
-            //setup sub mesh
-            SubMeshDescriptor subMesh;
-            subMesh.mvMinBounds = Vector3(-halfSize.x, 0.0f, -halfSize.y);
-            subMesh.mvMaxBounds = Vector3(halfSize.x, 0.0f, halfSize.y);
-            subMesh.mstrName = "SubMesh";
-            subMesh.mudwNumVertices = 4;
-            subMesh.mudwNumIndices = 6;
-            subMesh.ePrimitiveType = PrimitiveType::k_tri;
-            
-            //Vertices
-            Vertex* vertices = new Vertex[subMesh.mudwNumVertices];
-            subMesh.mpVertexData = reinterpret_cast<u8*>(vertices);
-            
-            vertices[0] = { Vector4(-halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[1] = { Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[2] = { Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 1.0f, 0.0f) };
-            vertices[3] = { Vector4(halfSize.x, 0.0f, halfSize.y, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 1.0f, 0.0f) };
-            
-            //Indices
-            u16 *indices(new u16[subMesh.mudwNumIndices]);
-            subMesh.mpIndexData = reinterpret_cast<u8*>(indices);
-            
-            //front
+            // Indices
+            u16* indices(new u16[k_numIndices]);
             indices[0] = 0;
             indices[1] = 2;
             indices[2] = 1;
@@ -110,15 +82,22 @@ namespace ChilliSource
             indices[4] = 2;
             indices[5] = 3;
             
-            //Create the mesh.
-            meshDescriptor.mMeshes.push_back(subMesh);
-            meshDescriptor.mvMinBounds = Vector3(-halfSize.x, 0.0f, -halfSize.y);
-            meshDescriptor.mvMaxBounds = Vector3(halfSize.x, 0.0f, halfSize.y);
+            auto name = "PlaneMesh";
+            auto polygonType = PolygonType::k_triangle;
+            auto vertexFormat = VertexFormat::k_staticMesh;
+            auto indexFormat = IndexFormat::k_short;
+            AABB aabb(Vector3::k_zero, Vector3(in_size.x, 0.0f, in_size.y));
+            Sphere boundingSphere(Vector3::k_zero, in_size.Length() * 0.5f);
+            std::unique_ptr<const u8[]> vertexData(reinterpret_cast<const u8*>(vertices));
+            std::unique_ptr<const u8[]> indexData(reinterpret_cast<const u8*>(indices));
             
-            return meshDescriptor;
+            std::vector<MeshDesc> meshDescs;
+            meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, boundingSphere, k_numVertices, k_numVertices, std::move(vertexData), std::move(indexData)));
+            
+            return ModelDesc(std::move(meshDescs), aabb, boundingSphere);
         }
         //------------------------------------------------------------------------------
-        /// Creates a new mesh description describing a box model.
+        /// Creates a new model description describing a box model.
         ///
         /// @author Ian Copland
         ///
@@ -128,82 +107,56 @@ namespace ChilliSource
         /// @param in_flipNormals - Whether or not to flip the box inside out.
         /// This is useful for creating rooms
         ///
-        /// @return The new mesh descriptor.
+        /// @return The new model description.
         //------------------------------------------------------------------------------
-        MeshDescriptor CreateBoxDesc(const Vector3& in_size, const Vector2& in_textureRepeat, bool in_flipNormals)
+        ModelDesc CreateBoxDesc(const Vector3& in_size, const Vector2& in_textureRepeat, bool in_flipNormals)
         {
-            Vector3 halfSize = in_size * 0.5f;
-            
-            //Setup the mesh description
-            MeshDescriptor meshDescriptor;
-            meshDescriptor.mFeatures.mbHasMaterial = true;
-            meshDescriptor.mFeatures.mbHasAnimationData = false;
-            meshDescriptor.mudwIndexSize = sizeof(u16);
-            
-            //Setup vertex description
-            VertexElement vertexDec[3];
-            vertexDec[0].eType = VertexDataType::k_float4;
-            vertexDec[0].eSemantic = VertexDataSemantic::k_position;
-            vertexDec[1].eType = VertexDataType::k_float2;
-            vertexDec[1].eSemantic = VertexDataSemantic::k_uv;
-            vertexDec[2].eType = VertexDataType::k_float3;
-            vertexDec[2].eSemantic = VertexDataSemantic::k_normal;
-            meshDescriptor.mVertexDeclaration = VertexDeclaration(3, vertexDec);
-            
-            //setup sub mesh
-            SubMeshDescriptor subMesh;
-            subMesh.mvMinBounds = Vector3(-halfSize.x, -halfSize.y, -halfSize.z);
-            subMesh.mvMaxBounds = Vector3(halfSize.x, halfSize.y, halfSize.z);
-            subMesh.mstrName = "SubMesh";
-            subMesh.mudwNumVertices = 24;
-            subMesh.mudwNumIndices = 36;
-            subMesh.ePrimitiveType = PrimitiveType::k_tri;
+            constexpr u32 k_numVertices = 24;
+            constexpr u32 k_numIndices = 36;
+            const Vector3 halfSize = in_size * 0.5f;
             
             //Vertices
-            Vertex* vertices = new Vertex[subMesh.mudwNumVertices];
-            subMesh.mpVertexData = reinterpret_cast<u8*>(vertices);
-            
+            Vertex* vertices = new Vertex[k_numVertices];
             float normalDir = (in_flipNormals == false) ? 1.0f : -1.0f;
             
             //bottom
-            vertices[0] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[1] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[2] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, -normalDir, 0.0f) };
-            vertices[3] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, -normalDir, 0.0f) };
+            vertices[0] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, -normalDir, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[1] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, -normalDir, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[2] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, -normalDir, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[3] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, -normalDir, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //top
-            vertices[4] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, normalDir, 0.0f) };
-            vertices[5] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, normalDir, 0.0f) };
-            vertices[6] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, normalDir, 0.0f) };
-            vertices[7] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, normalDir, 0.0f) };
+            vertices[4] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, normalDir, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[5] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, normalDir, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[6] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, normalDir, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[7] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, normalDir, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //left
-            vertices[8] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[9] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[10] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(-normalDir, 0.0f, 0.0f) };
-            vertices[11] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(-normalDir, 0.0f, 0.0f) };
+            vertices[8] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(-normalDir, 0.0f, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[9] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(-normalDir, 0.0f, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[10] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(-normalDir, 0.0f, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[11] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(-normalDir, 0.0f, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //right
-            vertices[12] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[13] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[14] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(normalDir, 0.0f, 0.0f) };
-            vertices[15] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(normalDir, 0.0f, 0.0f) };
+            vertices[12] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(normalDir, 0.0f, 0.0f), Vector2(0.0f, 0.0f) };
+            vertices[13] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(normalDir, 0.0f, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[14] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(normalDir, 0.0f, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[15] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(normalDir, 0.0f, 0.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //front
-            vertices[16] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[17] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[18] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 0.0f, -normalDir) };
-            vertices[19] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 0.0f, -normalDir) };
+            vertices[16] = { Vector4(-halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, 0.0f, -normalDir), Vector2(0.0f, 0.0f) };
+            vertices[17] = { Vector4(-halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, 0.0f, -normalDir), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[18] = { Vector4(halfSize.x, halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, 0.0f, -normalDir), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[19] = { Vector4(halfSize.x, -halfSize.y, -halfSize.z, 1.0f), Vector3(0.0f, 0.0f, -normalDir), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //back
-            vertices[20] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, 0.0f), Vector3(0.0f, 0.0f, normalDir) };
-            vertices[21] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(0.0f, in_textureRepeat.y), Vector3(0.0f, 0.0f, normalDir) };
-            vertices[22] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, 0.0f), Vector3(0.0f, 0.0f, normalDir) };
-            vertices[23] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector2(in_textureRepeat.x, in_textureRepeat.y), Vector3(0.0f, 0.0f, normalDir) };
+            vertices[20] = { Vector4(-halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, 0.0f, normalDir), Vector2(0.0f, 0.0f) };
+            vertices[21] = { Vector4(-halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, 0.0f, normalDir), Vector2(0.0f, in_textureRepeat.y) };
+            vertices[22] = { Vector4(halfSize.x, -halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, 0.0f, normalDir), Vector2(in_textureRepeat.x, 0.0f) };
+            vertices[23] = { Vector4(halfSize.x, halfSize.y, halfSize.z, 1.0f), Vector3(0.0f, 0.0f, normalDir), Vector2(in_textureRepeat.x, in_textureRepeat.y) };
             
             //Indices
-            u16 *indices(new u16[subMesh.mudwNumIndices]);
-            subMesh.mpIndexData = reinterpret_cast<u8*>(indices);
+            u16 *indices(new u16[k_numIndices]);
             
             //bottom
             indices[0] = 0;
@@ -255,37 +208,27 @@ namespace ChilliSource
             
             if (in_flipNormals == true)
             {
-                for (u32 i = 0; i < subMesh.mudwNumIndices; i += 3)
+                for (u32 i = 0; i < k_numIndices; i += 3)
                 {
                     u16 temp = indices[i + 1];
                     indices[i + 1] = indices[i + 2];
                     indices[i + 2] = temp;
                 }
             }
+        
+            auto name = "BoxMesh";
+            auto polygonType = PolygonType::k_triangle;
+            auto vertexFormat = VertexFormat::k_staticMesh;
+            auto indexFormat = IndexFormat::k_short;
+            AABB aabb(Vector3::k_zero, in_size);
+            Sphere boundingSphere(Vector3::k_zero, in_size.Length() / 0.5f);
+            std::unique_ptr<const u8[]> vertexData(reinterpret_cast<const u8*>(vertices));
+            std::unique_ptr<const u8[]> indexData(reinterpret_cast<const u8*>(indices));
             
-            //Create the mesh.
-            meshDescriptor.mMeshes.push_back(subMesh);
-            meshDescriptor.mvMinBounds = Vector3(-halfSize.x, -halfSize.y, -halfSize.z);
-            meshDescriptor.mvMaxBounds = Vector3(halfSize.x, halfSize.y, halfSize.z);
+            std::vector<MeshDesc> meshDescs;
+            meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, boundingSphere, k_numVertices, k_numIndices, std::move(vertexData), std::move(indexData)));
             
-            return meshDescriptor;
-        }
-        //------------------------------------------------------------------------------
-        /// Deletes all heap memory associated with the given mesh descriptor.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param in_desc - The mesh descriptor which should have its contents cleaned
-        /// up.
-        //------------------------------------------------------------------------------
-        void CleanupDesc(MeshDescriptor& in_desc)
-        {
-            //cleanup.
-            for (u32 i = 0; i < in_desc.mMeshes.size(); i++)
-            {
-                delete[] reinterpret_cast<Vertex*>(in_desc.mMeshes[i].mpVertexData);
-                delete[] reinterpret_cast<u16*>(in_desc.mMeshes[i].mpIndexData);
-            }
+            return ModelDesc(std::move(meshDescs), aabb, boundingSphere);
         }
     }
     
@@ -304,21 +247,20 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    MeshCSPtr PrimitiveModelFactory::CreatePlane(const Vector2& in_size, const Vector2& in_textureRepeat) const
+    ModelCSPtr PrimitiveModelFactory::CreatePlane(const Vector2& in_size, const Vector2& in_textureRepeat) const
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
         
         auto resourcePool = Application::Get()->GetResourcePool();
         auto meshName = "_PrimitivePlane(" + ToString(in_size) + ")";
-        auto mesh = resourcePool->GetResource<Mesh>(meshName);
+        auto mesh = resourcePool->GetResource<Model>(meshName);
         
         if (mesh == nullptr)
         {
-            auto mutableMesh = resourcePool->CreateResource<Mesh>(meshName);
+            auto mutableMesh = resourcePool->CreateResource<Model>(meshName);
             
             auto desc = CreatePlaneDesc(in_size, in_textureRepeat);
-            mutableMesh->Build(desc);
-            CleanupDesc(desc);
+            mutableMesh->Build(std::move(desc));
             mutableMesh->SetLoadState(Resource::LoadState::k_loaded);
             
             mesh = mutableMesh;
@@ -328,21 +270,20 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    MeshCSPtr PrimitiveModelFactory::CreateBox(const Vector3& in_size, const Vector2& in_textureRepeat, bool in_flipNormals) const
+    ModelCSPtr PrimitiveModelFactory::CreateBox(const Vector3& in_size, const Vector2& in_textureRepeat, bool in_flipNormals) const
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
         
         auto resourcePool = Application::Get()->GetResourcePool();
         auto meshName = "_PrimitiveBox(" + ToString(in_size) + "|" + ToString(in_textureRepeat) + "|" + ToString(in_flipNormals) + ")";
-        auto mesh = resourcePool->GetResource<Mesh>(meshName);
+        auto mesh = resourcePool->GetResource<Model>(meshName);
         
         if (mesh == nullptr)
         {
-            auto mutableMesh = resourcePool->CreateResource<Mesh>(meshName);
+            auto mutableMesh = resourcePool->CreateResource<Model>(meshName);
             
             auto desc = CreateBoxDesc(in_size, in_textureRepeat, in_flipNormals);
-            mutableMesh->Build(desc);
-            CleanupDesc(desc);
+            mutableMesh->Build(std::move(desc));
             mutableMesh->SetLoadState(Resource::LoadState::k_loaded);
             
             mesh = mutableMesh;

@@ -286,33 +286,89 @@ namespace CSBackend
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        ChilliSource::FileStreamUPtr FileSystem::CreateFileStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileMode in_fileMode) const
+        ChilliSource::ITextInputStreamUPtr FileSystem::CreateTextInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
-            if (IsWriteMode(in_fileMode) == true)
+            std::string absFilePath = "";
+            if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
             {
-                CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
-            }
-            
-            if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false && IsWriteMode(in_fileMode) == false)
-            {
-                auto absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + in_filePath;
-                ChilliSource::FileStreamUPtr output(new ChilliSource::FileStream(absFilePath, in_fileMode));
-                if (output->IsValid() == true)
-                {
-                    return output;
-                }
+                absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + in_filePath;
             }
             else
             {
-                auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
-                ChilliSource::FileStreamUPtr output(new ChilliSource::FileStream(absFilePath, in_fileMode));
+                absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+            }
+            
+            ChilliSource::ITextInputStreamUPtr output(new ChilliSource::TextInputStream(absFilePath));
+            if (output->IsValid() == true)
+            {
+                return output;
+            }
+            else
+            {
+                return nullptr;
+            }
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        ChilliSource::IBinaryInputStreamUPtr FileSystem::CreateBinaryInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+        {
+            std::string absFilePath = "";
+            if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
+            {
+                absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + in_filePath;
+            }
+            else
+            {
+                absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+            }
+            
+            ChilliSource::IBinaryInputStreamUPtr output(new ChilliSource::BinaryInputStream(absFilePath));
+            if (output->IsValid() == true)
+            {
+                return output;
+            }
+            else
+            {
+                return nullptr;
+            }
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        ChilliSource::TextOutputStreamUPtr FileSystem::CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileWriteMode in_fileMode) const
+        {
+            CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+            
+            if(IsStorageLocationWritable(in_storageLocation))
+            {
+                std::string absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+                
+                ChilliSource::TextOutputStreamUPtr output(new ChilliSource::TextOutputStream(absFilePath, in_fileMode));
                 if (output->IsValid() == true)
                 {
                     return output;
                 }
             }
             
-			return nullptr;
+            return nullptr;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        ChilliSource::BinaryOutputStreamUPtr FileSystem::CreateBinaryOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileWriteMode in_fileMode) const
+        {
+            CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+            
+            if(IsStorageLocationWritable(in_storageLocation))
+            {
+                std::string absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+                
+                ChilliSource::BinaryOutputStreamUPtr output(new ChilliSource::BinaryOutputStream(absFilePath, in_fileMode));
+                if (output->IsValid() == true)
+                {
+                    return output;
+                }
+            }
+            
+            return nullptr;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------

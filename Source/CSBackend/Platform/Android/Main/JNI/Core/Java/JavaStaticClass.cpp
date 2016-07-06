@@ -40,11 +40,12 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         JavaStaticClass::JavaStaticClass(const JavaStaticClassDef& in_javaStaticClassDef)
         {
-            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto jvm = JavaVirtualMachine::Get();
+            auto environment = jvm->GetJNIEnvironment();
 
             //Get the class
             m_className = in_javaStaticClassDef.GetClassName();
-            jclass jClass = environment->FindClass(m_className.c_str());
+            jclass jClass = jvm->FindClass(m_className);
             CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
 
             m_javaClass = static_cast<jclass>(environment->NewGlobalRef(jClass));

@@ -50,480 +50,394 @@ namespace ChilliSource
         f32 m_resourcesDensity;
     };
     
-    //-----------------------------------------------------------
-    /// The main hub of the engine. The Application controls the
-    /// overall application flow and contains all engine systems.
-    /// This also acts as the entry point into a Chilli Source
-    /// application. The user should override this class to include
-    /// desired systems and add the initial State.
+    
+    /// The main hub of the engine. The Application controls the overall application flow
+    /// and contains all engine systems. This also acts as the entry point into a
+    /// ChilliSource application. The user should override this class to include desired
+    /// systems and add the initial State.
     ///
-    /// @author S Downie
-    //-----------------------------------------------------------
+    /// Some methods in Application are thread-safe, but others are not.
+    ///
     class Application
     {
     public:
         CS_DECLARE_NOCOPY(Application);
-        //----------------------------------------------------
-        /// Returns the global application instance.
+        
+        /// This is thread safe.
         ///
-        /// @author I Copland
+        /// @return The application singleton instance pointer.
         ///
-        /// @return The application instance pointer.
-        //----------------------------------------------------
-        static Application* Get();
-        //----------------------------------------------------
+        static Application* Get() noexcept;
+        
         /// Constructor
         ///
-        /// @author S Downie
-        //----------------------------------------------------
-        Application();
-        //----------------------------------------------------
-        /// Creates a new instance of the given system and
-        /// adds it to the application.
+        Application() noexcept;
+        
+        /// Creates a new instance of the given system and adds it to the application.
         ///
-        /// @author I Copland
-        ///
-        /// @param The arguments to the system constructor.
+        /// @param args
+        ///     The arguments to the system constructor.
         ///
         /// @return A raw pointer to the new system.
-        //----------------------------------------------------
-        template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs&&... in_args);
-        //----------------------------------------------------
-        /// Looks for a system that implements the queryable
-        /// interface provided as a template parameter.
         ///
-        /// This is thread-safe as long as it is called between
-        /// the OnInit() and OnDestroy() applicationlifecycle
-        /// events, inclusive.
+        template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs&&... args) noexcept;
+        
+        /// Looks for a system that implements the queryable interface provided as a
+        /// template parameter.
         ///
-        /// @author I Copland
+        /// This is thread-safe as long as it is called between the OnInit() and OnDestroy()
+        /// application lifecycle events, inclusive.
         ///
-        /// @return A pointer to the first system found that
-        /// implements the named interface.
-        //----------------------------------------------------
-        template <typename TNamedType> TNamedType* GetSystem();
-        //----------------------------------------------------
-        /// Looks for a system that implements the queryable
-        /// interface provided as a template parameter.
+        /// @return A pointer to the first system found that implements the named interface.
         ///
-        /// This is thread-safe as long as it is called between
-        /// the OnInit() and OnDestroy() applicationlifecycle
-        /// events, inclusive.
+        template <typename TNamedType> TNamedType* GetSystem() noexcept;
+
+        /// Looks for a system that implements the queryable interface provided as a
+        /// template parameter.
         ///
-        /// @author I Copland
+        /// This is thread-safe as long as it is called between the OnInit() and OnDestroy()
+        /// application lifecycle events, inclusive.
         ///
-        /// @return A const pointer to the first system found
-        /// that implements the named interface.
-        //----------------------------------------------------
-        template <typename TNamedType> const TNamedType* GetSystem() const;
-        //-----------------------------------------------------
-        /// Looks for all systems that implement the given
-        /// queryable interface provided as a template parameter.
+        /// @return A const pointer to the first system found that implements the named
+        /// interface.
         ///
-        /// This is thread-safe as long as it is called between
-        /// the OnInit() and OnDestroy() applicationlifecycle
-        /// events, inclusive.
+        template <typename TNamedType> const TNamedType* GetSystem() const noexcept;
+        
+        /// Looks for all systems that implement the given queryable interface provided
+        /// as a template parameter.
         ///
-        /// @author I Copland
+        /// This is thread-safe as long as it is called between the OnInit() and
+        /// OnDestroy() application lifecycle events, inclusive.
         ///
-        /// @return A list of pointers to the systems that
-        /// implement the given interface.
-        //-----------------------------------------------------
-        template <typename TNamedType> std::vector<TNamedType*> GetSystems();
-        //-----------------------------------------------------
-        /// Looks for all systems that implement the given
-        /// queryable interface provided as a template parameter.
+        /// @return A list of pointers to the systems that implement the given interface.
         ///
-        /// This is thread-safe as long as it is called between
-        /// the OnInit() and OnDestroy() applicationlifecycle
-        /// events, inclusive.
+        template <typename TNamedType> std::vector<TNamedType*> GetSystems() noexcept;
+
+        /// Looks for all systems that implement the given queryable interface provided
+        /// as a template parameter.
         ///
-        /// @author I Copland
+        /// This is thread-safe as long as it is called between the OnInit() and
+        /// OnDestroy() application lifecycle events, inclusive.
         ///
-        /// @return A list of const pointers to the systems that
-        /// implement the given interface.
-        //-----------------------------------------------------
-        template <typename TNamedType> std::vector<const TNamedType*> GetSystems() const;
-        //-----------------------------------------------------
-        /// Returns the version number of the application on
-        /// the current platform as a string.
+        /// @return A list of const pointers to the systems that implement the given
+        /// interface.
         ///
-        /// @author S Downie.
+        template <typename TNamedType> std::vector<const TNamedType*> GetSystems() const noexcept;
+
+        /// Returns the version number of the application on the current platform
+        /// as a string.
+        ///
+        /// This is not thread-safe and should only be called from the main thread.
         ///
         /// @return The version string.
-        //-----------------------------------------------------
-        std::string GetAppVersion() const;
-        //-----------------------------------------------------
+        ///
+        std::string GetAppVersion() const noexcept;
+
         /// This is thread-safe.
         ///
-        /// @author Ian Copland
-        ///
         /// @return The unique index of the current frame.
-        //-----------------------------------------------------
-        u32 GetFrameIndex() const;
-        //-----------------------------------------------------
-        /// Returns the elapsed time since the application
-        /// started running in seconds.
         ///
-        /// This is not thread-safe and should only be called
-        /// from the main thread.
+        u32 GetFrameIndex() const noexcept;
+        
+        /// Returns the elapsed time since the application started running in
+        /// seconds.
         ///
-        /// @author S Downie.
+        /// This is not thread-safe and should only be called from the main thread.
         ///
         /// @return The time in seconds.
-        //-----------------------------------------------------
-        TimeIntervalSecs GetAppElapsedTime() const;
-        //-----------------------------------------------------
+        ///
+        TimeIntervalSecs GetAppElapsedTime() const noexcept;
+
         /// Returns the system clock time in seconds since epoch.
         ///
-        /// @author S Downie.
-        ///
         /// @return The time in seconds.
-        //-----------------------------------------------------
-        TimeIntervalSecs GetSystemTime() const;
-        //-----------------------------------------------------
-        /// Return the system clock time in milliseconds since
-        /// epoch.
         ///
-        /// @author S Downie.
+        TimeIntervalSecs GetSystemTime() const noexcept;
+
+        /// Return the system clock time in milliseconds since epoch.
         ///
         /// @return The time in milliseconds.
-        //-----------------------------------------------------
-        TimeIntervalSecs GetSystemTimeInMilliseconds() const;
-        //-----------------------------------------------------
-        /// Set the time between update calls to adjust the
-        /// frame rate.
         ///
-        /// @author S Downie.
+        TimeIntervalSecs GetSystemTimeInMilliseconds() const noexcept;
+
+        /// Set the time between update calls to adjust the frame rate.
         ///
-        /// @param Time between update calls
-        //-----------------------------------------------------
-        void SetUpdateInterval(f32 in_updateInterval);
-        //-----------------------------------------------------
-        /// Returns the time between update calls.
+        /// @param updateInterval
+        ///     Time between update calls
         ///
-        /// @author S Downie.
+        void SetUpdateInterval(f32 updateInterval) noexcept;
+        
+        /// This is not thread-safe and should only be called on the main thread.
         ///
-        /// @return Time between update calls
-        //-----------------------------------------------------
-        f32 GetUpdateInterval() const;
-        //-----------------------------------------------------
-        /// Returns the maximum amount of time to be processed
-        /// a single update frame.
+        /// @return The time between update calls.
         ///
-        /// @author S Downie.
+        f32 GetUpdateInterval() const noexcept;
+
+        /// Returns the maximum amount of time to be processed a single update frame.
+        ///
+        /// This is not thread-safe and should only be called on the main thread.
         ///
         /// @return Max time to be processed in a single frame.
-        //-----------------------------------------------------
-        f32 GetUpdateIntervalMax() const;
-        //-----------------------------------------------------
-        /// Sets a multiplier for slowing or speeding up the
-        /// delta time passed to each system and state.
         ///
-        /// @author I Copland
+        f32 GetUpdateIntervalMax() const noexcept;
+
+        /// Sets a multiplier for slowing or speeding up the delta time passed to
+        /// each system and state.
         ///
-        /// @param Scaler to speed up or slow down update time.
-        //-----------------------------------------------------
-        void SetUpdateSpeed(f32 in_speed);
-        //-----------------------------------------------------
+        /// This is not thread-safe and should only be called on the main thread.
+        ///
+        /// @param speed
+        ///     Scaler to speed up or slow down update time.
+        ///
+        void SetUpdateSpeed(f32 speed) noexcept;
+
         /// Stop the application and exit gracefully
         ///
-        /// @author S Downie.
-        //-----------------------------------------------------
-        void Quit();
-        //-----------------------------------------------------
-        /// @author S Downie
+        /// This is not thread-safe and should only be called on the main thread.
+        ///
+        void Quit() noexcept;
+        
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A pointer to the state manager.
-        //-----------------------------------------------------
-        StateManager* GetStateManager();
-        //-----------------------------------------------------
-        /// @author Ian Copland
+        ///
+        StateManager* GetStateManager() noexcept;
+
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A const pointer to the state manager.
-        //-----------------------------------------------------
-        const StateManager* GetStateManager() const;
-        //-----------------------------------------------------
-        /// @author S Downie.
         ///
-        /// @return A pointer to the renderer.
-        //-----------------------------------------------------
-        Renderer* GetRenderer();
-        //-----------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @return A const pointer to the renderer.
-        //-----------------------------------------------------
-        const Renderer* GetRenderer() const;
-        //-----------------------------------------------------
-        /// @author S Downie.
-        ///
-        /// @return A pointer to the platform specific render
-        /// system
-        //-----------------------------------------------------
-        RenderSystem* GetRenderSystem();
-        //-----------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @return A const pointer to the platform specific
-        /// render system
-        //-----------------------------------------------------
-        const RenderSystem* GetRenderSystem() const;
-        //-----------------------------------------------------
-        /// @author I Copland
+        const StateManager* GetStateManager() const noexcept;
+
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A pointer to the file system.
-        //-----------------------------------------------------
-        FileSystem* GetFileSystem();
-        //-----------------------------------------------------
-        /// @author I Copland
+        ///
+        FileSystem* GetFileSystem() noexcept;
+
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A const pointer to the file system.
-        //-----------------------------------------------------
-        const FileSystem* GetFileSystem() const;
-        //-----------------------------------------------------
-        /// @author S Downie
         ///
-        /// @return A pointer to the system that resolves path
-        /// based on the device config
-        //-----------------------------------------------------
-        TaggedFilePathResolver* GetTaggedFilePathResolver();
-        //-----------------------------------------------------
-        /// @author Ian Copland
+        const FileSystem* GetFileSystem() const noexcept;
+
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
-        /// @return A const pointer to the system that resolves
-        /// path based on the device config
-        //-----------------------------------------------------
-        const TaggedFilePathResolver* GetTaggedFilePathResolver() const;
-        //-----------------------------------------------------
-        /// This is thread-safe as long as it is called between
-        /// the OnInit() and OnDestroy() applicationlifecycle
-        /// events, inclusive.
+        /// @return A pointer to the system that resolves path based on the device
+        /// config
         ///
-        /// @author Ian Copland
+        TaggedFilePathResolver* GetTaggedFilePathResolver() noexcept;
+
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
+        ///
+        /// @return A const pointer to the system that resolves path based on the
+        /// device config
+        ///
+        const TaggedFilePathResolver* GetTaggedFilePathResolver() const noexcept;
+
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A pointer to the task scheduler.
-        //-----------------------------------------------------
-        TaskScheduler* GetTaskScheduler();
-        //-----------------------------------------------------
-        /// This is thread-safe as long as it is called between
-        /// the OnInit() and OnDestroy() applicationlifecycle
-        /// events, inclusive.
+        ///
+        TaskScheduler* GetTaskScheduler() noexcept;
+
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @author Ian Copland
         ///
         /// @return A const pointer to the task scheduler.
-        //-----------------------------------------------------
-        const TaskScheduler* GetTaskScheduler() const;
-        //-----------------------------------------------------
-        /// @author S Downie
+        ///
+        const TaskScheduler* GetTaskScheduler() const noexcept;
+
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A pointer to the resource pool system.
-        //-----------------------------------------------------
-        ResourcePool* GetResourcePool();
-        //-----------------------------------------------------
-        /// @author Ian Copland
+        ///
+        ResourcePool* GetResourcePool() noexcept;
+        
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A const pointer to the resource pool system.
-        //-----------------------------------------------------
-        const ResourcePool* GetResourcePool() const;
-        //-----------------------------------------------------
-        /// @author Ian Copland
+        ///
+        const ResourcePool* GetResourcePool() const noexcept;
+        
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A pointer to the App Config.
-        //-----------------------------------------------------
-        AppConfig* GetAppConfig();
-        //-----------------------------------------------------
-        /// @author Ian Copland
+        ///
+        AppConfig* GetAppConfig() noexcept;
+        
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A const pointer to the App Config.
-        //-----------------------------------------------------
-        const AppConfig* GetAppConfig() const;
-        //-----------------------------------------------------
-        /// @author Ian Copland
+        ///
+        const AppConfig* GetAppConfig() const noexcept;
+        
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A pointer to the screen system.
-        //-----------------------------------------------------
-        Screen* GetScreen();
-        //-----------------------------------------------------
-        /// @author Ian Copland
+        ///
+        Screen* GetScreen() noexcept;
+        
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A const pointer to the screen system.
-        //-----------------------------------------------------
-        const Screen* GetScreen() const;
-        //-----------------------------------------------------
-        /// @author S Downie
+        ///
+        const Screen* GetScreen() const noexcept;
+        
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A pointer to the widget factory system.
-        //-----------------------------------------------------
-        WidgetFactory* GetWidgetFactory();
-        //-----------------------------------------------------
-        /// @author Ian Copland
+        ///
+        WidgetFactory* GetWidgetFactory() noexcept;
+        
+        /// This is thread-safe as long as it is called between the init and
+        /// destroy application lifecycle events, inclusive.
         ///
         /// @return A const pointer to the widget factory system.
-        //-----------------------------------------------------
-        const WidgetFactory* GetWidgetFactory() const;
-        //----------------------------------------------------
-        /// Initialises the application and kicks off the update
-        /// loop. This should not be called by a users application.
         ///
-        /// @author I Copland
-        //----------------------------------------------------
-        void Init();
-        //----------------------------------------------------
-        /// Resumes application from suspended state. This should
-        /// not be called by a users application.
-        ///
-        /// @author  S Downie.
-        //----------------------------------------------------
-        void Resume();
-        //----------------------------------------------------
-        /// Triggered when the application is pushed
-        /// to the front of the view stack. This should
-        /// not be called by a users application.
-        ///
-        /// @author S Downie
-        //----------------------------------------------------
-        void Foreground();
-        //----------------------------------------------------
-        /// Triggered by an update event. This will update
-        /// the application, systems and states. This should
-        /// not be called by a users application.
-        ///
-        /// @author S Downie
-        ///
-        /// @param The delta time.
-        /// @param The frame timestamp.
-        //----------------------------------------------------
-        void Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
-        //----------------------------------------------------
-        /// The main draw loop of the application that will
-        /// render to the screen. This should not be called
-        /// by a users application.
-        //----------------------------------------------------
-        void Render();
-        //----------------------------------------------------
-        /// Triggered on receiving a "application memory warning"
-        /// event. This will notify active resource managers to
-        /// purge their caches. This should not be called by
-        /// a users application.
-        ///
-        /// @author S Downie
-        //----------------------------------------------------
-        void ApplicationMemoryWarning();
-        //----------------------------------------------------
-        /// Triggered when the application is pushed back from
-        /// the front of the view stack. This should
-        /// not be called by a users application.
-        ///
-        /// @author S Downie
-        //----------------------------------------------------
-        void Background();
-        //----------------------------------------------------
-        /// Triggered on receiving a "application will suspend"
-        /// message. This will notify active states to pause
-        /// and tell the sub systems to stop. This should not
-        /// be called by a users application.
-        ///
-        /// @author S Downie
-        //----------------------------------------------------
-        void Suspend();
-        //----------------------------------------------------
-        /// Releases all systems and states and cleans up the
-        /// application. This should not be called by a users
-        /// application.
-        ///
-        /// @author I Copland
-        //----------------------------------------------------
-        void Destroy();
-        //------------------------------------------------------
-        /// Destructor
-        //------------------------------------------------------
-        virtual ~Application();
-    protected:
-        //------------------------------------------------------
-        /// The users application should override this to add
-        /// desired systems. Systems can only be added in this
-        /// method.
-        ///
-        /// @author S Downie
-        //------------------------------------------------------
-        virtual void CreateSystems() = 0;
-        //------------------------------------------------------
-        /// Initialisation method called after all systems have
-        /// been set up and before the first state is pushed.
-        /// Application initialisation code should be in here.
-        ///
-        /// @author I Copland
-        //------------------------------------------------------
-        virtual void OnInit() = 0;
-        //------------------------------------------------------
-        /// Give the state manager the initial state. This should
-        /// be overriden by the users application to add initial
-        /// state.
-        ///
-        /// @author S Downie
-        //------------------------------------------------------
-        virtual void PushInitialState() = 0;
-        //------------------------------------------------------
-        /// Destuction method called just before all systems
-        /// and states are released. Application destruction
-        /// code should be in here.
-        ///
-        /// @author I Copland
-        //------------------------------------------------------
-        virtual void OnDestroy() = 0;
-    private:
-        //------------------------------------------------------
-        /// Systems that are required by CS are added in this
-        /// method
-        ///
-        /// @author S Downie
-        //------------------------------------------------------
-        void CreateDefaultSystems();
-        //------------------------------------------------------
-        /// Once the systems have been created they are then
-        /// added to the pool and initialised.
-        ///
-        /// @author S Downie
-        //------------------------------------------------------
-        void PostCreateSystems();
-        //------------------------------------------------------
-        /// A single update cycle that updates all updateables,
-        /// timers and the active state This can be called multiple
-        /// times per frame depending on fixed updates.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Time between frames
-        //------------------------------------------------------
-        void OnUpdate(f32 in_deltaTime);
-        //---------------------------------------------------
-        /// Resumes the application. This will be called when
-        /// at the start of the next update following the On
-        /// Resume event.
-        ///
-        /// @author S Downie
-        //---------------------------------------------------
-        void OnResume();
-        //---------------------------------------------------
-        /// Foregrounds the application. This will be called when
-        /// at the start of the next update following the On
-        /// Foreground event.
-        ///
-        /// @author S Downie
-        //---------------------------------------------------
-        void OnForeground();
+        const WidgetFactory* GetWidgetFactory() const noexcept;
 
+        virtual ~Application() noexcept;
+        
+    protected:
+        /// The users application should override this to add desired systems.
+        /// Systems can only be added in this method.
+        ///
+        /// This will always be called on the main thread.
+        ///
+        virtual void CreateSystems() noexcept = 0;
+        
+        /// Initialisation method called after all systems have been set up and
+        /// before the first state is pushed. Application initialisation code
+        /// should be in here.
+        ///
+        /// This will always be called on the main thread.
+        ///
+        virtual void OnInit() noexcept = 0;
+        
+        /// Give the state manager the initial state. This should be overriden by
+        /// the users application to add initial state.
+        ///
+        /// This will always be called on the main thread.
+        ///
+        virtual void PushInitialState() noexcept = 0;
+        
+        /// Destuction method called just before all systems and states are released.
+        /// Application destruction code should be in here.
+        ///
+        /// This will always be called on the main thread.
+        ///
+        virtual void OnDestroy() noexcept = 0;
+        
     private:
+        friend class LifecycleManager;
+        
+        /// Systems that are required by CS are added in this method
+        ///
+        void CreateDefaultSystems() noexcept;
+        
+        /// Once the systems have been created they are then added to the pool and
+        /// initialised.
+        ///
+        void PostCreateSystems() noexcept;
+        
+        /// Sends the render snapshot event to all active systems and components
+        /// that are current in the scene to generate the render snapshot. This
+        /// snapshot is then passed to the render pipeline for processing.
+        ///
+        void ProcessRenderSnapshotEvent() noexcept;
+        
+        /// Initialises the application, creating all systems and sending the init
+        /// lifecycle event to all systems.
+        ///
+        /// This is called by the LifecycleManager.
+        ///
+        void Init() noexcept;
+        
+        /// Resumes the application from the suspended state, and sends the resume
+        /// lifecycle event to all systems.
+        ///
+        /// This is called by the LifecycleManager.
+        ///
+        void Resume() noexcept;
+        
+        /// Foregrounds the application and sends the foreground lifecycle event to
+        /// all systems.
+        ///
+        /// This is called by the LifecycleManager.
+        ///
+        void Foreground() noexcept;
+        
+        /// Updates the application and sends the update lifecycle event and fixed
+        /// update lifecycle event to all systems.
+        ///
+        /// This is called by the LifecycleManager.
+        ///
+        /// @param deltaTime
+        ///     The time that has passed since the last update.
+        /// @param timestamp
+        ///     The frame timestamp.
+        ///
+        void Update(f32 deltaTime, TimeIntervalSecs timestamp) noexcept;
+        
+        /// Sends the render snapshot event to all systems and then initiates the
+        /// render pipeline.
+        ///
+        /// This is called on the render thread.
+        ///
+        void Render() noexcept;
+        
+        /// Triggered on receiving a "application memory warning" event. This will
+        /// notify active resource managers to purge their caches.
+        ///
+        /// This is called by the LifecycleManager.
+        ///
+        void ApplicationMemoryWarning() noexcept;
+        
+        /// Backgrounds the application and sends the background lifecycle event to
+        /// all systems.
+        ///
+        /// This is called by the LifecycleManager.
+        ///
+        void Background() noexcept;
+        
+        /// Suspends the application and sends the suspend lifecycle event to all
+        /// systems.
+        ///
+        /// This is called by the LifecycleManager.
+        ///
+        void Suspend() noexcept;
+        
+        /// Sends the destroy lifecycle event to all systems and then deallocates
+        /// them. All background tasks will be processed before the destroy event.
+        ///
+        /// This is called by the LifecycleManager.
+        ///
+        void Destroy() noexcept;
+        
         std::vector<AppSystemUPtr> m_systems;
         
         ResourcePool* m_resourcePool = nullptr;
         StateManager* m_stateManager = nullptr;
         TaskScheduler* m_taskScheduler = nullptr;
-        Screen* m_screen = nullptr;
         Renderer* m_renderer = nullptr;
-        RenderSystem* m_renderSystem = nullptr;
+        Screen* m_screen = nullptr;
         PlatformSystem* m_platformSystem = nullptr;
         FileSystem* m_fileSystem = nullptr;
         TaggedFilePathResolver* m_taggedPathResolver = nullptr;
@@ -536,21 +450,17 @@ namespace ChilliSource
         f32 m_updateInterval;
         f32 m_updateSpeed = 1.0f;
         f32 m_updateIntervalRemainder = 0.0f;
-        
-        bool m_shouldNotifyConnectionsResumeEvent = false;
-        bool m_shouldNotifyConnectionsForegroundEvent = false;
-        bool m_isSuspending = false;
         bool m_isSystemCreationAllowed = false;
         
         static Application* s_application;
     };
-    //----------------------------------------------------
-    //----------------------------------------------------
-    template <typename TSystem, typename... TArgs> TSystem* Application::CreateSystem(TArgs&&... in_args)
+    
+    //------------------------------------------------------------------------------
+    template <typename TSystem, typename... TArgs> TSystem* Application::CreateSystem(TArgs&&... args) noexcept
     {
         CS_ASSERT(m_isSystemCreationAllowed == true, "Cannot add systems outwith the creation phase");
         
-        std::unique_ptr<TSystem> newSystem = TSystem::Create(std::forward<TArgs>(in_args)...);
+        std::unique_ptr<TSystem> newSystem = TSystem::Create(std::forward<TArgs>(args)...);
         TSystem* output = newSystem.get();
         if (newSystem != nullptr)
         {
@@ -559,9 +469,9 @@ namespace ChilliSource
         
         return output;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    template <typename TNamedType> TNamedType* Application::GetSystem()
+    
+    //------------------------------------------------------------------------------
+    template <typename TNamedType> TNamedType* Application::GetSystem() noexcept
     {
         for (const auto& system : m_systems)
         {
@@ -573,9 +483,9 @@ namespace ChilliSource
         
         return nullptr;
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    template <typename TNamedType> const TNamedType* Application::GetSystem() const
+    
+    //------------------------------------------------------------------------------
+    template <typename TNamedType> const TNamedType* Application::GetSystem() const noexcept
     {
         for (const auto& system : m_systems)
         {
@@ -587,9 +497,9 @@ namespace ChilliSource
         
         return nullptr;
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    template <typename TNamedType> std::vector<TNamedType*> Application::GetSystems()
+    
+    //------------------------------------------------------------------------------
+    template <typename TNamedType> std::vector<TNamedType*> Application::GetSystems() noexcept
     {
         std::vector<TNamedType*> output;
         
@@ -603,9 +513,9 @@ namespace ChilliSource
         
         return output;
     }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    template <typename TNamedType> std::vector<const TNamedType*> Application::GetSystems() const
+    
+    //------------------------------------------------------------------------------
+    template <typename TNamedType> std::vector<const TNamedType*> Application::GetSystems() const noexcept
     {
         std::vector<const TNamedType*> output;
         
@@ -621,14 +531,12 @@ namespace ChilliSource
     }
 }
 
-//--------------------------------------------------------
-/// Factory method that must be implemented by the
-/// the derived application.
+/// Factory method that must be implemented by the the derived application.
 ///
-/// @author S Downie
+/// This is not thread safe and must always be called on the system thread.
 ///
 /// @return Instance of concrete CS application
-//--------------------------------------------------------
-ChilliSource::Application* CreateApplication();
+///
+ChilliSource::Application* CreateApplication() noexcept;
 
 #endif

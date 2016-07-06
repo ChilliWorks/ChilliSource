@@ -82,7 +82,6 @@ namespace ChilliSource
         //----------------------------------------------------
         virtual bool IsVisible() const = 0;
 
-    public:
         f32 mfQueryIntersectionValue;
     };
 }

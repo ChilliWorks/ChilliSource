@@ -113,6 +113,19 @@ namespace ChilliSource
     }
     //-----------------------------------------
     //-----------------------------------------
+    void State::RenderSnapshot(class RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        for(auto& system : m_systems)
+        {
+            system->OnRenderSnapshot(in_renderSnapshot);
+        }
+        
+        m_scene->RenderSnapshotEntities(in_renderSnapshot);
+        
+        OnRenderSnapshot(in_renderSnapshot);
+    }
+    //-----------------------------------------
+    //-----------------------------------------
     void State::Background()
     {
         OnBackground();

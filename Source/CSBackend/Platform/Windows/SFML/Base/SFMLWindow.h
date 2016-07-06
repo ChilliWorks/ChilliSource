@@ -32,6 +32,7 @@
 
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/LifeCycleManager.h>
 #include <ChilliSource/Core/Base/Singleton.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -195,13 +196,6 @@ namespace CSBackend
 			/// @return A list of resolutions supported by the display
 			//----------------------------------------------------------
 			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const;
-			//-------------------------------------------------
-			/// Flush to the display. Should be called at end
-			/// if each frame
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void Display();
 			//----------------------------------------------------
 			/// Hide the window cursor
 			///
@@ -382,6 +376,8 @@ namespace CSBackend
 			bool m_isRunning = true;
 			bool m_isFocused = true;
 			DisplayMode m_displayMode = DisplayMode::k_windowed;
+
+            ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
 		};
 	}
 }

@@ -36,6 +36,7 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureDesc.h>
 
 namespace ChilliSource
 {
@@ -161,22 +162,15 @@ namespace ChilliSource
         if(m_shadowMap == nullptr && m_renderCapabilities->IsShadowMappingSupported() == true && m_shadowMapRes > 0)
         {
             m_shadowMap = Application::Get()->GetResourcePool()->CreateResource<Texture>("_ShadowMap" + ToString(m_shadowMapId));
-            Texture::Descriptor desc;
-            desc.m_width = m_shadowMapRes;
-            desc.m_height = m_shadowMapRes;
-            desc.m_format = ImageFormat::k_Depth16;
-            desc.m_compression = ImageCompression::k_none;
-            desc.m_dataSize = 0;
-            m_shadowMap->Build(desc, nullptr, false, false);
+            
+            TextureDesc desc(Integer2(m_shadowMapRes, m_shadowMapRes), ImageFormat::k_Depth16, ImageCompression::k_none);
+            m_shadowMap->Build(nullptr, 0, desc);
             
 #ifdef CS_ENABLE_DEBUGSHADOW
             m_shadowMapDebug = Application::Get()->GetResourcePool()->CreateResource<Texture>("_ShadowMapDebug" + ToString(m_shadowMapId));
-            desc.m_width = m_shadowMapRes;
-            desc.m_height = m_shadowMapRes;
-            desc.m_format = ImageFormat::k_RGB888;
-            desc.m_compression = ImageCompression::k_none;
-            desc.m_dataSize = 0;
-            m_shadowMapDebug->Build(desc, nullptr, false, false);
+            
+            TextureDesc desc(Integer2(m_shadowMapRes, m_shadowMapRes), ImageFormat::k_RGB888, ImageCompression::k_none);
+            m_shadowMapDebug->Build(nullptr, 0, desc);
 #endif
         }
     }

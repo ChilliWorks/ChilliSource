@@ -89,6 +89,8 @@ namespace CSBackend
             //-------------------------------------------------------
             /// @author S Downie
             ///
+            /// This should only be called from the main thread.
+            ///
             /// @return Whether or not text input is currently
             /// enabled.
             //-------------------------------------------------------
@@ -108,15 +110,10 @@ namespace CSBackend
             //-------------------------------------------------------
             /// Called when the keyboard text is updated.
             ///
-            /// The delegate called in this method will run on a
-            /// background thread, and should only perform text
-            /// validation.
-            ///
             /// @author S Downie
             ///
-            /// @param The new text.
             //-------------------------------------------------------
-			bool OnTextUpdated(NSString* in_text);
+			void OnTextUpdated(NSString* in_text);
             //-------------------------------------------------------
             /// Destructor.
             ///
@@ -153,6 +150,9 @@ namespace CSBackend
             /// @param The capitalisation method.
             //-------------------------------------------------------
             void SetCapitalisation(ChilliSource::TextEntryCapitalisation in_capitalisation);
+            
+            bool m_isActive = false;
+            bool m_isViewSetup = false;
             
             UITextField* m_textView;
             TextEntryDelegate* m_delegate;

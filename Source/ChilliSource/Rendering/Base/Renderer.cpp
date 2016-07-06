@@ -1,11 +1,7 @@
 //
-//  Renderer.cpp
-//  Chilli Source
-//  Created by Scott Downie on 30/09/2010.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,492 +25,129 @@
 #include <ChilliSource/Rendering/Base/Renderer.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
-#include <ChilliSource/Core/Entity/Entity.h>
-#include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
-#include <ChilliSource/Core/Scene/Scene.h>
-#include <ChilliSource/Rendering/Base/BlendMode.h>
-#include <ChilliSource/Rendering/Base/CullingPredicates.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
-#include <ChilliSource/Rendering/Base/RenderTarget.h>
-#include <ChilliSource/Rendering/Base/RendererSortPredicates.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
-#include <ChilliSource/Rendering/Camera/CameraComponent.h>
-#include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
-#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
-
-#include <ChilliSource/UI/Base/Canvas.h>
-
-#include <algorithm>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
+#include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
+#include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
 
 namespace ChilliSource
 {
-    //---Matrix caches
-    Matrix4 Renderer::matViewProjCache;
-
-    typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
-
+    namespace
+    {
+        constexpr u32 k_maxQueueSize = 1;
+    }
+    
     CS_DEFINE_NAMEDTYPE(Renderer);
-    //-------------------------------------------------------
-    //-------------------------------------------------------
-    RendererUPtr Renderer::Create(RenderSystem* in_renderSystem)
+    
+    //------------------------------------------------------------------------------
+    RendererUPtr Renderer::Create() noexcept
     {
-        return RendererUPtr(new Renderer(in_renderSystem));
+        return RendererUPtr(new Renderer());
     }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    Renderer::Renderer(RenderSystem* in_renderSystem)
-    : mpRenderSystem(in_renderSystem)
-    , mpActiveCamera(nullptr)
+    
+    //------------------------------------------------------------------------------
+    Renderer::Renderer() noexcept
+        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black)
     {
+        //TODO: Handle forward vs deferred rendering
+        m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
     }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    bool Renderer::IsA(InterfaceIDType in_interfaceId) const
+    
+    //------------------------------------------------------------------------------
+    bool Renderer::IsA(InterfaceIDType interfaceId) const noexcept
     {
-        return (Renderer::InterfaceID == in_interfaceId);
+        return (Renderer::InterfaceID == interfaceId);
     }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    void Renderer::OnInit()
+    
+    //------------------------------------------------------------------------------
+    void Renderer::ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept
     {
-        m_canvas = Application::Get()->GetSystem<CanvasRenderer>();
-        CS_ASSERT(m_canvas != nullptr, "Renderer cannot have null canvas renderer");
-
-        mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
-        mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
-
-        mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
-        mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
-
-        auto materialFactory = Application::Get()->GetSystem<MaterialFactory>();
-        m_staticDirShadowMaterial = materialFactory->CreateStaticDirectionalShadowMap("_StaticDirShadowMap");
-        m_animDirShadowMaterial = materialFactory->CreateAnimatedDirectionalShadowMap("_AnimDirShadowMap");
-    }
-    //----------------------------------------------------------
-    /// Set Transparent Sort Predicate
-    //----------------------------------------------------------
-    void Renderer::SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpFunctor)
-    {
-        mpTransparentSortPredicate = inpFunctor;
-    }
-    //----------------------------------------------------------
-    /// Set Opaque Sort Predicate
-    //----------------------------------------------------------
-    void Renderer::SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpFunctor)
-    {
-        mpOpaqueSortPredicate = inpFunctor;
-    }
-    //----------------------------------------------------------
-    /// Set Perspective Cull Predicate
-    //----------------------------------------------------------
-    void Renderer::SetPerspectiveCullPredicate(const ICullingPredicateSPtr & inpFunctor)
-    {
-        mpPerspectiveCullPredicate = inpFunctor;
-    }
-    //----------------------------------------------------------
-    /// Set Ortho Cull Predicate
-    //----------------------------------------------------------
-    void Renderer::SetOrthoCullPredicate(const ICullingPredicateSPtr & inpFunctor)
-    {
-        mpOrthoCullPredicate = inpFunctor;
-    }
-    //----------------------------------------------------------
-    /// Get Active Camera Pointer
-    //----------------------------------------------------------
-    CameraComponent* Renderer::GetActiveCameraPtr()
-    {
-        return mpActiveCamera;
-    }
-    //----------------------------------------------------------
-    /// Render To Screen
-    //----------------------------------------------------------
-    void Renderer::RenderToScreen(Scene* inpScene, Canvas* in_canvas)
-    {
-        RenderSceneToTarget(inpScene, in_canvas, nullptr);
-    }
-    //----------------------------------------------------------
-    /// Render To Texture
-    //----------------------------------------------------------
-    void Renderer::RenderToTexture(Scene* inpScene, Canvas* in_canvas, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
-    {
-        //get the width and height
-        u32 udwWidth = 1;
-        u32 udwHeight = 1;
-        if (inpColourTarget != nullptr)
+        WaitThenStartRenderPrep();
+        
+        m_currentSnapshot = std::move(renderSnapshot);
+        
+        auto taskScheduler = Application::Get()->GetTaskScheduler();
+        taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
-            udwWidth = inpColourTarget->GetWidth();
-            udwHeight = inpColourTarget->GetHeight();
-        }
-        else if (inpDepthTarget != nullptr)
-        {
-            udwWidth = inpDepthTarget->GetWidth();
-            udwHeight = inpDepthTarget->GetHeight();
-        }
-
-        RenderTarget* pOffscreenTarget = mpRenderSystem->CreateRenderTarget(udwWidth, udwHeight);
-        pOffscreenTarget->SetTargetTextures(inpColourTarget, inpDepthTarget);
-        RenderSceneToTarget(inpScene, in_canvas, pOffscreenTarget);
-        CS_SAFEDELETE(pOffscreenTarget);
-    }
-    //----------------------------------------------------------
-    /// Render Scene To Target
-    //----------------------------------------------------------
-    void Renderer::RenderSceneToTarget(Scene* inpScene, Canvas* in_canvas, RenderTarget* inpRenderTarget)
-    {
-        //TODO: Remove old UI render code
-        //Traverse the scene graph and get all renderable objects
-        std::vector<RenderComponent*> aPreFilteredRenderCache;
-        std::vector<CameraComponent*> aCameraCache;
-        std::vector<DirectionalLightComponent*> aDirLightCache;
-        std::vector<PointLightComponent*> aPointLightCache;
-        AmbientLightComponent* pAmbientLight = nullptr;
-
-        FindRenderableObjectsInScene(inpScene, aPreFilteredRenderCache, aCameraCache, aDirLightCache, aPointLightCache, pAmbientLight);
-        mpActiveCamera = (aCameraCache.empty() ? nullptr : aCameraCache.back());
-
-        if(mpActiveCamera)
-        {
-            //Apply the world view projection matrix
-            mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntity()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), inpScene->GetClearColour());
-            //Calculate the view-projection matrix as we will need it for sorting
-            matViewProjCache = mpActiveCamera->GetView() * mpActiveCamera->GetProjection();
-
-            //Render shadow maps
-            RenderShadowMap(mpActiveCamera, aDirLightCache, aPreFilteredRenderCache);
-
-            //Cull items based on camera
-            std::vector<RenderComponent*> aCameraRenderCache;
-            std::vector<RenderComponent*> aCameraOpaqueCache;
-            std::vector<RenderComponent*> aCameraTransparentCache;
-            CullRenderables(mpActiveCamera, aPreFilteredRenderCache, aCameraRenderCache);
-            FilterSceneRenderables(aCameraRenderCache, aCameraOpaqueCache, aCameraTransparentCache);
-
-            //Render scene
-            mpRenderSystem->BeginFrame(inpRenderTarget);
-
-            //Perform the ambient pass
-            mpRenderSystem->SetLight(pAmbientLight);
-            SortOpaque(mpActiveCamera, aCameraOpaqueCache);
-            Render(mpActiveCamera, ShaderPass::k_ambient, aCameraOpaqueCache);
-
-            //Perform the diffuse pass
-            if(aDirLightCache.empty() == false || aPointLightCache.empty() == false)
-            {
-                mpRenderSystem->SetBlendFunction(BlendMode::k_one, BlendMode::k_one);
-                mpRenderSystem->LockBlendFunction();
-
-                mpRenderSystem->EnableDepthWriting(false);
-                mpRenderSystem->LockDepthWriting();
-
-                mpRenderSystem->EnableAlphaBlending(true);
-                mpRenderSystem->LockAlphaBlending();
-
-                for(u32 i=0; i<aDirLightCache.size(); ++i)
-                {
-                    mpRenderSystem->SetLight(aDirLightCache[i]);
-                    Render(mpActiveCamera, ShaderPass::k_directional, aCameraOpaqueCache);
-                }
-
-                for(u32 i=0; i<aPointLightCache.size(); ++i)
-                {
-                    mpRenderSystem->SetLight(aPointLightCache[i]);
-                    std::vector<RenderComponent*> aPointLightOpaqueCache;
-                    CullRenderables(aPointLightCache[i], aCameraOpaqueCache, aPointLightOpaqueCache);
-                    Render(mpActiveCamera, ShaderPass::k_point, aPointLightOpaqueCache);
-                }
-
-                mpRenderSystem->UnlockAlphaBlending();
-                mpRenderSystem->UnlockDepthWriting();
-                mpRenderSystem->UnlockBlendFunction();
-            }
-
-            SortTransparent(mpActiveCamera, aCameraTransparentCache);
-            Render(mpActiveCamera, ShaderPass::k_ambient, aCameraTransparentCache);
-
-            mpRenderSystem->SetLight(nullptr);
-
-            if (in_canvas != nullptr)
-            {
-                RenderUI(in_canvas, inpScene->GetClearColour());
-            }
-
-            //Present contents of buffer to screen
-            if (inpRenderTarget != nullptr)
-            {
-                inpRenderTarget->Discard();
-            }
-            mpRenderSystem->EndFrame(inpRenderTarget);
-        }
-        else
-        {
-            //Render the UI only
-            //Clear the frame buffer ready for rendering
-            mpRenderSystem->BeginFrame(inpRenderTarget);
-
-            mpRenderSystem->SetLight(nullptr);
+            auto resolution = m_currentSnapshot.GetResolution();
+            auto clearColour = m_currentSnapshot.GetClearColour();
+            auto renderCamera = m_currentSnapshot.ClaimRenderCamera();
+            auto renderAmbientLights = m_currentSnapshot.ClaimRenderAmbientLights();
+            auto renderDirectionalLights = m_currentSnapshot.ClaimRenderDirectionalLights();
+            auto renderPointLights = m_currentSnapshot.ClaimRenderPointLights();
+            auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
+            auto renderDynamicMeshes = m_currentSnapshot.ClaimRenderDynamicMeshes();
+            auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();
+            auto postRenderCommandList = m_currentSnapshot.ClaimPostRenderCommandList();
             
-            if (in_canvas != nullptr)
-            {
-                RenderUI(in_canvas, inpScene->GetClearColour());
-            }
+            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
+            auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(renderDynamicMeshes),
+                                                                                    std::move(preRenderCommandList), std::move(postRenderCommandList));
             
-            //Present contents of buffer to screen
-            if (inpRenderTarget != nullptr)
-            {
-                inpRenderTarget->Discard();
-            }
-            mpRenderSystem->EndFrame(inpRenderTarget);
-        }
+            WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
+            EndRenderPrep();
+        });
     }
-    //----------------------------------------------------------
-    /// Find Renderable Objects In Scene
-    //----------------------------------------------------------
-    void Renderer::FindRenderableObjectsInScene(Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
-                                      std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const
+    
+    //------------------------------------------------------------------------------
+    void Renderer::ProcessRenderCommandBuffer() noexcept
     {
-        static std::vector<LightComponent*> aLightComponentCache;
-        aLightComponentCache.clear();
-
-        pScene->QuerySceneForComponents<RenderComponent, CameraComponent, LightComponent>(outaRenderCache, outaCameraCache, aLightComponentCache);
-
-        //Split the lights
-        for(u32 i=0; i<aLightComponentCache.size(); ++i)
-        {
-            if(aLightComponentCache[i]->IsA(DirectionalLightComponent::InterfaceID))
-            {
-                outaDirectionalLightComponentCache.push_back((DirectionalLightComponent*)aLightComponentCache[i]);
-            }
-            else if(aLightComponentCache[i]->IsA(PointLightComponent::InterfaceID))
-            {
-                outaPointLightComponentCache.push_back((PointLightComponent*)aLightComponentCache[i]);
-            }
-            else if(aLightComponentCache[i]->IsA(AmbientLightComponent::InterfaceID))
-            {
-                outpAmbientLight = (AmbientLightComponent*)aLightComponentCache[i];
-            }
-        }
+        auto renderCommandBuffer = WaitThenPopCommandBuffer();
+        m_renderCommandProcessor->Process(renderCommandBuffer.get());
     }
-    //----------------------------------------------------------
-    /// Get Cull Predicate
-    //----------------------------------------------------------
-    ICullingPredicateSPtr Renderer::GetCullPredicate(CameraComponent* inpActiveCamera) const
+    
+    //------------------------------------------------------------------------------
+    void Renderer::WaitThenStartRenderPrep() noexcept
     {
-        ICullingPredicateSPtr pCullPredicate = inpActiveCamera->GetCullingPredicate();
-
-        if(pCullPredicate)
+        std::unique_lock<std::mutex> lock(m_renderPrepMutex);
+        
+        while (m_renderPrepActive)
         {
-            return pCullPredicate;
+            m_renderPrepCondition.wait(lock);
         }
-
-        if(inpActiveCamera->IsA(OrthographicCameraComponent::InterfaceID) == true)
-        {
-            return mpOrthoCullPredicate;
-        }
-
-        return mpPerspectiveCullPredicate;
+        
+        m_renderPrepActive = true;
     }
-    //----------------------------------------------------------
-    /// Sort Opaque
-    //----------------------------------------------------------
-    void Renderer::SortOpaque(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const
+    
+    //------------------------------------------------------------------------------
+    void Renderer::EndRenderPrep() noexcept
     {
-        RendererSortPredicateSPtr pOpaqueSort = inpCameraComponent->GetOpaqueSortPredicate();
-        if(!pOpaqueSort)
-        {
-            pOpaqueSort = mpOpaqueSortPredicate;
-        }
-
-        if(pOpaqueSort)
-        {
-            pOpaqueSort->PrepareForSort(&inaRenderables);
-            std::sort(inaRenderables.begin(), inaRenderables.end(), MakeDelegate(pOpaqueSort.get(), &RendererSortPredicate::SortItem));
-        }
+        std::unique_lock<std::mutex> lock(m_renderPrepMutex);
+        m_renderPrepActive = false;
+        m_renderPrepCondition.notify_all();
     }
-    //----------------------------------------------------------
-    /// Sort Transparent
-    //----------------------------------------------------------
-    void Renderer::SortTransparent(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const
+    
+    //------------------------------------------------------------------------------
+    void Renderer::WaitThenPushCommandBuffer(RenderCommandBufferCUPtr renderCommandBuffer) noexcept
     {
-        RendererSortPredicateSPtr pTransparentSort = inpCameraComponent->GetTransparentSortPredicate();
-        if(!pTransparentSort)
+        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
+        
+        while (m_renderCommandBuffers.size() >= k_maxQueueSize)
         {
-            pTransparentSort = mpTransparentSortPredicate;
+            m_renderCommandBuffersCondition.wait(lock);
         }
-
-        if(pTransparentSort)
-        {
-            pTransparentSort->PrepareForSort(&inaRenderables);
-            std::sort(inaRenderables.begin(), inaRenderables.end(), MakeDelegate(pTransparentSort.get(), &RendererSortPredicate::SortItem));
-        }
+        
+        m_renderCommandBuffers.push_back(std::move(renderCommandBuffer));
+        
+        m_renderCommandBuffersCondition.notify_all();
     }
-    //----------------------------------------------------------
-    /// Render Shadow Map
-    //----------------------------------------------------------
-    void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, std::vector<DirectionalLightComponent*>& inaLightComponents, std::vector<RenderComponent*>& inaRenderables)
+    
+    //------------------------------------------------------------------------------
+    RenderCommandBufferCUPtr Renderer::WaitThenPopCommandBuffer() noexcept
     {
-        std::vector<RenderComponent*> aFilteredShadowMapRenderCache;
-
-        if(inaLightComponents.size() > 0)
+        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
+        
+        while (m_renderCommandBuffers.empty())
         {
-            //Cull items based on whether they cast shadows
-            FilterShadowMapRenderables(inaRenderables, aFilteredShadowMapRenderCache);
+            m_renderCommandBuffersCondition.wait(lock);
         }
-
-        for(u32 i=0; i<inaLightComponents.size(); ++i)
-        {
-            if(inaLightComponents[i]->GetShadowMapPtr() != nullptr)
-            {
-                mpRenderSystem->SetLight(inaLightComponents[i]);
-                RenderShadowMap(mpActiveCamera, inaLightComponents[i], aFilteredShadowMapRenderCache);
-            }
-        }
-    }
-    //----------------------------------------------------------
-    /// Render Shadow Map
-    //----------------------------------------------------------
-    void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, DirectionalLightComponent* inpLightComponent, std::vector<RenderComponent*>& inaRenderables)
-    {
-        //Create a new offscreen render target using the given texture
-        RenderTarget* pRenderTarget = mpRenderSystem->CreateRenderTarget(inpLightComponent->GetShadowMapPtr()->GetWidth(), inpLightComponent->GetShadowMapPtr()->GetHeight());
-        pRenderTarget->SetTargetTextures(inpLightComponent->GetShadowMapDebugPtr(), inpLightComponent->GetShadowMapPtr());
-
-        mpRenderSystem->BeginFrame(pRenderTarget);
-
-        //Only opaque objects cast and receive shadows
-        for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
-        {
-            (*it)->RenderShadowMap(mpRenderSystem, inpCameraComponent, m_staticDirShadowMaterial, m_animDirShadowMaterial);
-        }
-
-        mpRenderSystem->EndFrame(pRenderTarget);
-
-        CS_SAFEDELETE(pRenderTarget);
-    }
-    //----------------------------------------------------------
-    /// Render
-    //----------------------------------------------------------
-    void Renderer::Render(CameraComponent* inpCameraComponent, ShaderPass ineShaderPass, std::vector<RenderComponent*>& inaRenderables)
-    {
-        for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
-        {
-            (*it)->Render(mpRenderSystem, inpCameraComponent, ineShaderPass);
-        }
-
-        //The final dynamic sprite batch needs to be flushed
-        mpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
-    }
-    //----------------------------------------------------------
-    /// Render UI
-    //----------------------------------------------------------
-    void Renderer::RenderUI(Canvas* in_canvas, const Colour& in_clearColour)
-    {
-        mpRenderSystem->ApplyCamera(Vector3::k_zero, Matrix4::k_identity, CreateOverlayProjection(in_canvas->GetSize()), in_clearColour);
-        m_canvas->Render(in_canvas);
-    }
-    //----------------------------------------------------------
-    /// Cull Renderables
-    //----------------------------------------------------------
-    void Renderer::CullRenderables(CameraComponent* inpCamera, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const
-    {
-        ICullingPredicate * pCullingPredicate = GetCullPredicate(inpCamera).get();
-
-        if(pCullingPredicate == nullptr)
-        {
-            outaRenderCache = inaRenderCache;
-            return;
-        }
-
-        outaRenderCache.reserve(inaRenderCache.size());
-
-        for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
-        {
-            RenderComponent* pRenderable = (*it);
-
-            if(pRenderable->IsVisible() == false)
-            {
-                continue;
-            }
-
-            if(pRenderable->IsCullingEnabled() == false || pCullingPredicate->CullItem(inpCamera, pRenderable) == false)
-            {
-                outaRenderCache.push_back(pRenderable);
-                continue;
-            }
-        }
-    }
-    //----------------------------------------------------------
-    /// Cull Renderables
-    //----------------------------------------------------------
-    void Renderer::CullRenderables(PointLightComponent* inpLightComponent, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const
-    {
-        //Reserve estimated space
-        outaRenderCache.reserve(inaRenderCache.size());
-
-        Sphere aLightSphere;
-        aLightSphere.vOrigin = inpLightComponent->GetWorldPosition();
-        aLightSphere.fRadius = inpLightComponent->GetRangeOfInfluence();
-
-        for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
-        {
-            if(ShapeIntersection::Intersects(aLightSphere, (*it)->GetBoundingSphere()) == true)
-            {
-                outaRenderCache.push_back(*it);
-            }
-        }
-    }
-    //----------------------------------------------------------
-    /// Filter Scene Renderables
-    //----------------------------------------------------------
-    void Renderer::FilterSceneRenderables(const std::vector<RenderComponent*>& inaRenderables, std::vector<RenderComponent*>& outaOpaque, std::vector<RenderComponent*>& outaTransparent) const
-    {
-        //Reserve estimated space
-        outaOpaque.reserve(inaRenderables.size());
-        outaTransparent.reserve(inaRenderables.size());
-
-        for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
-        {
-            RenderComponent* pRenderable = (*it);
-            pRenderable->IsTransparent() ? outaTransparent.push_back(pRenderable) : outaOpaque.push_back(pRenderable);
-        }
-    }
-    //----------------------------------------------------------
-    /// Filter Shadow Map Renderables
-    //----------------------------------------------------------
-    void Renderer::FilterShadowMapRenderables(const std::vector<RenderComponent*>& inaRenderables, std::vector<RenderComponent*>& outaRenderables) const
-    {
-        //Reserve estimated space
-        outaRenderables.reserve(inaRenderables.size());
-
-        for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
-        {
-            RenderComponent* pRenderable = (*it);
-            if(pRenderable->IsShadowCastingEnabled() == true && pRenderable->IsTransparent() == false)
-            {
-                outaRenderables.push_back(pRenderable);
-            }
-        }
-    }
-    //----------------------------------------------------------
-    /// Create Overlay Projection
-    //----------------------------------------------------------
-    Matrix4 Renderer::CreateOverlayProjection(const Vector2& in_size) const
-    {
-        const f32 kfOverlayNear = 1.0f;
-        const f32 kfOverlayFar = 5.0f;
-
-        return Matrix4::CreateOrthographicProjectionLH(0, in_size.x, 0, in_size.y, kfOverlayNear, kfOverlayFar);
-    }
-    //------------------------------------------------
-    //------------------------------------------------
-    void Renderer::OnDestroy()
-    {
-        m_canvas = nullptr;
-        m_staticDirShadowMaterial = nullptr;
-        m_animDirShadowMaterial = nullptr;
+        
+        auto renderCommandBuffer = std::move(m_renderCommandBuffers.front());
+        m_renderCommandBuffers.pop_front();
+        
+        m_renderCommandBuffersCondition.notify_all();
+        
+        return renderCommandBuffer;
     }
 }

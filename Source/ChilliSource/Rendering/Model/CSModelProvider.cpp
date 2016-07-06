@@ -30,8 +30,10 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
+#include <ChilliSource/Rendering/Model/Model.h>
+#include <ChilliSource/Rendering/Model/ModelDesc.h>
+#include <ChilliSource/Rendering/Model/IndexFormat.h>
+#include <ChilliSource/Rendering/Model/PolygonType.h>
 
 #include <unordered_map>
 
@@ -41,9 +43,9 @@ namespace ChilliSource
     {
         const std::string k_modelFileExtension("csmodel");
         
-        const u32 k_minVersion = 12;
-        const u32 k_maxVersion = 12;
-        const u32 k_fileCheckValue = 6666;
+        constexpr u32 k_minVersion = 12;
+        constexpr u32 k_maxVersion = 12;
+        constexpr u32 k_fileCheckValue = 6666;
         
         //---------------------------------------------
         /// Features implemented by the model resource.
@@ -74,31 +76,51 @@ namespace ChilliSource
             k_jointIndices
         };
         //----------------------------------------------------------------------------
-        /// Mesh Data Quantities
+        /// Model Data Quantities
         ///
         /// A struct containing the quantities of different pieces of mesh data.
         //----------------------------------------------------------------------------
         struct MeshDataQuantities
         {
-            u32 m_numMeshes;
-            s32 m_numSkeletonNodes;
-            u32 m_numJoints;
+            u32 m_numMeshes = 0;
+            s32 m_numSkeletonNodes = 0;
+            u32 m_numJoints = 0;
         };
         //----------------------------------------------------------------------------
-        /// Read value in for given type
+        /// A container for mesh header data.
         ///
-        /// @author Ian Copland
-        ///
-        /// @param File stream
-        ///
-        /// @return Value of type T
+        /// @author Ian Copland.
         //----------------------------------------------------------------------------
-        template <typename TType> TType ReadValue(const FileStreamSPtr& in_meshStream)
+        struct MeshHeader final
         {
-            TType value;
-            in_meshStream->Read(reinterpret_cast<s8*>(&value), sizeof(TType));
-            return value;
-        }
+            std::string m_name;
+            u32 m_numVertices = 0;
+            u32 m_numIndices = 0;
+            AABB m_aabb;
+        };
+        //----------------------------------------------------------------------------
+        /// A container for mesh data.
+        ///
+        /// @author Ian Copland.
+        //----------------------------------------------------------------------------
+        struct MeshData final
+        {
+            std::unique_ptr<const u8[]> m_vertexData;
+            std::unique_ptr<const u8[]> m_indexData;
+            std::vector<Matrix4> m_inverseBindPoses;
+        };
+        //----------------------------------------------------------------------------
+        /// A container for model header data.
+        ///
+        /// @author Ian Copland.
+        //----------------------------------------------------------------------------
+        struct ModelHeader final
+        {
+            bool m_hasAnimationData = false;
+            VertexFormat m_vertexFormat;
+            IndexFormat m_indexFormat = IndexFormat::k_short;
+            AABB m_aabb;
+        };
         //----------------------------------------------------------------------------
         /// Read block of data in for given type
         ///
@@ -108,93 +130,92 @@ namespace ChilliSource
         /// @param Num to read
         /// @param [Out] data
         //----------------------------------------------------------------------------
-        template <typename TType> void ReadBlock(const FileStreamSPtr& in_meshStream, u32 in_numToRead, TType* out_data)
+        template <typename TType> void ReadBlock(IBinaryInputStream* in_meshStream, u32 in_numToRead, TType* out_data)
         {
-            in_meshStream->Read(reinterpret_cast<s8*>(out_data), sizeof(TType) * in_numToRead);
+            in_meshStream->Read(reinterpret_cast<u8*>(out_data), sizeof(TType) * in_numToRead);
         }
-        //-----------------------------------------------------------------------------
-        /// Read the vertex declaration from the mesh filestream. The declaration
-        /// is variable
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param Mesh stream
-        /// @param [Out] Mesh description
-        //-----------------------------------------------------------------------------
-        void ReadVertexDeclaration(const FileStreamSPtr& in_meshStream, MeshDescriptor& out_meshDesc)
-        {
-            //build the vertex declaration from the file
-            u8 numVertexElements = ReadValue<u8>(in_meshStream);
-            
-            VertexElement* vertexElements = new VertexElement[numVertexElements];
-            for (int i = 0; i < numVertexElements; ++i)
-            {
-                u8 vertexAttrib = ReadValue<u8>(in_meshStream);
-                
-                switch (VertexAttribute(vertexAttrib))
-                {
-                    case VertexAttribute::k_none:
-                        CS_LOG_ERROR("Unknown vertex type in vertex declaration!");
-                        break;
-                    case VertexAttribute::k_position:
-                        vertexElements[i].eType = VertexDataType::k_float4;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_position;
-                        break;
-                    case VertexAttribute::k_normal:
-                        vertexElements[i].eType = VertexDataType::k_float3;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_normal;
-                        break;
-                    case VertexAttribute::k_texcoord:
-                        vertexElements[i].eType = VertexDataType::k_float2;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_uv;
-                        break;
-                    case VertexAttribute::k_colour:
-                        vertexElements[i].eType = VertexDataType::k_byte4;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_colour;
-                        break;
-                    case VertexAttribute::k_weights:
-                        vertexElements[i].eType = VertexDataType::k_float4;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_weight;
-                        break;
-                    case VertexAttribute::k_jointIndices:
-                        vertexElements[i].eType = VertexDataType::k_byte4;
-                        vertexElements[i].eSemantic = VertexDataSemantic::k_jointIndex;
-                        break;
-                }
-            }
-            
-            out_meshDesc.mVertexDeclaration = VertexDeclaration(numVertexElements, vertexElements);
-            delete[] vertexElements;
-        }
-        //-----------------------------------------------------------------------------
-        /// Read the mesh section of the file
+        //----------------------------------------------------------------------------
+        /// Reads a null terminated string from the stream.
         ///
         /// @author Ian Copland
         ///
         /// @param File stream
-        /// @param Mesh description
-        /// @param [Out] Submesh description
-        //-----------------------------------------------------------------------------
-        void ReadSubMeshData(const FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
+        ///
+        /// @return The string.
+        //----------------------------------------------------------------------------
+        std::string ReadString(IBinaryInputStream* in_meshStream) noexcept
         {
-            //read the inverse bind matrices
-            if(true == in_meshDesc.mFeatures.mbHasAnimationData)
+            std::string output;
+            
+            u8 nextChar = 0;
+            do
             {
-                for(u32 i=0; i<in_meshDesc.m_skeletonDesc.m_jointIndices.size(); ++i)
+                nextChar = in_meshStream->Read<u8>();
+                output += nextChar;
+                
+            } while(nextChar != 0);
+            
+            return output;
+        }
+        //-----------------------------------------------------------------------------
+        /// Read the vertex format from the mesh filestream.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param Model stream
+        ///
+        /// @return the vertex description.
+        //-----------------------------------------------------------------------------
+        VertexFormat ReadVertexFormat(IBinaryInputStream* in_meshStream)
+        {
+            //build the vertex declaration from the file
+            u8 numVertexElements = in_meshStream->Read<u8>();
+            
+            std::vector<VertexFormat::ElementType> elements;
+            for (int i = 0; i < numVertexElements; ++i)
+            {
+                u8 vertexAttrib = in_meshStream->Read<u8>();
+                
+                switch (VertexAttribute(vertexAttrib))
                 {
-                    Matrix4 IBPMat;
-                    ReadBlock<f32>(in_meshStream, 16, IBPMat.m);
-                    out_subMeshDesc.mInverseBindPoseMatrices.push_back(IBPMat);
+                    case VertexAttribute::k_position:
+                        elements.push_back(VertexFormat::ElementType::k_position4);
+                        break;
+                    case VertexAttribute::k_normal:
+                        elements.push_back(VertexFormat::ElementType::k_normal3);
+                        break;
+                    case VertexAttribute::k_texcoord:
+                        elements.push_back(VertexFormat::ElementType::k_uv2);
+                        break;
+                    case VertexAttribute::k_colour:
+                        elements.push_back(VertexFormat::ElementType::k_colour4);
+                        break;
+                    case VertexAttribute::k_weights:
+                        elements.push_back(VertexFormat::ElementType::k_weight4);
+                        break;
+                    case VertexAttribute::k_jointIndices:
+                        elements.push_back(VertexFormat::ElementType::k_jointIndex4);
+                        break;
+                    default:
+                        CS_LOG_ERROR("Unknown vertex type in vertex declaration!");
+                        break;
                 }
             }
             
-            //read the vertex data
-            out_subMeshDesc.mpVertexData = new u8[in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices];
-            in_meshStream->Read((s8*)out_subMeshDesc.mpVertexData, in_meshDesc.mVertexDeclaration.GetTotalSize() * out_subMeshDesc.mudwNumVertices);
-            
-            //read the index data
-            out_subMeshDesc.mpIndexData = new u8[in_meshDesc.mudwIndexSize * out_subMeshDesc.mudwNumIndices];
-            in_meshStream->Read((s8*)out_subMeshDesc.mpIndexData, in_meshDesc.mudwIndexSize * out_subMeshDesc.mudwNumIndices);
+            return VertexFormat(elements);
+        }
+        //-----------------------------------------------------------------------------
+        /// Calculates a bounding sphere from the given AABB.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_aabb - The AABB from which to generate a bounding sphere.
+        ///
+        /// @return The bounding sphere generated.
+        //-----------------------------------------------------------------------------
+        Sphere CalcBoundingSphere(const AABB& in_aabb) noexcept
+        {
+            return Sphere(in_aabb.Centre(), in_aabb.GetSize().Length() * 0.5f);
         }
         //-----------------------------------------------------------------------------
         /// Reads the sub-mesh header section of the file
@@ -202,61 +223,66 @@ namespace ChilliSource
         /// @author Ian Copland
         ///
         /// @param File stream
-        /// @param Mesh description
+        /// @param Model description
         /// @param [Out] Sube mesh description
         //-----------------------------------------------------------------------------
-        void ReadSubMeshHeader(const FileStreamSPtr& in_meshStream, const MeshDescriptor& in_meshDesc, SubMeshDescriptor& out_subMeshDesc)
+        MeshHeader ReadMeshHeader(IBinaryInputStream* in_meshStream, IndexFormat in_indexFormat)
         {
-            //read mesh name
-            u8 nextChar = 0;
-            do
+            MeshHeader meshHeader;
+            
+            meshHeader.m_name = ReadString(in_meshStream);
+            
+            CS_ASSERT(in_indexFormat == IndexFormat::k_short, "Only short indices are currently supported.");
+            
+            constexpr u32 k_indicesPerTriangle = 3;
+            meshHeader.m_numVertices = (u32)in_meshStream->Read<u16>();
+            meshHeader.m_numIndices = ((u32)in_meshStream->Read<u16>()) * k_indicesPerTriangle;
+            
+            Vector3 minBound, maxBound;
+            minBound.x = in_meshStream->Read<f32>();
+            minBound.y = in_meshStream->Read<f32>();
+            minBound.z = in_meshStream->Read<f32>();
+            maxBound.x = in_meshStream->Read<f32>();
+            maxBound.y = in_meshStream->Read<f32>();
+            maxBound.z = in_meshStream->Read<f32>();
+            
+            meshHeader.m_aabb = AABB((maxBound + minBound) * 0.5f, maxBound - minBound);
+            
+            return meshHeader;
+        }
+        //-----------------------------------------------------------------------------
+        /// Read the mesh section of the file
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_meshStream - File stream
+        /// @param in_vertexDataSize - The vertex data size.
+        /// @param in_indexDataSize - The index data size.
+        /// @param in_numJoints - The number of joints in the mesh. Defaults to 0.
+        ///
+        /// @return The mesh data
+        //-----------------------------------------------------------------------------
+        MeshData ReadMeshData(IBinaryInputStream*in_meshStream, u32 in_vertexDataSize, u32 in_indexDataSize, u32 in_numJoints = 0)
+        {
+            MeshData meshData;
+            
+            for(u32 i = 0; i < in_numJoints; ++i)
             {
-                nextChar = ReadValue<u8>(in_meshStream);
-                out_subMeshDesc.mstrName += nextChar;
+                Matrix4 IBPMat;
+                ReadBlock<f32>(in_meshStream, 16, IBPMat.m);
                 
-            } while(nextChar != 0);
-            
-            //read num verts and triangles
-            if (2 == in_meshDesc.mudwIndexSize)
-            {
-                out_subMeshDesc.mudwNumVertices = (u32)ReadValue<u16>(in_meshStream);
-                out_subMeshDesc.mudwNumIndices = ((u32)ReadValue<u16>(in_meshStream)) * 3;
-            }
-            else
-            {
-                out_subMeshDesc.mudwNumVertices = ReadValue<u32>(in_meshStream);
-                out_subMeshDesc.mudwNumIndices = ReadValue<u32>(in_meshStream) * 3;
+                meshData.m_inverseBindPoses.push_back(IBPMat);
             }
             
-            //read bounds
-            out_subMeshDesc.mvMinBounds.x = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMinBounds.y = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMinBounds.z = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMaxBounds.x = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMaxBounds.y = ReadValue<f32>(in_meshStream);
-            out_subMeshDesc.mvMaxBounds.z = ReadValue<f32>(in_meshStream);
+            auto vertexData = new u8[in_vertexDataSize];
+            in_meshStream->Read(vertexData, in_vertexDataSize);
+            meshData.m_vertexData = std::unique_ptr<const u8[]>(vertexData);
             
-            //TODO: Remove texture and material from mesh
-            //in the meantime just read and discard.
-            if (true == in_meshDesc.mFeatures.mbHasTexture)
-            {
-                u8 nextCharacter = 0;
-                do
-                {
-                    nextCharacter = ReadValue<u8>(in_meshStream);
-                    
-                } while(nextCharacter != 0);
-            }
+            auto indexData = new u8[in_indexDataSize];
+            in_meshStream->Read(indexData, in_indexDataSize);
+            meshData.m_indexData = std::unique_ptr<const u8[]>(indexData);
             
-            if (true == in_meshDesc.mFeatures.mbHasMaterial)
-            {
-                u8 nextCharacter = 0;
-                do
-                {
-                    nextCharacter = ReadValue<u8>(in_meshStream);
-                    
-                } while(nextCharacter != 0);
-            }
+            return meshData;
         }
         //-----------------------------------------------------------------------------
         /// Reads the skeleton section of the file
@@ -265,48 +291,45 @@ namespace ChilliSource
         ///
         /// @param File stream
         /// @param Container holding the num of meshes, joints and bones
-        /// @param [Out] Skeleton description
+        ///
+        /// @return The skeleton description.
         //-----------------------------------------------------------------------------
-        void ReadSkeletonData(const FileStreamSPtr& in_meshStream, const MeshDataQuantities& in_quantities, SkeletonDescriptor& out_skeletonDesc)
+        SkeletonDesc ReadSkeletonData(IBinaryInputStream* in_meshStream, const MeshDataQuantities& in_quantities)
         {
-            //read the skeleton nodes
-            out_skeletonDesc.m_nodeNames.reserve(in_quantities.m_numSkeletonNodes);
-            out_skeletonDesc.m_parentNodeIndices.reserve(in_quantities.m_numSkeletonNodes);
+            std::vector<std::string> names;
+            std::vector<s32> parentNodeIndices;
+            
+            names.reserve(in_quantities.m_numSkeletonNodes);
+            parentNodeIndices.reserve(in_quantities.m_numSkeletonNodes);
             
             std::unordered_map<u32, s32> jointToNodeMap;
             for (u32 i = 0; i<(u32)in_quantities.m_numSkeletonNodes; ++i)
             {
-                //get the skeleton node name name
-                std::string nodeName;
-                u8 nextChar = 0;
-                do
-                {
-                    nextChar = ReadValue<u8>(in_meshStream);
-                    nodeName += nextChar;
-                } while(nextChar != 0);
+                names.push_back(ReadString(in_meshStream));
                 
                 //get the parent index
-                s32 parentIndex = (s32)ReadValue<s16>(in_meshStream);
+                parentNodeIndices.push_back(s32(in_meshStream->Read<s16>()));
                 
                 //get the type
-                const u32 k_isJoint = 1;
-                u8 type = ReadValue<u8>(in_meshStream);
+                constexpr u32 k_isJoint = 1;
+                u8 type = in_meshStream->Read<u8>();
                 if (type == k_isJoint)
                 {
-                    u32 jointIndex = (u32)ReadValue<u8>(in_meshStream);
+                    u32 jointIndex = (u32)in_meshStream->Read<u8>();
                     jointToNodeMap.insert(std::pair<u32, s32>(jointIndex, (s32)i));
                 }
-                
-                out_skeletonDesc.m_nodeNames.push_back(nodeName);
-                out_skeletonDesc.m_parentNodeIndices.push_back(parentIndex);
             }
             
-            CS_ASSERT(out_skeletonDesc.m_nodeNames.size() == out_skeletonDesc.m_parentNodeIndices.size(), "Invalid number of node names and indices in skeleton");
+            CS_ASSERT(names.size() == parentNodeIndices.size(), "Invalid number of node names and indices in skeleton");
             
-            for (u32 i=0; i<in_quantities.m_numJoints; ++i)
+            
+            std::vector<s32> jointIndices;
+            for (u32 i = 0; i < in_quantities.m_numJoints; ++i)
             {
-                out_skeletonDesc.m_jointIndices.push_back(jointToNodeMap[i]);
+                jointIndices.push_back(jointToNodeMap[i]);
             }
+            
+            return SkeletonDesc(names, parentNodeIndices, jointIndices);
         }
         //-----------------------------------------------------------------------------
         /// Reads the header of the file
@@ -315,42 +338,28 @@ namespace ChilliSource
         ///
         /// @param File stream
         /// @param the file path
-        /// @param [Out] Mesh description
+        /// @param [Out] Model description
         /// @param [Out] A struct containing info on the number of meshes, nodes and joints.
         ///
         /// @return Whether the file is correct
         //-----------------------------------------------------------------------------
-        bool ReadGlobalHeader(const FileStreamSPtr& in_meshStream, const std::string& in_filePath, MeshDescriptor& out_meshDesc, MeshDataQuantities& out_meshQuantities)
+        void ReadGlobalHeader(IBinaryInputStream* in_meshStream, const std::string& in_filePath, ModelHeader& out_modelHeader, MeshDataQuantities& out_meshQuantities)
         {
-            u32 fileCheckValue = ReadValue<u32>(in_meshStream);
-            if(fileCheckValue != k_fileCheckValue)
-            {
-                CS_LOG_ERROR("csmodel file has corruption(incorrect File Check Value): " + in_filePath);
-                return false;
-            }
+            u32 fileCheckValue = in_meshStream->Read<u32>();
+            CS_ASSERT(fileCheckValue != k_fileCheckValue, "csmodel file is corrupt (incorrect File Check Value): " + in_filePath);
             
-            u32 versionNum = ReadValue<u32>(in_meshStream);
-            if (versionNum < k_minVersion || versionNum > k_maxVersion)
-            {
-                CS_LOG_ERROR("Unsupported csmodel version: " + in_filePath);
-                return false;
-            }
+            u32 versionNum = in_meshStream->Read<u32>();
+            CS_ASSERT(versionNum < k_minVersion || versionNum > k_maxVersion, "Unsupported csmodel version: " + in_filePath);
             
-            //init features
-            out_meshDesc.mFeatures.mbHasAnimationData = false;
-            out_meshDesc.mFeatures.mbHasMaterial = false;
-            out_meshDesc.mFeatures.mbHasTexture = false;
-            
-            //build the feature declaration from the file
-            u32 numFeatures = (u32)ReadValue<u8>(in_meshStream);
+            u32 numFeatures = (u32)in_meshStream->Read<u8>();
             for (u32 i=0; i<numFeatures; ++i)
             {
-                u32 featureType = (u32)ReadValue<u8>(in_meshStream);
+                u32 featureType = (u32)in_meshStream->Read<u8>();
                 
                 switch (Feature(featureType))
                 {
                     case Feature::k_hasAnimation:
-                        out_meshDesc.mFeatures.mbHasAnimationData = true;
+                        out_modelHeader.m_hasAnimationData = true;
                         break;
                     default:
                         CS_LOG_ERROR("Unknown feature type in csmodel (" + in_filePath + ") feature declaration!");
@@ -358,33 +367,27 @@ namespace ChilliSource
                 }
             }
             
-            //read the vertex declaration
-            ReadVertexDeclaration(in_meshStream, out_meshDesc);
+            out_modelHeader.m_vertexFormat = ReadVertexFormat(in_meshStream);
             
-            //read index declaration
-            out_meshDesc.mudwIndexSize = ReadValue<u8>(in_meshStream);
+            constexpr u8 k_shortIndexFormatSize = 2;
+            auto indexSize = in_meshStream->Read<u8>();
+            CS_ASSERT(indexSize == k_shortIndexFormatSize, "Invalid index size.");
             
-            //read the min and max bounds
-            out_meshDesc.mvMinBounds.x = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMinBounds.y = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMinBounds.z = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMaxBounds.x = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMaxBounds.y = ReadValue<f32>(in_meshStream);
-            out_meshDesc.mvMaxBounds.z = ReadValue<f32>(in_meshStream);
+            Vector3 minBounds, maxBounds;
+            minBounds.x = in_meshStream->Read<f32>();
+            minBounds.y = in_meshStream->Read<f32>();
+            minBounds.z = in_meshStream->Read<f32>();
+            maxBounds.x = in_meshStream->Read<f32>();
+            maxBounds.y = in_meshStream->Read<f32>();
+            maxBounds.z = in_meshStream->Read<f32>();
+            out_modelHeader.m_aabb = AABB((maxBounds + minBounds) * 0.5f, maxBounds - minBounds);
             
-            //read the number of meshes
-            out_meshQuantities.m_numMeshes = (u32)ReadValue<u16>(in_meshStream);
-            out_meshQuantities.m_numSkeletonNodes = 0;
-            out_meshQuantities.m_numJoints = 0;
-            
-            //read num skeleton nodes and joints if used
-            if (true == out_meshDesc.mFeatures.mbHasAnimationData)
+            out_meshQuantities.m_numMeshes = (u32)in_meshStream->Read<u16>();
+            if (out_modelHeader.m_hasAnimationData)
             {
-                out_meshQuantities.m_numSkeletonNodes = (s32)ReadValue<s16>(in_meshStream);
-                out_meshQuantities.m_numJoints = (u32)ReadValue<u8>(in_meshStream);
+                out_meshQuantities.m_numSkeletonNodes = (s32)in_meshStream->Read<s16>();
+                out_meshQuantities.m_numJoints = (u32)in_meshStream->Read<u8>();
             }
-            
-            return true;
         }
         //----------------------------------------------------------------------------
         /// Read the mesh data from file and creates a mesh descriptor.
@@ -393,13 +396,13 @@ namespace ChilliSource
         ///
         /// @param The storage location to load from
         /// @param File path
-        /// @param [Out] Mesh description
+        /// @param [Out] Model description
         ///
         /// @return true if successful, false if not
         //----------------------------------------------------------------------------
-        bool ReadFile(StorageLocation in_location, const std::string& in_filePath, MeshDescriptor& out_meshDesc)
+        bool ReadFile(StorageLocation in_location, const std::string& in_filePath, ModelDesc& out_modelDesc)
         {
-            FileStreamSPtr meshStream = Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, FileMode::k_readBinary);
+            auto meshStream = Application::Get()->GetFileSystem()->CreateBinaryInputStream(in_location, in_filePath);
             
             //Check file for corruption
             if(nullptr == meshStream)
@@ -408,26 +411,33 @@ namespace ChilliSource
                 return false;
             }
             
+            ModelHeader modelHeader;
             MeshDataQuantities quantities;
-            if(ReadGlobalHeader(meshStream, in_filePath, out_meshDesc, quantities) == false)
+            ReadGlobalHeader(meshStream.get(), in_filePath, modelHeader, quantities);
+            
+            SkeletonDesc skeletonDesc;
+            if (modelHeader.m_hasAnimationData)
             {
-                return false;
+                skeletonDesc = ReadSkeletonData(meshStream.get(), quantities);
             }
             
-            if (true == out_meshDesc.mFeatures.mbHasAnimationData)
+            std::vector<MeshDesc> meshDescs;
+            for(u32 i = 0; i < quantities.m_numMeshes; ++i)
             {
-                ReadSkeletonData(meshStream, quantities, out_meshDesc.m_skeletonDesc);
+                auto meshHeader = ReadMeshHeader(meshStream.get(), modelHeader.m_indexFormat);
+                
+                CS_ASSERT(modelHeader.m_indexFormat == IndexFormat::k_short, "Invalid index format.");
+                constexpr u32 k_indexSize = 2;
+                auto meshData = ReadMeshData(meshStream.get(), meshHeader.m_numVertices * modelHeader.m_vertexFormat.GetSize(), meshHeader.m_numIndices * k_indexSize, quantities.m_numJoints);
+                auto meshBoundingSphere = CalcBoundingSphere(meshHeader.m_aabb);
+                
+                meshDescs.push_back(MeshDesc(meshHeader.m_name, PolygonType::k_triangle, modelHeader.m_vertexFormat, modelHeader.m_indexFormat, meshHeader.m_aabb, meshBoundingSphere, meshHeader.m_numVertices,
+                                             meshHeader.m_numIndices, std::move(meshData.m_vertexData), std::move(meshData.m_indexData), std::move(meshData.m_inverseBindPoses)));
+                
             }
             
-            for(u32 i=0; i<quantities.m_numMeshes; ++i)
-            {
-                SubMeshDescriptor subMeshDesc;
-                
-                ReadSubMeshHeader(meshStream, out_meshDesc, subMeshDesc);
-                ReadSubMeshData(meshStream, out_meshDesc, subMeshDesc);
-                
-                out_meshDesc.mMeshes.push_back(subMeshDesc);
-            }
+            auto modelBoundingSphere = CalcBoundingSphere(modelHeader.m_aabb);
+            out_modelDesc = std::move(ModelDesc(std::move(meshDescs), modelHeader.m_aabb, modelBoundingSphere, skeletonDesc));
 
             return true;
         }
@@ -451,7 +461,7 @@ namespace ChilliSource
     //----------------------------------------------------
     InterfaceIDType CSModelProvider::GetResourceType() const
     {
-        return Mesh::InterfaceID;
+        return Model::InterfaceID;
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
@@ -463,17 +473,18 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void CSModelProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
-        MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
+        auto modelResource = static_cast<Model*>(out_resource.get());
         
-        MeshDescriptor descriptor;
+        ModelDesc modelDesc;
         
-        if (ReadFile(in_location, in_filePath, descriptor) == false)
+        if (ReadFile(in_location, in_filePath, modelDesc) == false)
         {
-            meshResource->SetLoadState(Resource::LoadState::k_failed);
+            modelResource->SetLoadState(Resource::LoadState::k_failed);
             return;
         }
         
-        BuildMesh(nullptr, descriptor, meshResource);
+        modelResource->Build(std::move(modelDesc));
+        modelResource->SetLoadState(Resource::LoadState::k_loaded);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
@@ -481,7 +492,7 @@ namespace ChilliSource
     {
         CS_ASSERT(in_delegate != nullptr, "Cannot load mesh async with null delegate");
         
-        MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
+        ModelSPtr meshResource = std::static_pointer_cast<Model>(out_resource);
         
         //Load model as task
         Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
@@ -491,11 +502,11 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CSModelProvider::LoadMeshDataTask(StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const MeshSPtr& out_resource)
+    void CSModelProvider::LoadMeshDataTask(StorageLocation in_location, const std::string& in_filePath, const AsyncLoadDelegate& in_delegate, const ModelSPtr& out_resource)
     {
         //read the mesh data into a MoStaticDeclaration
-        MeshDescriptor descriptor;
-        if (false == ReadFile(in_location, in_filePath, descriptor))
+        ModelDescSPtr modelDesc(new ModelDesc());
+        if (false == ReadFile(in_location, in_filePath, *modelDesc))
         {
             out_resource->SetLoadState(Resource::LoadState::k_failed);
             Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
@@ -507,28 +518,10 @@ namespace ChilliSource
         //start a main thread task for loading the data into a mesh
         Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_large, [=](const TaskContext&) noexcept
         {
-            BuildMesh(in_delegate, descriptor, out_resource);
+            out_resource->Build(std::move(*modelDesc));
+            out_resource->SetLoadState(Resource::LoadState::k_loaded);
+            
+           in_delegate(out_resource);
         });
-    }
-    //----------------------------------------------------------------------------
-    //----------------------------------------------------------------------------
-    void CSModelProvider::BuildMesh(const AsyncLoadDelegate& in_delegate, const MeshDescriptor& out_meshDesc, const MeshSPtr& out_resource)
-    {
-        bool success = out_resource->Build(out_meshDesc);
-
-        //cleanup
-        for (auto it = out_meshDesc.mMeshes.begin(); it != out_meshDesc.mMeshes.end(); ++it)
-        {
-            delete[] it->mpVertexData;
-            delete[] it->mpIndexData;
-        }
-        
-        Resource::LoadState loadState = success ? Resource::LoadState::k_loaded : Resource::LoadState::k_failed;
-        out_resource->SetLoadState(loadState);
-        
-        if(in_delegate != nullptr)
-        {
-            in_delegate(out_resource);
-        }
     }
 }

@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
-#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
+#include <ChilliSource/Rendering/Model/SkeletonDesc.h>
 
 #include <vector>
 
@@ -36,19 +36,19 @@ namespace ChilliSource
 {
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    void Skeleton::Build(const SkeletonDescriptor& in_desc)
+    Skeleton::Skeleton(const SkeletonDesc& in_desc) noexcept
     {
-        mapNodes.reserve(in_desc.m_nodeNames.size());
+        mapNodes.reserve(in_desc.GetNodeNames().size());
         
-        for(u32 i=0; i<in_desc.m_nodeNames.size(); ++i)
+        for(u32 i=0; i<in_desc.GetNodeNames().size(); ++i)
         {
             SkeletonNode* node(new SkeletonNode());
-            node->mstrName = in_desc.m_nodeNames[i];
-            node->mdwParentIndex = in_desc.m_parentNodeIndices[i];
+            node->mstrName = in_desc.GetNodeNames()[i];
+            node->mdwParentIndex = in_desc.GetParentNodeIndices()[i];
             mapNodes.push_back(SkeletonNodeCUPtr(node));
         }
         
-        madwJoints = in_desc.m_jointIndices;
+        madwJoints = in_desc.GetJointIndices();
     }
     //-------------------------------------------------------------------------
     /// Get Node By Name

@@ -33,6 +33,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/IResourceOptions.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
+#include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
 
 namespace ChilliSource
 {
@@ -69,7 +71,7 @@ namespace ChilliSource
         /// disk. This will only work for RGBA8888, RGB888, RGBA4444
         /// and RGB565 textures.
         //-------------------------------------------------------
-        TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreTextureDataEnabled);
+        TextureResourceOptions(bool in_mipmaps, TextureFilterMode in_filter, TextureWrapMode in_wrapS, TextureWrapMode in_wrapT, bool in_restoreTextureDataEnabled);
         //-------------------------------------------------------
         /// Generate a unique hash based on the
         /// currently set options
@@ -91,19 +93,19 @@ namespace ChilliSource
         ///
         /// @return Wrap S direction mode to create texture with
         //-------------------------------------------------------
-        Texture::WrapMode GetWrapModeS() const;
+        TextureWrapMode GetWrapModeS() const;
         //-------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Wrap T direction mode to create texture with
         //-------------------------------------------------------
-        Texture::WrapMode GetWrapModeT() const;
+        TextureWrapMode GetWrapModeT() const;
         //-------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Filter mode to create texture with
         //-------------------------------------------------------
-        Texture::FilterMode GetFilterMode() const;
+        TextureFilterMode GetFilterMode() const;
         //-------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -128,9 +130,9 @@ namespace ChilliSource
         //-------------------------------------------------------
         struct Options
         {
-            Texture::WrapMode m_wrapModeS = Texture::WrapMode::k_clamp;
-            Texture::WrapMode m_wrapModeT = Texture::WrapMode::k_clamp;
-            Texture::FilterMode m_filterMode = Texture::FilterMode::k_bilinear;
+            TextureWrapMode m_wrapModeS = TextureWrapMode::k_clamp;
+            TextureWrapMode m_wrapModeT = TextureWrapMode::k_clamp;
+            TextureFilterMode m_filterMode = TextureFilterMode::k_bilinear;
             bool m_hasMipMaps = false;
             bool m_restoreTextureDataEnabled = true;
         };

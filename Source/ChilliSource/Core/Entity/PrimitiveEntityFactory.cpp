@@ -35,8 +35,8 @@
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Model/Model.h>
+#include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 #include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
@@ -61,10 +61,10 @@ namespace ChilliSource
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        MeshCSPtr mesh = m_primitiveModelFactory->CreatePlane(in_size);
+        ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(in_size);
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
         
-        StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
+        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
         
         auto entity = Entity::Create();
@@ -78,10 +78,10 @@ namespace ChilliSource
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        MeshCSPtr mesh = m_primitiveModelFactory->CreateBox(in_size);
+        ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(in_size);
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
         
-        StaticMeshComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticMeshComponent(mesh, material);
+        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
         
         auto entity = Entity::Create();
@@ -100,7 +100,8 @@ namespace ChilliSource
         {
             auto texture = m_resourcePool->LoadResource<Texture>(StorageLocation::k_chilliSource, "Textures/Blank.csimage");
             
-            auto mutableMaterial = m_materialFactory->CreateStaticBlinnShadowed(materialName, texture);
+            //TODO: Change back to creating shadowed once that is supported in the new renderer.
+            auto mutableMaterial = m_materialFactory->CreateStaticBlinn(materialName, texture);
             mutableMaterial->SetEmissive(Colour::k_black);
             mutableMaterial->SetAmbient(in_colour);
             mutableMaterial->SetDiffuse(in_colour);

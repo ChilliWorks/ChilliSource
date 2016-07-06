@@ -39,7 +39,7 @@
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
-#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
@@ -92,18 +92,17 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    StaticMeshComponentUPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshCSPtr& in_model, const MaterialCSPtr& in_material)
+    StaticModelComponentUPtr RenderComponentFactory::CreateStaticModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
     {
-        StaticMeshComponentUPtr pResult(new StaticMeshComponent());
-        pResult->AttachMesh(in_model, in_material);
+        StaticModelComponentUPtr pResult(new StaticModelComponent(in_model, in_material));
         return pResult;
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshCSPtr& in_model, const MaterialCSPtr& in_material)
+    AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
     {
         AnimatedMeshComponentUPtr pResult(new AnimatedMeshComponent());
-        pResult->AttachMesh(in_model, in_material);
+        pResult->SetModel(in_model, in_material);
         return pResult;
     }
     //---------------------------------------------------------------------------

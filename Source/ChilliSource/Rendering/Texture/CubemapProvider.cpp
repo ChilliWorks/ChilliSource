@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
+#include <ChilliSource/Rendering/Texture/TextureDesc.h>
 
 #include <json/json.h>
 
@@ -185,96 +186,94 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void CubemapProvider::LoadCubemap(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
-        //read the Cubemap JSON
-        Json::Value jsonRoot;
-        if (JsonUtils::ReadJson(in_location, in_filePath, jsonRoot) == false)
-        {
-            CS_LOG_ERROR("Could not read face Cubemap file '" + in_filePath + "'.");
-            out_resource->SetLoadState(Resource::LoadState::k_failed);
-            if(in_delegate != nullptr)
-            {
-                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                {
-                    in_delegate(out_resource);
-                });
-            }
-            return;
-        }
+        //TODO: Re-add support for Cubemaps.
         
-        const u32 k_numFaces = 6;
-        const std::string k_faces[k_numFaces] = {"Right", "Left", "Top", "Bottom", "Front", "Back"};
-        
-        //MSVC does not support moving arrays of unique_ptr at this time and therefore we have
-        //to create a shared pointer in order to pass it into the lambda
-        auto imageDataContainer = std::make_shared<std::array<Texture::TextureDataUPtr, k_numFaces>>();
-        std::array<Texture::Descriptor, k_numFaces> descs;
-        
-        for(u32 i = 0; i < k_numFaces; ++i)
-        {
-            auto textureFile = ParseCubemapFace(jsonRoot, k_faces[i]);
-            if (textureFile.first == StorageLocation::k_none || textureFile.second == "")
-            {
-                CS_LOG_ERROR("Could not load face '" + k_faces[i] + "' in Cubemap '" + in_filePath + "'.");
-                out_resource->SetLoadState(Resource::LoadState::k_failed);
-                if(in_delegate != nullptr)
-                {
-                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                    {
-                        in_delegate(out_resource);
-                    });
-                }
-                return;
-            }
-            
-            ImageSPtr image(Image::Create());
-            if (LoadImage(image, m_imageProviders, textureFile.first, textureFile.second) == false)
-            {
-                CS_LOG_ERROR("Could not load image '" + textureFile.second + "' in Cubemap '" + in_filePath + "'");
-                out_resource->SetLoadState(Resource::LoadState::k_failed);
-                if(in_delegate != nullptr)
-                {
-                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                    {
-                        in_delegate(out_resource);
-                    });
-                }
-                return;
-            }
-            
-            (*imageDataContainer)[i] = image->MoveData();
-            
-            Texture::Descriptor desc;
-            desc.m_width = image->GetWidth();
-            desc.m_height = image->GetHeight();
-            desc.m_format = image->GetFormat();
-            desc.m_compression = image->GetCompression();
-            desc.m_dataSize = image->GetDataSize();
-            
-            descs[i] = std::move(desc);
-        }
-        
-        if(in_delegate == nullptr)
-        {
-            Cubemap* cubemap = (Cubemap*)out_resource.get();
-            const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
-            cubemap->Build(descs, std::move(*imageDataContainer), options->IsMipMapsEnabled(), options->IsRestoreCubemapDataEnabled());
-            cubemap->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
-            cubemap->SetFilterMode(options->GetFilterMode());
-            out_resource->SetLoadState(Resource::LoadState::k_loaded);
-        }
-        else
-        {
-            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-            {
-                Cubemap* cubemap = (Cubemap*)out_resource.get();
-                const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
-                cubemap->Build(descs, std::move(*imageDataContainer), options->IsMipMapsEnabled(), options->IsRestoreCubemapDataEnabled());
-                cubemap->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
-                cubemap->SetFilterMode(options->GetFilterMode());
-                out_resource->SetLoadState(Resource::LoadState::k_loaded);
-                in_delegate(out_resource);
-            });
-        }
+//        //read the Cubemap JSON
+//        Json::Value jsonRoot;
+//        if (JsonUtils::ReadJson(in_location, in_filePath, jsonRoot) == false)
+//        {
+//            CS_LOG_ERROR("Could not read face Cubemap file '" + in_filePath + "'.");
+//            out_resource->SetLoadState(Resource::LoadState::k_failed);
+//            if(in_delegate != nullptr)
+//            {
+//                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+//                {
+//                    in_delegate(out_resource);
+//                });
+//            }
+//            return;
+//        }
+//        
+//        const u32 k_numFaces = 6;
+//        const std::string k_faces[k_numFaces] = {"Right", "Left", "Top", "Bottom", "Front", "Back"};
+//        
+//        //MSVC does not support moving arrays of unique_ptr at this time and therefore we have
+//        //to create a shared pointer in order to pass it into the lambda
+//        auto imageDataContainer = std::make_shared<std::array<Texture::DataUPtr, k_numFaces>>();
+//        std::array<TextureDesc, k_numFaces> descs;
+//        
+//        for(u32 i = 0; i < k_numFaces; ++i)
+//        {
+//            auto textureFile = ParseCubemapFace(jsonRoot, k_faces[i]);
+//            if (textureFile.first == StorageLocation::k_none || textureFile.second == "")
+//            {
+//                CS_LOG_ERROR("Could not load face '" + k_faces[i] + "' in Cubemap '" + in_filePath + "'.");
+//                out_resource->SetLoadState(Resource::LoadState::k_failed);
+//                if(in_delegate != nullptr)
+//                {
+//                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+//                    {
+//                        in_delegate(out_resource);
+//                    });
+//                }
+//                return;
+//            }
+//            
+//            ImageSPtr image(Image::Create());
+//            if (LoadImage(image, m_imageProviders, textureFile.first, textureFile.second) == false)
+//            {
+//                CS_LOG_ERROR("Could not load image '" + textureFile.second + "' in Cubemap '" + in_filePath + "'");
+//                out_resource->SetLoadState(Resource::LoadState::k_failed);
+//                if(in_delegate != nullptr)
+//                {
+//                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+//                    {
+//                        in_delegate(out_resource);
+//                    });
+//                }
+//                return;
+//            }
+//            
+//            (*imageDataContainer)[i] = image->MoveData();
+//            
+//            TextureDesc desc(Integer2(image->GetWidth(), image->GetHeight()), image->GetFormat(), image->GetCompression());
+//            desc.m_dataSize = image->GetDataSize();
+//            
+//            descs[i] = std::move(desc);
+//        }
+//        
+//        if(in_delegate == nullptr)
+//        {
+//            Cubemap* cubemap = (Cubemap*)out_resource.get();
+//            const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
+//            cubemap->Build(descs, std::move(*imageDataContainer), options->IsMipMapsEnabled(), options->IsRestoreCubemapDataEnabled());
+//            cubemap->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
+//            cubemap->SetFilterMode(options->GetFilterMode());
+//            out_resource->SetLoadState(Resource::LoadState::k_loaded);
+//        }
+//        else
+//        {
+//            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+//            {
+//                Cubemap* cubemap = (Cubemap*)out_resource.get();
+//                const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
+//                cubemap->Build(descs, std::move(*imageDataContainer), options->IsMipMapsEnabled(), options->IsRestoreCubemapDataEnabled());
+//                cubemap->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
+//                cubemap->SetFilterMode(options->GetFilterMode());
+//                out_resource->SetLoadState(Resource::LoadState::k_loaded);
+//                in_delegate(out_resource);
+//            });
+//        }
     }
 }
 

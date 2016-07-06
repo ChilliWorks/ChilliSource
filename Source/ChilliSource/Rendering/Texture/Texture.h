@@ -1,8 +1,4 @@
 //
-//  Texture.h
-//  Chilli Source
-//  Created by Scott Downie on 01/10/2010.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2010 Tag Games Limited
@@ -30,149 +26,105 @@
 #define _CHILLISOURCE_RENDERING_TEXTURE_TEXTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
+#include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
 namespace ChilliSource
 {
-    //--------------------------------------------------------------
-    /// Interface class to backend rendering texture resource. A
-    /// texture resource is created from an image into a format
-    /// that can be used by the render system.
+    /// A basic 2D texture resource. One or more textures can be applied to a model using
+    /// a material.
     ///
-    /// @author S Downie
-    //--------------------------------------------------------------
-    class Texture : public Resource
+    /// This is not thread safe and should only be accessed from one thread at a time.
+    ///
+    class Texture final : public Resource
     {
     public:
-        
         CS_DECLARE_NAMEDTYPE(Texture);
         
-        using TextureDataUPtr = std::unique_ptr<u8[]>;
+        /// The buffer used to hold texture data.
+        ///
+        using DataUPtr = std::unique_ptr<const u8[]>;
+
+        /// Allows querying of whether or not this system implements the interface described by the
+        /// given interface Id. Typically this is not called directly as the templated equivalent
+        /// IsA<Interface>() is preferred.
+        ///
+        /// @param interfaceId
+        ///     The Id of the interface.
+        ///
+        /// @return Whether or not the interface is implemented.
+        ///
+        bool IsA(InterfaceIDType interfaceId) const noexcept override;
         
-        //--------------------------------------------------------------
-        /// Holds the description for building a texture from image data
+        /// Construct the texture from the given image data. The texture will take ownership of
+        /// the image data. The texture must not already be in the loaded state.
         ///
-        /// @author S Downie
-        //--------------------------------------------------------------
-        struct Descriptor
-        {
-            u32 m_width;
-            u32 m_height;
-            ImageFormat m_format;
-            ImageCompression m_compression;
-            u32 m_dataSize;
-        };
-        //--------------------------------------------------------------
-        /// The filter mode for determining how to sample texels based
-        /// on nearby texels in order to reduce texture aliasing.
+        /// @param textureData
+        ///     The texture data buffer.
+        /// @param textureDataSize
+        ///     The size of the texture data buffer.
+        /// @param textureDesc
+        ///     The texture description.
         ///
-        /// * Nearest neighbour - Fastest method. Chooses the closest texel
-        /// * Bilinear - Samples from 4 texels and uses weighted average
+        void Build(DataUPtr textureData, u32 textureDataSize, const TextureDesc& textureDesc) noexcept;
+
+        /// @return The texture dimensions.
         ///
-        /// @author S Downie
-        //--------------------------------------------------------------
-        enum class FilterMode
-        {
-            k_nearestNeighbour,
-            k_bilinear
-        };
-        //--------------------------------------------------------------
-        /// The wrap mode for determining how a texel should be sampled
-        /// if the texture coordinates exceed the bounds
-        ///
-        /// * Clamp - Clamps the texcoord between 0 and 1
-        /// * Wrap - Tex coord > 1 will wrap to be (x - 1) and vice-versa
-        ///
-        /// @author S Downie
-        //--------------------------------------------------------------
-        enum class WrapMode
-        {
-            k_clamp,
-            k_repeat
-        };
-        //--------------------------------------------------------------
-        /// Construct the texture from the given image data. The texture
-        /// will take ownership of the image data.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Texture descriptor
-        /// @param Image data
-        /// @param Whether the texture should have mip maps generated
-        /// @param Whether or not the texture data should be
-        /// restored after a context loss. This involves maintaining
-        /// a copy of the texture data in memory which is costly
-        /// so this should be disabled for any textures that can
-        /// easily be recreated, i.e any texture that is rendered
-        /// into every frame. This has no effect on textures that
-        /// are loaded from file as they are always restored from
-        /// disk. This will only work for RGBA8888, RGB888, RGBA4444
-        /// and RGB565 textures.
-        //--------------------------------------------------------------
-        virtual void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureDataEnabled) = 0;
-        //--------------------------------------------------------------
-        /// Binds this texture to the given texture unit allowing it to
-        /// be accessed by the shaders and operations to be performed on it
-        ///
-        /// @author S Downie
-        ///
-        /// @param Texture unit
-        //--------------------------------------------------------------
-        virtual void Bind(u32 in_texUnit = 0) = 0;
-        //--------------------------------------------------------------
-        /// Unbind this texture from its current texture unit. This
-        /// means it can no longer be used or changed until rebound.
-        ///
-        /// @author S Downie
-        //--------------------------------------------------------------
-        virtual void Unbind() = 0;
-        //--------------------------------------------------------------
-        /// Future sampling of the texture will use the given filter function
-        ///
-        /// @author S Downie
-        ///
-        /// @param Filter mode
-        //--------------------------------------------------------------
-        virtual void SetFilterMode(FilterMode in_mode) = 0;
-        //--------------------------------------------------------------
-        /// Future sampling of the texture will use the given wrap mode
-        ///
-        /// @author S Downie
-        ///
-        /// @param Horizontal wrapping
-        /// @param Vertical wrapping
-        //--------------------------------------------------------------
-        virtual void SetWrapMode(WrapMode in_sMode, WrapMode in_tMode) = 0;
-        //--------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return The width of the texture in texels
-        //--------------------------------------------------------------
-        virtual u32 GetWidth() const = 0;
-        //--------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return The height of the texture in texels
-        //--------------------------------------------------------------
-        virtual u32 GetHeight() const = 0;
-        //--------------------------------------------------------------
-        /// Virtual destructor
-        ///
-        /// @author S Downie
-        //--------------------------------------------------------------
-        virtual ~Texture(){}
+        const Integer2& GetDimensions() const noexcept;
         
-    protected:
+        /// @return The format of the image.
+        ///
+        ImageFormat GetImageFormat() const noexcept;
+        
+        /// @return The compression type of the image.
+        ///
+        ImageCompression GetImageCompression() const noexcept;
+        
+        /// @return The texture filter mode used when rendering the texture.
+        ///
+        TextureFilterMode GetFilterMode() const noexcept;
+        
+        /// @return The s-coordinate texture wrap mode used when rendering the texture.
+        ///
+        TextureWrapMode GetWrapModeS() const noexcept;
+        
+        /// @return The t-coordinate texture wrap mode used when rendering the texture.
+        ///
+        TextureWrapMode GetWrapModeT() const noexcept;
+        
+        /// @return Whether or not the texture should be mipmapped.
+        ///
+        bool IsMipmappingEnabled() const noexcept;
+        
+        /// @return Whether or not texture data should be restored on context loss.
+        ///
+        bool IsRestoreTextureDataEnabled() const noexcept;
+        
+        /// @return The underlying RenderTexture used by the render system.
+        ///
+        const RenderTexture* GetRenderTexture() const noexcept;
+        
+        ~Texture() noexcept;
+        
+    private:
         friend class ResourcePool;
-        //--------------------------------------------------------------
-        /// Factory method for creating an empty texture resource.
-        /// Only called by the resource pool
+        
+        /// A factory method for creating new, empty instances of the resource. This must only be
+        /// called by ResourcePool.
         ///
-        /// @author S Downie
+        /// @return The new instance of the resource.
         ///
-        /// @return Concrete texture resource
-        //--------------------------------------------------------------
-        static TextureUPtr Create();
+        static TextureUPtr Create() noexcept;
+        
+        /// Destroys the render texture if one currently exists.
+        ///
+        void DestroyRenderTexture() noexcept;
+        
+        Texture() = default;
+        
+        const RenderTexture* m_renderTexture = nullptr;
+        bool m_restoreTextureDataEnabled = false;
     };
 }
 

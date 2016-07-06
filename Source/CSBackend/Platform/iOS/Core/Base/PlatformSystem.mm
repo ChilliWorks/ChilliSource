@@ -32,8 +32,6 @@
 
 #import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
-#import <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
-#import <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Image/PVRImageProvider.h>
 
@@ -56,8 +54,6 @@ namespace CSBackend
 		void PlatformSystem::CreateDefaultSystems(ChilliSource::Application* in_application)
 		{
             in_application->CreateSystem<ChilliSource::PVRImageProvider>();
-            in_application->CreateSystem<OpenGL::GLSLShaderProvider>();
-            in_application->CreateSystem<OpenGL::TextureUnitSystem>();
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
