@@ -36,7 +36,6 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/Rendering/Base/ShaderPass.h>
 
 #include <array>
 #include <unordered_map>
@@ -54,7 +53,19 @@ namespace ChilliSource
     {
     public:
         CS_DECLARE_NAMEDTYPE(Material);
-    
+        
+        //----------------------------------------------------------
+        /// Describes the different shading types that materials can
+        /// use. These affect the shaders that the render system
+        /// will use when rendering objects with this material.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------
+        enum class ShadingType
+        {
+            k_unlit,
+            k_blinn
+        };
         //----------------------------------------------------------
         /// @author S Downie
         ///
@@ -64,20 +75,19 @@ namespace ChilliSource
         //----------------------------------------------------------
         bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------
-        /// @author S Downie
+        /// @author Ian Copland
         ///
-        /// @return The shader associated with this rendering pass
+        /// @return The shading type that this material uses.
         //----------------------------------------------------------
-        const ShaderCSPtr& GetShader(ShaderPass in_pass) const;
+        ShadingType GetShadingType() const noexcept;
         //----------------------------------------------------------
-        /// Associate the given shader with the given render pass
+        ///Sets the shading type that this material uses.
         ///
-        /// @author S Downie
+        /// @author Ian Copland
         ///
-        /// @param Shader pass
-        /// @param Shader
+        /// @param in_shadingType - The shading type to use.
         //----------------------------------------------------------
-        void SetShader(ShaderPass in_pass, const ShaderCSPtr& in_shader);
+        void SetShadingType(ShadingType in_shadingType) noexcept;
         //----------------------------------------------------------
         /// Clear the textures from the slots
         ///
@@ -355,28 +365,22 @@ namespace ChilliSource
         /// @param Colour value
         //-----------------------------------------------------------
         void SetShaderVar(const std::string& in_varName, const Colour& in_value);
+        //-----------------------------------------------------------
+        /// Generates the RenderMaterialGroup that describes this
+        /// material. This generated RenderMaterialGroup is cached
+        /// and only re-generated when necessary.
+        ///
+        /// This is not thread safe and should only be called from
+        /// the main thread.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return The RenderMaterialGroup that describes this
+        /// material.
+        //-----------------------------------------------------------
+        const RenderMaterialGroup* GetRenderMaterialGroup() const noexcept;
         
-        //TODO: Remove these once we no longer rely on render system and material to hold our state
-        //i.e. when we have a proper render command queue
-        //----------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Whether this material has been dirtied
-        //----------------------------------------------------------
-        bool IsCacheValid() const;
-        //----------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Whether this materials shader variables has been dirtied
-        //----------------------------------------------------------
-        bool IsVariableCacheValid() const;
-        //----------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @param This material has been applied and is no longer
-        /// dirty
-        //----------------------------------------------------------
-        void SetCacheValid();
+        ~Material() noexcept;
         
         //TODO: Make private when we rework the render system
         std::unordered_map<std::string, f32> m_floatVars;
@@ -387,7 +391,6 @@ namespace ChilliSource
         std::unordered_map<std::string, Colour> m_colourVars;
         
     private:
-        
         friend class ResourcePool;
         //----------------------------------------------------------
         /// Factory method to create an new instance of an empty
@@ -403,14 +406,40 @@ namespace ChilliSource
         /// @author S Downie
         //----------------------------------------------------------
         Material();
-
-    private:
+        //----------------------------------------------------------
+        /// Generates an unlit render material group using the
+        /// current material setting. If any of the settings are
+        /// not allowed in an unlit render material group then this
+        /// will assert.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return The RenderMaterialGroup.
+        //----------------------------------------------------------
+        const RenderMaterialGroup* CreateUnlitRenderMaterialGroup() const;
+        //----------------------------------------------------------
+        /// Generates an blinn render material group using the
+        /// current material setting. If any of the settings are
+        /// not allowed in an blinn render material group then this
+        /// will assert.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return The RenderMaterialGroup.
+        //----------------------------------------------------------
+        const RenderMaterialGroup* CreateBlinnRenderMaterialGroup() const;
+        //----------------------------------------------------------
+        /// Destroys the render material group if there is one.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------
+        void DestroyRenderMaterialGroup() const noexcept;
         
         std::vector<TextureCSPtr> m_textures;
         
         CubemapCSPtr m_cubemap;
         
-        std::array<ShaderCSPtr, (u32)ShaderPass::k_total> m_shaders;
+        ShadingType m_shadingType = ShadingType::k_unlit;
         
         Colour m_emissive;
         Colour m_ambient;
@@ -421,14 +450,17 @@ namespace ChilliSource
         BlendMode m_dstBlendMode;
         CullFace m_cullFace;
         
-        bool m_isCacheValid = false;
-        bool m_isVariableCacheValid = true;
 
         bool m_isAlphaBlendingEnabled = false;
         bool m_isColWriteEnabled = true;
         bool m_isDepthWriteEnabled = true;
         bool m_isDepthTestEnabled = true;
         bool m_isFaceCullingEnabled = true;
+        
+        //TODO: When the material system is improved, remove the need to make this mutable.
+        mutable bool m_isCacheValid = false;
+        mutable bool m_isVariableCacheValid = true;
+        mutable const RenderMaterialGroup* m_renderMaterialGroup = nullptr;
     };
 }
 

@@ -40,21 +40,28 @@ namespace CSBackend
         //----------------------------------------------------
         /// Base
         //----------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(MeshBuffer);
+        CS_FORWARDDECLARE_CLASS(ContextState);
         CS_FORWARDDECLARE_CLASS(RenderCapabilities);
-        CS_FORWARDDECLARE_CLASS(RenderSystem);
+        CS_FORWARDDECLARE_CLASS(RenderCommandProcessor);
         CS_FORWARDDECLARE_CLASS(RenderTarget);
+        //----------------------------------------------------
+        /// Camera
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(GLCamera);
+        //----------------------------------------------------
+        /// Model
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(GLMesh);
+        CS_FORWARDDECLARE_CLASS(GLDynamicMesh);
         //----------------------------------------------------
         /// Shader
         //----------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Shader);
-        CS_FORWARDDECLARE_CLASS(GLSLShaderProvider);
+        CS_FORWARDDECLARE_CLASS(GLShader);
         //----------------------------------------------------
         /// Texture
         //----------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Cubemap);
-        CS_FORWARDDECLARE_CLASS(Texture);
-        CS_FORWARDDECLARE_CLASS(TextureUnitSystem);
+        CS_FORWARDDECLARE_CLASS(GLTexture);
+        CS_FORWARDDECLARE_CLASS(GLTextureUnitManager);
     }
 }
 

@@ -31,6 +31,9 @@
 #define _CHILLISOURCE_RENDERING_SHADER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Shader/CSShaderProvider.h>
+#include <ChilliSource/Rendering/Shader/RenderShader.h>
+#include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
 #endif

@@ -33,10 +33,6 @@
 #include <ChilliSource/Core/Threading/TaskContext.h>
 #include <ChilliSource/Core/Threading/TaskType.h>
 
-#ifdef CS_TARGETPLATFORM_ANDROID
-#   include <CSBackend/Platform/Android/Main/JNI/Core/Threading/MainThreadId.h>
-#endif
-
 #include <algorithm>
 
 namespace ChilliSource
@@ -64,11 +60,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool TaskScheduler::IsMainThread() const noexcept
     {
-#ifdef CS_TARGETPLATFORM_ANDROID
-        return CSBackend::Android::MainThreadId::Get()->GetId() == std::this_thread::get_id();
-#else
         return m_mainThreadId == std::this_thread::get_id();
-#endif
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -224,7 +216,7 @@ namespace ChilliSource
     void TaskScheduler::OnInit() noexcept
     {
         constexpr s32 k_minThreadsPerPool = 2;
-        constexpr s32 k_namedThreads = 1; //The main thread.
+        constexpr s32 k_namedThreads = 2; //The main thread and render (system) thread.
         
         Device* device = Application::Get()->GetSystem<Device>();
         
@@ -235,10 +227,8 @@ namespace ChilliSource
         m_largeTaskPool = TaskPoolUPtr(new TaskPool(TaskType::k_large, threadsPerPool));
         m_mainThreadTaskPool = SingleThreadTaskPoolUPtr(new SingleThreadTaskPool(TaskType::k_mainThread));
         m_systemThreadTaskPool = SingleThreadTaskPoolUPtr(new SingleThreadTaskPool(TaskType::k_system));
-        
-#ifndef CS_TARGETPLATFORM_ANDROID
+
         m_mainThreadId = std::this_thread::get_id();
-#endif
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -247,6 +237,5 @@ namespace ChilliSource
         m_smallTaskPool.reset();
         m_largeTaskPool.reset();
         m_mainThreadTaskPool.reset();
-        m_systemThreadTaskPool.reset();
     }
 }

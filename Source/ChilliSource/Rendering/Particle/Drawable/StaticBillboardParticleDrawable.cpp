@@ -40,7 +40,6 @@
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
@@ -233,7 +232,7 @@ namespace ChilliSource
 
             m_billboards = std::unique_ptr<dynamic_array<BillboardData>>(new dynamic_array<BillboardData>(1));
 
-            Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), Vector2(f32(texture->GetWidth()), f32(texture->GetHeight())),
+            Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), Vector2(f32(texture->GetDimensions().x), f32(texture->GetDimensions().y)),
                 m_billboardDrawableDef->GetSizePolicy());
 
             BillboardData& billboardData = m_billboards->at(0);
@@ -252,62 +251,64 @@ namespace ChilliSource
     //----------------------------------------------------------------
     void StaticBillboardParticleDrawable::DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
     {
-        const auto& material = m_billboardDrawableDef->GetMaterial();
-        auto entityWorldTransform = GetEntity()->GetTransform().GetWorldTransform();
-
-        //we can't directly apply the parent entities scale to the particles as this would look strange as
-        //the camera moved around an emitting entity with a non-uniform scale, so this works out a uniform
-        //scale from the average of the components.
-        auto entityScale = GetEntity()->GetTransform().GetWorldScale();
-        f32 particleScaleFactor = (entityScale.x + entityScale.y + entityScale.z) / 3.0f;
-
-        //billboard by applying the inverse of the view orientation. The view orientation is the inverse of the camera entity orientation.
-        auto inverseView = in_camera->GetEntity()->GetTransform().GetWorldOrientation();
-
-        for (u32 i = 0; i < in_particleData.size(); ++i)
-        {
-            const auto& particle = in_particleData[i];
-
-            if (particle.m_isActive == true && particle.m_colour != Colour::k_transparent)
-            {
-                auto worldPosition = particle.m_position * entityWorldTransform;
-                auto worldScale = particle.m_scale * particleScaleFactor;
-
-                //rotate locally in the XY plane before rotating to face the camera.
-                auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
-
-                const auto& billboardData = m_billboards->at(m_particleBillboardIndices[i]);
-                auto spriteData = BuildSpriteData(material, billboardData.m_uvs, billboardData.m_bottomLeft, billboardData.m_topRight, worldPosition, worldScale, worldOrientation,
-                    particle.m_colour);
-
-                Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
-            }
-        }
+        //TODO: Re-implement in new system
+//        const auto& material = m_billboardDrawableDef->GetMaterial();
+//        auto entityWorldTransform = GetEntity()->GetTransform().GetWorldTransform();
+//
+//        //we can't directly apply the parent entities scale to the particles as this would look strange as
+//        //the camera moved around an emitting entity with a non-uniform scale, so this works out a uniform
+//        //scale from the average of the components.
+//        auto entityScale = GetEntity()->GetTransform().GetWorldScale();
+//        f32 particleScaleFactor = (entityScale.x + entityScale.y + entityScale.z) / 3.0f;
+//
+//        //billboard by applying the inverse of the view orientation. The view orientation is the inverse of the camera entity orientation.
+//        auto inverseView = in_camera->GetEntity()->GetTransform().GetWorldOrientation();
+//
+//        for (u32 i = 0; i < in_particleData.size(); ++i)
+//        {
+//            const auto& particle = in_particleData[i];
+//
+//            if (particle.m_isActive == true && particle.m_colour != Colour::k_transparent)
+//            {
+//                auto worldPosition = particle.m_position * entityWorldTransform;
+//                auto worldScale = particle.m_scale * particleScaleFactor;
+//
+//                //rotate locally in the XY plane before rotating to face the camera.
+//                auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
+//
+//                const auto& billboardData = m_billboards->at(m_particleBillboardIndices[i]);
+//                auto spriteData = BuildSpriteData(material, billboardData.m_uvs, billboardData.m_bottomLeft, billboardData.m_topRight, worldPosition, worldScale, worldOrientation,
+//                    particle.m_colour);
+//
+//                Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
+//            }
+//        }
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
     void StaticBillboardParticleDrawable::DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
     {
-        const auto& material = m_billboardDrawableDef->GetMaterial();
-
-        //billboard by applying the inverse of the view orientation. The view orientation is the inverse of the camera entity orientation.
-        auto inverseView = in_camera->GetEntity()->GetTransform().GetWorldOrientation();
-
-        for (u32 i = 0; i < in_particleData.size(); ++i)
-        {
-            const auto& particle = in_particleData[i];
-
-            if (particle.m_isActive == true && particle.m_colour != Colour::k_transparent)
-            {
-                //rotate locally in the XY plane before rotating to face the camera.
-                auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
-
-                const auto& billboardData = m_billboards->at(m_particleBillboardIndices[i]);
-                auto spriteData = BuildSpriteData(material, billboardData.m_uvs, billboardData.m_bottomLeft, billboardData.m_topRight, particle.m_position, particle.m_scale,
-                    worldOrientation, particle.m_colour);
-
-                Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
-            }
-        }
+        //TODO: Re-implement in new system
+//        const auto& material = m_billboardDrawableDef->GetMaterial();
+//
+//        //billboard by applying the inverse of the view orientation. The view orientation is the inverse of the camera entity orientation.
+//        auto inverseView = in_camera->GetEntity()->GetTransform().GetWorldOrientation();
+//
+//        for (u32 i = 0; i < in_particleData.size(); ++i)
+//        {
+//            const auto& particle = in_particleData[i];
+//
+//            if (particle.m_isActive == true && particle.m_colour != Colour::k_transparent)
+//            {
+//                //rotate locally in the XY plane before rotating to face the camera.
+//                auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
+//
+//                const auto& billboardData = m_billboards->at(m_particleBillboardIndices[i]);
+//                auto spriteData = BuildSpriteData(material, billboardData.m_uvs, billboardData.m_bottomLeft, billboardData.m_topRight, particle.m_position, particle.m_scale,
+//                    worldOrientation, particle.m_colour);
+//
+//                Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
+//            }
+//        }
     }
 }

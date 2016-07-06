@@ -33,10 +33,12 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Base/RenderObject.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
+#include <ChilliSource/Rendering/Sprite/SpriteMeshBuilder.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
@@ -46,6 +48,27 @@ namespace ChilliSource
 {
     namespace
     {
+        //----------------------------------------------------------
+        /// Calculates the world space bounding sphere of an object.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param localBoundingSphere - The local bounding sphere
+        /// of the object.
+        /// @param worldPosition - The world position of the object.
+        /// @param worldScale - The world scale of the object.
+        ///
+        /// @return The world space bounding sphere.
+        //----------------------------------------------------------
+        Sphere CalcWorldSpaceBoundingSphere(const Sphere& localBoundingSphere, const Vector3& worldPosition, const Vector3& worldScale) noexcept
+        {
+            f32 maxScaleComponent = std::max(std::max(worldScale.x, worldScale.y), worldScale.z);
+            
+            auto centre = worldPosition + localBoundingSphere.vOrigin;
+            auto radius = maxScaleComponent * localBoundingSphere.fRadius;
+            
+            return Sphere(centre, radius);
+        }
         //----------------------------------------------------------
         /// Aspect ratio maintaing function that returns the original
         /// size. This is used despite the fact it doesn't do much to
@@ -157,15 +180,12 @@ namespace ChilliSource
     : m_uvs(0.0f, 0.0f, 1.0f, 1.0f)
     {
         m_sizePolicyDelegate = k_sizeDelegates[(u32)SizePolicy::k_none];
-        UpdateVertexUVs(m_uvs);
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
     bool SpriteComponent::IsA(InterfaceIDType in_interfaceId) const
     {
-        return  (in_interfaceId == SpriteComponent::InterfaceID) ||
-                (in_interfaceId == RenderComponent::InterfaceID) ||
-                (in_interfaceId == VolumeComponent::InterfaceID);
+        return  (in_interfaceId == VolumeComponent::InterfaceID || in_interfaceId == SpriteComponent::InterfaceID);
     }
     //----------------------------------------------------
     //----------------------------------------------------
@@ -254,7 +274,7 @@ namespace ChilliSource
         else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            return Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight());
+            return Vector2((f32)texture->GetDimensions().x, (f32)texture->GetDimensions().y);
         }
         
         return Vector2::k_one;
@@ -290,6 +310,18 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
+    void SpriteComponent::SetMaterial(const MaterialCSPtr& in_material)
+    {
+        mpMaterial = in_material;
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    const MaterialCSPtr& SpriteComponent::GetMaterial() const
+    {
+        return mpMaterial;
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
     void SpriteComponent::SetTextureAtlas(const TextureAtlasCSPtr& in_atlas)
     {
         OnTransformChanged();
@@ -306,34 +338,24 @@ namespace ChilliSource
         
         m_hashedTextureAtlasId = HashCRC32::GenerateHashCode(in_atlasId);
         m_uvs = m_textureAtlas->GetFrameUVs(m_hashedTextureAtlasId);
-        
-        UpdateVertexUVs(m_uvs);
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
     void SpriteComponent::SetUVs(const UVs& in_uvs)
     {
         m_uvs = in_uvs;
-        UpdateVertexUVs(in_uvs);
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
     void SpriteComponent::SetUVs(f32 in_u, f32 in_v, f32 in_s, f32 in_t)
     {
         m_uvs = UVs(in_u, in_v, in_s, in_t);
-        UpdateVertexUVs(m_uvs);
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
     void SpriteComponent::SetColour(const Colour& in_colour)
     {
         m_colour = in_colour;
-        
-        ByteColour byteCol = ColourUtils::ColourToByteColour(m_colour);
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = byteCol;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = byteCol;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].Col = byteCol;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].Col = byteCol;
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
@@ -353,8 +375,6 @@ namespace ChilliSource
     {
         m_flippedHorizontally = in_flip;
         m_vertexPositionsValid = false;
-        
-        UpdateVertexUVs(m_uvs);
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
@@ -368,8 +388,6 @@ namespace ChilliSource
     {
         m_flippedVertically = in_flip;
         m_vertexPositionsValid = false;
-        
-        UpdateVertexUVs(m_uvs);
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
@@ -390,33 +408,6 @@ namespace ChilliSource
     {
         return m_originAlignment;
     }
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    void SpriteComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
-    {
-        if (ineShaderPass == ShaderPass::k_ambient)
-        {
-            if(IsTextureSizeCacheValid() == false)
-            {
-                OnTransformChanged();
-                SetTextureSizeCacheValid();
-            }
-            
-            if(m_vertexPositionsValid == false)
-            {
-                //We have been transformed so we need to recalculate our vertices
-                UpdateVertexPositions();
-                m_vertexPositionsValid = true;
-            }
-            
-            m_spriteData.pMaterial = mpMaterial;
-            
-            //Add us to the render systems dynamic batch
-            //If we force a batch flush here then the previous sprites
-            //will be rendered.
-            inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(m_spriteData);
-        }
-    }
     //------------------------------------------------------------
     //------------------------------------------------------------
     void SpriteComponent::OnTransformChanged()
@@ -435,7 +426,7 @@ namespace ChilliSource
             if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
             {
                 auto texture = mpMaterial->GetTexture().get();
-                Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
+                Vector2 texSize((f32)texture->GetDimensions().x, (f32)texture->GetDimensions().y);
                 
                 return texSize == m_cachedTextureSize;
             }
@@ -450,7 +441,7 @@ namespace ChilliSource
         if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            Vector2 texSize((f32)texture->GetWidth(), (f32)texture->GetHeight());
+            Vector2 texSize((f32)texture->GetDimensions().x, (f32)texture->GetDimensions().y);
             m_cachedTextureSize = texSize;
         }
     }
@@ -462,19 +453,9 @@ namespace ChilliSource
         
         OnTransformChanged();
     }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void SpriteComponent::OnRemovedFromScene()
-    {
-        m_transformChangedConnection = nullptr;
-    }
-    //-----------------------------------------------------------
-    /// The image from the texture atlas will have potentially
-    /// been cropped by the tool. This will affect the sprites
-    /// position within the uncropped image and we need to
-    /// account for that when positioning the corners
-    //-----------------------------------------------------------
-    void SpriteComponent::UpdateVertexPositions()
+    //------------------------------------------------------------
+    //------------------------------------------------------------
+    void SpriteComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
     {
         Vector2 frameCenter;
         Vector2 frameSize;
@@ -485,60 +466,35 @@ namespace ChilliSource
         else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
         {
             auto texture = mpMaterial->GetTexture().get();
-            frameSize = m_sizePolicyDelegate(m_originalSize, Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight()));
+            frameSize = m_sizePolicyDelegate(m_originalSize, Vector2((f32)texture->GetDimensions().x, (f32)texture->GetDimensions().y));
         }
         
-        const Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
-        Vector2 halfFrameSize(frameSize.x * 0.5f, frameSize.y * 0.5f);
-        Vector2 alignedPosition = -GetAnchorPoint(m_originAlignment, halfFrameSize);
-        Vector4 vertexCentre(alignedPosition.x + frameCenter.x, alignedPosition.y + frameCenter.y, 0.0f, 1.0f);
-        
-        //TL
-        Vector4 vertexOffset(-halfFrameSize.x, halfFrameSize.y, 0.0f, 0.0f);
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = (vertexCentre + vertexOffset) * worldTransform;
-        
-        //TR
-        vertexOffset.x = halfFrameSize.x;
-        vertexOffset.y = halfFrameSize.y;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = (vertexCentre + vertexOffset) * worldTransform;
-        
-        //BL
-        vertexOffset.x = -halfFrameSize.x;
-        vertexOffset.y = -halfFrameSize.y;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = (vertexCentre + vertexOffset) * worldTransform;
-        
-        //BR
-        vertexOffset.x = halfFrameSize.x;
-        vertexOffset.y = -halfFrameSize.y;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = (vertexCentre + vertexOffset) * worldTransform;
-    }
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    void SpriteComponent::UpdateVertexUVs(const UVs& in_uvs)
-    {
-        UVs transformedUVs = in_uvs;
+        UVs transformedUVs = m_uvs;
         
         if(m_flippedHorizontally == true && m_flippedVertically == true)
         {
-            transformedUVs = UVs::FlipDiagonally(in_uvs);
+            transformedUVs = UVs::FlipDiagonally(transformedUVs);
         }
         else if(m_flippedHorizontally == true)
         {
-            transformedUVs = UVs::FlipHorizontally(in_uvs);
+            transformedUVs = UVs::FlipHorizontally(transformedUVs);
         }
         else if(m_flippedVertically == true)
         {
-            transformedUVs = UVs::FlipVertically(in_uvs);
+            transformedUVs = UVs::FlipVertically(transformedUVs);
         }
         
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.x = transformedUVs.m_u;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.y = transformedUVs.m_v;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.x = transformedUVs.m_u;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.y = transformedUVs.m_v + transformedUVs.m_t;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.x = transformedUVs.m_u + transformedUVs.m_s;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = transformedUVs.m_v;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = transformedUVs.m_u + transformedUVs.m_s;
-        m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = transformedUVs.m_v + transformedUVs.m_t;
+        const auto& transform = GetEntity()->GetTransform();
+        auto renderDynamicMesh = SpriteMeshBuilder::Build(Vector3(frameCenter, 0.0f), frameSize, transformedUVs, m_colour, m_originAlignment);
+        auto boundingSphere = CalcWorldSpaceBoundingSphere(renderDynamicMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
+        in_renderSnapshot.AddRenderObject(RenderObject(GetMaterial()->GetRenderMaterialGroup(), renderDynamicMesh.get(), transform.GetWorldTransform(), boundingSphere, RenderLayer::k_standard));
+        in_renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    void SpriteComponent::OnRemovedFromScene()
+    {
+        m_transformChangedConnection = nullptr;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

@@ -28,9 +28,6 @@
 
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Rendering/Base/ShaderPass.h>
-#include <ChilliSource/Rendering/Base/VertexLayouts.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
 
 namespace ChilliSource
 {
@@ -44,18 +41,19 @@ namespace ChilliSource
     ///
     /// Default
     //------------------------------------------------------
-    SpriteBatch::SpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage) 
-    : m_renderSystem(inpRenderSystem), mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
+    SpriteBatch::SpriteBatch(u32 inudwCapacity, BufferUsage ineUsage)
+    : mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
     {
-        BufferDescription desc;
-        desc.eUsageFlag = ineUsage;
-        desc.VertexDataCapacity = (inudwCapacity + 1) * k_numSpriteVerts * sizeof(SpriteVertex); 
-        desc.IndexDataCapacity  = (inudwCapacity + 1) * sizeof(u16) * k_numSpriteIndices;
-        desc.ePrimitiveType = PrimitiveType::k_tri;
-        desc.eAccessFlag = BufferAccess::k_read;
-        desc.VertexLayout = VertexLayout::kSprite;
-        
-        mpSpriteBuffer = m_renderSystem->CreateBuffer(desc);
+        //TODO: Re-add sprite batch init
+        //BufferDescription desc;
+        //desc.eUsageFlag = ineUsage;
+        //desc.VertexDataCapacity = (inudwCapacity + 1) * k_numSpriteVerts * sizeof(SpriteVertex); 
+        //desc.IndexDataCapacity  = (inudwCapacity + 1) * sizeof(u16) * k_numSpriteIndices;
+        //desc.ePrimitiveType = PrimitiveType::k_tri;
+        //desc.eAccessFlag = BufferAccess::k_read;
+        //desc.VertexLayout = VertexLayout::kSprite;
+        //
+        //mpSpriteBuffer = m_renderSystem->CreateBuffer(desc);
     }
     //------------------------------------------------------
     /// Build
@@ -67,30 +65,31 @@ namespace ChilliSource
     //------------------------------------------------------
     void SpriteBatch::Build(const std::vector<SpriteData>& in_sprites)
     {
-        const u32 udwNumSprites = static_cast<u32>(in_sprites.size());
-        const u32 udwNumIndices = k_numSpriteIndices * udwNumSprites; 
-        
-        mpSpriteBuffer->Bind();
-        mpSpriteBuffer->SetVertexCount(k_numSpriteVerts *  udwNumSprites);
-        mpSpriteBuffer->SetIndexCount(udwNumIndices);
-        
-        //Get the buffer locations
-        SpriteVertex* pVBuffer = nullptr;
-        mpSpriteBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
-
-        u32 VertIdx = 0;
-                                
-        //The vertex data depends on the sprite vertex layout.
-        for(const auto& sprite : in_sprites)
-        {
-            MapSpriteIntoBuffer(&pVBuffer[VertIdx], sprite);
-            VertIdx+=4;
-        }
-        
-        //---End mapping - Vertex
-        mpSpriteBuffer->UnlockVertex();
-
-        BuildIndicesForNumberSprites(udwNumSprites);
+        //TODO: Re-implement in new system.
+//        const u32 udwNumSprites = static_cast<u32>(in_sprites.size());
+//        const u32 udwNumIndices = k_numSpriteIndices * udwNumSprites; 
+//        
+//        mpSpriteBuffer->Bind();
+//        mpSpriteBuffer->SetVertexCount(k_numSpriteVerts *  udwNumSprites);
+//        mpSpriteBuffer->SetIndexCount(udwNumIndices);
+//        
+//        //Get the buffer locations
+//        SpriteVertex* pVBuffer = nullptr;
+//        mpSpriteBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
+//
+//        u32 VertIdx = 0;
+//                                
+//        //The vertex data depends on the sprite vertex layout.
+//        for(const auto& sprite : in_sprites)
+//        {
+//            MapSpriteIntoBuffer(&pVBuffer[VertIdx], sprite);
+//            VertIdx+=4;
+//        }
+//        
+//        //---End mapping - Vertex
+//        mpSpriteBuffer->UnlockVertex();
+//
+//        BuildIndicesForNumberSprites(udwNumSprites);
     }
     //-------------------------------------------------------
     /// Map Sprite Into Buffer
@@ -119,16 +118,17 @@ namespace ChilliSource
     //------------------------------------------------------
     void SpriteBatch::RemapSprite(u32 inudwIndex, const SpriteData& inpSprite)
     {
-        //No validation, cause it to crash as you want
-        mpSpriteBuffer->Bind();
-        
-        SpriteVertex* pVBuffer = nullptr;
-        mpSpriteBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
-        
-        pVBuffer += k_numSpriteVerts * inudwIndex;
-        MapSpriteIntoBuffer(pVBuffer, inpSprite);
-        
-        mpSpriteBuffer->UnlockVertex();
+        //TODO: Reimplmeent in new system.
+//        //No validation, cause it to crash as you want
+//        mpSpriteBuffer->Bind();
+//        
+//        SpriteVertex* pVBuffer = nullptr;
+//        mpSpriteBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
+//        
+//        pVBuffer += k_numSpriteVerts * inudwIndex;
+//        MapSpriteIntoBuffer(pVBuffer, inpSprite);
+//        
+//        mpSpriteBuffer->UnlockVertex();
     }
     //-------------------------------------------------------
     /// Build Indices For Number Sprites
@@ -138,23 +138,24 @@ namespace ChilliSource
     //------------------------------------------------------
     void SpriteBatch::BuildIndicesForNumberSprites(u32 inudwNumSprites)
     {
-        if(inudwNumSprites > mudwNumSpritesBuiltIndicesFor) 
-        {
-            mudwNumSpritesBuiltIndicesFor = inudwNumSprites;
-            
-            u16* pIBuffer = nullptr;
-            mpSpriteBuffer->LockIndex(&pIBuffer, 0, 0);
-            
-            for	(u32 nSprite = 0; nSprite < mudwNumSpritesBuiltIndicesFor; nSprite++)
-            {
-                for(u32 i=0; i<k_numSpriteIndices; ++i)
-                {
-                    pIBuffer[nSprite * k_numSpriteIndices + i] = k_localIndices[i] + (nSprite * k_numSpriteVerts);
-                }	
-            }
-            
-            mpSpriteBuffer->UnlockIndex();
-        }
+        //TODO: Re-implement in new system
+//        if(inudwNumSprites > mudwNumSpritesBuiltIndicesFor) 
+//        {
+//            mudwNumSpritesBuiltIndicesFor = inudwNumSprites;
+//            
+//            u16* pIBuffer = nullptr;
+//            mpSpriteBuffer->LockIndex(&pIBuffer, 0, 0);
+//            
+//            for	(u32 nSprite = 0; nSprite < mudwNumSpritesBuiltIndicesFor; nSprite++)
+//            {
+//                for(u32 i=0; i<k_numSpriteIndices; ++i)
+//                {
+//                    pIBuffer[nSprite * k_numSpriteIndices + i] = k_localIndices[i] + (nSprite * k_numSpriteVerts);
+//                }	
+//            }
+//            
+//            mpSpriteBuffer->UnlockIndex();
+//        }
     }
     //------------------------------------------------------
     /// Render
@@ -166,15 +167,16 @@ namespace ChilliSource
     //------------------------------------------------------
     void SpriteBatch::Render(const MaterialCSPtr& inMaterial, u32 inudwOffset, u32 inudwStride) const
     {
-        if(inudwStride > 0)
-        {
-            mpSpriteBuffer->Bind();
-        
-            //Tell the render system to draw the contents of the buffer
-            m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
-
-            m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Matrix4::k_identity);
-        }
+        //TODO: Re-implement in new system
+//        if(inudwStride > 0)
+//        {
+//            mpSpriteBuffer->Bind();
+//        
+//            //Tell the render system to draw the contents of the buffer
+//            m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
+//
+//            m_renderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Matrix4::k_identity);
+//        }
     }
     //------------------------------------------------------
     /// Render
@@ -185,15 +187,16 @@ namespace ChilliSource
     //------------------------------------------------------
     void SpriteBatch::Render(const MaterialCSPtr& inMaterial) const
     {
-        if(mpSpriteBuffer->GetIndexCount() > 0)
-        {
-            mpSpriteBuffer->Bind();
-            
-            //Tell the render system to draw the contents of the buffer
-            m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
-
-            m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Matrix4::k_identity);
-        }
+        //TODO: Re-implement in new system
+//        if(mpSpriteBuffer->GetIndexCount() > 0)
+//        {
+//            mpSpriteBuffer->Bind();
+//            
+//            //Tell the render system to draw the contents of the buffer
+//            m_renderSystem->ApplyMaterial(inMaterial, ShaderPass::k_ambient);
+//
+//            m_renderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Matrix4::k_identity);
+//        }
     }
     //------------------------------------------------------
     /// Get Tag
@@ -219,6 +222,5 @@ namespace ChilliSource
     //------------------------------------------------------
     SpriteBatch::~SpriteBatch() 
     {
-        CS_SAFEDELETE(mpSpriteBuffer);
     }
 }

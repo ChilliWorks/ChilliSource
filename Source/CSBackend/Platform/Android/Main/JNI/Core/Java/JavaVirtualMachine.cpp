@@ -1,8 +1,4 @@
 //
-//  JavaVirtualMachine.cpp
-//  ChilliSource
-//  Created by Ian Copland on 21/04/2015.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2015 Tag Games Limited
@@ -29,28 +25,46 @@
 #ifdef CS_TARGETPLATFORM_ANDROID
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 
 namespace CSBackend
 {
 	namespace Android
 	{
         //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        JavaVirtualMachine::JavaVirtualMachine(JavaVM* in_javaVirtualMachine)
+        JavaVirtualMachine::JavaVirtualMachine(JavaVM* in_javaVirtualMachine) noexcept
             : m_javaVirtualMachine(in_javaVirtualMachine)
         {
+            constexpr char k_activityClassName[] = "com/chilliworks/chillisource/core/CSActivity";
+
             CS_ASSERT(m_javaVirtualMachine != nullptr, "The java virtual machine cannot be null.");
+
+            auto environment = GetJNIEnvironment();
+
+            auto activityClass = environment->FindClass(k_activityClassName);
+            auto activityClassClass = environment->GetObjectClass(activityClass);
+            auto getClassLoaderMethod = environment->GetMethodID(activityClassClass, "getClassLoader", "()Ljava/lang/ClassLoader;");
+            auto classLoader = environment->CallObjectMethod(activityClass, getClassLoaderMethod);
+            m_classLoader = environment->NewGlobalRef(classLoader);
+
+            auto classLoaderClass = environment->GetObjectClass(m_classLoader);
+            m_findClassMethod = environment->GetMethodID(classLoaderClass, "findClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+
+            environment->DeleteLocalRef(activityClass);
+            environment->DeleteLocalRef(activityClassClass);
+            environment->DeleteLocalRef(classLoader);
+            environment->DeleteLocalRef(classLoaderClass);
         }
+
         //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void JavaVirtualMachine::AttachCurrentThread()
+        void JavaVirtualMachine::AttachCurrentThread() noexcept
         {
             JNIEnv* environment = nullptr;
             m_javaVirtualMachine->AttachCurrentThread(&environment, nullptr);
         }
+
         //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        JNIEnv* JavaVirtualMachine::GetJNIEnvironment()
+        JNIEnv* JavaVirtualMachine::GetJNIEnvironment() noexcept
         {
             CS_ASSERT(m_javaVirtualMachine != nullptr, "The java virtual machine cannot be null.");
 
@@ -60,11 +74,26 @@ namespace CSBackend
 
         	return environment;
         }
+
         //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void JavaVirtualMachine::DetachCurrentThread()
+        void JavaVirtualMachine::DetachCurrentThread() noexcept
         {
             m_javaVirtualMachine->DetachCurrentThread();
+        }
+
+        //------------------------------------------------------------------------------
+        jclass JavaVirtualMachine::FindClass(const std::string& className) noexcept
+        {
+            auto environment = GetJNIEnvironment();
+
+            auto javaClassName = JavaUtils::CreateJStringFromSTDString(className);
+            auto outputClass = environment->CallObjectMethod(m_classLoader, m_findClassMethod, javaClassName);
+
+            JavaUtils::CheckJavaExceptions("An exception was thrown while finding Java class '" + className + "'.");
+
+            environment->DeleteLocalRef(javaClassName);
+
+            return static_cast<jclass>(outputClass);
         }
 	}
 }

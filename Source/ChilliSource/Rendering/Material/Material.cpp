@@ -28,8 +28,12 @@
 
 #include <ChilliSource/Rendering/Material/Material.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
+#include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
 {
@@ -44,28 +48,8 @@ namespace ChilliSource
     //------------------------------------------------
     //------------------------------------------------
     Material::Material() 
-    : m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_cullFace(CullFace::k_back)
+        : m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_cullFace(CullFace::k_back)
     {
-
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    bool Material::IsCacheValid() const
-    {
-        return m_isCacheValid;
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    bool Material::IsVariableCacheValid() const
-    {
-        return m_isVariableCacheValid;
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    void Material::SetCacheValid()
-    {
-        m_isCacheValid = true;
-        m_isVariableCacheValid = true;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
@@ -75,19 +59,15 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const ShaderCSPtr& Material::GetShader(ShaderPass in_pass) const
+    Material::ShadingType Material::GetShadingType() const noexcept
     {
-        CS_ASSERT(in_pass != ShaderPass::k_total, "Invalid shader pass when fetching material shader");
-        return m_shaders[(u32)in_pass];
+        return m_shadingType;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetShader(ShaderPass in_pass, const ShaderCSPtr& in_shader)
+    void Material::SetShadingType(ShadingType in_shadingType) noexcept
     {
-        CS_ASSERT(in_pass != ShaderPass::k_total, "Invalid shader pass when setting material shader");
-        
-        m_isCacheValid = false;
-        m_shaders[(u32)in_pass] = in_shader;
+        m_shadingType = in_shadingType;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
@@ -357,6 +337,85 @@ namespace ChilliSource
         
         m_isCacheValid = false;
         m_isVariableCacheValid = false;
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    const RenderMaterialGroup* Material::GetRenderMaterialGroup() const noexcept
+    {
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Must be run in main thread.");
+        
+        if (!m_isCacheValid || !m_isVariableCacheValid || !m_renderMaterialGroup)
+        {
+            DestroyRenderMaterialGroup();
+            
+            //TODO: Handle variables
+            
+            m_isCacheValid = true;
+            m_isVariableCacheValid = true;
+            
+            switch (m_shadingType)
+            {
+                case ShadingType::k_unlit:
+                    m_renderMaterialGroup = CreateUnlitRenderMaterialGroup();
+                    break;
+                case ShadingType::k_blinn:
+                    m_renderMaterialGroup = CreateBlinnRenderMaterialGroup();
+                    break;
+            }
+        }
+        
+        return m_renderMaterialGroup;
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    const RenderMaterialGroup* Material::CreateUnlitRenderMaterialGroup() const
+    {
+        CS_ASSERT(m_textures.size() == 1, "Unlit materials must have one texture.");
+        
+        auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
+        CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.")
+        
+        auto renderTexture = m_textures[0]->GetRenderTexture();
+        return renderMaterialGroupManager->CreateUnlitRenderMaterialGroup(renderTexture, m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled,
+                                                                          m_srcBlendMode, m_dstBlendMode, m_cullFace, m_emissive, m_ambient);
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    const RenderMaterialGroup* Material::CreateBlinnRenderMaterialGroup() const
+    {
+        CS_ASSERT(m_textures.size() == 1, "Blinn materials must have one texture.");
+        CS_ASSERT(!m_isAlphaBlendingEnabled, "Blinn materials must have transparency disabled.");
+        CS_ASSERT(m_isDepthWriteEnabled, "Blinn materials must have depth write enabled.");
+        CS_ASSERT(m_isColWriteEnabled, "Blinn materials must have colour write enabled.");
+        CS_ASSERT(m_isDepthTestEnabled, "Blinn materials must have depth test enabled.");
+        CS_ASSERT(m_isFaceCullingEnabled, "Blinn materials must have face culling enabled.");
+        CS_ASSERT(m_cullFace == CullFace::k_back, "Blinn materials must use back-face culling.");
+        
+        auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
+        CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.")
+        
+        auto renderTexture = m_textures[0]->GetRenderTexture();
+        return renderMaterialGroupManager->CreateBlinnRenderMaterialGroup(renderTexture, m_emissive, m_ambient, m_diffuse, m_specular);
+    }
+    
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    void Material::DestroyRenderMaterialGroup() const noexcept
+    {
+        if (m_renderMaterialGroup)
+        {
+            auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
+            CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.");
+            
+            renderMaterialGroupManager->DestroyRenderMaterialGroup(m_renderMaterialGroup);
+            m_renderMaterialGroup = nullptr;
+        }
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    Material::~Material() noexcept
+    {
+        DestroyRenderMaterialGroup();
     }
 }
 

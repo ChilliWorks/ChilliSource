@@ -32,9 +32,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/Rendering/Base/RenderComponent.h>
-#include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
 #include <functional>
@@ -49,7 +49,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //---------------------------------------------------------------
-    class SpriteComponent final : public RenderComponent
+    class SpriteComponent final : public VolumeComponent
     {
     public: 
         
@@ -111,6 +111,18 @@ namespace ChilliSource
         /// @return world space bounding sphere
         //----------------------------------------------------
         const Sphere& GetBoundingSphere() override;
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @return Whether or not to render
+        //----------------------------------------------------
+        bool IsVisible() const override { return m_isVisible; }
+        //----------------------------------------------------
+        /// Is Visible
+        ///
+        /// @param in_isVisible - Whether or not to render
+        //----------------------------------------------------
+        void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -139,6 +151,20 @@ namespace ChilliSource
         /// @return Size after the size policy has been applied
         //-----------------------------------------------------------
         Vector2 GetSize() const;
+        //-----------------------------------------------------------
+        /// Sets the material
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_material - The material
+        //-----------------------------------------------------------
+        void SetMaterial(const MaterialCSPtr& in_material);
+        //-----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The material
+        //-----------------------------------------------------------
+        const MaterialCSPtr& GetMaterial() const;
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -250,42 +276,32 @@ namespace ChilliSource
         AlignmentAnchor GetOriginAlignment() const;
         
     private:
-        //-----------------------------------------------------------
-        /// Render
-        ///
-        /// Visited by the render system so we can add ourself
-        /// to the sprite batch for rendering and flush the
-        /// batch if we have a different material
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param The current shader pass.
-        //-----------------------------------------------------------
-        void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
-        //-----------------------------------------------------
-        /// Render Shadow Map
-        ///
-        /// Render the mesh to the shadow map
-        ///
-        /// @param Render system
-        /// @param Active camera component
-        /// @param Material to render static shadows with
-        /// @param Material to render skinned shadows with
-        //-----------------------------------------------------
-        void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam, const MaterialCSPtr& in_staticShadowMap, const MaterialCSPtr& in_animShadowMap) override {};
-        //----------------------------------------------------
-        /// Triggered when the component is attached to
-        /// an entity on the scene
+        //------------------------------------------------------------
+        /// Triggered when the component is attached to an entity on
+        /// the scene
         ///
         /// @author S Downie
-        //----------------------------------------------------
+        //------------------------------------------------------------
         void OnAddedToScene() override;
-        //----------------------------------------------------
-        /// Triggered when the component is removed from
-        /// an entity on the scene
+        //------------------------------------------------------------
+        /// Called during the Render Snapshot phase of the render
+        /// pipeline to capture all render primitives in the scene.
+        /// This builds a new dynamic mesh for the sprite described
+        /// by this component and adds a new render object which uses
+        /// it.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The snapshot containing all
+        /// data pertaining to a single frame.
+        //------------------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        //------------------------------------------------------------
+        /// Triggered when the component is removed from an entity on
+        /// the scene
         ///
         /// @author S Downie
-        //----------------------------------------------------
+        //------------------------------------------------------------
         void OnRemovedFromScene() override;
         //------------------------------------------------------------
         /// On Transform Changed
@@ -294,22 +310,6 @@ namespace ChilliSource
         /// We must rebuild our sprite data
         //------------------------------------------------------------
         void OnTransformChanged();
-        //-----------------------------------------------------------
-        /// If the transform cache is invalid we must calculate
-        /// the corner positions from the new world transform
-        ///
-        /// @author S Downie
-        //-----------------------------------------------------------
-        void UpdateVertexPositions();
-        //-----------------------------------------------------------
-        /// If the UVs change cache is invalid we must update the
-        /// sprite data vertices
-        ///
-        /// @author S Downie
-        ///
-        /// @param UVs
-        //-----------------------------------------------------------
-        void UpdateVertexUVs(const UVs& in_uvs);
         //-----------------------------------------------------------
         /// @author S Downie
         ///
@@ -350,9 +350,6 @@ namespace ChilliSource
         u32 m_hashedTextureAtlasId = 0;
     
         SizePolicyDelegate m_sizePolicyDelegate;
-        
-        SpriteBatch::SpriteData m_spriteData;
-    
         Vector2 m_cachedTextureSize;
         Vector2 m_originalSize;
         
@@ -369,6 +366,12 @@ namespace ChilliSource
         bool m_isBSValid = false;
         bool m_isAABBValid = false;
         bool m_isOOBBValid = false;
+        
+        AABB mBoundingBox;
+        OOBB mOBBoundingBox;
+        Sphere mBoundingSphere;
+        MaterialCSPtr mpMaterial;
+        bool m_isVisible = true;
     };
 }
 

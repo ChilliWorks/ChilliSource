@@ -147,7 +147,9 @@ namespace ChilliSource
         ///
         /// @author Jordan Brown
         //------------------------------------------------------------------------------
-        void ExecuteSystemThreadTasks() noexcept;
+    public:
+        void ExecuteSystemThreadTasks() noexcept; //TODO: don't expose this.
+    private:
         //------------------------------------------------------------------------------
         /// Adds the given task to the large task pool. Once the task is complete then
         /// this is called again for the next task in the file queue. If the file queue
@@ -186,10 +188,8 @@ namespace ChilliSource
         std::mutex m_fileTaskMutex;
         bool m_isFileTaskRunning = false;
         std::deque<Task> m_fileTaskQueue;
-        
-#ifndef CS_TARGETPLATFORM_ANDROID
+
         std::thread::id m_mainThreadId;
-#endif
     };
 }
 

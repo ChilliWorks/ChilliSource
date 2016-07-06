@@ -53,8 +53,6 @@ namespace ChilliSource
         virtual ~StateSystem() {};
     protected:
         friend class State;
-        friend class SubState;  //This is needed for internal development
-                                //of the sub-state system.
         
         //------------------------------------------------
         /// Default constructor.
@@ -112,6 +110,17 @@ namespace ChilliSource
         /// @author Ian Copland
         //------------------------------------------------
         virtual void OnFixedUpdate(f32 in_deltaTime) {};
+        //------------------------------------------------
+        /// The render snapshot event can be implemented
+        /// by a system to allow it to snapshot any data
+        /// which pertains to the renderer.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_renderSnapshot - The render snapshot
+        /// object which contains all snapshotted data.
+        //------------------------------------------------
+        virtual void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept {};
         //------------------------------------------------
         /// Called when the state transitions from
         /// being active app into the background. This

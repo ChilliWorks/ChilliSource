@@ -43,7 +43,7 @@ namespace ChilliSource
         k_scissorOff
     };
     
-    struct RenderCommand
+    struct SpriteRenderCommand
     {
         MaterialCSPtr m_material;
         
@@ -59,7 +59,7 @@ namespace ChilliSource
     class DynamicSpriteBatch
     {
     public:
-        DynamicSpriteBatch(RenderSystem* inpRenderSystem);
+        DynamicSpriteBatch();
         ~DynamicSpriteBatch();
         
         //-------------------------------------------------------
@@ -122,14 +122,12 @@ namespace ChilliSource
     
         SpriteBatch* mpBatch[kudwNumBuffers];
         std::vector<SpriteBatch::SpriteData> maSpriteCache;
-        std::vector<RenderCommand> maRenderCommands;
+        std::vector<SpriteRenderCommand> maSpriteRenderCommands;
         
         MaterialCSPtr mpLastMaterial;
         
         u32 mudwCurrentRenderSpriteBatch;
         u32 mudwSpriteCommandCounter;
-        
-        RenderSystem* m_renderSystem;
     };
 }
 

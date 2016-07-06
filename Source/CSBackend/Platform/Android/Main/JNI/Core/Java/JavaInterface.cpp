@@ -31,6 +31,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 
 namespace CSBackend
 {
@@ -65,7 +66,7 @@ namespace CSBackend
 				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
 				//get the class type
-				jclass jClassType = pEnv->FindClass(instrInterfaceName.c_str());
+				jclass jClassType = JavaVirtualMachine::Get()->FindClass(instrInterfaceName);
 				if (jClassType == nullptr)
 				{
 					jthrowable exception = pEnv->ExceptionOccurred();

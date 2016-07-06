@@ -47,18 +47,6 @@ namespace ChilliSource
         CS_DECLARE_NAMEDTYPE(MaterialProvider);
         
         //-------------------------------------------------------------------------
-        /// Holds the description of a shader as required by the material
-        /// including which pass it applies to and where the shader file is
-        ///
-        /// @author S Downie
-        //-------------------------------------------------------------------------
-        struct ShaderDesc
-        {
-            std::string m_filePath;
-            StorageLocation m_location;
-            ShaderPass m_pass;
-        };
-        //-------------------------------------------------------------------------
         /// Holds the description of a texture as required by the material
         /// including where the texture file is
         ///
@@ -69,20 +57,10 @@ namespace ChilliSource
             std::string m_filePath;
             StorageLocation m_location;
             bool m_shouldMipMap;
-            Texture::WrapMode m_wrapModeU;
-            Texture::WrapMode m_wrapModeV;
-            Texture::FilterMode m_filterMode;
+            TextureWrapMode m_wrapModeU;
+            TextureWrapMode m_wrapModeV;
+            TextureFilterMode m_filterMode;
         };
-        //-------------------------------------------------------------------------
-        /// Factory method
-        ///
-        /// @author S Downie
-        ///
-        /// @param The render capabilities.
-        ///
-        /// @return New instance with ownership transferred
-        //-------------------------------------------------------------------------
-        static MaterialProviderUPtr Create(RenderCapabilities* in_renderCapabilities);
         //-------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -107,7 +85,17 @@ namespace ChilliSource
         bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
         
     private:
-        
+        friend class Application;
+        //-------------------------------------------------------------------------
+        /// Factory method
+        ///
+        /// @author S Downie
+        ///
+        /// @param The render capabilities.
+        ///
+        /// @return New instance with ownership transferred
+        //-------------------------------------------------------------------------
+        static MaterialProviderUPtr Create();
         //-------------------------------------------------------
         /// Private constructor to force use of factory method
         ///
@@ -115,7 +103,7 @@ namespace ChilliSource
         ///
         /// @param The render capabilities.
         //-------------------------------------------------------
-        MaterialProvider(RenderCapabilities* in_renderCapabilities);
+        MaterialProvider() = default;
         //----------------------------------------------------------------------------
         /// Load the material resource from the given material file. Check the
         /// resource load state for success or failure.
@@ -165,14 +153,9 @@ namespace ChilliSource
         /// @return Whether the resource was loaded 
         //----------------------------------------------------------------------------
         bool BuildMaterialFromFile(StorageLocation in_location, const std::string& in_filePath,
-                                   std::vector<ShaderDesc>& out_shaderFiles,
                                    std::vector<TextureDesc>& out_textureFiles,
                                    std::vector<TextureDesc>& out_cubemapFiles,
                                    Material* out_material);
-
-    private:
-
-        RenderCapabilities* m_renderCapabilities;
     };
 }
 

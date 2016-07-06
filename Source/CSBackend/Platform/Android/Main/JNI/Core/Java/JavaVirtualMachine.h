@@ -1,8 +1,4 @@
 //
-//  JavaVirtualMachine.h
-//  ChilliSource
-//  Created by Ian Copland on 21/04/2015.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2015 Tag Games Limited
@@ -42,53 +38,56 @@ namespace CSBackend
 {
 	namespace Android
 	{
-		//------------------------------------------------------------------------------
 		/// A singleton which provides access to the java virtual machine. This is used
-		/// to get the JNI Environment for the current thread.
+		/// to get the JNI Environment for the current thread, and lookup java classes.
 		///
-		/// @author Ian Copland
-		//------------------------------------------------------------------------------
+		/// This is thread-safe as long as it is accessed after the singleton is created.
+		///
 		class JavaVirtualMachine final : public ChilliSource::Singleton<JavaVirtualMachine>
 		{
 		public:
-			//------------------------------------------------------------------------------
 			/// Attached the current thread to the JVM. If a background thread created in
 			/// native might be calling up to Java this should be the first thing it calls.
 			/// If this is called, DetachCurrentThread() must be called before the thread
 			/// finishes or the JVM will crash.
 			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			void AttachCurrentThread();
-			//------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The pointer to the JNI Environment for the current thread. The
+			void AttachCurrentThread() noexcept;
+
+			/// Returns the pointer to the JNI Environment for the current thread. The
 			/// thread will be attached to the JVM if it isn't already. This means that
 			/// DetachCurrentThread will need to be called prior to the thread exiting if
 			/// the thread was created in native.
-			//------------------------------------------------------------------------------
-			JNIEnv* GetJNIEnvironment();
-			//------------------------------------------------------------------------------
+			///
+			/// @return The pointer to the JNI Environment for the current thread.
+			///
+			JNIEnv* GetJNIEnvironment() noexcept;
+
 			/// Detaches the current thread from the JVM. This must be called for all
 			/// natively created threads that have been attached to the JVM. This must not
 			/// be called for threads which were created in Java.
 			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			void DetachCurrentThread();
+			void DetachCurrentThread() noexcept;
+
+			/// Queries the JVM for the class with the given class name. This should be
+			/// used instead of direct access using JNIEnv::FindClass as it can be called
+			/// from threads which do not originate in Java.
+			///
+			/// @param className
+			///		The full name of the java class, including package. A forward slash shoud
+			///		be used as the package separator, for example 'com/java/String'.
+			///
+			jclass FindClass(const std::string& className) noexcept;
 		private:
 		    friend class ChilliSource::Singleton<JavaVirtualMachine>;
-			//------------------------------------------------------------------------------
-			/// Constructor.
+
+			/// @param in_javaVirtualMachine
+			///		The pointer to the java virtual machine.
 			///
-			/// @author Ian Copland
-			///
-			/// @param in_javaVirtualMachine - The pointer to the java virtual machine.
-			//------------------------------------------------------------------------------
-			JavaVirtualMachine(JavaVM* in_javaVirtualMachine);
+			JavaVirtualMachine(JavaVM* in_javaVirtualMachine) noexcept;
 
 			JavaVM* m_javaVirtualMachine;
+			jobject m_classLoader;
+			jmethodID m_findClassMethod;
 		};
 	}
 }

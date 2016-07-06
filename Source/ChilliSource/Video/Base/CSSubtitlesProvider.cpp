@@ -29,7 +29,6 @@
 #include <ChilliSource/Video/Base/CSSubtitlesProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>

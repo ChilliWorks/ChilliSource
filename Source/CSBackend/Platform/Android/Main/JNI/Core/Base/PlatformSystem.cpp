@@ -30,12 +30,11 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/PlatformSystem.h>
 
-#include <ChilliSource/Core/Image/ETC1ImageProvider.h>
-
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
-#include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
-#include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
+
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Image/ETC1ImageProvider.h>
 
 namespace CSBackend 
 {
@@ -52,9 +51,7 @@ namespace CSBackend
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(ChilliSource::Application* in_application)
 		{
-			in_application->CreateSystem<CSBackend::OpenGL::GLSLShaderProvider>();
 			in_application->CreateSystem<ChilliSource::ETC1ImageProvider>();
-			in_application->CreateSystem<CSBackend::OpenGL::TextureUnitSystem>();
 		}
         //-----------------------------------------
         //-----------------------------------------

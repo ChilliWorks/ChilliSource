@@ -60,7 +60,6 @@ namespace CSBackend
 		CS_FORWARDDECLARE_CLASS(DialogueBoxJavaInterface);
 		CS_FORWARDDECLARE_CLASS(DialogueBoxSystem);
 		CS_FORWARDDECLARE_CLASS(FileSystem);
-		CS_FORWARDDECLARE_CLASS(VirtualFileStream);
 		CS_FORWARDDECLARE_CLASS(ZippedFileSystem);
 		CS_FORWARDDECLARE_CLASS(PngImage);
 		CS_FORWARDDECLARE_CLASS(PNGImageProvider);
