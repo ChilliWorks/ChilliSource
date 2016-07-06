@@ -86,6 +86,10 @@
 #include <algorithm>
 #include <ctime>
 
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+#   include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
+#endif
+
 namespace ChilliSource
 {
     namespace
@@ -294,6 +298,10 @@ namespace ChilliSource
         CreateSystem<TextEntry>();
         
         //Rendering
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+        CreateSystem<CSBackend::OpenGL::GLContextRestorer>();
+#endif
+        
         CreateSystem<RenderCommandBufferManager>();
         m_renderer = CreateSystem<Renderer>();
         CreateSystem<RenderMaterialGroupManager>();

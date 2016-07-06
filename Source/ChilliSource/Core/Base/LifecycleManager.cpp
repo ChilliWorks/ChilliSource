@@ -26,9 +26,14 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #   include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
+#endif
+
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+    #include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
 #endif
 
 namespace ChilliSource
@@ -60,6 +65,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LifecycleManager::SystemResume() noexcept
     {
+        m_application->GetSystem<Renderer>()->OnSystemResume();
     }
     
     //------------------------------------------------------------------------------
@@ -95,6 +101,11 @@ namespace ChilliSource
     void LifecycleManager::SystemSuspend() noexcept
     {
         m_application->GetSystem<RenderCommandBufferManager>()->OnSystemSuspend();
+        m_application->GetSystem<Renderer>()->OnSystemSuspend();
+        
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+        m_application->GetSystem<CSBackend::OpenGL::GLContextRestorer>()->OnSystemSuspend();
+#endif
     }
     
     //------------------------------------------------------------------------------

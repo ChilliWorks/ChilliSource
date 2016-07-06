@@ -288,9 +288,10 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLTexture::~GLTexture() noexcept
         {
-            //TODO: Handle context loss
-            
-            glDeleteTextures(1, &m_handle);
+            if(!m_contextInvalid)
+            {
+                glDeleteTextures(1, &m_handle);
+            }
         }
     }
 }

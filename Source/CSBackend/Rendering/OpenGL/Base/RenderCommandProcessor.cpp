@@ -168,6 +168,24 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::InvalidateContext() noexcept
+        {
+            if(m_glDynamicMesh)
+            {
+                m_glDynamicMesh->InvalidateContext();
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreContext() noexcept
+        {
+            ResetCache();
+            
+            m_glDynamicMesh.reset();
+            m_glDynamicMesh = GLDynamicMeshUPtr(new GLDynamicMesh(ChilliSource::RenderDynamicMesh::k_maxVertexDataSize, ChilliSource::RenderDynamicMesh::k_maxIndexDataSize));
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::Init() noexcept
         {
             m_textureUnitManager = GLTextureUnitManagerUPtr(new GLTextureUnitManager());

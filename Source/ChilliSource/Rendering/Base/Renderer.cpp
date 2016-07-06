@@ -55,11 +55,6 @@ namespace ChilliSource
         return (Renderer::InterfaceID == interfaceId);
     }
     //------------------------------------------------------------------------------
-    void Renderer::OnInit() noexcept
-    {
-        m_commandRecycleSystem = Application::Get()->GetSystem<RenderCommandBufferManager>();
-    }
-    //------------------------------------------------------------------------------
     void Renderer::ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept
     {
         WaitThenStartRenderPrep();
@@ -116,5 +111,32 @@ namespace ChilliSource
         std::unique_lock<std::mutex> lock(m_renderPrepMutex);
         m_renderPrepActive = false;
         m_renderPrepCondition.notify_all();
+    }
+    
+    //------------------------------------------------------------------------------
+    void Renderer::OnInit() noexcept
+    {
+        m_commandRecycleSystem = Application::Get()->GetSystem<RenderCommandBufferManager>();
+    }
+    
+    //------------------------------------------------------------------------------
+    void Renderer::OnSystemResume() noexcept
+    {
+        if(m_initialised)
+        {
+//#ifdef CS_TARGETPLATFORM_ANDROID
+            m_renderCommandProcessor->RestoreContext();
+//#endif
+        }
+        
+        m_initialised = true;
+    }
+    
+    //------------------------------------------------------------------------------
+    void Renderer::OnSystemSuspend() noexcept
+    {
+//#ifdef CS_TARGETPLATFORM_ANDROID
+        m_renderCommandProcessor->InvalidateContext();
+//#endif
     }
 }

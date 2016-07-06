@@ -263,30 +263,6 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        GLShader::~GLShader() noexcept
-        {
-            if(!m_contextLost)
-            {
-                if(m_vertexShaderId > 0)
-                {
-                    glDetachShader(m_programId, m_vertexShaderId);
-                    glDeleteShader(m_vertexShaderId);
-                }
-                if(m_fragmentShaderId > 0)
-                {
-                    glDetachShader(m_programId, m_fragmentShaderId);
-                    glDeleteShader(m_fragmentShaderId);
-                }
-                if(m_programId > 0)
-                {
-                    glDeleteProgram(m_programId);
-                }
-                
-                CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying shader.");
-            }
-        }
-
-        //------------------------------------------------------------------------------
         void GLShader::BuildAttributeHandleMap() noexcept
         {
             static const std::array<std::string, 6> attribNames =
@@ -337,5 +313,30 @@ namespace CSBackend
             
             return uniformHandle;
         }
+        
+        //------------------------------------------------------------------------------
+        GLShader::~GLShader() noexcept
+        {
+            if(!m_contextInvalid)
+            {
+                if(m_vertexShaderId > 0)
+                {
+                    glDetachShader(m_programId, m_vertexShaderId);
+                    glDeleteShader(m_vertexShaderId);
+                }
+                if(m_fragmentShaderId > 0)
+                {
+                    glDetachShader(m_programId, m_fragmentShaderId);
+                    glDeleteShader(m_fragmentShaderId);
+                }
+                if(m_programId > 0)
+                {
+                    glDeleteProgram(m_programId);
+                }
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying shader.");
+            }
+        }
+
     }
 }

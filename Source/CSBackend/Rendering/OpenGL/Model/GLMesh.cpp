@@ -93,7 +93,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLMesh::~GLMesh() noexcept
         {
-            if(!m_contextLost)
+            if(!m_contextInvalid)
             {
                 glDeleteBuffers(1, &m_vertexBufferHandle);
                 if(m_indexBufferHandle != 0)

@@ -82,7 +82,7 @@ namespace CSBackend
             /// Called when the GLContext has been lost. Function will set a flag to handle safe
             /// destructing of this object, preventing us from trying to delete invalid memory.
             ///
-            void OnGLContextLost() noexcept { m_contextLost = true; }
+            void InvalidateContext() noexcept { m_contextInvalid = true; }
             
             /// Destroys the OpenGL texture that this represents.
             ///
@@ -90,7 +90,7 @@ namespace CSBackend
             
         private:
             GLuint m_handle = 0;
-            bool m_contextLost = false;
+            bool m_contextInvalid = false;
         };
     }
 }

@@ -25,11 +25,9 @@
 #ifndef _CSBACKEND_RENDERING_OPENGL_BASE_GLCONTEXTRESTORER_H_
 #define _CSBACKEND_RENDERING_OPENGL_BASE_GLCONTEXTRESTORER_H_
 
-//#ifdef CS_TARGETPLATFORM_IOS //Remove
-//#ifdef CS_TARGETPLATFORM_ANDROID
-
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/IContextRestorer.h>
+#include <ChilliSource/Core/System/AppSystem.h>
+
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #include <vector>
@@ -43,33 +41,62 @@ namespace CSBackend
         /// as textures, shaders and buffers are destroyed and
         /// must be recreated on resume.
         ///
-        class GLContextRestorer final : public ChilliSource::IContextRestorer
+        class GLContextRestorer final : public ChilliSource::AppSystem
         {
         public:
             
-            CS_DECLARE_NOCOPY(GLContextRestorer);
+            CS_DECLARE_NAMEDTYPE(GLContextRestorer);
+           
+            /// Allows querying of whether or not this system implements the interface described by the
+            /// given interface Id. Typically this is not called directly as the templated equivalent
+            /// IsA<Interface>() is preferred.
+            ///
+            /// @param interfaceId
+            ///     The Id of the interface.
+            ///
+            /// @return Whether or not the interface is implemented.
+            ///
+            bool IsA(ChilliSource::InterfaceIDType interfaceId) const noexcept override;
+            
+        private:
+            friend class ChilliSource::Application;
+            friend class ChilliSource::LifecycleManager;
+            
+            /// A factory method for creating new instances of the system. This must be called by
+            /// Application.
+            ///
+            /// @return The new instance of the system.
+            ///
+            static GLContextRestorerUPtr Create() noexcept;
             
             /// Constructor
             ///
             GLContextRestorer() = default;
             
-            /// Take a snapshot of the GL context for resources
-            /// that cannot be recreated from file and store them
-            /// so they can be recreated
+            /// Iterate any GL resources and place them in an invalid state
             ///
-            void Backup() noexcept override;
+            void OnContextLost() noexcept;
             
-            /// Recreate the GL context with the backed up resources
+            /// Iterate all resources and either re-load them from file or
+            /// restore them from cached memory
             ///
-            void Restore() noexcept override;
+            void OnContextRestored() noexcept;
+            
+            /// Called when the app system is resumed
+            ///
+            void OnResume() noexcept override;
+            
+            /// Called when the application delegate is suspended. This is called directly
+            /// from lifecycle manager and will be called before the OnSuspend.
+            ///
+            void OnSystemSuspend() noexcept;
             
         private:
             
+            bool m_initialised = false;
             bool m_hasContextBeenBackedUp = false;
         };
     }
 }
-
-//#endif
 
 #endif

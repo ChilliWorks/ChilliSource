@@ -26,13 +26,11 @@
 //  THE SOFTWARE.
 //
 
-//#ifdef CS_TARGETPLATFORM_IOS //Remove
-//#ifdef CS_TARGETPLATFORM_ANDROID
-
 #include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Model/Model.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
@@ -48,11 +46,20 @@ namespace CSBackend
 {
     namespace OpenGL
     {
-        //-----------------------------------------------------
-        /// Shaders and most textures can be recreated from file,
-        /// however the mesh buffers must have a snap shot taken
-        //-----------------------------------------------------
-        void GLContextRestorer::Backup() noexcept
+        CS_DEFINE_NAMEDTYPE(GLContextRestorer);
+        
+        //------------------------------------------------------------------------------
+        GLContextRestorerUPtr GLContextRestorer::Create() noexcept
+        {
+            return GLContextRestorerUPtr(new GLContextRestorer());
+        }
+        //------------------------------------------------------------------------------
+        bool GLContextRestorer::IsA(ChilliSource::InterfaceIDType interfaceId) const noexcept
+        {
+            return (GLContextRestorer::InterfaceID == interfaceId);
+        }
+        //------------------------------------------------------------------------------
+        void GLContextRestorer::OnContextLost() noexcept
         {
             if(m_hasContextBeenBackedUp == false)
             {
@@ -67,7 +74,7 @@ namespace CSBackend
                     GLShader* glShader = reinterpret_cast<GLShader*>(shader->GetRenderShader()->GetExtraData());
                     if(glShader)
                     {
-                        glShader->OnGLContextLost();
+                        glShader->InvalidateContext();
                     }
                 }
                 
@@ -77,7 +84,7 @@ namespace CSBackend
                     GLTexture* glTexture = reinterpret_cast<GLTexture*>(texture->GetRenderTexture()->GetExtraData());
                     if(glTexture)
                     {
-                        glTexture->OnGLContextLost();
+                        glTexture->InvalidateContext();
                     }
                 }
                 
@@ -90,17 +97,14 @@ namespace CSBackend
                         
                         if(glMesh)
                         {
-                            glMesh->OnGLContextLost();
+                            glMesh->InvalidateContext();
                         }
                     }
                 }
             }
         }
-        //-----------------------------------------------------
-        /// Rebuild the shaders and textures from file. Re-upload
-        /// the mesh buffers
-        //-----------------------------------------------------
-        void GLContextRestorer::Restore() noexcept
+        //------------------------------------------------------------------------------
+        void GLContextRestorer::OnContextRestored() noexcept
         {
             if(m_hasContextBeenBackedUp == true)
             {
@@ -127,10 +131,34 @@ namespace CSBackend
                 }
                 resourcePool->RefreshResources<ChilliSource::Texture>();
                 
+                auto allMaterials = resourcePool->GetAllResources<ChilliSource::Material>();
+                for (auto& material : allMaterials)
+                {
+                    //TODO: Remove const cast when material system is improved.
+                    const_cast<ChilliSource::Material*>(material.get())->SetAmbient(material->GetAmbient());
+                }
+                
                 m_hasContextBeenBackedUp = false;
             }
         }
+        //------------------------------------------------------------------------------
+        void GLContextRestorer::OnResume() noexcept
+        {
+            if(m_initialised)
+            {
+//#ifdef CS_TARGETPLATFORM_ANDROID
+                OnContextRestored();
+//#endif
+            }
+            
+            m_initialised = true;
+        }
+        //------------------------------------------------------------------------------
+        void GLContextRestorer::OnSystemSuspend() noexcept
+        {
+//#ifdef CS_TARGETPLATFORM_ANDROID
+            OnContextLost();
+//#endif
+        }
     }
 }
-
-//#endif

@@ -320,7 +320,6 @@
 		81AF895E1D14036500A02E99 /* ByteBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AF895C1D14036500A02E99 /* ByteBuffer.cpp */; };
 		81AF89641D14152000A02E99 /* RenderCommandCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AF89621D14152000A02E99 /* RenderCommandCompiler.cpp */; };
 		81AF89671D142D6A00A02E99 /* RenderCommandBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AF89651D142D6A00A02E99 /* RenderCommandBuffer.cpp */; };
-		81B096011D2AB8B200E72835 /* IContextRestorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B095FD1D2AB8B200E72835 /* IContextRestorer.cpp */; };
 		81B096021D2AB8B200E72835 /* RenderCommandBufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B095FF1D2AB8B200E72835 /* RenderCommandBufferManager.cpp */; };
 		81B096051D2AB8CA00E72835 /* GLContextRestorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B096031D2AB8CA00E72835 /* GLContextRestorer.cpp */; };
 		81B3D32F1D12DCEC00F17401 /* VertexFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B3D32D1D12DCEC00F17401 /* VertexFormat.cpp */; };
@@ -1154,8 +1153,6 @@
 		81AF89631D14152000A02E99 /* RenderCommandCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandCompiler.h; sourceTree = "<group>"; };
 		81AF89651D142D6A00A02E99 /* RenderCommandBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommandBuffer.cpp; sourceTree = "<group>"; };
 		81AF89661D142D6A00A02E99 /* RenderCommandBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandBuffer.h; sourceTree = "<group>"; };
-		81B095FD1D2AB8B200E72835 /* IContextRestorer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IContextRestorer.cpp; sourceTree = "<group>"; };
-		81B095FE1D2AB8B200E72835 /* IContextRestorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IContextRestorer.h; sourceTree = "<group>"; };
 		81B095FF1D2AB8B200E72835 /* RenderCommandBufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommandBufferManager.cpp; sourceTree = "<group>"; };
 		81B096001D2AB8B200E72835 /* RenderCommandBufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandBufferManager.h; sourceTree = "<group>"; };
 		81B096031D2AB8CA00E72835 /* GLContextRestorer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLContextRestorer.cpp; sourceTree = "<group>"; };
@@ -2030,8 +2027,6 @@
 				81A55E001CFD8FFF00C9F0D6 /* ForwardRenderPasses.h */,
 				8158F34B1C89D2AD00B13109 /* HorizontalTextJustification.cpp */,
 				8158F34C1C89D2AD00B13109 /* HorizontalTextJustification.h */,
-				81B095FD1D2AB8B200E72835 /* IContextRestorer.cpp */,
-				81B095FE1D2AB8B200E72835 /* IContextRestorer.h */,
 				8184CE8B1D0EFBC600E35BE8 /* IRenderCommandProcessor.cpp */,
 				8184CE8C1D0EFBC600E35BE8 /* IRenderCommandProcessor.h */,
 				818BC4951CFDE6D9001DC484 /* IRenderPassCompiler.h */,
@@ -3487,7 +3482,6 @@
 				81B3D3511D130C6400F17401 /* ApplyMeshRenderCommand.cpp in Sources */,
 				8158F6761C89D2AD00B13109 /* LocalisedText.cpp in Sources */,
 				81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */,
-				81B096011D2AB8B200E72835 /* IContextRestorer.cpp in Sources */,
 				8158F6D31C89D2AD00B13109 /* AngularAccelerationParticleAffector.cpp in Sources */,
 				8158F7DA1C89D2AD00B13109 /* EmailComposer.mm in Sources */,
 				811991721CFF33B30078C246 /* IndexFormat.cpp in Sources */,

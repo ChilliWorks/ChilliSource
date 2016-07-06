@@ -27,7 +27,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Rendering/Base/IContextRestorer.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
@@ -109,6 +108,7 @@ namespace ChilliSource
         
     private:
         friend class Application;
+        friend class LifecycleManager;
         
         /// A factory method for creating new instances of the system. This must be called by
         /// Application.
@@ -134,6 +134,16 @@ namespace ChilliSource
         ///
         void OnInit() noexcept override;
         
+        /// Called when the application delegate is resumed. This is called directly
+        /// from lifecycle manager and will be called before the OnResume.
+        ///
+        void OnSystemResume() noexcept;
+        
+        /// Called when the application delegate is suspended. This is called directly
+        /// from lifecycle manager and will be called before the OnSuspend.
+        ///
+        void OnSystemSuspend() noexcept;
+        
         IRenderPassCompilerUPtr m_renderPassCompiler;
         IRenderCommandProcessorUPtr m_renderCommandProcessor;
         
@@ -142,6 +152,7 @@ namespace ChilliSource
         std::mutex m_renderPrepMutex;
         std::condition_variable m_renderPrepCondition;
         bool m_renderPrepActive = false;
+        bool m_initialised = false;
         
         RenderCommandBufferManager* m_commandRecycleSystem = nullptr;
     };
