@@ -64,8 +64,7 @@ namespace ChilliSource
         enum class ShadingType
         {
             k_unlit,
-            k_blinn,
-            k_blinnShadowed
+            k_blinn
         };
         //----------------------------------------------------------
         /// @author S Downie
@@ -417,7 +416,7 @@ namespace ChilliSource
         ///
         /// @return The RenderMaterialGroup.
         //----------------------------------------------------------
-        const RenderMaterialGroup* CreateUnlitRenderMaterialGroup() const;
+        const RenderMaterialGroup* CreateUnlitRenderMaterialGroup() const noexcept;
         //----------------------------------------------------------
         /// Generates an blinn render material group using the
         /// current material setting. If any of the settings are
@@ -428,7 +427,7 @@ namespace ChilliSource
         ///
         /// @return The RenderMaterialGroup.
         //----------------------------------------------------------
-        const RenderMaterialGroup* CreateBlinnRenderMaterialGroup() const;
+        const RenderMaterialGroup* CreateBlinnRenderMaterialGroup() const noexcept;
         //----------------------------------------------------------
         /// Destroys the render material group if there is one.
         ///
@@ -457,6 +456,8 @@ namespace ChilliSource
         bool m_isDepthWriteEnabled = true;
         bool m_isDepthTestEnabled = true;
         bool m_isFaceCullingEnabled = true;
+        
+        RenderMaterialGroupManager* m_renderMaterialGroupManager = nullptr;
         
         //TODO: When the material system is improved, remove the need to make this mutable.
         mutable bool m_isCacheValid = false;

@@ -34,9 +34,12 @@ namespace ChilliSource
     /// * The shadow map pass. This renders all shadow casting opaque objects in the scene to
     ///   acquire the shadow map used by each shadow casting light.
     /// * The base pass. This renders all opaque objects to the scene with only ambient lighting.
-    /// * The directional light pass. For each directional light in the scene, a pass over all lit,
-    ///   opaque objects in the scene is performed. This renders the applied lighting additively to
-    ///   the base pass and does not write to the depth buffer.
+    /// * The directional light pass. For each directional light in the scene which doesn't cast
+    ///   shadows, a pass over all lit, opaque objects in the scene is performed. This renders the
+    ///   applied lighting additively to the base pass and does not write to the depth buffer.
+    /// * The directional light shadows pass. For each directional light in the scene which does
+    ///   cast shadows, a pass over all lit, opaque objects in the scene is performed. This renders
+    ///   the applied lighting additively to the base pass and does not write to the depth buffer.
     /// * The point light pass. For each point light in the scene, a pass over all lit opaque objects
     ///   within the range of influence of the light is performed. This renders the applied lighting
     ///   additively to the previous passes and does not write to the depth buffer.
@@ -49,6 +52,7 @@ namespace ChilliSource
         k_shadowMap,
         k_base,
         k_directionalLight,
+        k_directionalLightShadows,
         k_pointLight,
         k_transparent
     };

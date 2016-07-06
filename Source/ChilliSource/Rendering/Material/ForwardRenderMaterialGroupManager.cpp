@@ -185,43 +185,74 @@ namespace ChilliSource
                                                                                                  bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode,
                                                                                                  CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept
     {
-        //TODO: Create RenderMaterials from pools.
-        auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
-                                        cullFace, emissiveColour, ambientColour);
-        auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode, cullFace,
-                                    emissiveColour, ambientColour);
-        
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticRenderMaterials {};
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> spriteRenderMaterials {};
-        
         if (isTransparencyEnabled)
         {
-            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = staticRM.get();
+            //TODO: Create RenderMaterials from pools.
+            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode, cullFace,
+                                        emissiveColour, ambientColour);
+            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
+                                        cullFace, emissiveColour, ambientColour);
+            
+            std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> spriteRenderMaterials {};
+            std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticRenderMaterials {};
+            
             spriteRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = spriteRM.get();
+            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = staticRM.get();
+            
+            //TODO: Add support for animated vertex format.
+            
+            std::vector<RenderMaterialGroup::Collection> collections
+            {
+                RenderMaterialGroup::Collection(VertexFormat::k_sprite, spriteRenderMaterials),
+                RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticRenderMaterials)
+            };
+            
+            std::vector<RenderMaterialUPtr> renderMaterials;
+            renderMaterials.push_back(std::move(spriteRM));
+            renderMaterials.push_back(std::move(staticRM));
+            
+            RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
+            auto renderMaterialGroupRaw = renderMaterialGroup.get();
+            AddRenderMaterialGroup(std::move(renderMaterialGroup));
+            
+            return renderMaterialGroupRaw;
         }
         else
         {
-            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticRM.get();
+            //TODO: Create RenderMaterials from pools.
+            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode, cullFace,
+                                        emissiveColour, ambientColour);
+            
+            auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
+            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
+                                        cullFace, emissiveColour, ambientColour);
+            
+            std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> spriteRenderMaterials {};
+            std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticRenderMaterials {};
+                
             spriteRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = spriteRM.get();
+            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
+            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticRM.get();
+            
+            //TODO: Add support for animated vertex format.
+            
+            std::vector<RenderMaterialGroup::Collection> collections
+            {
+                RenderMaterialGroup::Collection(VertexFormat::k_sprite, spriteRenderMaterials),
+                RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticRenderMaterials)
+            };
+            
+            std::vector<RenderMaterialUPtr> renderMaterials;
+            renderMaterials.push_back(std::move(spriteRM));
+            renderMaterials.push_back(std::move(staticShadowMapRM));
+            renderMaterials.push_back(std::move(staticRM));
+            
+            RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
+            auto renderMaterialGroupRaw = renderMaterialGroup.get();
+            AddRenderMaterialGroup(std::move(renderMaterialGroup));
+            
+            return renderMaterialGroupRaw;
         }
-        
-        //TODO: Add support for animated vertex format.
-        
-        std::vector<RenderMaterialGroup::Collection> collections
-        {
-            RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticRenderMaterials),
-            RenderMaterialGroup::Collection(VertexFormat::k_sprite, spriteRenderMaterials)
-        };
-        
-        std::vector<RenderMaterialUPtr> renderMaterials;
-        renderMaterials.push_back(std::move(staticRM));
-        renderMaterials.push_back(std::move(spriteRM));
-
-        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
-        auto renderMaterialGroupRaw = renderMaterialGroup.get();
-        AddRenderMaterialGroup(std::move(renderMaterialGroup));
-        
-        return renderMaterialGroupRaw;
     }
     
     //------------------------------------------------------------------------------
@@ -230,14 +261,16 @@ namespace ChilliSource
     {
         //TODO: Create RenderMaterials from pools.
         auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
-        auto staticBaseRM = CreateBlinnBase(m_staticUnlit, renderTexture, emissiveColour, ambientColour);
+        auto staticBaseRM = CreateBlinnBase(m_staticBlinnBase, renderTexture, emissiveColour, ambientColour);
         auto staticDirectionalRM = CreateBlinnLight(m_staticBlinnDirectional, renderTexture, diffuseColour, specularColour);
+        auto staticDirectionalShadowsRM = CreateBlinnLight(m_staticBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
         auto staticPointRM = CreateBlinnLight(m_staticBlinnPoint, renderTexture, diffuseColour, specularColour);
         
         std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticRenderMaterials {};
         staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
         staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticBaseRM.get();
         staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticDirectionalRM.get();
+        staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLightShadows)] = staticDirectionalShadowsRM.get();
         staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_pointLight)] = staticPointRM.get();
         
         //TODO: Add support for animated vertex format.
@@ -248,39 +281,7 @@ namespace ChilliSource
         renderMaterials.push_back(std::move(staticShadowMapRM));
         renderMaterials.push_back(std::move(staticBaseRM));
         renderMaterials.push_back(std::move(staticDirectionalRM));
-        renderMaterials.push_back(std::move(staticPointRM));
-        
-        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
-        auto renderMaterialGroupRaw = renderMaterialGroup.get();
-        AddRenderMaterialGroup(std::move(renderMaterialGroup));
-        
-        return renderMaterialGroupRaw;
-    }
-    
-    //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateBlinnShadowedRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour,
-                                                                                                         const Colour& diffuseColour, const Colour& specularColour) noexcept
-    {
-        //TODO: Create RenderMaterials from pools.
-        auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
-        auto staticBaseRM = CreateBlinnBase(m_staticUnlit, renderTexture, emissiveColour, ambientColour);
-        auto staticDirectionalRM = CreateBlinnLight(m_staticBlinnShadowedDirectional, renderTexture, diffuseColour, specularColour);
-        auto staticPointRM = CreateBlinnLight(m_staticBlinnPoint, renderTexture, diffuseColour, specularColour);
-        
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticRenderMaterials {};
-        staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
-        staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticBaseRM.get();
-        staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticDirectionalRM.get();
-        staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_pointLight)] = staticPointRM.get();
-        
-        //TODO: Add support for animated vertex format.
-        
-        std::vector<RenderMaterialGroup::Collection> collections { RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticRenderMaterials) };
-        
-        std::vector<RenderMaterialUPtr> renderMaterials;
-        renderMaterials.push_back(std::move(staticShadowMapRM));
-        renderMaterials.push_back(std::move(staticBaseRM));
-        renderMaterials.push_back(std::move(staticDirectionalRM));
+        renderMaterials.push_back(std::move(staticDirectionalShadowsRM));
         renderMaterials.push_back(std::move(staticPointRM));
         
         RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
@@ -297,12 +298,12 @@ namespace ChilliSource
         
         m_spriteUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Sprite-Unlit.csshader");
         
-        m_staticShadowMap = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-ShadowMap.csshader");
-        m_staticUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-Unlit.csshader");
-        m_staticBlinnBase = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-Blinn-Base.csshader");
-        m_staticBlinnDirectional = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-Blinn-Directional.csshader");
-        m_staticBlinnPoint = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-Blinn-Point.csshader");
-        m_staticBlinnShadowedDirectional = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/StaticMesh-BlinnShadowed-Directional.csshader");
+        m_staticShadowMap = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static-ShadowMap.csshader");
+        m_staticUnlit = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static-Unlit.csshader");
+        m_staticBlinnBase = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static-Blinn-Base.csshader");
+        m_staticBlinnDirectional = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static-Blinn-Directional.csshader");
+        m_staticBlinnDirectionalShadows = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static-Blinn-DirectionalShadows.csshader");
+        m_staticBlinnPoint = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Static-Blinn-Point.csshader");
     }
     
     //------------------------------------------------------------------------------
@@ -315,6 +316,6 @@ namespace ChilliSource
         m_staticBlinnBase.reset();
         m_staticBlinnDirectional.reset();
         m_staticBlinnPoint.reset();
-        m_staticBlinnShadowedDirectional.reset();
+        m_staticBlinnDirectionalShadows.reset();
     }
 }

@@ -91,41 +91,6 @@ namespace ChilliSource
         MaterialCSPtr CreateBlinn(const std::string& uniqueId, const TextureCSPtr& texture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
                                   const Colour& specularColour, f32 shininess) const noexcept;
         
-        /// Creates a new material with blinn shadowed shaders that can be used with static and animated
-        /// meshes.
-        ///
-        /// @param uniqueId
-        ///     The unique Id that will be used to identify the material in the resource pool. Note
-        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
-        /// @param texture
-        ///     The texture that the material will use.
-        /// @param ambientColour
-        ///     The ambient colour.
-        /// @param emissiveColour
-        ///     The ambient colour.
-        /// @param diffuseColour
-        ///     The diffuse colour.
-        /// @param specularColour
-        ///     The specular colour, note that the alpha value is ignored.
-        /// @param shininess
-        ///     The specular shininess of the material.
-        ///
-        /// @return The newly created material.
-        ///
-        MaterialCSPtr CreateBlinnShadowed(const std::string& uniqueId, const TextureCSPtr& texture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
-                                  const Colour& specularColour, f32 shininess) const noexcept;
-        
-        /// Creates a new material with shadow map shaders that can be used with static and animated
-        /// meshes.
-        ///
-        /// @param uniqueId
-        ///     The unique Id that will be used to identify the material in the resource pool. Note
-        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
-        ///
-        /// @return The newly created material.
-        ///
-        MaterialCSPtr CreateShadowMap(const std::string& uniqueId) const noexcept;
-        
         /// Creates a new custom material, on which all shader settings can be changed. The shading
         /// type defaults to Unlit, but other types can be set. The types of mesh that the material
         /// can be used with depends on the shading type set.

@@ -50,6 +50,8 @@ namespace ChilliSource
     Material::Material() 
         : m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_cullFace(CullFace::k_back)
     {
+        m_renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
+        CS_ASSERT(m_renderMaterialGroupManager, "RenderMaterialGroupManager is required.");
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
@@ -361,6 +363,9 @@ namespace ChilliSource
                 case ShadingType::k_blinn:
                     m_renderMaterialGroup = CreateBlinnRenderMaterialGroup();
                     break;
+                default:
+                    CS_LOG_FATAL("Invalid shading type.");
+                    
             }
         }
         
@@ -368,20 +373,17 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const RenderMaterialGroup* Material::CreateUnlitRenderMaterialGroup() const
+    const RenderMaterialGroup* Material::CreateUnlitRenderMaterialGroup() const noexcept
     {
         CS_ASSERT(m_textures.size() == 1, "Unlit materials must have one texture.");
         
-        auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
-        CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.")
-        
         auto renderTexture = m_textures[0]->GetRenderTexture();
-        return renderMaterialGroupManager->CreateUnlitRenderMaterialGroup(renderTexture, m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled,
+        return m_renderMaterialGroupManager->CreateUnlitRenderMaterialGroup(renderTexture, m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled,
                                                                           m_srcBlendMode, m_dstBlendMode, m_cullFace, m_emissive, m_ambient);
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const RenderMaterialGroup* Material::CreateBlinnRenderMaterialGroup() const
+    const RenderMaterialGroup* Material::CreateBlinnRenderMaterialGroup() const noexcept
     {
         CS_ASSERT(m_textures.size() == 1, "Blinn materials must have one texture.");
         CS_ASSERT(!m_isAlphaBlendingEnabled, "Blinn materials must have transparency disabled.");
@@ -391,13 +393,9 @@ namespace ChilliSource
         CS_ASSERT(m_isFaceCullingEnabled, "Blinn materials must have face culling enabled.");
         CS_ASSERT(m_cullFace == CullFace::k_back, "Blinn materials must use back-face culling.");
         
-        auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
-        CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.")
-        
         auto renderTexture = m_textures[0]->GetRenderTexture();
-        return renderMaterialGroupManager->CreateBlinnRenderMaterialGroup(renderTexture, m_emissive, m_ambient, m_diffuse, m_specular);
+        return m_renderMaterialGroupManager->CreateBlinnRenderMaterialGroup(renderTexture, m_emissive, m_ambient, m_diffuse, m_specular);
     }
-    
     //----------------------------------------------------------
     //----------------------------------------------------------
     void Material::DestroyRenderMaterialGroup() const noexcept
