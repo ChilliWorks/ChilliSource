@@ -49,7 +49,7 @@ namespace ChilliSource
         ///
         /// @return The render shader that should be unloaded.
         ///
-        RenderShaderUPtr ClaimRenderShader() noexcept { return std::move(m_renderShader); }
+        RenderShaderUPtr ClaimRenderShader() noexcept;
         
     private:
         friend class RenderCommandList;

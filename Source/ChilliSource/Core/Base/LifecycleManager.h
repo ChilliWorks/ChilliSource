@@ -58,11 +58,6 @@ namespace ChilliSource
         ///
         void Resume() noexcept;
         
-        /// Called when the raw platform resume event is triggered. This is guaranteed
-        /// to happen before the regular OnResume event.
-        ///
-        void SystemResume() noexcept;
-        
         /// Sends the foreground event to the main thread. The app must currently
         /// be backgrounded or this will assert.
         ///
@@ -83,11 +78,6 @@ namespace ChilliSource
         /// This is thread safe.
         ///
         void Suspend() noexcept;
-        
-        /// Called when the raw platform suspend event is triggered. This is guaranteed
-        /// to happen before the regular OnSuspend event.
-        ///
-        void SystemSuspend() noexcept;
         
         /// Sends the render event to the application, rendering to the screen.
         ///
@@ -205,6 +195,16 @@ namespace ChilliSource
         /// is not currently resumed or foregrounded.
         ///
         void BlockIfInactive() noexcept;
+        
+        /// Called when the raw platform resume event is triggered. This is guaranteed
+        /// to happen before the regular OnResume event.
+        ///
+        void SystemResume() noexcept;
+        
+        /// Called when the raw platform suspend event is triggered. This is guaranteed
+        /// to happen before the regular OnSuspend event.
+        ///
+        void SystemSuspend() noexcept;
         
         Application* m_application;
         

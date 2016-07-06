@@ -54,7 +54,7 @@ namespace ChilliSource
         ///
         /// @return The vertex data buffer.
         ///
-        std::unique_ptr<const u8[]> ClaimVertexData() noexcept { return std::move(m_vertexData); }
+        std::unique_ptr<const u8[]> ClaimVertexData() noexcept;
         
         /// @return The size of the vertex data buffer.
         ///
@@ -69,7 +69,7 @@ namespace ChilliSource
         ///
         /// @return The index data buffer.
         ///
-        std::unique_ptr<const u8[]> ClaimIndexData() noexcept { return std::move(m_indexData); }
+        std::unique_ptr<const u8[]> ClaimIndexData() noexcept;
         
         /// @return The size of the index data buffer.
         ///

@@ -58,7 +58,7 @@ namespace ChilliSource
         /// @param renderCommandBuffer
         ///     The buffer of render commands that should be processed.
         ///
-        virtual void Process(ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept = 0;
+        virtual void Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept = 0;
         
         virtual ~IRenderCommandProcessor() noexcept {}
     };

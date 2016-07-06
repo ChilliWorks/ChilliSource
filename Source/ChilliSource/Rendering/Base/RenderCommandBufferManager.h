@@ -28,9 +28,15 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-#include <ChilliSource/Rendering/Base/IContextRestorer.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
@@ -63,30 +69,6 @@ namespace ChilliSource
         ///
         bool IsA(InterfaceIDType interfaceId) const noexcept override;
         
-        /// Called when the app system is resumed.
-        ///
-        /// Called on the main thread.
-        ///
-        void OnResume() noexcept override;
-        
-        /// Called when the application delegate is suspended. This
-        /// event is called directly from the platform application
-        /// implementation and will be called before the lifecycle
-        /// counterpart.
-        ///
-        /// This should only be called from the render thread by the
-        /// lifecycle manager.
-        ///
-        void OnSystemSuspend() noexcept;
-        
-        /// Will iterate an RenderCommandBuffer and extract any commands that can
-        /// be recycled for next frame.
-        ///
-        /// @param commands
-        ///     The RenderCommandBuffer to recycle.
-        ///
-        void RecycleCommands(const RenderCommandBufferUPtr& commands) noexcept;
-        
         /// If the queue of command buffers is full then this waits until one has been popped to continue.
         /// It then adds the given render buffer and notifies any threads which are waiting.
         ///
@@ -100,50 +82,51 @@ namespace ChilliSource
         ///
         /// @return The render command buffer which has been popped.
         ///
-        RenderCommandBufferUPtr WaitThenPopCommandBuffer() noexcept;
-        
-        ~RenderCommandBufferManager() noexcept {}
+        RenderCommandBufferCUPtr WaitThenPopCommandBuffer() noexcept;
         
     private:
         friend class Application;
-        
-        /// Command data for loading a texture
-        ///
-        struct TextureLoadCommand final
-        {
-            std::unique_ptr<const u8[]> m_textureData;
-            u32 m_textureDataSize = 0;
-            RenderTexture* m_renderTexture = nullptr;
-        };
-        
-        /// Command data for loading a shader
-        ///
-        struct ShaderLoadCommand final
-        {
-            std::string m_vertexShader;
-            std::string m_fragmentShader;
-            RenderShader* m_renderShader = nullptr;
-        };
-        
-        /// Command data for loading a mesh
-        ///
-        struct MeshLoadCommand final
-        {
-            RenderMesh* m_renderMesh = nullptr;
-            std::unique_ptr<const u8[]> m_vertexData;
-            u32 m_vertexDataSize = 0;
-            std::unique_ptr<const u8[]> m_indexData;
-            u32 m_indexDataSize = 0;
-        };
-        
-        RenderCommandBufferManager();
-        
+        friend class LifecycleManager;
+
         /// A factory method for creating new instances of the system. This must be called by
         /// Application.
         ///
         /// @return The new instance of the system.
         ///
         static RenderCommandBufferManagerUPtr Create() noexcept;
+
+        RenderCommandBufferManager();
+        
+        /// Will iterate an RenderCommandBuffer and extract any commands that can be recycled
+        /// for next frame.
+        ///
+        /// @param commands
+        ///     The RenderCommandBuffer to recycle.
+        ///
+        void RecycleRenderCommandBuffer(RenderCommandBuffer* commands) noexcept;
+        
+        /// Called to process a command queue and extract load/unload commands that we
+        /// can recycle and store for use next frame.
+        ///
+        /// @param renderCommandList
+        ///     The render command list to recycle
+        ///
+        void RecycleCommandList(RenderCommandList* renderCommandList) noexcept;
+        
+        /// Called to proccess a command to be recycled. Will decide if its a valid
+        /// recyclable command and then take a copy of its data so we can recreate the
+        /// command later.
+        ///
+        /// @param renderCommand
+        ///     The render command to recycle or ignore
+        ///
+        void RecycleCommand(RenderCommand* renderCommand) noexcept;
+        
+        /// Called when the app system is resumed.
+        ///
+        /// Called on the main thread.
+        ///
+        void OnResume() noexcept override;
         
         /// Called during the Render Snapshot stage of the render pipeline. All pending load commands
         /// are added to the render snapshot.
@@ -153,40 +136,31 @@ namespace ChilliSource
         ///
         void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
         
-        /// Called to process a command queue and extract load/unload commands that we
-        /// can recycle and store for use next frame.
+        /// Called when the application delegate is suspended. This event is called directly
+        /// from the platform application implementation and will be called before the lifecycle
+        /// counterpart.
         ///
-        /// @param renderCommandQueue
-        ///     The render command queue to recycle
+        /// This should only be called from the render thread by the
+        /// lifecycle manager.
         ///
-        void RecycleCommandQueue(std::vector<RenderCommand*>& renderCommandQueue) noexcept;
+        void OnSystemSuspend() noexcept;
         
-        /// Called to proccess a command to be recycled. Will decide if its a valid
-        /// recyclable command and then take a copy of its data so we can recreate the
-        /// command later.
-        ///
-        /// @param renderCommand
-        ///     The render command to recycle or ignore
-        ///
-        /// @return If the command was processed
-        ///
-        bool RecycleCommand(RenderCommand* renderCommand) noexcept;
         
     private:
         
         std::mutex m_commandBufferMutex;
         
-        std::vector<ShaderLoadCommand> m_pendingShaderLoadCommands;
-        std::vector<TextureLoadCommand> m_pendingTextureLoadCommands;
-        std::vector<MeshLoadCommand> m_pendingMeshLoadCommands;
+        std::vector<LoadShaderRenderCommand> m_pendingShaderLoadCommands;
+        std::vector<LoadTextureRenderCommand> m_pendingTextureLoadCommands;
+        std::vector<LoadMeshRenderCommand> m_pendingMeshLoadCommands;
+        std::vector<LoadMaterialGroupRenderCommand> m_pendingMaterialGroupLoadCommands;
         
-        std::vector<RenderShaderUPtr> m_pendingShaderUnloadCommands;
-        std::vector<RenderTextureUPtr> m_pendingTextureUnloadCommands;
-        std::vector<RenderMeshUPtr> m_pendingMeshUnloadCommands;
+        std::vector<UnloadShaderRenderCommand> m_pendingShaderUnloadCommands;
+        std::vector<UnloadTextureRenderCommand> m_pendingTextureUnloadCommands;
+        std::vector<UnloadMeshRenderCommand> m_pendingMeshUnloadCommands;
+        std::vector<UnloadMaterialGroupRenderCommand> m_pendingMaterialGroupUnloadCommands;
         
-        IContextRestorerUPtr m_contextRestorer;
         std::atomic_bool m_discardCommands;
-        bool m_initialised = false;
         
         std::mutex m_renderCommandBuffersMutex;
         std::condition_variable m_renderCommandBuffersCondition;

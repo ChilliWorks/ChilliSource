@@ -84,11 +84,7 @@ namespace ChilliSource
         /// @return Whether or not the interface is implemented.
         ///
         bool IsA(InterfaceIDType interfaceId) const noexcept override;
-        
-        /// Initialisation called when all App Systems have been created.
-        ///
-        void OnInit() noexcept override;
-        
+       
         /// Performs the Scene Snapshot through to the Render Command Queue Compilation Stages and
         /// then stores the output render command buffer render to later be processed by the
         /// ProcessRenderCommandBuffer() method.
@@ -133,6 +129,10 @@ namespace ChilliSource
         /// waiting.
         ///
         void EndRenderPrep() noexcept;
+        
+        /// Initialisation called when all App Systems have been created.
+        ///
+        void OnInit() noexcept override;
         
         IRenderPassCompilerUPtr m_renderPassCompiler;
         IRenderCommandProcessorUPtr m_renderCommandProcessor;

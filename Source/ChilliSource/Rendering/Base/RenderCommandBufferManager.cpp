@@ -37,21 +37,22 @@
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(RenderCommandBufferManager);
-    
     namespace
     {
         constexpr u32 k_maxQueueSize = 1;
     }
     
-    RenderCommandBufferManager::RenderCommandBufferManager()
-    :m_contextRestorer(IContextRestorer::Create()), m_discardCommands(false)
-    {
-    }
+    CS_DEFINE_NAMEDTYPE(RenderCommandBufferManager);
+    
     //------------------------------------------------------------------------------
     RenderCommandBufferManagerUPtr RenderCommandBufferManager::Create() noexcept
     {
         return RenderCommandBufferManagerUPtr(new RenderCommandBufferManager());
+    }
+    //------------------------------------------------------------------------------
+    RenderCommandBufferManager::RenderCommandBufferManager()
+    : m_discardCommands(false)
+    {
     }
     //------------------------------------------------------------------------------
     bool RenderCommandBufferManager::IsA(InterfaceIDType interfaceId) const noexcept
@@ -62,16 +63,6 @@ namespace ChilliSource
     void RenderCommandBufferManager::OnResume() noexcept
     {
         m_discardCommands = false;
-        
-//      if(m_initialised)
-//      {
-//        if(m_contextRestorer)
-//        {
-//            m_contextRestorer->Restore();
-//        }
-//      }
-        
-        m_initialised = true;
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::OnSystemSuspend() noexcept
@@ -84,7 +75,7 @@ namespace ChilliSource
         {
             for(const auto& buffer : m_renderCommandBuffers)
             {
-                RecycleCommands(buffer);
+                RecycleRenderCommandBuffer(buffer.get());
             }
             
             m_renderCommandBuffers.clear();
@@ -94,11 +85,6 @@ namespace ChilliSource
         
         //Notify the condition since we have updated the command buffer
         m_renderCommandBuffersCondition.notify_all();
-        
-        if(m_contextRestorer)
-        {
-            m_contextRestorer->Backup();
-        }
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
@@ -112,140 +98,130 @@ namespace ChilliSource
             
             for(auto& command : m_pendingShaderLoadCommands)
             {
-                preRenderCommandList->AddLoadShaderCommand(command.m_renderShader, command.m_vertexShader, command.m_fragmentShader);
+                preRenderCommandList->AddLoadShaderCommand(command.GetRenderShader(), command.GetVertexShader(), command.GetFragmentShader());
             }
             
             for(auto& command : m_pendingTextureLoadCommands)
             {
-                preRenderCommandList->AddLoadTextureCommand(command.m_renderTexture, std::move(command.m_textureData), command.m_textureDataSize);
+                preRenderCommandList->AddLoadTextureCommand(command.GetRenderTexture(), command.ClaimTextureData(), command.GetTextureDataSize());
             }
             
             for(auto& command : m_pendingMeshLoadCommands)
             {
-                preRenderCommandList->AddLoadMeshCommand(command.m_renderMesh, std::move(command.m_vertexData), command.m_vertexDataSize, std::move(command.m_indexData), command.m_indexDataSize);
+                preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), command.ClaimVertexData(), command.GetVertexDataSize(), command.ClaimIndexData(), command.GetIndexDataSize());
+            }
+            
+            for(auto& command : m_pendingMaterialGroupLoadCommands)
+            {
+                preRenderCommandList->AddLoadMaterialGroupCommand(command.GetRenderMaterialGroup());
             }
             
             for(auto& command : m_pendingShaderUnloadCommands)
             {
-                postRenderCommandList->AddUnloadShaderCommand(std::move(command));
+                postRenderCommandList->AddUnloadShaderCommand(command.ClaimRenderShader());
             }
             
             for(auto& command : m_pendingTextureUnloadCommands)
             {
-                postRenderCommandList->AddUnloadTextureCommand(std::move(command));
+                postRenderCommandList->AddUnloadTextureCommand(command.ClaimRenderTexture());
             }
             
             for(auto& command : m_pendingMeshUnloadCommands)
             {
-                postRenderCommandList->AddUnloadMeshCommand(std::move(command));
+                postRenderCommandList->AddUnloadMeshCommand(command.ClaimRenderMesh());
+            }
+            
+            for(auto& command : m_pendingMaterialGroupUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadMaterialGroupCommand(command.ClaimRenderMaterialGroup());
             }
             
             m_pendingShaderLoadCommands.clear();
             m_pendingTextureLoadCommands.clear();
             m_pendingMeshLoadCommands.clear();
+            m_pendingMaterialGroupLoadCommands.clear();
             m_pendingShaderUnloadCommands.clear();
             m_pendingTextureUnloadCommands.clear();
             m_pendingMeshUnloadCommands.clear();
+            m_pendingMaterialGroupUnloadCommands.clear();
         }
     }
     //------------------------------------------------------------------------------
-    void RenderCommandBufferManager::RecycleCommands(const RenderCommandBufferUPtr& commands) noexcept
+    void RenderCommandBufferManager::RecycleRenderCommandBuffer(RenderCommandBuffer* commands) noexcept
     {
         for(u32 i = 0; i < commands->GetNumSlots(); ++i)
         {
-            RecycleCommandQueue(commands->GetRenderCommandList(i)->GetOrderedList());
+            RecycleCommandList(commands->GetRenderCommandList(i));
         }
     }
     //------------------------------------------------------------------------------
-    void RenderCommandBufferManager::RecycleCommandQueue(std::vector<RenderCommand*>& renderCommandQueue) noexcept
+    void RenderCommandBufferManager::RecycleCommandList(RenderCommandList* renderCommandList) noexcept
     {
         std::unique_lock<std::mutex>(m_commandBufferMutex);
         
-        //Iterate the queue and store any recyclable commands for reinsertion later. If a command
-        //is recycled then we remove from the list. We do not need to delete the command as that is still owned
-        //by the command queue
-        auto it = renderCommandQueue.begin();
-        while(it != renderCommandQueue.end())
+        for(u32 i = 0; i < renderCommandList->GetNumCommands(); ++i)
         {
-            bool processed = RecycleCommand((*it));
-            if(processed)
-            {
-                it = renderCommandQueue.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
+            RecycleCommand(renderCommandList->GetCommand(i));
         }
     }
     //------------------------------------------------------------------------------
-    bool RenderCommandBufferManager::RecycleCommand(RenderCommand* renderCommand) noexcept
+    void RenderCommandBufferManager::RecycleCommand(RenderCommand* renderCommand) noexcept
     {
         switch(renderCommand->GetType())
         {
             case RenderCommand::Type::k_loadShader:
             {
-                LoadShaderRenderCommand* command = dynamic_cast<LoadShaderRenderCommand*>(renderCommand);
-                
-                ShaderLoadCommand loadCommand;
-                loadCommand.m_fragmentShader = command->GetFragmentShader();
-                loadCommand.m_vertexShader = command->GetVertexShader();
-                loadCommand.m_renderShader = command->GetRenderShader();
-                
-                m_pendingShaderLoadCommands.push_back(std::move(loadCommand));
+                LoadShaderRenderCommand* command = static_cast<LoadShaderRenderCommand*>(renderCommand);
+                m_pendingShaderLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_loadTexture:
             {
-                LoadTextureRenderCommand* command = dynamic_cast<LoadTextureRenderCommand*>(renderCommand);
-                
-                TextureLoadCommand loadCommand;
-                loadCommand.m_textureDataSize = command->GetTextureDataSize();
-                loadCommand.m_textureData = command->ClaimTextureData();
-                loadCommand.m_renderTexture = command->GetRenderTexture();
-                
-                m_pendingTextureLoadCommands.push_back(std::move(loadCommand));
+                LoadTextureRenderCommand* command = static_cast<LoadTextureRenderCommand*>(renderCommand);
+                m_pendingTextureLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_loadMesh:
             {
-                LoadMeshRenderCommand* command = dynamic_cast<LoadMeshRenderCommand*>(renderCommand);
-                
-                MeshLoadCommand loadCommand;
-                loadCommand.m_indexDataSize = command->GetIndexDataSize();
-                loadCommand.m_indexData = command->ClaimIndexData();
-                loadCommand.m_vertexDataSize = command->GetVertexDataSize();
-                loadCommand.m_vertexData = command->ClaimVertexData();
-                loadCommand.m_renderMesh = command->GetRenderMesh();
-                
-                m_pendingMeshLoadCommands.push_back(std::move(loadCommand));
+                LoadMeshRenderCommand* command = static_cast<LoadMeshRenderCommand*>(renderCommand);
+                m_pendingMeshLoadCommands.push_back(std::move(*command));
+                break;
+            }
+            case RenderCommand::Type::k_loadMaterialGroup:
+            {
+                LoadMaterialGroupRenderCommand* command = static_cast<LoadMaterialGroupRenderCommand*>(renderCommand);
+                m_pendingMaterialGroupLoadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_unloadShader:
             {
-                UnloadShaderRenderCommand* command = dynamic_cast<UnloadShaderRenderCommand*>(renderCommand);
-                m_pendingShaderUnloadCommands.push_back(std::move(command->ClaimRenderShader()));
+                UnloadShaderRenderCommand* command = static_cast<UnloadShaderRenderCommand*>(renderCommand);
+                m_pendingShaderUnloadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_unloadTexture:
             {
-                UnloadTextureRenderCommand* command = dynamic_cast<UnloadTextureRenderCommand*>(renderCommand);
-                m_pendingTextureUnloadCommands.push_back(std::move(command->ClaimRenderTexture()));
+                UnloadTextureRenderCommand* command = static_cast<UnloadTextureRenderCommand*>(renderCommand);
+                m_pendingTextureUnloadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_unloadMesh:
             {
-                UnloadMeshRenderCommand* command = dynamic_cast<UnloadMeshRenderCommand*>(renderCommand);
-                m_pendingMeshUnloadCommands.push_back(std::move(command->ClaimRenderMesh()));
+                UnloadMeshRenderCommand* command = static_cast<UnloadMeshRenderCommand*>(renderCommand);
+                m_pendingMeshUnloadCommands.push_back(std::move(*command));
+                break;
+            }
+            case RenderCommand::Type::k_unloadMaterialGroup:
+            {
+                UnloadMaterialGroupRenderCommand* command = static_cast<UnloadMaterialGroupRenderCommand*>(renderCommand);
+                m_pendingMaterialGroupUnloadCommands.push_back(std::move(*command));
                 break;
             }
             default:
             {
-                return false;
+                break;
             }
         }
-        
-        return true;
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::WaitThenPushCommandBuffer(RenderCommandBufferUPtr renderCommandBuffer) noexcept
@@ -259,7 +235,7 @@ namespace ChilliSource
         
         if(m_discardCommands)
         {
-            RecycleCommands(renderCommandBuffer);
+            RecycleRenderCommandBuffer(renderCommandBuffer.get());
         }
         else
         {
@@ -269,7 +245,7 @@ namespace ChilliSource
         m_renderCommandBuffersCondition.notify_all();
     }
     //------------------------------------------------------------------------------
-    RenderCommandBufferUPtr RenderCommandBufferManager::WaitThenPopCommandBuffer() noexcept
+    RenderCommandBufferCUPtr RenderCommandBufferManager::WaitThenPopCommandBuffer() noexcept
     {
         std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
         
@@ -283,6 +259,6 @@ namespace ChilliSource
         
         m_renderCommandBuffersCondition.notify_all();
         
-        return renderCommandBuffer;
+        return std::move(renderCommandBuffer);
     }
 }
