@@ -65,10 +65,10 @@ namespace ChilliSource
         ///     the shadow map.
         /// @param shadowTolerance
         ///     The tolerence used to judge if an object is in shadow.
-        /// @param shadowMapRenderTexture
-        ///     The render texture which should be used for the shadow map.
+        /// @param shadowMapTarget
+        ///     The render target group which should be used for the shadow map.
         ///
-        DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept;
+        DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTargetGroup* shadowMapTarget) noexcept;
         
         /// @return The colour of the light.
         ///
@@ -87,17 +87,17 @@ namespace ChilliSource
         ///
         f32 GetShadowTolerance() const noexcept { return m_shadowTolerance; }
         
-        /// @return The render texture which should be used for the shadow map. Will be null if there is
+        /// @return The render texture group which should be used for the shadow map. Will be null if there is
         ///     no shadow map.
         ///
-        const RenderTexture* GetShadowMapRenderTexture() const noexcept { return m_shadowMapRenderTexture; }
+        const RenderTargetGroup* GetShadowMapTarget() const noexcept { return m_shadowMapTarget; }
         
     private:
         Colour m_colour;
         Vector3 m_direction;
         Matrix4 m_lightViewProjection;
         f32 m_shadowTolerance = 0.0f;
-        const RenderTexture* m_shadowMapRenderTexture = nullptr;
+        const RenderTargetGroup* m_shadowMapTarget = nullptr;
     };
 }
 

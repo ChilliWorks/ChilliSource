@@ -31,4 +31,11 @@ namespace ChilliSource
         : m_renderCameraGroups(cameraRenderPassGroups)
     {
     }
+    
+    //------------------------------------------------------------------------------
+    TargetRenderPassGroup::TargetRenderPassGroup(const RenderTargetGroup* renderTargetGroup, const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept
+        : m_renderTargetGroup(renderTargetGroup)
+    {
+        CS_ASSERT(renderTargetGroup, "Must supply a valid render target group.");
+    }
 }

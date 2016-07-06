@@ -22,26 +22,12 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
 
-namespace ChilliSource
-{
-    //------------------------------------------------------------------------------
-    DirectionalRenderLight::DirectionalRenderLight() noexcept
-        : m_colour(Colour::k_black), m_direction(Vector3::k_unitNegativeY)
-    {
-    }
-    
-    //------------------------------------------------------------------------------
-    DirectionalRenderLight::DirectionalRenderLight(const Colour& colour, const Vector3& direction) noexcept
-        : m_colour(colour), m_direction(direction)
-    {
-    }
-    
-    //------------------------------------------------------------------------------
-    DirectionalRenderLight::DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTargetGroup* shadowMapTarget) noexcept
-        : m_colour(colour), m_direction(direction), m_lightViewProjection(lightViewProjection), m_shadowTolerance(shadowTolerance), m_shadowMapTarget(shadowMapTarget)
-    {
-        CS_ASSERT(m_shadowMapTarget, "Shadow map target cannot be null.");
-    }
-}
+#ifndef _CHILLISOURCE_RENDERING_TARGET_H_
+#define _CHILLISOURCE_RENDERING_TARGET_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
+
+#endif

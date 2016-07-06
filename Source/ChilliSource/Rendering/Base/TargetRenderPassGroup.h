@@ -41,16 +41,33 @@ namespace ChilliSource
     public:
         TargetRenderPassGroup() = default;
         
+        /// Creates a new instance which will render to the default render target.
+        ///
         /// @param cameraRenderPassGroups
         ///     The list of camera render pass groups to render to the target
         ///
         TargetRenderPassGroup(const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept;
+        
+        /// Creates a new instance which will render to the given render target group.
+        ///
+        /// @param renderTargetGroup
+        ///     The RenderTargetGroup that should be rendered into.
+        /// @param cameraRenderPassGroups
+        ///     The list of camera render pass groups to render to the target
+        ///
+        TargetRenderPassGroup(const RenderTargetGroup* renderTargetGroup, const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept;
+        
+        /// @return The render target group that the contained passes should be applied to. Null
+        ///     indicates that the default render target should be used.
+        ///
+        const RenderTargetGroup* GetRenderTarget() const noexcept { return m_renderTargetGroup; }
         
         /// @return The list of render camera groups
         ///
         const std::vector<CameraRenderPassGroup>& GetRenderCameraGroups() const noexcept { return m_renderCameraGroups; }
         
     private:
+        const RenderTargetGroup* m_renderTargetGroup = nullptr;
         std::vector<CameraRenderPassGroup> m_renderCameraGroups;
     };
 }

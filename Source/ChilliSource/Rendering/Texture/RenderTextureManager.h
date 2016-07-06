@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_TEXTURE_RENDERTEXTUREMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
 #include <mutex>

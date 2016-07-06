@@ -27,6 +27,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
+#include <ChilliSource/Rendering/Texture/TextureDesc.h>
 
 namespace ChilliSource
 {

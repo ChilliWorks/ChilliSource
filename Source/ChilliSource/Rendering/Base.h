@@ -57,7 +57,6 @@
 #include <ChilliSource/Rendering/Base/RenderPassObjectSorter.h>
 #include <ChilliSource/Rendering/Base/RenderPassVisibilityChecker.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
-#include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>

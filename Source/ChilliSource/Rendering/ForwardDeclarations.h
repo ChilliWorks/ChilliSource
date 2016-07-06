@@ -51,7 +51,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderPass);
     CS_FORWARDDECLARE_CLASS(RenderPassObject);
     CS_FORWARDDECLARE_CLASS(RenderSnapshot);
-    CS_FORWARDDECLARE_CLASS(RenderTarget);
     CS_FORWARDDECLARE_CLASS(TargetRenderPassGroup);
     CS_FORWARDDECLARE_CLASS(CameraRenderPassGroup);
     enum class AlignmentAnchor;
@@ -199,6 +198,11 @@ namespace ChilliSource
     /// Sprite
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(SpriteComponent);
+    //------------------------------------------------------------
+    /// Target
+    //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(RenderTargetGroup);
+    CS_FORWARDDECLARE_CLASS(RenderTargetGroupManager);
     //------------------------------------------------------------
     /// Texture
     //------------------------------------------------------------

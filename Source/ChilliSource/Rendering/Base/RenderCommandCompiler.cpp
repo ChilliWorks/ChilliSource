@@ -28,6 +28,7 @@
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
 namespace ChilliSource
 {
@@ -128,8 +129,16 @@ namespace ChilliSource
                 case RenderPass::LightType::k_directional:
                 {
                     const auto& directionalLight = renderPass.GetDirectionalLight();
+                    const auto& shadowMapTarget = directionalLight.GetShadowMapTarget();
+                    const RenderTexture* shadowMapTexture = nullptr;
+                    if (shadowMapTarget)
+                    {
+                        shadowMapTexture = shadowMapTarget->GetDepthTarget();
+                        CS_ASSERT(shadowMapTexture, "Shadow map target must have depth texture.");
+                    }
+                    
                     renderCommandList->AddApplyDirectionalLightCommand(directionalLight.GetColour(), directionalLight.GetDirection(), directionalLight.GetLightViewProjection(),
-                                                                       directionalLight.GetShadowTolerance(), directionalLight.GetShadowMapRenderTexture());
+                                                                       directionalLight.GetShadowTolerance(), shadowMapTexture);
                     break;
                 }
                 case RenderPass::LightType::k_point:
