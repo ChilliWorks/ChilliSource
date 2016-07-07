@@ -54,7 +54,7 @@ namespace ChilliSource
         ///
         /// @return The data describing the texture.
         ///
-        std::unique_ptr<const u8[]> ClaimTextureData() noexcept { return std::move(m_textureData); }
+        std::unique_ptr<const u8[]> ClaimTextureData() noexcept;
         
         /// @return The size of the texture data in bytes.
         ///
