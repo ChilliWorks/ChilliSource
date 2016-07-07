@@ -379,12 +379,13 @@ namespace CSBackend
                 
                 m_currentCamera.Apply(glShader);
                 
+                GLMaterial::Apply(renderMaterial, glShader);
+                
                 if (m_currentLight)
                 {
-                    m_currentLight->Apply(glShader);
+                    // The light may bind additional textures, meaning it must be applied after the material is applied.
+                    m_currentLight->Apply(glShader, m_textureUnitManager.get());
                 }
-                
-                GLMaterial::Apply(renderMaterial, glShader);
             }
         }
         
@@ -473,12 +474,10 @@ namespace CSBackend
         {
             if (m_currentRenderTargetGroup)
             {
-                //TODO: Update texture data for bound target group.
+                //TODO: Update texture data for bound target group, when render to texture is implemented.
             }
             
             ResetCache();
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while ending rendering.");
         }
         
         //------------------------------------------------------------------------------

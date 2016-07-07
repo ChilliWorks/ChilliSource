@@ -41,6 +41,7 @@ namespace CSBackend
             const std::string k_uniformAmbient = "u_ambient";
             const std::string k_uniformDiffuse = "u_diffuse";
             const std::string k_uniformSpecular = "u_specular";
+            const std::string k_uniformTexturePrefix = "u_texture";
             
             /// Converts from a ChilliSource blend mode to a OpenGL blend mode.
             ///
@@ -124,6 +125,11 @@ namespace CSBackend
             else
             {
                 glDisable(GL_BLEND);
+            }
+            
+            for (s32 i = 0; i < renderMaterial->GetRenderTextures().size(); ++i)
+            {
+                glShader->SetUniform(k_uniformTexturePrefix + ChilliSource::ToString(i), i);
             }
             
             glShader->SetUniform(k_uniformEmissive, renderMaterial->GetEmissiveColour(), GLShader::FailurePolicy::k_silent);

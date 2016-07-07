@@ -42,7 +42,7 @@ namespace CSBackend
         }
             
         //------------------------------------------------------------------------------
-        void GLAmbientLight::Apply(GLShader* glShader) const noexcept
+        void GLAmbientLight::Apply(GLShader* glShader, GLTextureUnitManager* glTextureUnitManager) const noexcept
         {
             glShader->SetUniform(k_uniformLightCol, m_colour, GLShader::FailurePolicy::k_silent);
         }

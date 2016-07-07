@@ -36,6 +36,44 @@ namespace CSBackend
     {
         namespace
         {
+            /// Creates a new colour render buffer with the requested size.
+            ///
+            /// @param dimensions
+            ///     The dimensions of the colour buffer.
+            ///
+            /// @return The handle of the buffer.
+            ///
+            GLuint CreateColourRenderBuffer(const ChilliSource::Integer2& dimensions) noexcept
+            {
+                GLuint handle = 0;
+                glGenRenderbuffers(1, &handle);
+                glBindRenderbuffer(GL_RENDERBUFFER, handle);
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB, dimensions.x, dimensions.y);
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating a colour render buffer.");
+                
+                return handle;
+            }
+            
+            /// Creates a new depth render buffer with the requested size.
+            ///
+            /// @param dimensions
+            ///     The dimensions of the colour buffer.
+            ///
+            /// @return The handle of the buffer.
+            ///
+            GLuint CreateDepthRenderBuffer(const ChilliSource::Integer2& dimensions) noexcept
+            {
+                GLuint handle = 0;
+                glGenRenderbuffers(1, &handle);
+                glBindRenderbuffer(GL_RENDERBUFFER, handle);
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, dimensions.x, dimensions.y);
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating a depth render buffer.");
+                
+                return handle;
+            }
+            
             /// Validates that the current frame buffer is complete. If it isn't, a fatal error
             /// will occur.
             ///
@@ -77,8 +115,14 @@ namespace CSBackend
                 auto glTexture = reinterpret_cast<GLTexture*>(m_renderTargetGroup->GetColourTarget()->GetExtraData());
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, glTexture->GetHandle(), 0);
             }
-            
-            //TODO: handle creation of of colour target in OpenGL 2.0
+            else
+            {
+                // OpenGL 2.0 on windows requires a colour buffer, else the frame buffer cannot be used.
+#ifdef CS_TARGETPLATFORM_WINDOWS
+                auto colourBufferHandle = CreateColourRenderBuffer(m_renderTargetGroup->GetResolution());
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colourBufferHandle);
+#endif
+            }
             
             if (m_renderTargetGroup->GetDepthTarget())
             {
@@ -87,7 +131,8 @@ namespace CSBackend
             }
             else if (m_renderTargetGroup->ShouldUseDepthBuffer())
             {
-                //TODO: Handle creation of depth target.
+                auto depthBufferHandle = CreateDepthRenderBuffer(m_renderTargetGroup->GetResolution());
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferHandle);
             }
             
 #ifdef CS_ENABLE_DEBUG

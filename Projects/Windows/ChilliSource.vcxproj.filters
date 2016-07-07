@@ -301,6 +301,15 @@
     <Filter Include="CSBackend\Rendering\OpenGL\Camera">
       <UniqueIdentifier>{8e88dc6e-d075-47ce-bc7e-dc460822f3a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CSBackend\Rendering\OpenGL\Target">
+      <UniqueIdentifier>{109a90c2-eb9a-4708-acd9-a70e96d16822}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Target">
+      <UniqueIdentifier>{c35d03fc-4744-4127-8c2e-2f9aba86718e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CSBackend\Rendering\OpenGL\Lighting">
+      <UniqueIdentifier>{16a9f81a-57d5-40c8-ae06-05f83c347d78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -621,9 +630,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.cpp">
       <Filter>ChilliSource\Rendering\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.cpp">
-      <Filter>ChilliSource\Rendering\Lighting</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.cpp">
       <Filter>ChilliSource\Rendering\Lighting</Filter>
     </ClCompile>
@@ -831,9 +837,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
@@ -1022,15 +1025,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\RenderCamera.cpp">
       <Filter>ChilliSource\Rendering\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderAmbientLight.cpp">
-      <Filter>ChilliSource\Rendering\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderDirectionalLight.cpp">
-      <Filter>ChilliSource\Rendering\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderPointLight.cpp">
-      <Filter>ChilliSource\Rendering\Lighting</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTexture.cpp">
       <Filter>ChilliSource\Rendering\Texture</Filter>
@@ -1238,6 +1232,51 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTextureUnitManager.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Target\GLTargetGroup.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroup.cpp">
+      <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.cpp">
+      <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginWithTargetGroupRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTargetGroupRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTargetGroupRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\AmbientRenderLight.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalRenderLight.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\PointRenderLight.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyAmbientLightRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDirectionalLightRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyPointLightRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLAmbientLight.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLDirectionalLight.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLPointLight.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1916,9 +1955,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.h">
       <Filter>ChilliSource\Rendering\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.h">
-      <Filter>ChilliSource\Rendering\Lighting</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.h">
       <Filter>ChilliSource\Rendering\Lighting</Filter>
     </ClInclude>
@@ -2159,9 +2195,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
@@ -2363,9 +2396,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
@@ -2377,15 +2407,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\RenderCamera.h">
       <Filter>ChilliSource\Rendering\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderAmbientLight.h">
-      <Filter>ChilliSource\Rendering\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderDirectionalLight.h">
-      <Filter>ChilliSource\Rendering\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\RenderPointLight.h">
-      <Filter>ChilliSource\Rendering\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTexture.h">
       <Filter>ChilliSource\Rendering\Texture</Filter>
@@ -2620,6 +2641,54 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderLayer.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Target\GLTargetGroup.h">
+      <Filter>CSBackend\Rendering\OpenGL\Target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroup.h">
+      <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.h">
+      <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginWithTargetGroupRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTargetGroupRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadTargetGroupRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\AmbientRenderLight.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalRenderLight.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\PointRenderLight.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyAmbientLightRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDirectionalLightRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyPointLightRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLAmbientLight.h">
+      <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLDirectionalLight.h">
+      <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLLight.h">
+      <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLPointLight.h">
+      <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

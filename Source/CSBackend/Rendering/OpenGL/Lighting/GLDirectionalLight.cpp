@@ -25,6 +25,7 @@
 #include <CSBackend/Rendering/OpenGL/Lighting/GLDirectionalLight.h>
 
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+#include <CSBackend/Rendering/OpenGL/Texture/GLTextureUnitManager.h>
 
 namespace CSBackend
 {
@@ -34,6 +35,9 @@ namespace CSBackend
         {
             const std::string k_uniformLightCol = "u_lightCol";
             const std::string k_uniformLightDir = "u_lightDir";
+            const std::string k_uniformShadowMap = "u_shadowMap";
+            const std::string k_uniformShadowTolerance = "u_shadowTolerance";
+            const std::string k_uniformLightMat = "u_lightMat";
         }
         
         //------------------------------------------------------------------------------
@@ -44,12 +48,19 @@ namespace CSBackend
         }
             
         //------------------------------------------------------------------------------
-        void GLDirectionalLight::Apply(GLShader* glShader) const noexcept
+        void GLDirectionalLight::Apply(GLShader* glShader, GLTextureUnitManager* glTextureUnitManager) const noexcept
         {
             glShader->SetUniform(k_uniformLightCol, m_colour, GLShader::FailurePolicy::k_silent);
             glShader->SetUniform(k_uniformLightDir, m_direction, GLShader::FailurePolicy::k_silent);
             
-            //TODO: Shadow map data
+            if (m_shadowMapRenderTexture)
+            {
+                auto texUnit = glTextureUnitManager->BindAdditional(m_shadowMapRenderTexture);
+                
+                glShader->SetUniform(k_uniformShadowMap, s32(texUnit), GLShader::FailurePolicy::k_silent);
+                glShader->SetUniform(k_uniformShadowTolerance, m_shadowTolerance, GLShader::FailurePolicy::k_silent);
+                glShader->SetUniform(k_uniformLightMat, m_lightViewProjection, GLShader::FailurePolicy::k_silent);
+            }
         }
     }
 }

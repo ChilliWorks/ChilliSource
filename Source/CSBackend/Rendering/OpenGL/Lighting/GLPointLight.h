@@ -63,8 +63,11 @@ namespace CSBackend
             ///
             /// @param glShader
             ///     The shader the light data should be applied to.
+            /// @param glTextureUnitManager
+            ///     The texture unit manager which can be used to bind additional textures required by a light
+            ///     such as a shadow map.
             ///
-            void Apply(GLShader* glShader) const noexcept override;
+            void Apply(GLShader* glShader, GLTextureUnitManager* glTextureUnitManager) const noexcept override;
             
         private:
             ChilliSource::Colour m_colour;

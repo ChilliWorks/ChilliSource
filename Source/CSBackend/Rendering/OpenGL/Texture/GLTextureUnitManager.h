@@ -60,12 +60,24 @@ namespace CSBackend
             ///
             void Bind(const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept;
             
+            /// Binds an additional texture to the first free slot, returning the slot index.
+            ///
+            /// @param texture
+            ///     The additional texture which should be bound.
+            ///
+            u32 BindAdditional(const ChilliSource::RenderTexture* texture) noexcept;
+            
             /// Clears all texture slots. This doesn't unbind them from the OpenGL context, it
             /// simply clears the cache to force them to be re-bound the next time Bind() is called
             ///
             void Reset() noexcept;
             
         private:
+            /// Finds the next free texture unit, asserting if they are all currently full.
+            ///
+            /// @return The next free texture unit.
+            ///
+            u32 GetNextUnit() const noexcept;
             
             std::vector<const ChilliSource::RenderTexture*> m_boundTextures;
         };

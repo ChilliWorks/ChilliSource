@@ -48,8 +48,11 @@ namespace CSBackend
             ///
             /// @param glShader
             ///     The shader the light data should be applied to.
+            /// @param glTextureUnitManager
+            ///     The texture unit manager which can be used to bind additional textures required by a light
+            ///     such as a shadow map.
             ///
-            virtual void Apply(GLShader* glShader) const noexcept = 0;
+            virtual void Apply(GLShader* glShader, GLTextureUnitManager* glTextureUnitManager) const noexcept = 0;
             
             virtual ~GLLight() {}
         };
