@@ -46,6 +46,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
@@ -131,7 +132,7 @@ namespace CSBackend
                             RestoreMesh(static_cast<const ChilliSource::RestoreMeshRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_restoreTexture:
-//                            LoadMesh(static_cast<const ChilliSource::LoadMeshRenderCommand*>(renderCommand));//TODO
+                            RestoreTexture(static_cast<const ChilliSource::RestoreTextureRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_begin:
                             Begin(static_cast<const ChilliSource::BeginRenderCommand*>(renderCommand));
@@ -222,9 +223,7 @@ namespace CSBackend
             auto renderTexture = renderCommand->GetRenderTexture();
             
             //TODO: Should be pooled.
-            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture->GetDimensions(), renderTexture->GetImageFormat(),
-                                           renderTexture->GetImageCompression(), renderTexture->GetFilterMode(), renderTexture->GetWrapModeS(), renderTexture->GetWrapModeT(),
-                                           renderTexture->IsMipmapped());
+            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture, renderCommand->ShouldBackupData());
             
             renderTexture->SetExtraData(glTexture);
         }
@@ -245,6 +244,8 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::RestoreTexture(const ChilliSource::RestoreTextureRenderCommand* renderCommand) noexcept
         {
+            GLTexture* glTexture = static_cast<GLTexture*>(renderCommand->GetRenderTexture()->GetExtraData());
+            glTexture->RestoreContext();
         }
         
         //------------------------------------------------------------------------------

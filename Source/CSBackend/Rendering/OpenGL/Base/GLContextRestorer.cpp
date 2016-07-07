@@ -122,8 +122,8 @@ namespace CSBackend
 				{
                     if (texture->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
                     {
-                        ChilliSource::Texture* glTexture = static_cast<ChilliSource::Texture*>(const_cast<ChilliSource::Texture*>(texture.get()));
-//                        glTexture->Restore();
+                        ChilliSource::RestoreTextureRenderCommand command(texture->GetRenderTexture());
+                        m_pendingRestoreTextureCommands.push_back(std::move(command));
                     }
                 }
                 resourcePool->RefreshResources<ChilliSource::Texture>();
@@ -177,6 +177,14 @@ namespace CSBackend
             {
                 preRenderCommandList->AddRestoreMeshCommand(restoreMeshCommand.GetRenderMesh());
             }
+            
+            for(auto& restoreTextureCommand : m_pendingRestoreTextureCommands)
+            {
+                preRenderCommandList->AddRestoreTextureCommand(restoreTextureCommand.GetRenderTexture());
+            }
+            
+            m_pendingRestoreMeshCommands.clear();
+            m_pendingRestoreTextureCommands.clear();
 #endif
         }
         

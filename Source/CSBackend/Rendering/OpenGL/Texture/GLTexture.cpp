@@ -26,6 +26,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Rendering/Texture/RenderTexture.h>
 #include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
 #include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
 
@@ -245,42 +246,68 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        GLTexture::GLTexture(const u8* data, u32 dataSize, const ChilliSource::Integer2& dimensions, ChilliSource::ImageFormat format, ChilliSource::ImageCompression compression,
-                             ChilliSource::TextureFilterMode filterMode, ChilliSource::TextureWrapMode wrapModeS, ChilliSource::TextureWrapMode wrapModeT, bool enableMipmapping) noexcept
+        GLTexture::GLTexture(const u8* data, u32 dataSize, ChilliSource::RenderTexture* renderTexture, bool storeMemoryBackup) noexcept
+            :m_imageDataSize(dataSize), m_renderTexture(renderTexture), m_hasMemoryBackup(storeMemoryBackup)
         {
             //TODO: Re-add check
             //CS_ASSERT(m_width <= m_renderCapabilities->GetMaxTextureSize() && m_height <= m_renderCapabilities->GetMaxTextureSize(), "OpenGL does not support textures of this size on this device (" + CSCore::ToString(m_width) + ", " + CSCore::ToString(m_height) + ")");
+
+            BuildTexture(data, dataSize);
             
+            if(storeMemoryBackup)
+            {
+                u8* imageDataCopy = new u8[dataSize];
+                memcpy(imageDataCopy, data, dataSize);
+                m_imageDataBackup = std::unique_ptr<const u8[]>(imageDataCopy);
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLTexture::RestoreContext() noexcept
+        {
+            if(m_hasMemoryBackup && m_contextInvalid)
+            {
+                CS_ASSERT(m_imageDataSize > 0 && m_imageDataBackup, "Cannot restore context with empty data");
+                BuildTexture(m_imageDataBackup.get(), m_imageDataSize);
+                m_contextInvalid = false;
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLTexture::BuildTexture(const u8* data, u32 dataSize) noexcept
+        {
             glGenTextures(1, &m_handle);
             
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, m_handle);
             
-            switch(compression)
+            const auto& dimensions = m_renderTexture->GetDimensions();
+            
+            switch(m_renderTexture->GetImageCompression())
             {
                 case ChilliSource::ImageCompression::k_none:
-                    UploadImageDataNoCompression(format, dimensions, data);
+                    UploadImageDataNoCompression(m_renderTexture->GetImageFormat(), dimensions, data);
                     break;
                 case ChilliSource::ImageCompression::k_ETC1:
-                    UploadImageDataETC1(format, dimensions, data, dataSize);
+                    UploadImageDataETC1(m_renderTexture->GetImageFormat(), dimensions, data, dataSize);
                     break;
                 case ChilliSource::ImageCompression::k_PVR2Bpp:
-                    UploadImageDataPVR2(format, dimensions, data, dataSize);
+                    UploadImageDataPVR2(m_renderTexture->GetImageFormat(), dimensions, data, dataSize);
                     break;
                 case ChilliSource::ImageCompression::k_PVR4Bpp:
-                    UploadImageDataPVR4(format, dimensions, data, dataSize);
+                    UploadImageDataPVR4(m_renderTexture->GetImageFormat(), dimensions, data, dataSize);
                     break;
             };
             
-            if(enableMipmapping)
+            if(m_renderTexture->IsMipmapped())
             {
                 CS_ASSERT(CS::MathUtils::IsPowerOfTwo(dimensions.x) && CS::MathUtils::IsPowerOfTwo(dimensions.y), "Mipmapped images must be a power of two.");
                 
                 glGenerateMipmap(GL_TEXTURE_2D);
             }
             
-            ApplyFilterMode(filterMode, enableMipmapping);
-            ApplyWrapMode(wrapModeS, wrapModeT);
+            ApplyFilterMode(m_renderTexture->GetFilterMode(), m_renderTexture->IsMipmapped());
+            ApplyWrapMode(m_renderTexture->GetWrapModeS(), m_renderTexture->GetWrapModeT());
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
         }

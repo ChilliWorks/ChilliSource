@@ -84,6 +84,20 @@ namespace CSBackend
             ~GLMesh() noexcept;
             
         private:
+            
+            /// Creates a new OpenGL mesh with the given mesh data.
+            ///
+            /// @param vertexData
+            ///     The vertex data.
+            /// @param vertexDataSize
+            ///     The size of the vertex data.
+            /// @param indexData
+            ///     The size of the index data.
+            /// @param indexDataSize
+            ///     The size of the index data.
+            ///
+            void BuildMesh(const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
+            
             ChilliSource::VertexFormat m_vertexFormat;
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
@@ -92,7 +106,7 @@ namespace CSBackend
             std::unique_ptr<const u8[]> m_indexDataBackup = nullptr;
             
             u32 m_indexDataSize = 0;
-            u32 m_vertextDataSize = 0;
+            u32 m_vertexDataSize = 0;
             
             bool m_contextInvalid = false;
             bool m_hasMemoryBackup = false;

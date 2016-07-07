@@ -30,6 +30,17 @@ namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderTextureManager);
     
+    namespace
+    {
+#ifdef CS_TARGETPLATFORM_ANDROID
+        //Should maintain memory backups on android to restore data when the context
+        //is lost when dealing with meshes that are not loaded from file.
+        const bool k_shouldBackupMeshDataFromMemory = true;
+#else
+        const bool k_shouldBackupMeshDataFromMemory = false;
+#endif
+    }
+    
     //------------------------------------------------------------------------------
     RenderTextureManagerUPtr RenderTextureManager::Create() noexcept
     {
@@ -44,7 +55,7 @@ namespace ChilliSource
         
     //------------------------------------------------------------------------------
     const RenderTexture* RenderTextureManager::CreateRenderTexture(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
-                                             TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped) noexcept
+                                             TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool isLoadedFromFile) noexcept
     {
         RenderTextureUPtr renderTexture(new RenderTexture(dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped));
         auto rawRenderTexture = renderTexture.get();
@@ -53,6 +64,7 @@ namespace ChilliSource
         loadCommand.m_textureData = std::move(textureData);
         loadCommand.m_textureDataSize = textureDataSize;
         loadCommand.m_renderTexture = rawRenderTexture;
+        loadCommand.m_shouldBackupData = k_shouldBackupMeshDataFromMemory && !isLoadedFromFile;
         
         std::unique_lock<std::mutex> lock(m_mutex);
         m_renderTextures.push_back(std::move(renderTexture));
@@ -91,7 +103,7 @@ namespace ChilliSource
         
         for (auto& loadCommand : m_pendingLoadCommands)
         {
-            preRenderCommandList->AddLoadTextureCommand(loadCommand.m_renderTexture, std::move(loadCommand.m_textureData), loadCommand.m_textureDataSize);
+            preRenderCommandList->AddLoadTextureCommand(loadCommand.m_renderTexture, std::move(loadCommand.m_textureData), loadCommand.m_textureDataSize, loadCommand.m_shouldBackupData);
         }
         m_pendingLoadCommands.clear();
         

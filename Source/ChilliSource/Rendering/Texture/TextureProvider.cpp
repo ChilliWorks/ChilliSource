@@ -170,7 +170,7 @@ namespace ChilliSource
             desc.SetWrapModeS(options->GetWrapModeS());
             desc.SetWrapModeT(options->GetWrapModeT());
             desc.SetMipmappingEnabled(options->IsMipMapsEnabled());
-            desc.SetTextureDataRestoreEnabled(options->IsRestoreTextureDataEnabled());
+            desc.SetTextureDataRestoreEnabled(false);
 
             texture->Build(Texture::DataUPtr(image->MoveData()), image->GetDataSize(), desc);
             texture->SetLoadState(Resource::LoadState::k_loaded);
@@ -187,7 +187,7 @@ namespace ChilliSource
                 desc.SetWrapModeS(options->GetWrapModeS());
                 desc.SetWrapModeT(options->GetWrapModeT());
                 desc.SetMipmappingEnabled(options->IsMipMapsEnabled());
-                desc.SetTextureDataRestoreEnabled(options->IsRestoreTextureDataEnabled());
+                desc.SetTextureDataRestoreEnabled(false);
 
                 texture->Build(Texture::DataUPtr(image->MoveData()), image->GetDataSize(), desc);
                 texture->SetLoadState(Resource::LoadState::k_loaded);

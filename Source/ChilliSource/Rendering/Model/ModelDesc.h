@@ -58,7 +58,7 @@ namespace ChilliSource
         /// @param loadedFromFile
         ///     If the model data was loaded from file
         ///
-        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, bool loadedFromFile) noexcept;
+        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, bool loadedFromFile = false) noexcept;
         
         /// Creates a new model description with the given mesh data, bounds and skeleton
         /// description.
@@ -75,7 +75,7 @@ namespace ChilliSource
         /// @param loadedFromFile
         ///     If the model data was loaded from file
         ///
-        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, const SkeletonDesc& skeletonDesc, bool loadedFromFile) noexcept;
+        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, const SkeletonDesc& skeletonDesc, bool loadedFromFile = false) noexcept;
         
         /// @return The list of mesh descriptions.
         ///

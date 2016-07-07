@@ -22,19 +22,39 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_RESTORETEXTURERENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_RESTORETEXTURERENDERCOMMAND_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize, bool shouldBackupData) noexcept
-        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize), m_shouldBackupData(shouldBackupData)
+    /// A render command for restoring a texture from cached memory.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class RestoreTextureRenderCommand final : public RenderCommand
     {
-    }
-    //------------------------------------------------------------------------------
-    std::unique_ptr<const u8[]> LoadTextureRenderCommand::ClaimTextureData() noexcept
-    {
-        CS_ASSERT(m_textureData, "Cannot claim nullptr data! Data may have already been claimed.");
-        return std::move(m_textureData);
-    }
+    public:
+        
+        /// Creates a new instance with the given texture to restore.
+        ///
+        /// @param renderTexture
+        ///     The render texture to restore.
+        ///
+        RestoreTextureRenderCommand(const RenderTexture* renderMesh) noexcept;
+        
+        /// @return The render material to apply.
+        ///
+        const RenderTexture* GetRenderTexture() const noexcept { return m_renderTexture; };
+        
+    private:
+        
+        const RenderTexture* m_renderTexture;
+    };
 }
+
+#endif

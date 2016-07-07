@@ -34,27 +34,9 @@ namespace CSBackend
     {
         //------------------------------------------------------------------------------
         GLMesh::GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize, bool storeMemoryBackup) noexcept
-            : m_vertexFormat(vertexFormat), m_vertextDataSize(vertexDataSize), m_indexDataSize(indexDataSize), m_hasMemoryBackup(storeMemoryBackup)
+            : m_vertexFormat(vertexFormat), m_vertexDataSize(vertexDataSize), m_indexDataSize(indexDataSize), m_hasMemoryBackup(storeMemoryBackup)
         {
-            glGenBuffers(1, &m_vertexBufferHandle);
-            CS_ASSERT(m_vertexBufferHandle != 0, "Invalid vertex buffer.");
-            
-            if(indexData)
-            {
-                glGenBuffers(1, &m_indexBufferHandle);
-                CS_ASSERT(m_indexBufferHandle != 0, "Invalid index buffer.");
-            }
-            
-            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
-            glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_STATIC_DRAW);
-            
-            if(indexData)
-            {
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataSize, indexData, GL_STATIC_DRAW);
-            }
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating GLMesh.");
+            BuildMesh(vertexData, vertexDataSize, indexData, indexDataSize);
             
             if(storeMemoryBackup)
             {
@@ -106,25 +88,33 @@ namespace CSBackend
         {
             if(m_hasMemoryBackup && m_contextInvalid)
             {
-                glGenBuffers(1, &m_vertexBufferHandle);
-                CS_ASSERT(m_vertexBufferHandle != 0, "Invalid vertex buffer.");
-                
-                if(m_indexDataBackup)
-                {
-                    glGenBuffers(1, &m_indexBufferHandle);
-                    CS_ASSERT(m_indexBufferHandle != 0, "Invalid index buffer.");
-                }
-                
-                glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
-                glBufferData(GL_ARRAY_BUFFER, m_vertextDataSize, m_vertexDataBackup.get(), GL_STATIC_DRAW);
-                
-                if(m_indexDataBackup)
-                {
-                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
-                    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexDataSize, m_indexDataBackup.get(), GL_STATIC_DRAW);
-                }
+                BuildMesh(m_vertexDataBackup.get(), m_vertexDataSize, m_indexDataBackup.get(), m_indexDataSize);
                 
                 m_contextInvalid = false;
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLMesh::BuildMesh(const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept
+        {
+            CS_ASSERT(vertexDataSize > 0 && vertexData, "Cannot build mesh with empty data");
+            
+            glGenBuffers(1, &m_vertexBufferHandle);
+            CS_ASSERT(m_vertexBufferHandle != 0, "Invalid vertex buffer.");
+            
+            if(indexData)
+            {
+                glGenBuffers(1, &m_indexBufferHandle);
+                CS_ASSERT(m_indexBufferHandle != 0, "Invalid index buffer.");
+            }
+            
+            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
+            glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_STATIC_DRAW);
+            
+            if(indexData)
+            {
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataSize, indexData, GL_STATIC_DRAW);
             }
         }
         
