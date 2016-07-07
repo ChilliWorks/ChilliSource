@@ -27,8 +27,9 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderSnapshot::RenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& in_renderCamera) noexcept
-        : m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(in_renderCamera), m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
+    RenderSnapshot::RenderSnapshot(IAllocator* frameAllocator, const Integer2& resolution, const Colour& clearColour, const RenderCamera& in_renderCamera) noexcept
+        : m_frameAllocator(frameAllocator), m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(in_renderCamera),
+          m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
     {
     }
     

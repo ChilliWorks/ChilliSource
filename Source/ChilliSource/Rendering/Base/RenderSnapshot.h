@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Memory/PagedLinearAllocator.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
 #include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
@@ -59,6 +60,8 @@ namespace ChilliSource
         
         /// Creates a new instance with the given viewport resolution and clear colour.
         ///
+        /// @param frameAllocator
+        ///     The allocator which should be used for all frame allocations.
         /// @param resolution
         ///     The viewport resolution.
         /// @param clearColour
@@ -67,7 +70,11 @@ namespace ChilliSource
         ///     The main camera that will be used to render the scene. Currently only one camera per
         ///     scene is supported.
         ///
-        RenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
+        RenderSnapshot(IAllocator* frameAllocator, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
+        
+        /// @return The allocator which should be used for all frame allocations.
+        ///
+        IAllocator* GetFrameAllocator() const noexcept { return m_frameAllocator; }
         
         /// @return The viewport resolution.
         ///
@@ -168,6 +175,7 @@ namespace ChilliSource
         RenderCommandListUPtr ClaimPostRenderCommandList() noexcept;
         
     private:
+        IAllocator* m_frameAllocator;
         Integer2 m_resolution;
         Colour m_clearColour;
         RenderCamera m_renderCamera;

@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Model/IndexFormat.h>
 #include <ChilliSource/Rendering/Model/PolygonType.h>

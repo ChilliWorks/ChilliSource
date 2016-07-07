@@ -289,6 +289,7 @@
 		81729FA41D1BE681005B8CC9 /* GLMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA21D1BE681005B8CC9 /* GLMaterial.cpp */; };
 		81729FA81D1BE92B005B8CC9 /* GLCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA61D1BE92B005B8CC9 /* GLCamera.cpp */; };
 		81729FAB1D1BFF05005B8CC9 /* GLTextureUnitManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA91D1BFF05005B8CC9 /* GLTextureUnitManager.cpp */; };
+		8172E3F21D2EFECC00BB4349 /* FrameAllocatorQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8172E3F01D2EFECC00BB4349 /* FrameAllocatorQueue.cpp */; };
 		817B8F861D2ACD8200273F4B /* ApplyAmbientLightRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817B8F841D2ACD8200273F4B /* ApplyAmbientLightRenderCommand.cpp */; };
 		817B8F8D1D2AE21300273F4B /* GLAmbientLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817B8F891D2AE21300273F4B /* GLAmbientLight.cpp */; };
 		817EA3541CFC3B0C00828E08 /* RenderMaterialGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817EA3521CFC3B0C00828E08 /* RenderMaterialGroupManager.cpp */; };
@@ -1104,6 +1105,8 @@
 		81729FA71D1BE92B005B8CC9 /* GLCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCamera.h; sourceTree = "<group>"; };
 		81729FA91D1BFF05005B8CC9 /* GLTextureUnitManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureUnitManager.cpp; sourceTree = "<group>"; };
 		81729FAA1D1BFF05005B8CC9 /* GLTextureUnitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTextureUnitManager.h; sourceTree = "<group>"; };
+		8172E3F01D2EFECC00BB4349 /* FrameAllocatorQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameAllocatorQueue.cpp; sourceTree = "<group>"; };
+		8172E3F11D2EFECC00BB4349 /* FrameAllocatorQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameAllocatorQueue.h; sourceTree = "<group>"; };
 		817B8F841D2ACD8200273F4B /* ApplyAmbientLightRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplyAmbientLightRenderCommand.cpp; sourceTree = "<group>"; };
 		817B8F851D2ACD8200273F4B /* ApplyAmbientLightRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplyAmbientLightRenderCommand.h; sourceTree = "<group>"; };
 		817B8F891D2AE21300273F4B /* GLAmbientLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLAmbientLight.cpp; sourceTree = "<group>"; };
@@ -2098,6 +2101,8 @@
 				818BC4A01CFDEE3C001DC484 /* ForwardRenderPassCompiler.cpp */,
 				818BC4A11CFDEE3C001DC484 /* ForwardRenderPassCompiler.h */,
 				81A55E001CFD8FFF00C9F0D6 /* ForwardRenderPasses.h */,
+				8172E3F01D2EFECC00BB4349 /* FrameAllocatorQueue.cpp */,
+				8172E3F11D2EFECC00BB4349 /* FrameAllocatorQueue.h */,
 				8158F34B1C89D2AD00B13109 /* HorizontalTextJustification.cpp */,
 				8158F34C1C89D2AD00B13109 /* HorizontalTextJustification.h */,
 				8184CE8B1D0EFBC600E35BE8 /* IRenderCommandProcessor.cpp */,
@@ -2115,6 +2120,7 @@
 				8153A3031CF5A764002AC919 /* RenderFrame.h */,
 				8153A2FC1CF5A22A002AC919 /* RenderFrameCompiler.cpp */,
 				8153A2FD1CF5A22A002AC919 /* RenderFrameCompiler.h */,
+				814BC3F01D23C4F600CAC7DB /* RenderLayer.h */,
 				8153A2FF1CF5A4AB002AC919 /* RenderObject.cpp */,
 				8153A3001CF5A4AB002AC919 /* RenderObject.h */,
 				818BC4961CFDE6D9001DC484 /* RenderPass.cpp */,
@@ -2134,7 +2140,6 @@
 				818BC49B1CFDE6D9001DC484 /* TargetRenderPassGroup.h */,
 				8158F3631C89D2AD00B13109 /* VerticalTextJustification.cpp */,
 				8158F3641C89D2AD00B13109 /* VerticalTextJustification.h */,
-				814BC3F01D23C4F600CAC7DB /* RenderLayer.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -3726,6 +3731,7 @@
 				8158F6F11C89D2AD00B13109 /* ParticleEffectComponent.cpp in Sources */,
 				818639721D2BE62100FE085B /* ApplyDirectionalLightRenderCommand.cpp in Sources */,
 				8158F7DD1C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */,
+				8172E3F21D2EFECC00BB4349 /* FrameAllocatorQueue.cpp in Sources */,
 				8158F67B1C89D2AD00B13109 /* MathUtils.cpp in Sources */,
 				8158F6601C89D2AD00B13109 /* HashMD5.cpp in Sources */,
 				818BC4A61CFDEE3C001DC484 /* ForwardRenderPassCompiler.cpp in Sources */,

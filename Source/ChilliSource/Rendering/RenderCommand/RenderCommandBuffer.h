@@ -53,12 +53,18 @@ namespace ChilliSource
         
         /// Creates a new render command buffer with the requested number of slots.
         ///
+        /// @param frameAllocator
+        ///     The allocator from which all frame allocations should occur.
         /// @param numSlots
         ///     The number of slots in the queue.
         /// @param renderDynamicMeshes
         ///     Any render dynamic meshes that are used by the commands for this frame.
         ///
-        RenderCommandBuffer(u32 numSlots, std::vector<RenderDynamicMeshUPtr> renderDynamicMeshes) noexcept;
+        RenderCommandBuffer(IAllocator* frameAllocator, u32 numSlots, std::vector<RenderDynamicMeshUPtr> renderDynamicMeshes) noexcept;
+        
+        /// @return The allocator from which all frame allocations should occur.
+        ///
+        IAllocator* GetFrameAllocator() const noexcept { return m_frameAllocator; }
         
         /// @return The number of slots in the queue.
         ///
@@ -76,6 +82,7 @@ namespace ChilliSource
         const std::vector<const RenderCommandList*>& GetQueue() const noexcept { return m_queue; }
         
     private:
+        IAllocator* m_frameAllocator;
         std::vector<RenderDynamicMeshUPtr> m_renderDynamicMeshes;
         std::vector<const RenderCommandList*> m_queue;
         std::vector<RenderCommandListUPtr> m_renderCommandLists; //TODO: This should be changed to a pool.

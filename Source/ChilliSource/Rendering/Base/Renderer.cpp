@@ -47,7 +47,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black, RenderCamera())
+        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(nullptr, Integer2::k_zero, Colour::k_black, RenderCamera())
     {
         //TODO: Handle forward vs deferred rendering
         m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
@@ -60,6 +60,14 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    RenderSnapshot Renderer::CreateRenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept
+    {
+        auto allocator = m_frameAllocatorQueue.Pop();
+        
+        return RenderSnapshot(allocator, resolution, clearColour, renderCamera);
+    }
+    
+    //------------------------------------------------------------------------------
     void Renderer::ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept
     {
         WaitThenStartRenderPrep();
@@ -69,6 +77,7 @@ namespace ChilliSource
         auto taskScheduler = Application::Get()->GetTaskScheduler();
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
+            auto frameAllocator = m_currentSnapshot.GetFrameAllocator();
             auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
             auto renderCamera = m_currentSnapshot.GetRenderCamera();
@@ -82,7 +91,8 @@ namespace ChilliSource
             
             auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, clearColour, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, std::move(renderDynamicMeshes), std::move(preRenderCommandList), std::move(postRenderCommandList));
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, frameAllocator, targetRenderPassGroups, std::move(renderDynamicMeshes),
+                                                                                    std::move(preRenderCommandList), std::move(postRenderCommandList));
             
             WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
             EndRenderPrep();
@@ -94,6 +104,8 @@ namespace ChilliSource
     {
         auto renderCommandBuffer = WaitThenPopCommandBuffer();
         m_renderCommandProcessor->Process(renderCommandBuffer.get());
+        
+        m_frameAllocatorQueue.Push(renderCommandBuffer->GetFrameAllocator());
     }
     
     //------------------------------------------------------------------------------

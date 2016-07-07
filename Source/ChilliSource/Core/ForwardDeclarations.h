@@ -158,6 +158,12 @@ namespace ChilliSource
     using Matrix3 = GenericMatrix3<f32>;
     using Matrix4 = GenericMatrix4<f32>;
     //---------------------------------------------------------
+    /// Memory
+    //---------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(IAllocator);
+    CS_FORWARDDECLARE_CLASS(LinearAllocator);
+    CS_FORWARDDECLARE_CLASS(PagedLinearAllocator);
+    //---------------------------------------------------------
     /// Notifications
     //---------------------------------------------------------
     CS_FORWARDDECLARE_STRUCT(Notification);
