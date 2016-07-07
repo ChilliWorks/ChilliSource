@@ -22,6 +22,8 @@
 		8153A30A1CF5DDB5002AC919 /* RenderTextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A3081CF5DDB5002AC919 /* RenderTextureManager.cpp */; };
 		8153A30F1CF60025002AC919 /* UnloadTextureRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8153A30D1CF60025002AC919 /* UnloadTextureRenderCommand.cpp */; };
 		8156124B1D2E5D41000DD01B /* GLTargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 815612491D2E5D41000DD01B /* GLTargetGroup.cpp */; };
+		815612611D2EAB97000DD01B /* LinearAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 815612561D2EAB97000DD01B /* LinearAllocator.cpp */; };
+		815612621D2EAB97000DD01B /* PagedLinearAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8156125A1D2EAB97000DD01B /* PagedLinearAllocator.cpp */; };
 		8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */; };
 		8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FB1C89D2AC00B13109 /* CkBank.cpp */; };
 		8158F64C1C89D2AD00B13109 /* CkBankProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FD1C89D2AC00B13109 /* CkBankProvider.cpp */; };
@@ -422,6 +424,18 @@
 		8153A30E1CF60025002AC919 /* UnloadTextureRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnloadTextureRenderCommand.h; sourceTree = "<group>"; };
 		815612491D2E5D41000DD01B /* GLTargetGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTargetGroup.cpp; sourceTree = "<group>"; };
 		8156124A1D2E5D41000DD01B /* GLTargetGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTargetGroup.h; sourceTree = "<group>"; };
+		815612541D2EAB97000DD01B /* IAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAllocator.h; sourceTree = "<group>"; };
+		815612561D2EAB97000DD01B /* LinearAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LinearAllocator.cpp; sourceTree = "<group>"; };
+		815612571D2EAB97000DD01B /* LinearAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearAllocator.h; sourceTree = "<group>"; };
+		815612581D2EAB97000DD01B /* MemoryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryUtils.h; sourceTree = "<group>"; };
+		815612591D2EAB97000DD01B /* MemoryUtilsImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryUtilsImpl.h; sourceTree = "<group>"; };
+		8156125A1D2EAB97000DD01B /* PagedLinearAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PagedLinearAllocator.cpp; sourceTree = "<group>"; };
+		8156125B1D2EAB97000DD01B /* PagedLinearAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagedLinearAllocator.h; sourceTree = "<group>"; };
+		8156125C1D2EAB97000DD01B /* SharedPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedPtr.h; sourceTree = "<group>"; };
+		8156125D1D2EAB97000DD01B /* SharedPtrImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedPtrImpl.h; sourceTree = "<group>"; };
+		8156125E1D2EAB97000DD01B /* UniquePtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UniquePtr.h; sourceTree = "<group>"; };
+		8156125F1D2EAB97000DD01B /* UniquePtrImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UniquePtrImpl.h; sourceTree = "<group>"; };
+		815612601D2EAB97000DD01B /* Memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		8158F1EA1C89D27300B13109 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioPlayer.cpp; sourceTree = "<group>"; };
 		8158F1FA1C89D2AC00B13109 /* CkAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioPlayer.h; sourceTree = "<group>"; };
@@ -1367,6 +1381,24 @@
 			path = Target;
 			sourceTree = "<group>";
 		};
+		815612531D2EAB97000DD01B /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				815612541D2EAB97000DD01B /* IAllocator.h */,
+				815612561D2EAB97000DD01B /* LinearAllocator.cpp */,
+				815612571D2EAB97000DD01B /* LinearAllocator.h */,
+				815612581D2EAB97000DD01B /* MemoryUtils.h */,
+				815612591D2EAB97000DD01B /* MemoryUtilsImpl.h */,
+				8156125A1D2EAB97000DD01B /* PagedLinearAllocator.cpp */,
+				8156125B1D2EAB97000DD01B /* PagedLinearAllocator.h */,
+				8156125C1D2EAB97000DD01B /* SharedPtr.h */,
+				8156125D1D2EAB97000DD01B /* SharedPtrImpl.h */,
+				8156125E1D2EAB97000DD01B /* UniquePtr.h */,
+				8156125F1D2EAB97000DD01B /* UniquePtrImpl.h */,
+			);
+			path = Memory;
+			sourceTree = "<group>";
+		};
 		8158F1E11C89D27300B13109 = {
 			isa = PBXGroup;
 			children = (
@@ -1460,6 +1492,8 @@
 				8158F2911C89D2AC00B13109 /* Localisation.h */,
 				8158F2921C89D2AC00B13109 /* Math */,
 				8158F2A91C89D2AC00B13109 /* Math.h */,
+				815612531D2EAB97000DD01B /* Memory */,
+				815612601D2EAB97000DD01B /* Memory.h */,
 				8158F2AA1C89D2AC00B13109 /* Notification */,
 				8158F2B41C89D2AC00B13109 /* Notification.h */,
 				8158F2B51C89D2AC00B13109 /* Resource */,
@@ -3421,6 +3455,7 @@
 				8158F6E31C89D2AD00B13109 /* CircleParticleEmitter.cpp in Sources */,
 				81AF89571D13FF1400A02E99 /* BinaryInputStream.cpp in Sources */,
 				8158F7171C89D2AD00B13109 /* UIDrawableUtils.cpp in Sources */,
+				815612611D2EAB97000DD01B /* LinearAllocator.cpp in Sources */,
 				819A8C1A1D2D18870065171E /* RenderTargetGroupManager.cpp in Sources */,
 				8158F7311C89D2AD00B13109 /* WebView.cpp in Sources */,
 				8158F68A1C89D2AD00B13109 /* StringParser.cpp in Sources */,
@@ -3642,6 +3677,7 @@
 				8158F7CF1C89D2AD00B13109 /* Accelerometer.mm in Sources */,
 				8158F6A51C89D2AD00B13109 /* ContentManagementSystem.cpp in Sources */,
 				8158F7251C89D2AD00B13109 /* VListUILayout.cpp in Sources */,
+				815612621D2EAB97000DD01B /* PagedLinearAllocator.cpp in Sources */,
 				819A8C1D1D2D3B4A0065171E /* RenderTargetGroup.cpp in Sources */,
 				818639751D2BE97C00FE085B /* GLDirectionalLight.cpp in Sources */,
 				8158F72D1C89D2AD00B13109 /* TextIcon.cpp in Sources */,
