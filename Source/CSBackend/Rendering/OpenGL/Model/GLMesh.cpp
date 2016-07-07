@@ -33,8 +33,8 @@ namespace CSBackend
     namespace OpenGL
     {
         //------------------------------------------------------------------------------
-        GLMesh::GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept
-            : m_vertexFormat(vertexFormat)
+        GLMesh::GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize, bool storeMemoryBackup) noexcept
+            : m_vertexFormat(vertexFormat), m_vertextDataSize(vertexDataSize), m_indexDataSize(indexDataSize), m_hasMemoryBackup(storeMemoryBackup)
         {
             glGenBuffers(1, &m_vertexBufferHandle);
             CS_ASSERT(m_vertexBufferHandle != 0, "Invalid vertex buffer.");
@@ -42,7 +42,7 @@ namespace CSBackend
             if(indexData)
             {
                 glGenBuffers(1, &m_indexBufferHandle);
-                CS_ASSERT(m_vertexBufferHandle != 0, "Invalid index buffer.");
+                CS_ASSERT(m_indexBufferHandle != 0, "Invalid index buffer.");
             }
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
@@ -55,6 +55,17 @@ namespace CSBackend
             }
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating GLMesh.");
+            
+            if(storeMemoryBackup)
+            {
+                u8* vertextDataCopy = new u8[vertexDataSize];
+                memcpy(vertextDataCopy, vertexData, vertexDataSize);
+                m_vertexDataBackup = std::unique_ptr<const u8[]>(vertextDataCopy);
+                
+                u8* indexDataCopy = new u8[indexDataSize];
+                memcpy(indexDataCopy, indexData, indexDataSize);
+                m_indexDataBackup = std::unique_ptr<const u8[]>(indexDataCopy);
+            }
         }
         
         //------------------------------------------------------------------------------
@@ -87,6 +98,33 @@ namespace CSBackend
             for (s32 i = m_vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
             {
                 glDisableVertexAttribArray(i);
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLMesh::RestoreContext() noexcept
+        {
+            if(m_hasMemoryBackup && m_contextInvalid)
+            {
+                glGenBuffers(1, &m_vertexBufferHandle);
+                CS_ASSERT(m_vertexBufferHandle != 0, "Invalid vertex buffer.");
+                
+                if(m_indexDataBackup)
+                {
+                    glGenBuffers(1, &m_indexBufferHandle);
+                    CS_ASSERT(m_indexBufferHandle != 0, "Invalid index buffer.");
+                }
+                
+                glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
+                glBufferData(GL_ARRAY_BUFFER, m_vertextDataSize, m_vertexDataBackup.get(), GL_STATIC_DRAW);
+                
+                if(m_indexDataBackup)
+                {
+                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
+                    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexDataSize, m_indexDataBackup.get(), GL_STATIC_DRAW);
+                }
+                
+                m_contextInvalid = false;
             }
         }
         

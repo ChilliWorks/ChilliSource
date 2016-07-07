@@ -78,6 +78,9 @@ namespace CSBackend
             ///
             GLuint GetHandle() noexcept { return m_handle; }
             
+            /// @return The OpenGL texture handle.
+            ///
+            bool IsContextInvalid() const noexcept { return m_contextInvalid; }
             
             /// Called when the GLContext has been lost. Function will set a flag to handle safe
             /// destructing of this object, preventing us from trying to delete invalid memory.

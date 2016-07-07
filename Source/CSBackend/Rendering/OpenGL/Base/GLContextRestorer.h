@@ -27,6 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
@@ -86,6 +87,14 @@ namespace CSBackend
             ///
             void OnResume() noexcept override;
             
+            /// The render snapshot event can be implemented by a system to
+            /// allow it to snapshot any data which pertains to the renderer.
+            ///
+            /// @param renderSnapshot - The render snapshot
+            /// object which contains all snapshotted data.
+            ///
+            void OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot) noexcept override;
+            
             /// Called when the application delegate is suspended. This is called directly
             /// from lifecycle manager and will be called before the OnSuspend.
             ///
@@ -95,6 +104,8 @@ namespace CSBackend
             
             bool m_initialised = false;
             bool m_hasContextBeenBackedUp = false;
+            
+            std::vector<ChilliSource::RestoreMeshRenderCommand> m_pendingRestoreMeshCommands;
         };
     }
 }

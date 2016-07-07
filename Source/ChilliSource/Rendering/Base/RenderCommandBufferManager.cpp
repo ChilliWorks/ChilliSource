@@ -108,7 +108,7 @@ namespace ChilliSource
             
             for(auto& command : m_pendingMeshLoadCommands)
             {
-                preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), command.ClaimVertexData(), command.GetVertexDataSize(), command.ClaimIndexData(), command.GetIndexDataSize());
+                preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), command.ClaimVertexData(), command.GetVertexDataSize(), command.ClaimIndexData(), command.GetIndexDataSize(), command.ShouldBackupData());
             }
             
             for(auto& command : m_pendingMaterialGroupLoadCommands)

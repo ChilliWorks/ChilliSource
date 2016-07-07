@@ -90,6 +90,20 @@ namespace CSBackend
             ///
             void LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept;
             
+            /// Restores the texture given by the command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void RestoreTexture(const ChilliSource::RestoreTextureRenderCommand* renderCommand) noexcept;
+            
+            /// Restores the mesh given by the command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void RestoreMesh(const ChilliSource::RestoreMeshRenderCommand* renderCommand) noexcept;
+            
             /// Begins rendering to the default render target.
             ///
             /// @param renderCommand

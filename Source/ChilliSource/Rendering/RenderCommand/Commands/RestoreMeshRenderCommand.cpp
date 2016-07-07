@@ -22,35 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Model/ModelDesc.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ModelDesc::ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, bool loadedFromFile) noexcept
-        : m_meshDescs(std::move(meshDescs)), m_aabb(aabb), m_boundingSphere(boundingSphere)
+    RestoreMeshRenderCommand::RestoreMeshRenderCommand(const RenderMesh* renderMesh) noexcept
+        : RenderCommand(Type::k_restoreMesh), m_renderMesh(renderMesh)
     {
-    }
-    
-    //------------------------------------------------------------------------------
-    ModelDesc::ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, const SkeletonDesc& skeletonDesc, bool loadedFromFile) noexcept
-        : m_meshDescs(std::move(meshDescs)), m_aabb(aabb), m_boundingSphere(boundingSphere), m_skeletonDesc(skeletonDesc)
-    {
-    }
-    
-    //------------------------------------------------------------------------------
-    MeshDesc& ModelDesc::GetMeshDesc(u32 index) noexcept
-    {
-        CS_ASSERT(index < GetNumMeshDescs(), "Index out of bounds.");
-        
-        return m_meshDescs[index];
-    }
-    
-    //------------------------------------------------------------------------------
-    const MeshDesc& ModelDesc::GetMeshDesc(u32 index) const noexcept
-    {
-        CS_ASSERT(index < GetNumMeshDescs(), "Index out of bounds.");
-        
-        return m_meshDescs[index];
     }
 }

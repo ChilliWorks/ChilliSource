@@ -85,11 +85,13 @@ namespace ChilliSource
         ///     The index data buffer.
         /// @param indexDataSize
         ///     The size of the index data buffer.
+        /// @param isLoadedFromFile
+        ///     If the mesh data originated from file.
         ///
         /// @return The RenderMesh instance.
         ///
         const RenderMesh* CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                                           std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
+                                           std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool isLoadedFromFile) noexcept;
         
         /// Removes the RenderMesh from the manager and queues an UnloadMeshRenderCommand for the
         /// next Render Snapshot stage in the render pipeline. The render command is given ownership
@@ -115,6 +117,7 @@ namespace ChilliSource
             u32 m_vertexDataSize = 0;
             std::unique_ptr<const u8[]> m_indexData;
             u32 m_indexDataSize = 0;
+            bool m_shouldBackupData = false;
         };
         
         /// A factory method for creating new instances of the system. This must be called by

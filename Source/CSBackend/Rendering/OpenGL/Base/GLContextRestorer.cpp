@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Model/Model.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
@@ -67,7 +68,6 @@ namespace CSBackend
                 
                 ChilliSource::ResourcePool* resourcePool = ChilliSource::Application::Get()->GetResourcePool();
                 
-                //Iterate all glResources and invalidate them.
                 auto allShaders = resourcePool->GetAllResources<ChilliSource::Shader>();
                 for (const auto& shader : allShaders)
                 {
@@ -108,10 +108,8 @@ namespace CSBackend
         {
             if(m_hasContextBeenBackedUp == true)
             {
-                //TODO: Restore correctly.
                 ChilliSource::ResourcePool* resourcePool = ChilliSource::Application::Get()->GetResourcePool();
                 
-                //---Shaders
                 auto allShaders = resourcePool->GetAllResources<ChilliSource::Shader>();
                 for (const auto& shader : allShaders)
                 {
@@ -119,7 +117,6 @@ namespace CSBackend
                 }
                 resourcePool->RefreshResources<ChilliSource::Shader>();
                 
-                //---Textures
                 auto allTextures = resourcePool->GetAllResources<ChilliSource::Texture>();
                 for (const auto& texture : allTextures)
 				{
@@ -131,12 +128,27 @@ namespace CSBackend
                 }
                 resourcePool->RefreshResources<ChilliSource::Texture>();
                 
+                //Iterate the materials and 'dirty' them so they are rebuilt
                 auto allMaterials = resourcePool->GetAllResources<ChilliSource::Material>();
                 for (auto& material : allMaterials)
                 {
                     //TODO: Remove const cast when material system is improved.
                     const_cast<ChilliSource::Material*>(material.get())->SetAmbient(material->GetAmbient());
                 }
+                
+                auto allModels = resourcePool->GetAllResources<ChilliSource::Model>();
+                for (const auto& model : allModels)
+                {
+                    if (model->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
+                    {
+                        for(u32 i = 0; i < model->GetNumMeshes(); ++i)
+                        {
+                            ChilliSource::RestoreMeshRenderCommand command(model->GetRenderMesh(i));
+                            m_pendingRestoreMeshCommands.push_back(std::move(command));
+                        }
+                    }
+                }
+                resourcePool->RefreshResources<ChilliSource::Model>();
                 
                 m_hasContextBeenBackedUp = false;
             }
@@ -146,19 +158,34 @@ namespace CSBackend
         {
             if(m_initialised)
             {
-//#ifdef CS_TARGETPLATFORM_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
                 OnContextRestored();
-//#endif
+#endif
             }
             
             m_initialised = true;
         }
+        
+        //------------------------------------------------------------------------------
+        void GLContextRestorer::OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot) noexcept
+        {
+#ifdef CS_TARGETPLATFORM_ANDROID
+            auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
+            auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
+            
+            for(auto& restoreMeshCommand : m_pendingRestoreMeshCommands)
+            {
+                preRenderCommandList->AddRestoreMeshCommand(restoreMeshCommand.GetRenderMesh());
+            }
+#endif
+        }
+        
         //------------------------------------------------------------------------------
         void GLContextRestorer::OnSystemSuspend() noexcept
         {
-//#ifdef CS_TARGETPLATFORM_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             OnContextLost();
-//#endif
+#endif
         }
     }
 }

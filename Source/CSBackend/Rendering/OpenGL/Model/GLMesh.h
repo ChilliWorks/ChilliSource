@@ -58,8 +58,10 @@ namespace CSBackend
             ///     The size of the index data.
             /// @param indexDataSize
             ///     The size of the index data.
+            /// @param storeMemoryBackup
+            ///     Whether or not to store a duplicate backup of any data
             ///
-            GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
+            GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize, bool storeMemoryBackup) noexcept;
             
             /// Binds the mesh for use and applies attibutes to the given shader.
             ///
@@ -67,6 +69,10 @@ namespace CSBackend
             ///     The shader to apply attributes to.
             ///
             void Bind(GLShader* glShader) noexcept;
+            
+            /// Called when the GLContext is restored. We should re-setup any cached data.
+            ///
+            void RestoreContext() noexcept;
             
             /// Called when the GLContext has been lost. Function will set a flag to handle safe
             /// destructing of this object, preventing us from trying to delete invalid memory.
@@ -82,7 +88,14 @@ namespace CSBackend
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
             
+            std::unique_ptr<const u8[]> m_vertexDataBackup = nullptr;
+            std::unique_ptr<const u8[]> m_indexDataBackup = nullptr;
+            
+            u32 m_indexDataSize = 0;
+            u32 m_vertextDataSize = 0;
+            
             bool m_contextInvalid = false;
+            bool m_hasMemoryBackup = false;
         };
     }
 }

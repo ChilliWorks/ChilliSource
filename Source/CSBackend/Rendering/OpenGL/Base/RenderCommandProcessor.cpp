@@ -45,6 +45,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
@@ -125,6 +126,12 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_loadMesh:
                             LoadMesh(static_cast<const ChilliSource::LoadMeshRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_restoreMesh:
+                            RestoreMesh(static_cast<const ChilliSource::RestoreMeshRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_restoreTexture:
+//                            LoadMesh(static_cast<const ChilliSource::LoadMeshRenderCommand*>(renderCommand));//TODO
                             break;
                         case ChilliSource::RenderCommand::Type::k_begin:
                             Begin(static_cast<const ChilliSource::BeginRenderCommand*>(renderCommand));
@@ -230,9 +237,21 @@ namespace CSBackend
             auto renderMesh = renderCommand->GetRenderMesh();
             
             //TODO: Should be pooled.
-            auto glMesh = new GLMesh(renderMesh->GetVertexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
+            auto glMesh = new GLMesh(renderMesh->GetVertexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize(), renderCommand->ShouldBackupData());
             
             renderMesh->SetExtraData(glMesh);
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreTexture(const ChilliSource::RestoreTextureRenderCommand* renderCommand) noexcept
+        {
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreMesh(const ChilliSource::RestoreMeshRenderCommand* renderCommand) noexcept
+        {
+            GLMesh* glMesh = static_cast<GLMesh*>(renderCommand->GetRenderMesh()->GetExtraData());
+            glMesh->RestoreContext();
         }
         
         //------------------------------------------------------------------------------

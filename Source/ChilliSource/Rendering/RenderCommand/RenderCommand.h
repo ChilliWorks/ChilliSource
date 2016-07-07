@@ -50,6 +50,8 @@ namespace ChilliSource
             k_loadShader,
             k_loadMaterialGroup,
             k_loadMesh,
+            k_restoreTexture,
+            k_restoreMesh,
             k_begin,
             k_applyCamera,
             k_applyMaterial,

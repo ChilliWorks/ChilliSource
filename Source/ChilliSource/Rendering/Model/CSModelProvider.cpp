@@ -437,7 +437,7 @@ namespace ChilliSource
             }
             
             auto modelBoundingSphere = CalcBoundingSphere(modelHeader.m_aabb);
-            out_modelDesc = std::move(ModelDesc(std::move(meshDescs), modelHeader.m_aabb, modelBoundingSphere, skeletonDesc));
+            out_modelDesc = std::move(ModelDesc(std::move(meshDescs), modelHeader.m_aabb, modelBoundingSphere, skeletonDesc, true));
 
             return true;
         }

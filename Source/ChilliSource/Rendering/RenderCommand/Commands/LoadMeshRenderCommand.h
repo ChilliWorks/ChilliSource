@@ -75,6 +75,10 @@ namespace ChilliSource
         ///
         u32 GetIndexDataSize() const noexcept { return m_indexDataSize; }
         
+        /// @return If we should maintain copies of data for context restoration.
+        ///
+        bool ShouldBackupData() const noexcept { return m_shouldBackupData; }
+        
     private:
         friend class RenderCommandList;
         
@@ -90,14 +94,18 @@ namespace ChilliSource
         ///     The index data buffer.
         /// @param indexDataSize
         ///     The size of the index data buffer.
+        /// @param shouldBackupData
+        ///     If we should retain a copy of any vertex/index data in main memory
+        ///     so we can rebuild the mesh if the context is lost.
         ///
-        LoadMeshRenderCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
+        LoadMeshRenderCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData) noexcept;
         
         RenderMesh* m_renderMesh;
         std::unique_ptr<const u8[]> m_vertexData;
         u32 m_vertexDataSize;
         std::unique_ptr<const u8[]> m_indexData;
         u32 m_indexDataSize;
+        bool m_shouldBackupData = false;
     };
 }
 

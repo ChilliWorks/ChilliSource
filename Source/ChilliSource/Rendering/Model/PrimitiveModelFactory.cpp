@@ -94,7 +94,7 @@ namespace ChilliSource
             std::vector<MeshDesc> meshDescs;
             meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, boundingSphere, k_numVertices, k_numVertices, std::move(vertexData), std::move(indexData)));
             
-            return ModelDesc(std::move(meshDescs), aabb, boundingSphere);
+            return ModelDesc(std::move(meshDescs), aabb, boundingSphere, false);
         }
         //------------------------------------------------------------------------------
         /// Creates a new model description describing a box model.
@@ -228,7 +228,7 @@ namespace ChilliSource
             std::vector<MeshDesc> meshDescs;
             meshDescs.push_back(MeshDesc(name, polygonType, vertexFormat, indexFormat, aabb, boundingSphere, k_numVertices, k_numIndices, std::move(vertexData), std::move(indexData)));
             
-            return ModelDesc(std::move(meshDescs), aabb, boundingSphere);
+            return ModelDesc(std::move(meshDescs), aabb, boundingSphere, false);
         }
     }
     

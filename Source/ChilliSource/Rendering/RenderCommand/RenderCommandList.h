@@ -88,8 +88,18 @@ namespace ChilliSource
         ///     The index data buffer.
         /// @param indexDataSize
         ///     The size of the index data buffer.
+        /// @param shouldBackupData
+        ///     If we should backup vertex/index data so we can restore the mesh from memory if
+        ///     the render context needs to be rebuilt.
         ///
-        void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
+        void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData) noexcept;
+        
+        /// Creates and adds a new restore mesh command to the render command list.
+        ///
+        /// @param renderMesh
+        ///     The render mesh that should be restored.
+        ///
+        void AddRestoreMeshCommand(const RenderMesh* renderMesh) noexcept;
         
         /// Creates and adds a new begin rendering command to the render command list.
         ///
