@@ -118,15 +118,13 @@ namespace ChilliSource
         
         for (auto& loadCommand : m_pendingLoadCommands)
         {
-            //TODO: Add
-//            preRenderCommandList->AddLoadTargetGroupCommand(loadCommand);
+            preRenderCommandList->AddLoadTargetGroupCommand(loadCommand);
         }
         m_pendingLoadCommands.clear();
         
         for (auto& unloadCommand : m_pendingUnloadCommands)
         {
-            //TODO: Add
-//            postRenderCommandList->AddUnloadTargetGroupCommand(std::move(unloadCommand));
+            postRenderCommandList->AddUnloadTargetGroupCommand(std::move(unloadCommand));
         }
         m_pendingUnloadCommands.clear();
     }

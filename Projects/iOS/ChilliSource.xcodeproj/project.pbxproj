@@ -275,6 +275,9 @@
 		8158F7F71C89D2AD00B13109 /* ContextRestorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6301C89D2AD00B13109 /* ContextRestorer.cpp */; };
 		8158F7F81C89D2AD00B13109 /* GLError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6321C89D2AD00B13109 /* GLError.cpp */; };
 		8158F7FA1C89D2AD00B13109 /* RenderCapabilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6371C89D2AD00B13109 /* RenderCapabilities.cpp */; };
+		815C745E1D2DA08C00731C6C /* LoadTargetGroupRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 815C745C1D2DA08C00731C6C /* LoadTargetGroupRenderCommand.cpp */; };
+		815C74611D2DA18600731C6C /* UnloadTargetGroupRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 815C745F1D2DA18600731C6C /* UnloadTargetGroupRenderCommand.cpp */; };
+		815C74641D2DA2F200731C6C /* BeginWithTargetGroupRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 815C74621D2DA2F200731C6C /* BeginWithTargetGroupRenderCommand.cpp */; };
 		8164A4691CB69C86002A95B0 /* MainThreadTaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */; };
 		816D96AF1CF7282700D23969 /* CSShaderProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816D96AD1CF7282700D23969 /* CSShaderProvider.cpp */; };
 		816D96B51CF73AA500D23969 /* RenderShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816D96B31CF73AA500D23969 /* RenderShaderManager.cpp */; };
@@ -1061,6 +1064,12 @@
 		8158F6371C89D2AD00B13109 /* RenderCapabilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCapabilities.cpp; sourceTree = "<group>"; };
 		8158F6381C89D2AD00B13109 /* RenderCapabilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCapabilities.h; sourceTree = "<group>"; };
 		8158F63D1C89D2AD00B13109 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
+		815C745C1D2DA08C00731C6C /* LoadTargetGroupRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadTargetGroupRenderCommand.cpp; sourceTree = "<group>"; };
+		815C745D1D2DA08C00731C6C /* LoadTargetGroupRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadTargetGroupRenderCommand.h; sourceTree = "<group>"; };
+		815C745F1D2DA18600731C6C /* UnloadTargetGroupRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnloadTargetGroupRenderCommand.cpp; sourceTree = "<group>"; };
+		815C74601D2DA18600731C6C /* UnloadTargetGroupRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnloadTargetGroupRenderCommand.h; sourceTree = "<group>"; };
+		815C74621D2DA2F200731C6C /* BeginWithTargetGroupRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeginWithTargetGroupRenderCommand.cpp; sourceTree = "<group>"; };
+		815C74631D2DA2F200731C6C /* BeginWithTargetGroupRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeginWithTargetGroupRenderCommand.h; sourceTree = "<group>"; };
 		8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainThreadTaskPool.cpp; sourceTree = "<group>"; };
 		8164A4681CB69C86002A95B0 /* MainThreadTaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainThreadTaskPool.h; sourceTree = "<group>"; };
 		816D96AD1CF7282700D23969 /* CSShaderProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSShaderProvider.cpp; sourceTree = "<group>"; };
@@ -2994,6 +3003,8 @@
 				818639781D2C169200FE085B /* ApplyPointLightRenderCommand.h */,
 				81B3D3491D130C6400F17401 /* BeginRenderCommand.cpp */,
 				81B3D34A1D130C6400F17401 /* BeginRenderCommand.h */,
+				815C74621D2DA2F200731C6C /* BeginWithTargetGroupRenderCommand.cpp */,
+				815C74631D2DA2F200731C6C /* BeginWithTargetGroupRenderCommand.h */,
 				81B3D34B1D130C6400F17401 /* EndRenderCommand.cpp */,
 				81B3D34C1D130C6400F17401 /* EndRenderCommand.h */,
 				81A55DF91CFD8AD600C9F0D6 /* LoadMaterialGroupRenderCommand.cpp */,
@@ -3002,6 +3013,8 @@
 				81BF7B841CF8552000DBC80B /* LoadMeshRenderCommand.h */,
 				816D96B61CF73CB600D23969 /* LoadShaderRenderCommand.cpp */,
 				816D96B71CF73CB600D23969 /* LoadShaderRenderCommand.h */,
+				815C745C1D2DA08C00731C6C /* LoadTargetGroupRenderCommand.cpp */,
+				815C745D1D2DA08C00731C6C /* LoadTargetGroupRenderCommand.h */,
 				81A125EC1CF464480010853A /* LoadTextureRenderCommand.cpp */,
 				81A125ED1CF464480010853A /* LoadTextureRenderCommand.h */,
 				81B3D34D1D130C6400F17401 /* RenderInstanceRenderCommand.cpp */,
@@ -3012,6 +3025,8 @@
 				81BF7B871CF87BF700DBC80B /* UnloadMeshRenderCommand.h */,
 				816D96B91CF73E6B00D23969 /* UnloadShaderRenderCommand.cpp */,
 				816D96BA1CF73E6B00D23969 /* UnloadShaderRenderCommand.h */,
+				815C745F1D2DA18600731C6C /* UnloadTargetGroupRenderCommand.cpp */,
+				815C74601D2DA18600731C6C /* UnloadTargetGroupRenderCommand.h */,
 				8153A30D1CF60025002AC919 /* UnloadTextureRenderCommand.cpp */,
 				8153A30E1CF60025002AC919 /* UnloadTextureRenderCommand.h */,
 			);
@@ -3414,6 +3429,7 @@
 				81A125E11CF456340010853A /* DirectionalRenderLight.cpp in Sources */,
 				8158F6871C89D2AD00B13109 /* StateManager.cpp in Sources */,
 				81AF89591D13FF1400A02E99 /* FileWriteMode.cpp in Sources */,
+				815C74611D2DA18600731C6C /* UnloadTargetGroupRenderCommand.cpp in Sources */,
 				8158F7CD1C89D2AD00B13109 /* RemoteNotificationSystem.cpp in Sources */,
 				8158F7D91C89D2AD00B13109 /* StoreKitIAPSystem.mm in Sources */,
 				8158F65F1C89D2AD00B13109 /* HashCRC32.cpp in Sources */,
@@ -3509,6 +3525,7 @@
 				8158F6A41C89D2AD00B13109 /* TextEntry.cpp in Sources */,
 				8158F72B1C89D2AD00B13109 /* SliderDirection.cpp in Sources */,
 				8158F6EB1C89D2AD00B13109 /* ParticleEmitterDefFactory.cpp in Sources */,
+				815C745E1D2DA08C00731C6C /* LoadTargetGroupRenderCommand.cpp in Sources */,
 				8158F6781C89D2AD00B13109 /* ShapeIntersection.cpp in Sources */,
 				8158F65A1C89D2AD00B13109 /* ParamDictionarySerialiser.cpp in Sources */,
 				8158F6E71C89D2AD00B13109 /* ConeParticleEmitter.cpp in Sources */,
@@ -3583,6 +3600,7 @@
 				8158F6591C89D2AD00B13109 /* ParamDictionary.cpp in Sources */,
 				8158F71C1C89D2AD00B13109 /* ThreePatchUIDrawable.cpp in Sources */,
 				81A55DFE1CFD8BA400C9F0D6 /* UnloadMaterialGroupRenderCommand.cpp in Sources */,
+				815C74641D2DA2F200731C6C /* BeginWithTargetGroupRenderCommand.cpp in Sources */,
 				81729FA81D1BE92B005B8CC9 /* GLCamera.cpp in Sources */,
 				8158F70E1C89D2AD00B13109 /* WidgetFactory.cpp in Sources */,
 				81B3D34F1D130C6400F17401 /* ApplyCameraRenderCommand.cpp in Sources */,

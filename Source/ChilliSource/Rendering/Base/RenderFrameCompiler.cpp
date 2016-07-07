@@ -55,7 +55,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderFrame RenderFrameCompiler::CompileRenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const std::vector<AmbientRenderLight>& renderAmbientLights,
+    RenderFrame RenderFrameCompiler::CompileRenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const std::vector<AmbientRenderLight>& renderAmbientLights,
                                                         const std::vector<DirectionalRenderLight>& renderDirectionalLights, const std::vector<PointRenderLight>& renderPointLights,
                                                         const std::vector<RenderObject>& renderObjects) noexcept
     {
@@ -63,6 +63,6 @@ namespace ChilliSource
         
         auto renderAmbientLight = MergeAmbientRenderLights(renderAmbientLights);
         
-        return RenderFrame(resolution, renderCamera, renderAmbientLight, renderDirectionalLights, renderPointLights, renderObjects);
+        return RenderFrame(resolution, clearColour, renderCamera, renderAmbientLight, renderDirectionalLights, renderPointLights, renderObjects);
     }
 }

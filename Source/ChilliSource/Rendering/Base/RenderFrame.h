@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_BASE_RENDERFRAME_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
@@ -48,6 +49,8 @@ namespace ChilliSource
         ///
         /// @param resolution
         ///     The resolution of the viewport.
+        /// @param clearColour
+        ///     The clear colour of the default render target.
         /// @param renderCamera
         ///     The camera used for the frame.
         /// @param renderAmbientLight
@@ -60,12 +63,16 @@ namespace ChilliSource
         /// @param renderObjects
         ///     A list of objects in the frame.
         ///
-        RenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight, const std::vector<DirectionalRenderLight>& renderDirectionalLights,
+        RenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight, const std::vector<DirectionalRenderLight>& renderDirectionalLights,
                     const std::vector<PointRenderLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept;
         
         /// @return The resolution of the viewport.
         ///
         const Integer2& GetResolution() const noexcept { return m_resolution; }
+        
+        /// @return The clear colour of the default render target.
+        ///
+        const Colour& GetClearColour() const noexcept { return m_clearColour; }
         
         /// @return The camera used for the frame.
         ///
@@ -90,6 +97,7 @@ namespace ChilliSource
         
     private:
         Integer2 m_resolution;
+        Colour m_clearColour;
         RenderCamera m_renderCamera;
         AmbientRenderLight m_renderAmbientLight;
         std::vector<DirectionalRenderLight> m_renderDirectionalLights;

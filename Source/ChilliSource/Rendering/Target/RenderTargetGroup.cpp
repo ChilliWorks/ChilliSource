@@ -34,10 +34,17 @@ namespace ChilliSource
     {
         CS_ASSERT(colourTarget || depthTarget, "Must supply either a colour target or a depth target.");
         
+        if (colourTarget && depthTarget)
+        {
+            CS_ASSERT(colourTarget->GetDimensions() == depthTarget->GetDimensions(), "All render targets must have the same dimensions");
+        }
+        
         if (colourTarget)
         {
             CS_ASSERT(colourTarget->GetImageFormat() != ImageFormat::k_Depth16 && colourTarget->GetImageFormat() != ImageFormat::k_Depth32, "Colour target cannot be depth texture.");
             CS_ASSERT(colourTarget->GetImageCompression() == ImageCompression::k_none, "Colour target cannot be compressed.");
+            
+            m_resolution = colourTarget->GetDimensions();
         }
         
         if (depthTarget)
@@ -46,6 +53,8 @@ namespace ChilliSource
             CS_ASSERT(depthTarget->GetImageCompression() == ImageCompression::k_none, "Depth target cannot be compressed.");
             CS_ASSERT(!m_shouldUseDepthBuffer, "If a depth target is supplied, shouldUseDepthBuffer must be false.");
             CS_ASSERT(!m_shouldUseDepthBuffer, "If a depth target is supplied, shouldUseDepthBuffer must be false.");
+            
+            m_resolution = depthTarget->GetDimensions();
         }
     }
 }

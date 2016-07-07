@@ -26,7 +26,7 @@
 #define _CHILLISOURCE_RENDERING_BASE_TARGETRENDERPASSGROUP_H_
 
 #include <ChilliSource/ChilliSource.h>
-
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 
 namespace ChilliSource
@@ -47,31 +47,47 @@ namespace ChilliSource
         
         /// Creates a new instance which will render to the default render target.
         ///
+        /// @param resolution
+        ///     The resolution of the screen.
+        /// @param clearColour
+        ///     The targets clear colour.
         /// @param cameraRenderPassGroups
         ///     The list of camera render pass groups to render to the target. Must be moved.
         ///
-        TargetRenderPassGroup(std::vector<CameraRenderPassGroup> cameraRenderPassGroups) noexcept;
+        TargetRenderPassGroup(const Integer2& resolution, const Colour& clearColour, std::vector<CameraRenderPassGroup> cameraRenderPassGroups) noexcept;
         
         /// Creates a new instance which will render to the given render target group.
         ///
         /// @param renderTargetGroup
         ///     The RenderTargetGroup that should be rendered into.
+        /// @param clearColour
+        ///     The targets clear colour.
         /// @param cameraRenderPassGroups
         ///     The list of camera render pass groups to render to the target. Must be moved.
         ///
-        TargetRenderPassGroup(const RenderTargetGroup* renderTargetGroup, std::vector<CameraRenderPassGroup> cameraRenderPassGroups) noexcept;
+        TargetRenderPassGroup(const RenderTargetGroup* renderTargetGroup, const Colour& clearColour, std::vector<CameraRenderPassGroup> cameraRenderPassGroups) noexcept;
         
         /// @return The render target group that the contained passes should be applied to. Null
         ///     indicates that the default render target should be used.
         ///
-        const RenderTargetGroup* GetRenderTarget() const noexcept { return m_renderTargetGroup; }
+        const RenderTargetGroup* GetRenderTargetGroup() const noexcept { return m_renderTargetGroup; }
+        
+        /// @return The resolution of the target.
+        ///
+        const Integer2& GetResolution() const noexcept { return m_resolution; }
+        
+        /// @return The targets clear colour.
+        ///
+        const Colour& GetClearColour() const noexcept { return m_clearColour; }
         
         /// @return The list of render camera groups
         ///
         const std::vector<CameraRenderPassGroup>& GetRenderCameraGroups() const noexcept { return m_renderCameraGroups; }
-        
+
     private:
         const RenderTargetGroup* m_renderTargetGroup = nullptr;
+        Integer2 m_resolution;
+        Colour m_clearColour;
         std::vector<CameraRenderPassGroup> m_renderCameraGroups;
     };
 }

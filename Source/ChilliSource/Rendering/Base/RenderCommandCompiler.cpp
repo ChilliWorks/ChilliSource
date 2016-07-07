@@ -104,6 +104,26 @@ namespace ChilliSource
             return count;
         }
         
+        /// Adds a new begin command or begin with target group command, depending on whether or
+        /// not a RenderTargetGroup exists.
+        ///
+        /// @param targetRenderPassGroup
+        ///     The target render pass group.
+        /// @param renderCommandList
+        ///     The render command list to add the command to.
+        ///
+        void AddBeginCommand(const TargetRenderPassGroup& targetRenderPassGroup, RenderCommandList* renderCommandList) noexcept
+        {
+            if (targetRenderPassGroup.GetRenderTargetGroup())
+            {
+                renderCommandList->AddBeginWithTargetGroupCommand(targetRenderPassGroup.GetRenderTargetGroup(), targetRenderPassGroup.GetClearColour());
+            }
+            else
+            {
+                renderCommandList->AddBeginCommand(targetRenderPassGroup.GetResolution(), targetRenderPassGroup.GetClearColour());
+            }
+        }
+        
         /// Adds a new apply light command to the list for the given render pass.
         ///
         /// @param renderPass
@@ -220,8 +240,8 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandBufferCUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
-                                                                          const Colour& clearColour, std::vector<RenderDynamicMeshUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList,
+    RenderCommandBufferCUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
+                                                                          std::vector<RenderDynamicMeshUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList,
                                                                           RenderCommandListUPtr postRenderCommandList) noexcept
     {
         u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());
@@ -236,7 +256,7 @@ namespace ChilliSource
         
         for (const auto& targetRenderPassGroup : targetRenderPassGroups)
         {
-            renderCommandBuffer->GetRenderCommandList(currentList++)->AddBeginCommand(resolution, clearColour);
+            AddBeginCommand(targetRenderPassGroup, renderCommandBuffer->GetRenderCommandList(currentList++));
                 
             for (const auto& cameraRenderPassGroup : targetRenderPassGroup.GetRenderCameraGroups())
             {

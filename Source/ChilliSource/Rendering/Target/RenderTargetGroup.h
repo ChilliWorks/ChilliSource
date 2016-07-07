@@ -56,6 +56,10 @@ namespace ChilliSource
         ///
         bool ShouldUseDepthBuffer() const noexcept { return m_shouldUseDepthBuffer; }
         
+        /// @return The resolution of the render target.
+        ///
+        const Integer2& GetResolution() const noexcept { return m_resolution; }
+        
         /// This is not thread safe and should only be called from the render thread.
         ///
         /// @return A pointer to render system specific additional information.
@@ -88,6 +92,7 @@ namespace ChilliSource
         const RenderTexture* m_colourTarget;
         const RenderTexture* m_depthTarget;
         bool m_shouldUseDepthBuffer;
+        Integer2 m_resolution;
         void* m_extraData = nullptr;
     };
 }

@@ -91,6 +91,13 @@ namespace ChilliSource
         ///
         void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
         
+        /// Creates and adds a new load target group command to the render command list.
+        ///
+        /// @param renderTargetGroup
+        ///     The RenderTargetGroup that should be loaded.
+        ///
+        void AddLoadTargetGroupCommand(RenderTargetGroup* renderTargetGroup) noexcept;
+        
         /// Creates and adds a new begin rendering command to the render command list.
         ///
         /// @param resolution
@@ -99,6 +106,16 @@ namespace ChilliSource
         ///     The clear colour.
         ///
         void AddBeginCommand(const Integer2& resolution, const Colour& clearColour) noexcept;
+        
+        /// Creates and adds a new begin with target group rendering command to the render
+        /// command list.
+        ///
+        /// @param renderTargetGroup
+        ///     The RenderTargetGroup to render into.
+        /// @param clearColour
+        ///     The clear colour.
+        ///
+        void AddBeginWithTargetGroupCommand(const RenderTargetGroup* renderTargetGroup, const Colour& clearColour) noexcept;
         
         /// Creates and adds a new apply camera command to the render command list.
         ///
@@ -176,6 +193,13 @@ namespace ChilliSource
         /// Creates and adds a new end command to the render command list.
         ///
         void AddEndCommand() noexcept;
+        
+        /// Creates and adds a new unload target group command to the render command list.
+        ///
+        /// @param renderTargetGroup
+        ///     The render target group that should be unloaded.
+        ///
+        void AddUnloadTargetGroupCommand(RenderTargetGroupUPtr renderTargetGroup) noexcept;
         
         /// Creates and adds a new unload mesh command to the render command list.
         ///

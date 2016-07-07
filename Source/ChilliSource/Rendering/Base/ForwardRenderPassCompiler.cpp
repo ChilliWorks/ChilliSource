@@ -435,7 +435,7 @@ namespace ChilliSource
             
             taskContext.ProcessChildTasks(tasks);
             
-            return TargetRenderPassGroup(std::move(cameraRenderPassGroups));
+            return TargetRenderPassGroup(renderFrame.GetResolution(), renderFrame.GetClearColour(), std::move(cameraRenderPassGroups));
         }
         
         /// Gather all render objects in the frame that are to be renderered into a shadow RenderTarget
@@ -468,7 +468,7 @@ namespace ChilliSource
             
             std::vector<CameraRenderPassGroup> cameraRenderPassGroups;
             cameraRenderPassGroups.push_back(std::move(cameraRenderPassGroup));
-            return TargetRenderPassGroup(directionalRenderLight.GetShadowMapTarget(), std::move(cameraRenderPassGroups));
+            return TargetRenderPassGroup(directionalRenderLight.GetShadowMapTarget(), Colour::k_black, std::move(cameraRenderPassGroups));
         }
     }
     
