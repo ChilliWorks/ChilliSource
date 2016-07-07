@@ -30,9 +30,9 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
-#include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
-#include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
-#include <ChilliSource/Rendering/Lighting/RenderPointLight.h>
+#include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
+#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
@@ -86,21 +86,21 @@ namespace ChilliSource
         /// @param renderAmbientLight
         ///     The ambient light which should be added.
         ///
-        void AddRenderAmbientLight(const RenderAmbientLight& renderAmbientLight) noexcept;
+        void AddAmbientRenderLight(const AmbientRenderLight& renderAmbientLight) noexcept;
         
         /// Adds a directional light to the render snapshot.
         ///
         /// @param renderDirectionalLight
         ///     The directional light which should be added.
         ///
-        void AddRenderDirectionalLight(const RenderDirectionalLight& renderDirectionalLight) noexcept;
+        void AddDirectionalRenderLight(const DirectionalRenderLight& renderDirectionalLight) noexcept;
         
         /// Adds a point light to the render snapshot.
         ///
         /// @param renderPointLight
         ///     The point light which should be added.
         ///
-        void AddRenderPointLight(const RenderPointLight& renderPointLight) noexcept;
+        void AddPointRenderLight(const PointRenderLight& renderPointLight) noexcept;
         
         /// Adds an object to the render snapshot.
         ///
@@ -129,19 +129,19 @@ namespace ChilliSource
         ///
         /// @return The moved list of ambient lights.
         ///
-        std::vector<RenderAmbientLight> ClaimRenderAmbientLights() noexcept;
+        std::vector<AmbientRenderLight> ClaimAmbientRenderLights() noexcept;
         
         /// Moves the list of directional lights to a new external owner.
         ///
         /// @return The moved list of directional lights.
         ///
-        std::vector<RenderDirectionalLight> ClaimRenderDirectionalLights() noexcept;
+        std::vector<DirectionalRenderLight> ClaimDirectionalRenderLights() noexcept;
         
         /// Moves the list of point lights to a new external owner.
         ///
         /// @return The moved list of point lights.
         ///
-        std::vector<RenderPointLight> ClaimRenderPointLights() noexcept;
+        std::vector<PointRenderLight> ClaimPointRenderLights() noexcept;
         
         /// Moves the list of objects to a new external owner.
         ///
@@ -171,9 +171,9 @@ namespace ChilliSource
         Integer2 m_resolution;
         Colour m_clearColour;
         RenderCamera m_renderCamera;
-        std::vector<RenderAmbientLight> m_renderAmbientLights;
-        std::vector<RenderDirectionalLight> m_renderDirectionalLights;
-        std::vector<RenderPointLight> m_renderPointLights;
+        std::vector<AmbientRenderLight> m_renderAmbientLights;
+        std::vector<DirectionalRenderLight> m_renderDirectionalLights;
+        std::vector<PointRenderLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
         std::vector<RenderDynamicMeshUPtr> m_renderDynamicMeshes;
         RenderCommandListUPtr m_preRenderCommandList;

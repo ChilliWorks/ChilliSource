@@ -1,11 +1,7 @@
 //
-//  GUI.csshader
-//  Chilli Source
-//  Created by I Copland on 29/01/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,56 +22,29 @@
 //  THE SOFTWARE.
 //
 
-GLSL
+#include <CSBackend/Rendering/OpenGL/Lighting/GLAmbientLight.h>
+
+#include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+
+namespace CSBackend
 {
-    VertexShader
+    namespace OpenGL
     {
-        #ifndef GL_ES
-        #define lowp
-        #define mediump
-        #define highp
-        #endif
-
-        //attributes
-        attribute highp vec4 a_position;
-        attribute lowp vec4 a_colour;
-        attribute mediump vec2 a_texCoord;
-
-        //uniforms
-        uniform highp mat4 u_wvpMat;
-
-        //varyings
-        varying lowp vec4 vvColour;
-        varying mediump vec2 vvTexCoord;
-
-        void main()
+        namespace
         {
-            gl_Position = u_wvpMat * a_position;
-            vvColour = a_colour;
-            vvTexCoord = a_texCoord;
+            const std::string k_uniformLightCol = "u_lightCol";
         }
-    }
-
-    FragmentShader
-    {
-        #ifndef GL_ES
-        #define lowp
-        #define mediump
-        #define highp
-        #else
-        precision lowp float;
-        #endif
-
-        //uniforms
-        uniform lowp sampler2D u_texture0;
-
-        //varying
-        varying lowp vec4 vvColour;
-        varying mediump vec2 vvTexCoord;
-
-        void main()
+        
+        //------------------------------------------------------------------------------
+        GLAmbientLight::GLAmbientLight(const ChilliSource::Colour& colour) noexcept
+            : m_colour(colour)
         {
-            gl_FragColor = texture2D(u_texture0, vvTexCoord) * vvColour;
+        }
+            
+        //------------------------------------------------------------------------------
+        void GLAmbientLight::Apply(GLShader* glShader) const noexcept
+        {
+            glShader->SetUniform(k_uniformLightCol, m_colour, GLShader::FailurePolicy::k_silent);
         }
     }
 }

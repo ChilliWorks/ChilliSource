@@ -1,8 +1,4 @@
 //
-//  AmbientLightComponent.cpp
-//  Chilli Source
-//  Created by Scott Downie on 28/01/2014.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2014 Tag Games Limited
@@ -28,23 +24,29 @@
 
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 
+#include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
+
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(AmbientLightComponent);
     
-    //----------------------------------------------------------
-    /// Is A
-    //----------------------------------------------------------
-    bool AmbientLightComponent::IsA(InterfaceIDType inInterfaceID) const
+    //------------------------------------------------------------------------------
+    AmbientLightComponent::AmbientLightComponent(const Colour& colour, f32 intensity) noexcept
+        : m_colour(colour), m_intensity(intensity)
     {
-        return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == AmbientLightComponent::InterfaceID;
     }
-    //----------------------------------------------------------
-    /// Get Light Matrix
-    //----------------------------------------------------------
-    const Matrix4& AmbientLightComponent::GetLightMatrix() const
+    
+    //------------------------------------------------------------------------------
+    bool AmbientLightComponent::IsA(InterfaceIDType interfaceId) const noexcept
     {
-        return mmatLight;
+        return AmbientLightComponent::InterfaceID == interfaceId;
+    }
+    
+    //------------------------------------------------------------------------------
+    void AmbientLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    {
+        renderSnapshot.AddAmbientRenderLight(AmbientRenderLight(GetFinalColour()));
     }
 }
 

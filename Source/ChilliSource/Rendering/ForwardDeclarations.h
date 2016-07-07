@@ -83,9 +83,9 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(DirectionalLightComponent);
     CS_FORWARDDECLARE_CLASS(LightComponent);
     CS_FORWARDDECLARE_CLASS(PointLightComponent);
-    CS_FORWARDDECLARE_CLASS(RenderAmbientLight);
-    CS_FORWARDDECLARE_CLASS(RenderDirectionalLight);
-    CS_FORWARDDECLARE_CLASS(RenderPointLight);
+    CS_FORWARDDECLARE_CLASS(AmbientRenderLight);
+    CS_FORWARDDECLARE_CLASS(DirectionalRenderLight);
+    CS_FORWARDDECLARE_CLASS(PointRenderLight);
     //------------------------------------------------------------
     /// Material
     //------------------------------------------------------------
@@ -167,10 +167,13 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Render Command
     //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(ApplyAmbientLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyCameraRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplyDirectionalLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyDynamicMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplyPointLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginRenderCommand);
     CS_FORWARDDECLARE_CLASS(EndRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadMaterialGroupRenderCommand);

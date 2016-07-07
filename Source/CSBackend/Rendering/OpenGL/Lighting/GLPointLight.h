@@ -22,58 +22,54 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_CAMERA_GLCAMERA_H_
-#define _CSBACKEND_RENDERING_OPENGL_CAMERA_GLCAMERA_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLPOINTLIGHT_H_
+#define _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLPOINTLIGHT_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLLight.h>
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
-        /// Describes the state of the camera, including it's view projection matrix and the
-        /// current camera position.
+        /// The point OpenGL light object, which stores the point light data and provides the means
+        /// to apply the data to a shader.
         ///
-        /// This is immutable and therefore thread-safe.
+        /// This is immutable and therefore thread-safe, but apply must be called on the render
+        /// thread.
         ///
-        class GLCamera final
+        class GLPointLight final : public GLLight
         {
         public:
-            GLCamera() = default;
-            
-            /// Constructs the camera with the given view projection matrix and position data.
+            /// Creates a new instance with the given directional light information.
             ///
+            /// @param colour
+            ///     The colour of the light.
             /// @param position
-            ///     The world space position of the camera.
-            /// @param viewProjectionMatrix
-            ///     The view projection matrix of the camera.
+            ///     The position of the light.
+            /// @param attenuation
+            ///     The vector containing the constant, linear and quadratic attenuation values of the
+            ///     light.
             ///
-            GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept;
+            GLPointLight(const ChilliSource::Colour& colour, const ChilliSource::Vector3& position, const ChilliSource::Vector3& attenuation) noexcept;
             
-            /// @return The world space position of the camera.
-            ///
-            const ChilliSource::Vector3& GetPosition() const noexcept { return m_position; }
-            
-            /// @return The view projection matrix of the camera.
-            ///
-            const ChilliSource::Matrix4& GetViewProjectionMatrix() const noexcept { return m_viewProjectionMatrix; }
-            
-            /// Applies the camera to the given shader.
+            /// Applies the light to the given shader.
             ///
             /// This must be called on the render thread.
             ///
             /// @param glShader
-            ///     The shader the camera data should be applied to.
+            ///     The shader the light data should be applied to.
             ///
-            void Apply(GLShader* glShader) const noexcept;
+            void Apply(GLShader* glShader) const noexcept override;
             
         private:
+            ChilliSource::Colour m_colour;
             ChilliSource::Vector3 m_position;
-            ChilliSource::Matrix4 m_viewProjectionMatrix;
+            ChilliSource::Vector3 m_attenuation;
         };
     }
 }

@@ -103,6 +103,49 @@ namespace ChilliSource
             return count;
         }
         
+        /// Adds a new apply light command to the list for the given render pass.
+        ///
+        /// @param renderPass
+        ///     The render pass.
+        /// @param renderCommandList
+        ///     The render command list to add the command to.
+        ///
+        void AddApplyLightCommand(const RenderPass& renderPass, RenderCommandList* renderCommandList) noexcept
+        {
+            switch (renderPass.GetLightType())
+            {
+                case RenderPass::LightType::k_none:
+                {
+                    renderCommandList->AddApplyAmbientLightCommand(Colour::k_black);
+                    break;
+                }
+                case RenderPass::LightType::k_ambient:
+                {
+                    const auto& ambientLight = renderPass.GetAmbientLight();
+                    renderCommandList->AddApplyAmbientLightCommand(ambientLight.GetColour());
+                    break;
+                }
+                case RenderPass::LightType::k_directional:
+                {
+                    const auto& directionalLight = renderPass.GetDirectionalLight();
+                    renderCommandList->AddApplyDirectionalLightCommand(directionalLight.GetColour(), directionalLight.GetDirection(), directionalLight.GetLightViewProjection(),
+                                                                       directionalLight.GetShadowTolerance(), directionalLight.GetShadowMapRenderTexture());
+                    break;
+                }
+                case RenderPass::LightType::k_point:
+                {
+                    const auto& pointLight = renderPass.GetPointLight();
+                    renderCommandList->AddApplyPointLightCommand(pointLight.GetColour(), pointLight.GetPosition(), pointLight.GetAttenuation());
+                    break;
+                }
+                default:
+                {
+                    CS_LOG_FATAL("Invalid light type.");
+                    break;
+                }
+            }
+        }
+        
         /// Compiles the render commands for the given render pass. The render pass must contain
         /// render pass objects otherwise this will assert.
         ///
@@ -113,7 +156,7 @@ namespace ChilliSource
         ///
         void CompileRenderCommandsForPass(const RenderPass& renderPass, RenderCommandList* renderCommandList) noexcept
         {
-            //TODO: Handle lights
+            AddApplyLightCommand(renderPass, renderCommandList);
             
             const auto& renderPassObjects = renderPass.GetRenderPassObjects();
             CS_ASSERT(renderPassObjects.size() > 0, "Cannot compile a pass with no objects.");

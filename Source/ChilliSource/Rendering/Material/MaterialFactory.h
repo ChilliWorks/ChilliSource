@@ -1,8 +1,4 @@
 //
-//  MaterialFactory.h
-//  Chilli Source
-//  Created by Scott Downie on 5/08/2013.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2013 Tag Games Limited
@@ -30,267 +26,130 @@
 #define _CHILLISOURCE_RENDERING_MATERIAL_MATERIALFACTORY_H
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
 {
-    //-------------------------------------------------------------------------
-    /// Factory for creating material resources based on rendering type
+    /// A convenience factory for creating new materials of the requested types.
     ///
-    /// @author S Downie
-    //-------------------------------------------------------------------------
+    /// This is not thread-safe and must be called from the main thread.
+    ///
     class MaterialFactory final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(MaterialFactory);
-        //---------------------------------------------------
-        /// @author S Downie
+
+        /// Allows querying of whether or not this system implements the interface described by the
+        /// given interface Id. Typically this is not called directly as the templated equivalent
+        /// IsA<Interface>() is preferred.
         ///
-        /// @param Interface ID
+        /// @param interfaceId
+        ///     The Id of the interface.
         ///
-        /// @return Whether the object is of the same interface
-        //---------------------------------------------------
-        bool IsA(InterfaceIDType in_interfaceId) const override;
-        //---------------------------------------------------
-        /// Create a material with no shader programs.
-        /// The shader programs must be specified by the
-        /// user before using the material
+        /// @return Whether or not the interface is implemented.
         ///
-        /// @author S Downie
+        bool IsA(InterfaceIDType interfaceId) const noexcept override;
+        
+        /// Creates a new material with unlit shaders that can be used with static, animated and
+        /// sprites.
         ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
+        /// @param texture
+        ///     The texture that the material will use.
+        /// @param isTransparent
+        ///     Whether or not transparency is enabled for the material.
+        /// @param colour
+        ///     (Optional) The colour of the material. Defaults to white.
         ///
-        /// @param Empty new material
-        //---------------------------------------------------
-        MaterialSPtr CreateCustom(const std::string& in_uniqueId) const;
-        //---------------------------------------------------
-        /// Create a material to render UI
+        /// @return The newly created material.
         ///
-        /// @author S Downie
+        MaterialCSPtr CreateUnlit(const std::string& uniqueId, const TextureCSPtr& texture, bool isTransparent, const Colour& colour = Colour::k_white) const noexcept;
+        
+        /// Creates a new material with blinn shaders that can be used with static and animated meshes.
         ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
+        /// @param texture
+        ///     The texture that the material will use.
+        /// @param ambientColour
+        ///     The ambient colour.
+        /// @param emissiveColour
+        ///     The ambient colour.
+        /// @param diffuseColour
+        ///     The diffuse colour.
+        /// @param specularColour
+        ///     The specular colour, note that the alpha value is ignored.
+        /// @param shininess
+        ///     The specular shininess of the material.
         ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateGUI(const std::string& in_uniqueId) const;
-        //---------------------------------------------------
-        /// Create a material for rendering sprites. Sprites
-        /// have no lighting and vertex colours
+        /// @return The newly created material.
         ///
-        /// @author S Downie
+        MaterialCSPtr CreateBlinn(const std::string& uniqueId, const TextureCSPtr& texture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
+                                  const Colour& specularColour, f32 shininess) const noexcept;
+        
+        /// Creates a new material with blinn shadowed shaders that can be used with static and animated
+        /// meshes.
         ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
+        /// @param texture
+        ///     The texture that the material will use.
+        /// @param ambientColour
+        ///     The ambient colour.
+        /// @param emissiveColour
+        ///     The ambient colour.
+        /// @param diffuseColour
+        ///     The diffuse colour.
+        /// @param specularColour
+        ///     The specular colour, note that the alpha value is ignored.
+        /// @param shininess
+        ///     The specular shininess of the material.
         ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateSprite(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for static textured models
-        /// that use no lighting.
+        /// @return The newly created material.
         ///
-        /// @author S Downie
+        MaterialCSPtr CreateBlinnShadowed(const std::string& uniqueId, const TextureCSPtr& texture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
+                                  const Colour& specularColour, f32 shininess) const noexcept;
+        
+        /// Creates a new material with shadow map shaders that can be used with static and animated
+        /// meshes.
         ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
         ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateStatic(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for static textured models
-        /// that use Ambient lighting.
+        /// @return The newly created material.
         ///
-        /// @author S Downie
+        MaterialCSPtr CreateShadowMap(const std::string& uniqueId) const noexcept;
+        
+        /// Creates a new custom material, on which all shader settings can be changed. The shading
+        /// type defaults to Unlit, but other types can be set. The types of mesh that the material
+        /// can be used with depends on the shading type set.
         ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
+        /// The material must have it's load state set manually to loaded before it can be used.
         ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateStaticAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for static textured models
-        /// that use blinn-phong per pixel lighting.
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
         ///
-        /// @author S Downie
+        /// @return The new empty, mutable material.
         ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateStaticBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for static textured models
-        /// that use blinn-phong per pixel lighting and received
-        /// shadows.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateStaticBlinnShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for static textured models
-        /// that use blinn-phong per vertex lighting.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateStaticBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for static textured models
-        /// that use blinn-phong per vertex lighting and
-        /// received shadows.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateStaticBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Create a material for rendering a static model
-        /// to a directional shadow map.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateStaticDirectionalShadowMap(const std::string& in_uniqueId) const;
-        //---------------------------------------------------
-        /// Creates a new material for animated textured models
-        /// that use no lighting.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateAnimated(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for animated textured models
-        /// that use ambient lighting.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateAnimatedAmbient(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for animated textured models
-        /// that use blinn-phong per pixel lighting.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateAnimatedBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for animated textured models
-        /// that use blinn-phong per pixel lighting and receives
-        /// shadows.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateAnimatedBlinnShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for animated textured models
-        /// that use blinn-phong per vertex lighting.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateAnimatedBlinnPerVertex(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Creates a new material for animated textured models
-        /// that use blinn-phong per vertex lighting and
-        /// recieves shadows.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        /// @param Texture
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateAnimatedBlinnPerVertexShadowed(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
-        //---------------------------------------------------
-        /// Create a material for rendering an animated model
-        /// to a directional shadow map.
-        ///
-        /// @author S Downie
-        ///
-        /// @param Unique Id to identify in resource pool
-        /// "_" prefix is reserved for engine resources
-        ///
-        /// @return New material
-        //---------------------------------------------------
-        MaterialSPtr CreateAnimatedDirectionalShadowMap(const std::string& in_uniqueId) const;
+        MaterialSPtr CreateCustom(const std::string& uniqueId) const noexcept;
         
     private:
         friend class Application;
-        //-------------------------------------------------------
-        /// Factory method
+        
+        /// A factory method for creating new instances of the system. This must be called by
+        /// Application.
         ///
-        /// @author S Downie
+        /// @return The new instance of the system.
         ///
-        /// @param Render capabilities used to determine which
-        /// materials can be used
-        ///
-        /// @return New instance with ownership transferred
-        //-------------------------------------------------------
-        static MaterialFactoryUPtr Create();
-        //-------------------------------------------------------
-        /// Private constructor to force use of factory method
-        ///
-        /// @author S Downie
-        //-------------------------------------------------------
+        static MaterialFactoryUPtr Create() noexcept;
+        
         MaterialFactory() = default;
     };
 }

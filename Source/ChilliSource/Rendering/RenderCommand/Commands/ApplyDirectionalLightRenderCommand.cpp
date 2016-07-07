@@ -22,18 +22,15 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDirectionalLightRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderAmbientLight::RenderAmbientLight() noexcept
-        : m_colour(Colour::k_black)
-    {
-    }
-    //------------------------------------------------------------------------------
-    RenderAmbientLight::RenderAmbientLight(const Colour& colour) noexcept
-        : m_colour(colour)
+    ApplyDirectionalLightRenderCommand::ApplyDirectionalLightRenderCommand(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance,
+                                                                           const RenderTexture* shadowMapRenderTexture) noexcept
+        : RenderCommand(Type::k_applyDirectionalLight), m_colour(colour), m_direction(direction), m_lightViewProjection(lightViewProjection), m_shadowTolerance(shadowTolerance),
+          m_shadowMapRenderTexture(shadowMapRenderTexture)
     {
     }
 }

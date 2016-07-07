@@ -27,8 +27,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderFrame::RenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const RenderAmbientLight& renderAmbientLight, const std::vector<RenderDirectionalLight>& renderDirectionalLights,
-                             const std::vector<RenderPointLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept
+    RenderFrame::RenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight, const std::vector<DirectionalRenderLight>& renderDirectionalLights,
+                             const std::vector<PointRenderLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept
         : m_resolution(resolution), m_renderCamera(renderCamera), m_renderAmbientLight(renderAmbientLight), m_renderDirectionalLights(renderDirectionalLights), m_renderPointLights(renderPointLights),
           m_renderObjects(renderObjects)
     {

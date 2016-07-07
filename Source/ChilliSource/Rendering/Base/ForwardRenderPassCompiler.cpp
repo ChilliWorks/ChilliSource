@@ -24,6 +24,7 @@
 
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
 
+#include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
 #include <ChilliSource/Rendering/Base/RenderFrame.h>
@@ -147,7 +148,7 @@ namespace ChilliSource
         ///
         std::vector<RenderPassObject> GetDirectionalLightRenderPassObjects(const std::vector<RenderObject>& renderObjects) noexcept
         {
-            std::vector<RenderPassObject> baseRenderPassObjects;
+            std::vector<RenderPassObject> renderPassObjects;
             
             for (const auto& renderObject : renderObjects)
             {
@@ -155,11 +156,41 @@ namespace ChilliSource
                 
                 if (renderMaterial)
                 {
-                    baseRenderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
+                    renderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
                 }
             }
             
-            return baseRenderPassObjects;
+            return renderPassObjects;
+        }
+        
+        /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
+        /// each RenderObject that has a PointLight pass defined, and is within the range
+        /// of influence of the given light.
+        ///
+        /// @param renderObjects
+        ///     A list of RenderObjects to parse
+        /// @param pointRenderLight
+        ///     The render light to get objects for.
+        ///
+        /// @return A collection of RenderPassObjects for the render light pass.
+        ///
+        std::vector<RenderPassObject> GetPointLightRenderPassObjects(const std::vector<RenderObject>& renderObjects, const PointRenderLight& pointRenderLight) noexcept
+        {
+            Sphere pointLightBoundingSphere(pointRenderLight.GetPosition(), pointRenderLight.GetRangeOfInfluence());
+            
+            std::vector<RenderPassObject> renderPassObjects;
+            
+            for (const auto& renderObject : renderObjects)
+            {
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_pointLight));
+                
+                if (renderMaterial && pointLightBoundingSphere.Contains(renderObject.GetBoundingSphere()))
+                {
+                    renderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
+                }
+            }
+            
+            return renderPassObjects;
         }
         
         /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
@@ -205,7 +236,7 @@ namespace ChilliSource
             auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
             auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
             
-            const u32 numPasses = k_reservedRenderPasses + u32(renderFrame.GetRenderDirectionalLights().size()) + u32(renderFrame.GetRenderPointLights().size());
+            const u32 numPasses = k_reservedRenderPasses + u32(renderFrame.GetDirectionalRenderLights().size()) + u32(renderFrame.GetPointRenderLights().size());
             std::vector<RenderPass> renderPasses(numPasses);
             std::vector<Task> tasks;
             u32 nextPassIndex = 0;
@@ -216,11 +247,11 @@ namespace ChilliSource
             {
                 auto renderPassObjects = GetBaseRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                renderPasses[basePassIndex] = RenderPass(renderFrame.GetRenderAmbientLight(), renderPassObjects);
+                renderPasses[basePassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), renderPassObjects);
             });
             
             // Directional light pass
-            for (const auto& directionalLight : renderFrame.GetRenderDirectionalLights())
+            for (const auto& directionalLight : renderFrame.GetDirectionalRenderLights())
             {
                 u32 directionLightPassIndex = nextPassIndex++;
                 tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
@@ -231,7 +262,17 @@ namespace ChilliSource
                 });
             }
             
-            //TODO: Point light pass
+            // Point light pass
+            for (const auto& pointLight : renderFrame.GetPointRenderLights())
+            {
+                u32 pointLightPassIndex = nextPassIndex++;
+                tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
+                {
+                    auto renderPassObjects = GetPointLightRenderPassObjects(visibleStandardRenderObjects, pointLight);
+                    RenderPassObjectSorter::OpaqueSort(renderFrame.GetRenderCamera(), renderPassObjects);
+                    renderPasses[pointLightPassIndex] = RenderPass(pointLight, renderPassObjects);
+                });
+            }
             
             // Transparent pass
             u32 transparentPassIndex = nextPassIndex++;
@@ -239,7 +280,7 @@ namespace ChilliSource
             {
                 auto renderPassObjects = GetTransparentRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::TransparentSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetRenderAmbientLight(), renderPassObjects);
+                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), renderPassObjects);
             });
             
             taskContext.ProcessChildTasks(tasks);
@@ -276,7 +317,7 @@ namespace ChilliSource
             std::vector<RenderPass> renderPasses;
             if (uiRenderPassObjects.size() > 0)
             {
-                renderPasses.push_back(RenderPass(renderFrame.GetRenderAmbientLight(), uiRenderPassObjects));
+                renderPasses.push_back(RenderPass(renderFrame.GetAmbientRenderLight(), uiRenderPassObjects));
             }
             
             return CameraRenderPassGroup(uiCamera, renderPasses);

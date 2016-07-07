@@ -119,15 +119,6 @@ namespace CSBackend
             }
         }
         
-        const std::string GLShader::k_defaultUniformWVPMat = "u_wvpMat";
-        const std::string GLShader::k_defaultUniformWorldMat = "u_worldMat";
-        const std::string GLShader::k_defaultUniformNormalMat = "u_normalMat";
-        const std::string GLShader::k_defaultUniformCameraPos = "u_cameraPos";
-        const std::string GLShader::k_defaultUniformEmissive = "u_emissive";
-        const std::string GLShader::k_defaultUniformAmbient = "u_ambient";
-        const std::string GLShader::k_defaultUniformDiffuse = "u_diffuse";
-        const std::string GLShader::k_defaultUniformSpecular = "u_specular";
-        
         const std::string GLShader::k_attributePosition = "a_position";
         const std::string GLShader::k_attributeNormal = "a_normal";
         const std::string GLShader::k_attributeTexCoord = "a_texCoord";

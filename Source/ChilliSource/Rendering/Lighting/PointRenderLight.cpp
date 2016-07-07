@@ -22,38 +22,18 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_LIGHTING_RENDERAMBIENTLIGHT_H_
-#define _CHILLISOURCE_RENDERING_LIGHTING_RENDERAMBIENTLIGHT_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
 
 namespace ChilliSource
 {
-    /// A standard-layout container for data the renderer needs which pertains to a single
-    /// ambient light, such as the colour.
-    class RenderAmbientLight final
+    //------------------------------------------------------------------------------
+    PointRenderLight::PointRenderLight() noexcept
+        : m_colour(Colour::k_black), m_position(Vector3::k_zero), m_attenuation(1.0f, 0.0f, 0.0f), m_rangeOfInfluence(0.0f)
     {
-    public:
-        
-        /// Creates a new instance of the container with default black colour.
-        ///
-        RenderAmbientLight() noexcept;
-        
-        /// Creates a new instance of the container with the given light colour.
-        ///
-        /// @param colour
-        ///     The colour of the light.
-        ///
-        RenderAmbientLight(const Colour& colour) noexcept;
-        
-        /// @return The colour of the light.
-        ///
-        const Colour& GetColour() const noexcept { return m_colour; }
-        
-    private:
-        Colour m_colour;
-    };
+    }
+    //------------------------------------------------------------------------------
+    PointRenderLight::PointRenderLight(const Colour& colour, const Vector3& position, const Vector3& attenuation, f32 rangeOfInfluence) noexcept
+        : m_colour(colour), m_position(position), m_attenuation(attenuation), m_rangeOfInfluence(rangeOfInfluence)
+    {
+    }
 }
-
-#endif

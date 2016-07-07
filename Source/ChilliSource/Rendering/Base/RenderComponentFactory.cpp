@@ -41,6 +41,7 @@
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 #include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
@@ -94,8 +95,7 @@ namespace ChilliSource
     //---------------------------------------------------------------------------
     StaticModelComponentUPtr RenderComponentFactory::CreateStaticModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
     {
-        StaticModelComponentUPtr pResult(new StaticModelComponent(in_model, in_material));
-        return pResult;
+        return StaticModelComponentUPtr(new StaticModelComponent(in_model, in_material));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
@@ -110,15 +110,13 @@ namespace ChilliSource
     PerspectiveCameraComponentUPtr RenderComponentFactory::CreatePerspectiveCameraComponent(f32 in_fov, f32 in_near, f32 in_far)
     {
         auto screenSize = m_screen->GetResolution();
-        PerspectiveCameraComponentUPtr pCamera(new PerspectiveCameraComponent(screenSize.x / screenSize.y, in_fov, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
-        return pCamera;
+        return PerspectiveCameraComponentUPtr(new PerspectiveCameraComponent(screenSize.x / screenSize.y, in_fov, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
     OrthographicCameraComponentUPtr RenderComponentFactory::CreateOrthographicCameraComponent(const Vector2& in_viewportSize, f32 in_near, f32 in_far)
     {
-        OrthographicCameraComponentUPtr pCamera(new OrthographicCameraComponent(in_viewportSize, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
-        return pCamera;
+        return OrthographicCameraComponentUPtr(new OrthographicCameraComponent(in_viewportSize, CameraComponent::ViewportResizePolicy::k_scaleWithScreen, in_near, in_far));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
@@ -128,30 +126,32 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    AmbientLightComponentUPtr RenderComponentFactory::CreateAmbientLightComponent() const
+    AmbientLightComponentUPtr RenderComponentFactory::CreateAmbientLightComponent(const Colour& in_colour, f32 in_intensity) const noexcept
     {
-        AmbientLightComponentUPtr pLight(new AmbientLightComponent());
-        return pLight;
+        return AmbientLightComponentUPtr(new AmbientLightComponent(in_colour, in_intensity));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    DirectionalLightComponentUPtr RenderComponentFactory::CreateDirectionalLightComponent(u32 in_shadowMapRes) const
+    DirectionalLightComponentUPtr RenderComponentFactory::CreateDirectionalLightComponent(const Colour& in_colour, f32 in_intensity) const noexcept
     {
-        DirectionalLightComponentUPtr pLight(new DirectionalLightComponent(in_shadowMapRes));
-        return pLight;
+        return DirectionalLightComponentUPtr(new DirectionalLightComponent(in_colour, in_intensity));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    PointLightComponentUPtr RenderComponentFactory::CreatePointLightComponent() const
+    DirectionalLightComponentUPtr RenderComponentFactory::CreateDirectionalLightComponent(DirectionalLightComponent::ShadowQuality in_shadowQuality, const Colour& in_colour, f32 in_intensity) const noexcept
     {
-        PointLightComponentUPtr pLight(new PointLightComponent());
-        return pLight;
+        return DirectionalLightComponentUPtr(new DirectionalLightComponent(in_shadowQuality, in_colour, in_intensity));
+    }
+    //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
+    PointLightComponentUPtr RenderComponentFactory::CreatePointLightComponent(const Colour& in_colour, f32 in_radius, f32 in_intensity) const noexcept
+    {
+        return PointLightComponentUPtr(new PointLightComponent(in_colour, in_radius, in_intensity));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
     ParticleEffectComponentUPtr RenderComponentFactory::CreateParticleEffectComponent(const ParticleEffectCSPtr& in_particleEffect) const
     {
-        ParticleEffectComponentUPtr particleEffect(new ParticleEffectComponent(in_particleEffect));
-        return particleEffect;
+        return ParticleEffectComponentUPtr(new ParticleEffectComponent(in_particleEffect));
     }
 }

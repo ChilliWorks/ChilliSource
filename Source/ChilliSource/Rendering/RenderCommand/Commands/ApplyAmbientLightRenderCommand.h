@@ -1,11 +1,7 @@
 //
-//  Lighting.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +22,41 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_LIGHTING_H_
-#define _CHILLISOURCE_RENDERING_LIGHTING_H_
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYAMBIENTLIGHTRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYAMBIENTLIGHTRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
-#include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
-#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
+
+namespace ChilliSource
+{
+    /// A render command for applying the described ambient light to the current context
+    /// state.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class ApplyAmbientLightRenderCommand final : public RenderCommand
+    {
+    public:
+        /// @return The colour of the ambient light.
+        ///
+        const Colour& GetColour() const noexcept { return m_colour; };
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Creates a new instance with the given light colour.
+        ///
+        /// @param colour
+        ///     The ambient light colour.
+        ///
+        ApplyAmbientLightRenderCommand(const Colour& colour) noexcept;
+        
+        Colour m_colour;
+    };
+}
 
 #endif

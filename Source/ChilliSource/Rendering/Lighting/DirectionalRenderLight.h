@@ -34,14 +34,14 @@ namespace ChilliSource
     /// A standard-layout container for data the renderer needs which pertains to a single
     /// direction light, such as the colour and direction.
     ///
-    class RenderDirectionalLight final
+    class DirectionalRenderLight final
     {
     public:
         
         /// Creates a new instance of the container with default black colour and v-down direction
         /// with no shadow map.
         ///
-        RenderDirectionalLight() noexcept;
+        DirectionalRenderLight() noexcept;
         
         /// Creates a new instance of the container with the given light colour and direction
         /// with no shadow map.
@@ -51,7 +51,7 @@ namespace ChilliSource
         /// @param direction
         ///     The direction of the light.
         ///
-        RenderDirectionalLight(const Colour& colour, const Vector3& direction) noexcept;
+        DirectionalRenderLight(const Colour& colour, const Vector3& direction) noexcept;
         
         /// Creates a new instance of the container with the given light colour and direction
         /// and shadow map data.
@@ -60,7 +60,7 @@ namespace ChilliSource
         ///     The colour of the light.
         /// @param direction
         ///     The direction of the light.
-        /// @param lightMatrix
+        /// @param lightViewProjection
         ///     The view projection matrix of the light which is used as the camera when rendering
         ///     the shadow map.
         /// @param shadowTolerance
@@ -68,7 +68,7 @@ namespace ChilliSource
         /// @param shadowMapRenderTexture
         ///     The render texture which should be used for the shadow map.
         ///
-        RenderDirectionalLight(const Colour& colour, const Vector3& direction, const Matrix4& lightMatrix, f32 shadowTolerance/*, const RenderTexture* shadowMapRenderTexture*/) noexcept;
+        DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept;
         
         /// @return The colour of the light.
         ///
@@ -81,22 +81,23 @@ namespace ChilliSource
         /// @return The view projection matrix of the light which is used as the camera when rendering
         ///     the shadow map.
         ///
-        const Matrix4& GetLightMatrix() const noexcept { return m_lightMatrix; }
+        const Matrix4& GetLightViewProjection() const noexcept { return m_lightViewProjection; }
         
         /// @return The tolerence used to judge if an object is in shadow.
         ///
         f32 GetShadowTolerance() const noexcept { return m_shadowTolerance; }
         
-        /// @return The render texture which should be used for the shadow map.
+        /// @return The render texture which should be used for the shadow map. Will be null if there is
+        ///     no shadow map.
         ///
-        //const RenderTexture* GetShadowMapRenderTexture() const noexcept { return m_shadowMapRenderTexture; }
+        const RenderTexture* GetShadowMapRenderTexture() const noexcept { return m_shadowMapRenderTexture; }
         
     private:
         Colour m_colour;
         Vector3 m_direction;
-        Matrix4 m_lightMatrix;
+        Matrix4 m_lightViewProjection;
         f32 m_shadowTolerance = 0.0f;
-        //const RenderTexture* m_shadowMapRenderTexture;
+        const RenderTexture* m_shadowMapRenderTexture = nullptr;
     };
 }
 

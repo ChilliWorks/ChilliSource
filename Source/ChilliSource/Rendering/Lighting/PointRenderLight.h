@@ -34,14 +34,14 @@ namespace ChilliSource
     /// A standard-layout container for data the renderer needs which pertains to a single
     /// point light, such as the colour and position.
     ///
-    class RenderPointLight final
+    class PointRenderLight final
     {
     public:
         
         /// Creates a new instance of the container with default black colour with
         /// position and attenuation zeroed.
         ///
-        RenderPointLight() noexcept;
+        PointRenderLight() noexcept;
         
         /// Creates a new instance of the container with the given light colour and position.
         ///
@@ -51,8 +51,10 @@ namespace ChilliSource
         ///     The position of the light.
         /// @param attenuation
         ///     The attenuation of the light.
+        /// @param rangeOfInfluence
+        ///     The range of influence of the light.
         ///
-        RenderPointLight(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept;
+        PointRenderLight(const Colour& colour, const Vector3& position, const Vector3& attenuation, f32 rangeOfInfluence) noexcept;
         
         /// @return The colour of the light.
         ///
@@ -66,10 +68,15 @@ namespace ChilliSource
         ///
         const Vector3& GetAttenuation() const noexcept { return m_attenuation; }
         
+        /// @return The range of influence of the light.
+        ///
+        f32 GetRangeOfInfluence() const noexcept { return m_rangeOfInfluence; }
+        
     private:
         Colour m_colour;
         Vector3 m_position;
         Vector3 m_attenuation;
+        f32 m_rangeOfInfluence;
     };
 }
 

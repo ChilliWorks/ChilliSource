@@ -22,7 +22,7 @@
 //  THE SOFTWARE.
 //
 
-#include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLPointLight.h>
 
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 
@@ -32,19 +32,27 @@ namespace CSBackend
     {
         namespace
         {
-            const std::string k_uniformCameraPos = "u_cameraPos";
+            const std::string k_uniformLightCol = "u_lightCol";
+            const std::string k_uniformLightPos = "u_lightPos";
+            const std::string k_uniformAttenuationConstant = "u_attenuationConstant";
+            const std::string k_uniformAttenuationLinear = "u_attenuationLinear";
+            const std::string k_uniformAttenuationQuadratic = "u_attenuationQuadratic";
         }
         
         //------------------------------------------------------------------------------
-        GLCamera::GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept
-            : m_position(position), m_viewProjectionMatrix(viewProjectionMatrix)
+        GLPointLight::GLPointLight(const ChilliSource::Colour& colour, const ChilliSource::Vector3& position, const ChilliSource::Vector3& attenuation) noexcept
+            : m_colour(colour), m_position(position), m_attenuation(attenuation)
         {
         }
         
         //------------------------------------------------------------------------------
-        void GLCamera::Apply(GLShader* glShader) const noexcept
+        void GLPointLight::Apply(GLShader* glShader) const noexcept
         {
-            glShader->SetUniform(k_uniformCameraPos, m_position, GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformLightCol, m_colour, GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformLightPos, m_position, GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformAttenuationConstant, m_attenuation.x, GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformAttenuationLinear, m_attenuation.y, GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformAttenuationQuadratic, m_attenuation.z, GLShader::FailurePolicy::k_silent);
         }
     }
 }

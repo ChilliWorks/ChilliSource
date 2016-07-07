@@ -24,10 +24,13 @@
 
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyAmbientLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDirectionalLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/EndRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
@@ -91,6 +94,33 @@ namespace ChilliSource
     void RenderCommandList::AddApplyCameraCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept
     {
         RenderCommandUPtr renderCommand(new ApplyCameraRenderCommand(position, viewProjectionMatrix));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplyAmbientLightCommand(const Colour& colour) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplyAmbientLightRenderCommand(colour));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplyDirectionalLightCommand(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplyDirectionalLightRenderCommand(colour, direction, lightViewProjection, shadowTolerance, shadowMapRenderTexture));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplyPointLightCommand(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplyPointLightRenderCommand(colour, position, attenuation));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));

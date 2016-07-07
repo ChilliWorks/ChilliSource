@@ -52,7 +52,7 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(RenderMaterialGroup);
         
-        static constexpr u32 k_maxPasses = 3;
+        static constexpr u32 k_maxPasses = 4;
         
         /// A collection of RenderMaterials for a single vertex format.
         ///

@@ -22,7 +22,7 @@
 //  THE SOFTWARE.
 //
 
-#include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLDirectionalLight.h>
 
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 
@@ -32,19 +32,24 @@ namespace CSBackend
     {
         namespace
         {
-            const std::string k_uniformCameraPos = "u_cameraPos";
+            const std::string k_uniformLightCol = "u_lightCol";
+            const std::string k_uniformLightDir = "u_lightDir";
         }
         
         //------------------------------------------------------------------------------
-        GLCamera::GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept
-            : m_position(position), m_viewProjectionMatrix(viewProjectionMatrix)
+        GLDirectionalLight::GLDirectionalLight(const ChilliSource::Colour& colour, const ChilliSource::Vector3& direction, const ChilliSource::Matrix4& lightViewProjection, f32 shadowTolerance,
+                                               const ChilliSource::RenderTexture* shadowMapRenderTexture) noexcept
+            : m_colour(colour), m_direction(direction), m_lightViewProjection(lightViewProjection), m_shadowTolerance(shadowTolerance), m_shadowMapRenderTexture(shadowMapRenderTexture)
         {
         }
-        
+            
         //------------------------------------------------------------------------------
-        void GLCamera::Apply(GLShader* glShader) const noexcept
+        void GLDirectionalLight::Apply(GLShader* glShader) const noexcept
         {
-            glShader->SetUniform(k_uniformCameraPos, m_position, GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformLightCol, m_colour, GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformLightDir, m_direction, GLShader::FailurePolicy::k_silent);
+            
+            //TODO: Shadow map data
         }
     }
 }

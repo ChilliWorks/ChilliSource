@@ -22,30 +22,46 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_SHADER_GLMATERIAL_H_
-#define _CSBACKEND_RENDERING_OPENGL_SHADER_GLMATERIAL_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLAMBIENTLIGHT_H_
+#define _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLAMBIENTLIGHT_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLLight.h>
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
-        /// A container for all functionality pertaining to materials in OpenGL.
+        /// The ambient OpenGL light object, which stores the ambient light colour and provides
+        /// the means to apply this colour to a shader.
         ///
-        namespace GLMaterial
+        /// This is immutable and therefore thread-safe, but apply must be called on the render
+        /// thread.
+        ///
+        class GLAmbientLight final : public GLLight
         {
-            /// Applys the state described by the given RenderMaterial to the OpenGL context.
+        public:
+            /// Creates a new instance with the given colour.
             ///
-            /// @param renderMaterial
-            ///     The render material to apply.
+            /// @param colour
+            ///     The ambient light colour.
+            ///
+            GLAmbientLight(const ChilliSource::Colour& colour) noexcept;
+            
+            /// Applies the light to the given shader.
+            ///
+            /// This must be called on the render thread.
+            ///
             /// @param glShader
-            ///     The currently active shader to apply uniforms to.
+            ///     The shader the light data should be applied to.
             ///
-            void Apply(const ChilliSource::RenderMaterial* renderMaterial, GLShader* glShader) noexcept;
+            void Apply(GLShader* glShader) const noexcept override;
+            
+        private:
+            ChilliSource::Colour m_colour;
         };
     }
 }

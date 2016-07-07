@@ -102,6 +102,25 @@ namespace ChilliSource
         virtual const RenderMaterialGroup* CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
                                                                           const Colour& specularColour) noexcept = 0;
         
+        /// Creates a new shadowed blinn RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the
+        /// next Render Snapshot stage in the render pipeline.
+        ///
+        /// @param renderTexture
+        ///     The render texture.
+        /// @param ambientColour
+        ///     The ambient colour.
+        /// @param emissiveColour
+        ///     The ambient colour.
+        /// @param diffuseColour
+        ///     The diffuse colour.
+        /// @param specularColour
+        ///     The specular colour.
+        ///
+        /// @return The new material group.
+        ///
+        virtual const RenderMaterialGroup* CreateBlinnShadowedRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
+                                                                                  const Colour& specularColour) noexcept = 0;
+        
         /// Removes the RenderMaterialGroup from the manager and queues an UnloadMaterialGroupRenderCommand
         /// for the next Render Snapshot stage in the render pipeline. The render command is given ownership
         /// of the RenderMaterialGroup, ensuring it won't be destroyed until it is no longer used.

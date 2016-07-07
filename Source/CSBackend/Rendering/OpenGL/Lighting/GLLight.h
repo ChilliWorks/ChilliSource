@@ -1,11 +1,7 @@
 //
-//  Lighting.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +22,38 @@
 //  THE SOFTWARE.
 //
 
+#ifndef _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLLIGHT_H_
+#define _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLLIGHT_H_
 
-#ifndef _CHILLISOURCE_RENDERING_LIGHTING_H_
-#define _CHILLISOURCE_RENDERING_LIGHTING_H_
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
-#include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
-#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
+
+namespace CSBackend
+{
+    namespace OpenGL
+    {
+        /// The base class for all OpenGL light objects. This is used to apply the appropriate
+        /// lighting data to the active shader.
+        ///
+        /// The underlying light object should be immutable and therefore thread-safe, but apply
+        /// must be called on the render thread.
+        ///
+        class GLLight
+        {
+        public:
+            /// Applies the light to the given shader.
+            ///
+            /// This must be called on the render thread.
+            ///
+            /// @param glShader
+            ///     The shader the light data should be applied to.
+            ///
+            virtual void Apply(GLShader* glShader) const noexcept = 0;
+            
+            virtual ~GLLight() {}
+        };
+    }
+}
 
 #endif
