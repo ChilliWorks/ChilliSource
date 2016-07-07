@@ -131,6 +131,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
@@ -567,6 +568,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderPassCompiler.h" />

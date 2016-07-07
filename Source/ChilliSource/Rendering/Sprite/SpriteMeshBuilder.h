@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_SPRITE_SPRITEMESHBUILDER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 
 namespace ChilliSource
 {
@@ -38,6 +39,10 @@ namespace ChilliSource
         /// Generates a new RenderDynamicMesh for a sprite with the given properties. The sprite
         /// will be generated as a plane with its normal facing down the negative z axis.
         ///
+        /// All required memory will be allocated from the given allocator.
+        ///
+        /// @param allocator
+        ///     The allocator which should be used for all allocations.
         /// @param localPosition
         ///     The local position of the sprite. This is often used for offsetting the
         ///     sprite to account for cropping during texture packing.
@@ -53,7 +58,7 @@ namespace ChilliSource
         /// @param alignmentAchor
         ///     The alignmentAnchor of the sprite.
         ///
-        RenderDynamicMeshUPtr Build(const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour, AlignmentAnchor alignmentAnchor) noexcept;
+        RenderDynamicMeshAUPtr Build(IAllocator* allocator, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour, AlignmentAnchor alignmentAnchor) noexcept;
     }
 }
 

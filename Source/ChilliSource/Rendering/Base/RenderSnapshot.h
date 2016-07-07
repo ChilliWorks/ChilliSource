@@ -120,7 +120,7 @@ namespace ChilliSource
         ///
         /// @param The render dynamic mesh.
         ///
-        void AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept;
+        void AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept;
         
         /// @return A modifiable version of the pre render command list. This can be used to populate
         ///     The list with additional commands.
@@ -160,7 +160,7 @@ namespace ChilliSource
         ///
         /// @return The moved list of dynamic meshes.
         ///
-        std::vector<RenderDynamicMeshUPtr> ClaimRenderDynamicMeshes() noexcept;
+        std::vector<RenderDynamicMeshAUPtr> ClaimRenderDynamicMeshes() noexcept;
         
         /// Moves the pre render command list to a new external owner.
         ///
@@ -183,7 +183,7 @@ namespace ChilliSource
         std::vector<DirectionalRenderLight> m_renderDirectionalLights;
         std::vector<PointRenderLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
-        std::vector<RenderDynamicMeshUPtr> m_renderDynamicMeshes;
+        std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
         

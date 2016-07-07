@@ -66,7 +66,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderSnapshot::AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept
+    void RenderSnapshot::AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept
     {
         CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes list cannot be changed after it has been claimed.");
         
@@ -126,7 +126,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    std::vector<RenderDynamicMeshUPtr> RenderSnapshot::ClaimRenderDynamicMeshes() noexcept
+    std::vector<RenderDynamicMeshAUPtr> RenderSnapshot::ClaimRenderDynamicMeshes() noexcept
     {
         CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes have already been claimed.");
         

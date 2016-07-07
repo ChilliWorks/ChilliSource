@@ -1287,6 +1287,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Memory\PagedLinearAllocator.cpp">
       <Filter>ChilliSource\Core\Memory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2734,6 +2737,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target.h">
       <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

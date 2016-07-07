@@ -210,7 +210,8 @@ namespace ChilliSource
                 auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView; //rotate locally in the XY plane before rotating to face the camera.
                 auto worldMatrix = Matrix4::CreateTransform(worldPosition, worldScale, worldOrientation);
                 
-                auto renderDynamicMesh = SpriteMeshBuilder::Build(Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs, particle.m_colour, AlignmentAnchor::k_middleCentre);
+                auto renderDynamicMesh = SpriteMeshBuilder::Build(in_renderSnapshot.GetFrameAllocator(), Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs,
+                                                                  particle.m_colour, AlignmentAnchor::k_middleCentre);
                 auto worldBoundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldPosition, worldScale);
                 
                 in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderDynamicMesh.get(), worldMatrix, worldBoundingSphere, false, RenderLayer::k_standard));
@@ -240,7 +241,8 @@ namespace ChilliSource
                 auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;  //rotate locally in the XY plane before rotating to face the camera.
                 auto worldMatrix = Matrix4::CreateTransform(worldPosition, worldScale, worldOrientation);
 
-                auto renderDynamicMesh = SpriteMeshBuilder::Build(Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs, particle.m_colour, AlignmentAnchor::k_middleCentre);
+                auto renderDynamicMesh = SpriteMeshBuilder::Build(in_renderSnapshot.GetFrameAllocator(), Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs,
+                                                                  particle.m_colour, AlignmentAnchor::k_middleCentre);
                 auto worldBoundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldPosition, worldScale);
                 
                 in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderDynamicMesh.get(), worldMatrix, worldBoundingSphere, false, RenderLayer::k_standard));

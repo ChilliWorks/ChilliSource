@@ -130,8 +130,11 @@ namespace ChilliSource
             vertices[static_cast<u32>(SpriteVertices::k_bottomRight)].m_colour = byteColour;
         }
         
-        /// Creates the sprite vertex data from the given description.
+        /// Creates the sprite vertex data from the given description. The data will be allocated from
+        /// the given allocator.
         ///
+        /// @param allocator
+        ///     The allocator which should be used to create the buffer.
         /// @param localPosition
         ///     The local position of the sprite. This is often used to offset the sprite as required
         ///     by the cropping performed by texture packing.
@@ -144,10 +147,9 @@ namespace ChilliSource
         /// @param alignmentAnchor
         ///     The alignmentAnchor of the sprite.
         ///
-        std::unique_ptr<const u8[]> BuildVertexData(const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour, AlignmentAnchor alignmentAnchor) noexcept
+        UniquePtr<u8[]> BuildVertexData(IAllocator* allocator, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour, AlignmentAnchor alignmentAnchor) noexcept
         {
-            //TODO: This should be allocated from the frame based linear allocator.
-            std::unique_ptr<u8[]> vertexData(new u8[k_vertexDataSize]);
+            auto vertexData = MakeUniqueArray<u8>(*allocator, k_vertexDataSize);
             
             ApplyVertexPosition(reinterpret_cast<SpriteVertex*>(vertexData.get()), localPosition, localSize, alignmentAnchor);
             ApplyVertexUvs(reinterpret_cast<SpriteVertex*>(vertexData.get()), uvs);
@@ -156,12 +158,13 @@ namespace ChilliSource
             return std::move(vertexData);
         }
         
+        /// Creates the index data. This data will be allocated from the given allocator.
+        ///
         /// @return A new instance of the index data. This will always be the same 6 indices.
         ///
-        std::unique_ptr<const u8[]> BuildIndexData() noexcept
+        UniquePtr<u8[]> BuildIndexData(IAllocator* allocator) noexcept
         {
-            //TODO: This should be allocated from the frame based linear allocator.
-            std::unique_ptr<u8[]> indexData(new u8[k_indexDataSize]);
+            auto indexData = MakeUniqueArray<u8>(*allocator, k_indexDataSize);
             
             memcpy(indexData.get(), k_indices, k_indexDataSize);
             
@@ -190,13 +193,13 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderDynamicMeshUPtr SpriteMeshBuilder::Build(const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour, AlignmentAnchor alignmentAnchor) noexcept
+    RenderDynamicMeshAUPtr SpriteMeshBuilder::Build(IAllocator* allocator, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour, AlignmentAnchor alignmentAnchor) noexcept
     {
         auto polygonType = PolygonType::k_triangle;
-        ByteBuffer vertexData(BuildVertexData(localPosition, localSize, uvs, colour, alignmentAnchor), k_vertexDataSize);
-        ByteBuffer indexData(BuildIndexData(), k_indexDataSize);
+        auto vertexData = BuildVertexData(allocator, localPosition, localSize, uvs, colour, alignmentAnchor);
+        auto indexData = BuildIndexData(allocator);
         Sphere boundingSphere = CalcBoundingSphere(localPosition, localSize, alignmentAnchor);
         
-        return RenderDynamicMeshUPtr(new RenderDynamicMesh(polygonType, VertexFormat::k_sprite, IndexFormat::k_short, k_numVertices, k_numIndices, boundingSphere, std::move(vertexData), std::move(indexData)));
+        return MakeUnique<RenderDynamicMesh>(*allocator, polygonType, VertexFormat::k_sprite, IndexFormat::k_short, k_numVertices, k_numIndices, boundingSphere, std::move(vertexData), k_vertexDataSize, std::move(indexData), k_indexDataSize);
     }
 }

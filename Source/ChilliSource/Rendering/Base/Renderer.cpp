@@ -105,7 +105,10 @@ namespace ChilliSource
         auto renderCommandBuffer = WaitThenPopCommandBuffer();
         m_renderCommandProcessor->Process(renderCommandBuffer.get());
         
-        m_frameAllocatorQueue.Push(renderCommandBuffer->GetFrameAllocator());
+        auto allocator = renderCommandBuffer->GetFrameAllocator();
+        renderCommandBuffer.reset();
+        
+        m_frameAllocatorQueue.Push(allocator);
     }
     
     //------------------------------------------------------------------------------
