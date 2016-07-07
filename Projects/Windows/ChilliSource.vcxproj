@@ -130,7 +130,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IContextRestorer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandBufferManager.cpp" />
@@ -230,6 +229,8 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadShaderRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreMeshRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreTextureRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.cpp" />
@@ -548,7 +549,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IContextRestorer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h" />
@@ -669,6 +669,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadShaderRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreMeshRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreTextureRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadShaderRenderCommand.h" />
