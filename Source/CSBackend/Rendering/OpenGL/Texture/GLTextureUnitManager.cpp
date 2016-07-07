@@ -49,7 +49,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLTextureUnitManager::Bind(const std::vector<const ChilliSource::RenderTexture*> textures) noexcept
+        void GLTextureUnitManager::Bind(const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept
         {
             for (u32 textureUnitIndex = 0; textureUnitIndex < u32(textures.size()); ++textureUnitIndex)
             {

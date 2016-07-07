@@ -22,52 +22,50 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_TEXTURE_TEXTUREUNITMANAGER_H_
-#define _CSBACKEND_RENDERING_OPENGL_TEXTURE_TEXTUREUNITMANAGER_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_TARGET_GLTARGETGROUP_H_
+#define _CSBACKEND_RENDERING_OPENGL_TARGET_GLTARGETGROUP_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <unordered_map>
 #include <vector>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
-        /// Provides the ability to bind a number of textures to different opengl texture
-        /// units.
+        /// A container for all functionality pertaining to a single OpenGL target group, including
+        /// creation, deletion and binding of frame buffers.
         ///
         /// This is not thread-safe and should only be accessed from the render thread.
         ///
-        class GLTextureUnitManager final
+        class GLTargetGroup final
         {
         public:
-            CS_DECLARE_NOCOPY(GLTextureUnitManager);
+            CS_DECLARE_NOCOPY(GLTargetGroup);
             
-            GLTextureUnitManager() noexcept;
+            /// Creates a new OpenGL texture with the given texture data and description.
+            ///
+            /// @param renderTargetGroup
+            ///     The render target
+            ///
+            GLTargetGroup(const ChilliSource::RenderTargetGroup* renderTargetGroup) noexcept;
             
-            /// @return The number of available texture slots.
+            /// Binds the frame buffer that this target group represents for rendering.
             ///
-            u32 GetNumTextureSlots() noexcept { return u32(m_boundTextures.size()); }
+            void Bind() noexcept;
             
-            /// Binds the given list of textures to texture units, in order. If the list is
-            /// greater in size than the number of available texture units this will assert.
+            /// Destroys the OpenGL texture that this represents.
             ///
-            /// @param textures
-            ///     The list of textures which should be bound.
-            ///
-            void Bind(const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept;
-            
-            /// Clears all texture slots. This doesn't unbind them from the OpenGL context, it
-            /// simply clears the cache to force them to be re-bound the next time Bind() is called
-            ///
-            void Reset() noexcept;
+            ~GLTargetGroup() noexcept;
             
         private:
+            const ChilliSource::RenderTargetGroup* m_renderTargetGroup;
             
-            std::vector<const ChilliSource::RenderTexture*> m_boundTextures;
+            GLuint m_frameBufferHandle;
         };
     }
 }

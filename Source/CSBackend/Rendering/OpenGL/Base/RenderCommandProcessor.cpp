@@ -24,12 +24,14 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
+#include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 #include <CSBackend/Rendering/OpenGL/Lighting/GLAmbientLight.h>
 #include <CSBackend/Rendering/OpenGL/Lighting/GLDirectionalLight.h>
 #include <CSBackend/Rendering/OpenGL/Lighting/GLPointLight.h>
 #include <CSBackend/Rendering/OpenGL/Material/GLMaterial.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+#include <CSBackend/Rendering/OpenGL/Target/GLTargetGroup.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
 #include <ChilliSource/Rendering/Model/IndexFormat.h>
@@ -45,16 +47,24 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/BeginWithTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/EndRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+
+#ifdef CS_TARGETPLATFORM_IOS
+#   import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
+#   import <CSBackend/Platform/iOS/Core/Base/CSGLViewController.h>
+#endif
 
 namespace CSBackend
 {
@@ -136,8 +146,14 @@ namespace CSBackend
                         case ChilliSource::RenderCommand::Type::k_loadMesh:
                             LoadMesh(static_cast<const ChilliSource::LoadMeshRenderCommand*>(renderCommand));
                             break;
+                        case ChilliSource::RenderCommand::Type::k_loadTargetGroup:
+                            LoadTargetGroup(static_cast<const ChilliSource::LoadTargetGroupRenderCommand*>(renderCommand));
+                            break;
                         case ChilliSource::RenderCommand::Type::k_begin:
                             Begin(static_cast<const ChilliSource::BeginRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_beginWithTargetGroup:
+                            BeginWithTargetGroup(static_cast<const ChilliSource::BeginWithTargetGroupRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyCamera:
                             ApplyCamera(static_cast<const ChilliSource::ApplyCameraRenderCommand*>(renderCommand));
@@ -177,6 +193,9 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_unloadMesh:
                             UnloadMesh(static_cast<const ChilliSource::UnloadMeshRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_unloadTargetGroup:
+                            UnloadTargetGroup(static_cast<const ChilliSource::UnloadTargetGroupRenderCommand*>(renderCommand));
                             break;
                         default:
                             CS_LOG_FATAL("Unknown render command.");
@@ -237,9 +256,31 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::LoadTargetGroup(const ChilliSource::LoadTargetGroupRenderCommand* renderCommand) noexcept
+        {
+            ResetCache();
+            
+            auto renderTargetGroup = renderCommand->GetRenderTargetGroup();
+            
+            //TODO: Should be pooled.
+            auto glTargetGroup = new GLTargetGroup(renderTargetGroup);
+            
+            renderTargetGroup->SetExtraData(glTargetGroup);
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::Begin(const ChilliSource::BeginRenderCommand* renderCommand) noexcept
         {
             ResetCache();
+     
+            // iOS doesn't have a default frame buffer bound to 0, instead the view controllers frame buffer must
+            // be bound manually. Other platforms can just bind 0.
+#ifdef CS_TARGETPLATFORM_IOS
+            GLKView* glView = (GLKView*)[CSAppDelegate sharedInstance].viewController.view;
+            [glView bindDrawable];
+#else
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#endif
             
             glViewport(0, 0, renderCommand->GetResolution().x, renderCommand->GetResolution().y);
             
@@ -251,6 +292,35 @@ namespace CSBackend
             
             glBlendEquation(GL_FUNC_ADD);
             glDepthFunc(GL_LEQUAL);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while beginning rendering.");
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::BeginWithTargetGroup(const ChilliSource::BeginWithTargetGroupRenderCommand* renderCommand) noexcept
+        {
+            ResetCache();
+            
+            m_currentRenderTargetGroup = renderCommand->GetRenderTargetGroup();
+            CS_ASSERT(m_currentRenderTargetGroup, "Cannot render with a null render target group.");
+            
+            auto glTargetGroup = reinterpret_cast<GLTargetGroup*>(m_currentRenderTargetGroup->GetExtraData());
+            CS_ASSERT(glTargetGroup, "Cannot render with a render target group which hasn't been loaded.");
+            
+            glTargetGroup->Bind();
+            
+            glViewport(0, 0, m_currentRenderTargetGroup->GetResolution().x, m_currentRenderTargetGroup->GetResolution().y);
+            
+            glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+            glDepthMask(GL_TRUE);
+            
+            glClearColor(renderCommand->GetClearColour().r, renderCommand->GetClearColour().g, renderCommand->GetClearColour().b, renderCommand->GetClearColour().a);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
+            glBlendEquation(GL_FUNC_ADD);
+            glDepthFunc(GL_LEQUAL);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while beginning rendering with a target group.");
         }
         
         //------------------------------------------------------------------------------
@@ -394,12 +464,21 @@ namespace CSBackend
                     glDrawArrays(ToGLPolygonType(m_currentDynamicMesh->GetPolygonType()), 0, m_currentDynamicMesh->GetNumVertices());
                 }
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while rendering an instance.");
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::End() noexcept
         {
+            if (m_currentRenderTargetGroup)
+            {
+                //TODO: Update texture data for bound target group.
+            }
+            
             ResetCache();
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while ending rendering.");
         }
         
         //------------------------------------------------------------------------------
@@ -436,11 +515,23 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::UnloadTargetGroup(const ChilliSource::UnloadTargetGroupRenderCommand* renderCommand) noexcept
+        {
+            ResetCache();
+            
+            auto renderTargetGroup = renderCommand->GetRenderTargetGroup();
+            auto glTargetGroup = reinterpret_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
+            
+            CS_SAFEDELETE(glTargetGroup);
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::ResetCache() noexcept
         {
             m_textureUnitManager->Reset();
             m_currentCamera = GLCamera();
             m_currentLight.reset();
+            m_currentRenderTargetGroup = nullptr;
             m_currentMesh = nullptr;
             m_currentDynamicMesh = nullptr;
             m_currentShader = nullptr;
