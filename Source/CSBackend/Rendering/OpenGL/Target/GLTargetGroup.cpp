@@ -119,8 +119,8 @@ namespace CSBackend
             {
                 // OpenGL 2.0 on windows requires a colour buffer, else the frame buffer cannot be used.
 #ifdef CS_TARGETPLATFORM_WINDOWS
-                auto colourBufferHandle = CreateColourRenderBuffer(m_renderTargetGroup->GetResolution());
-                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colourBufferHandle);
+                m_colourRenderBufferHandle = CreateColourRenderBuffer(m_renderTargetGroup->GetResolution());
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_colourRenderBufferHandle);
 #endif
             }
             
@@ -131,8 +131,8 @@ namespace CSBackend
             }
             else if (m_renderTargetGroup->ShouldUseDepthBuffer())
             {
-                auto depthBufferHandle = CreateDepthRenderBuffer(m_renderTargetGroup->GetResolution());
-                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferHandle);
+                m_depthRenderBufferHandle = CreateDepthRenderBuffer(m_renderTargetGroup->GetResolution());
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBufferHandle);
             }
             
 #ifdef CS_ENABLE_DEBUG
@@ -153,11 +153,18 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLTargetGroup::~GLTargetGroup() noexcept
         {
-            //TODO: is needed?
-            //glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferHandle);
+            if (m_colourRenderBufferHandle > 0)
+            {
+                glDeleteRenderbuffers(1, &m_colourRenderBufferHandle);
+            }
+
+            if (m_depthRenderBufferHandle > 0)
+            {
+                glDeleteRenderbuffers(1, &m_depthRenderBufferHandle);
+            }
             
             glDeleteFramebuffers(1, &m_frameBufferHandle);
-            
+
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying target group.");
         }
     }

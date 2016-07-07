@@ -66,6 +66,8 @@ namespace CSBackend
             const ChilliSource::RenderTargetGroup* m_renderTargetGroup;
             
             GLuint m_frameBufferHandle;
+            GLuint m_colourRenderBufferHandle = 0;
+            GLuint m_depthRenderBufferHandle = 0;
         };
     }
 }
