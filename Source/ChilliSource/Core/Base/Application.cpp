@@ -371,7 +371,7 @@ namespace ChilliSource
             renderCamera = RenderCamera(transform.GetWorldTransform(), camera->GetProjection(), transform.GetWorldOrientation());
         }
         
-        RenderSnapshot renderSnapshot(resolution, clearColour, renderCamera);
+        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(resolution, clearColour, renderCamera);
         for (const AppSystemUPtr& system : m_systems)
         {
             system->OnRenderSnapshot(renderSnapshot);

@@ -22,32 +22,15 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
+#ifndef _CHILLISOURCE_CORE_MEMORY_H_
+#define _CHILLISOURCE_CORE_MEMORY_H_
 
-namespace ChilliSource
-{
-    //------------------------------------------------------------------------------
-    RenderCommandBuffer::RenderCommandBuffer(IAllocator* frameAllocator, u32 numSlots, std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes) noexcept
-        : m_frameAllocator(frameAllocator), m_renderDynamicMeshes(std::move(renderDynamicMeshes))
-    {
-        m_renderCommandLists.reserve(numSlots);
-        for (u32 i = 0; i < numSlots; ++i)
-        {
-            m_renderCommandLists.push_back(RenderCommandListUPtr(new RenderCommandList()));
-        }
-        
-        m_queue.reserve(numSlots);
-        for (const auto& renderCommandList : m_renderCommandLists)
-        {
-            m_queue.push_back(renderCommandList.get());
-        }
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderCommandList* RenderCommandBuffer::GetRenderCommandList(u32 slotIndex) noexcept
-    {
-        CS_ASSERT(slotIndex < GetNumSlots(), "Index out of bounds.");
-        
-        return m_renderCommandLists[slotIndex].get();
-    }
-}
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/IAllocator.h>
+#include <ChilliSource/Core/Memory/LinearAllocator.h>
+#include <ChilliSource/Core/Memory/MemoryUtils.h>
+#include <ChilliSource/Core/Memory/PagedLinearAllocator.h>
+#include <ChilliSource/Core/Memory/SharedPtr.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
+
+#endif

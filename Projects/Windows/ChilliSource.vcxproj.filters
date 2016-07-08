@@ -310,6 +310,9 @@
     <Filter Include="CSBackend\Rendering\OpenGL\Lighting">
       <UniqueIdentifier>{16a9f81a-57d5-40c8-ae06-05f83c347d78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Core\Memory">
+      <UniqueIdentifier>{d6135d70-2135-4b7d-9b0c-58ad8fd39986}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -1277,6 +1280,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLPointLight.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Memory\LinearAllocator.cpp">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Memory\PagedLinearAllocator.cpp">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2689,6 +2701,45 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLPointLight.h">
       <Filter>CSBackend\Rendering\OpenGL\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\IAllocator.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\LinearAllocator.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\MemoryUtils.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\MemoryUtilsImpl.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\PagedLinearAllocator.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\SharedPtr.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\SharedPtrImpl.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\UniquePtr.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\UniquePtrImpl.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

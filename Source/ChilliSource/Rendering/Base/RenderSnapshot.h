@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Memory/PagedLinearAllocator.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
 #include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
@@ -59,6 +60,8 @@ namespace ChilliSource
         
         /// Creates a new instance with the given viewport resolution and clear colour.
         ///
+        /// @param frameAllocator
+        ///     The allocator which should be used for all frame allocations.
         /// @param resolution
         ///     The viewport resolution.
         /// @param clearColour
@@ -67,7 +70,11 @@ namespace ChilliSource
         ///     The main camera that will be used to render the scene. Currently only one camera per
         ///     scene is supported.
         ///
-        RenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
+        RenderSnapshot(IAllocator* frameAllocator, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
+        
+        /// @return The allocator which should be used for all frame allocations.
+        ///
+        IAllocator* GetFrameAllocator() const noexcept { return m_frameAllocator; }
         
         /// @return The viewport resolution.
         ///
@@ -113,7 +120,7 @@ namespace ChilliSource
         ///
         /// @param The render dynamic mesh.
         ///
-        void AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept;
+        void AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept;
         
         /// @return A modifiable version of the pre render command list. This can be used to populate
         ///     The list with additional commands.
@@ -153,7 +160,7 @@ namespace ChilliSource
         ///
         /// @return The moved list of dynamic meshes.
         ///
-        std::vector<RenderDynamicMeshUPtr> ClaimRenderDynamicMeshes() noexcept;
+        std::vector<RenderDynamicMeshAUPtr> ClaimRenderDynamicMeshes() noexcept;
         
         /// Moves the pre render command list to a new external owner.
         ///
@@ -168,6 +175,7 @@ namespace ChilliSource
         RenderCommandListUPtr ClaimPostRenderCommandList() noexcept;
         
     private:
+        IAllocator* m_frameAllocator;
         Integer2 m_resolution;
         Colour m_clearColour;
         RenderCamera m_renderCamera;
@@ -175,7 +183,7 @@ namespace ChilliSource
         std::vector<DirectionalRenderLight> m_renderDirectionalLights;
         std::vector<PointRenderLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
-        std::vector<RenderDynamicMeshUPtr> m_renderDynamicMeshes;
+        std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
         

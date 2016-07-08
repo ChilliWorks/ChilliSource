@@ -77,6 +77,8 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\MathUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Random.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Memory\LinearAllocator.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Memory\PagedLinearAllocator.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\LocalNotificationSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\NotificationManager.cpp" />
@@ -129,6 +131,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
@@ -461,6 +464,16 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector2.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector3.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector4.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\IAllocator.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\LinearAllocator.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\MemoryUtils.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\MemoryUtilsImpl.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\PagedLinearAllocator.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\SharedPtr.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\SharedPtrImpl.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\UniquePtr.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\UniquePtrImpl.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Notification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\LocalNotificationSystem.h" />
@@ -555,6 +568,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderPassCompiler.h" />
@@ -662,6 +676,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomConstantParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomCurveParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyAmbientLightRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyCameraRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDirectionalLightRenderCommand.h" />
@@ -694,6 +709,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteMeshBuilder.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture.h" />

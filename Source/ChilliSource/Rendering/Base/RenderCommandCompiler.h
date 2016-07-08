@@ -45,6 +45,8 @@ namespace ChilliSource
         ///     The task context that child tasks should be run within. This assumes that the
         ///     method is being called from within another task, as per the render pipeline
         ///     design.
+        /// @param frameAllocator
+        ///     The allocator from which all frame allocations should occur.
         /// @param targetRenderPassGroups
         ///     The list of TargetRenderPassGroups containing all of the render passes.
         /// @param renderDynamicMeshes
@@ -56,8 +58,8 @@ namespace ChilliSource
         ///
         /// @return The render command buffer.
         ///
-        RenderCommandBufferCUPtr CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, std::vector<RenderDynamicMeshUPtr> renderDynamicMeshes,
-                                                       RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept;
+        RenderCommandBufferCUPtr CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
+                                                       std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept;
     }
 }
 

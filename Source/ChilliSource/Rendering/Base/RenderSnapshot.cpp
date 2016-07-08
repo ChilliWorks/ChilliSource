@@ -27,8 +27,9 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderSnapshot::RenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& in_renderCamera) noexcept
-        : m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(in_renderCamera), m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
+    RenderSnapshot::RenderSnapshot(IAllocator* frameAllocator, const Integer2& resolution, const Colour& clearColour, const RenderCamera& in_renderCamera) noexcept
+        : m_frameAllocator(frameAllocator), m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(in_renderCamera),
+          m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
     {
     }
     
@@ -65,7 +66,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderSnapshot::AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept
+    void RenderSnapshot::AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept
     {
         CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes list cannot be changed after it has been claimed.");
         
@@ -125,7 +126,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    std::vector<RenderDynamicMeshUPtr> RenderSnapshot::ClaimRenderDynamicMeshes() noexcept
+    std::vector<RenderDynamicMeshAUPtr> RenderSnapshot::ClaimRenderDynamicMeshes() noexcept
     {
         CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes have already been claimed.");
         

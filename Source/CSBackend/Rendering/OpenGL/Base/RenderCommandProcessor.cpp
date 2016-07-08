@@ -421,10 +421,10 @@ namespace CSBackend
                 
                 auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
                 const auto& vertexFormat = m_currentDynamicMesh->GetVertexFormat();
-                auto vertexData = m_currentDynamicMesh->GetVertexData().GetData();
-                auto vertexDataSize = m_currentDynamicMesh->GetVertexData().GetLength();
-                auto indexData = m_currentDynamicMesh->GetIndexData().GetData();
-                auto indexDataSize = m_currentDynamicMesh->GetIndexData().GetLength();
+                auto vertexData = m_currentDynamicMesh->GetVertexData();
+                auto vertexDataSize = m_currentDynamicMesh->GetVertexDataSize();
+                auto indexData = m_currentDynamicMesh->GetIndexData();
+                auto indexDataSize = m_currentDynamicMesh->GetIndexDataSize();
                 
                 m_glDynamicMesh->Bind(glShader, vertexFormat, vertexData, vertexDataSize, indexData, indexDataSize);
             }
