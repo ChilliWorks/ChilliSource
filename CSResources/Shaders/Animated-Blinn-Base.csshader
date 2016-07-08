@@ -1,8 +1,4 @@
 //
-//  Animated.csshader
-//  Chilli Source
-//  Created by I Copland on 29/01/2014.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2014 Tag Games Limited
@@ -46,9 +42,13 @@ GLSL
 		//uniforms
 		uniform highp mat4 u_wvpMat;
 		uniform highp vec4 u_joints[180];
+		uniform lowp vec4 u_emissive;
+		uniform lowp vec4 u_ambient;
+		uniform lowp vec4 u_lightCol;
 
 		//varyings
 		varying mediump vec2 vvTexCoord;
+		varying lowp vec4 vvColour;
 
 		void main()
 		{
@@ -97,10 +97,14 @@ GLSL
 		    animationTransform += (jointMatrix * (1.0 - a_weights.x - a_weights.y - a_weights.z));
 
 		    //Convert the vertex from local space to projection and world space.
-		    gl_Position = u_wvpMat * animationTransform * a_position;
+			vec4 localPosition = animationTransform * a_position;
+		    gl_Position = u_wvpMat * localPosition;
 
 			//get the tex coord
 			vvTexCoord = a_texCoord;
+		    
+		    //calculate the lighting colour
+		    vvColour = (u_emissive + (u_ambient * u_lightCol));
 		}
 	}
 	
@@ -116,14 +120,14 @@ GLSL
 
 		//uniforms
 		uniform lowp sampler2D u_texture0;
-		uniform lowp vec4 u_emissive;
 
 		//varyings
 		varying mediump vec2 vvTexCoord;
+		varying lowp vec4 vvColour;
 
 		void main()
 		{
-			gl_FragColor = texture2D(u_texture0, vvTexCoord) * u_emissive;
+			gl_FragColor = vvColour * texture2D(u_texture0, vvTexCoord);
 		}
 	}
 }

@@ -22,15 +22,12 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderFrame.h>
 
-namespace ChilliSource
-{
-    //------------------------------------------------------------------------------
-    RenderFrame::RenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight,
-                             const std::vector<DirectionalRenderLight>& renderDirectionalLights, const std::vector<PointRenderLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept
-        : m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(renderCamera), m_renderAmbientLight(renderAmbientLight), m_renderDirectionalLights(renderDirectionalLights),
-          m_renderPointLights(renderPointLights), m_renderObjects(renderObjects)
-    {
-    }
-}
+#ifndef _CHILLISOURCE_RENDERING_TARGET_H_
+#define _CHILLISOURCE_RENDERING_TARGET_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
+
+#endif

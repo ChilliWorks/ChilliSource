@@ -223,7 +223,6 @@ namespace ChilliSource
         {
             constexpr char k_unlit[] = "unlit";
             constexpr char k_blinn[] = "blinn";
-            constexpr char k_blinnShadowed[] = "blinnshadowed";
             constexpr char k_custom[] = "custom";
             
             auto materialTypeLower = in_materialType;
@@ -236,10 +235,6 @@ namespace ChilliSource
             else if (materialTypeLower == k_blinn)
             {
                 return Material::ShadingType::k_blinn;
-            }
-            else if (materialTypeLower == k_blinnShadowed)
-            {
-                return Material::ShadingType::k_blinnShadowed;
             }
             else if (materialTypeLower == k_custom)
             {

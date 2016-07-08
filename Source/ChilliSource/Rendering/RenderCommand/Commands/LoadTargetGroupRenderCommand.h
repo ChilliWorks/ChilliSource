@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,40 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_LOADTARGETGROUPRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_LOADTARGETGROUPRENDERCOMMAND_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    TargetRenderPassGroup::TargetRenderPassGroup(const Integer2& resolution, const Colour& clearColour, std::vector<CameraRenderPassGroup> cameraRenderPassGroups) noexcept
-        : m_resolution(resolution), m_renderCameraGroups(std::move(cameraRenderPassGroups)), m_clearColour(clearColour)
+    /// A render command for loading the data pertaining to a single render target group.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class LoadTargetGroupRenderCommand final : public RenderCommand
     {
-    }
-    
-    //------------------------------------------------------------------------------
-    TargetRenderPassGroup::TargetRenderPassGroup(const RenderTargetGroup* renderTargetGroup, const Colour& clearColour, std::vector<CameraRenderPassGroup> cameraRenderPassGroups) noexcept
-        : m_renderTargetGroup(renderTargetGroup), m_clearColour(clearColour), m_renderCameraGroups(std::move(cameraRenderPassGroups))
-    {
-        CS_ASSERT(m_renderTargetGroup, "Must supply a valid render target group.");
+    public:
+        /// @return The render target that should be loaded.
+        ///
+        RenderTargetGroup* GetRenderTargetGroup() const noexcept { return m_renderTargetGroup; }
         
-        m_resolution = m_renderTargetGroup->GetResolution();
-    }
+    private:
+        friend class RenderCommandList;
+        
+        /// Constructs a new instance with the given render render target group.
+        ///
+        /// @param renderTargetGroup
+        ///     The render target group that should be loaded.
+        ///
+        LoadTargetGroupRenderCommand(RenderTargetGroup* renderTargetGroup) noexcept;
+        
+        RenderTargetGroup* m_renderTargetGroup;
+    };
 }
+
+#endif

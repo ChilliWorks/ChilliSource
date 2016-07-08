@@ -103,25 +103,6 @@ namespace ChilliSource
         const RenderMaterialGroup* CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
                                                                   const Colour& specularColour) noexcept override;
         
-        /// Creates a new shadowed blinn RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the
-        /// next Render Snapshot stage in the render pipeline.
-        ///
-        /// @param renderTexture
-        ///     The render texture.
-        /// @param ambientColour
-        ///     The ambient colour.
-        /// @param emissiveColour
-        ///     The ambient colour.
-        /// @param diffuseColour
-        ///     The diffuse colour.
-        /// @param specularColour
-        ///     The specular colour.
-        ///
-        /// @return The new material group.
-        ///
-        const RenderMaterialGroup* CreateBlinnShadowedRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
-                                                                          const Colour& specularColour) noexcept override;
-        
     private:
         friend class RenderMaterialGroupManager;
         
@@ -135,12 +116,14 @@ namespace ChilliSource
         
         ForwardRenderMaterialGroupManager() = default;
         
-        ShaderCSPtr m_staticMeshUnlit;
-        ShaderCSPtr m_staticMeshBlinnBase;
-        ShaderCSPtr m_staticMeshBlinnDirectional;
-        ShaderCSPtr m_staticMeshBlinnPoint;
-        ShaderCSPtr m_staticMeshBlinnShadowedDirectional;
         ShaderCSPtr m_spriteUnlit;
+        
+        ShaderCSPtr m_staticShadowMap;
+        ShaderCSPtr m_staticUnlit;
+        ShaderCSPtr m_staticBlinnBase;
+        ShaderCSPtr m_staticBlinnDirectional;
+        ShaderCSPtr m_staticBlinnDirectionalShadows;
+        ShaderCSPtr m_staticBlinnPoint;
     };
 }
 

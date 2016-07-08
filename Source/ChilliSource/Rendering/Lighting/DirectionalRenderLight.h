@@ -27,6 +27,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 
 namespace ChilliSource
@@ -60,15 +62,19 @@ namespace ChilliSource
         ///     The colour of the light.
         /// @param direction
         ///     The direction of the light.
-        /// @param lightViewProjection
-        ///     The view projection matrix of the light which is used as the camera when rendering
-        ///     the shadow map.
+        /// @param lightWorldMatrix
+        ///     The light world matrix, required for rendering the shadow map.
+        /// @param lightProjectionMatrix
+        ///     The light projection matrix, required for rendering the shadow map.
+        /// @param lightOrientation
+        ///     The light orientation, required for rendering the shadow map.
         /// @param shadowTolerance
         ///     The tolerence used to judge if an object is in shadow.
-        /// @param shadowMapRenderTexture
-        ///     The render texture which should be used for the shadow map.
+        /// @param shadowMapTarget
+        ///     The render target group which should be used for the shadow map.
         ///
-        DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept;
+        DirectionalRenderLight(const Colour& colour, const Vector3& direction, const Matrix4& lightWorldMatrix, const Matrix4& lightProjectionMatrix, const Quaternion& lightOrientation,
+                               f32 shadowTolerance, const RenderTargetGroup* shadowMapTarget) noexcept;
         
         /// @return The colour of the light.
         ///
@@ -78,26 +84,35 @@ namespace ChilliSource
         ///
         const Vector3& GetDirection() const noexcept { return m_direction; }
         
-        /// @return The view projection matrix of the light which is used as the camera when rendering
-        ///     the shadow map.
+        /// @return The light world matrix, required for rendering the shadow map.
         ///
-        const Matrix4& GetLightViewProjection() const noexcept { return m_lightViewProjection; }
+        const Matrix4& GetLightWorldMatrix() const noexcept { return m_lightWorldMatrix; }
+        
+        /// @return The light projection matrix, required for rendering the shadow map.
+        ///
+        const Matrix4& GetLightProjectionMatrix() const noexcept { return m_lightProjectionMatrix; }
+        
+        /// @return The light orientation, required for rendering the shadow map.
+        ///
+        const Quaternion& GetLightOrientation() const noexcept { return m_lightOrientation; }
         
         /// @return The tolerence used to judge if an object is in shadow.
         ///
         f32 GetShadowTolerance() const noexcept { return m_shadowTolerance; }
         
-        /// @return The render texture which should be used for the shadow map. Will be null if there is
+        /// @return The render texture group which should be used for the shadow map. Will be null if there is
         ///     no shadow map.
         ///
-        const RenderTexture* GetShadowMapRenderTexture() const noexcept { return m_shadowMapRenderTexture; }
+        const RenderTargetGroup* GetShadowMapTarget() const noexcept { return m_shadowMapTarget; }
         
     private:
         Colour m_colour;
         Vector3 m_direction;
-        Matrix4 m_lightViewProjection;
+        Matrix4 m_lightWorldMatrix;
+        Matrix4 m_lightProjectionMatrix;
+        Quaternion m_lightOrientation;
         f32 m_shadowTolerance = 0.0f;
-        const RenderTexture* m_shadowMapRenderTexture = nullptr;
+        const RenderTargetGroup* m_shadowMapTarget = nullptr;
     };
 }
 

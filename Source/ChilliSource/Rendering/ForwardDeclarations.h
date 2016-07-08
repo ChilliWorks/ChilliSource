@@ -51,7 +51,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderPass);
     CS_FORWARDDECLARE_CLASS(RenderPassObject);
     CS_FORWARDDECLARE_CLASS(RenderSnapshot);
-    CS_FORWARDDECLARE_CLASS(RenderTarget);
     CS_FORWARDDECLARE_CLASS(TargetRenderPassGroup);
     CS_FORWARDDECLARE_CLASS(CameraRenderPassGroup);
     enum class AlignmentAnchor;
@@ -175,10 +174,12 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyPointLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginRenderCommand);
+    CS_FORWARDDECLARE_CLASS(BeginWithTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(EndRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadShaderRenderCommand);
+    CS_FORWARDDECLARE_CLASS(LoadTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandBuffer);
@@ -187,6 +188,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(UnloadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadShaderRenderCommand);
+    CS_FORWARDDECLARE_CLASS(UnloadTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadTextureRenderCommand);
     //------------------------------------------------------------
     /// Shader
@@ -199,6 +201,11 @@ namespace ChilliSource
     /// Sprite
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(SpriteComponent);
+    //------------------------------------------------------------
+    /// Target
+    //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(RenderTargetGroup);
+    CS_FORWARDDECLARE_CLASS(RenderTargetGroupManager);
     //------------------------------------------------------------
     /// Texture
     //------------------------------------------------------------

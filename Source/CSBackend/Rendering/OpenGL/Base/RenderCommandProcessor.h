@@ -83,12 +83,26 @@ namespace CSBackend
             ///
             void LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept;
             
+            /// Loads the target group described by the given load command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void LoadTargetGroup(const ChilliSource::LoadTargetGroupRenderCommand* renderCommand) noexcept;
+            
             /// Begins rendering to the default render target.
             ///
             /// @param renderCommand
             ///     The render command
             ///
             void Begin(const ChilliSource::BeginRenderCommand* renderCommand) noexcept;
+            
+            /// Begins rendering to the the described render target group.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void BeginWithTargetGroup(const ChilliSource::BeginWithTargetGroupRenderCommand* renderCommand) noexcept;
             
             /// Caches the given camera data. All applied materials after this will use this camera data.
             /// The currently applied material will be invalidated and needs to be re-applied.
@@ -182,6 +196,13 @@ namespace CSBackend
             ///
             void UnloadMesh(const ChilliSource::UnloadMeshRenderCommand* renderCommand) noexcept;
             
+            /// Unloads the target group described by the given unload command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void UnloadTargetGroup(const ChilliSource::UnloadTargetGroupRenderCommand* renderCommand) noexcept;
+            
             /// Resets the cached values back to thier original state.
             ///
             void ResetCache() noexcept;
@@ -193,6 +214,7 @@ namespace CSBackend
             
             GLCamera m_currentCamera;
             GLLightUPtr m_currentLight;
+            const ChilliSource::RenderTargetGroup* m_currentRenderTargetGroup = nullptr;
             const ChilliSource::RenderShader* m_currentShader = nullptr;
             const ChilliSource::RenderMaterial* m_currentMaterial = nullptr;
             const ChilliSource::RenderMesh* m_currentMesh = nullptr;

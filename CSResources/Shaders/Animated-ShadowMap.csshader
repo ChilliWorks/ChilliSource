@@ -1,5 +1,5 @@
 //
-//  AnimatedAmbient.csshader
+//  AnimatedDirectionalShadowMap.csshader
 //  Chilli Source
 //  Created by I Copland on 29/01/2014.
 //
@@ -36,23 +36,17 @@ GLSL
 		#define highp
 		#endif
 
-
 		//attributes
 		attribute highp vec4 a_position;
-		attribute mediump vec2 a_texCoord;
 		attribute mediump vec4 a_weights;
 		attribute highp vec4 a_jointIndices;
 
 		//uniforms
 		uniform highp mat4 u_wvpMat;
 		uniform highp vec4 u_joints[180];
-		uniform lowp vec4 u_emissive;
-		uniform lowp vec4 u_ambient;
-		uniform lowp vec4 u_lightCol;
 
 		//varyings
-		varying mediump vec2 vvTexCoord;
-		varying lowp vec4 vvColour;
+		varying highp float v_depth;
 
 		void main()
 		{
@@ -101,17 +95,12 @@ GLSL
 		    animationTransform += (jointMatrix * (1.0 - a_weights.x - a_weights.y - a_weights.z));
 
 		    //Convert the vertex from local space to projection and world space.
-			vec4 localPosition = animationTransform * a_position;
+            vec4 localPosition = animationTransform * a_position;
 		    gl_Position = u_wvpMat * localPosition;
-
-			//get the tex coord
-			vvTexCoord = a_texCoord;
-		    
-		    //calculate the lighting colour
-		    vvColour = (u_emissive + (u_ambient * u_lightCol));
+		    v_depth = gl_Position.z;
 		}
 	}
-	
+
 	FragmentShader
 	{
 		#ifndef GL_ES
@@ -122,16 +111,13 @@ GLSL
 		precision lowp float;
 		#endif
 
-		//uniforms
-		uniform lowp sampler2D u_texture0;
-
 		//varyings
-		varying mediump vec2 vvTexCoord;
-		varying lowp vec4 vvColour;
+		varying highp float v_depth;
 
 		void main()
 		{
-			gl_FragColor = vvColour * texture2D(u_texture0, vvTexCoord);
+			gl_FragColor = vec4(v_depth, v_depth, v_depth, 1.0);
 		}
 	}
 }
+

@@ -22,15 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderFrame.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/BeginWithTargetGroupRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderFrame::RenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight,
-                             const std::vector<DirectionalRenderLight>& renderDirectionalLights, const std::vector<PointRenderLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept
-        : m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(renderCamera), m_renderAmbientLight(renderAmbientLight), m_renderDirectionalLights(renderDirectionalLights),
-          m_renderPointLights(renderPointLights), m_renderObjects(renderObjects)
+    BeginWithTargetGroupRenderCommand::BeginWithTargetGroupRenderCommand(const RenderTargetGroup* renderTargetGroup, const Colour& clearColour) noexcept
+        : RenderCommand(Type::k_beginWithTargetGroup), m_renderTargetGroup(renderTargetGroup), m_clearColour(clearColour)
     {
     }
 }

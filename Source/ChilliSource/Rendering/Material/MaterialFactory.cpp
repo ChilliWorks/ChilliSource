@@ -74,21 +74,6 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    MaterialCSPtr MaterialFactory::CreateBlinnShadowed(const std::string& uniqueId, const TextureCSPtr& texture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
-                                      const Colour& specularColour, f32 shininess) const noexcept
-    {
-        MaterialSPtr material(CreateCustom(uniqueId));
-        material->SetShadingType(Material::ShadingType::k_blinnShadowed);
-        material->AddTexture(texture);
-        material->SetEmissive(emissiveColour);
-        material->SetAmbient(ambientColour);
-        material->SetDiffuse(diffuseColour);
-        material->SetSpecular(Colour(specularColour.r, specularColour.g, specularColour.b, shininess));
-        material->SetLoadState(Resource::LoadState::k_loaded);
-        return material;
-    }
-    
-    //------------------------------------------------------------------------------
     MaterialSPtr MaterialFactory::CreateCustom(const std::string& uniqueId) const noexcept
     {
         ResourcePool* resourcePool = Application::Get()->GetResourcePool();

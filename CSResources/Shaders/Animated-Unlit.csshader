@@ -1,8 +1,4 @@
 //
-//  AnimatedDirectionalShadowMap.csshader
-//  Chilli Source
-//  Created by I Copland on 29/01/2014.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2014 Tag Games Limited
@@ -36,19 +32,19 @@ GLSL
 		#define highp
 		#endif
 
+
 		//attributes
 		attribute highp vec4 a_position;
+		attribute mediump vec2 a_texCoord;
 		attribute mediump vec4 a_weights;
 		attribute highp vec4 a_jointIndices;
 
 		//uniforms
-		uniform highp mat4 u_worldMat;
-		uniform highp mat4 u_lightMat;
-
+		uniform highp mat4 u_wvpMat;
 		uniform highp vec4 u_joints[180];
 
 		//varyings
-		varying highp float vfDepth;
+		varying mediump vec2 vvTexCoord;
 
 		void main()
 		{
@@ -97,13 +93,13 @@ GLSL
 		    animationTransform += (jointMatrix * (1.0 - a_weights.x - a_weights.y - a_weights.z));
 
 		    //Convert the vertex from local space to projection and world space.
-            vec4 localPosition = animationTransform * a_position;
-            vec4 worldPosition = u_worldMat * localPosition;
-		    gl_Position = u_lightMat * worldPosition;
-		    vfDepth = gl_Position.z;
+		    gl_Position = u_wvpMat * animationTransform * a_position;
+
+			//get the tex coord
+			vvTexCoord = a_texCoord;
 		}
 	}
-
+	
 	FragmentShader
 	{
 		#ifndef GL_ES
@@ -114,13 +110,16 @@ GLSL
 		precision lowp float;
 		#endif
 
+		//uniforms
+		uniform lowp sampler2D u_texture0;
+		uniform lowp vec4 u_emissive;
+
 		//varyings
-		varying highp float vfDepth;
+		varying mediump vec2 vvTexCoord;
 
 		void main()
 		{
-			gl_FragColor = vec4(vfDepth, vfDepth, vfDepth, 1.0);
+			gl_FragColor = texture2D(u_texture0, vvTexCoord) * u_emissive;
 		}
 	}
 }
-

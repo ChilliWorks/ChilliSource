@@ -22,41 +22,40 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLLIGHT_H_
-#define _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLLIGHT_H_
-
-#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADTARGETGROUPRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADTARGETGROUPRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
-namespace CSBackend
+namespace ChilliSource
 {
-    namespace OpenGL
+    /// A render command for unloading the data pertaining to a single render target group.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class UnloadTargetGroupRenderCommand final : public RenderCommand
     {
-        /// The base class for all OpenGL light objects. This is used to apply the appropriate
-        /// lighting data to the active shader.
+    public:
+        /// @return The render target that should be unloaded.
         ///
-        /// The underlying light object should be immutable and therefore thread-safe, but apply
-        /// must be called on the render thread.
+        RenderTargetGroup* GetRenderTargetGroup() const noexcept { return m_renderTargetGroup.get(); }
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Constructs a new instance with the given render render target group.
         ///
-        class GLLight
-        {
-        public:
-            /// Applies the light to the given shader.
-            ///
-            /// This must be called on the render thread.
-            ///
-            /// @param glShader
-            ///     The shader the light data should be applied to.
-            /// @param glTextureUnitManager
-            ///     The texture unit manager which can be used to bind additional textures required by a light
-            ///     such as a shadow map.
-            ///
-            virtual void Apply(GLShader* glShader, GLTextureUnitManager* glTextureUnitManager) const noexcept = 0;
-            
-            virtual ~GLLight() {}
-        };
-    }
+        /// @param renderTargetGroup
+        ///     The render target group that should be unloaded.
+        ///
+        UnloadTargetGroupRenderCommand(RenderTargetGroupUPtr renderTargetGroup) noexcept;
+        
+        RenderTargetGroupUPtr m_renderTargetGroup;
+    };
 }
 
 #endif

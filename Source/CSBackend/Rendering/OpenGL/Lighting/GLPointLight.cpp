@@ -46,7 +46,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLPointLight::Apply(GLShader* glShader) const noexcept
+        void GLPointLight::Apply(GLShader* glShader, GLTextureUnitManager* glTextureUnitManager) const noexcept
         {
             glShader->SetUniform(k_uniformLightCol, m_colour, GLShader::FailurePolicy::k_silent);
             glShader->SetUniform(k_uniformLightPos, m_position, GLShader::FailurePolicy::k_silent);

@@ -22,49 +22,52 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLAMBIENTLIGHT_H_
-#define _CSBACKEND_RENDERING_OPENGL_LIGHTING_GLAMBIENTLIGHT_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_TARGET_GLTARGETGROUP_H_
+#define _CSBACKEND_RENDERING_OPENGL_TARGET_GLTARGETGROUP_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <CSBackend/Rendering/OpenGL/Lighting/GLLight.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/Colour.h>
+
+#include <unordered_map>
+#include <vector>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
-        /// The ambient OpenGL light object, which stores the ambient light colour and provides
-        /// the means to apply this colour to a shader.
+        /// A container for all functionality pertaining to a single OpenGL target group, including
+        /// creation, deletion and binding of frame buffers.
         ///
-        /// This is immutable and therefore thread-safe, but apply must be called on the render
-        /// thread.
+        /// This is not thread-safe and should only be accessed from the render thread.
         ///
-        class GLAmbientLight final : public GLLight
+        class GLTargetGroup final
         {
         public:
-            /// Creates a new instance with the given colour.
-            ///
-            /// @param colour
-            ///     The ambient light colour.
-            ///
-            GLAmbientLight(const ChilliSource::Colour& colour) noexcept;
+            CS_DECLARE_NOCOPY(GLTargetGroup);
             
-            /// Applies the light to the given shader.
+            /// Creates a new OpenGL texture with the given texture data and description.
             ///
-            /// This must be called on the render thread.
+            /// @param renderTargetGroup
+            ///     The render target
             ///
-            /// @param glShader
-            ///     The shader the light data should be applied to.
-            /// @param glTextureUnitManager
-            ///     The texture unit manager which can be used to bind additional textures required by a light
-            ///     such as a shadow map.
+            GLTargetGroup(const ChilliSource::RenderTargetGroup* renderTargetGroup) noexcept;
+            
+            /// Binds the frame buffer that this target group represents for rendering.
             ///
-            void Apply(GLShader* glShader, GLTextureUnitManager* glTextureUnitManager) const noexcept override;
+            void Bind() noexcept;
+            
+            /// Destroys the OpenGL texture that this represents.
+            ///
+            ~GLTargetGroup() noexcept;
             
         private:
-            ChilliSource::Colour m_colour;
+            const ChilliSource::RenderTargetGroup* m_renderTargetGroup;
+            
+            GLuint m_frameBufferHandle;
+            GLuint m_colourRenderBufferHandle = 0;
+            GLuint m_depthRenderBufferHandle = 0;
         };
     }
 }

@@ -26,8 +26,11 @@
 #define _CHILLISOURCE_RENDERING_TEXTURE_RENDERTEXTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Image/ImageFormat.h>
+#include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
+#include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
 
 namespace ChilliSource
 {

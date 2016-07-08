@@ -146,13 +146,13 @@ namespace ChilliSource
         ~DirectionalLightComponent() noexcept;
         
     private:
-        /// Create the shadow map texture if required.
+        /// Create the shadow map target and texture if required.
         ///
-        void TryCreateShadowMapTexture() noexcept;
+        void TryCreateShadowMapTarget() noexcept;
         
-        /// Destroys the shadow map texture if required.
+        /// Destroys the shadow map target and texture if required.
         ///
-        void TryDestroyShadowMapTexture() noexcept;
+        void TryDestroyShadowMapTarget() noexcept;
         
         /// Triggered when either the component is attached to an entity which is already in the
         /// scene or when the owning entity is added to the scene.
@@ -183,11 +183,10 @@ namespace ChilliSource
         
         Vector3 m_direction;
         Matrix4 m_lightProjection;
-        Matrix4 m_lightView;
-        Matrix4 m_lightViewProjection;
         Integer2 m_shadowMapResolution;
         s32 m_shadowMapId = -1;
         TextureCSPtr m_shadowMap;
+        const RenderTargetGroup* m_shadowMapTarget = nullptr;
         
         EventConnectionUPtr m_transformChangedConnection;
     };

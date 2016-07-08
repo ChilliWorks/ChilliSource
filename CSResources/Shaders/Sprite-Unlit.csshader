@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2016 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,58 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderFrame.h>
-
-namespace ChilliSource
+GLSL
 {
-    //------------------------------------------------------------------------------
-    RenderFrame::RenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight,
-                             const std::vector<DirectionalRenderLight>& renderDirectionalLights, const std::vector<PointRenderLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept
-        : m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(renderCamera), m_renderAmbientLight(renderAmbientLight), m_renderDirectionalLights(renderDirectionalLights),
-          m_renderPointLights(renderPointLights), m_renderObjects(renderObjects)
-    {
-    }
+	VertexShader
+	{
+		#ifndef GL_ES
+		#define lowp
+		#define mediump
+		#define highp
+		#endif
+
+		//attributes
+		attribute highp vec4 a_position;
+		attribute lowp vec4 a_colour;
+		attribute mediump vec2 a_texCoord;
+
+		//uniforms
+		uniform highp mat4 u_wvpMat;
+		uniform lowp vec4 u_emissive;
+
+		//varyings
+		varying lowp vec4 vvColour;
+		varying mediump vec2 vvTexCoord;
+
+		void main()
+		{
+		    gl_Position = u_wvpMat * a_position;
+		    vvColour = a_colour * u_emissive;
+		    vvTexCoord = a_texCoord;
+		}
+	}
+	
+	FragmentShader
+	{
+		#ifndef GL_ES
+		#define lowp
+		#define mediump
+		#define highp
+		#else
+		precision lowp float;
+		#endif
+
+		//uniforms
+		uniform lowp sampler2D u_texture0;
+
+		//varyings
+		varying lowp vec4 vvColour;
+		varying mediump vec2 vvTexCoord;
+
+		void main()
+		{
+			gl_FragColor = texture2D(u_texture0, vvTexCoord) * vvColour;
+		}
+	}
 }
+

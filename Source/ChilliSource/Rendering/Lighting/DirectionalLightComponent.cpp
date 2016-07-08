@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureDesc.h>
 
@@ -40,7 +41,7 @@ namespace ChilliSource
 {
     namespace
     {
-        constexpr f32 k_defaultShadowTolerance = 0.075f;
+        constexpr f32 k_defaultShadowTolerance = 0.005f;
         constexpr f32 k_defaultShadowVolumeWidth = 50.0f;
         constexpr f32 k_defaultShadowVolumeHeight = 50.0f;
         constexpr f32 k_defaultShadowVolumeNear = 5.0f;
@@ -86,7 +87,7 @@ namespace ChilliSource
     {
         SetShadowVolume(k_defaultShadowVolumeWidth, k_defaultShadowVolumeHeight, k_defaultShadowVolumeNear, k_defaultShadowVolumeFar);
         
-        TryCreateShadowMapTexture();
+        TryCreateShadowMapTarget();
     }
     
     //------------------------------------------------------------------------------
@@ -99,13 +100,13 @@ namespace ChilliSource
     void DirectionalLightComponent::SetShadowVolume(f32 width, f32 height, f32 near, f32 far) noexcept
     {
         m_lightProjection = Matrix4::CreateOrthographicProjectionLH(width, height, near, far);
-        m_lightViewProjection = m_lightView * m_lightProjection;
     }
     
     //------------------------------------------------------------------------------
-    void DirectionalLightComponent::TryCreateShadowMapTexture() noexcept
+    void DirectionalLightComponent::TryCreateShadowMapTarget() noexcept
     {
         CS_ASSERT(!m_shadowMap, "Shadow map already exists.");
+        CS_ASSERT(!m_shadowMapTarget, "Shadow map target already exists.");
         
         //TODO: handle the case where the device doesn't support depth textures.
         
@@ -118,19 +119,29 @@ namespace ChilliSource
             mutableShadowMap->SetLoadState(Resource::LoadState::k_loaded);
             
             m_shadowMap = mutableShadowMap;
+            
+            auto renderTargetGroupManager = Application::Get()->GetSystem<RenderTargetGroupManager>();
+            m_shadowMapTarget = renderTargetGroupManager->CreateDepthRenderTargetGroup(m_shadowMap->GetRenderTexture());
         }
     }
     
     //------------------------------------------------------------------------------
-    void DirectionalLightComponent::TryDestroyShadowMapTexture() noexcept
+    void DirectionalLightComponent::TryDestroyShadowMapTarget() noexcept
     {
-        ResourcePool* resourcePool = Application::Get()->GetResourcePool();
-        
-        if(m_shadowMap)
+        if (m_shadowMap)
         {
+            auto resourcePool = Application::Get()->GetResourcePool();
+            
             auto release = m_shadowMap.get();
             m_shadowMap.reset();
             resourcePool->Release(release);
+        }
+        
+        if (m_shadowMapTarget)
+        {
+            auto renderTargetGroupManager = Application::Get()->GetSystem<RenderTargetGroupManager>();
+            
+            renderTargetGroupManager->DestroyRenderTargetGroup(m_shadowMapTarget);
         }
     }
     
@@ -140,8 +151,6 @@ namespace ChilliSource
         auto& transform = GetEntity()->GetTransform();
         
         m_direction = Vector3::Rotate(Vector3::k_unitPositiveZ, transform.GetWorldOrientation());
-        m_lightView = Matrix4::Inverse(transform.GetWorldTransform());
-        m_lightViewProjection = m_lightView * m_lightProjection;
         
         m_transformChangedConnection = transform.GetTransformChangedEvent().OpenConnection(MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
     }
@@ -152,8 +161,6 @@ namespace ChilliSource
         auto& transform = GetEntity()->GetTransform();
         
         m_direction = Vector3::Rotate(Vector3::k_unitPositiveZ, transform.GetWorldOrientation());
-        m_lightView = Matrix4::Inverse(transform.GetWorldTransform());
-        m_lightViewProjection = m_lightView * m_lightProjection;
     }
     
     //------------------------------------------------------------------------------
@@ -161,7 +168,10 @@ namespace ChilliSource
     {
         if (m_shadowMap)
         {
-            //TODO: Handle shadow map
+            const auto& transform = GetEntity()->GetTransform();
+            auto worldMatrix = transform.GetWorldTransform();
+            auto orientation = transform.GetWorldOrientation();
+            renderSnapshot.AddDirectionalRenderLight(DirectionalRenderLight(GetFinalColour(), m_direction, worldMatrix, m_lightProjection, orientation, m_shadowTolerance, m_shadowMapTarget));
         }
         else
         {
@@ -178,7 +188,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     DirectionalLightComponent::~DirectionalLightComponent() noexcept
     {
-        TryDestroyShadowMapTexture();
+        TryDestroyShadowMapTarget();
     }
 }
 
