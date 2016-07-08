@@ -57,7 +57,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void* LinearAllocator::Allocate(std::size_t allocationSize) noexcept
     {
-        assert(allocationSize <= GetFreeSpace());
+        CS_ASSERT(allocationSize <= GetFreeSpace(), "Allocation is too big to fit in the remaining space.");
 
         std::uint8_t* output = m_nextPointer;
         m_nextPointer = MemoryUtils::Align(m_nextPointer + allocationSize, sizeof(std::intptr_t));
@@ -70,7 +70,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LinearAllocator::Deallocate(void* pointer) noexcept
     {
-        assert(Contains(pointer));
+        CS_ASSERT(Contains(pointer), "Cannot deallocate a pointer that did not originate from this allocator.");
 
         --m_activeAllocationCount;
     }
@@ -84,7 +84,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void LinearAllocator::Reset() noexcept
     {
-        assert(m_activeAllocationCount == 0);
+        CS_ASSERT(m_activeAllocationCount == 0, "Cannot reset before all allocations have been deallocated.");
 
         m_nextPointer = MemoryUtils::Align(m_buffer, sizeof(std::intptr_t));
     }

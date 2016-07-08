@@ -58,7 +58,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void* PagedLinearAllocator::Allocate(std::size_t allocationSize) noexcept
     {
-        assert(allocationSize <= GetMaxAllocationSize());
+        CS_ASSERT(allocationSize <= GetMaxAllocationSize(), "Allocation size is too big.");
 
         if (m_parentAllocator)
         {
@@ -112,7 +112,7 @@ namespace ChilliSource
             }
         }
 
-        assert(false);
+        CS_LOG_FATAL("Cannot deallocate a pointer that did not originate from this allocator.");
     }
 
     //------------------------------------------------------------------------------

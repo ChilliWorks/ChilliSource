@@ -37,6 +37,8 @@ namespace ChilliSource
             static_assert(std::is_integral<TAlignmentType>::value, "Alignment must be integral type.");
             static_assert(std::is_unsigned<TAlignmentType>::value, "Alignment must be unsigned.");
 
+            CS_ASSERT(IsPowerOfTwo(alignment), "Must be a power of two.");
+            
             std::uintptr_t valueIntPtr = reinterpret_cast<std::uintptr_t>(value);
             std::uintptr_t alignmentIntPtr = static_cast<std::uintptr_t>(alignment);
 
@@ -95,7 +97,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         template <typename TType> std::size_t CalcShift(TType value) noexcept
         {
-            assert(IsPowerOfTwo(value));
+            CS_ASSERT(IsPowerOfTwo(value), "Must be a power of two.");
 
             TType output = 0;
             while (value > 1)
@@ -113,7 +115,7 @@ namespace ChilliSource
             auto pointerInt = reinterpret_cast<std::uintptr_t>(pointer);
             auto relativeToInt = reinterpret_cast<std::uintptr_t>(relativeTo);
 
-            assert(pointerInt >= relativeToInt);
+            CS_ASSERT(pointerInt >= relativeToInt, "Pointer must greater than it's parent.");
             return (pointerInt - relativeToInt);
         }
 
