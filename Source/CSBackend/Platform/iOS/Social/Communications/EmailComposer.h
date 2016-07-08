@@ -65,9 +65,6 @@ namespace CSBackend
             /// Displays the email activity with the given recipients,
             /// subject and contents.
             ///
-            /// If Dismiss() has been called, this must only be called
-            /// after the result delegate has finished, if it exists.
-            ///
             /// @author S Downie
             ///
             /// @param A list of recipients (UTF-8).
@@ -82,9 +79,6 @@ namespace CSBackend
             /// Displays the email activity with the given recipients,
             /// subject and contents, and adds a list of attachments
             /// to the email.
-            ///
-            /// If Dismiss() has been called, this must only be called
-            /// after the result delegate has finished, if it exists.
             ///
             /// @author Ian Copland
             ///

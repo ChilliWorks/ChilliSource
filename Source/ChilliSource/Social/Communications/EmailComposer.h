@@ -85,9 +85,6 @@ namespace ChilliSource
         /// A delegate that is called when the email view is
         /// dismissed, returning the result.
         ///
-        /// If Dismiss() has been called, this must only be called
-        /// after the result delegate has finished, if it exists.
-        ///
         /// @author S McGaw
         ///
         /// @param The result of the email composition.
@@ -96,9 +93,6 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Displays the email activity with the given recipients,
         /// subject and contents.
-        ///
-        /// If Dismiss() has been called, this must only be called
-        /// after the result delegate has finished, if it exists.
         ///
         /// @author S Downie
         ///
