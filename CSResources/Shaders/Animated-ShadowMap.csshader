@@ -42,13 +42,11 @@ GLSL
 		attribute highp vec4 a_jointIndices;
 
 		//uniforms
-		uniform highp mat4 u_worldMat;
-		uniform highp mat4 u_lightMat;
-
+		uniform highp mat4 u_wvpMat;
 		uniform highp vec4 u_joints[180];
 
 		//varyings
-		varying highp float vfDepth;
+		varying highp float v_depth;
 
 		void main()
 		{
@@ -98,9 +96,8 @@ GLSL
 
 		    //Convert the vertex from local space to projection and world space.
             vec4 localPosition = animationTransform * a_position;
-            vec4 worldPosition = u_worldMat * localPosition;
-		    gl_Position = u_lightMat * worldPosition;
-		    vfDepth = gl_Position.z;
+		    gl_Position = u_wvpMat * localPosition;
+		    v_depth = gl_Position.z;
 		}
 	}
 
@@ -115,11 +112,11 @@ GLSL
 		#endif
 
 		//varyings
-		varying highp float vfDepth;
+		varying highp float v_depth;
 
 		void main()
 		{
-			gl_FragColor = vec4(vfDepth, vfDepth, vfDepth, 1.0);
+			gl_FragColor = vec4(v_depth, v_depth, v_depth, 1.0);
 		}
 	}
 }
