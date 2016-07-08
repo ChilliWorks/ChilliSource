@@ -37,6 +37,7 @@
 #import <ChilliSource/Core/Base/Screen.h>
 #import <ChilliSource/Core/File/FileSystem.h>
 #import <ChilliSource/Core/String/StringUtils.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/CALayer.h>
@@ -98,25 +99,28 @@ namespace CSBackend
                 m_linkHandlerDelegate = in_customLinkHandler;
                 m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
                 
-                if(!m_webView)
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
-                    CreateWebview(in_size);
+                    if(!m_webView)
+                    {
+                        CreateWebview(in_size);
+                        
+                        m_anchor = "";
+                        
+                        NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
+                        NSURL* url = [NSURL URLWithString:urlString];
+                        [urlString release];
+                        
+                        [m_webView loadRequest:[NSURLRequest requestWithURL:url]];
+                        
+                        m_webView.backgroundColor = [UIColor clearColor];
+                        m_webView.opaque = NO;
+                        
+                        AddActivityIndicator();
+                    }
                     
-                    m_anchor = "";
-                    
-                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
-                    NSURL* url = [NSURL URLWithString:urlString];
-                    [urlString release];
-                    
-                    [m_webView loadRequest:[NSURLRequest requestWithURL:url]];
-                    
-                    m_webView.backgroundColor = [UIColor clearColor];
-                    m_webView.opaque = NO;
-                    
-                    AddActivityIndicator();
-                }
-                
-                Display();
+                    Display();
+                });
             }
 		}
 		//-----------------------------------------------
@@ -132,41 +136,44 @@ namespace CSBackend
                 m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
                 m_linkHandlerDelegate = in_customLinkHandler;
                 
-                CreateWebview(in_size);
-                
-                std::string filePath;
-                GetFilePathAndAnchor(in_filePath, filePath, m_anchor);
-                
-                ChilliSource::FileSystem* fileSystem = ChilliSource::Application::Get()->GetFileSystem();
-
-                std::string fullFilePath;
-                if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(filePath) == false)
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
-                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + filePath;
-                }
-                else
-                {
-                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
-                }
+                    CreateWebview(in_size);
+                    
+                    std::string filePath;
+                    GetFilePathAndAnchor(in_filePath, filePath, m_anchor);
+                    
+                    ChilliSource::FileSystem* fileSystem = ChilliSource::Application::Get()->GetFileSystem();
 
-                
-                auto HTMLFileStream = fileSystem->CreateTextInputStream(in_storageLocation, in_filePath);
-                CS_ASSERT(HTMLFileStream, "Could not open file: " + filePath);
-                std::string HTMLFileContents = HTMLFileStream->ReadAll();
-                HTMLFileStream.reset();
-                
-                NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:HTMLFileContents];
-                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];
-                [m_webView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
-                [urlString release];
-                [pstrHTML release];
-                
-                m_webView.backgroundColor = [UIColor clearColor];
-                m_webView.opaque = NO;
-                
-                AddActivityIndicator();
-                
-                Display();
+                    std::string fullFilePath;
+                    if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(filePath) == false)
+                    {
+                        fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + filePath;
+                    }
+                    else
+                    {
+                        fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
+                    }
+
+                    
+                    auto HTMLFileStream = fileSystem->CreateTextInputStream(in_storageLocation, in_filePath);
+                    CS_ASSERT(HTMLFileStream, "Could not open file: " + filePath);
+                    std::string HTMLFileContents = HTMLFileStream->ReadAll();
+                    HTMLFileStream.reset();
+                    
+                    NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:HTMLFileContents];
+                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];
+                    [m_webView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:urlString]];
+                    [urlString release];
+                    [pstrHTML release];
+                    
+                    m_webView.backgroundColor = [UIColor clearColor];
+                    m_webView.opaque = NO;
+                    
+                    AddActivityIndicator();
+                    
+                    Display();
+                });
             }
 		}
         //-----------------------------------------------
@@ -175,11 +182,14 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
-                NSURL* url = [NSURL URLWithString:urlString];
-                [urlString release];
-                
-                [[UIApplication sharedApplication] openURL:url];
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+                {
+                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_url];
+                    NSURL* url = [NSURL URLWithString:urlString];
+                    [urlString release];
+                    
+                    [[UIApplication sharedApplication] openURL:url];
+                });
             }
 		}
         //-----------------------------------------------
@@ -188,7 +198,11 @@ namespace CSBackend
 		{
             @autoreleasepool
             {
-                if(m_currentState == State::k_presented)
+                CS_ASSERT(m_currentState == State::k_presented, "Cannot dismiss a view which is not presented");
+               
+                m_currentState = State::k_dismissing;
+                
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
                 {
                     if (m_activityIndicator != nil)
                     {
@@ -210,15 +224,17 @@ namespace CSBackend
                     [m_webView release];
                     m_webView = nil;
                     
-                    m_currentState = State::k_inactive;
-                    
-                    if (m_dismissedDelegate)
+                    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
                     {
-                        DismissedDelegate delegate = m_dismissedDelegate;
-                        m_dismissedDelegate = nullptr;
-                        delegate();
-                    }
-                }
+                        if (m_dismissedDelegate)
+                        {
+                            DismissedDelegate delegate = m_dismissedDelegate;
+                            m_dismissedDelegate = nullptr;
+                            delegate();
+                            m_currentState = State::k_inactive;
+                        }
+                    });
+                });
             }
 		}
         //---------------------------------------------------------

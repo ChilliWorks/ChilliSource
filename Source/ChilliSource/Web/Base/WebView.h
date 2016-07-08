@@ -125,17 +125,6 @@ namespace ChilliSource
     protected:
         friend class State;
         //------------------------------------------------------------------------------
-        /// Describes the current state of the webview.
-        ///
-        /// @author Jordan Brown
-        //------------------------------------------------------------------------------
-        enum class State
-        {
-            k_inactive,
-            k_presented,
-            k_dismissing
-        };
-        //------------------------------------------------------------------------------
         /// Create the platform dependent backend.
         ///
         /// @author S Downie

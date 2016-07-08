@@ -98,16 +98,20 @@ namespace ChilliSource
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
-    void NotificationManager::GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+    void NotificationManager::GetScheduledAppNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
     {
         if (m_appNotificationSystem != nullptr)
         {
             m_appNotificationSystem->GetScheduledNotifications(out_notifications, in_time, in_period);
         }
-        
-        if (m_localNotificationSystem != nullptr)
+    }
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    void NotificationManager::GetScheduledLocalNotifications(LocalNotificationSystem::GetScheduledNotificationsDelegate in_delegate, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+    {
+        if(m_localNotificationSystem != nullptr)
         {
-            m_localNotificationSystem->GetScheduledNotifications(out_notifications, in_time, in_period);
+            m_localNotificationSystem->GetScheduledNotifications(in_delegate, in_time, in_period);
         }
     }
     //---------------------------------------------------

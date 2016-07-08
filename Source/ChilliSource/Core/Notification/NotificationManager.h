@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Notification/Notification.h>
+#include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
@@ -148,7 +149,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void ScheduleLocalNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
         //--------------------------------------------------------
-        /// Builds a list of all notifications currently scheduled
+        /// Builds a list of all app notifications currently scheduled
         /// within the given time period.
         ///
         /// @author Ian Copland
@@ -157,7 +158,19 @@ namespace ChilliSource
         /// @param [Optional] The start time.
         /// @param [Optional] The end time.
         //--------------------------------------------------------
-        void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const;
+        void GetScheduledAppNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const;
+        //--------------------------------------------------------
+        /// Builds a list of all notifications currently scheduled
+        /// within the given time period, and then executes a
+        /// delegate function with the list as its parameter.
+        ///
+        /// @author Jordan Brown
+        ///
+        /// @param The delegate function to execute.
+        /// @param [Optional] The start time.
+        /// @param [Optional] The end time.
+        //--------------------------------------------------------
+        void GetScheduledLocalNotifications(LocalNotificationSystem::GetScheduledNotificationsDelegate in_delegate, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const;
         //---------------------------------------------------
         /// Prevent any notifications with given ID type from
         /// firing.

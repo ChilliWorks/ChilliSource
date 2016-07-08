@@ -178,38 +178,51 @@ namespace CSBackend
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void LocalNotificationSystem::GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+        void LocalNotificationSystem::GetScheduledNotifications(GetScheduledNotificationsDelegate in_delegate, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to retrieve scheduled notifications outside of main thread.");
             
-            for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
-			{
-                TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
-                s32 dwDeltaSecs = (s32)(in_time - triggerTime);
-                
-				if(std::abs(dwDeltaSecs) <= in_period)
-				{
-                    ChilliSource::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
-					out_notifications.push_back(notification);
-				}
-                
-                if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
-                {
-                    [m_recentlyAddedNotifications removeObject:nsNotification];
-                }
-			}
-            
-            for(UILocalNotification* nsNotification in m_recentlyAddedNotifications)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
-                s32 dwDeltaSecs = (s32)(in_time - triggerTime);
+                std::vector<ChilliSource::NotificationCSPtr> notificationList;
                 
-                if(std::abs(dwDeltaSecs) <= in_period)
+                for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
                 {
-                    ChilliSource::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
-                    out_notifications.push_back(notification);
+                    TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
+                    s32 dwDeltaSecs = (s32)(in_time - triggerTime);
+                    
+                    if(std::abs(dwDeltaSecs) <= in_period)
+                    {
+                        ChilliSource::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
+                        notificationList.push_back(notification);
+                    }
+                    
+                    if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
+                    {
+                        [m_recentlyAddedNotifications removeObject:nsNotification];
+                    }
                 }
-            }
+                
+                for(UILocalNotification* nsNotification in m_recentlyAddedNotifications)
+                {
+                    TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
+                    s32 dwDeltaSecs = (s32)(in_time - triggerTime);
+                    
+                    if(std::abs(dwDeltaSecs) <= in_period)
+                    {
+                        ChilliSource::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
+                        notificationList.push_back(notification);
+                    }
+                }
+                
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                {
+                    if(in_delegate)
+                    {
+                        in_delegate(notificationList);
+                    }
+                });
+            });
         }
         //------------------------------------------------
         //------------------------------------------------
