@@ -178,7 +178,7 @@ namespace CSBackend
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void LocalNotificationSystem::GetScheduledNotifications(GetScheduledNotificationsDelegate in_delegate, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+        void LocalNotificationSystem::GetScheduledNotifications(const GetScheduledNotificationsDelegate& in_delegate, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to retrieve scheduled notifications outside of main thread.");
             
@@ -266,6 +266,7 @@ namespace CSBackend
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
+                [m_recentlyAddedNotifications removeAllObjects];
                 [[UIApplication sharedApplication] cancelAllLocalNotifications];
             });
         }

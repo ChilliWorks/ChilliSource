@@ -98,20 +98,33 @@ namespace ChilliSource
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
-    void NotificationManager::GetScheduledAppNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+    void NotificationManager::GetScheduledNotifications(const GetScheduledNotificationsDelegate& in_delegate, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
     {
-        if (m_appNotificationSystem != nullptr)
+        std::vector<NotificationCSPtr> scheduledAppNotifications;
+        
+        if(m_appNotificationSystem != nullptr)
         {
-            m_appNotificationSystem->GetScheduledNotifications(out_notifications, in_time, in_period);
+            m_appNotificationSystem->GetScheduledNotifications(scheduledAppNotifications);
         }
-    }
-    //---------------------------------------------------------
-    //---------------------------------------------------------
-    void NotificationManager::GetScheduledLocalNotifications(LocalNotificationSystem::GetScheduledNotificationsDelegate in_delegate, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
-    {
+        
         if(m_localNotificationSystem != nullptr)
         {
-            m_localNotificationSystem->GetScheduledNotifications(in_delegate, in_time, in_period);
+            m_localNotificationSystem->GetScheduledNotifications([=](std::vector<NotificationCSPtr> notifications)
+            {
+                std::vector<NotificationCSPtr> scheduledNotifications;
+                
+                for(auto notification : scheduledAppNotifications)
+                {
+                    scheduledNotifications.push_back(notification);
+                }
+                
+                for(auto notification : notifications)
+                {
+                    scheduledNotifications.push_back(notification);
+                }
+                
+                in_delegate(scheduledNotifications);
+            });
         }
     }
     //---------------------------------------------------

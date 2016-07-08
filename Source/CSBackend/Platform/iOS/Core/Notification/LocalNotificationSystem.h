@@ -84,9 +84,10 @@ namespace CSBackend
             //---------------------------------------------------
             void ScheduleNotificationForTime(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, TimeIntervalSecs in_time, ChilliSource::Notification::Priority in_priority = ChilliSource::Notification::Priority::k_standard) override;
             //--------------------------------------------------------
-            /// Builds a list of all notifications currently scheduled
-            /// within the given time period, and then executes a
-            /// delegate function with the list as its parameter.
+            /// Generates a list of all notifications that are currently
+            /// scheduled. Because the list cannot be immediately
+            /// calculated, the result is returned through the provided
+            /// delegate when ready.
             ///
             /// @author Ian Copland
             ///
@@ -94,7 +95,7 @@ namespace CSBackend
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            void GetScheduledNotifications(GetScheduledNotificationsDelegate in_delegate, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
+            void GetScheduledNotifications(const GetScheduledNotificationsDelegate& in_delegate, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
             //--------------------------------------------------------
             /// Prevent any notifications with given ID type from firing
             ///

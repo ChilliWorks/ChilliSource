@@ -56,6 +56,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         using ReceivedDelegate = std::function<void(NotificationManager*, const NotificationCSPtr&)>;
         using DismissedDelegate = std::function<void(const NotificationCSPtr&)>;
+        using GetScheduledNotificationsDelegate = std::function<void(const std::vector<NotificationCSPtr>& scheduledNotifications)>;
         //-----------------------------------------------------
         /// Creates a new instance of the system.
         ///
@@ -148,29 +149,19 @@ namespace ChilliSource
         /// to standard priority.
         //----------------------------------------------------
         void ScheduleLocalNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
-        //--------------------------------------------------------
-        /// Builds a list of all app notifications currently scheduled
-        /// within the given time period.
+        //----------------------------------------------------------
+        /// Generates a list of all notifications that are currently
+        /// scheduled. Because the list cannot be immediately
+        /// calculated, the result is returned through the provided
+        /// delegate when ready.
         ///
         /// @author Ian Copland
-        ///
-        /// @param [Out] The list of notifications.
-        /// @param [Optional] The start time.
-        /// @param [Optional] The end time.
-        //--------------------------------------------------------
-        void GetScheduledAppNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const;
-        //--------------------------------------------------------
-        /// Builds a list of all notifications currently scheduled
-        /// within the given time period, and then executes a
-        /// delegate function with the list as its parameter.
-        ///
-        /// @author Jordan Brown
         ///
         /// @param The delegate function to execute.
         /// @param [Optional] The start time.
         /// @param [Optional] The end time.
-        //--------------------------------------------------------
-        void GetScheduledLocalNotifications(LocalNotificationSystem::GetScheduledNotificationsDelegate in_delegate, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const;
+        //---------------------------------------------------------
+        void GetScheduledNotifications(const GetScheduledNotificationsDelegate& in_delegate, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const;
         //---------------------------------------------------
         /// Prevent any notifications with given ID type from
         /// firing.
