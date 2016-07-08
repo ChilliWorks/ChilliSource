@@ -79,9 +79,6 @@ namespace CSBackend
 			/// Displays the email activity with the given recipients,
 			/// subject and contents, and adds a list of attachments
 			/// to the email.
-			///
-            /// If Dismiss() has been called, this must only be called
-            /// after the result delegate has finished, if it exists.
             ///
 			/// @author Ian Copland
 			///
@@ -99,12 +96,6 @@ namespace CSBackend
             /// @author Jordan Brown
             //-------------------------------------------------------
             bool IsPresented() override;
-            //-------------------------------------------------------
-            /// Dismisses the activity if it is currently displayed.
-			///
-			/// @author S Hendrie
-            //-------------------------------------------------------
-			void Dismiss() override;
 		private:
 			friend ChilliSource::EmailComposerUPtr ChilliSource::EmailComposer::Create();
             //----------------------------------------------------

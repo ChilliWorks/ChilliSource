@@ -111,17 +111,6 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::Dismiss()
-		{
-			if (m_isPresented == true)
-			{
-				m_isPresented = false;
-
-				CS_LOG_FATAL("Cannot dismiss the email composer on Android.");
-			}
-		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
 		void EmailComposer::OnEmailClosed(EmailComposerJavaInterface::Result in_result)
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Email closed callback not on main thread.");
