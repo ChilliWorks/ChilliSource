@@ -346,10 +346,10 @@ namespace ChilliSource
         void ReadGlobalHeader(IBinaryInputStream* in_meshStream, const std::string& in_filePath, ModelHeader& out_modelHeader, MeshDataQuantities& out_meshQuantities)
         {
             u32 fileCheckValue = in_meshStream->Read<u32>();
-            CS_ASSERT(fileCheckValue != k_fileCheckValue, "csmodel file is corrupt (incorrect File Check Value): " + in_filePath);
+            CS_ASSERT(fileCheckValue == k_fileCheckValue, "csmodel file is corrupt (incorrect File Check Value): " + in_filePath);
             
             u32 versionNum = in_meshStream->Read<u32>();
-            CS_ASSERT(versionNum < k_minVersion || versionNum > k_maxVersion, "Unsupported csmodel version: " + in_filePath);
+            CS_ASSERT(versionNum >= k_minVersion && versionNum <= k_maxVersion, "Unsupported csmodel version: " + in_filePath);
             
             u32 numFeatures = (u32)in_meshStream->Read<u8>();
             for (u32 i=0; i<numFeatures; ++i)
