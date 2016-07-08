@@ -79,7 +79,7 @@ namespace CSBackend
             ///
             /// @return The next free texture unit.
             ///
-            GLuint GetNextUnit() const noexcept;
+            GLuint GetNextAvailableUnit() const noexcept;
             
             std::vector<const ChilliSource::RenderTexture*> m_boundTextures;
         };

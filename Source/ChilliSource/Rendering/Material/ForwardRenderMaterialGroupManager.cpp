@@ -193,8 +193,8 @@ namespace ChilliSource
             auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
                                         cullFace, emissiveColour, ambientColour);
             
-            std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> spriteRenderMaterials {};
-            std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticRenderMaterials {};
+            std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> spriteRenderMaterials {};
+            std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
             
             spriteRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = spriteRM.get();
             staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = staticRM.get();
@@ -227,8 +227,8 @@ namespace ChilliSource
             auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
                                         cullFace, emissiveColour, ambientColour);
             
-            std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> spriteRenderMaterials {};
-            std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticRenderMaterials {};
+            std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> spriteRenderMaterials {};
+            std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
                 
             spriteRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = spriteRM.get();
             staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
@@ -266,7 +266,7 @@ namespace ChilliSource
         auto staticDirectionalShadowsRM = CreateBlinnLight(m_staticBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
         auto staticPointRM = CreateBlinnLight(m_staticBlinnPoint, renderTexture, diffuseColour, specularColour);
         
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_maxPasses> staticRenderMaterials {};
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
         staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
         staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticBaseRM.get();
         staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticDirectionalRM.get();

@@ -73,7 +73,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLuint GLTextureUnitManager::BindAdditional(const ChilliSource::RenderTexture* texture) noexcept
         {
-            GLuint textureIndex = GetNextUnit();
+            GLuint textureIndex = GetNextAvailableUnit();
             
             m_boundTextures.push_back(texture);
             
@@ -99,7 +99,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        GLuint GLTextureUnitManager::GetNextUnit() const noexcept
+        GLuint GLTextureUnitManager::GetNextAvailableUnit() const noexcept
         {
             u32 index = 0;
             

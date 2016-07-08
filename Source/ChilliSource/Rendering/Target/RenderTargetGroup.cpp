@@ -54,7 +54,6 @@ namespace ChilliSource
             CS_ASSERT(depthTarget->GetImageCompression() == ImageCompression::k_none, "Depth target cannot be compressed.");
             CS_ASSERT(depthTarget->IsMipmapped() == false, "Depth target cannot be mipmapped.");
             CS_ASSERT(!m_shouldUseDepthBuffer, "If a depth target is supplied, shouldUseDepthBuffer must be false.");
-            CS_ASSERT(!m_shouldUseDepthBuffer, "If a depth target is supplied, shouldUseDepthBuffer must be false.");
             
             m_resolution = depthTarget->GetDimensions();
         }

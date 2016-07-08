@@ -52,7 +52,7 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(RenderMaterialGroup);
         
-        static constexpr u32 k_maxPasses = 6;
+        static constexpr u32 k_numMaterialSlots = 6;
         
         /// A collection of RenderMaterials for a single vertex format.
         ///
@@ -68,7 +68,7 @@ namespace ChilliSource
             /// @param renderMaterials
             ///     The render materials for each pass.
             ///
-            Collection(const VertexFormat& vertexFormat, const std::array<const RenderMaterial*, k_maxPasses>& renderMaterials) noexcept;
+            Collection(const VertexFormat& vertexFormat, const std::array<const RenderMaterial*, k_numMaterialSlots>& renderMaterials) noexcept;
             
             /// @return The vertex format.
             ///
@@ -85,7 +85,7 @@ namespace ChilliSource
             
         private:
             VertexFormat m_vertexFormat;
-            std::array<const RenderMaterial*, k_maxPasses> m_renderMaterials;
+            std::array<const RenderMaterial*, k_numMaterialSlots> m_renderMaterials;
         };
         
         /// Evaluates whether or not the given RenderMaterial is part of this group.
