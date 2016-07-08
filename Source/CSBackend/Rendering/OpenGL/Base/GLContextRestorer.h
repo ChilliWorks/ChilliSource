@@ -38,10 +38,21 @@ namespace CSBackend
 {
     namespace OpenGL
     {
-        /// OpenGL on Android has its context killed whenever the
-        /// app is suspended. This means all GL resources such
-        /// as textures, shaders and buffers are destroyed and
-        /// must be recreated on resume.
+        /// OpenGL on Android has its context killed whenever the app is suspended.
+        /// This system has 2 main functions, handling glResources when the context is
+        /// lost and restoring these resources when the context is restored.
+        ///
+        /// During a context loss, all GPU memory will be destroyed leaving existing resources
+        /// with invalid memory handles. We iterate through each of these and set an invalid flag,
+        /// which stops the resource from attempting to delete that memory on destruction.
+        ///
+        /// During the restore, we have 4 different ways to restore a resource:
+        /// - If the resource was originally loaded from file we can reload the resource, essentially
+        ///   creating a new one.
+        /// - If not from file, we can restore from a backup of any data on a resource.
+        /// - If there is no backup and where allowed, we can restore back to a basic state with loss
+        ///   of data.
+        /// - Else we cannot restore and assert is called.
         ///
         class GLContextRestorer final : public ChilliSource::AppSystem
         {
@@ -77,12 +88,12 @@ namespace CSBackend
             
             /// Iterate any GL resources and place them in an invalid state
             ///
-            void OnContextLost() noexcept;
+            void InvalidateResources() noexcept;
             
             /// Iterate all resources and either re-load them from file or
             /// restore them from cached memory
             ///
-            void OnContextRestored() noexcept;
+            void RestoreResources() noexcept;
             
             /// Called when the app system is resumed
             ///
@@ -91,8 +102,8 @@ namespace CSBackend
             /// The render snapshot event can be implemented by a system to
             /// allow it to snapshot any data which pertains to the renderer.
             ///
-            /// @param renderSnapshot - The render snapshot
-            /// object which contains all snapshotted data.
+            /// @param renderSnapshot
+            ///     The render snapshot object which contains all snapshotted data.
             ///
             void OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot) noexcept override;
             

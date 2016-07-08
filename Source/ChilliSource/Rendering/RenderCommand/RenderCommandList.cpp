@@ -54,9 +54,9 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize, bool shouldBackupData) noexcept
+    void RenderCommandList::AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
     {
-        RenderCommandUPtr renderCommand(new LoadTextureRenderCommand(renderTexture, std::move(textureData), textureDataSize, shouldBackupData));
+        RenderCommandUPtr renderCommand(new LoadTextureRenderCommand(renderTexture, std::move(textureData), textureDataSize));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
@@ -72,9 +72,9 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData) noexcept
+    void RenderCommandList::AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
     {
-        RenderCommandUPtr renderCommand(new LoadMeshRenderCommand(renderMesh, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize, shouldBackupData));
+        RenderCommandUPtr renderCommand(new LoadMeshRenderCommand(renderMesh, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));

@@ -317,7 +317,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLShader::~GLShader() noexcept
         {
-            if(!m_contextInvalid)
+            if(!m_invalidData)
             {
                 if(m_vertexShaderId > 0)
                 {

@@ -66,11 +66,8 @@ namespace ChilliSource
         ///     The data describing the texture.
         /// @param textureDataSize
         ///     The size of the texture data in bytes.
-        /// @param shouldBackupData
-        ///     If we should backup texture data so we can restore from memory if
-        ///     the render context needs to be rebuilt.
         ///
-        void AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize, bool shouldBackupData) noexcept;
+        void AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
         
         /// Creates and adds a new load material group command to the render command list.
         ///
@@ -91,11 +88,8 @@ namespace ChilliSource
         ///     The index data buffer.
         /// @param indexDataSize
         ///     The size of the index data buffer.
-        /// @param shouldBackupData
-        ///     If we should backup vertex/index data so we can restore the mesh from memory if
-        ///     the render context needs to be rebuilt.
         ///
-        void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData) noexcept;
+        void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
         
         /// Creates and adds a new restore texture command to the render command list.
         ///

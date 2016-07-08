@@ -60,10 +60,6 @@ namespace ChilliSource
         ///
         u32 GetTextureDataSize() const noexcept { return m_textureDataSize; }
         
-        /// @return If we should maintain copies of data for context restoration.
-        ///
-        bool ShouldBackupData() const noexcept { return m_shouldBackupData; }
-        
     private:
         friend class RenderCommandList;
         
@@ -75,16 +71,12 @@ namespace ChilliSource
         ///     The data describing the texture.
         /// @param textureDataSize
         ///     The size of the texture data in bytes.
-        /// @param shouldBackupData
-        ///     If the texture data should be backed up in memory so we can restore
-        ///     it if the context is lost.
         ///
-        LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize, bool shouldBackupData) noexcept;
+        LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
         
         RenderTexture* m_renderTexture;
         std::unique_ptr<const u8[]> m_textureData;
         u32 m_textureDataSize;
-        bool m_shouldBackupData = false;
     };
 }
 

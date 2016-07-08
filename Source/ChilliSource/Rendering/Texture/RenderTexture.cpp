@@ -28,8 +28,8 @@ namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     RenderTexture::RenderTexture(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression, TextureFilterMode filterMode, TextureWrapMode wrapModeS,  TextureWrapMode wrapModeT,
-                                 bool isMipmapped) noexcept
-        : m_dimensions(dimensions), m_imageFormat(imageFormat), m_imageCompression(imageCompression), m_filterMode(filterMode), m_wrapModeS(wrapModeS), m_wrapModeT(wrapModeT), m_isMipmapped(isMipmapped)
+                                 bool isMipmapped, bool shouldBackupData) noexcept
+        : m_dimensions(dimensions), m_imageFormat(imageFormat), m_imageCompression(imageCompression), m_filterMode(filterMode), m_wrapModeS(wrapModeS), m_wrapModeT(wrapModeT), m_isMipmapped(isMipmapped), m_shouldBackupData(shouldBackupData)
     {
     }
 }

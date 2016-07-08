@@ -82,13 +82,13 @@ namespace ChilliSource
         ///     The t-coordinate wrap mode.
         /// @param isMipmapped
         ///     Whether or not mipmaps are generated for the texture.
-        /// @param isLoadedFromFile
-        ///     If the texture data originated from file.
+        /// @param shouldBackupData
+        ///     If the texture data should be backed up in main memory for restoring it later.
         ///
         /// @return The new render texture instance.
         ///
         const RenderTexture* CreateRenderTexture(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
-                                           TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool isLoadedFromFile) noexcept;
+                                           TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept;
         
         /// Removes the render texture from the manager and queues an UnloadTextureRenderCommand for
         /// the next Render Snapshot stage in the render pipeline. The render command is given
@@ -113,7 +113,6 @@ namespace ChilliSource
             std::unique_ptr<const u8[]> m_textureData;
             u32 m_textureDataSize = 0;
             RenderTexture* m_renderTexture = nullptr;
-            bool m_shouldBackupData = false;
         };
         
         /// A factory method for creating new instances of the system. This must be called by

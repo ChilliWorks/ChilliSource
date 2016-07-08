@@ -55,7 +55,7 @@ namespace ChilliSource
         m_restoreTextureDataEnabled = textureDesc.IsRestoreTextureDataEnabled();
         
         m_renderTexture = renderTextureManager->CreateRenderTexture(std::move(textureData), textureDataSize, textureDesc.GetDimensions(), textureDesc.GetImageFormat(), textureDesc.GetImageCompression(),
-                                                                    textureDesc.GetFilterMode(), textureDesc.GetWrapModeS(), textureDesc.GetWrapModeT(), textureDesc.IsMipmappingEnabled(), !m_restoreTextureDataEnabled);
+                                                                    textureDesc.GetFilterMode(), textureDesc.GetWrapModeS(), textureDesc.GetWrapModeT(), textureDesc.IsMipmappingEnabled(), m_restoreTextureDataEnabled);
     }
 
     //------------------------------------------------------------------------------

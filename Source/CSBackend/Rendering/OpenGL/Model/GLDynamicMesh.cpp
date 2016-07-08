@@ -101,7 +101,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLDynamicMesh::~GLDynamicMesh() noexcept
         {
-            if(!m_contextInvalid)
+            if(!m_invalidData)
             {
                 glDeleteBuffers(1, &m_vertexBufferHandle);
                 if(m_indexBufferHandle != 0)

@@ -63,11 +63,11 @@ namespace ChilliSource
         /// Called when the GL context is lost, iterate any GL resources and place
         /// them in an invalid state
         ///
-        virtual void InvalidateContext() noexcept = 0;
+        virtual void Invalidate() noexcept = 0;
         
         /// Called when the GL context is restored, need to rebuild any GL resources
         ///
-        virtual void RestoreContext() noexcept = 0;
+        virtual void Restore() noexcept = 0;
         
         virtual ~IRenderCommandProcessor() noexcept {}
     };

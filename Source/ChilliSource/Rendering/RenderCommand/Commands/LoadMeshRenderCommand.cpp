@@ -28,8 +28,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    LoadMeshRenderCommand::LoadMeshRenderCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData) noexcept
-        : RenderCommand(Type::k_loadMesh), m_renderMesh(renderMesh), m_vertexData(std::move(vertexData)), m_vertexDataSize(vertexDataSize), m_indexData(std::move(indexData)), m_indexDataSize(indexDataSize), m_shouldBackupData(shouldBackupData)
+    LoadMeshRenderCommand::LoadMeshRenderCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
+        : RenderCommand(Type::k_loadMesh), m_renderMesh(renderMesh), m_vertexData(std::move(vertexData)), m_vertexDataSize(vertexDataSize), m_indexData(std::move(indexData)), m_indexDataSize(indexDataSize)
     {
     }
     //------------------------------------------------------------------------------

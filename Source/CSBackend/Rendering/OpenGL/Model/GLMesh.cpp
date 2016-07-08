@@ -24,6 +24,8 @@
 
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 
+#include <ChilliSource/Rendering/Model/RenderMesh.h>
+
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMeshUtils.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
@@ -32,13 +34,24 @@ namespace CSBackend
 {
     namespace OpenGL
     {
+        namespace
+        {
+#ifdef CS_TARGETPLATFORM_ANDROID
+            //Should maintain memory backups on android to restore data when the context
+            //is lost when dealing with meshes that are not loaded from file.
+            const bool k_shouldBackupMeshDataFromMemory = true;
+#else
+            const bool k_shouldBackupMeshDataFromMemory = false;
+#endif
+        }
+        
         //------------------------------------------------------------------------------
-        GLMesh::GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize, bool storeMemoryBackup) noexcept
-            : m_vertexFormat(vertexFormat), m_vertexDataSize(vertexDataSize), m_indexDataSize(indexDataSize), m_hasMemoryBackup(storeMemoryBackup)
+        GLMesh::GLMesh(const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize, ChilliSource::RenderMesh* renderMesh) noexcept
+            : m_vertexDataSize(vertexDataSize), m_indexDataSize(indexDataSize), m_renderMesh(renderMesh)
         {
             BuildMesh(vertexData, vertexDataSize, indexData, indexDataSize);
             
-            if(storeMemoryBackup)
+            if(k_shouldBackupMeshDataFromMemory && renderMesh->ShouldBackupData())
             {
                 u8* vertextDataCopy = new u8[vertexDataSize];
                 memcpy(vertextDataCopy, vertexData, vertexDataSize);
@@ -53,44 +66,46 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void GLMesh::Bind(GLShader* glShader) noexcept
         {
+            auto vertexFormat = m_renderMesh->GetVertexFormat();
+            
             //TODO: This should be pre-calculated.
             GLint maxVertexAttributes = 0;
             glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
-            CS_ASSERT(u32(maxVertexAttributes) >= m_vertexFormat.GetNumElements(), "Too many vertex elements.");
+            CS_ASSERT(u32(maxVertexAttributes) >= vertexFormat.GetNumElements(), "Too many vertex elements.");
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding GLMesh.");
             
-            for (u32 i = 0; i < m_vertexFormat.GetNumElements(); ++i)
+            for (u32 i = 0; i < vertexFormat.GetNumElements(); ++i)
             {
                 glEnableVertexAttribArray(i);
                 
-                auto elementType = m_vertexFormat.GetElement(i);
+                auto elementType = vertexFormat.GetElement(i);
                 auto name = GLMeshUtils::GetAttributeName(elementType);
                 auto numComponents = ChilliSource::VertexFormat::GetNumComponents(elementType);
                 auto type = GLMeshUtils::GetGLType(ChilliSource::VertexFormat::GetDataType(elementType));
                 auto normalised = GLMeshUtils::IsNormalised(elementType);
-                auto offset = reinterpret_cast<const GLvoid*>(u64(m_vertexFormat.GetElementOffset(i)));
+                auto offset = reinterpret_cast<const GLvoid*>(u64(vertexFormat.GetElementOffset(i)));
                 
-                glShader->SetAttribute(name, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
+                glShader->SetAttribute(name, numComponents, type, normalised, vertexFormat.GetSize(), offset);
             }
             
-            for (s32 i = m_vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
+            for (s32 i = vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
             {
                 glDisableVertexAttribArray(i);
             }
         }
         
         //------------------------------------------------------------------------------
-        void GLMesh::RestoreContext() noexcept
+        void GLMesh::Restore() noexcept
         {
-            if(m_hasMemoryBackup && m_contextInvalid)
+            if(m_vertexDataBackup && m_invalidData)
             {
                 BuildMesh(m_vertexDataBackup.get(), m_vertexDataSize, m_indexDataBackup.get(), m_indexDataSize);
                 
-                m_contextInvalid = false;
+                m_invalidData = false;
             }
         }
         
@@ -116,12 +131,14 @@ namespace CSBackend
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
                 glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataSize, indexData, GL_STATIC_DRAW);
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating GLMesh.");
         }
         
         //------------------------------------------------------------------------------
         GLMesh::~GLMesh() noexcept
         {
-            if(!m_contextInvalid)
+            if(!m_invalidData)
             {
                 glDeleteBuffers(1, &m_vertexBufferHandle);
                 if(m_indexBufferHandle != 0)

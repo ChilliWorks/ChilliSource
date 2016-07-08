@@ -56,10 +56,8 @@ namespace CSBackend
             ///     The texture data.
             /// @param dataSize
             ///     The size of the texture data.
-            /// @param storeMemoryBackup
-            ///     Whether or not to store a duplicate backup of texture data
             ///
-            GLTexture(const u8* data, u32 dataSize, ChilliSource::RenderTexture* renderTexture, bool storeMemoryBackup) noexcept;
+            GLTexture(const u8* data, u32 dataSize, ChilliSource::RenderTexture* renderTexture) noexcept;
             
             /// @return The OpenGL texture handle.
             ///
@@ -67,31 +65,25 @@ namespace CSBackend
             
             /// @return The OpenGL texture handle.
             ///
-            bool IsContextInvalid() const noexcept { return m_contextInvalid; }
+            bool IsDataInvalid() const noexcept { return m_invalidData; }
             
-            /// Called when the GLContext is restored. We should re-setup any cached data.
+            /// Called when we should restore any cached texture data.
             ///
-            void RestoreContext() noexcept;
+            /// This will assert if called without having data backed up.
+            ///
+            void Restore() noexcept;
             
-            /// Called when the GLContext has been lost. Function will set a flag to handle safe
-            /// destructing of this object, preventing us from trying to delete invalid memory.
+            /// Called when graphics memory is lost, usually through the GLContext being destroyed
+            /// on Android. Function will set a flag to handle safe destructing of this object, preventing
+            /// us from trying to delete invalid memory.
             ///
-            void InvalidateContext() noexcept { m_contextInvalid = true; }
+            void Invalidate() noexcept { m_invalidData = true; }
             
             /// Destroys the OpenGL texture that this represents.
             ///
             ~GLTexture() noexcept;
             
         private:
-            
-            /// Creates a new OpenGL texture with the given texture data.
-            ///
-            /// @param data
-            ///     The texture data.
-            /// @param dataSize
-            ///     The size of the texture data.
-            ///
-            void BuildTexture(const u8* data, u32 dataSize) noexcept;
             
             GLuint m_handle = 0;
             
@@ -101,8 +93,7 @@ namespace CSBackend
             
             u32 m_imageDataSize = 0;
             
-            bool m_contextInvalid = false;
-            bool m_hasMemoryBackup = false;
+            bool m_invalidData = false;
         };
     }
 }

@@ -48,8 +48,6 @@ namespace CSBackend
             
             /// Creates a new OpenGL mesh with the given mesh data and description.
             ///
-            /// @param vertexFormat
-            ///     The vertex format.
             /// @param vertexData
             ///     The vertex data.
             /// @param vertexDataSize
@@ -58,10 +56,10 @@ namespace CSBackend
             ///     The size of the index data.
             /// @param indexDataSize
             ///     The size of the index data.
-            /// @param storeMemoryBackup
-            ///     Whether or not to store a duplicate backup of any data
+            /// @param render
+            ///     The size of the index data.
             ///
-            GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize, bool storeMemoryBackup) noexcept;
+            GLMesh(const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize, ChilliSource::RenderMesh* renderMesh) noexcept;
             
             /// Binds the mesh for use and applies attibutes to the given shader.
             ///
@@ -70,14 +68,17 @@ namespace CSBackend
             ///
             void Bind(GLShader* glShader) noexcept;
             
-            /// Called when the GLContext is restored. We should re-setup any cached data.
+            /// Called when we should restore any cached mesh data.
             ///
-            void RestoreContext() noexcept;
+            /// This will assert if called without having data backed up.
+            ///
+            void Restore() noexcept;
             
-            /// Called when the GLContext has been lost. Function will set a flag to handle safe
-            /// destructing of this object, preventing us from trying to delete invalid memory.
+            /// Called when graphics memory is lost, usually through the GLContext being destroyed
+            /// on Android. Function will set a flag to handle safe destructing of this object, preventing
+            /// us from trying to delete invalid memory.
             ///
-            void InvalidateContext() noexcept { m_contextInvalid = true; }
+            void Invalidate() noexcept { m_invalidData = true; }
             
             /// Destroys the OpenGL mesh that this represents.
             ///
@@ -98,7 +99,6 @@ namespace CSBackend
             ///
             void BuildMesh(const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
             
-            ChilliSource::VertexFormat m_vertexFormat;
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
             
@@ -108,8 +108,9 @@ namespace CSBackend
             u32 m_indexDataSize = 0;
             u32 m_vertexDataSize = 0;
             
-            bool m_contextInvalid = false;
-            bool m_hasMemoryBackup = false;
+            ChilliSource::RenderMesh* m_renderMesh = nullptr;
+            
+            bool m_invalidData = false;
         };
     }
 }

@@ -32,18 +32,6 @@ namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderMeshManager);
 
-    namespace
-    {
-#ifdef CS_TARGETPLATFORM_ANDROID
-        //Should maintain memory backups on android to restore data when the context
-        //is lost when dealing with meshes that are not loaded from file.
-        const bool k_shouldBackupMeshDataFromMemory = true;
-#else
-        const bool k_shouldBackupMeshDataFromMemory = false;
-#endif
-    }
-    
-    
     //------------------------------------------------------------------------------
     RenderMeshManagerUPtr RenderMeshManager::Create() noexcept
     {
@@ -58,9 +46,9 @@ namespace ChilliSource
 
     //------------------------------------------------------------------------------
     const RenderMesh* RenderMeshManager::CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                                                          std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool isLoadedFromFile) noexcept
+                                                          std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData) noexcept
     {
-        RenderMeshUPtr renderMesh(new RenderMesh(polygonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere));
+        RenderMeshUPtr renderMesh(new RenderMesh(polygonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, shouldBackupData));
         auto rawRenderMesh = renderMesh.get();
         
         PendingLoadCommand loadCommand;
@@ -69,7 +57,6 @@ namespace ChilliSource
         loadCommand.m_vertexDataSize = vertexDataSize;
         loadCommand.m_indexData = std::move(indexData);
         loadCommand.m_indexDataSize = indexDataSize;
-        loadCommand.m_shouldBackupData = k_shouldBackupMeshDataFromMemory && !isLoadedFromFile;
         
         std::unique_lock<std::mutex> lock(m_mutex);
         m_renderMeshes.push_back(std::move(renderMesh));
@@ -108,7 +95,7 @@ namespace ChilliSource
         
         for (auto& loadCommand : m_pendingLoadCommands)
         {
-            preRenderCommandList->AddLoadMeshCommand(loadCommand.m_renderMesh, std::move(loadCommand.m_vertexData), loadCommand.m_vertexDataSize, std::move(loadCommand.m_indexData), loadCommand.m_indexDataSize, loadCommand.m_shouldBackupData);
+            preRenderCommandList->AddLoadMeshCommand(loadCommand.m_renderMesh, std::move(loadCommand.m_vertexData), loadCommand.m_vertexDataSize, std::move(loadCommand.m_indexData), loadCommand.m_indexDataSize);
         }
         m_pendingLoadCommands.clear();
         

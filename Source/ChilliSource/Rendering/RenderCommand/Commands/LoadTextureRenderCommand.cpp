@@ -27,8 +27,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize, bool shouldBackupData) noexcept
-        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize), m_shouldBackupData(shouldBackupData)
+    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
+        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize)
     {
     }
     //------------------------------------------------------------------------------

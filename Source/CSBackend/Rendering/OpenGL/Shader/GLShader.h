@@ -204,10 +204,11 @@ namespace CSBackend
             ///
             void SetAttribute(const std::string& name, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
             
-            /// Called when the GLContext has been lost. Function will set a flag to handle safe
-            /// destructing of this object, preventing us from trying to delete invalid memory.
+            /// Called when graphics memory is lost, usually through the GLContext being destroyed
+            /// on Android. Function will set a flag to handle safe destructing of this object, preventing
+            /// us from trying to delete invalid memory.
             ///
-            void InvalidateContext() noexcept { m_contextInvalid = true; }
+            void Invalidate() noexcept { m_invalidData = true; }
             
             /// Unloads the opengl shader.
             ///
@@ -237,7 +238,7 @@ namespace CSBackend
             std::unordered_map<std::string, GLint> m_uniformHandles;
             std::unordered_map<std::string, GLint> m_attributeHandles;
             
-            bool m_contextInvalid = false;
+            bool m_invalidData = false;
         };
     }
 }

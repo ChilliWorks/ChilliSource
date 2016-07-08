@@ -73,6 +73,10 @@ namespace ChilliSource
         ///
         bool IsMipmapped() const noexcept { return m_isMipmapped; }
         
+        /// @return If the mesh should backup its data.
+        ///
+        bool ShouldBackupData() const noexcept { return m_shouldBackupData; }
+        
         /// This is not thread safe and should only be called from the render thread.
         ///
         /// @return A pointer to render system specific additional information.
@@ -105,8 +109,10 @@ namespace ChilliSource
         ///     The t-coordinate wrap mode.
         /// @param isMipmapped
         ///     Whether or not mipmaps are generated for the texture.
+        /// @param shouldBackupData
+        ///     If the mesh data should be backed up in main memory for restoring it later.
         ///
-        RenderTexture(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression, TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped) noexcept;
+        RenderTexture(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression, TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept;
         
         Integer2 m_dimensions;
         ImageFormat m_imageFormat;
@@ -115,6 +121,7 @@ namespace ChilliSource
         TextureWrapMode m_wrapModeS;
         TextureWrapMode m_wrapModeT;
         bool m_isMipmapped;
+        bool m_shouldBackupData = true;
         void* m_extraData = nullptr;
     };
 }

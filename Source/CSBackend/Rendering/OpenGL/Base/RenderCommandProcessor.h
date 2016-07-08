@@ -57,11 +57,11 @@ namespace CSBackend
             /// Called when the GL context is lost, iterate any GL resources and place
             /// them in an invalid state
             ///
-            void InvalidateContext() noexcept override;
+            void Invalidate() noexcept override;
             
             /// Called when the GL context is restored, need to rebuild any GL resources
             ///
-            void RestoreContext() noexcept override;
+            void Restore() noexcept override;
             
         private:
             /// Initialises the render command processor. This is deferred until Process is first called

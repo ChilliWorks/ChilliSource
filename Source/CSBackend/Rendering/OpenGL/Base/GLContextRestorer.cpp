@@ -60,7 +60,7 @@ namespace CSBackend
             return (GLContextRestorer::InterfaceID == interfaceId);
         }
         //------------------------------------------------------------------------------
-        void GLContextRestorer::OnContextLost() noexcept
+        void GLContextRestorer::InvalidateResources() noexcept
         {
             if(m_hasContextBeenBackedUp == false)
             {
@@ -74,7 +74,7 @@ namespace CSBackend
                     GLShader* glShader = reinterpret_cast<GLShader*>(shader->GetRenderShader()->GetExtraData());
                     if(glShader)
                     {
-                        glShader->InvalidateContext();
+                        glShader->Invalidate();
                     }
                 }
                 
@@ -84,7 +84,7 @@ namespace CSBackend
                     GLTexture* glTexture = reinterpret_cast<GLTexture*>(texture->GetRenderTexture()->GetExtraData());
                     if(glTexture)
                     {
-                        glTexture->InvalidateContext();
+                        glTexture->Invalidate();
                     }
                 }
                 
@@ -97,14 +97,14 @@ namespace CSBackend
                         
                         if(glMesh)
                         {
-                            glMesh->InvalidateContext();
+                            glMesh->Invalidate();
                         }
                     }
                 }
             }
         }
         //------------------------------------------------------------------------------
-        void GLContextRestorer::OnContextRestored() noexcept
+        void GLContextRestorer::RestoreResources() noexcept
         {
             if(m_hasContextBeenBackedUp == true)
             {
@@ -159,7 +159,7 @@ namespace CSBackend
             if(m_initialised)
             {
 #ifdef CS_TARGETPLATFORM_ANDROID
-                OnContextRestored();
+                RestoreResources();
 #endif
             }
             
@@ -192,7 +192,7 @@ namespace CSBackend
         void GLContextRestorer::OnSystemSuspend() noexcept
         {
 #ifdef CS_TARGETPLATFORM_ANDROID
-            OnContextLost();
+            InvalidateResources();
 #endif
         }
     }

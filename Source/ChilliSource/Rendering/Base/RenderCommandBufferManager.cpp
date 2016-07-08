@@ -103,12 +103,12 @@ namespace ChilliSource
             
             for(auto& command : m_pendingTextureLoadCommands)
             {
-                preRenderCommandList->AddLoadTextureCommand(command.GetRenderTexture(), command.ClaimTextureData(), command.GetTextureDataSize(), command.ShouldBackupData());
+                preRenderCommandList->AddLoadTextureCommand(command.GetRenderTexture(), command.ClaimTextureData(), command.GetTextureDataSize());
             }
             
             for(auto& command : m_pendingMeshLoadCommands)
             {
-                preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), command.ClaimVertexData(), command.GetVertexDataSize(), command.ClaimIndexData(), command.GetIndexDataSize(), command.ShouldBackupData());
+                preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), command.ClaimVertexData(), command.GetVertexDataSize(), command.ClaimIndexData(), command.GetIndexDataSize());
             }
             
             for(auto& command : m_pendingMaterialGroupLoadCommands)

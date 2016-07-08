@@ -30,7 +30,8 @@
 
 namespace ChilliSource
 {
-    /// A render command for restoring a texture from cached memory.
+    /// A render command for restoring a texture from cached memory. A restore command
+    /// that is issued on a render texture without a backup will use empty data.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///

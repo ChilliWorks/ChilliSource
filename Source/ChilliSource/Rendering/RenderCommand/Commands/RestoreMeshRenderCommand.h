@@ -30,7 +30,9 @@
 
 namespace ChilliSource
 {
-    /// A render command for restoring a mesh from cached memory.
+    /// A render command for restoring a mesh from cached memory. A restore command
+    /// should only be issued for a mesh that has had its contexts backed up at creation,
+    /// otherwise this command will assert when applied.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///

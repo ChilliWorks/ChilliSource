@@ -110,9 +110,9 @@ namespace CSBackend
                 Init();
             }
             
-            for(auto renderCommandList : renderCommandBuffer->GetQueue())
+            for(const auto& renderCommandList : renderCommandBuffer->GetQueue())
             {
-                for (auto& renderCommand : renderCommandList->GetOrderedList())
+                for (const auto& renderCommand : renderCommandList->GetOrderedList())
                 {
                     switch (renderCommand->GetType())
                     {
@@ -176,16 +176,16 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void RenderCommandProcessor::InvalidateContext() noexcept
+        void RenderCommandProcessor::Invalidate() noexcept
         {
             if(m_glDynamicMesh)
             {
-                m_glDynamicMesh->InvalidateContext();
+                m_glDynamicMesh->Invalidate();
             }
         }
         
         //------------------------------------------------------------------------------
-        void RenderCommandProcessor::RestoreContext() noexcept
+        void RenderCommandProcessor::Restore() noexcept
         {
             ResetCache();
             
@@ -223,7 +223,7 @@ namespace CSBackend
             auto renderTexture = renderCommand->GetRenderTexture();
             
             //TODO: Should be pooled.
-            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture, renderCommand->ShouldBackupData());
+            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture);
             
             renderTexture->SetExtraData(glTexture);
         }
@@ -236,7 +236,7 @@ namespace CSBackend
             auto renderMesh = renderCommand->GetRenderMesh();
             
             //TODO: Should be pooled.
-            auto glMesh = new GLMesh(renderMesh->GetVertexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize(), renderCommand->ShouldBackupData());
+            auto glMesh = new GLMesh(renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize(), renderMesh);
             
             renderMesh->SetExtraData(glMesh);
         }
@@ -245,14 +245,14 @@ namespace CSBackend
         void RenderCommandProcessor::RestoreTexture(const ChilliSource::RestoreTextureRenderCommand* renderCommand) noexcept
         {
             GLTexture* glTexture = static_cast<GLTexture*>(renderCommand->GetRenderTexture()->GetExtraData());
-            glTexture->RestoreContext();
+            glTexture->Restore();
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::RestoreMesh(const ChilliSource::RestoreMeshRenderCommand* renderCommand) noexcept
         {
             GLMesh* glMesh = static_cast<GLMesh*>(renderCommand->GetRenderMesh()->GetExtraData());
-            glMesh->RestoreContext();
+            glMesh->Restore();
         }
         
         //------------------------------------------------------------------------------
