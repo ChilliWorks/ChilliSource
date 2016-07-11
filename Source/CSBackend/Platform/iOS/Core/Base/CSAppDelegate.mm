@@ -305,7 +305,7 @@ CSAppDelegate* singletonInstance = nil;
             [EAGLContext setCurrentContext:view.context];
         }
         
-        ChilliSource::Application::Get()->GetTaskScheduler()->ExecuteSystemThreadTasks();
+        m_lifecycleManager->SystemUpdate();
         
         m_lifecycleManager->Render();
     }

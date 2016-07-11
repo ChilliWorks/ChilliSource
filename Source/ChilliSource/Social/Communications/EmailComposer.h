@@ -133,17 +133,6 @@ namespace ChilliSource
     protected:
         friend class State;
         //-------------------------------------------------------
-        /// Describes the current state of the composer.
-        ///
-        /// @author Jordan Brown
-        //-------------------------------------------------------
-        enum class State
-        {
-            k_inactive,
-            k_presented,
-            k_dismissing
-        };
-        //-------------------------------------------------------
         /// Creates a new instance of the email composition
         /// activity.
         ///
