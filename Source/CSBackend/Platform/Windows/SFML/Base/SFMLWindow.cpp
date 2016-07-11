@@ -469,10 +469,6 @@ namespace CSBackend
 				exit(1);
 			}
 
-			sf::Clock clock;
-			auto appStartTime = clock.getElapsedTime().asSeconds();
-			auto appPreviousTime = appStartTime;
-
 			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication());
             m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
             m_lifecycleManager->Resume();
@@ -597,12 +593,6 @@ namespace CSBackend
 						}
 					}
 				}
-
-                auto appCurrentTime = clock.getElapsedTime().asSeconds();
-
-				auto deltaTime = (appCurrentTime - appPreviousTime);
-				auto runningTime = (appPreviousTime - appStartTime);
-				appPreviousTime = appCurrentTime;
 
                 m_lifecycleManager->SystemUpdate();
                 m_lifecycleManager->Render();
