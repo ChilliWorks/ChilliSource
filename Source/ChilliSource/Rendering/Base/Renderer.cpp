@@ -43,7 +43,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black, RenderCamera())
+        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(nullptr, Integer2::k_zero, Colour::k_black, RenderCamera())
     {
         //TODO: Handle forward vs deferred rendering
         m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
@@ -55,6 +55,14 @@ namespace ChilliSource
         return (Renderer::InterfaceID == interfaceId);
     }
     //------------------------------------------------------------------------------
+    RenderSnapshot Renderer::CreateRenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept
+    {
+        auto allocator = m_frameAllocatorQueue.Pop();
+        
+        return RenderSnapshot(allocator, resolution, clearColour, renderCamera);
+    }
+    
+    //------------------------------------------------------------------------------
     void Renderer::ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept
     {
         WaitThenStartRenderPrep();
@@ -64,20 +72,21 @@ namespace ChilliSource
         auto taskScheduler = Application::Get()->GetTaskScheduler();
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
+            auto frameAllocator = m_currentSnapshot.GetFrameAllocator();
             auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
             auto renderCamera = m_currentSnapshot.GetRenderCamera();
-            auto renderAmbientLights = m_currentSnapshot.ClaimRenderAmbientLights();
-            auto renderDirectionalLights = m_currentSnapshot.ClaimRenderDirectionalLights();
-            auto renderPointLights = m_currentSnapshot.ClaimRenderPointLights();
+            auto renderAmbientLights = m_currentSnapshot.ClaimAmbientRenderLights();
+            auto renderDirectionalLights = m_currentSnapshot.ClaimDirectionalRenderLights();
+            auto renderPointLights = m_currentSnapshot.ClaimPointRenderLights();
             auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
             auto renderDynamicMeshes = m_currentSnapshot.ClaimRenderDynamicMeshes();
             auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();
             auto postRenderCommandList = m_currentSnapshot.ClaimPostRenderCommandList();
             
-            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
+            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, clearColour, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(renderDynamicMeshes),
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, frameAllocator, targetRenderPassGroups, std::move(renderDynamicMeshes),
                                                                                     std::move(preRenderCommandList), std::move(postRenderCommandList));
             
             m_commandRecycleSystem->WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
@@ -90,6 +99,11 @@ namespace ChilliSource
     {
         auto renderCommandBuffer = m_commandRecycleSystem->WaitThenPopCommandBuffer();
         m_renderCommandProcessor->Process(renderCommandBuffer.get());
+        
+        auto allocator = renderCommandBuffer->GetFrameAllocator();
+        renderCommandBuffer.reset();
+        
+        m_frameAllocatorQueue.Push(allocator);
     }
     
     //------------------------------------------------------------------------------

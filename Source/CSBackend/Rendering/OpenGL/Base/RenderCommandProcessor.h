@@ -28,10 +28,12 @@
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
 #include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLLight.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLDynamicMesh.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTextureUnitManager.h>
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 
 namespace CSBackend
@@ -103,13 +105,27 @@ namespace CSBackend
             ///     The render command
             ///
             void RestoreMesh(const ChilliSource::RestoreMeshRenderCommand* renderCommand) noexcept;
-            
+
+            /// Loads the target group described by the given load command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void LoadTargetGroup(const ChilliSource::LoadTargetGroupRenderCommand* renderCommand) noexcept;
+
             /// Begins rendering to the default render target.
             ///
             /// @param renderCommand
             ///     The render command
             ///
             void Begin(const ChilliSource::BeginRenderCommand* renderCommand) noexcept;
+            
+            /// Begins rendering to the the described render target group.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void BeginWithTargetGroup(const ChilliSource::BeginWithTargetGroupRenderCommand* renderCommand) noexcept;
             
             /// Caches the given camera data. All applied materials after this will use this camera data.
             /// The currently applied material will be invalidated and needs to be re-applied.
@@ -118,6 +134,36 @@ namespace CSBackend
             ///     The render command
             ///
             void ApplyCamera(const ChilliSource::ApplyCameraRenderCommand* renderCommand) noexcept;
+            
+            /// Caches the given ambient light data and invalidates all other light data. All applied materials
+            /// after this will use this data.
+            ///
+            /// The currently applied material will be invalidated and needs to be re-applied.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyAmbientLight(const ChilliSource::ApplyAmbientLightRenderCommand* renderCommand) noexcept;
+            
+            /// Caches the given directional light data and invalidates all other light data. All applied materials
+            /// after this will use this data.
+            ///
+            /// The currently applied material will be invalidated and needs to be re-applied.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyDirectionalLight(const ChilliSource::ApplyDirectionalLightRenderCommand* renderCommand) noexcept;
+            
+            /// Caches the given point light data and invalidates all other light data. All applied materials
+            /// after this will use this data.
+            ///
+            /// The currently applied material will be invalidated and needs to be re-applied.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyPointLight(const ChilliSource::ApplyPointLightRenderCommand* renderCommand) noexcept;
             
             /// Applies the given material to the OpenGL Context. The cached camera data will be used.
             ///
@@ -173,6 +219,13 @@ namespace CSBackend
             ///
             void UnloadMesh(const ChilliSource::UnloadMeshRenderCommand* renderCommand) noexcept;
             
+            /// Unloads the target group described by the given unload command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void UnloadTargetGroup(const ChilliSource::UnloadTargetGroupRenderCommand* renderCommand) noexcept;
+            
             /// Resets the cached values back to thier original state.
             ///
             void ResetCache() noexcept;
@@ -183,6 +236,8 @@ namespace CSBackend
             GLDynamicMeshUPtr m_glDynamicMesh;
             
             GLCamera m_currentCamera;
+            GLLightUPtr m_currentLight;
+            const ChilliSource::RenderTargetGroup* m_currentRenderTargetGroup = nullptr;
             const ChilliSource::RenderShader* m_currentShader = nullptr;
             const ChilliSource::RenderMaterial* m_currentMaterial = nullptr;
             const ChilliSource::RenderMesh* m_currentMesh = nullptr;

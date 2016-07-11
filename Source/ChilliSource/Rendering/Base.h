@@ -41,6 +41,7 @@
 #include <ChilliSource/Rendering/Base/DepthTestComparison.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
+#include <ChilliSource/Rendering/Base/FrameAllocatorQueue.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
@@ -57,7 +58,6 @@
 #include <ChilliSource/Rendering/Base/RenderPassObjectSorter.h>
 #include <ChilliSource/Rendering/Base/RenderPassVisibilityChecker.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
-#include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>

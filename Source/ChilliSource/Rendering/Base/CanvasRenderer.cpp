@@ -638,10 +638,10 @@ namespace ChilliSource
         void AddSpriteRenderObject(RenderSnapshot* renderSnapshot, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour,
                                    AlignmentAnchor alignmentAnchor, const Matrix4& worldMatrix, const MaterialCSPtr& material, u32 priority) noexcept
         {
-            auto renderDynamicMesh = SpriteMeshBuilder::Build(localPosition, localSize, uvs, colour, alignmentAnchor);
+            auto renderDynamicMesh = SpriteMeshBuilder::Build(renderSnapshot->GetFrameAllocator(), localPosition, localSize, uvs, colour, alignmentAnchor);
             auto boundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldMatrix.GetTranslation(), Vector3(localSize, 0.0f));
             
-            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, RenderLayer::k_ui, priority));
+            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, false, RenderLayer::k_ui, priority));
             renderSnapshot->AddRenderDynamicMesh(std::move(renderDynamicMesh));
         }
     }

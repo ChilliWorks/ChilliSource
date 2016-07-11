@@ -28,6 +28,7 @@
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
 namespace ChilliSource
 {
@@ -103,6 +104,78 @@ namespace ChilliSource
             return count;
         }
         
+        /// Adds a new begin command or begin with target group command, depending on whether or
+        /// not a RenderTargetGroup exists.
+        ///
+        /// @param targetRenderPassGroup
+        ///     The target render pass group.
+        /// @param renderCommandList
+        ///     The render command list to add the command to.
+        ///
+        void AddBeginCommand(const TargetRenderPassGroup& targetRenderPassGroup, RenderCommandList* renderCommandList) noexcept
+        {
+            if (targetRenderPassGroup.GetRenderTargetGroup())
+            {
+                renderCommandList->AddBeginWithTargetGroupCommand(targetRenderPassGroup.GetRenderTargetGroup(), targetRenderPassGroup.GetClearColour());
+            }
+            else
+            {
+                renderCommandList->AddBeginCommand(targetRenderPassGroup.GetResolution(), targetRenderPassGroup.GetClearColour());
+            }
+        }
+        
+        /// Adds a new apply light command to the list for the given render pass.
+        ///
+        /// @param renderPass
+        ///     The render pass.
+        /// @param renderCommandList
+        ///     The render command list to add the command to.
+        ///
+        void AddApplyLightCommand(const RenderPass& renderPass, RenderCommandList* renderCommandList) noexcept
+        {
+            switch (renderPass.GetLightType())
+            {
+                case RenderPass::LightType::k_none:
+                {
+                    renderCommandList->AddApplyAmbientLightCommand(Colour::k_black);
+                    break;
+                }
+                case RenderPass::LightType::k_ambient:
+                {
+                    const auto& ambientLight = renderPass.GetAmbientLight();
+                    renderCommandList->AddApplyAmbientLightCommand(ambientLight.GetColour());
+                    break;
+                }
+                case RenderPass::LightType::k_directional:
+                {
+                    const auto& directionalLight = renderPass.GetDirectionalLight();
+                    auto viewProj = Matrix4::Inverse(directionalLight.GetLightWorldMatrix()) * directionalLight.GetLightProjectionMatrix();
+                    
+                    const auto& shadowMapTarget = directionalLight.GetShadowMapTarget();
+                    const RenderTexture* shadowMapTexture = nullptr;
+                    if (shadowMapTarget)
+                    {
+                        shadowMapTexture = shadowMapTarget->GetDepthTarget();
+                        CS_ASSERT(shadowMapTexture, "Shadow map target must have depth texture.");
+                    }
+                    
+                    renderCommandList->AddApplyDirectionalLightCommand(directionalLight.GetColour(), directionalLight.GetDirection(), viewProj, directionalLight.GetShadowTolerance(), shadowMapTexture);
+                    break;
+                }
+                case RenderPass::LightType::k_point:
+                {
+                    const auto& pointLight = renderPass.GetPointLight();
+                    renderCommandList->AddApplyPointLightCommand(pointLight.GetColour(), pointLight.GetPosition(), pointLight.GetAttenuation());
+                    break;
+                }
+                default:
+                {
+                    CS_LOG_FATAL("Invalid light type.");
+                    break;
+                }
+            }
+        }
+        
         /// Compiles the render commands for the given render pass. The render pass must contain
         /// render pass objects otherwise this will assert.
         ///
@@ -113,7 +186,7 @@ namespace ChilliSource
         ///
         void CompileRenderCommandsForPass(const RenderPass& renderPass, RenderCommandList* renderCommandList) noexcept
         {
-            //TODO: Handle lights
+            AddApplyLightCommand(renderPass, renderCommandList);
             
             const auto& renderPassObjects = renderPass.GetRenderPassObjects();
             CS_ASSERT(renderPassObjects.size() > 0, "Cannot compile a pass with no objects.");
@@ -167,12 +240,12 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, const Integer2& resolution,
-                                                                          const Colour& clearColour, std::vector<RenderDynamicMeshUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList,
+    RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
+                                                                          std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList,
                                                                           RenderCommandListUPtr postRenderCommandList) noexcept
     {
         u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());
-        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(numLists, std::move(renderDynamicMeshes)));
+        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(frameAllocator, numLists, std::move(renderDynamicMeshes)));
         std::vector<Task> tasks;
         u32 currentList = 0;
         
@@ -183,7 +256,7 @@ namespace ChilliSource
         
         for (const auto& targetRenderPassGroup : targetRenderPassGroups)
         {
-            renderCommandBuffer->GetRenderCommandList(currentList++)->AddBeginCommand(resolution, clearColour);
+            AddBeginCommand(targetRenderPassGroup, renderCommandBuffer->GetRenderCommandList(currentList++));
                 
             for (const auto& cameraRenderPassGroup : targetRenderPassGroup.GetRenderCameraGroups())
             {
@@ -214,7 +287,10 @@ namespace ChilliSource
             *renderCommandBuffer->GetRenderCommandList(currentList++) = std::move(*postRenderCommandList);
         }
         
-        taskContext.ProcessChildTasks(tasks);
+        if (tasks.size() > 0)
+        {
+            taskContext.ProcessChildTasks(tasks);
+        }
         
         return std::move(renderCommandBuffer);
     }

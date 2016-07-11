@@ -29,6 +29,7 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
+#include <ChilliSource/Rendering/Base/FrameAllocatorQueue.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 
@@ -83,7 +84,23 @@ namespace ChilliSource
         /// @return Whether or not the interface is implemented.
         ///
         bool IsA(InterfaceIDType interfaceId) const noexcept override;
-       
+        
+        /// Creates a new RenderSnapshot object which can be used to take a snapshot of the current
+        /// scene. This will be created with the next queued frame allocator; if one isn't available
+        /// this will block until one is.
+        ///
+        /// @param resolution
+        ///     The viewport resolution.
+        /// @param clearColour
+        ///     The clear colour
+        /// @param renderCamera
+        ///     The main camera that will be used to render the scene. Currently only one camera per
+        ///     scene is supported.
+        ///
+        /// @return The new render snapshot object.
+        ///
+        RenderSnapshot CreateRenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
+        
         /// Performs the Scene Snapshot through to the Render Command Queue Compilation Stages and
         /// then stores the output render command buffer render to later be processed by the
         /// ProcessRenderCommandBuffer() method.
@@ -144,6 +161,7 @@ namespace ChilliSource
         ///
         void OnSystemSuspend() noexcept;
         
+        FrameAllocatorQueue m_frameAllocatorQueue;
         IRenderPassCompilerUPtr m_renderPassCompiler;
         IRenderCommandProcessorUPtr m_renderCommandProcessor;
         

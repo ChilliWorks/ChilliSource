@@ -44,6 +44,8 @@ namespace ChilliSource
         ///
         /// @param resolution
         ///     The resolution of the viewport.
+        /// @param clearColour
+        ///     The clar colour of the screen.
         /// @param renderCamera
         ///     The camera used for the frame.
         /// @param renderAmbientLights
@@ -57,8 +59,8 @@ namespace ChilliSource
         ///
         /// @return The compiled render frame.
         ///
-        RenderFrame CompileRenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const std::vector<RenderAmbientLight>& renderAmbientLights,
-                                       const std::vector<RenderDirectionalLight>& renderDirectionalLights, const std::vector<RenderPointLight>& renderPointLights,
+        RenderFrame CompileRenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const std::vector<AmbientRenderLight>& renderAmbientLights,
+                                       const std::vector<DirectionalRenderLight>& renderDirectionalLights, const std::vector<PointRenderLight>& renderPointLights,
                                        const std::vector<RenderObject>& renderObjects) noexcept;
     }
 }

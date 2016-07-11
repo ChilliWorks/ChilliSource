@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 
 namespace ChilliSource
 {
@@ -143,37 +143,60 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         OrthographicCameraComponentUPtr CreateOrthographicCameraComponent(f32 in_near, f32 in_far);
         //---------------------------------------------------------------------------
-        /// Create a new light component that is applied in the ambient render pass.
-        /// This light simulates global light scattering as a base colour
+        /// Create a new ambient light component. This light simulates global light
+        /// scattering as a base colour.
         ///
-        /// @author S Downie
+        /// @author Ian Copland
         ///
-        /// @return Ownership of new ambient light component
+        /// @param in_colour - The colour of the ambient light.
+        /// @param in_intensity - (Optional) The intensity of the ambient light. This
+        /// defaults to 1.0.
+        ///
+        /// @return The new ambient light component.
         //---------------------------------------------------------------------------
-        AmbientLightComponentUPtr CreateAmbientLightComponent() const;
+        AmbientLightComponentUPtr CreateAmbientLightComponent(const Colour& in_colour, f32 in_intensity = 1.0f) const noexcept;
         //---------------------------------------------------------------------------
-        /// Create a new light component that is applied in the diffuse render pass.
-        /// This light simulates direct light from an infinitely far away light source
-        /// where the light waves travel in parallel along a single vector.
+        /// Create a new directional light component which does not cast shadows.
+        /// This light simulates direct light from an infinitely far away light
+        /// source where the light waves travel in parallel along a single vector.
         ///
-        /// NOTE: This light type can cast shadows into a shadow map of the given
-        /// resolution. If ZERO then no shadows are cast
+        /// @author Ian Copland
         ///
-        /// @author S Downie
+        /// @param in_colour - The colour of the directional light.
+        /// @param in_intensity - (Optional) The intensity of the directional light.
+        /// This defaults to 1.0.
         ///
-        /// @return Ownership of new directional light component
+        /// @return The new directional light component
         //---------------------------------------------------------------------------
-        DirectionalLightComponentUPtr CreateDirectionalLightComponent(u32 in_shadowMapRes = 0) const;
+        DirectionalLightComponentUPtr CreateDirectionalLightComponent(const Colour& in_colour, f32 in_intensity = 1.0f) const noexcept;
         //---------------------------------------------------------------------------
-        /// Create a new light component that is applied in the diffuse render pass.
-        /// This light simulates direct light from nearby light sources where the light
-        /// is omni-directional
+        /// Create a new directional light component which casts shadows. This light
+        /// simulates direct light from an infinitely far away light source where the
+        /// light waves travel in parallel along a single vector.
         ///
-        /// @author S Downie
+        /// @author Ian Copland
         ///
-        /// @return Ownership of new point light component
+        /// @param in_colour - The colour of the directional light.
+        /// @param in_intensity - (Optional) The intensity of the directional light.
+        /// This defaults to 1.0.
+        ///
+        /// @return The new directional light component
         //---------------------------------------------------------------------------
-        PointLightComponentUPtr CreatePointLightComponent() const;
+        DirectionalLightComponentUPtr CreateDirectionalLightComponent(DirectionalLightComponent::ShadowQuality in_shadowQuality, const Colour& in_colour, f32 in_intensity = 1.0f) const noexcept;
+        //---------------------------------------------------------------------------
+        /// Create a new point light component. This light simulates direct light
+        /// from nearby light sources where the light is omni-directional.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_colour - The colour of the point light.
+        /// @param in_radius - The radius of the point light.
+        /// @param in_intensity - (Optional) The intensity of the point light. This
+        /// defaults to 1.0.
+        ///
+        /// @return The new point light component.
+        //---------------------------------------------------------------------------
+        PointLightComponentUPtr CreatePointLightComponent(const Colour& in_colour, f32 in_radius, f32 in_intensity = 1.0f) const noexcept;
         //---------------------------------------------------------------------------
         /// @author Ian Copland
         ///

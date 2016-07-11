@@ -73,6 +73,7 @@
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDefFactory.h>
 #include <ChilliSource/Rendering/Shader/CSShaderProvider.h>
 #include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
@@ -308,6 +309,7 @@ namespace ChilliSource
         CreateSystem<RenderMeshManager>();
         CreateSystem<RenderShaderManager>();
         CreateSystem<RenderTextureManager>();
+        CreateSystem<RenderTargetGroupManager>();
         CreateSystem<RenderCapabilities>();
         CreateSystem<CanvasRenderer>();
         CreateSystem<MaterialFactory>();
@@ -379,7 +381,7 @@ namespace ChilliSource
             renderCamera = RenderCamera(transform.GetWorldTransform(), camera->GetProjection(), transform.GetWorldOrientation());
         }
         
-        RenderSnapshot renderSnapshot(resolution, clearColour, renderCamera);
+        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(resolution, clearColour, renderCamera);
         for (const AppSystemUPtr& system : m_systems)
         {
             system->OnRenderSnapshot(renderSnapshot);

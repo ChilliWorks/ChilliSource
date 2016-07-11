@@ -58,7 +58,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     const RenderMaterial* RenderMaterialGroup::GetRenderMaterial(const VertexFormat& vertexFormat, u32 passIndex) const noexcept
     {
-        CS_ASSERT(passIndex < k_maxPasses, "Pass index is out of bounds.");
+        CS_ASSERT(passIndex < k_numMaterialSlots, "Pass index is out of bounds.");
         
         for (const auto& collection : m_collections)
         {
@@ -73,7 +73,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderMaterialGroup::Collection::Collection(const VertexFormat& vertexFormat, const std::array<const RenderMaterial*, k_maxPasses>& renderMaterials) noexcept
+    RenderMaterialGroup::Collection::Collection(const VertexFormat& vertexFormat, const std::array<const RenderMaterial*, k_numMaterialSlots>& renderMaterials) noexcept
         : m_vertexFormat(vertexFormat), m_renderMaterials(renderMaterials)
     {
     }
@@ -81,7 +81,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     const RenderMaterial* RenderMaterialGroup::Collection::GetRenderMaterial(u32 passIndex) const noexcept
     {
-        CS_ASSERT(passIndex < k_maxPasses, "Pass index is out of bounds.");
+        CS_ASSERT(passIndex < k_numMaterialSlots, "Pass index is out of bounds.");
         
         return m_renderMaterials[passIndex];
     }

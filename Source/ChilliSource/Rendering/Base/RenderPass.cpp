@@ -27,50 +27,55 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderPass::RenderPass(const std::vector<RenderPassObject>& renderPassObjects) noexcept
-    :m_renderPassObjects(renderPassObjects)
-    ,m_lightType(k_none)
+    RenderPass::RenderPass() noexcept
+        : m_lightType(LightType::k_none), m_ambientLight(AmbientRenderLight(Colour::k_black))
     {
     }
+    
     //------------------------------------------------------------------------------
-    RenderPass::RenderPass(const RenderAmbientLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
-    :m_ambientLight(light)
-    ,m_renderPassObjects(renderPassObjects)
-    ,m_lightType(k_ambient)
+    RenderPass::RenderPass(std::vector<RenderPassObject> renderPassObjects) noexcept
+        : m_renderPassObjects(std::move(renderPassObjects)), m_lightType(LightType::k_none), m_ambientLight(AmbientRenderLight(Colour::k_black))
     {
     }
+    
     //------------------------------------------------------------------------------
-    RenderPass::RenderPass(const RenderPointLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
-    :m_pointLight(light)
-    ,m_renderPassObjects(renderPassObjects)
-    ,m_lightType(k_point)
+    RenderPass::RenderPass(const AmbientRenderLight& light, std::vector<RenderPassObject> renderPassObjects) noexcept
+    : m_renderPassObjects(std::move(renderPassObjects)), m_lightType(LightType::k_ambient), m_ambientLight(light)
     {
     }
+    
     //------------------------------------------------------------------------------
-    RenderPass::RenderPass(const RenderDirectionalLight& light, const std::vector<RenderPassObject>& renderPassObjects) noexcept
-    :m_directionalLight(light)
-    ,m_renderPassObjects(renderPassObjects)
-    ,m_lightType(k_directional)
+    RenderPass::RenderPass(const PointRenderLight& light, std::vector<RenderPassObject> renderPassObjects) noexcept
+        : m_renderPassObjects(std::move(renderPassObjects)), m_lightType(LightType::k_point), m_pointLight(light)
     {
     }
+    
     //------------------------------------------------------------------------------
-    const RenderAmbientLight& RenderPass::GetAmbientLight() const noexcept
+    RenderPass::RenderPass(const DirectionalRenderLight& light, std::vector<RenderPassObject> renderPassObjects) noexcept
+        : m_renderPassObjects(std::move(renderPassObjects)), m_lightType(LightType::k_directional), m_directionalLight(light)
     {
-        CS_ASSERT(m_lightType == k_ambient, "Ambient light not set for pass");
+    }
+    
+    //------------------------------------------------------------------------------
+    const AmbientRenderLight& RenderPass::GetAmbientLight() const noexcept
+    {
+        CS_ASSERT(m_lightType == LightType::k_ambient, "Ambient light not set for pass");
         
         return m_ambientLight;
     }
+    
     //------------------------------------------------------------------------------
-    const RenderPointLight& RenderPass::GetPointLight() const noexcept
+    const PointRenderLight& RenderPass::GetPointLight() const noexcept
     {
-        CS_ASSERT(m_lightType == k_point, "Point light not set for pass");
+        CS_ASSERT(m_lightType == LightType::k_point, "Point light not set for pass");
         
         return m_pointLight;
     }
+    
     //------------------------------------------------------------------------------
-    const RenderDirectionalLight& RenderPass::GetDirectionalLight() const noexcept
+    const DirectionalRenderLight& RenderPass::GetDirectionalLight() const noexcept
     {
-        CS_ASSERT(m_lightType == k_directional, "Ambient light not set for pass");
+        CS_ASSERT(m_lightType == LightType::k_directional, "Ambient light not set for pass");
         
         return m_directionalLight;
     }

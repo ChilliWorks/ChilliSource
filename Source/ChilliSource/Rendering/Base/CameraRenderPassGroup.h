@@ -42,14 +42,18 @@ namespace ChilliSource
     class CameraRenderPassGroup final
     {
     public:
+        CS_DECLARE_NOCOPY(CameraRenderPassGroup);
+        
         CameraRenderPassGroup() = default;
+        CameraRenderPassGroup(CameraRenderPassGroup&&) = default;
+        CameraRenderPassGroup& operator=(CameraRenderPassGroup&&) = default;
         
         /// @param camera
         ///     The camera to use for this pass
         /// @param renderPasses
-        ///     The list of render passes to carry out with the camera
+        ///     The list of render passes to carry out with the camera. Must be moved.
         ///
-        CameraRenderPassGroup(const RenderCamera& camera, const std::vector<RenderPass>& renderPasses) noexcept;
+        CameraRenderPassGroup(const RenderCamera& camera, std::vector<RenderPass> renderPasses) noexcept;
         
         /// @return The camera to use for rendering the group
         ///

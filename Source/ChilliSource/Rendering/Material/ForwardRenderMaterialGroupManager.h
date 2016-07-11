@@ -81,8 +81,8 @@ namespace ChilliSource
         /// @return The new material group.
         ///
         const RenderMaterialGroup* CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
-                                                                          bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace,
-                                                                          const Colour& emissiveColour, const Colour& ambientColour) noexcept override;
+                                                                  bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace,
+                                                                  const Colour& emissiveColour, const Colour& ambientColour) noexcept override;
         
         /// Creates a new blinn RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
         /// Render Snapshot stage in the render pipeline.
@@ -101,7 +101,7 @@ namespace ChilliSource
         /// @return The new material group.
         ///
         const RenderMaterialGroup* CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
-                                                                          const Colour& specularColour) noexcept override;
+                                                                  const Colour& specularColour) noexcept override;
         
     private:
         friend class RenderMaterialGroupManager;
@@ -116,10 +116,14 @@ namespace ChilliSource
         
         ForwardRenderMaterialGroupManager() = default;
         
-        ShaderCSPtr m_staticMeshUnlit;
-        ShaderCSPtr m_staticMeshBlinnBase;
-        ShaderCSPtr m_staticMeshBlinnDirectional;
         ShaderCSPtr m_spriteUnlit;
+        
+        ShaderCSPtr m_staticShadowMap;
+        ShaderCSPtr m_staticUnlit;
+        ShaderCSPtr m_staticBlinnBase;
+        ShaderCSPtr m_staticBlinnDirectional;
+        ShaderCSPtr m_staticBlinnDirectionalShadows;
+        ShaderCSPtr m_staticBlinnPoint;
     };
 }
 

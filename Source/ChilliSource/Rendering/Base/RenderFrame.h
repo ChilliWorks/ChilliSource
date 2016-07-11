@@ -26,12 +26,13 @@
 #define _CHILLISOURCE_RENDERING_BASE_RENDERFRAME_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
-#include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
-#include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
-#include <ChilliSource/Rendering/Lighting/RenderPointLight.h>
+#include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
+#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
 
 #include <vector>
 
@@ -48,6 +49,8 @@ namespace ChilliSource
         ///
         /// @param resolution
         ///     The resolution of the viewport.
+        /// @param clearColour
+        ///     The clear colour of the default render target.
         /// @param renderCamera
         ///     The camera used for the frame.
         /// @param renderAmbientLight
@@ -60,12 +63,16 @@ namespace ChilliSource
         /// @param renderObjects
         ///     A list of objects in the frame.
         ///
-        RenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const RenderAmbientLight& renderAmbientLight, const std::vector<RenderDirectionalLight>& renderDirectionalLights,
-                    const std::vector<RenderPointLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept;
+        RenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight, const std::vector<DirectionalRenderLight>& renderDirectionalLights,
+                    const std::vector<PointRenderLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept;
         
         /// @return The resolution of the viewport.
         ///
         const Integer2& GetResolution() const noexcept { return m_resolution; }
+        
+        /// @return The clear colour of the default render target.
+        ///
+        const Colour& GetClearColour() const noexcept { return m_clearColour; }
         
         /// @return The camera used for the frame.
         ///
@@ -74,15 +81,15 @@ namespace ChilliSource
         /// @return An ambient light that represents the combination of all ambient lights in the
         ///     scene.
         ///
-        const RenderAmbientLight& GetRenderAmbientLight() const noexcept { return m_renderAmbientLight; }
+        const AmbientRenderLight& GetAmbientRenderLight() const noexcept { return m_renderAmbientLight; }
         
         /// @return A list of directional lights in the frame.
         ///
-        const std::vector<RenderDirectionalLight>& GetRenderDirectionalLights() const noexcept { return m_renderDirectionalLights; }
+        const std::vector<DirectionalRenderLight>& GetDirectionalRenderLights() const noexcept { return m_renderDirectionalLights; }
         
         /// @return A list of point lights in the frame.
         ///
-        const std::vector<RenderPointLight>& GetRenderPointLights() const noexcept { return m_renderPointLights; }
+        const std::vector<PointRenderLight>& GetPointRenderLights() const noexcept { return m_renderPointLights; }
         
         /// @return A list of objects in the frame.
         ///
@@ -90,10 +97,11 @@ namespace ChilliSource
         
     private:
         Integer2 m_resolution;
+        Colour m_clearColour;
         RenderCamera m_renderCamera;
-        RenderAmbientLight m_renderAmbientLight;
-        std::vector<RenderDirectionalLight> m_renderDirectionalLights;
-        std::vector<RenderPointLight> m_renderPointLights;
+        AmbientRenderLight m_renderAmbientLight;
+        std::vector<DirectionalRenderLight> m_renderDirectionalLights;
+        std::vector<PointRenderLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
     };
 }

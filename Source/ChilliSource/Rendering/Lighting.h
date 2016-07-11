@@ -33,10 +33,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
-#include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
-#include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
-#include <ChilliSource/Rendering/Lighting/RenderPointLight.h>
+#include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
+#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
 
 #endif

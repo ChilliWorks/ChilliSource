@@ -81,15 +81,52 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         BlendMode ConvertStringToBlendMode(const std::string& in_blendMode)
         {
-            if(in_blendMode == "Zero") return BlendMode::k_zero;
-            if(in_blendMode == "One") return BlendMode::k_one;
-            if(in_blendMode == "SourceColour") return BlendMode::k_sourceCol;
-            if(in_blendMode == "OneMinusSourceColour") return BlendMode::k_oneMinusSourceCol;
-            if(in_blendMode == "SourceAlpha") return BlendMode::k_sourceAlpha;
-            if(in_blendMode == "OneMinusSourceAlpha") return BlendMode::k_oneMinusSourceAlpha;
-            if(in_blendMode == "DestAlpha")	return BlendMode::k_destAlpha;
-            if(in_blendMode == "OneMinusDestAlpha") return BlendMode::k_oneMinusDestAlpha;
+            constexpr char k_zero[] = "zero";
+            constexpr char k_one[] = "one";
+            constexpr char k_sourceColour[] = "sourcecolour";
+            constexpr char k_oneMinusSourceColour[] = "oneminussourcecolour";
+            constexpr char k_sourceAlpha[] = "sourcealpha";
+            constexpr char k_oneMinusSourceAlpha[] = "oneminussourcealpha";
+            constexpr char k_destAlpha[] = "destalpha";
+            constexpr char k_oneMinusDestAlpha[] = "oneminusdestalpha";
             
+            std::string blendModeLower = in_blendMode;
+            StringUtils::ToLowerCase(blendModeLower);
+            
+            if (blendModeLower == k_zero)
+            {
+                return BlendMode::k_zero;
+            }
+            else if (blendModeLower == k_one)
+            {
+                return BlendMode::k_one;
+            }
+            else if (blendModeLower == k_sourceColour)
+            {
+                return BlendMode::k_sourceCol;
+            }
+            else if (blendModeLower == k_oneMinusSourceColour)
+            {
+                return BlendMode::k_oneMinusSourceCol;
+            }
+            else if (blendModeLower == k_sourceAlpha)
+            {
+                return BlendMode::k_sourceAlpha;
+            }
+            else if (blendModeLower == k_oneMinusSourceAlpha)
+            {
+                 return BlendMode::k_oneMinusSourceAlpha;
+            }
+            else if (blendModeLower == k_destAlpha)
+            {
+                return BlendMode::k_destAlpha;
+            }
+            else if (blendModeLower == k_oneMinusDestAlpha)
+            {
+                return BlendMode::k_oneMinusDestAlpha;
+            }
+            
+            CS_LOG_FATAL("Invalid BlendMode: " + in_blendMode);
             return BlendMode::k_one;
         }
         //----------------------------------------------------------------------------
@@ -101,9 +138,22 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         CullFace ConvertStringToCullFace(const std::string& in_cullFace)
         {
-            if(in_cullFace == "Front") return CullFace::k_front;
-            if(in_cullFace == "Back") return CullFace::k_back;
+            constexpr char k_front[] = "front";
+            constexpr char k_back[] = "back";
             
+            std::string cullFaceLower = in_cullFace;
+            StringUtils::ToLowerCase(cullFaceLower);
+            
+            if (cullFaceLower == k_front)
+            {
+                return CullFace::k_front;
+            }
+            else if (cullFaceLower == k_back)
+            {
+                return CullFace::k_back;
+            }
+            
+            CS_LOG_FATAL("Invalid CullFace: " + in_cullFace);
             return CullFace::k_front;
         }
         //----------------------------------------------------------------------------
@@ -116,19 +166,22 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         TextureWrapMode ConvertStringToWrapMode(const std::string& in_wrapModeString)
         {
+            constexpr char k_clamp[] = "clamp";
+            constexpr char k_repeat[] = "repeat";
+            
             std::string lowerWrapModeString = in_wrapModeString;
             StringUtils::ToLowerCase(lowerWrapModeString);
             
-            if(lowerWrapModeString == "clamp")
+            if (lowerWrapModeString == k_clamp)
             {
                 return TextureWrapMode::k_clamp;
             }
-            if(lowerWrapModeString == "repeat")
+            else if (lowerWrapModeString == k_repeat)
             {
                 return TextureWrapMode::k_repeat;
             }
             
-            CS_LOG_ERROR("Invalid WrapMode: " + in_wrapModeString);
+            CS_LOG_FATAL("Invalid WrapMode: " + in_wrapModeString);
             return TextureWrapMode::k_clamp;
         }
         //----------------------------------------------------------------------------
@@ -141,19 +194,22 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         TextureFilterMode ConvertStringToFilterMode(const std::string& in_filterModeString)
         {
+            constexpr char k_nearest[] = "nearest";
+            constexpr char k_bilinear[] = "bilinear";
+            
             std::string lowerFilterModeString = in_filterModeString;
             StringUtils::ToLowerCase(lowerFilterModeString);
             
-            if(lowerFilterModeString == "nearestneighbour")
+            if (lowerFilterModeString == k_nearest)
             {
                 return TextureFilterMode::k_nearest;
             }
-            if(lowerFilterModeString == "bilinear")
+            else if (lowerFilterModeString == k_bilinear)
             {
                 return TextureFilterMode::k_bilinear;
             }
             
-            CS_LOG_ERROR("Invalid FilterMode: " + in_filterModeString);
+            CS_LOG_FATAL("Invalid FilterMode: " + in_filterModeString);
             return TextureFilterMode::k_bilinear;
         }
         //----------------------------------------------------------------------------
@@ -165,61 +221,25 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         Material::ShadingType GetShadingType(const std::string& in_materialType) noexcept
         {
-            if(in_materialType == "Sprite")
+            constexpr char k_unlit[] = "unlit";
+            constexpr char k_blinn[] = "blinn";
+            constexpr char k_custom[] = "custom";
+            
+            auto materialTypeLower = in_materialType;
+            StringUtils::ToLowerCase(materialTypeLower);
+            
+            if (materialTypeLower == k_unlit)
             {
                 return Material::ShadingType::k_unlit;
             }
-            if(in_materialType == "Static")
-            {
-                return Material::ShadingType::k_unlit;
-            }
-            if(in_materialType == "StaticAmbient")
-            {
-                return Material::ShadingType::k_unlit;
-            }
-            if(in_materialType == "StaticBlinn")
+            else if (materialTypeLower == k_blinn)
             {
                 return Material::ShadingType::k_blinn;
             }
-            if(in_materialType == "StaticBlinnShadowed")
+            else if (materialTypeLower == k_custom)
             {
-                CS_LOG_FATAL("Unsupported: Not implemented yet.");
-            }
-            if(in_materialType == "StaticBlinnPerVertex")
-            {
-                CS_LOG_FATAL("Unsupported: Not implemented yet.");
-            }
-            if(in_materialType == "StaticBlinnPerVertexShadowed")
-            {
-                CS_LOG_FATAL("Unsupported: Not implemented yet.");
-            }
-            if(in_materialType == "Animated")
-            {
-                return Material::ShadingType::k_unlit;
-            }
-            if(in_materialType == "AnimatedAmbient")
-            {
-                return Material::ShadingType::k_unlit;
-            }
-            if(in_materialType == "AnimatedBlinn")
-            {
-                return Material::ShadingType::k_blinn;
-            }
-            if(in_materialType == "AnimatedBlinnShadowed")
-            {
-                CS_LOG_FATAL("Unsupported: Not implemented yet.");
-            }
-            if(in_materialType == "AnimatedBlinnPerVertex")
-            {
-                CS_LOG_FATAL("Unsupported: Not implemented yet.");
-            }
-            if(in_materialType == "AnimatedBlinnPerVertexShadowed")
-            {
-                CS_LOG_FATAL("Unsupported: Not implemented yet.");
-            }
-            if(in_materialType == "Custom")
-            {
-                CS_LOG_FATAL("Unsupported: Not implemented yet.");
+                //TODO: Support custom shading types.
+                CS_LOG_FATAL("Unsupported: not implemented yet.");
             }
             
             CS_LOG_FATAL("Invalid material type: " + in_materialType);
@@ -355,85 +375,6 @@ namespace ChilliSource
                 out_material->SetSpecular(specular);
             }
         }
-        //----------------------------------------------------------------------------
-        /// Parse the shader file paths
-        ///
-        /// @author S Downie
-        ///
-        /// @param Root element
-        /// @param [Out] Shader files to populate
-        /// @param [Out] Material to populate
-        //----------------------------------------------------------------------------
-//        void ParseShaders(XML::Node* in_rootElement, std::vector<MaterialProvider::ShaderDesc>& out_shaderFiles, Material* out_material)
-//        {
-            //TODO: Re-add when adding custom shader support.
-//            const u32 numShaderNodes = 3;
-//            const std::pair<std::string, ShaderPass> shaderNodes[numShaderNodes] =
-//            {
-//                std::make_pair("AmbientLightPass", ShaderPass::k_ambient),
-//                std::make_pair("DirectionalLightPass", ShaderPass::k_directional),
-//                std::make_pair("PointLightPass", ShaderPass::k_point)
-//            };
-//            
-//            XML::Node* shadersEl = XMLUtils::GetFirstChildElement(in_rootElement, "Shaders");
-//            if(shadersEl)
-//            {
-//                for(u32 i=0; i<numShaderNodes; ++i)
-//                {
-//                    //Overwrite any of the default files for this material type with specified custom ones
-//                    XML::Node* shaderEl = XMLUtils::GetFirstChildElement(shadersEl, shaderNodes[i].first);
-//                    if(shaderEl)
-//                    {
-//                        for(u32 udwShaderFilesIndex = 0; udwShaderFilesIndex<out_shaderFiles.size(); ++udwShaderFilesIndex)
-//                        {
-//                            if(out_shaderFiles[udwShaderFilesIndex].m_pass == shaderNodes[i].second)
-//                            {
-//                                out_shaderFiles[udwShaderFilesIndex].m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(shaderEl, "location", "Package"));
-//                                out_shaderFiles[udwShaderFilesIndex].m_filePath = XMLUtils::GetAttributeValue<std::string>(shaderEl, "file-name", "");
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//                
-//                //---Get the shader variables
-//                XML::Node* shaderVarEl = XMLUtils::GetFirstChildElement(shadersEl, "Var");
-//                while(shaderVarEl)
-//                {
-//                    //Get the variable type
-//                    std::string strType = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "type", "");
-//                    //Get the variable name
-//                    std::string strName = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "name", "");
-//                    //Add the variable to the material
-//                    if(strType == "Float")
-//                    {
-//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<f32>(shaderVarEl, "value", 0.0f));
-//                    }
-//                    else if(strType == "Vec2")
-//                    {
-//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector2>(shaderVarEl, "value", Vector2::k_zero));
-//                    }
-//                    else if(strType == "Vec3")
-//                    {
-//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector3>(shaderVarEl, "value", Vector3::k_zero));
-//                    }
-//                    else if(strType == "Vec4")
-//                    {
-//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector4>(shaderVarEl, "value", Vector4::k_zero));
-//                    }
-//                    else if(strType == "Colour")
-//                    {
-//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Colour>(shaderVarEl, "value", Colour::k_white));
-//                    }
-//                    else if(strType == "Matrix")
-//                    {
-//                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Matrix4>(shaderVarEl, "value", Matrix4::k_identity));
-//                    }
-//                    //Move on to the next variable
-//                    shaderVarEl =  XMLUtils::GetNextSiblingElement(shaderVarEl, "Var");
-//                }
-//            }
-//        }
         //----------------------------------------------------------------------------
         /// Parse the texture file paths
         ///
@@ -743,10 +684,10 @@ namespace ChilliSource
         ParseCullFunction(rootElement, out_material);
         ParseSurface(rootElement, out_material);
         
-        //TODO: Re-add when supporting custom shaders.
-        //ParseShaders(rootElement, out_shaderFiles, out_material);
         ParseTextures(rootElement, out_textureFiles);
         ParseCubemaps(rootElement, out_cubemapFiles);
+        
+        //TODO: Add support for custom shaders.
         
         return true;
     }

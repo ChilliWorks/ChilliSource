@@ -23,12 +23,22 @@
 //
 
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    TargetRenderPassGroup::TargetRenderPassGroup(const std::vector<CameraRenderPassGroup>& cameraRenderPassGroups) noexcept
-        : m_renderCameraGroups(cameraRenderPassGroups)
+    TargetRenderPassGroup::TargetRenderPassGroup(const Integer2& resolution, const Colour& clearColour, std::vector<CameraRenderPassGroup> cameraRenderPassGroups) noexcept
+        : m_resolution(resolution), m_renderCameraGroups(std::move(cameraRenderPassGroups)), m_clearColour(clearColour)
     {
+    }
+    
+    //------------------------------------------------------------------------------
+    TargetRenderPassGroup::TargetRenderPassGroup(const RenderTargetGroup* renderTargetGroup, const Colour& clearColour, std::vector<CameraRenderPassGroup> cameraRenderPassGroups) noexcept
+        : m_renderTargetGroup(renderTargetGroup), m_clearColour(clearColour), m_renderCameraGroups(std::move(cameraRenderPassGroups))
+    {
+        CS_ASSERT(m_renderTargetGroup, "Must supply a valid render target group.");
+        
+        m_resolution = m_renderTargetGroup->GetResolution();
     }
 }

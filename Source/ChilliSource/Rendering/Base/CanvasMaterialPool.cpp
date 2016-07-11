@@ -51,12 +51,19 @@ namespace ChilliSource
         
         if (m_nextMaterial >= m_materials.size())
         {
-            m_materials.push_back(m_materialFactory->CreateGUI("_Canvas-" + ToString(m_materials.size())));
+            auto material = m_materialFactory->CreateCustom("_Canvas-" + ToString(m_materials.size()));
+            material->SetShadingType(Material::ShadingType::k_unlit);
+            material->SetTransparencyEnabled(true);
+            material->SetDepthTestEnabled(false);
+
+            m_materials.push_back(material);
             CS_ASSERT(m_nextMaterial < m_materials.size(), "We've added a new material yet we still don't have enough - something has gone wrong.");
         }
         
         auto material = m_materials[m_nextMaterial++];
         material->AddTexture(in_texture);
+        material->SetLoadState(Resource::LoadState::k_loaded);
+        
         m_associations.emplace(in_texture.get(), material);
         return material;
     }
@@ -69,6 +76,7 @@ namespace ChilliSource
         
         for (auto& material : m_materials)
         {
+            material->SetLoadState(Resource::LoadState::k_loading);
             material->RemoveAllTextures();
         }
     }

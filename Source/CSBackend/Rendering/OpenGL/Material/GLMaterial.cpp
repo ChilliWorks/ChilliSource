@@ -27,6 +27,7 @@
 #include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Material/RenderMaterial.h>
 
@@ -36,6 +37,12 @@ namespace CSBackend
     {
         namespace
         {
+            const std::string k_uniformEmissive = "u_emissive";
+            const std::string k_uniformAmbient = "u_ambient";
+            const std::string k_uniformDiffuse = "u_diffuse";
+            const std::string k_uniformSpecular = "u_specular";
+            const std::string k_uniformTexturePrefix = "u_texture";
+            
             /// Converts from a ChilliSource blend mode to a OpenGL blend mode.
             ///
             /// @param blendMode
@@ -71,7 +78,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLMaterial::Apply(const ChilliSource::RenderMaterial* renderMaterial, const GLCamera& glCamera, GLShader* glShader) noexcept
+        void GLMaterial::Apply(const ChilliSource::RenderMaterial* renderMaterial, GLShader* glShader) noexcept
         {
             if (renderMaterial->IsDepthTestEnabled())
             {
@@ -120,12 +127,15 @@ namespace CSBackend
                 glDisable(GL_BLEND);
             }
             
-            glShader->SetUniform(GLShader::k_defaultUniformEmissive, renderMaterial->GetEmissiveColour(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform(GLShader::k_defaultUniformAmbient, renderMaterial->GetAmbientColour(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform(GLShader::k_defaultUniformDiffuse, renderMaterial->GetDiffuseColour(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform(GLShader::k_defaultUniformSpecular, renderMaterial->GetSpecularColour(), GLShader::FailurePolicy::k_silent);
+            for (s32 i = 0; i < renderMaterial->GetRenderTextures().size(); ++i)
+            {
+                glShader->SetUniform(k_uniformTexturePrefix + ChilliSource::ToString(i), i);
+            }
             
-            glShader->SetUniform(GLShader::k_defaultUniformCameraPos, glCamera.GetPosition(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformEmissive, renderMaterial->GetEmissiveColour(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformAmbient, renderMaterial->GetAmbientColour(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformDiffuse, renderMaterial->GetDiffuseColour(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformSpecular, renderMaterial->GetSpecularColour(), GLShader::FailurePolicy::k_silent);
         }
     }
 }

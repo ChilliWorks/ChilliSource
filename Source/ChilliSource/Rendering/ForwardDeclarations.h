@@ -43,6 +43,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(IRenderCommandProcessor);
     CS_FORWARDDECLARE_CLASS(IRenderPassCompiler);
     CS_FORWARDDECLARE_CLASS(ForwardRenderPassCompiler);
+    CS_FORWARDDECLARE_CLASS(FrameAllocatorQueue);
     CS_FORWARDDECLARE_CLASS(RenderCapabilities);
     CS_FORWARDDECLARE_CLASS(RenderComponentFactory);
     CS_FORWARDDECLARE_CLASS(Renderer);
@@ -51,7 +52,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderPass);
     CS_FORWARDDECLARE_CLASS(RenderPassObject);
     CS_FORWARDDECLARE_CLASS(RenderSnapshot);
-    CS_FORWARDDECLARE_CLASS(RenderTarget);
     CS_FORWARDDECLARE_CLASS(TargetRenderPassGroup);
     CS_FORWARDDECLARE_CLASS(CameraRenderPassGroup);
     enum class AlignmentAnchor;
@@ -83,9 +83,9 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(DirectionalLightComponent);
     CS_FORWARDDECLARE_CLASS(LightComponent);
     CS_FORWARDDECLARE_CLASS(PointLightComponent);
-    CS_FORWARDDECLARE_CLASS(RenderAmbientLight);
-    CS_FORWARDDECLARE_CLASS(RenderDirectionalLight);
-    CS_FORWARDDECLARE_CLASS(RenderPointLight);
+    CS_FORWARDDECLARE_CLASS(AmbientRenderLight);
+    CS_FORWARDDECLARE_CLASS(DirectionalRenderLight);
+    CS_FORWARDDECLARE_CLASS(PointRenderLight);
     //------------------------------------------------------------
     /// Material
     //------------------------------------------------------------
@@ -167,15 +167,20 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Render Command
     //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(ApplyAmbientLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyCameraRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplyDirectionalLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyDynamicMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplyPointLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginRenderCommand);
+    CS_FORWARDDECLARE_CLASS(BeginWithTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(EndRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadShaderRenderCommand);
+    CS_FORWARDDECLARE_CLASS(LoadTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RestoreMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(RestoreTextureRenderCommand);
@@ -187,6 +192,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(UnloadMaterialGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadShaderRenderCommand);
+    CS_FORWARDDECLARE_CLASS(UnloadTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadTextureRenderCommand);
     //------------------------------------------------------------
     /// Shader
@@ -199,6 +205,11 @@ namespace ChilliSource
     /// Sprite
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(SpriteComponent);
+    //------------------------------------------------------------
+    /// Target
+    //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(RenderTargetGroup);
+    CS_FORWARDDECLARE_CLASS(RenderTargetGroupManager);
     //------------------------------------------------------------
     /// Texture
     //------------------------------------------------------------

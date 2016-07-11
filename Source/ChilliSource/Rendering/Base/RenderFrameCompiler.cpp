@@ -39,7 +39,7 @@ namespace ChilliSource
         ///
         /// @return A single ambient light representing all of the lights in the frame.
         ///
-        RenderAmbientLight MergeRenderAmbientLights(const std::vector<RenderAmbientLight>& renderAmbientLights)
+        AmbientRenderLight MergeAmbientRenderLights(const std::vector<AmbientRenderLight>& renderAmbientLights)
         {
             Colour mergedAmbientColour = Colour::k_transparent;
             
@@ -50,19 +50,19 @@ namespace ChilliSource
             
             mergedAmbientColour.a = 1.0f;
             
-            return RenderAmbientLight(mergedAmbientColour);
+            return AmbientRenderLight(mergedAmbientColour);
         }
     }
     
     //------------------------------------------------------------------------------
-    RenderFrame RenderFrameCompiler::CompileRenderFrame(const Integer2& resolution, const RenderCamera& renderCamera, const std::vector<RenderAmbientLight>& renderAmbientLights,
-                                                        const std::vector<RenderDirectionalLight>& renderDirectionalLights, const std::vector<RenderPointLight>& renderPointLights,
+    RenderFrame RenderFrameCompiler::CompileRenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const std::vector<AmbientRenderLight>& renderAmbientLights,
+                                                        const std::vector<DirectionalRenderLight>& renderDirectionalLights, const std::vector<PointRenderLight>& renderPointLights,
                                                         const std::vector<RenderObject>& renderObjects) noexcept
     {
         //TODO: Perform all render jobs in background tasks prior to building the complete render frame.
         
-        auto renderAmbientLight = MergeRenderAmbientLights(renderAmbientLights);
+        auto renderAmbientLight = MergeAmbientRenderLights(renderAmbientLights);
         
-        return RenderFrame(resolution, renderCamera, renderAmbientLight, renderDirectionalLights, renderPointLights, renderObjects);
+        return RenderFrame(resolution, clearColour, renderCamera, renderAmbientLight, renderDirectionalLights, renderPointLights, renderObjects);
     }
 }
