@@ -24,6 +24,8 @@
 
 #include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
@@ -60,6 +62,11 @@ namespace ChilliSource
         return (RenderCommandBufferManager::InterfaceID == interfaceId);
     }
     //------------------------------------------------------------------------------
+    void RenderCommandBufferManager::OnInit() noexcept
+    {
+        m_renderer = Application::Get()->GetSystem<Renderer>();
+    }
+    //------------------------------------------------------------------------------
     void RenderCommandBufferManager::OnResume() noexcept
     {
         m_discardCommands = false;
@@ -73,9 +80,9 @@ namespace ChilliSource
         
         if(m_renderCommandBuffers.size() > 0)
         {
-            for(const auto& buffer : m_renderCommandBuffers)
+            for(auto& buffer : m_renderCommandBuffers)
             {
-                RecycleRenderCommandBuffer(buffer.get());
+                RecycleRenderCommandBuffer(std::move(buffer));
             }
             
             m_renderCommandBuffers.clear();
@@ -147,12 +154,16 @@ namespace ChilliSource
         }
     }
     //------------------------------------------------------------------------------
-    void RenderCommandBufferManager::RecycleRenderCommandBuffer(RenderCommandBuffer* commands) noexcept
+    void RenderCommandBufferManager::RecycleRenderCommandBuffer(RenderCommandBufferUPtr buffer) noexcept
     {
-        for(u32 i = 0; i < commands->GetNumSlots(); ++i)
+        for(u32 i = 0; i < buffer->GetNumSlots(); ++i)
         {
-            RecycleCommandList(commands->GetRenderCommandList(i));
+            RecycleCommandList(buffer->GetRenderCommandList(i));
         }
+        
+        auto frameAllocator = buffer->GetFrameAllocator();
+        buffer.reset();
+        m_renderer->GetFrameAllocatorQueue().Push(frameAllocator);
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::RecycleCommandList(RenderCommandList* renderCommandList) noexcept
@@ -235,7 +246,7 @@ namespace ChilliSource
         
         if(m_discardCommands)
         {
-            RecycleRenderCommandBuffer(renderCommandBuffer.get());
+            RecycleRenderCommandBuffer(std::move(renderCommandBuffer));
         }
         else
         {

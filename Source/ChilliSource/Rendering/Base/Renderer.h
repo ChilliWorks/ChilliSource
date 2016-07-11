@@ -123,6 +123,10 @@ namespace ChilliSource
         ///
         void ProcessRenderCommandBuffer() noexcept;
         
+        /// @return The renderers frame allocator queue
+        ///
+        FrameAllocatorQueue& GetFrameAllocatorQueue() noexcept { return m_frameAllocatorQueue; }
+        
     private:
         friend class Application;
         friend class LifecycleManager;

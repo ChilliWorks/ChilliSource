@@ -41,6 +41,7 @@
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
+#include <atomic>
 #include <condition_variable>
 #include <deque>
 #include <mutex>
@@ -100,10 +101,10 @@ namespace ChilliSource
         /// Will iterate an RenderCommandBuffer and extract any commands that can be recycled
         /// for next frame.
         ///
-        /// @param commands
+        /// @param buffer
         ///     The RenderCommandBuffer to recycle.
         ///
-        void RecycleRenderCommandBuffer(RenderCommandBuffer* commands) noexcept;
+        void RecycleRenderCommandBuffer(RenderCommandBufferUPtr buffer) noexcept;
         
         /// Called to process a command queue and extract load/unload commands that we
         /// can recycle and store for use next frame.
@@ -121,6 +122,12 @@ namespace ChilliSource
         ///     The render command to recycle or ignore
         ///
         void RecycleCommand(RenderCommand* renderCommand) noexcept;
+        
+        /// Called when the app system is init.
+        ///
+        /// Called on the main thread.
+        ///
+        void OnInit() noexcept override;
         
         /// Called when the app system is resumed.
         ///
@@ -165,6 +172,8 @@ namespace ChilliSource
         std::mutex m_renderCommandBuffersMutex;
         std::condition_variable m_renderCommandBuffersCondition;
         std::deque<RenderCommandBufferUPtr> m_renderCommandBuffers;
+        
+        Renderer* m_renderer = nullptr;
     };
 }
 
