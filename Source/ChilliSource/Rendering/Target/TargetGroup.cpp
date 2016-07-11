@@ -32,6 +32,16 @@ namespace ChilliSource
 {
     namespace
     {
+        /// Creates a RenderTargetGroup for the passed in combination of colour/depth targets.
+        ///
+        /// @param colourTarget
+        ///     The colour render target. Can be null if no colour target is needed.
+        /// @param depthTarget
+        ///     The depth render target. Can be null if no depth target is needed.
+        /// @param shouldUseDepthBuffer
+        ///     Whether or not to use an internal depth buffer if no depth buffer was specified.
+        ///     This should always be false if a depth target was supplied.
+        ///
         const RenderTargetGroup* CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, bool shouldUseDepthBuffer)
         {
             auto renderTargetGroupManager = Application::Get()->GetSystem<RenderTargetGroupManager>();

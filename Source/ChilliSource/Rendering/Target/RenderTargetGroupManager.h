@@ -99,7 +99,7 @@ namespace ChilliSource
         
         /// @return The number of render target groups.
         ///
-        u32 GetNumRenderTargetGroups() const noexcept { return m_renderTargetGroups.size(); }
+        u32 GetNumRenderTargetGroups() const noexcept { return u32(m_renderTargetGroups.size()); }
         
         /// @return The render target group at the passed position
         ///
