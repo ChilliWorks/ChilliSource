@@ -49,7 +49,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLTextureUnitManager::Bind(const std::vector<const ChilliSource::RenderTexture*> textures) noexcept
+        void GLTextureUnitManager::Bind(const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept
         {
             for (u32 textureUnitIndex = 0; textureUnitIndex < u32(textures.size()); ++textureUnitIndex)
             {
@@ -58,6 +58,9 @@ namespace CSBackend
                     m_boundTextures[textureUnitIndex] = textures[textureUnitIndex];
                     
                     auto glTexture = reinterpret_cast<GLTexture*>(m_boundTextures[textureUnitIndex]->GetExtraData());
+
+                    CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
+                    CS_ASSERT(!glTexture->IsDataInvalid(), "GLTextureUnitManager::Bind(): Failed to bind texture, its context is invalid!");
                     
                     glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
                     glBindTexture(GL_TEXTURE_2D, glTexture->GetHandle());
@@ -70,12 +73,50 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        GLuint GLTextureUnitManager::BindAdditional(const ChilliSource::RenderTexture* texture) noexcept
+        {
+            GLuint textureIndex = GetNextAvailableUnit();
+            
+            m_boundTextures.push_back(texture);
+            
+            auto glTexture = reinterpret_cast<GLTexture*>(texture->GetExtraData());
+            CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
+            
+            glActiveTexture(GL_TEXTURE0 + textureIndex);
+            glBindTexture(GL_TEXTURE_2D, glTexture->GetHandle());
+            glActiveTexture(GL_TEXTURE0);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding an additional texture.");
+            
+            return textureIndex;
+        }
+        
+        //------------------------------------------------------------------------------
         void GLTextureUnitManager::Reset() noexcept
         {
             for (auto& texture : m_boundTextures)
             {
                 texture = nullptr;
             }
+        }
+        
+        //------------------------------------------------------------------------------
+        GLuint GLTextureUnitManager::GetNextAvailableUnit() const noexcept
+        {
+            u32 index = 0;
+            
+            for (const auto& texture : m_boundTextures)
+            {
+                if (!texture)
+                {
+                    return index;
+                }
+                
+                 ++index;
+            }
+            
+            CS_LOG_FATAL("No free texture units.");
+            return 0;
         }
     }
 }

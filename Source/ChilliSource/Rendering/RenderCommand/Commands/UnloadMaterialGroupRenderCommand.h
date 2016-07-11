@@ -44,6 +44,13 @@ namespace ChilliSource
         ///
         RenderMaterialGroup* GetRenderMaterialGroup() const noexcept { return m_renderMaterialGroup.get(); }
         
+        /// Takes ownership of the RenderMaterialGroup from this class. This will leave
+        /// this command in an unusable state and should be used with caution.
+        ///
+        /// @return The render material group that should be unloaded.
+        ///
+        RenderMaterialGroupUPtr ClaimRenderMaterialGroup() noexcept;
+        
     private:
         friend class RenderCommandList;
         

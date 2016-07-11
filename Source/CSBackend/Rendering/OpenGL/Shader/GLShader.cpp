@@ -119,15 +119,6 @@ namespace CSBackend
             }
         }
         
-        const std::string GLShader::k_defaultUniformWVPMat = "u_wvpMat";
-        const std::string GLShader::k_defaultUniformWorldMat = "u_worldMat";
-        const std::string GLShader::k_defaultUniformNormalMat = "u_normalMat";
-        const std::string GLShader::k_defaultUniformCameraPos = "u_cameraPos";
-        const std::string GLShader::k_defaultUniformEmissive = "u_emissive";
-        const std::string GLShader::k_defaultUniformAmbient = "u_ambient";
-        const std::string GLShader::k_defaultUniformDiffuse = "u_diffuse";
-        const std::string GLShader::k_defaultUniformSpecular = "u_specular";
-        
         const std::string GLShader::k_attributePosition = "a_position";
         const std::string GLShader::k_attributeNormal = "a_normal";
         const std::string GLShader::k_attributeTexCoord = "a_texCoord";
@@ -263,29 +254,6 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        GLShader::~GLShader() noexcept
-        {
-            //TODO: Handle missing context.
-            
-            if(m_vertexShaderId > 0)
-            {
-                glDetachShader(m_programId, m_vertexShaderId);
-                glDeleteShader(m_vertexShaderId);
-            }
-            if(m_fragmentShaderId > 0)
-            {
-                glDetachShader(m_programId, m_fragmentShaderId);
-                glDeleteShader(m_fragmentShaderId);
-            }
-            if(m_programId > 0)
-            {
-                glDeleteProgram(m_programId);
-            }
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying shader.");
-        }
-
-        //------------------------------------------------------------------------------
         void GLShader::BuildAttributeHandleMap() noexcept
         {
             static const std::array<std::string, 6> attribNames =
@@ -336,5 +304,30 @@ namespace CSBackend
             
             return uniformHandle;
         }
+        
+        //------------------------------------------------------------------------------
+        GLShader::~GLShader() noexcept
+        {
+            if(!m_invalidData)
+            {
+                if(m_vertexShaderId > 0)
+                {
+                    glDetachShader(m_programId, m_vertexShaderId);
+                    glDeleteShader(m_vertexShaderId);
+                }
+                if(m_fragmentShaderId > 0)
+                {
+                    glDetachShader(m_programId, m_fragmentShaderId);
+                    glDeleteShader(m_fragmentShaderId);
+                }
+                if(m_programId > 0)
+                {
+                    glDeleteProgram(m_programId);
+                }
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying shader.");
+            }
+        }
+
     }
 }

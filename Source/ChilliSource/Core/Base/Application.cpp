@@ -55,6 +55,7 @@
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
@@ -72,6 +73,7 @@
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDefFactory.h>
 #include <ChilliSource/Rendering/Shader/CSShaderProvider.h>
 #include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
@@ -84,6 +86,10 @@
 
 #include <algorithm>
 #include <ctime>
+
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+#   include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
+#endif
 
 namespace ChilliSource
 {
@@ -293,11 +299,17 @@ namespace ChilliSource
         CreateSystem<TextEntry>();
         
         //Rendering
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+        CreateSystem<CSBackend::OpenGL::GLContextRestorer>();
+#endif
+        
+        CreateSystem<RenderCommandBufferManager>();
         m_renderer = CreateSystem<Renderer>();
         CreateSystem<RenderMaterialGroupManager>();
         CreateSystem<RenderMeshManager>();
         CreateSystem<RenderShaderManager>();
         CreateSystem<RenderTextureManager>();
+        CreateSystem<RenderTargetGroupManager>();
         CreateSystem<RenderCapabilities>();
         CreateSystem<CanvasRenderer>();
         CreateSystem<MaterialFactory>();
@@ -355,9 +367,21 @@ namespace ChilliSource
         auto activeState = m_stateManager->GetActiveState();
         CS_ASSERT(activeState, "Must have active state.");
         
-        auto clearColour = activeState->GetScene()->GetClearColour();
+        auto scene = activeState->GetScene();
+        auto clearColour = scene->GetClearColour();
+        auto camera = scene->GetActiveCamera();
         
-        RenderSnapshot renderSnapshot(resolution, clearColour);
+        RenderCamera renderCamera;
+        if (camera)
+        {
+            Entity* cameraEntity = camera->GetEntity();
+            CS_ASSERT(cameraEntity, "Active CameraComponent must be attached to an entity.");
+            
+            const auto& transform = cameraEntity->GetTransform();
+            renderCamera = RenderCamera(transform.GetWorldTransform(), camera->GetProjection(), transform.GetWorldOrientation());
+        }
+        
+        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(resolution, clearColour, renderCamera);
         for (const AppSystemUPtr& system : m_systems)
         {
             system->OnRenderSnapshot(renderSnapshot);

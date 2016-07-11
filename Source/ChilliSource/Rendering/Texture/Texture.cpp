@@ -27,6 +27,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
+#include <ChilliSource/Rendering/Texture/TextureDesc.h>
 
 namespace ChilliSource
 {
@@ -51,12 +52,11 @@ namespace ChilliSource
         
         auto renderTextureManager = Application::Get()->GetSystem<RenderTextureManager>();
         CS_ASSERT(renderTextureManager, "RenderTextureManager must exist.");
-
-        m_renderTexture = renderTextureManager->CreateRenderTexture(std::move(textureData), textureDataSize, textureDesc.GetDimensions(), textureDesc.GetImageFormat(), textureDesc.GetImageCompression(),
-                                                                    textureDesc.GetFilterMode(), textureDesc.GetWrapModeS(), textureDesc.GetWrapModeT(), textureDesc.IsMipmappingEnabled());
         
-        //TODO: Add support for restoring texture data.
         m_restoreTextureDataEnabled = textureDesc.IsRestoreTextureDataEnabled();
+        
+        m_renderTexture = renderTextureManager->CreateRenderTexture(std::move(textureData), textureDataSize, textureDesc.GetDimensions(), textureDesc.GetImageFormat(), textureDesc.GetImageCompression(),
+                                                                    textureDesc.GetFilterMode(), textureDesc.GetWrapModeS(), textureDesc.GetWrapModeT(), textureDesc.IsMipmappingEnabled(), m_restoreTextureDataEnabled);
     }
 
     //------------------------------------------------------------------------------

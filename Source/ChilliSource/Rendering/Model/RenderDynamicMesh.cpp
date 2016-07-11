@@ -28,11 +28,11 @@ namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     RenderDynamicMesh::RenderDynamicMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                      ByteBuffer vertexData, ByteBuffer indexData) noexcept
+                      UniquePtr<u8[]> vertexData, u32 vertexDataSize, UniquePtr<u8[]> indexData, u32 indexDataSize) noexcept
     : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere),
-      m_vertexData(std::move(vertexData)), m_indexData(std::move(indexData))
+      m_vertexData(std::move(vertexData)), m_vertexDataSize(vertexDataSize), m_indexData(std::move(indexData)), m_indexDataSize(indexDataSize)
     {
-        CS_ASSERT(m_vertexData.GetLength() <= k_maxVertexDataSize, "Vertex data too large.");
-        CS_ASSERT(m_indexData.GetLength() <= k_maxIndexDataSize, "Index data too large.");
+        CS_ASSERT(vertexDataSize <= k_maxVertexDataSize, "Vertex data too large.");
+        CS_ASSERT(indexDataSize <= k_maxIndexDataSize, "Index data too large.");
     }
 }

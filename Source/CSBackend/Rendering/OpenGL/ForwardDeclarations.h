@@ -41,13 +41,21 @@ namespace CSBackend
         /// Base
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(ContextState);
+        CS_FORWARDDECLARE_CLASS(GLContextRestorer);
+
         CS_FORWARDDECLARE_CLASS(RenderCapabilities);
         CS_FORWARDDECLARE_CLASS(RenderCommandProcessor);
-        CS_FORWARDDECLARE_CLASS(RenderTarget);
         //----------------------------------------------------
         /// Camera
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLCamera);
+        //----------------------------------------------------
+        /// Lighting
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(GLAmbientLight);
+        CS_FORWARDDECLARE_CLASS(GLDirectionalLight);
+        CS_FORWARDDECLARE_CLASS(GLLight);
+        CS_FORWARDDECLARE_CLASS(GLPointLight);
         //----------------------------------------------------
         /// Model
         //----------------------------------------------------
@@ -57,6 +65,10 @@ namespace CSBackend
         /// Shader
         //----------------------------------------------------
         CS_FORWARDDECLARE_CLASS(GLShader);
+        //----------------------------------------------------
+        /// Target
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(GLTargetGroup);
         //----------------------------------------------------
         /// Texture
         //----------------------------------------------------

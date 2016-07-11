@@ -27,21 +27,14 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderSnapshot::RenderSnapshot(const Integer2& resolution, const Colour& clearColour) noexcept
-        : m_resolution(resolution), m_clearColour(clearColour), m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
+    RenderSnapshot::RenderSnapshot(IAllocator* frameAllocator, const Integer2& resolution, const Colour& clearColour, const RenderCamera& in_renderCamera) noexcept
+        : m_frameAllocator(frameAllocator), m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(in_renderCamera),
+          m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
     {
     }
     
     //------------------------------------------------------------------------------
-    void RenderSnapshot::SetRenderCamera(const RenderCamera& renderCamera) noexcept
-    {
-        CS_ASSERT(!m_renderCameraClaimed, "Render camera cannot be set after it has been claimed.");
-        
-        m_renderCamera = renderCamera;
-    }
-    
-    //------------------------------------------------------------------------------
-    void RenderSnapshot::AddRenderAmbientLight(const RenderAmbientLight& renderAmbientLight) noexcept
+    void RenderSnapshot::AddAmbientRenderLight(const AmbientRenderLight& renderAmbientLight) noexcept
     {
         CS_ASSERT(!m_renderAmbientLightsClaimed, "Render ambient light list cannot be changed after it has been claimed.");
         
@@ -49,7 +42,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderSnapshot::AddRenderDirectionalLight(const RenderDirectionalLight& renderDirectionalLight) noexcept
+    void RenderSnapshot::AddDirectionalRenderLight(const DirectionalRenderLight& renderDirectionalLight) noexcept
     {
         CS_ASSERT(!m_renderDirectionalLightsClaimed, "Render directional light list cannot be changed after it has been claimed.");
         
@@ -57,7 +50,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderSnapshot::AddRenderPointLight(const RenderPointLight& renderPointLight) noexcept
+    void RenderSnapshot::AddPointRenderLight(const PointRenderLight& renderPointLight) noexcept
     {
         CS_ASSERT(!m_renderPointLightsClaimed, "Render point light list cannot be changed after it has been claimed.");
         
@@ -73,7 +66,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderSnapshot::AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept
+    void RenderSnapshot::AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept
     {
         CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes list cannot be changed after it has been claimed.");
         
@@ -97,16 +90,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCamera RenderSnapshot::ClaimRenderCamera() noexcept
-    {
-        CS_ASSERT(!m_renderCameraClaimed, "Render camera has already been claimed.");
-        
-        m_renderCameraClaimed = true;
-        return std::move(m_renderCamera);
-    }
-    
-    //------------------------------------------------------------------------------
-    std::vector<RenderAmbientLight> RenderSnapshot::ClaimRenderAmbientLights() noexcept
+    std::vector<AmbientRenderLight> RenderSnapshot::ClaimAmbientRenderLights() noexcept
     {
         CS_ASSERT(!m_renderAmbientLightsClaimed, "Render ambient lights have already been claimed.");
         
@@ -115,7 +99,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    std::vector<RenderDirectionalLight> RenderSnapshot::ClaimRenderDirectionalLights() noexcept
+    std::vector<DirectionalRenderLight> RenderSnapshot::ClaimDirectionalRenderLights() noexcept
     {
         CS_ASSERT(!m_renderDirectionalLightsClaimed, "Render directional lights have already been claimed.");
         
@@ -124,7 +108,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    std::vector<RenderPointLight> RenderSnapshot::ClaimRenderPointLights() noexcept
+    std::vector<PointRenderLight> RenderSnapshot::ClaimPointRenderLights() noexcept
     {
         CS_ASSERT(!m_renderPointLightsClaimed, "Render point lights have already been claimed.");
         
@@ -142,7 +126,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    std::vector<RenderDynamicMeshUPtr> RenderSnapshot::ClaimRenderDynamicMeshes() noexcept
+    std::vector<RenderDynamicMeshAUPtr> RenderSnapshot::ClaimRenderDynamicMeshes() noexcept
     {
         CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes have already been claimed.");
         

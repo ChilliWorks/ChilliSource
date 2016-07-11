@@ -67,6 +67,10 @@ namespace ChilliSource
         ///
         const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
         
+        /// @return If the mesh should backup its data.
+        ///
+        bool ShouldBackupData() const noexcept { return m_shouldBackupData; }
+        
         /// This is not thread safe and should only be called from the render thread.
         ///
         /// @return A pointer to render system specific additional information.
@@ -97,8 +101,10 @@ namespace ChilliSource
         ///     The number of indices in the mesh.
         /// @param boundingSphere
         ///     A local space sphere enclosing the mesh.
+        /// @param shouldBackupData
+        ///     If the mesh data should be backed up in main memory for restoring it later.
         ///
-        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept;
+        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere, bool shouldBackupData) noexcept;
         
         PolygonType m_polygonType;
         VertexFormat m_vertexFormat;
@@ -106,6 +112,8 @@ namespace ChilliSource
         u32 m_numVertices;
         u32 m_numIndices;
         Sphere m_boundingSphere;
+        bool m_shouldBackupData = true;
+        
         void* m_extraData = nullptr;
     };
 }

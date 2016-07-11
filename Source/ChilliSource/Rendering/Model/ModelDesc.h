@@ -55,8 +55,10 @@ namespace ChilliSource
         ///     The local AABB of the model.
         /// @param boundingSphere
         ///     The local bounding sphere of the model.
+        /// @param shouldBackupData
+        ///     If the model mesh data should be backed up in main memory for restoring it later.
         ///
-        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere) noexcept;
+        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, bool shouldBackupData = true) noexcept;
         
         /// Creates a new model description with the given mesh data, bounds and skeleton
         /// description.
@@ -70,8 +72,10 @@ namespace ChilliSource
         ///     The local bounding sphere of the model.
         /// @param skeletonDesc
         ///     The skeleton description.
+        /// @param shouldBackupData
+        ///     If the model mesh data should be backed up in main memory for restoring it later.
         ///
-        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, const SkeletonDesc& skeletonDesc) noexcept;
+        ModelDesc(std::vector<MeshDesc> meshDescs, const AABB& aabb, const Sphere& boundingSphere, const SkeletonDesc& skeletonDesc, bool shouldBackupData = true) noexcept;
         
         /// @return The list of mesh descriptions.
         ///
@@ -105,11 +109,16 @@ namespace ChilliSource
         ///
         const SkeletonDesc& GetSkeletonDesc() const noexcept { return m_skeletonDesc; }
         
+        /// @return If the data should be backed up for restoration.
+        ///
+        bool ShouldBackupData() const noexcept { return m_shouldBackupData; }
+        
     private:
         std::vector<MeshDesc> m_meshDescs;
         AABB m_aabb;
         Sphere m_boundingSphere;
         SkeletonDesc m_skeletonDesc;
+        bool m_shouldBackupData = true;
     };
 }
 

@@ -28,6 +28,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/ByteBuffer.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
+#include <ChilliSource/Core/Memory/SharedPtr.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 namespace ChilliSource
@@ -61,12 +63,16 @@ namespace ChilliSource
         /// @param boundingSphere
         ///     A local space sphere enclosing the mesh.
         /// @param vertexData
-        ///     The vertex data.
+        ///     The vertex data. This must have been allocated from an IAllocator.
+        /// @param vertexDataSize
+        ///     The size of the vertex data in bytes.
         /// @param indexData
-        ///     The index data.
+        ///     The index data. This must have been allocated from an IAllocator.
+        /// @param indexDataSize
+        ///     The size of the index data in bytes.
         ///
         RenderDynamicMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                          ByteBuffer vertexData, ByteBuffer indexData) noexcept;
+                          UniquePtr<u8[]> vertexData, u32 vertexDataSize, UniquePtr<u8[]> indexData, u32 indexDataSize) noexcept;
         
         /// @return The type of polygon the mesh uses.
         ///
@@ -94,11 +100,19 @@ namespace ChilliSource
         
         /// @return The vertex data buffer.
         ///
-        const ByteBuffer& GetVertexData() const noexcept { return m_vertexData; }
+        const u8* GetVertexData() const noexcept { return m_vertexData.get(); }
+        
+        /// @return The size of the vertex data in bytes.
+        ///
+        u32 GetVertexDataSize() const noexcept { return m_vertexDataSize; }
         
         /// @return The index data buffer.
         ///
-        const ByteBuffer& GetIndexData() const noexcept { return m_indexData; }
+        const u8* GetIndexData() const noexcept { return m_indexData.get(); }
+        
+        /// @return The size of the index data in bytes.
+        ///
+        u32 GetIndexDataSize() const noexcept { return m_indexDataSize; }
         
     private:
         friend class RenderMeshManager;
@@ -109,9 +123,14 @@ namespace ChilliSource
         u32 m_numVertices;
         u32 m_numIndices;
         Sphere m_boundingSphere;
-        ByteBuffer m_vertexData;
-        ByteBuffer m_indexData;
+        UniquePtr<u8[]> m_vertexData;
+        u32 m_vertexDataSize;
+        UniquePtr<u8[]> m_indexData;
+        u32 m_indexDataSize;
     };
+    
+    using RenderDynamicMeshAUPtr = UniquePtr<RenderDynamicMesh>;
+    using RenderDynamicMeshASPtr = SharedPtr<RenderDynamicMesh>;
 }
 
 #endif

@@ -44,7 +44,7 @@ namespace CSBackend
             if(indexDataSize > 0)
             {
                 glGenBuffers(1, &m_indexBufferHandle);
-                CS_ASSERT(m_vertexBufferHandle != 0, "Invalid index buffer.");
+                CS_ASSERT(m_indexBufferHandle != 0, "Invalid index buffer.");
             }
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
@@ -76,7 +76,7 @@ namespace CSBackend
                 glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexDataSize, indexData);
             }
             
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding GLMesh.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding GLDynamicMesh.");
             
             for (u32 i = 0; i < vertexFormat.GetNumElements(); ++i)
             {
@@ -101,15 +101,16 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLDynamicMesh::~GLDynamicMesh() noexcept
         {
-            //TODO: Handle context loss
-            
-            glDeleteBuffers(1, &m_vertexBufferHandle);
-            if(m_indexBufferHandle != 0)
+            if(!m_invalidData)
             {
-                glDeleteBuffers(1, &m_indexBufferHandle);
+                glDeleteBuffers(1, &m_vertexBufferHandle);
+                if(m_indexBufferHandle != 0)
+                {
+                    glDeleteBuffers(1, &m_indexBufferHandle);
+                }
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting GLDynamicMesh.");
             }
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting GLDynamicMesh.");
         }
     }
 }

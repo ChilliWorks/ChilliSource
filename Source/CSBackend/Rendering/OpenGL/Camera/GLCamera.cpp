@@ -24,14 +24,27 @@
 
 #include <CSBackend/Rendering/OpenGL/Camera/GLCamera.h>
 
+#include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+
 namespace CSBackend
 {
     namespace OpenGL
     {
+        namespace
+        {
+            const std::string k_uniformCameraPos = "u_cameraPos";
+        }
+        
         //------------------------------------------------------------------------------
         GLCamera::GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept
             : m_position(position), m_viewProjectionMatrix(viewProjectionMatrix)
         {
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLCamera::Apply(GLShader* glShader) const noexcept
+        {
+            glShader->SetUniform(k_uniformCameraPos, m_position, GLShader::FailurePolicy::k_silent);
         }
     }
 }

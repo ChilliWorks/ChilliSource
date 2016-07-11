@@ -32,4 +32,16 @@ namespace ChilliSource
         : RenderCommand(Type::k_loadMesh), m_renderMesh(renderMesh), m_vertexData(std::move(vertexData)), m_vertexDataSize(vertexDataSize), m_indexData(std::move(indexData)), m_indexDataSize(indexDataSize)
     {
     }
+    //------------------------------------------------------------------------------
+    std::unique_ptr<const u8[]> LoadMeshRenderCommand::ClaimVertexData() noexcept
+    {
+        CS_ASSERT(m_vertexData, "Cannot claim nullptr data! Data may have already been claimed.");
+        return std::move(m_vertexData);
+    }
+    //------------------------------------------------------------------------------
+    std::unique_ptr<const u8[]> LoadMeshRenderCommand::ClaimIndexData() noexcept
+    {
+        CS_ASSERT(m_indexData, "Cannot claim nullptr data! Data may have already been claimed.");
+        return std::move(m_indexData);
+    }
 }

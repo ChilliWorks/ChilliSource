@@ -636,6 +636,17 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
+    void ParticleEffectComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    {
+        if (m_particleEffect != nullptr && (m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping))
+        {
+            CS_ASSERT(m_drawable != nullptr, "Cannot render without a drawable.");
+            
+            m_drawable->Draw(in_renderSnapshot);
+        }
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
     void ParticleEffectComponent::OnEntityTransformChanged()
     {
         m_invalidateBoundingShapeCache = true;

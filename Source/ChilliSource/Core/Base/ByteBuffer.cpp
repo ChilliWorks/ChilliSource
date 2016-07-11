@@ -27,7 +27,7 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ByteBuffer::ByteBuffer(std::unique_ptr<const u8[]> data, u64 length) noexcept
+    ByteBuffer::ByteBuffer(std::unique_ptr<const u8[]> data, u32 length) noexcept
         : m_data(std::move(data)), m_length(length)
     {
     }
@@ -37,7 +37,7 @@ namespace ChilliSource
         return m_data.get();
     }
     //------------------------------------------------------------------------------
-    u64 ByteBuffer::GetLength() const noexcept
+    u32 ByteBuffer::GetLength() const noexcept
     {
         return m_length;
     }

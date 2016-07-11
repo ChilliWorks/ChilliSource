@@ -58,6 +58,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void TaskContext::ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept
     {
+		CS_ASSERT(in_tasks.size() > 0, "No tasks provided to run.");
         if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_system || m_taskType == TaskType::k_file)
         {
             for (const auto& task : in_tasks)

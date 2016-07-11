@@ -133,7 +133,7 @@ namespace ChilliSource
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured in filestream");
 
         std::unique_ptr<const u8[]> uniqueData(reinterpret_cast<const u8*>(data));
-        return ByteBufferUPtr(new ByteBuffer(std::move(uniqueData), maxValidLength));
+        return ByteBufferUPtr(new ByteBuffer(std::move(uniqueData), u32(maxValidLength)));
     }
     //------------------------------------------------------------------------------
     BinaryInputStream::~BinaryInputStream() noexcept

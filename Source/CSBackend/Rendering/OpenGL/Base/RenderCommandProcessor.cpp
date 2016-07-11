@@ -24,9 +24,14 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
+#include <CSBackend/Rendering/OpenGL/Base/GLError.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLAmbientLight.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLDirectionalLight.h>
+#include <CSBackend/Rendering/OpenGL/Lighting/GLPointLight.h>
 #include <CSBackend/Rendering/OpenGL/Material/GLMaterial.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+#include <CSBackend/Rendering/OpenGL/Target/GLTargetGroup.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
 #include <ChilliSource/Rendering/Model/IndexFormat.h>
@@ -34,21 +39,34 @@
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyAmbientLightRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDirectionalLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyCameraRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/BeginWithTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/EndRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+
+#ifdef CS_TARGETPLATFORM_IOS
+#   import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
+#   import <CSBackend/Platform/iOS/Core/Base/CSGLViewController.h>
+#endif
 
 namespace CSBackend
 {
@@ -56,6 +74,10 @@ namespace CSBackend
     {
         namespace
         {
+            const std::string k_uniformWVPMat = "u_wvpMat";
+            const std::string k_uniformWorldMat = "u_worldMat";
+            const std::string k_uniformNormalMat = "u_normalMat";
+            
             /// Converts from a ChilliSource polygon type to a OpenGL polygon type.
             ///
             /// @param blendMode
@@ -108,7 +130,7 @@ namespace CSBackend
                 Init();
             }
             
-            for (const auto& renderCommandList : renderCommandBuffer->GetQueue())
+            for(const auto& renderCommandList : renderCommandBuffer->GetQueue())
             {
                 for (const auto& renderCommand : renderCommandList->GetOrderedList())
                 {
@@ -126,11 +148,32 @@ namespace CSBackend
                         case ChilliSource::RenderCommand::Type::k_loadMesh:
                             LoadMesh(static_cast<const ChilliSource::LoadMeshRenderCommand*>(renderCommand));
                             break;
+                        case ChilliSource::RenderCommand::Type::k_restoreMesh:
+                            RestoreMesh(static_cast<const ChilliSource::RestoreMeshRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_restoreTexture:
+                            RestoreTexture(static_cast<const ChilliSource::RestoreTextureRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_loadTargetGroup:
+                            LoadTargetGroup(static_cast<const ChilliSource::LoadTargetGroupRenderCommand*>(renderCommand));
+                            break;
                         case ChilliSource::RenderCommand::Type::k_begin:
                             Begin(static_cast<const ChilliSource::BeginRenderCommand*>(renderCommand));
                             break;
+                        case ChilliSource::RenderCommand::Type::k_beginWithTargetGroup:
+                            BeginWithTargetGroup(static_cast<const ChilliSource::BeginWithTargetGroupRenderCommand*>(renderCommand));
+                            break;
                         case ChilliSource::RenderCommand::Type::k_applyCamera:
                             ApplyCamera(static_cast<const ChilliSource::ApplyCameraRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applyAmbientLight:
+                            ApplyAmbientLight(static_cast<const ChilliSource::ApplyAmbientLightRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applyDirectionalLight:
+                            ApplyDirectionalLight(static_cast<const ChilliSource::ApplyDirectionalLightRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applyPointLight:
+                            ApplyPointLight(static_cast<const ChilliSource::ApplyPointLightRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyMaterial:
                             ApplyMaterial(static_cast<const ChilliSource::ApplyMaterialRenderCommand*>(renderCommand));
@@ -159,12 +202,33 @@ namespace CSBackend
                         case ChilliSource::RenderCommand::Type::k_unloadMesh:
                             UnloadMesh(static_cast<const ChilliSource::UnloadMeshRenderCommand*>(renderCommand));
                             break;
+                        case ChilliSource::RenderCommand::Type::k_unloadTargetGroup:
+                            UnloadTargetGroup(static_cast<const ChilliSource::UnloadTargetGroupRenderCommand*>(renderCommand));
+                            break;
                         default:
                             CS_LOG_FATAL("Unknown render command.");
                             break;
                     }
                 }
             }
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::Invalidate() noexcept
+        {
+            if(m_glDynamicMesh)
+            {
+                m_glDynamicMesh->Invalidate();
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::Restore() noexcept
+        {
+            ResetCache();
+            
+            m_glDynamicMesh.reset();
+            m_glDynamicMesh = GLDynamicMeshUPtr(new GLDynamicMesh(ChilliSource::RenderDynamicMesh::k_maxVertexDataSize, ChilliSource::RenderDynamicMesh::k_maxIndexDataSize));
         }
         
         //------------------------------------------------------------------------------
@@ -197,9 +261,7 @@ namespace CSBackend
             auto renderTexture = renderCommand->GetRenderTexture();
             
             //TODO: Should be pooled.
-            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture->GetDimensions(), renderTexture->GetImageFormat(),
-                                           renderTexture->GetImageCompression(), renderTexture->GetFilterMode(), renderTexture->GetWrapModeS(), renderTexture->GetWrapModeT(),
-                                           renderTexture->IsMipmapped());
+            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture);
             
             renderTexture->SetExtraData(glTexture);
         }
@@ -212,15 +274,50 @@ namespace CSBackend
             auto renderMesh = renderCommand->GetRenderMesh();
             
             //TODO: Should be pooled.
-            auto glMesh = new GLMesh(renderMesh->GetVertexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
+            auto glMesh = new GLMesh(renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize(), renderMesh);
             
             renderMesh->SetExtraData(glMesh);
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreTexture(const ChilliSource::RestoreTextureRenderCommand* renderCommand) noexcept
+        {
+            GLTexture* glTexture = static_cast<GLTexture*>(renderCommand->GetRenderTexture()->GetExtraData());
+            glTexture->Restore();
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreMesh(const ChilliSource::RestoreMeshRenderCommand* renderCommand) noexcept
+        {
+            GLMesh* glMesh = static_cast<GLMesh*>(renderCommand->GetRenderMesh()->GetExtraData());
+            glMesh->Restore();
+        }
+        
+        void RenderCommandProcessor::LoadTargetGroup(const ChilliSource::LoadTargetGroupRenderCommand* renderCommand) noexcept
+        {
+            ResetCache();
+            
+            auto renderTargetGroup = renderCommand->GetRenderTargetGroup();
+            
+            //TODO: Should be pooled.
+            auto glTargetGroup = new GLTargetGroup(renderTargetGroup);
+            
+            renderTargetGroup->SetExtraData(glTargetGroup);
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::Begin(const ChilliSource::BeginRenderCommand* renderCommand) noexcept
         {
             ResetCache();
+     
+            // iOS doesn't have a default frame buffer bound to 0, instead the view controllers frame buffer must
+            // be bound manually. Other platforms can just bind 0.
+#ifdef CS_TARGETPLATFORM_IOS
+            GLKView* glView = (GLKView*)[CSAppDelegate sharedInstance].viewController.view;
+            [glView bindDrawable];
+#else
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#endif
             
             glViewport(0, 0, renderCommand->GetResolution().x, renderCommand->GetResolution().y);
             
@@ -232,6 +329,35 @@ namespace CSBackend
             
             glBlendEquation(GL_FUNC_ADD);
             glDepthFunc(GL_LEQUAL);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while beginning rendering.");
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::BeginWithTargetGroup(const ChilliSource::BeginWithTargetGroupRenderCommand* renderCommand) noexcept
+        {
+            ResetCache();
+            
+            m_currentRenderTargetGroup = renderCommand->GetRenderTargetGroup();
+            CS_ASSERT(m_currentRenderTargetGroup, "Cannot render with a null render target group.");
+            
+            auto glTargetGroup = reinterpret_cast<GLTargetGroup*>(m_currentRenderTargetGroup->GetExtraData());
+            CS_ASSERT(glTargetGroup, "Cannot render with a render target group which hasn't been loaded.");
+            
+            glTargetGroup->Bind();
+            
+            glViewport(0, 0, m_currentRenderTargetGroup->GetResolution().x, m_currentRenderTargetGroup->GetResolution().y);
+            
+            glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+            glDepthMask(GL_TRUE);
+            
+            glClearColor(renderCommand->GetClearColour().r, renderCommand->GetClearColour().g, renderCommand->GetClearColour().b, renderCommand->GetClearColour().a);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
+            glBlendEquation(GL_FUNC_ADD);
+            glDepthFunc(GL_LEQUAL);
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while beginning rendering with a target group.");
         }
         
         //------------------------------------------------------------------------------
@@ -240,6 +366,31 @@ namespace CSBackend
             m_currentMaterial = nullptr;
             
             m_currentCamera = GLCamera(renderCommand->GetPosition(), renderCommand->GetViewProjectionMatrix());
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyAmbientLight(const ChilliSource::ApplyAmbientLightRenderCommand* renderCommand) noexcept
+        {
+            m_currentMaterial = nullptr;
+            
+            m_currentLight = GLLightUPtr(new GLAmbientLight(renderCommand->GetColour()));
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyDirectionalLight(const ChilliSource::ApplyDirectionalLightRenderCommand* renderCommand) noexcept
+        {
+            m_currentMaterial = nullptr;
+            
+            m_currentLight = GLLightUPtr(new GLDirectionalLight(renderCommand->GetColour(), renderCommand->GetDirection(), renderCommand->GetLightViewProjection(),
+                                                                renderCommand->GetShadowTolerance(), renderCommand->GetShadowMapRenderTexture()));
+        }
+
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyPointLight(const ChilliSource::ApplyPointLightRenderCommand* renderCommand) noexcept
+        {
+            m_currentMaterial = nullptr;
+            
+            m_currentLight = GLLightUPtr(new GLPointLight(renderCommand->GetColour(), renderCommand->GetPosition(), renderCommand->GetAttenuation()));
         }
         
         //------------------------------------------------------------------------------
@@ -263,7 +414,15 @@ namespace CSBackend
                 
                 m_textureUnitManager->Bind(m_currentMaterial->GetRenderTextures());
                 
-                GLMaterial::Apply(renderMaterial, m_currentCamera, glShader);
+                m_currentCamera.Apply(glShader);
+                
+                GLMaterial::Apply(renderMaterial, glShader);
+                
+                if (m_currentLight)
+                {
+                    // The light may bind additional textures, meaning it must be applied after the material is applied.
+                    m_currentLight->Apply(glShader, m_textureUnitManager.get());
+                }
             }
         }
         
@@ -299,10 +458,10 @@ namespace CSBackend
                 
                 auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
                 const auto& vertexFormat = m_currentDynamicMesh->GetVertexFormat();
-                auto vertexData = m_currentDynamicMesh->GetVertexData().GetData();
-                auto vertexDataSize = m_currentDynamicMesh->GetVertexData().GetLength();
-                auto indexData = m_currentDynamicMesh->GetIndexData().GetData();
-                auto indexDataSize = m_currentDynamicMesh->GetIndexData().GetLength();
+                auto vertexData = m_currentDynamicMesh->GetVertexData();
+                auto vertexDataSize = m_currentDynamicMesh->GetVertexDataSize();
+                auto indexData = m_currentDynamicMesh->GetIndexData();
+                auto indexDataSize = m_currentDynamicMesh->GetIndexDataSize();
                 
                 m_glDynamicMesh->Bind(glShader, vertexFormat, vertexData, vertexDataSize, indexData, indexDataSize);
             }
@@ -317,8 +476,9 @@ namespace CSBackend
             CS_ASSERT(!m_currentMesh != !m_currentDynamicMesh, "Both mesh types are currently bound, this shouldn't be possible.");
             
             auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
-            glShader->SetUniform(GLShader::k_defaultUniformWVPMat, renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
-            glShader->SetUniform(GLShader::k_defaultUniformNormalMat, ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformWorldMat, renderCommand->GetWorldMatrix(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformWVPMat, renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformNormalMat, ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
             
             if (m_currentMesh)
             {
@@ -342,11 +502,18 @@ namespace CSBackend
                     glDrawArrays(ToGLPolygonType(m_currentDynamicMesh->GetPolygonType()), 0, m_currentDynamicMesh->GetNumVertices());
                 }
             }
+            
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while rendering an instance.");
         }
         
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::End() noexcept
         {
+            if (m_currentRenderTargetGroup)
+            {
+                //TODO: Update texture data for bound target group, when render to texture is implemented.
+            }
+            
             ResetCache();
         }
         
@@ -384,10 +551,23 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::UnloadTargetGroup(const ChilliSource::UnloadTargetGroupRenderCommand* renderCommand) noexcept
+        {
+            ResetCache();
+            
+            auto renderTargetGroup = renderCommand->GetRenderTargetGroup();
+            auto glTargetGroup = reinterpret_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
+            
+            CS_SAFEDELETE(glTargetGroup);
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::ResetCache() noexcept
         {
             m_textureUnitManager->Reset();
             m_currentCamera = GLCamera();
+            m_currentLight.reset();
+            m_currentRenderTargetGroup = nullptr;
             m_currentMesh = nullptr;
             m_currentDynamicMesh = nullptr;
             m_currentShader = nullptr;

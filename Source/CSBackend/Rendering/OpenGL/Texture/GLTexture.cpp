@@ -26,6 +26,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Rendering/Texture/RenderTexture.h>
 #include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
 #include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
 
@@ -35,6 +36,14 @@ namespace CSBackend
     {
         namespace
         {
+#ifdef CS_TARGETPLATFORM_ANDROID
+            //Should maintain memory backups on android to restore data when the context
+            //is lost when dealing with meshes that are not loaded from file.
+            const bool k_shouldBackupMeshDataFromMemory = true;
+#else
+            const bool k_shouldBackupMeshDataFromMemory = false;
+#endif
+    
             /// Uploads the given uncompressed image data to texture memory.
             ///
             /// @param format
@@ -242,55 +251,105 @@ namespace CSBackend
                 
                 CS_ASSERT_NOGLERROR("An OpenGL error occurred while applying texture filter mode.");
             }
+            
+            /// Creates a new OpenGL texture with the given texture data.
+            ///
+            /// @param data
+            ///     The texture data.
+            /// @param dataSize
+            ///     The size of the texture data.
+            /// @param renderTexture
+            ///     The RenderTexture containing image format data.
+            ///
+            /// @return Handle to the texture
+            ///
+            GLuint BuildTexture(const u8* data, u32 dataSize, const ChilliSource::RenderTexture* renderTexture) noexcept
+            {
+                GLuint handle;
+                glGenTextures(1, &handle);
+                
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, handle);
+                
+                const auto& dimensions = renderTexture->GetDimensions();
+                
+                switch(renderTexture->GetImageCompression())
+                {
+                    case ChilliSource::ImageCompression::k_none:
+                        UploadImageDataNoCompression(renderTexture->GetImageFormat(), dimensions, data);
+                        break;
+                    case ChilliSource::ImageCompression::k_ETC1:
+                        UploadImageDataETC1(renderTexture->GetImageFormat(), dimensions, data, dataSize);
+                        break;
+                    case ChilliSource::ImageCompression::k_PVR2Bpp:
+                        UploadImageDataPVR2(renderTexture->GetImageFormat(), dimensions, data, dataSize);
+                        break;
+                    case ChilliSource::ImageCompression::k_PVR4Bpp:
+                        UploadImageDataPVR4(renderTexture->GetImageFormat(), dimensions, data, dataSize);
+                        break;
+                };
+                
+                if(renderTexture->IsMipmapped())
+                {
+                    CS_ASSERT(CS::MathUtils::IsPowerOfTwo(dimensions.x) && CS::MathUtils::IsPowerOfTwo(dimensions.y), "Mipmapped images must be a power of two.");
+                    
+                    glGenerateMipmap(GL_TEXTURE_2D);
+                }
+                
+                ApplyFilterMode(renderTexture->GetFilterMode(), renderTexture->IsMipmapped());
+                ApplyWrapMode(renderTexture->GetWrapModeS(), renderTexture->GetWrapModeT());
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
+                
+                return handle;
+            }
         }
         
         //------------------------------------------------------------------------------
-        GLTexture::GLTexture(const u8* data, u32 dataSize, const ChilliSource::Integer2& dimensions, ChilliSource::ImageFormat format, ChilliSource::ImageCompression compression,
-                             ChilliSource::TextureFilterMode filterMode, ChilliSource::TextureWrapMode wrapModeS, ChilliSource::TextureWrapMode wrapModeT, bool enableMipmapping) noexcept
+        GLTexture::GLTexture(const u8* data, u32 dataSize, ChilliSource::RenderTexture* renderTexture) noexcept
+            :m_imageDataSize(dataSize), m_renderTexture(renderTexture)
         {
             //TODO: Re-add check
             //CS_ASSERT(m_width <= m_renderCapabilities->GetMaxTextureSize() && m_height <= m_renderCapabilities->GetMaxTextureSize(), "OpenGL does not support textures of this size on this device (" + CSCore::ToString(m_width) + ", " + CSCore::ToString(m_height) + ")");
+
+            m_handle = BuildTexture(data, dataSize, m_renderTexture);
             
-            glGenTextures(1, &m_handle);
-            
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, m_handle);
-            
-            switch(compression)
+            if(k_shouldBackupMeshDataFromMemory && renderTexture->ShouldBackupData())
             {
-                case ChilliSource::ImageCompression::k_none:
-                    UploadImageDataNoCompression(format, dimensions, data);
-                    break;
-                case ChilliSource::ImageCompression::k_ETC1:
-                    UploadImageDataETC1(format, dimensions, data, dataSize);
-                    break;
-                case ChilliSource::ImageCompression::k_PVR2Bpp:
-                    UploadImageDataPVR2(format, dimensions, data, dataSize);
-                    break;
-                case ChilliSource::ImageCompression::k_PVR4Bpp:
-                    UploadImageDataPVR4(format, dimensions, data, dataSize);
-                    break;
-            };
-            
-            if(enableMipmapping)
-            {
-                CS_ASSERT(CS::MathUtils::IsPowerOfTwo(dimensions.x) && CS::MathUtils::IsPowerOfTwo(dimensions.y), "Mipmapped images must be a power of two.");
-                
-                glGenerateMipmap(GL_TEXTURE_2D);
+                u8* imageDataCopy = new u8[dataSize];
+                memcpy(imageDataCopy, data, dataSize);
+                m_imageDataBackup = std::unique_ptr<const u8[]>(imageDataCopy);
             }
-            
-            ApplyFilterMode(filterMode, enableMipmapping);
-            ApplyWrapMode(wrapModeS, wrapModeT);
-            
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLTexture::Restore() noexcept
+        {
+            if(m_invalidData)
+            {
+                CS_ASSERT(m_imageDataSize > 0, "Cannot restore context with empty data");
+                
+                if(m_imageDataBackup)
+                {
+                    m_handle = BuildTexture(m_imageDataBackup.get(), m_imageDataSize, m_renderTexture);
+                }
+                else
+                {
+                    //Create some empty black texture data
+                    auto blankData = std::unique_ptr<u8[]>(new u8[m_imageDataSize]());
+                    m_handle = BuildTexture(blankData.get(), m_imageDataSize, m_renderTexture);
+                }
+                m_invalidData = false;
+            }
         }
         
         //------------------------------------------------------------------------------
         GLTexture::~GLTexture() noexcept
         {
-            //TODO: Handle context loss
-            
-            glDeleteTextures(1, &m_handle);
+            if(!m_invalidData)
+            {
+                glDeleteTextures(1, &m_handle);
+            }
         }
     }
 }

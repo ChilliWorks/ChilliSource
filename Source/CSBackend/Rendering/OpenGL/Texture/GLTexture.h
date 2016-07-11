@@ -56,34 +56,44 @@ namespace CSBackend
             ///     The texture data.
             /// @param dataSize
             ///     The size of the texture data.
-            /// @param dimensions
-            ///     The dimensions of the texture.
-            /// @param format
-            ///     The image format of the texture.
-            /// @param compression
-            ///     The compression type of the texture.
-            /// @param filterMode
-            ///     The filter mode of the texture.
-            /// @param wrapModeS
-            ///     The s-component wrap mode of the texture.
-            /// @param wrapModeT
-            ///     The t-component wrap mode of the texture.
-            /// @param enableMipmapping
-            ///     Whether or not mipmapping should be enabled for the texture.
             ///
-            GLTexture(const u8* data, u32 dataSize, const ChilliSource::Integer2& dimensions, ChilliSource::ImageFormat format, ChilliSource::ImageCompression compression,
-                      ChilliSource::TextureFilterMode filterMode, ChilliSource::TextureWrapMode wrapModeS, ChilliSource::TextureWrapMode wrapModeT, bool enableMipmapping) noexcept;
+            GLTexture(const u8* data, u32 dataSize, ChilliSource::RenderTexture* renderTexture) noexcept;
             
             /// @return The OpenGL texture handle.
             ///
             GLuint GetHandle() noexcept { return m_handle; }
+            
+            /// @return The OpenGL texture handle.
+            ///
+            bool IsDataInvalid() const noexcept { return m_invalidData; }
+            
+            /// Called when we should restore any cached texture data.
+            ///
+            /// This will assert if called without having data backed up.
+            ///
+            void Restore() noexcept;
+            
+            /// Called when graphics memory is lost, usually through the GLContext being destroyed
+            /// on Android. Function will set a flag to handle safe destructing of this object, preventing
+            /// us from trying to delete invalid memory.
+            ///
+            void Invalidate() noexcept { m_invalidData = true; }
             
             /// Destroys the OpenGL texture that this represents.
             ///
             ~GLTexture() noexcept;
             
         private:
+            
             GLuint m_handle = 0;
+            
+            ChilliSource::RenderTexture* m_renderTexture;
+            
+            std::unique_ptr<const u8[]> m_imageDataBackup = nullptr;
+            
+            u32 m_imageDataSize = 0;
+            
+            bool m_invalidData = false;
         };
     }
 }

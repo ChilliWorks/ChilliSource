@@ -48,8 +48,46 @@ namespace CSBackend
             
             /// Creates a new OpenGL mesh with the given mesh data and description.
             ///
-            /// @param vertexFormat
-            ///     The vertex format.
+            /// @param vertexData
+            ///     The vertex data.
+            /// @param vertexDataSize
+            ///     The size of the vertex data.
+            /// @param indexData
+            ///     The size of the index data.
+            /// @param indexDataSize
+            ///     The size of the index data.
+            /// @param render
+            ///     The size of the index data.
+            ///
+            GLMesh(const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize, ChilliSource::RenderMesh* renderMesh) noexcept;
+            
+            /// Binds the mesh for use and applies attibutes to the given shader.
+            ///
+            /// @param glShader
+            ///     The shader to apply attributes to.
+            ///
+            void Bind(GLShader* glShader) noexcept;
+            
+            /// Called when we should restore any cached mesh data.
+            ///
+            /// This will assert if called without having data backed up.
+            ///
+            void Restore() noexcept;
+            
+            /// Called when graphics memory is lost, usually through the GLContext being destroyed
+            /// on Android. Function will set a flag to handle safe destructing of this object, preventing
+            /// us from trying to delete invalid memory.
+            ///
+            void Invalidate() noexcept { m_invalidData = true; }
+            
+            /// Destroys the OpenGL mesh that this represents.
+            ///
+            ~GLMesh() noexcept;
+            
+        private:
+            
+            /// Creates a new OpenGL mesh with the given mesh data.
+            ///
             /// @param vertexData
             ///     The vertex data.
             /// @param vertexDataSize
@@ -59,23 +97,20 @@ namespace CSBackend
             /// @param indexDataSize
             ///     The size of the index data.
             ///
-            GLMesh(const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
+            void BuildMesh(const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
             
-            /// Binds the mesh for use and applies attibutes to the given shader.
-            ///
-            /// @param glShader
-            ///     The shader to apply attributes to.
-            ///
-            void Bind(GLShader* glShader) noexcept;
-            
-            /// Destroys the OpenGL mesh that this represents.
-            ///
-            ~GLMesh() noexcept;
-            
-        private:
-            ChilliSource::VertexFormat m_vertexFormat;
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
+            
+            std::unique_ptr<const u8[]> m_vertexDataBackup = nullptr;
+            std::unique_ptr<const u8[]> m_indexDataBackup = nullptr;
+            
+            u32 m_indexDataSize = 0;
+            u32 m_vertexDataSize = 0;
+            
+            ChilliSource::RenderMesh* m_renderMesh = nullptr;
+            
+            bool m_invalidData = false;
         };
     }
 }

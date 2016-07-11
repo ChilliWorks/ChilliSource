@@ -28,15 +28,11 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
+#include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 #include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
 
 namespace ChilliSource
 {
-    namespace
-    {
-        constexpr u32 k_maxQueueSize = 1;
-    }
-    
     CS_DEFINE_NAMEDTYPE(Renderer);
     
     //------------------------------------------------------------------------------
@@ -47,7 +43,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(Integer2::k_zero, Colour::k_black)
+        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(nullptr, Integer2::k_zero, Colour::k_black, RenderCamera())
     {
         //TODO: Handle forward vs deferred rendering
         m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
@@ -57,6 +53,13 @@ namespace ChilliSource
     bool Renderer::IsA(InterfaceIDType interfaceId) const noexcept
     {
         return (Renderer::InterfaceID == interfaceId);
+    }
+    //------------------------------------------------------------------------------
+    RenderSnapshot Renderer::CreateRenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept
+    {
+        auto allocator = m_frameAllocatorQueue.Pop();
+        
+        return RenderSnapshot(allocator, resolution, clearColour, renderCamera);
     }
     
     //------------------------------------------------------------------------------
@@ -69,23 +72,24 @@ namespace ChilliSource
         auto taskScheduler = Application::Get()->GetTaskScheduler();
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
+            auto frameAllocator = m_currentSnapshot.GetFrameAllocator();
             auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
-            auto renderCamera = m_currentSnapshot.ClaimRenderCamera();
-            auto renderAmbientLights = m_currentSnapshot.ClaimRenderAmbientLights();
-            auto renderDirectionalLights = m_currentSnapshot.ClaimRenderDirectionalLights();
-            auto renderPointLights = m_currentSnapshot.ClaimRenderPointLights();
+            auto renderCamera = m_currentSnapshot.GetRenderCamera();
+            auto renderAmbientLights = m_currentSnapshot.ClaimAmbientRenderLights();
+            auto renderDirectionalLights = m_currentSnapshot.ClaimDirectionalRenderLights();
+            auto renderPointLights = m_currentSnapshot.ClaimPointRenderLights();
             auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
             auto renderDynamicMeshes = m_currentSnapshot.ClaimRenderDynamicMeshes();
             auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();
             auto postRenderCommandList = m_currentSnapshot.ClaimPostRenderCommandList();
             
-            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
+            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, clearColour, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, resolution, clearColour, std::move(renderDynamicMeshes),
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, frameAllocator, targetRenderPassGroups, std::move(renderDynamicMeshes),
                                                                                     std::move(preRenderCommandList), std::move(postRenderCommandList));
             
-            WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
+            m_commandRecycleSystem->WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
             EndRenderPrep();
         });
     }
@@ -93,8 +97,13 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Renderer::ProcessRenderCommandBuffer() noexcept
     {
-        auto renderCommandBuffer = WaitThenPopCommandBuffer();
+        auto renderCommandBuffer = m_commandRecycleSystem->WaitThenPopCommandBuffer();
         m_renderCommandProcessor->Process(renderCommandBuffer.get());
+        
+        auto allocator = renderCommandBuffer->GetFrameAllocator();
+        renderCommandBuffer.reset();
+        
+        m_frameAllocatorQueue.Push(allocator);
     }
     
     //------------------------------------------------------------------------------
@@ -119,35 +128,29 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::WaitThenPushCommandBuffer(RenderCommandBufferCUPtr renderCommandBuffer) noexcept
+    void Renderer::OnInit() noexcept
     {
-        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
-        
-        while (m_renderCommandBuffers.size() >= k_maxQueueSize)
-        {
-            m_renderCommandBuffersCondition.wait(lock);
-        }
-        
-        m_renderCommandBuffers.push_back(std::move(renderCommandBuffer));
-        
-        m_renderCommandBuffersCondition.notify_all();
+        m_commandRecycleSystem = Application::Get()->GetSystem<RenderCommandBufferManager>();
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandBufferCUPtr Renderer::WaitThenPopCommandBuffer() noexcept
+    void Renderer::OnSystemResume() noexcept
     {
-        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
-        
-        while (m_renderCommandBuffers.empty())
+        if(m_initialised)
         {
-            m_renderCommandBuffersCondition.wait(lock);
+#ifdef CS_TARGETPLATFORM_ANDROID
+            m_renderCommandProcessor->RestoreContext();
+#endif
         }
         
-        auto renderCommandBuffer = std::move(m_renderCommandBuffers.front());
-        m_renderCommandBuffers.pop_front();
-        
-        m_renderCommandBuffersCondition.notify_all();
-        
-        return renderCommandBuffer;
+        m_initialised = true;
+    }
+    
+    //------------------------------------------------------------------------------
+    void Renderer::OnSystemSuspend() noexcept
+    {
+#ifdef CS_TARGETPLATFORM_ANDROID
+        m_renderCommandProcessor->InvalidateContext();
+#endif
     }
 }

@@ -612,28 +612,6 @@ namespace ChilliSource
             }
         }
         
-        /// Calculates the world space bounding sphere from a local bounding sphere, world position
-        /// and size.
-        ///
-        /// @param localBoundingSphere
-        ///     The local bounding sphere.
-        /// @param worldPosition
-        ///     The world position of the object.
-        /// @param size
-        ///     The final size of the object.
-        ///
-        /// @return The world space bounding sphere.
-        ///
-        Sphere CalcWorldSpaceBoundingSphere(const Sphere& localBoundingSphere, const Vector3& worldPosition, const Vector2& size) noexcept
-        {
-            f32 maxScaleComponent = std::max(size.x, size.y);
-            
-            auto centre = worldPosition + localBoundingSphere.vOrigin;
-            auto radius = maxScaleComponent * localBoundingSphere.fRadius;
-            
-            return Sphere(centre, radius);
-        }
-        
         /// Creates a new render object containing a dynamic mesh that describes the sprite and
         /// adds it to the snapshot.
         ///
@@ -660,10 +638,10 @@ namespace ChilliSource
         void AddSpriteRenderObject(RenderSnapshot* renderSnapshot, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour,
                                    AlignmentAnchor alignmentAnchor, const Matrix4& worldMatrix, const MaterialCSPtr& material, u32 priority) noexcept
         {
-            auto renderDynamicMesh = SpriteMeshBuilder::Build(localPosition, localSize, uvs, colour, alignmentAnchor);
-            auto boundingSphere = CalcWorldSpaceBoundingSphere(renderDynamicMesh->GetBoundingSphere(), worldMatrix.GetTranslation(), localSize);
+            auto renderDynamicMesh = SpriteMeshBuilder::Build(renderSnapshot->GetFrameAllocator(), localPosition, localSize, uvs, colour, alignmentAnchor);
+            auto boundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldMatrix.GetTranslation(), Vector3(localSize, 0.0f));
             
-            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, RenderLayer::k_ui, priority));
+            renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, false, RenderLayer::k_ui, priority));
             renderSnapshot->AddRenderDynamicMesh(std::move(renderDynamicMesh));
         }
     }

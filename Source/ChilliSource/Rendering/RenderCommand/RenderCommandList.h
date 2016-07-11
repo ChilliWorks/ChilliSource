@@ -91,6 +91,27 @@ namespace ChilliSource
         ///
         void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
         
+        /// Creates and adds a new restore texture command to the render command list.
+        ///
+        /// @param renderTexture
+        ///     The render texture that should be restored.
+        ///
+        void AddRestoreTextureCommand(const RenderTexture* renderTexture) noexcept;
+        
+        /// Creates and adds a new restore mesh command to the render command list.
+        ///
+        /// @param renderMesh
+        ///     The render mesh that should be restored.
+        ///
+        void AddRestoreMeshCommand(const RenderMesh* renderMesh) noexcept;
+
+        /// Creates and adds a new load target group command to the render command list.
+        ///
+        /// @param renderTargetGroup
+        ///     The RenderTargetGroup that should be loaded.
+        ///
+        void AddLoadTargetGroupCommand(RenderTargetGroup* renderTargetGroup) noexcept;
+        
         /// Creates and adds a new begin rendering command to the render command list.
         ///
         /// @param resolution
@@ -100,6 +121,16 @@ namespace ChilliSource
         ///
         void AddBeginCommand(const Integer2& resolution, const Colour& clearColour) noexcept;
         
+        /// Creates and adds a new begin with target group rendering command to the render
+        /// command list.
+        ///
+        /// @param renderTargetGroup
+        ///     The RenderTargetGroup to render into.
+        /// @param clearColour
+        ///     The clear colour.
+        ///
+        void AddBeginWithTargetGroupCommand(const RenderTargetGroup* renderTargetGroup, const Colour& clearColour) noexcept;
+        
         /// Creates and adds a new apply camera command to the render command list.
         ///
         /// @param position
@@ -108,6 +139,42 @@ namespace ChilliSource
         ///     The view projection matrix of the camera.
         ///
         void AddApplyCameraCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept;
+        
+        /// Creates and adds a new apply ambient light command to the render command list.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        ///
+        void AddApplyAmbientLightCommand(const Colour& colour) noexcept;
+        
+        /// Creates and adds a new apply directional light command to the render command list.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        /// @param direction
+        ///     The direction of the light.
+        /// @param lightViewProjection
+        ///     The view projection matrix of the light which is used as the camera when rendering
+        ///     the shadow map.
+        /// @param shadowTolerance
+        ///     The tolerence used to judge if an object is in shadow.
+        /// @param shadowMapRenderTexture
+        ///     The render texture which should be used for the shadow map. Can be null if there is no
+        ///     shadow map.
+        ///
+        void AddApplyDirectionalLightCommand(const Colour& colour, const Vector3& direction, const Matrix4& lightViewProjection, f32 shadowTolerance, const RenderTexture* shadowMapRenderTexture) noexcept;
+        
+        /// Creates and adds a new apply point light command to the render command list.
+        ///
+        /// @param colour
+        ///     The colour of the light.
+        /// @param position
+        ///     The world space position of the light.
+        /// @param attenuation
+        ///     The vector containing the constant, linear and quadratic attenuation values of the
+        ///     light.
+        ///
+        void AddApplyPointLightCommand(const Colour& colour, const Vector3& position, const Vector3& attenuation) noexcept;
         
         /// Creates and adds a new apply material command to the render command list.
         ///
@@ -141,6 +208,13 @@ namespace ChilliSource
         ///
         void AddEndCommand() noexcept;
         
+        /// Creates and adds a new unload target group command to the render command list.
+        ///
+        /// @param renderTargetGroup
+        ///     The render target group that should be unloaded.
+        ///
+        void AddUnloadTargetGroupCommand(RenderTargetGroupUPtr renderTargetGroup) noexcept;
+        
         /// Creates and adds a new unload mesh command to the render command list.
         ///
         /// @param renderMesh
@@ -169,9 +243,17 @@ namespace ChilliSource
         ///
         void AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept;
 
+        /// @return The number of render commands in the list.
+        ///
+        u32 GetNumCommands() const noexcept { return u32(m_renderCommands.size()); }
+        
         /// @return The ordered list of render commands.
         ///
         const std::vector<const RenderCommand*>& GetOrderedList() const noexcept { return m_orderedCommands; };
+        
+        /// @return The RenderCommand at the given index
+        ///
+        RenderCommand* GetCommand(u32 index) noexcept;
         
     private:
         std::vector<const RenderCommand*> m_orderedCommands;

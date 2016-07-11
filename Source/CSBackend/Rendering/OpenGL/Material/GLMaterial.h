@@ -42,12 +42,10 @@ namespace CSBackend
             ///
             /// @param renderMaterial
             ///     The render material to apply.
-            /// @param glCamera
-            ///     The current glCamera.
             /// @param glShader
             ///     The currently active shader to apply uniforms to.
             ///
-            void Apply(const ChilliSource::RenderMaterial* renderMaterial, const GLCamera& glCamera, GLShader* glShader) noexcept;
+            void Apply(const ChilliSource::RenderMaterial* renderMaterial, GLShader* glShader) noexcept;
         };
     }
 }

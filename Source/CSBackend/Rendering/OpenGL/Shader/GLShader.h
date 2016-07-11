@@ -52,15 +52,6 @@ namespace CSBackend
         public:
             CS_DECLARE_NOCOPY(GLShader);
             
-            static const std::string k_defaultUniformWVPMat;
-            static const std::string k_defaultUniformWorldMat;
-            static const std::string k_defaultUniformNormalMat;
-            static const std::string k_defaultUniformCameraPos;
-            static const std::string k_defaultUniformEmissive;
-            static const std::string k_defaultUniformAmbient;
-            static const std::string k_defaultUniformDiffuse;
-            static const std::string k_defaultUniformSpecular;
-            
             static const std::string k_attributePosition;
             static const std::string k_attributeNormal;
             static const std::string k_attributeTexCoord;
@@ -204,6 +195,12 @@ namespace CSBackend
             ///
             void SetAttribute(const std::string& name, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
             
+            /// Called when graphics memory is lost, usually through the GLContext being destroyed
+            /// on Android. Function will set a flag to handle safe destructing of this object, preventing
+            /// us from trying to delete invalid memory.
+            ///
+            void Invalidate() noexcept { m_invalidData = true; }
+            
             /// Unloads the opengl shader.
             ///
             ~GLShader() noexcept;
@@ -231,6 +228,8 @@ namespace CSBackend
             GLuint m_programId = 0;
             std::unordered_map<std::string, GLint> m_uniformHandles;
             std::unordered_map<std::string, GLint> m_attributeHandles;
+            
+            bool m_invalidData = false;
         };
     }
 }

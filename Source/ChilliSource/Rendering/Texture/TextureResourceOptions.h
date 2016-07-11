@@ -71,7 +71,7 @@ namespace ChilliSource
         /// disk. This will only work for RGBA8888, RGB888, RGBA4444
         /// and RGB565 textures.
         //-------------------------------------------------------
-        TextureResourceOptions(bool in_mipmaps, TextureFilterMode in_filter, TextureWrapMode in_wrapS, TextureWrapMode in_wrapT, bool in_restoreTextureDataEnabled);
+        TextureResourceOptions(bool in_mipmaps, TextureFilterMode in_filter, TextureWrapMode in_wrapS, TextureWrapMode in_wrapT);
         //-------------------------------------------------------
         /// Generate a unique hash based on the
         /// currently set options
@@ -106,20 +106,7 @@ namespace ChilliSource
         /// @return Filter mode to create texture with
         //-------------------------------------------------------
         TextureFilterMode GetFilterMode() const;
-        //-------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @return Whether or not the texture data should be
-        /// restored after a context loss. This involves maintaining
-        /// a copy of the texture data in memory which is costly
-        /// so this should be disabled for any textures that can
-        /// easily be recreated, i.e any texture that is rendered
-        /// into every frame. This has no effect on textures that
-        /// are loaded from file as they are always restored from
-        /// disk. This will only work for RGBA8888, RGB888, RGBA4444
-        /// and RGB565 textures.
-        //-------------------------------------------------------
-        bool IsRestoreTextureDataEnabled() const;
+        
     private:
         
         //-------------------------------------------------------
@@ -134,7 +121,6 @@ namespace ChilliSource
             TextureWrapMode m_wrapModeT = TextureWrapMode::k_clamp;
             TextureFilterMode m_filterMode = TextureFilterMode::k_bilinear;
             bool m_hasMipMaps = false;
-            bool m_restoreTextureDataEnabled = true;
         };
         
         Options m_options;

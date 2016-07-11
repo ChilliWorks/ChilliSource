@@ -28,11 +28,12 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Memory/PagedLinearAllocator.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
-#include <ChilliSource/Rendering/Lighting/RenderAmbientLight.h>
-#include <ChilliSource/Rendering/Lighting/RenderDirectionalLight.h>
-#include <ChilliSource/Rendering/Lighting/RenderPointLight.h>
+#include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
+#include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
@@ -59,12 +60,21 @@ namespace ChilliSource
         
         /// Creates a new instance with the given viewport resolution and clear colour.
         ///
+        /// @param frameAllocator
+        ///     The allocator which should be used for all frame allocations.
         /// @param resolution
         ///     The viewport resolution.
         /// @param clearColour
         ///     The clear colour
+        /// @param renderCamera
+        ///     The main camera that will be used to render the scene. Currently only one camera per
+        ///     scene is supported.
         ///
-        RenderSnapshot(const Integer2& resolution, const Colour& clearColour) noexcept;
+        RenderSnapshot(IAllocator* frameAllocator, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
+        
+        /// @return The allocator which should be used for all frame allocations.
+        ///
+        IAllocator* GetFrameAllocator() const noexcept { return m_frameAllocator; }
         
         /// @return The viewport resolution.
         ///
@@ -74,34 +84,30 @@ namespace ChilliSource
         ///
         const Colour& GetClearColour() const noexcept { return m_clearColour; }
         
-        /// Sets the main camera that will be used to render the scene. Currently only one camera per scene
-        /// is supported.
+        /// @return  The main camera that will be used to render the scene.
         ///
-        /// @param renderCamera
-        ///     The main camera that will be used to render the scene.
-        ///
-        void SetRenderCamera(const RenderCamera& renderCamera) noexcept;
+        RenderCamera GetRenderCamera() noexcept { return m_renderCamera; }
         
         /// Adds an ambient light to the render snapshot.
         ///
         /// @param renderAmbientLight
         ///     The ambient light which should be added.
         ///
-        void AddRenderAmbientLight(const RenderAmbientLight& renderAmbientLight) noexcept;
+        void AddAmbientRenderLight(const AmbientRenderLight& renderAmbientLight) noexcept;
         
         /// Adds a directional light to the render snapshot.
         ///
         /// @param renderDirectionalLight
         ///     The directional light which should be added.
         ///
-        void AddRenderDirectionalLight(const RenderDirectionalLight& renderDirectionalLight) noexcept;
+        void AddDirectionalRenderLight(const DirectionalRenderLight& renderDirectionalLight) noexcept;
         
         /// Adds a point light to the render snapshot.
         ///
         /// @param renderPointLight
         ///     The point light which should be added.
         ///
-        void AddRenderPointLight(const RenderPointLight& renderPointLight) noexcept;
+        void AddPointRenderLight(const PointRenderLight& renderPointLight) noexcept;
         
         /// Adds an object to the render snapshot.
         ///
@@ -114,7 +120,7 @@ namespace ChilliSource
         ///
         /// @param The render dynamic mesh.
         ///
-        void AddRenderDynamicMesh(RenderDynamicMeshUPtr renderDynamicMesh) noexcept;
+        void AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept;
         
         /// @return A modifiable version of the pre render command list. This can be used to populate
         ///     The list with additional commands.
@@ -126,29 +132,23 @@ namespace ChilliSource
         ///
         RenderCommandList* GetPostRenderCommandList() noexcept;
         
-        /// Moves the camera from the snapshot to a new external owner.
-        ///
-        /// @return The moved render camera.
-        ///
-        RenderCamera ClaimRenderCamera() noexcept;
-        
         /// Moves the list of ambient lights to a new external owner.
         ///
         /// @return The moved list of ambient lights.
         ///
-        std::vector<RenderAmbientLight> ClaimRenderAmbientLights() noexcept;
+        std::vector<AmbientRenderLight> ClaimAmbientRenderLights() noexcept;
         
         /// Moves the list of directional lights to a new external owner.
         ///
         /// @return The moved list of directional lights.
         ///
-        std::vector<RenderDirectionalLight> ClaimRenderDirectionalLights() noexcept;
+        std::vector<DirectionalRenderLight> ClaimDirectionalRenderLights() noexcept;
         
         /// Moves the list of point lights to a new external owner.
         ///
         /// @return The moved list of point lights.
         ///
-        std::vector<RenderPointLight> ClaimRenderPointLights() noexcept;
+        std::vector<PointRenderLight> ClaimPointRenderLights() noexcept;
         
         /// Moves the list of objects to a new external owner.
         ///
@@ -160,7 +160,7 @@ namespace ChilliSource
         ///
         /// @return The moved list of dynamic meshes.
         ///
-        std::vector<RenderDynamicMeshUPtr> ClaimRenderDynamicMeshes() noexcept;
+        std::vector<RenderDynamicMeshAUPtr> ClaimRenderDynamicMeshes() noexcept;
         
         /// Moves the pre render command list to a new external owner.
         ///
@@ -175,14 +175,15 @@ namespace ChilliSource
         RenderCommandListUPtr ClaimPostRenderCommandList() noexcept;
         
     private:
+        IAllocator* m_frameAllocator;
         Integer2 m_resolution;
         Colour m_clearColour;
         RenderCamera m_renderCamera;
-        std::vector<RenderAmbientLight> m_renderAmbientLights;
-        std::vector<RenderDirectionalLight> m_renderDirectionalLights;
-        std::vector<RenderPointLight> m_renderPointLights;
+        std::vector<AmbientRenderLight> m_renderAmbientLights;
+        std::vector<DirectionalRenderLight> m_renderDirectionalLights;
+        std::vector<PointRenderLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
-        std::vector<RenderDynamicMeshUPtr> m_renderDynamicMeshes;
+        std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
         

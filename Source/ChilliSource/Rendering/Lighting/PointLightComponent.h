@@ -1,8 +1,4 @@
 //
-//  PointLightComponent.h
-//  Chilli Source
-//  Created by Scott Downie on 31/01/2014.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2014 Tag Games Limited
@@ -26,152 +22,145 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_COMPONENTS_POINTLIGHTCOMPONENT_H_
-#define _CHILLISOURCE_RENDERING_COMPONENTS_POINTLIGHTCOMPONENT_H_
+#ifndef _CHILLISOURCE_RENDERING_LIGHTING_POINTLIGHTCOMPONENT_H_
+#define _CHILLISOURCE_RENDERING_LIGHTING_POINTLIGHTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Lighting/LightComponent.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Entity/Component.h>
 
 namespace ChilliSource
 {
-    class PointLightComponent : public LightComponent
+    /// A component which describes a directional light. While this is in the scene all lit
+    /// objects in range will have point lighting applied to it.
+    ///
+    /// A point light is described in terms of a radius and a minimum light influence which
+    /// are used to calculate the light attenuation and range of influence. Where d is
+    /// the distance from the fragment to the light, the formulae for these are as follows:
+    ///
+    ///   attenuationConstant = 1
+    ///   attenuationLinear = 2 / radius
+    ///   attenuationQuatratic = 1 / (radius * radius)
+    ///   attenuation = 1 / (attenuationConstant + attenuationLinear * d + attenuationQuatratic * d * d)
+    ///
+    /// rangeOfInfluence = radius * (sqrt(intensity / minLightInfluence) + 1)
+    ///
+    /// This is not thread-safe and should only be accessed from the main thread.
+    ///
+    class PointLightComponent final : public Component
     {
     public:
         CS_DECLARE_NAMEDTYPE(PointLightComponent);
         
-        //----------------------------------------------------------
-        /// Constructor
-        //----------------------------------------------------------
-        PointLightComponent();
-        //----------------------------------------------------------
-        /// Is A
+        /// Creates a new point light with the given colour, radius and intensity.
         ///
-        /// Returns if it is of the type given
-        /// @param Comparison Type
-        /// @return Whether the class matches the comparison type
-        //----------------------------------------------------------
-        bool IsA(InterfaceIDType inInterfaceID) const override;
-        //----------------------------------------------------------
-        /// Set Radius
+        /// @param colour
+        ///     The colour of the point light.
+        /// @param radius
+        ///     The radius of the point light.
+        /// @param intensity
+        ///     (Optional) The intensity of the ambient light. This defaults to 1.0.
         ///
-        /// Sets the radius of the point light. This radius is used
-        /// to calculate the attenuation constants and the lights
-        /// maximum influence distance. Assuming r is the radius,
-        /// and L is the Light Attenuation, the following is the
-        /// equation used for attenuation:
+        PointLightComponent(const Colour& colour, f32 radius, f32 intensity = 1.0f) noexcept;
+
+        /// Allows querying of whether or not this system implements the interface described by the
+        /// given interface Id. Typically this is not called directly as the templated equivalent
+        /// IsA<Interface>() is preferred.
         ///
-        ///   kC = 1
-        ///   kL = 2/r
-        ///   kQ = 1/(r*r)
-        ///   L = 1 / (kC + kL*d + kQ*d*d)
+        /// @param interfaceId
+        ///     The Id of the interface.
         ///
-        /// @param The lights radius.
-        //----------------------------------------------------------
-        void SetRadius(f32 infRadius);
-        //----------------------------------------------------------
-        /// Set Min Light Influence
+        /// @return Whether or not the interface is implemented.
         ///
-        /// Sets the minimum light influence. This is used to
-        /// calculate the Range of Influence of the light. Increasing
-        /// the Min Light Influence will reduce the range of the light,
-        /// reducing the number of objects that will be influenced
-        /// by it. This value should never be 0 or below as this will
-        /// mean that all objects will be influenced by the light,
-        /// regardless of distance. Assuming L is the Min Light
-        /// Influence, I is the light intensity and r is the light radius,
-        /// the following is used to calculate d, the Range of Influence:
+        bool IsA(InterfaceIDType interfaceId) const noexcept override;
+        
+        /// @return The colour of the point light.
         ///
-        ///  d = r * (sqrt(I / L) + 1)
+        void SetColour(const Colour& colour) noexcept { m_colour = colour; }
+        
+        /// @return The intensity of the point light.
         ///
-        /// @param The minimum light influence.
-        //----------------------------------------------------------
-        void SetMinLightInfluence(f32 infMinLightInfluence);
-        //----------------------------------------------------------
-        /// Get Radius
+        void SetIntensity(f32 intensity) noexcept { m_intensity = intensity; }
+        
+        /// Sets the radius of the point light. See the class documentation for more information.
         ///
-        /// @return Radius of emission
-        //----------------------------------------------------------
-        f32 GetRadius() const;
-        //----------------------------------------------------------
-        /// Get Min Light Influence
+        /// @param radius
+        ///     The lights radius.
         ///
-        /// @return The light attenuation factor at which the light
-        /// is considered to no longer be influencing an object.
-        //----------------------------------------------------------
-        f32 GetMinLightInfluence() const;
-        //----------------------------------------------------------
-        /// Get Constant Attenuation
+        void SetRadius(f32 radius) noexcept;
+        
+        /// Sets the minimum light influence. See the class documentation for more information.
         ///
-        /// @return Constant attenuation factor
-        //----------------------------------------------------------
-        f32 GetConstantAttenuation() const;
-        //----------------------------------------------------------
-        /// Get Linear Attenuation
+        /// @param minLightInfluence
+        ///     The minimum light influence.
         ///
-        /// @return Linear attenuation factor
-        //----------------------------------------------------------
-        f32 GetLinearAttenuation() const;
-        //----------------------------------------------------------
-        /// Get Quadratic Attenuation
+        void SetMinLightInfluence(f32 minLightInfluence) noexcept;
+        
+        /// @return The colour of the point light.
         ///
-        /// @return Quadratic attenuation factor
-        //----------------------------------------------------------
-        f32 GetQuadraticAttenuation() const;
-        //----------------------------------------------------------
-        /// Get Range Of Influence
+        const Colour& GetColour() const noexcept { return m_colour; }
+        
+        /// @return The intensity of the point light.
         ///
-        /// @return The range in which the light has influence on
-        /// objects. This is calculated based on the Min Light
-        /// Influence and the radius of the light.
-        //----------------------------------------------------------
-        f32 GetRangeOfInfluence() const;
-        //----------------------------------------------------------
-        /// Get Light Matrix
+        f32 GetIntensity() const noexcept { return m_intensity; }
+        
+        /// @return The colour of the point light with the intesity applied to it.
         ///
-        /// @return Matrix to transform into light space
-        //----------------------------------------------------------
-        const Matrix4& GetLightMatrix() const override;
-        //----------------------------------------------------
-        /// Triggered when the component is attached to
-        /// an entity on the scene
+        Colour GetFinalColour() const noexcept { return m_colour * m_intensity; }
+        
+        /// @return The light radius.
         ///
-        /// @author S Downie
-        //----------------------------------------------------
-        void OnAddedToScene() override;
-        //----------------------------------------------------
-        /// Triggered when the component is removed from
-        /// an entity on the scene
+        f32 GetRadius() const noexcept { return m_radius; };
+        
+        /// @return The min light influence.
         ///
-        /// @author S Downie
-        //----------------------------------------------------
-        void OnRemovedFromScene() override;
-        //----------------------------------------------------
-        /// On Entity Transform Changed
+        f32 GetMinLightInfluence() const noexcept { return m_minLightInfluence; };
+
+        /// @return The range in which the light has influence on objects. This is calculated based on
+        ///     the Min Light Influence and the radius of the light.
         ///
-        /// Triggered when the entity transform changes
-        /// and invalidates the light VP matrix
-        //----------------------------------------------------
-        void OnEntityTransformChanged();
-        //----------------------------------------------------------
-        /// Calculate Lighting Values
-        ///
-        /// Calculates the attenuation constants and the range
-        /// of influence based on the light radius and the
-        /// minimum light influence value.
-        //----------------------------------------------------------
-        void CalculateLightingValues() override;
+        f32 GetRangeOfInfluence() const noexcept { return m_rangeOfInfluence; };
+
     private:
+        /// Calculates the range of influence of the light based on the formula described in the
+        /// class documentation.
+        ///
+        void CalcRangeOfInfluence() noexcept;
+        
+        /// Triggered when either the component is attached to an entity which is already in the
+        /// scene or when the owning entity is added to the scene.
+        ///
+        void OnAddedToScene() noexcept override;
+        
+        /// Triggered when the entity transform changes, updating the light view matrix.
+        ///
+        void OnEntityTransformChanged() noexcept;
+        
+        /// This is called during the render snapshot stage of the render pipeline to collect a copy of
+        /// the current state of the renderable portion of the scene. This will add all relevant light
+        /// data to this snapshot.
+        ///
+        /// @return renderSnapshot
+        ///     The snapshot that the light data will be added to.
+        ///
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        
+        /// Triggered when either the component is removed from an entity which is currently in the
+        /// scene, or the owning entity is removed from the scene.
+        ///
+        void OnRemovedFromScene() noexcept override;
+        
+        Colour m_colour;
+        f32 m_intensity;
+        f32 m_radius;
+        f32 m_minLightInfluence;
+        
+        Vector3 m_lightPosition;
+        f32 m_rangeOfInfluence = 0.0f;
+        Vector3 m_attenuation;
         
         EventConnectionUPtr m_transformChangedConnection;
-        
-        f32 mfConstantAttenuation;
-        f32 mfLinearAttenuation;
-        f32 mfQuadraticAttenuation;
-        f32 mfRadius;
-        f32 mfMinLightInfluence;
-        f32 mfRangeOfInfluence;
-        
-        mutable bool mbMatrixCacheValid;
     };
 }
 

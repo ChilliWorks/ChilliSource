@@ -60,6 +60,15 @@ namespace ChilliSource
         ///
         virtual void Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept = 0;
         
+        /// Called when the GL context is lost, iterate any GL resources and place
+        /// them in an invalid state
+        ///
+        virtual void Invalidate() noexcept = 0;
+        
+        /// Called when the GL context is restored, need to rebuild any GL resources
+        ///
+        virtual void Restore() noexcept = 0;
+        
         virtual ~IRenderCommandProcessor() noexcept {}
     };
 }

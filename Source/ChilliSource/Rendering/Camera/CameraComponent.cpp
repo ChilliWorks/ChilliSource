@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
+#include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 
 namespace ChilliSource
@@ -176,17 +177,15 @@ namespace ChilliSource
         {
             m_isFrustumCacheValid = false;
         });
-    }
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    void CameraComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
-    {
-        in_renderSnapshot.SetRenderCamera(RenderCamera(GetEntity()->GetTransform().GetWorldTransform(), GetProjection()));
+        
+        GetEntity()->GetScene()->SetActiveCamera(this);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
     void CameraComponent::OnRemovedFromScene()
     {
+        GetEntity()->GetScene()->SetActiveCamera(nullptr);
+        
         m_resolutionChangedConnection.reset();
     }
     //------------------------------------------------------------------------------

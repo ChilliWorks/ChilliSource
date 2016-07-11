@@ -31,4 +31,10 @@ namespace ChilliSource
         : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize)
     {
     }
+    //------------------------------------------------------------------------------
+    std::unique_ptr<const u8[]> LoadTextureRenderCommand::ClaimTextureData() noexcept
+    {
+        CS_ASSERT(m_textureData, "Cannot claim nullptr data! Data may have already been claimed.");
+        return std::move(m_textureData);
+    }
 }
