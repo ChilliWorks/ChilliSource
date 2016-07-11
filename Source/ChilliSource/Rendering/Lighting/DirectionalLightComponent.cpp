@@ -120,8 +120,7 @@ namespace ChilliSource
             
             m_shadowMap = mutableShadowMap;
             
-            auto renderTargetGroupManager = Application::Get()->GetSystem<RenderTargetGroupManager>();
-            m_shadowMapTarget = renderTargetGroupManager->CreateDepthRenderTargetGroup(m_shadowMap->GetRenderTexture());
+            m_shadowMapTarget = TargetGroup::CreateDepthTargetGroup(m_shadowMap.get());
         }
     }
     
@@ -139,9 +138,8 @@ namespace ChilliSource
         
         if (m_shadowMapTarget)
         {
-            auto renderTargetGroupManager = Application::Get()->GetSystem<RenderTargetGroupManager>();
-            
-            renderTargetGroupManager->DestroyRenderTargetGroup(m_shadowMapTarget);
+            m_shadowMapTarget->DestroyRenderTargetGroup();
+            m_shadowMapTarget.reset();
         }
     }
     
@@ -171,7 +169,7 @@ namespace ChilliSource
             const auto& transform = GetEntity()->GetTransform();
             auto worldMatrix = transform.GetWorldTransform();
             auto orientation = transform.GetWorldOrientation();
-            renderSnapshot.AddDirectionalRenderLight(DirectionalRenderLight(GetFinalColour(), m_direction, worldMatrix, m_lightProjection, orientation, m_shadowTolerance, m_shadowMapTarget));
+            renderSnapshot.AddDirectionalRenderLight(DirectionalRenderLight(GetFinalColour(), m_direction, worldMatrix, m_lightProjection, orientation, m_shadowTolerance, m_shadowMapTarget->GetRenderTargetGroup()));
         }
         else
         {

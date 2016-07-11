@@ -97,6 +97,14 @@ namespace ChilliSource
         ///
         const RenderTargetGroup* CreateDepthRenderTargetGroup(const RenderTexture* depthTarget) noexcept;
         
+        /// @return The number of render target groups.
+        ///
+        u32 GetNumRenderTargetGroups() const noexcept { return m_renderTargetGroups.size(); }
+        
+        /// @return The render target group at the passed position
+        ///
+        RenderTargetGroup* GetRenderTargetGroup(u32 index) noexcept;
+        
         /// Removes the render target group from the manager and queues an UnloadTargetGroupRenderCommand
         /// for the next Render Snapshot stage in the render pipeline. The render command is given
         /// ownership of the render target group, ensuring it won't be destroyed until it is no longer

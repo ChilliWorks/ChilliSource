@@ -434,6 +434,15 @@ namespace ChilliSource
         /// @author Ian Copland
         //----------------------------------------------------------
         void DestroyRenderMaterialGroup() const noexcept;
+        //----------------------------------------------------------
+        /// Checks if the current textures are still valid, i.e. the containing
+        /// render textures match the ones cached on creation.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @return If the current texture list is invalid
+        //----------------------------------------------------------
+        bool VerifyTexturesAreValid() const noexcept;
         
         std::vector<TextureCSPtr> m_textures;
         
@@ -463,6 +472,7 @@ namespace ChilliSource
         mutable bool m_isCacheValid = false;
         mutable bool m_isVariableCacheValid = true;
         mutable const RenderMaterialGroup* m_renderMaterialGroup = nullptr;
+        mutable std::vector<const RenderTexture*> m_cachedRenderTextures;
     };
 }
 

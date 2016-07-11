@@ -105,6 +105,13 @@ namespace ChilliSource
         ///
         void AddRestoreMeshCommand(const RenderMesh* renderMesh) noexcept;
 
+        /// Creates and adds a new restore render target group command to the render command list.
+        ///
+        /// @param renderTargetGroup
+        ///     The render target group that should be restored.
+        ///
+        void AddRestoreRenderTargetGroupCommand(const RenderTargetGroup* renderTargetGroup) noexcept;
+        
         /// Creates and adds a new load target group command to the render command list.
         ///
         /// @param renderTargetGroup

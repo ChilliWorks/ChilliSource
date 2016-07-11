@@ -78,7 +78,15 @@ namespace ChilliSource
         
         return tenderTargetGroupRaw;
     }
-
+    
+    //------------------------------------------------------------------------------
+    RenderTargetGroup* RenderTargetGroupManager::GetRenderTargetGroup(u32 index) noexcept
+    {
+        CS_ASSERT(index < GetNumRenderTargetGroups(), "Index out of bounds.");
+        
+        return m_renderTargetGroups[index].get();
+    }
+    
     //------------------------------------------------------------------------------
     void RenderTargetGroupManager::DestroyRenderTargetGroup(const RenderTargetGroup* renderTargetGroup) noexcept
     {

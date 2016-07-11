@@ -36,11 +36,13 @@
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
+#include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+#include <CSBackend/Rendering/OpenGL/Target/GLTargetGroup.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
 namespace CSBackend
@@ -101,6 +103,14 @@ namespace CSBackend
                         }
                     }
                 }
+                
+                auto renderTargetGroupManager = CS::Application::Get()->GetSystem<CS::RenderTargetGroupManager>();
+                for(u32 i = 0; i < renderTargetGroupManager->GetNumRenderTargetGroups(); ++i)
+                {
+                    auto renderTargetGroup = renderTargetGroupManager->GetRenderTargetGroup(i);
+                    GLTargetGroup* targetGroup = static_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
+                    targetGroup->Invalidate();
+                }
             }
         }
         //------------------------------------------------------------------------------
@@ -128,14 +138,6 @@ namespace CSBackend
                 }
                 resourcePool->RefreshResources<ChilliSource::Texture>();
                 
-                //Iterate the materials and 'dirty' them so they are rebuilt
-                auto allMaterials = resourcePool->GetAllResources<ChilliSource::Material>();
-                for (auto& material : allMaterials)
-                {
-                    //TODO: Remove const cast when material system is improved.
-                    const_cast<ChilliSource::Material*>(material.get())->SetAmbient(material->GetAmbient());
-                }
-                
                 auto allModels = resourcePool->GetAllResources<ChilliSource::Model>();
                 for (const auto& model : allModels)
                 {
@@ -149,6 +151,14 @@ namespace CSBackend
                     }
                 }
                 resourcePool->RefreshResources<ChilliSource::Model>();
+                
+                auto renderTargetGroupManager = CS::Application::Get()->GetSystem<CS::RenderTargetGroupManager>();
+                for(u32 i = 0; i < renderTargetGroupManager->GetNumRenderTargetGroups(); ++i)
+                {
+                    auto renderTargetGroup = renderTargetGroupManager->GetRenderTargetGroup(i);
+                    ChilliSource::RestoreRenderTargetGroupCommand command(renderTargetGroup);
+                    m_pendingRestoreRenderTargetGroupCommands.push_back(std::move(command));
+                }
                 
                 m_hasContextBeenBackedUp = false;
             }
@@ -183,8 +193,14 @@ namespace CSBackend
                 preRenderCommandList->AddRestoreTextureCommand(restoreTextureCommand.GetRenderTexture());
             }
             
+            for(auto& restoreRenderTargetGroupCommand : m_pendingRestoreRenderTargetGroupCommands)
+            {
+                preRenderCommandList->AddRestoreRenderTargetGroupCommand(restoreRenderTargetGroupCommand.GetTargetRenderGroup());
+            }
+            
             m_pendingRestoreMeshCommands.clear();
             m_pendingRestoreTextureCommands.clear();
+            m_pendingRestoreRenderTargetGroupCommands.clear();
 #endif
         }
         

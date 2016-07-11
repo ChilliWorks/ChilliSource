@@ -314,7 +314,7 @@ namespace CSBackend
 
             m_handle = BuildTexture(data, dataSize, m_renderTexture);
             
-            if(k_shouldBackupMeshDataFromMemory && renderTexture->ShouldBackupData())
+            if(k_shouldBackupMeshDataFromMemory && renderTexture->ShouldBackupData() && data)
             {
                 u8* imageDataCopy = new u8[dataSize];
                 memcpy(imageDataCopy, data, dataSize);
@@ -327,17 +327,13 @@ namespace CSBackend
         {
             if(m_invalidData)
             {
-                CS_ASSERT(m_imageDataSize > 0, "Cannot restore context with empty data");
-                
                 if(m_imageDataBackup)
                 {
                     m_handle = BuildTexture(m_imageDataBackup.get(), m_imageDataSize, m_renderTexture);
                 }
                 else
                 {
-                    //Create some empty black texture data
-                    auto blankData = std::unique_ptr<u8[]>(new u8[m_imageDataSize]());
-                    m_handle = BuildTexture(blankData.get(), m_imageDataSize, m_renderTexture);
+                    m_handle = BuildTexture(nullptr, 0, m_renderTexture);
                 }
                 m_invalidData = false;
             }
