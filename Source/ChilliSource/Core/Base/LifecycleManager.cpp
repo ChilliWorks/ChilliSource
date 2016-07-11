@@ -25,6 +25,7 @@
 #include <ChilliSource/Core/Base/LifecycleManager.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #   include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
@@ -87,6 +88,12 @@ namespace ChilliSource
         CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed || m_targetLifecycleState == LifecycleState::k_foregrounded, "Cannot render as target lifecycle state is invalid.");
         
         m_application->Render();
+    }
+    
+    //------------------------------------------------------------------------------
+    void LifecycleManager::SystemUpdate() noexcept
+    {
+        m_application->GetTaskScheduler()->ExecuteSystemThreadTasks();
     }
     
     //------------------------------------------------------------------------------

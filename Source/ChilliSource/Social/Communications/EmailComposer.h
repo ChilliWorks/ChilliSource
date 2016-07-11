@@ -121,18 +121,17 @@ namespace ChilliSource
         virtual void PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
                                            const Attachment& in_attachment, const SendResultDelegate& in_callback) = 0;
         //-------------------------------------------------------
-        /// Dismisses the activity if it is currently displayed.
+        /// Determines whether or not the composer is presented.
         ///
-        /// @author S Downie
+        /// @author Jordan Brown
         //-------------------------------------------------------
-        virtual void Dismiss() = 0;
+        virtual bool IsPresented() = 0;
         //-------------------------------------------------------
         /// Destructor
         //-------------------------------------------------------
         virtual ~EmailComposer() {};
     protected:
         friend class State;
-        
         //-------------------------------------------------------
         /// Creates a new instance of the email composition
         /// activity.

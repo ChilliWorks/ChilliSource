@@ -56,6 +56,7 @@ namespace ChilliSource
         /// Delegates
         //--------------------------------------------------
         using ReceivedDelegate = std::function<void(const NotificationCSPtr&)>;
+        using GetScheduledNotificationsDelegate = std::function<void(const std::vector<NotificationCSPtr>& scheduledNotifications)>;
         //-------------------------------------------------------
         /// Create the platform dependent backend
         ///
@@ -91,17 +92,19 @@ namespace ChilliSource
         /// to standard priority.
         //---------------------------------------------------
         virtual void ScheduleNotificationForTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard) = 0;
-        //--------------------------------------------------------
-        /// Builds a list of all notifications currently scheduled
-        /// within the given time period.
+        //----------------------------------------------------------
+        /// Generates a list of all notifications that are currently
+        /// scheduled. Because the list cannot be immediately
+        /// calculated, the result is returned through the provided
+        /// delegate when ready.
         ///
         /// @author Ian Copland
         ///
-        /// @param [Out] The list of notifications.
+        /// @param The delegate function to execute.
         /// @param [Optional] The start time.
         /// @param [Optional] The end time.
-        //--------------------------------------------------------
-        virtual void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const = 0;
+        //---------------------------------------------------------
+        virtual void GetScheduledNotifications(const GetScheduledNotificationsDelegate& in_delegate, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const = 0;
         //--------------------------------------------------------
         /// Cancel By ID
         ///

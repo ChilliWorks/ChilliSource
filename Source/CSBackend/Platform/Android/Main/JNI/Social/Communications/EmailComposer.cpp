@@ -105,15 +105,10 @@ namespace CSBackend
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::Dismiss()
-		{
-			if (m_isPresented == true)
-			{
-				m_isPresented = false;
-
-				CS_LOG_FATAL("Cannot dismiss the email composer on Android.");
-			}
-		}
+        bool EmailComposer::IsPresented()
+        {
+            return m_isPresented;
+        }
         //-------------------------------------------------------
         //-------------------------------------------------------
 		void EmailComposer::OnEmailClosed(EmailComposerJavaInterface::Result in_result)

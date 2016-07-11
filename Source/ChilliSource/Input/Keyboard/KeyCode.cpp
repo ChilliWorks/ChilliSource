@@ -232,6 +232,8 @@ namespace ChilliSource
                 return "Left System";
             case KeyCode::k_rightSystem:
                 return "Right System";
+            case KeyCode::k_tab:
+                return "Tab";
             case KeyCode::k_unknown:
                 return "Unknown";
         }

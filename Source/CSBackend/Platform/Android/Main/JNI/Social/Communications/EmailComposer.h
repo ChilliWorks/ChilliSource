@@ -62,7 +62,7 @@ namespace CSBackend
             //-------------------------------------------------------
             /// Displays the email activity with the given recipients,
             /// subject and contents.
-			///
+            ///
 			/// @author S Hendrie
             ///
             /// @param A list of recipients (UTF-8).
@@ -76,7 +76,7 @@ namespace CSBackend
 			/// Displays the email activity with the given recipients,
 			/// subject and contents, and adds a list of attachments
 			/// to the email.
-			///
+            ///
 			/// @author Ian Copland
 			///
 			/// @param A list of recipients (UTF-8).
@@ -89,11 +89,10 @@ namespace CSBackend
 			void PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
 					const Attachment& in_attachment, const SendResultDelegate& in_callback) override;
             //-------------------------------------------------------
-            /// Dismisses the activity if it is currently displayed.
-			///
-			/// @author S Hendrie
+            /// Determines whether or not the composer is presented.
+            /// @author Jordan Brown
             //-------------------------------------------------------
-			void Dismiss() override;
+            bool IsPresented() override;
 		private:
 			friend ChilliSource::EmailComposerUPtr ChilliSource::EmailComposer::Create();
             //----------------------------------------------------

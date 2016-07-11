@@ -34,6 +34,8 @@
 
 #import <MessageUI/MessageUI.h>
 
+#import <mutex>
+
 @class EmailComposerDelegate;
 
 namespace CSBackend
@@ -90,11 +92,10 @@ namespace CSBackend
             void PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
                                        const Attachment& in_attachment, const SendResultDelegate & in_callback) override;
             //-------------------------------------------------------
-            /// Dismisses the activity if it is currently displayed.
-            ///
-            /// @author S Downie
+            /// Determines whether or not the composer is presented.
+            /// @author Jordan Brown
             //-------------------------------------------------------
-			void Dismiss() override;
+            bool IsPresented() override;
             //-------------------------------------------------------
             /// Called when the result is received from the email
             /// composition view controller. This is for internal
@@ -141,11 +142,11 @@ namespace CSBackend
             //------------------------------------------------------
             void OnDestroy() override;
             
-            bool m_isPresented;
             SendResultDelegate m_resultDelegate;
 			EmailComposerDelegate* m_emailComposerDelegate;
 			MFMailComposeViewController* m_viewController;
             UIViewController* m_rootViewController;
+            bool m_isPresented = false;
 		};
 		 
 	}

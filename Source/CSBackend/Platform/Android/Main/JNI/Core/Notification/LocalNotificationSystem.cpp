@@ -84,10 +84,12 @@ namespace CSBackend
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+		void LocalNotificationSystem::GetScheduledNotifications(const GetScheduledNotificationsDelegate& in_delegate, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
 		{
             CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to retrieve scheduled notifications outside of main thread.");
-            m_localNotificationJI->GetScheduledNotifications(out_notifications, in_time, in_period);
+            std::vector<ChilliSource::NotificationCSPtr> notificationList;
+            m_localNotificationJI->GetScheduledNotifications(notificationList, in_time, in_period);
+            in_delegate(notificationList);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
