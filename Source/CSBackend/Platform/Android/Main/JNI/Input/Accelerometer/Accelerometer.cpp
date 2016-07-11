@@ -140,8 +140,7 @@ namespace CSBackend
 		//------------------------------------------------
 		void Accelerometer::OnAccelerationChanged(const ChilliSource::Vector3& in_acceleration)
 		{
-            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to respond to acceleration change outside of main thread.");
-			m_acceleration = in_acceleration;
+            m_acceleration = in_acceleration;
 			m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);
 		}
 	}
