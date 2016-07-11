@@ -55,6 +55,7 @@
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
@@ -85,6 +86,10 @@
 
 #include <algorithm>
 #include <ctime>
+
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+#   include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
+#endif
 
 namespace ChilliSource
 {
@@ -294,6 +299,11 @@ namespace ChilliSource
         CreateSystem<TextEntry>();
         
         //Rendering
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+        CreateSystem<CSBackend::OpenGL::GLContextRestorer>();
+#endif
+        
+        CreateSystem<RenderCommandBufferManager>();
         m_renderer = CreateSystem<Renderer>();
         CreateSystem<RenderMaterialGroupManager>();
         CreateSystem<RenderMeshManager>();

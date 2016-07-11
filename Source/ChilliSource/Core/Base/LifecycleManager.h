@@ -196,6 +196,16 @@ namespace ChilliSource
         ///
         void BlockIfInactive() noexcept;
         
+        /// Called when the raw platform resume event is triggered. This is guaranteed
+        /// to happen before the regular OnResume event.
+        ///
+        void SystemResume() noexcept;
+        
+        /// Called when the raw platform suspend event is triggered. This is guaranteed
+        /// to happen before the regular OnSuspend event.
+        ///
+        void SystemSuspend() noexcept;
+        
         Application* m_application;
         
         LifecycleState m_currentLifecycleState = LifecycleState::k_uninitialised;

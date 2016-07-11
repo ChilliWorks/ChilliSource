@@ -22,19 +22,41 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_RESTOREMESHRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_RESTOREMESHRENDERCOMMAND_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
-        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize)
+    /// A render command for restoring a mesh from cached memory. A restore command
+    /// should only be issued for a mesh that has had its contexts backed up at creation,
+    /// otherwise this command will assert when applied.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class RestoreMeshRenderCommand final : public RenderCommand
     {
-    }
-    //------------------------------------------------------------------------------
-    std::unique_ptr<const u8[]> LoadTextureRenderCommand::ClaimTextureData() noexcept
-    {
-        CS_ASSERT(m_textureData, "Cannot claim nullptr data! Data may have already been claimed.");
-        return std::move(m_textureData);
-    }
+    public:
+        
+        /// Creates a new instance with the given mesh to restore.
+        ///
+        /// @param renderMesh
+        ///     The render mesh to restore.
+        ///
+        RestoreMeshRenderCommand(const RenderMesh* renderMesh) noexcept;
+        
+        /// @return The render material to apply.
+        ///
+        const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh; };
+        
+    private:
+        
+        const RenderMesh* m_renderMesh;
+    };
 }
+
+#endif

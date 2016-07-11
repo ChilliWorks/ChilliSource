@@ -34,7 +34,7 @@
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Model);
-    
+
     //------------------------------------------------------------------------------
     ModelUPtr Model::Create() noexcept
     {
@@ -76,7 +76,7 @@ namespace ChilliSource
             u32 vertexDataSize = meshDesc.GetNumVertices() * meshDesc.GetVertexFormat().GetSize();
             u32 indexDataSize = meshDesc.GetNumIndices() * GetIndexSize(meshDesc.GetIndexFormat());
             
-            auto renderMesh = renderMeshManager->CreateRenderMesh(poylgonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize);
+            auto renderMesh = renderMeshManager->CreateRenderMesh(poylgonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize, modelDesc.ShouldBackupData());
             m_renderMeshes.push_back(renderMesh);
         }
     }

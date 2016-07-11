@@ -831,9 +831,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.cpp">
       <Filter>CSBackend\Platform\Windows\SFML\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
@@ -1235,6 +1232,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTextureUnitManager.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandBufferManager.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreTextureRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreMeshRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Target\GLTargetGroup.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Target</Filter>
@@ -2195,9 +2204,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\ForwardDeclarations.h">
       <Filter>CSBackend\Rendering\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
@@ -2653,6 +2659,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderLayer.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.h">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandBufferManager.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreMeshRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreTextureRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Target\GLTargetGroup.h">
       <Filter>CSBackend\Rendering\OpenGL\Target</Filter>

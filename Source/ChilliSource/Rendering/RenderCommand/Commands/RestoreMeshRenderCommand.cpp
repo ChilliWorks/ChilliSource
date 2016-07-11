@@ -22,19 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    LoadTextureRenderCommand::LoadTextureRenderCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
-        : RenderCommand(Type::k_loadTexture), m_renderTexture(renderTexture), m_textureData(std::move(textureData)), m_textureDataSize(textureDataSize)
+    RestoreMeshRenderCommand::RestoreMeshRenderCommand(const RenderMesh* renderMesh) noexcept
+        : RenderCommand(Type::k_restoreMesh), m_renderMesh(renderMesh)
     {
-    }
-    //------------------------------------------------------------------------------
-    std::unique_ptr<const u8[]> LoadTextureRenderCommand::ClaimTextureData() noexcept
-    {
-        CS_ASSERT(m_textureData, "Cannot claim nullptr data! Data may have already been claimed.");
-        return std::move(m_textureData);
     }
 }

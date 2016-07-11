@@ -25,9 +25,15 @@
 #include <ChilliSource/Core/Base/LifecycleManager.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #   include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
+#endif
+
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+    #include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
 #endif
 
 namespace ChilliSource
@@ -51,7 +57,15 @@ namespace ChilliSource
         CS_ASSERT(m_targetLifecycleState == LifecycleState::k_initialised, "Cannot resume as target lifecycle state is invalid.");
         m_targetLifecycleState = LifecycleState::k_resumed;
         
+        SystemResume();
+        
         m_activeCondition.notify_one();
+    }
+    
+    //------------------------------------------------------------------------------
+    void LifecycleManager::SystemResume() noexcept
+    {
+        m_application->GetSystem<Renderer>()->OnSystemResume();
     }
     
     //------------------------------------------------------------------------------
@@ -78,7 +92,20 @@ namespace ChilliSource
         CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed, "Cannot suspend as target lifecycle state is invalid.");
         m_targetLifecycleState = LifecycleState::k_initialised;
         
+        SystemSuspend();
+        
         m_activeCondition.notify_one();
+    }
+    
+    //------------------------------------------------------------------------------
+    void LifecycleManager::SystemSuspend() noexcept
+    {
+        m_application->GetSystem<RenderCommandBufferManager>()->OnSystemSuspend();
+        m_application->GetSystem<Renderer>()->OnSystemSuspend();
+        
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+        m_application->GetSystem<CSBackend::OpenGL::GLContextRestorer>()->OnSystemSuspend();
+#endif
     }
     
     //------------------------------------------------------------------------------

@@ -45,6 +45,13 @@ namespace ChilliSource
         ///
         const RenderTexture* GetRenderTexture() const noexcept { return m_renderTexture.get(); };
     
+        /// Takes ownership of the RenderTexture from this class. This will leave
+        /// this command in an unusable state and should be used with caution.
+        ///
+        /// @return The render texture that should be unloaded.
+        ///
+        RenderTextureUPtr ClaimRenderTexture() noexcept;
+        
     private:
         friend class RenderCommandList;
         

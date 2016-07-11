@@ -56,6 +56,15 @@ namespace CSBackend
             ///
             void Process(const ChilliSource::RenderCommandBuffer* renderCommandBuffer) noexcept override;
             
+            /// Called when the GL context is lost, iterate any GL resources and place
+            /// them in an invalid state
+            ///
+            void Invalidate() noexcept override;
+            
+            /// Called when the GL context is restored, need to rebuild any GL resources
+            ///
+            void Restore() noexcept override;
+            
         private:
             /// Initialises the render command processor. This is deferred until Process is first called
             /// to ensure it is run on the render thread.
@@ -83,13 +92,27 @@ namespace CSBackend
             ///
             void LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept;
             
+            /// Restores the texture given by the command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void RestoreTexture(const ChilliSource::RestoreTextureRenderCommand* renderCommand) noexcept;
+            
+            /// Restores the mesh given by the command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void RestoreMesh(const ChilliSource::RestoreMeshRenderCommand* renderCommand) noexcept;
+
             /// Loads the target group described by the given load command
             ///
             /// @param renderCommand
             ///     The render command
             ///
             void LoadTargetGroup(const ChilliSource::LoadTargetGroupRenderCommand* renderCommand) noexcept;
-            
+
             /// Begins rendering to the default render target.
             ///
             /// @param renderCommand

@@ -44,6 +44,13 @@ namespace ChilliSource
         ///
         const RenderShader* GetRenderShader() const noexcept { return m_renderShader.get(); };
         
+        /// Takes ownership of the RenderShader from this class. This will leave
+        /// this command in an unusable state and should be used with caution.
+        ///
+        /// @return The render shader that should be unloaded.
+        ///
+        RenderShaderUPtr ClaimRenderShader() noexcept;
+        
     private:
         friend class RenderCommandList;
         

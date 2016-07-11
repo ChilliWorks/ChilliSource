@@ -240,7 +240,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandBufferCUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
+    RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
                                                                           std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList,
                                                                           RenderCommandListUPtr postRenderCommandList) noexcept
     {

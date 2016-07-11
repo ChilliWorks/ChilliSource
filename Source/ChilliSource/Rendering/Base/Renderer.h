@@ -123,8 +123,13 @@ namespace ChilliSource
         ///
         void ProcessRenderCommandBuffer() noexcept;
         
+        /// @return The renderers frame allocator queue
+        ///
+        FrameAllocatorQueue& GetFrameAllocatorQueue() noexcept { return m_frameAllocatorQueue; }
+        
     private:
         friend class Application;
+        friend class LifecycleManager;
         
         /// A factory method for creating new instances of the system. This must be called by
         /// Application.
@@ -146,20 +151,19 @@ namespace ChilliSource
         ///
         void EndRenderPrep() noexcept;
         
-        /// If the queue of command buffers is full then this waits until one has been popped to continue.
-        /// It then adds the given render buffer and notifies any threads which are waiting.
+        /// Initialisation called when all App Systems have been created.
         ///
-        /// @param renderCommandBuffer
-        ///     The render command buffer which should be pushed. Must be moved.
-        ///
-        void WaitThenPushCommandBuffer(RenderCommandBufferCUPtr renderCommandBuffer) noexcept;
+        void OnInit() noexcept override;
         
-        /// If the queue of command buffers is empty then this waits until one has been pushed to continue.
-        /// It pops a command buffer from the list and notifies any threads which are waiting.
+        /// Called when the application delegate is resumed. This is called directly
+        /// from lifecycle manager and will be called before the OnResume.
         ///
-        /// @return The render command buffer which has been popped.
+        void OnSystemResume() noexcept;
+        
+        /// Called when the application delegate is suspended. This is called directly
+        /// from lifecycle manager and will be called before the OnSuspend.
         ///
-        RenderCommandBufferCUPtr WaitThenPopCommandBuffer() noexcept;
+        void OnSystemSuspend() noexcept;
         
         FrameAllocatorQueue m_frameAllocatorQueue;
         IRenderPassCompilerUPtr m_renderPassCompiler;
@@ -170,10 +174,9 @@ namespace ChilliSource
         std::mutex m_renderPrepMutex;
         std::condition_variable m_renderPrepCondition;
         bool m_renderPrepActive = false;
+        bool m_initialised = false;
         
-        std::mutex m_renderCommandBuffersMutex;
-        std::condition_variable m_renderCommandBuffersCondition;
-        std::deque<RenderCommandBufferCUPtr> m_renderCommandBuffers;
+        RenderCommandBufferManager* m_commandRecycleSystem = nullptr;
     };
 }
 

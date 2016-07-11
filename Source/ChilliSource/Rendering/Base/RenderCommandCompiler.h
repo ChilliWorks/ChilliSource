@@ -58,7 +58,7 @@ namespace ChilliSource
         ///
         /// @return The render command buffer.
         ///
-        RenderCommandBufferCUPtr CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
+        RenderCommandBufferUPtr CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
                                                        std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept;
     }
 }

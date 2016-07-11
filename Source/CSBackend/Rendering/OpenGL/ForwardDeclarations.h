@@ -40,6 +40,9 @@ namespace CSBackend
         //----------------------------------------------------
         /// Base
         //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(ContextState);
+        CS_FORWARDDECLARE_CLASS(GLContextRestorer);
+
         CS_FORWARDDECLARE_CLASS(RenderCapabilities);
         CS_FORWARDDECLARE_CLASS(RenderCommandProcessor);
         //----------------------------------------------------

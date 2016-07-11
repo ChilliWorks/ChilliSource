@@ -45,6 +45,13 @@ namespace ChilliSource
         ///
         const RenderMesh* GetRenderMesh() const noexcept { return m_renderMesh.get(); }
         
+        /// Takes ownership of the RenderMesh from this class. This will leave
+        /// this command in an unusable state and should be used with caution.
+        ///
+        /// @return The render mesh that should be unloaded.
+        ///
+        RenderMeshUPtr ClaimRenderMesh() noexcept;
+        
     private:
         friend class RenderCommandList;
         

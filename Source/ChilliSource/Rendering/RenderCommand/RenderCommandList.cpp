@@ -40,6 +40,8 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
@@ -85,14 +87,31 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddLoadTargetGroupCommand(RenderTargetGroup* renderTargetGroup) noexcept
+    void RenderCommandList::AddRestoreTextureCommand(const RenderTexture* renderTexture) noexcept
     {
-        RenderCommandUPtr renderCommand(new LoadTargetGroupRenderCommand(renderTargetGroup));
+        RenderCommandUPtr renderCommand(new RestoreTextureRenderCommand(renderTexture));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
     }
     
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddRestoreMeshCommand(const RenderMesh* renderMesh) noexcept
+    {
+        RenderCommandUPtr renderCommand(new RestoreMeshRenderCommand(renderMesh));
+
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddLoadTargetGroupCommand(RenderTargetGroup* renderTargetGroup) noexcept
+    {
+        RenderCommandUPtr renderCommand(new LoadTargetGroupRenderCommand(renderTargetGroup));
+
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
     //------------------------------------------------------------------------------
     void RenderCommandList::AddBeginCommand(const Integer2& resolution, const Colour& clearColour) noexcept
     {
@@ -235,5 +254,12 @@ namespace ChilliSource
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
+    }
+    //------------------------------------------------------------------------------
+    RenderCommand* RenderCommandList::GetCommand(u32 index) noexcept
+    {
+        CS_ASSERT(index < GetNumCommands(), "Index out of bounds.");
+        
+        return m_renderCommands[index].get();
     }
 }

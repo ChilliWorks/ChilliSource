@@ -85,11 +85,13 @@ namespace ChilliSource
         ///     The index data buffer.
         /// @param indexDataSize
         ///     The size of the index data buffer.
+        /// @param shouldBackupData
+        ///     If the mesh data should be backed up in main memory for restoring it later.
         ///
         /// @return The RenderMesh instance.
         ///
         const RenderMesh* CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                                           std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
+                                           std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData) noexcept;
         
         /// Removes the RenderMesh from the manager and queues an UnloadMeshRenderCommand for the
         /// next Render Snapshot stage in the render pipeline. The render command is given ownership

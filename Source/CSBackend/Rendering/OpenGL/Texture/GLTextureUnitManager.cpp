@@ -58,7 +58,9 @@ namespace CSBackend
                     m_boundTextures[textureUnitIndex] = textures[textureUnitIndex];
                     
                     auto glTexture = reinterpret_cast<GLTexture*>(m_boundTextures[textureUnitIndex]->GetExtraData());
+
                     CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
+                    CS_ASSERT(!glTexture->IsDataInvalid(), "GLTextureUnitManager::Bind(): Failed to bind texture, its context is invalid!");
                     
                     glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
                     glBindTexture(GL_TEXTURE_2D, glTexture->GetHandle());

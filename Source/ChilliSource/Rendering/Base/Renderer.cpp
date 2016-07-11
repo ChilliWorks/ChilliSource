@@ -28,15 +28,11 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
+#include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 #include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>
 
 namespace ChilliSource
 {
-    namespace
-    {
-        constexpr u32 k_maxQueueSize = 1;
-    }
-    
     CS_DEFINE_NAMEDTYPE(Renderer);
     
     //------------------------------------------------------------------------------
@@ -58,7 +54,6 @@ namespace ChilliSource
     {
         return (Renderer::InterfaceID == interfaceId);
     }
-    
     //------------------------------------------------------------------------------
     RenderSnapshot Renderer::CreateRenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept
     {
@@ -94,7 +89,7 @@ namespace ChilliSource
             auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, frameAllocator, targetRenderPassGroups, std::move(renderDynamicMeshes),
                                                                                     std::move(preRenderCommandList), std::move(postRenderCommandList));
             
-            WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
+            m_commandRecycleSystem->WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
             EndRenderPrep();
         });
     }
@@ -102,7 +97,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Renderer::ProcessRenderCommandBuffer() noexcept
     {
-        auto renderCommandBuffer = WaitThenPopCommandBuffer();
+        auto renderCommandBuffer = m_commandRecycleSystem->WaitThenPopCommandBuffer();
         m_renderCommandProcessor->Process(renderCommandBuffer.get());
         
         auto allocator = renderCommandBuffer->GetFrameAllocator();
@@ -133,35 +128,29 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::WaitThenPushCommandBuffer(RenderCommandBufferCUPtr renderCommandBuffer) noexcept
+    void Renderer::OnInit() noexcept
     {
-        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
-        
-        while (m_renderCommandBuffers.size() >= k_maxQueueSize)
-        {
-            m_renderCommandBuffersCondition.wait(lock);
-        }
-        
-        m_renderCommandBuffers.push_back(std::move(renderCommandBuffer));
-        
-        m_renderCommandBuffersCondition.notify_all();
+        m_commandRecycleSystem = Application::Get()->GetSystem<RenderCommandBufferManager>();
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandBufferCUPtr Renderer::WaitThenPopCommandBuffer() noexcept
+    void Renderer::OnSystemResume() noexcept
     {
-        std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
-        
-        while (m_renderCommandBuffers.empty())
+        if(m_initialised)
         {
-            m_renderCommandBuffersCondition.wait(lock);
+#ifdef CS_TARGETPLATFORM_ANDROID
+            m_renderCommandProcessor->RestoreContext();
+#endif
         }
         
-        auto renderCommandBuffer = std::move(m_renderCommandBuffers.front());
-        m_renderCommandBuffers.pop_front();
-        
-        m_renderCommandBuffersCondition.notify_all();
-        
-        return renderCommandBuffer;
+        m_initialised = true;
+    }
+    
+    //------------------------------------------------------------------------------
+    void Renderer::OnSystemSuspend() noexcept
+    {
+#ifdef CS_TARGETPLATFORM_ANDROID
+        m_renderCommandProcessor->InvalidateContext();
+#endif
     }
 }
