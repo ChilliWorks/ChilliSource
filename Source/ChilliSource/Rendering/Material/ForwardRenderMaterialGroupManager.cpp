@@ -70,9 +70,10 @@ namespace ChilliSource
             std::vector<const RenderTexture*> renderTextures { renderTexture };
             auto diffuseColour = Colour::k_black;
             auto specularColour = Colour::k_black;
+            RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
             return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour));
+                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
         
         /// Creates a new shadow map RenderMaterial with the given shader.
@@ -97,10 +98,11 @@ namespace ChilliSource
             auto emissiveColour = Colour::k_black;
             auto ambientColour = Colour::k_black;
             auto diffuseColour = Colour::k_black;
-            auto specularColour =Colour::k_black;
+            auto specularColour = Colour::k_black;
+            RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
             return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour));
+                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
         
         /// Creates a new base pass blinn RenderMaterial with the given info.
@@ -131,10 +133,11 @@ namespace ChilliSource
             auto destinationBlendMode = BlendMode::k_oneMinusSourceAlpha;
             auto cullFace = CullFace::k_back;
             auto diffuseColour = Colour::k_black;
-            auto specularColour =Colour::k_black;
+            auto specularColour = Colour::k_black;
+            RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
             return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour));
+                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
         
         /// Creates a new light pass (directional or point) blinn RenderMaterial with the given info.
@@ -166,9 +169,10 @@ namespace ChilliSource
             auto cullFace = CullFace::k_back;
             auto emissiveColour = Colour::k_black;
             auto ambientColour = Colour::k_black;
+            RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
             return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour));
+                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
     }
     
@@ -318,6 +322,40 @@ namespace ChilliSource
         renderMaterials.push_back(std::move(animatedDirectionalRM));
         renderMaterials.push_back(std::move(animatedDirectionalShadowsRM));
         renderMaterials.push_back(std::move(animatedPointRM));
+        
+        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
+        auto renderMaterialGroupRaw = renderMaterialGroup.get();
+        AddRenderMaterialGroup(std::move(renderMaterialGroup));
+        
+        return renderMaterialGroupRaw;
+    }
+    
+    //------------------------------------------------------------------------------
+    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateCustomRenderMaterialGroup(const VertexFormat& vertexFormat, const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
+                                                                                                  bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled,
+                                                                                                  bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace,
+                                                                                                  const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
+                                                                                                  RenderShaderVariablesUPtr renderShaderVariables) noexcept
+    {
+        //TODO: Create RenderMaterials from pools.
+        auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
+                                                            destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+        
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> renderMaterialsSlots {};
+        
+        if (isTransparencyEnabled)
+        {
+            renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_transparent)] = renderMaterial.get();
+        }
+        else
+        {
+            renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = renderMaterial.get();
+        }
+        
+        std::vector<RenderMaterialGroup::Collection> collections { RenderMaterialGroup::Collection(vertexFormat, renderMaterialsSlots) };
+        
+        std::vector<RenderMaterialUPtr> renderMaterials;
+        renderMaterials.push_back(std::move(renderMaterial));
         
         RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
         auto renderMaterialGroupRaw = renderMaterialGroup.get();

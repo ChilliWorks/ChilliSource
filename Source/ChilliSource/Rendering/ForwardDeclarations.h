@@ -200,6 +200,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(CSShaderProvider);
     CS_FORWARDDECLARE_CLASS(RenderShader);
     CS_FORWARDDECLARE_CLASS(RenderShaderManager);
+    CS_FORWARDDECLARE_CLASS(RenderShaderVariables);
     CS_FORWARDDECLARE_CLASS(Shader);
     //------------------------------------------------------------
     /// Sprite

@@ -313,6 +313,7 @@
 		819126FF1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819126FD1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.cpp */; };
 		819127021D33E216004A2CB2 /* GLSkinnedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819127001D33E216004A2CB2 /* GLSkinnedAnimation.cpp */; };
 		819127051D342554004A2CB2 /* RenderFrameData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819127031D342554004A2CB2 /* RenderFrameData.cpp */; };
+		8191270D1D344437004A2CB2 /* RenderShaderVariables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8191270B1D344437004A2CB2 /* RenderShaderVariables.cpp */; };
 		819A8C1A1D2D18870065171E /* RenderTargetGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819A8C161D2D18870065171E /* RenderTargetGroupManager.cpp */; };
 		819A8C1D1D2D3B4A0065171E /* RenderTargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819A8C1B1D2D3B4A0065171E /* RenderTargetGroup.cpp */; };
 		81A125DB1CF44E490010853A /* RenderCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125D91CF44E490010853A /* RenderCamera.cpp */; };
@@ -1159,6 +1160,8 @@
 		819127011D33E216004A2CB2 /* GLSkinnedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSkinnedAnimation.h; sourceTree = "<group>"; };
 		819127031D342554004A2CB2 /* RenderFrameData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderFrameData.cpp; sourceTree = "<group>"; };
 		819127041D342554004A2CB2 /* RenderFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderFrameData.h; sourceTree = "<group>"; };
+		8191270B1D344437004A2CB2 /* RenderShaderVariables.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderShaderVariables.cpp; sourceTree = "<group>"; };
+		8191270C1D344437004A2CB2 /* RenderShaderVariables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderShaderVariables.h; sourceTree = "<group>"; };
 		819A8C161D2D18870065171E /* RenderTargetGroupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTargetGroupManager.cpp; sourceTree = "<group>"; };
 		819A8C171D2D18870065171E /* RenderTargetGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTargetGroupManager.h; sourceTree = "<group>"; };
 		819A8C181D2D18870065171E /* Target.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Target.h; sourceTree = "<group>"; };
@@ -2396,6 +2399,8 @@
 				816D96B41CF73AA500D23969 /* RenderShaderManager.h */,
 				8158F3F31C89D2AD00B13109 /* Shader.cpp */,
 				8158F3F41C89D2AD00B13109 /* Shader.h */,
+				8191270B1D344437004A2CB2 /* RenderShaderVariables.cpp */,
+				8191270C1D344437004A2CB2 /* RenderShaderVariables.h */,
 			);
 			path = Shader;
 			sourceTree = "<group>";
@@ -3736,6 +3741,7 @@
 				8158F7F81C89D2AD00B13109 /* GLError.cpp in Sources */,
 				8158F6A31C89D2AD00B13109 /* PointerSystem.cpp in Sources */,
 				8158F6541C89D2AD00B13109 /* Device.cpp in Sources */,
+				8191270D1D344437004A2CB2 /* RenderShaderVariables.cpp in Sources */,
 				8123B6791CE098BF008F8182 /* InputFilter.cpp in Sources */,
 				8153A3041CF5A764002AC919 /* RenderFrame.cpp in Sources */,
 				8158F7D41C89D2AD00B13109 /* Main.cpp in Sources */,

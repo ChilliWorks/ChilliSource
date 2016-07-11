@@ -1,11 +1,7 @@
 //
-//  Shader.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,15 +22,16 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_SHADER_H_
-#define _CHILLISOURCE_RENDERING_SHADER_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Shader/CSShaderProvider.h>
-#include <ChilliSource/Rendering/Shader/RenderShader.h>
-#include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
 #include <ChilliSource/Rendering/Shader/RenderShaderVariables.h>
-#include <ChilliSource/Rendering/Shader/Shader.h>
 
-#endif
+namespace ChilliSource
+{
+    //------------------------------------------------------------------------------
+    RenderShaderVariables::RenderShaderVariables(const std::unordered_map<std::string, f32>& floatVars, const std::unordered_map<std::string, Vector2>& vec2Vars, const std::unordered_map<std::string, Vector3>& vec3Vars,
+                                                 const std::unordered_map<std::string, Vector4>& vec4Vars, const std::unordered_map<std::string, Matrix4>& mat4Vars,
+                                                 const std::unordered_map<std::string, Colour>& colourVars) noexcept
+        : m_floatVars(floatVars), m_vec2Vars(vec2Vars), m_vec3Vars(vec3Vars), m_vec4Vars(vec4Vars), m_mat4Vars(mat4Vars), m_colourVars(colourVars)
+    {
+    }
+        
+}
