@@ -139,7 +139,7 @@ namespace ChilliSource
         if(m_initialised)
         {
 #ifdef CS_TARGETPLATFORM_ANDROID
-            m_renderCommandProcessor->RestoreContext();
+            m_renderCommandProcessor->Restore();
 #endif
         }
         
@@ -150,7 +150,7 @@ namespace ChilliSource
     void Renderer::OnSystemSuspend() noexcept
     {
 #ifdef CS_TARGETPLATFORM_ANDROID
-        m_renderCommandProcessor->InvalidateContext();
+        m_renderCommandProcessor->Invalidate();
 #endif
     }
 }
