@@ -1098,9 +1098,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\ForwardRenderMaterialGroupManager.cpp">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
@@ -1288,6 +1285,21 @@
       <Filter>ChilliSource\Core\Memory</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderSkinnedAnimation.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplySkinnedAnimationRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLSkinnedAnimation.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameData.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2504,9 +2516,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\ForwardRenderMaterialGroupManager.h">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
@@ -2739,6 +2748,21 @@
       <Filter>ChilliSource\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderSkinnedAnimation.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplySkinnedAnimationRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLSkinnedAnimation.h">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameData.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>

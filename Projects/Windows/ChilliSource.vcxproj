@@ -140,6 +140,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameData.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPass.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObject.cpp" />
@@ -168,7 +169,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterial.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroupManager.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\IndexFormat.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderDynamicMesh.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderSkinnedAnimation.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkeletonDesc.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.cpp" />
@@ -226,6 +228,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMaterialRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyPointLightRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplySkinnedAnimationRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginWithTargetGroupRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\EndRenderCommand.cpp" />
@@ -340,6 +343,7 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLDynamicMesh.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMeshUtils.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLSkinnedAnimation.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Target\GLTargetGroup.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.cpp" />
@@ -578,6 +582,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameData.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderLayer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPass.h" />
@@ -614,7 +619,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroupManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\IndexFormat.h" />
@@ -626,6 +631,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderDynamicMesh.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderSkinnedAnimation.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkeletonDesc.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.h" />
@@ -684,6 +690,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMaterialRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyPointLightRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplySkinnedAnimationRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\BeginWithTargetGroupRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\EndRenderCommand.h" />
@@ -825,6 +832,7 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLDynamicMesh.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMesh.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLMeshUtils.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLSkinnedAnimation.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\GLShader.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Target\GLTargetGroup.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTexture.h" />
