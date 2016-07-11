@@ -169,6 +169,12 @@ namespace ChilliSource
         /// @return A new vertical stretch progress bar.
         //---------------------------------------------------------------------------
         WidgetUPtr CreateVerticalStretchProgressBar() const;
+        //---------------------------------------------------------------------------
+        /// @author Jordan Brown
+        ///
+        /// @return A new editable label.
+        //---------------------------------------------------------------------------
+        WidgetUPtr CreateEditableLabel() const;
         
     private:
         

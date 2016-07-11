@@ -32,5 +32,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
+#include <ChilliSource/Input/TextEntry/TextEntryCapitalisation.h>
+#include <ChilliSource/Input/TextEntry/TextEntryType.h>
 
 #endif

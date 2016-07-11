@@ -34,6 +34,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -61,31 +62,34 @@ namespace CSBackend
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
-        	m_dialogueBoxJI->ShowSystemDialogue(in_id, in_title, in_message, in_confirm);
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "System Dialogue requested outside of main thread.");
+            m_dialogueBoxJI->ShowSystemDialogue(in_id, in_title, in_message, in_confirm);
             m_activeSysConfirmDelegate = in_delegate;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const ChilliSource::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
-        	m_dialogueBoxJI->ShowSystemConfirmDialogue(in_id, in_title, in_message, in_confirm, in_cancel);
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "System Confirm Dialogue requested outside of main thread.");
+            m_dialogueBoxJI->ShowSystemConfirmDialogue(in_id, in_title, in_message, in_confirm, in_cancel);
             m_activeSysConfirmDelegate = in_delegate;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::MakeToast(const std::string& in_text)
         {
-        	m_dialogueBoxJI->MakeToast(in_text);
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to make toast outside of main thread.");
+            m_dialogueBoxJI->MakeToast(in_text);   
         }
         //------------------------------------------------------
         //------------------------------------------------------
         void DialogueBoxSystem::OnSystemConfirmDialogueResult(u32 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result)
         {
-            if(m_activeSysConfirmDelegate)
-        	{
-        		m_activeSysConfirmDelegate(in_id, in_result);
-        		m_activeSysConfirmDelegate = nullptr;
-        	}
+            if (m_activeSysConfirmDelegate)
+            {
+                m_activeSysConfirmDelegate(in_id, in_result);
+                m_activeSysConfirmDelegate = nullptr;
+            }
         }
         //-----------------------------------------------------
         //-----------------------------------------------------

@@ -140,6 +140,17 @@ namespace CSBackend
             
         private:
             friend ChilliSource::WebViewUPtr ChilliSource::WebView::Create();
+            //------------------------------------------------------------------------------
+            /// Describes the current state of the webview.
+            ///
+            /// @author Jordan Brown
+            //------------------------------------------------------------------------------
+            enum class State
+            {
+                k_inactive,
+                k_presented,
+                k_dismissing
+            };
             //---------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -211,8 +222,7 @@ namespace CSBackend
             
             f32 m_dismissButtonRelativeSize;
 			
-            bool m_isPresented;
-            
+            State m_currentState = State::k_inactive;
 		};
 	}
 }

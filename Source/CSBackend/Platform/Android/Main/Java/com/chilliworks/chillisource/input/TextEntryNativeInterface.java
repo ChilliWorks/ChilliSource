@@ -121,15 +121,15 @@ public final class TextEntryNativeInterface extends System implements TextWatche
 	 */
 	public void activate()
 	{
-		Runnable task = new Runnable() 
+		Runnable task = new Runnable()
 		{
-			@Override public void run() 
+			@Override public void run()
 			{
 				CSApplication.get().addView(m_textEntryView);
 				m_textEntryView.requestFocus();
 				m_textEntryView.setSelection(m_textEntryView.getText().length());
 				InputMethodManager imm = (InputMethodManager)CSApplication.get().getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.showSoftInput(m_textEntryView, InputMethodManager.SHOW_IMPLICIT);
+				imm.showSoftInput(m_textEntryView, InputMethodManager.SHOW_FORCED);
 			}
 		};
 		CSApplication.get().scheduleUIThreadTask(task);

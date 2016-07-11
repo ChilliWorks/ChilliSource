@@ -42,6 +42,9 @@ namespace CSBackend
 		//------------------------------------------------------------
 		/// Listens to and stores the acceleration read from the
 		/// hardware accelerometer.
+        ///
+        /// The methods in this class aren't thread-safe, and must
+        /// be accessed from the main thread.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------

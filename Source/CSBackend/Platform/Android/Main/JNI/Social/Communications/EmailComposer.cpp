@@ -36,6 +36,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/TaggedFilePathResolver.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -64,6 +65,7 @@ namespace CSBackend
 		void EmailComposer::Present(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents, ContentFormat in_contentFormat,
 				const SendResultDelegate& in_callback)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present Email Composer on background threads.");
 			Attachment emptyAttachment;
 			emptyAttachment.m_storageLocation = ChilliSource::StorageLocation::k_none;
 			PresentWithAttachment(in_recipientAddresses, in_subject, in_contents, in_contentFormat, emptyAttachment, in_callback);
@@ -73,6 +75,7 @@ namespace CSBackend
 		void EmailComposer::PresentWithAttachment(const std::vector<std::string>& in_recipientAddresses, const std::string& in_subject, const std::string& in_contents,
 				ContentFormat in_contentFormat, const Attachment& in_attachment, const SendResultDelegate & in_callback)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present Email Composer on background threads.");
 			CS_ASSERT(m_isPresented == false, "Cannot present email composer while one is already presented.");
 
 			m_isPresented = true;
@@ -102,19 +105,15 @@ namespace CSBackend
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void EmailComposer::Dismiss()
-		{
-			if (m_isPresented == true)
-			{
-				m_isPresented = false;
-
-				CS_LOG_FATAL("Cannot dismiss the email composer on Android.");
-			}
-		}
+        bool EmailComposer::IsPresented()
+        {
+            return m_isPresented;
+        }
         //-------------------------------------------------------
         //-------------------------------------------------------
 		void EmailComposer::OnEmailClosed(EmailComposerJavaInterface::Result in_result)
 		{
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Email closed callback not on main thread.");
 			if(m_javaInterface != nullptr)
 			{
 				EmailComposer::SendResult result = EmailComposer::SendResult::k_failed;
@@ -134,7 +133,7 @@ namespace CSBackend
 
 				SendResultDelegate delegate = m_resultDelegate;
 				m_resultDelegate = nullptr;
-				delegate(result);
+                delegate(result);
 			}
 		}
         //------------------------------------------------------

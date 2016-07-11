@@ -32,6 +32,9 @@
 #import <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #import <ChilliSource/Video/Base/VideoPlayer.h>
 
+#import <atomic>
+#import <mutex>
+
 @class MPMoviePlayerController;
 @class CVideoPlayerTapListener;
 @class CSubtitlesRenderer;
@@ -94,18 +97,42 @@ namespace CSBackend
             //-------------------------------------------------------
             /// @author S Downie
             ///
+            /// This isn't thread-safe, and should only be called
+            /// on the system thread. Used by SubtitlesRenderer.
+            ///
             /// @return The current time though the video.
 			//-------------------------------------------------------
 			f32 GetCurrentTime() const;
             //-------------------------------------------------------
             /// @author Ian Copland
             ///
+            /// This isn't thread-safe, and should only be called
+            /// on the system thread. Used by SubtitlesRenderer.
+            ///
             /// @return the actual dimensions of the playing video.
             //-------------------------------------------------------
             ChilliSource::Vector2 GetVideoDimensions() const;
+            //-------------------------------------------------------
+            /// Returns whether or not the player is currently
+            /// presented.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            bool IsPresented() const noexcept override;
         private:
-            
             friend ChilliSource::VideoPlayerUPtr ChilliSource::VideoPlayer::Create();
+            //-------------------------------------------------------
+            /// Represents the current state of the video player.
+            ///
+            /// @author Jordan Brown
+            //-------------------------------------------------------
+            enum class State
+            {
+                k_inactive,
+                k_loading,
+                k_ready,
+                k_playing
+            };
             //--------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
@@ -206,7 +233,7 @@ namespace CSBackend
         private:
             ChilliSource::Screen* m_screen;
             
-            bool m_playing;
+            std::atomic<State> m_currentState;
             MPMoviePlayerController* m_moviePlayerController;
             
             bool m_dismissWithTap;

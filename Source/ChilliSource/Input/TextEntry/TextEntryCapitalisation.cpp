@@ -1,11 +1,6 @@
-//
-//  Text.h
-//  Chilli Source
-//  Created by Ian Copland on 05/11/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +21,35 @@
 //  THE SOFTWARE.
 //
 
+#include <ChilliSource/Input/TextEntry/TextEntryCapitalisation.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
-#ifndef _CHILLISOURCE_UI_TEXT_H_
-#define _CHILLISOURCE_UI_TEXT_H_
+namespace ChilliSource
+{
+    //-------------------------------------------------------------------
+    TextEntryCapitalisation ParseCapitalisationFormat(const std::string& string) noexcept
+    {
+        std::string capitalisationFormatString = string;
+        StringUtils::ToLowerCase(capitalisationFormatString);
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Text/EditableTextUIComponent.h>
-#include <ChilliSource/UI/Text/TextUIComponent.h>
-#include <ChilliSource/UI/Text/TextIcon.h>
+        if (capitalisationFormatString == "none")
+        {
+            return TextEntryCapitalisation::k_none;
+        }
+        else if (capitalisationFormatString == "words")
+        {
+            return TextEntryCapitalisation::k_words;
+        }
+        else if (capitalisationFormatString == "sentences")
+        {
+            return TextEntryCapitalisation::k_sentences;
+        }
+        else if (capitalisationFormatString == "all")
+        {
+            return TextEntryCapitalisation::k_all;
+        }
 
-#endif
+        CS_LOG_FATAL("Invalid keyboard input type.");
+        return TextEntryCapitalisation::k_sentences;
+    }
+}

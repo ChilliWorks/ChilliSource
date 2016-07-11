@@ -36,6 +36,7 @@
 #include <ChilliSource/Core/Base/LifecycleManager.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
 #include <GL/glew.h>
@@ -44,6 +45,7 @@
 
 #include <fstream>
 #include <array>
+#include <mutex>
 
 #include <windows.h>
 
@@ -290,7 +292,12 @@ namespace CSBackend
 				{
 					auto windowSize = GetWindowSize();
 					m_window.create(sf::VideoMode(windowSize.x, windowSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
-					m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_fullscreen);
+                    
+                    std::unique_lock<std::mutex> lock(m_windowMutex);
+                    if (m_windowDisplayModeDelegate)
+                    {
+                        m_windowDisplayModeDelegate(DisplayMode::k_fullscreen);
+                    }
 					break;
 				}
 			}
@@ -301,7 +308,12 @@ namespace CSBackend
 		{
 			auto windowSize = GetWindowSize();
 			m_window.create(sf::VideoMode(windowSize.x, windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
-			m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_windowed);
+            
+            std::unique_lock<std::mutex> lock(m_windowMutex);
+            if (m_windowDisplayModeDelegate)
+            {
+                m_windowDisplayModeDelegate(DisplayMode::k_windowed);
+            }
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
@@ -321,54 +333,90 @@ namespace CSBackend
 
 			return result;
 		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::WindowResizeDelegate>& SFMLWindow::GetWindowResizedEvent()
-		{
-			return m_windowResizeEvent;
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::WindowDisplayModeDelegate>& SFMLWindow::GetWindowDisplayModeEvent()
-		{
-			return m_windowDisplayModeEvent;
-		}
-		//-------------------------------------------------
-		//------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::MouseButtonDelegate>& SFMLWindow::GetMouseButtonEvent()
-		{
-			return m_mouseButtonEvent;
-		}
-		//-------------------------------------------------
-		//------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::MouseMovedDelegate>& SFMLWindow::GetMouseMovedEvent()
-		{
-			return m_mouseMovedEvent;
-		}
-		//-------------------------------------------------
-		//------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::MouseWheelDelegate>& SFMLWindow::GetMouseWheelEvent()
-		{
-			return m_mouseWheelEvent;
-		}
-		//-------------------------------------------------
-		//------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::TextEnteredEvent>& SFMLWindow::GetTextEnteredEvent()
-		{
-			return m_textEnteredEvent;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::KeyPressedDelegate>& SFMLWindow::GetKeyPressedEvent()
-		{
-			return m_keyPressedEvent;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		ChilliSource::IConnectableEvent<SFMLWindow::KeyReleasedDelegate>& SFMLWindow::GetKeyReleasedEvent()
-		{
-			return m_keyReleasedEvent;
-		}
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetWindowDelegates(const WindowResizeDelegate& in_windowResizeDelegate, const WindowDisplayModeDelegate& in_windowDisplayModeDelegate) noexcept
+        {
+            CS_ASSERT(in_windowResizeDelegate, "Window resize delegate invalid.");
+            CS_ASSERT(in_windowDisplayModeDelegate, "Window display mode delegate invalid.");
+            CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate already set.");
+            CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate already set.");
+
+            std::unique_lock<std::mutex> lock(m_windowMutex);
+            m_windowResizeDelegate = in_windowResizeDelegate;
+            m_windowDisplayModeDelegate = in_windowDisplayModeDelegate;
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetMouseDelegates(const MouseButtonDelegate& in_mouseButtonDelegate, const MouseMovedDelegate& in_mouseMovedDelegate, const MouseWheelDelegate& in_mouseWheelDelegate) noexcept
+        {
+            CS_ASSERT(in_mouseButtonDelegate, "Mouse button event delegate invalid.");
+            CS_ASSERT(in_mouseMovedDelegate, "Mouse moved delegate invalid.");
+            CS_ASSERT(in_mouseWheelDelegate, "Mouse wheel scroll delegate invalid.");
+            CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate already set.");
+            CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate already set.");
+            CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate already set.");
+
+            std::unique_lock<std::mutex> lock(m_mouseMutex);
+            m_mouseButtonDelegate = in_mouseButtonDelegate;
+            m_mouseMovedDelegate = in_mouseMovedDelegate;
+            m_mouseWheelDelegate = in_mouseWheelDelegate;
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetTextEnteredDelegate(const TextEnteredDelegate& in_textEnteredDelegate) noexcept
+        {
+            CS_ASSERT(in_textEnteredDelegate, "Text entered delegate invalid.");
+            CS_ASSERT(!m_textEnteredDelegate, "Text entered delegate already set.");
+
+            std::unique_lock<std::mutex> lock(m_textEntryMutex);
+            m_textEnteredDelegate = in_textEnteredDelegate;
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::SetKeyDelegates(const KeyPressedDelegate& in_keyPressedDelegate, const KeyReleasedDelegate& in_keyReleasedDelegate) noexcept
+        {
+            CS_ASSERT(in_keyPressedDelegate, "Key pressed delegate invalid.");
+            CS_ASSERT(in_keyReleasedDelegate, "Key released delegate invalid.");
+            CS_ASSERT(!m_keyPressedDelegate, "Key pressed delegate already set.");
+            CS_ASSERT(!m_keyReleasedDelegate, "Key released delegate already set.");
+
+            std::unique_lock<std::mutex> lock(m_keyMutex);
+            m_keyPressedDelegate = in_keyPressedDelegate;
+            m_keyReleasedDelegate = in_keyReleasedDelegate;
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveWindowDelegates() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_windowMutex);
+            m_windowResizeDelegate = nullptr;
+            m_windowDisplayModeDelegate = nullptr;
+        }        
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveMouseDelegates() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_mouseMutex);
+            m_mouseButtonDelegate = nullptr;
+            m_mouseMovedDelegate = nullptr;
+            m_mouseWheelDelegate = nullptr;
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveTextEnteredDelegate() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_textEntryMutex);
+            m_textEnteredDelegate = nullptr;
+        }        
+        //------------------------------------------------
+        //------------------------------------------------
+        void SFMLWindow::RemoveKeyDelegates() noexcept
+        {
+            std::unique_lock<std::mutex> lock(m_keyMutex);
+            m_keyPressedDelegate = nullptr;
+            m_keyReleasedDelegate = nullptr;
+        }        
 		//------------------------------------------------
 		//------------------------------------------------
 		ChilliSource::Integer2 SFMLWindow::GetWindowSize() const
@@ -421,10 +469,6 @@ namespace CSBackend
 				exit(1);
 			}
 
-			sf::Clock clock;
-			auto appStartTime = clock.getElapsedTime().asSeconds();
-			auto appPreviousTime = appStartTime;
-
 			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication());
             m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
             m_lifecycleManager->Resume();
@@ -461,8 +505,14 @@ namespace CSBackend
 							app->Quit();
 							return;
 						case sf::Event::Resized:
-							m_windowResizeEvent.NotifyConnections(ChilliSource::Integer2(s32(event.size.width), s32(event.size.height)));
-							break;
+                        {
+                            std::unique_lock<std::mutex> lock(m_windowMutex);
+                            if (m_windowResizeDelegate)
+                            {
+                                m_windowResizeDelegate(ChilliSource::Integer2(s32(event.size.width), s32(event.size.height)));
+                            }
+                            break;
+                        }
 						case sf::Event::GainedFocus:
 							if (m_isFocused == false)
 							{
@@ -478,38 +528,73 @@ namespace CSBackend
 							}
 							break;
 						case sf::Event::MouseButtonPressed:
-							m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
-							break;
+                        {
+                            std::unique_lock<std::mutex> lock(m_mouseMutex);
+                            if (m_mouseButtonDelegate)
+                            {
+                                m_mouseButtonDelegate(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
+                            }
+                            break;
+                        }
 						case sf::Event::MouseButtonReleased:
-							m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
-							break;
+                        {
+                            std::unique_lock<std::mutex> lock(m_mouseMutex);
+                            if (m_mouseButtonDelegate)
+                            {
+                                m_mouseButtonDelegate(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
+                            }
+                            break;
+                        }
 						case sf::Event::MouseMoved:
-							m_mouseMovedEvent.NotifyConnections(event.mouseMove.x, event.mouseMove.y);
-							break;
+                        {
+                            std::unique_lock<std::mutex> lock(m_mouseMutex);
+                            if (m_mouseMovedDelegate)
+                            {
+                                m_mouseMovedDelegate(event.mouseMove.x, event.mouseMove.y);
+                            }
+                            break;
+                        }
 						case sf::Event::MouseWheelMoved:
-							m_mouseWheelEvent.NotifyConnections(event.mouseWheel.delta);
-							break;
+                        {
+                            std::unique_lock<std::mutex> lock(m_mouseMutex);
+                            if (m_mouseWheelDelegate)
+                            {
+                                m_mouseWheelDelegate(event.mouseWheel.delta);
+                            }
+                            break;
+                        }
 						case sf::Event::KeyPressed:
-							m_keyPressedEvent.NotifyConnections(event.key.code, event.key);
-							break;
+                        {
+                            std::unique_lock<std::mutex> lock(m_keyMutex);
+                            if (m_keyPressedDelegate)
+                            {
+                                m_keyPressedDelegate(event.key.code, event.key);
+                            }
+                            break;
+                        }
 						case sf::Event::KeyReleased:
-							m_keyReleasedEvent.NotifyConnections(event.key.code);
-							break;
+                        {
+                            std::unique_lock<std::mutex> lock(m_keyMutex);
+                            if (m_keyReleasedDelegate)
+                            {
+                                m_keyReleasedDelegate(event.key.code);
+                            }
+                            break;
+                        }
 						case sf::Event::TextEntered:
 						{
-							ChilliSource::UTF8Char utf8Char = event.text.unicode;
-							m_textEnteredEvent.NotifyConnections(utf8Char);
+                            std::unique_lock<std::mutex> lock(m_textEntryMutex);
+                            if (m_textEnteredDelegate)
+                            {
+                                ChilliSource::UTF8Char utf8Char = event.text.unicode;
+                                m_textEnteredDelegate(utf8Char);
+                            }
 							break;
 						}
 					}
 				}
 
-				auto appCurrentTime = clock.getElapsedTime().asSeconds();
-
-				auto deltaTime = (appCurrentTime - appPreviousTime);
-				auto runningTime = (appPreviousTime - appStartTime);
-				appPreviousTime = appCurrentTime;
-
+                m_lifecycleManager->SystemUpdate();
                 m_lifecycleManager->Render();
                 m_window.display();
 			}
@@ -529,7 +614,21 @@ namespace CSBackend
 
 			m_isRunning = false;
 		}
+        //------------------------------------------------
+        //------------------------------------------------
+        SFMLWindow::~SFMLWindow() noexcept
+        {
+            CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate not removed.");
+            CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate not removed.");
+            CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
+            CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
+            CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate not removed.");
+            CS_ASSERT(!m_textEnteredDelegate, "Text entry delegate not removed.");
+            CS_ASSERT(!m_keyPressedDelegate, "Key press delegate not removed.");
+            CS_ASSERT(!m_keyReleasedDelegate, "Key release delegate not removed.");
+        }
 	}
 }
 
 #endif
+

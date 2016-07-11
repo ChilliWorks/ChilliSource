@@ -40,6 +40,7 @@ import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 //=============================================================
@@ -55,19 +56,19 @@ public class SubtitlesView extends ViewGroup
 	///
 	/// All information required to display a single subtitle.
 	//----------------------------------------------------------
-	class SubtitleInfo
+	class BoundsInfo
 	{
-		float fLeft;
-		float fTop;
-		float fRight;
-		float fBottom;
+		float fCentreX;
+		float fCentreY;
+		float fWidth;
+		float fHeight;
 	}
 	//----------------------------------------------------------
 	/// Member data
 	//----------------------------------------------------------
 	private VideoPlayer mVideoPlayer = null;
 	private HashMap<Long, TextView> mTextViewMap = new HashMap<Long, TextView>();
-	private HashMap<Long, SubtitleInfo> mSubtitleMap = new HashMap<Long, SubtitleInfo>();
+	private HashMap<Long, BoundsInfo> mSubtitleMap = new HashMap<Long, BoundsInfo>();
 	private long mlwNextID = 0;
 	//----------------------------------------------------------
 	/// Constructor
@@ -98,16 +99,16 @@ public class SubtitlesView extends ViewGroup
 	/// @param The height.
 	/// @output the ID of the new subtitle.
 	//--------------------------------------------------------------
-	public long CreateSubtitle(String instrText, String instrFontName, int indwFontSize, String instrAlignment, float infX, float infY, float infWidth, float infHeight) 
+	public long CreateSubtitle(String instrText, String instrFontName, int indwFontSize, String instrAlignment, float infCentreX, float infCentreY, float infWidth, float infHeight)
 	{
 		long lwID = mlwNextID++;
 		
 		//create new subtitle info
-		SubtitleInfo info = new SubtitleInfo();
-		info.fLeft = infX;
-		info.fTop = infY;
-		info.fRight = info.fLeft + infWidth;
-		info.fBottom = info.fTop + infHeight;
+		BoundsInfo info = new BoundsInfo();
+		info.fCentreX = infCentreX;
+		info.fCentreY = infCentreY;
+		info.fWidth = infWidth;
+		info.fHeight = infHeight;
 		mSubtitleMap.put(lwID, info);
 		
 		//create a new text view
@@ -179,13 +180,21 @@ public class SubtitlesView extends ViewGroup
 		int dwHeight = indwBottom - indwTop;
 		for (Map.Entry<Long, TextView> textView : mTextViewMap.entrySet())
 		{
-			SubtitleInfo subtitleInfo = mSubtitleMap.get(textView.getKey());
-			int dwTop = (int)(dwHeight * subtitleInfo.fTop);
-			int dwLeft = (int)(dwWidth * subtitleInfo.fLeft);
-			int dwRight = (int)(dwWidth * subtitleInfo.fRight);
-			int dwBottom = (int)(dwHeight * subtitleInfo.fBottom);
-			textView.getValue().measure(MeasureSpec.makeMeasureSpec(dwRight - dwLeft, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(dwBottom - dwTop, MeasureSpec.EXACTLY));
-			textView.getValue().layout(dwLeft, dwTop, dwRight, dwBottom);
+			BoundsInfo boundsInfo = mSubtitleMap.get(textView.getKey());
+
+            // Converting from origin at bottom-left to top-left
+            float fRelativeLeft = boundsInfo.fCentreX - boundsInfo.fWidth * 0.5f;
+            float fRelativeTop = 1.0f - boundsInfo.fCentreY - boundsInfo.fHeight * 0.5f;
+            float fRelativeRight = boundsInfo.fCentreX + boundsInfo.fWidth * 0.5f;
+            float fRelativeBottom = 1.0f - boundsInfo.fCentreY + boundsInfo.fHeight * 0.5f;
+
+            int dwAbsoluteLeft = (int)(dwWidth * fRelativeLeft);
+			int dwAbsoluteTop = (int)(dwHeight * fRelativeTop);
+            int dwAbsoluteRight = (int)(dwWidth * fRelativeRight);
+            int dwAbsoluteBottom = (int)(dwHeight * fRelativeBottom);
+
+			textView.getValue().measure(MeasureSpec.makeMeasureSpec(dwAbsoluteRight - dwAbsoluteLeft, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(dwAbsoluteBottom - dwAbsoluteTop, MeasureSpec.EXACTLY));
+			textView.getValue().layout(dwAbsoluteLeft, dwAbsoluteTop, dwAbsoluteRight, dwAbsoluteBottom);
 		}
 	}
 	//--------------------------------------------------------------
@@ -236,5 +245,8 @@ public class SubtitlesView extends ViewGroup
 			dwGravity = Gravity.BOTTOM | Gravity.RIGHT;
 		}
 		inTextView.setGravity(dwGravity);
+        LinearLayout.LayoutParams newParameters = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        newParameters.gravity = dwGravity;
+        inTextView.setLayoutParams(newParameters);
 	}
 }

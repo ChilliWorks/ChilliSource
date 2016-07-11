@@ -37,6 +37,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -114,6 +115,7 @@ namespace CSBackend
 		void WebView::Present(const std::string& in_url, const ChilliSource::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present Web View on background threads.");
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
@@ -128,6 +130,7 @@ namespace CSBackend
 		void WebView::PresentFromFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present Web View on background threads.");
 
 			auto fileSystem = static_cast<CSBackend::Android::FileSystem*>(ChilliSource::Application::Get()->GetFileSystem());
 
@@ -209,6 +212,7 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
         void WebView::OnWebViewDismissed()
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Web View dismissal callback not on main thread.");
         	m_isPresented = false;
 
         	if (m_delegate != nullptr)
