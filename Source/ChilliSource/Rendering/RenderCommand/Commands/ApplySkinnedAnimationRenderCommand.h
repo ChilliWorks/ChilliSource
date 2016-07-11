@@ -31,7 +31,6 @@
 namespace ChilliSource
 {
     /// A render command for applying the given skinned animation to the current context state.
-    /// If null is supplied this will disable skinned animation.
     ///
     /// This must be instantiated via a RenderCommandList.
     ///
@@ -40,8 +39,7 @@ namespace ChilliSource
     class ApplySkinnedAnimationRenderCommand final : public RenderCommand
     {
     public:
-        /// @return The render skinned animation to apply. May be null if there is no skinned
-        ///     animation.
+        /// @return The render skinned animation to apply.
         ///
         const RenderSkinnedAnimation* GetRenderSkinnedAnimation() const noexcept { return m_renderSkinnedAnimation; };
         
@@ -51,7 +49,7 @@ namespace ChilliSource
         /// Creates a new instance with the given render skinned animation.
         ///
         /// @param renderSkinnedAnimation
-        ///     The render skinned animation to apply. May be null if there is no skinned animation.
+        ///     The render skinned animation to apply.
         ///
         ApplySkinnedAnimationRenderCommand(const RenderSkinnedAnimation* renderSkinnedAnimation) noexcept;
         

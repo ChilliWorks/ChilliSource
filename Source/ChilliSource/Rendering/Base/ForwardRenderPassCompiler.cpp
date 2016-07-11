@@ -85,8 +85,10 @@ namespace ChilliSource
             switch (renderObject.GetType())
             {
                 case RenderObject::Type::k_static:
+                case RenderObject::Type::k_staticAnimated:
                     return renderObject.GetRenderMesh()->GetVertexFormat();
                 case RenderObject::Type::k_dynamic:
+                case RenderObject::Type::k_dynamicAnimated:
                     return renderObject.GetRenderDynamicMesh()->GetVertexFormat();
                 default:
                     CS_LOG_FATAL("Invalid RenderObject type.");

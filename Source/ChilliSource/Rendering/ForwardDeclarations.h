@@ -175,6 +175,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyPointLightRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplySkinnedAnimationRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginWithTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(EndRenderCommand);

@@ -228,13 +228,13 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLShader::SetUniform(const std::string& name, const std::vector<ChilliSource::Vector4>& value, FailurePolicy failurePolicy) noexcept
+        void GLShader::SetUniform(const std::string& name, const ChilliSource::Vector4* values, u32 numValues, FailurePolicy failurePolicy) noexcept
         {
             GLint uniformHandle = GetUniformHandle(name, failurePolicy);
             
             if(uniformHandle >= 0)
             {
-                glUniform4fv(uniformHandle, u32(value.size()), reinterpret_cast<const GLfloat*>(&value[0]));
+                glUniform4fv(uniformHandle, numValues, reinterpret_cast<const GLfloat*>(values));
                 CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
             }
         }

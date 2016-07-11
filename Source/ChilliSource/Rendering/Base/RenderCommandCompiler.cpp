@@ -38,7 +38,6 @@ namespace ChilliSource
         ///
         struct RenderCommandListStateCache final
         {
-            bool m_firstObject = true;
             const RenderMaterial* m_material = nullptr;
             const RenderMesh* m_mesh = nullptr;
             const RenderDynamicMesh* m_dynamicMesh = nullptr;
@@ -205,6 +204,7 @@ namespace ChilliSource
                 cache.m_material = renderPassObject.GetRenderMaterial();
                 cache.m_mesh = nullptr;
                 cache.m_dynamicMesh = nullptr;
+                cache.m_skinnedAnimation = nullptr;
                 
                 renderCommandList->AddApplyMaterialCommand(cache.m_material);
             }
@@ -233,6 +233,7 @@ namespace ChilliSource
                     {
                         cache.m_mesh = renderPassObject.GetRenderMesh();
                         cache.m_dynamicMesh = nullptr;
+                        cache.m_skinnedAnimation = nullptr;
                         
                         renderCommandList->AddApplyMeshCommand(cache.m_mesh);
                     }
@@ -245,6 +246,7 @@ namespace ChilliSource
                     {
                         cache.m_mesh = nullptr;
                         cache.m_dynamicMesh = renderPassObject.GetRenderDynamicMesh();
+                        cache.m_skinnedAnimation = nullptr;
                         
                         renderCommandList->AddApplyDynamicMeshCommand(cache.m_dynamicMesh);
                     }
@@ -256,11 +258,10 @@ namespace ChilliSource
             }
         }
         
-        /// Adds either a new apply skinned animation command if the object has animation,
-        /// otherwise it will add a command to disable skinned animation.
+        /// Adds either a new apply skinned animation command if the object has animation.
         ///
-        /// The the cache already contains the skinned animation, or skinned animation is
-        /// already disabled, then no command will be generated.
+        /// The the cache already contains the skinned animation, then no command will be
+        /// generated.
         ///
         /// @param renderPassObject
         ///     The render pass object to create the command for.
@@ -271,7 +272,8 @@ namespace ChilliSource
         ///
         void AddApplySkinnedAnimationCommand(const RenderPassObject& renderPassObject, RenderCommandList* renderCommandList, RenderCommandListStateCache& cache) noexcept
         {
-            if (cache.m_firstObject || cache.m_skinnedAnimation != renderPassObject.GetRenderSkinnedAnimation())
+            if ((renderPassObject.GetType() == RenderPassObject::Type::k_staticAnimated || renderPassObject.GetType() == RenderPassObject::Type::k_dynamicAnimated)
+                && cache.m_skinnedAnimation != renderPassObject.GetRenderSkinnedAnimation())
             {
                 cache.m_skinnedAnimation = renderPassObject.GetRenderSkinnedAnimation();
                 
@@ -303,8 +305,6 @@ namespace ChilliSource
                 AddApplySkinnedAnimationCommand(renderPassObject, renderCommandList, cache);
                 
                 renderCommandList->AddRenderInstanceCommand(renderPassObject.GetWorldMatrix());
-                
-                cache.m_firstObject = false;
             }
         }
     }

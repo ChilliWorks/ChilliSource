@@ -30,6 +30,7 @@
 #include <CSBackend/Rendering/OpenGL/Lighting/GLPointLight.h>
 #include <CSBackend/Rendering/OpenGL/Material/GLMaterial.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
+#include <CSBackend/Rendering/OpenGL/Model/GLSkinnedAnimation.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 #include <CSBackend/Rendering/OpenGL/Target/GLTargetGroup.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
@@ -46,6 +47,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplySkinnedAnimationRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginWithTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/EndRenderCommand.h>
@@ -370,6 +372,7 @@ namespace CSBackend
                 {
                     m_currentMesh = nullptr;
                     m_currentDynamicMesh = nullptr;
+                    m_currentSkinnedAnimation = nullptr;
                     m_currentShader = renderShader;
                     
                     glShader->Bind();
@@ -400,6 +403,7 @@ namespace CSBackend
             {
                 m_currentMesh = renderMesh;
                 m_currentDynamicMesh = nullptr;
+                m_currentSkinnedAnimation = nullptr;
                 
                 auto glMesh = reinterpret_cast<GLMesh*>(m_currentMesh->GetExtraData());
                 auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
@@ -418,6 +422,7 @@ namespace CSBackend
             {
                 m_currentMesh = nullptr;
                 m_currentDynamicMesh = renderDynamicMesh;
+                m_currentSkinnedAnimation = nullptr;
                 
                 auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
                 const auto& vertexFormat = m_currentDynamicMesh->GetVertexFormat();
@@ -427,6 +432,23 @@ namespace CSBackend
                 auto indexDataSize = m_currentDynamicMesh->GetIndexDataSize();
                 
                 m_glDynamicMesh->Bind(glShader, vertexFormat, vertexData, vertexDataSize, indexData, indexDataSize);
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplySkinnedAnimation(const ChilliSource::ApplySkinnedAnimationRenderCommand* renderCommand) noexcept
+        {
+            CS_ASSERT(m_currentMaterial, "A material must be applied before applying skinned animation.");
+            CS_ASSERT(m_currentShader, "A shader must be applied before applying skinned animation.");
+            CS_ASSERT(m_currentMesh || m_currentDynamicMesh, "A mesh must be applied before applying skinned animation.");
+            
+            if (m_currentSkinnedAnimation != renderCommand->GetRenderSkinnedAnimation())
+            {
+                m_currentSkinnedAnimation = renderCommand->GetRenderSkinnedAnimation();
+                
+                auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
+                
+                GLSkinnedAnimation::Apply(m_currentSkinnedAnimation, glShader);
             }
         }
         
@@ -535,6 +557,7 @@ namespace CSBackend
             m_currentDynamicMesh = nullptr;
             m_currentShader = nullptr;
             m_currentMaterial = nullptr;
+            m_currentSkinnedAnimation = nullptr;
         }
     }
 }

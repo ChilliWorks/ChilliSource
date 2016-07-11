@@ -60,6 +60,8 @@ namespace ChilliSource
         {
             mMaterials[i] = in_material;
         }
+        
+        Reset();
     }
     //----------------------------------------------------------
     /// Is A
@@ -568,7 +570,6 @@ namespace ChilliSource
     //----------------------------------------------------------
     void AnimatedModelComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
     {
-        CS_ASSERT(mActiveAnimationGroup, "An animated model must always have an active animation group.");
         CS_ASSERT(mpModel->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
         CS_ASSERT(mpModel->GetNumMeshes() == mMaterials.size(), "Invalid number of materials.");
         
@@ -576,6 +577,8 @@ namespace ChilliSource
         {
             UpdateAnimation(0.0f);
         }
+        
+        CS_ASSERT(mActiveAnimationGroup, "An animated model must always have an active animation group.");
         
         for (u32 index = 0; index < mpModel->GetNumMeshes(); ++index)
         {

@@ -163,6 +163,14 @@ namespace CSBackend
             ///
             void ApplyDynamicMesh(const ChilliSource::ApplyDynamicMeshRenderCommand* renderCommand) noexcept;
             
+            /// Applies the given skinned animation to the OpenGL Context. If the skinned animation is null
+            /// then skinned animation will be disabled.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplySkinnedAnimation(const ChilliSource::ApplySkinnedAnimationRenderCommand* renderCommand) noexcept;
+            
             /// Renders an instance of the mesh described by the current OpenGL context state. A camera,
             /// material and mesh must all currently be appled to the context.
             ///
@@ -219,6 +227,7 @@ namespace CSBackend
             const ChilliSource::RenderMaterial* m_currentMaterial = nullptr;
             const ChilliSource::RenderMesh* m_currentMesh = nullptr;
             const ChilliSource::RenderDynamicMesh* m_currentDynamicMesh = nullptr;
+            const ChilliSource::RenderSkinnedAnimation* m_currentSkinnedAnimation = nullptr;
         };
     }
 }

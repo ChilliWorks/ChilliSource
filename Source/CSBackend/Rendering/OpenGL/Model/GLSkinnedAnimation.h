@@ -22,15 +22,32 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/ApplySkinnedAnimationRenderCommand.h>
+#ifndef _CSBACKEND_RENDERING_OPENGL_MODEL_GLSKINNEDANIMATION_H_
+#define _CSBACKEND_RENDERING_OPENGL_MODEL_GLSKINNEDANIMATION_H_
 
-namespace ChilliSource
+#include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
+
+#include <ChilliSource/ChilliSource.h>
+
+namespace CSBackend
 {
-    //------------------------------------------------------------------------------
-    ApplySkinnedAnimationRenderCommand::ApplySkinnedAnimationRenderCommand(const RenderSkinnedAnimation* renderSkinnedAnimation) noexcept
-        : RenderCommand(Type::k_applySkinnedAnimation), m_renderSkinnedAnimation(renderSkinnedAnimation)
+    namespace OpenGL
     {
-        CS_ASSERT(m_renderSkinnedAnimation, "RenderSkinnedAnimation must not be null.");
+        /// A container for all functionality pertaining to skinned animation in OpenGL.
+        ///
+        namespace GLSkinnedAnimation
+        {
+            /// Applys the animation data described by the given RenderSkinnedAnimation to the OpenGL context.
+            ///
+            /// @param renderSkinnedAnimation
+            ///     The render skinned animation to apply.
+            /// @param glShader
+            ///     The currently active shader to apply uniforms to.
+            ///
+            void Apply(const ChilliSource::RenderSkinnedAnimation* renderSkinnedAnimation, GLShader* glShader) noexcept;
+        };
     }
 }
+
+#endif

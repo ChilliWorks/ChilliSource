@@ -311,6 +311,7 @@
 		818C150E1D22FB70001D639B /* GLMeshUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818C150C1D22FB70001D639B /* GLMeshUtils.cpp */; };
 		819059451D301C1D00885DC1 /* RenderSkinnedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819059431D301C1D00885DC1 /* RenderSkinnedAnimation.cpp */; };
 		819126FF1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819126FD1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.cpp */; };
+		819127021D33E216004A2CB2 /* GLSkinnedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819127001D33E216004A2CB2 /* GLSkinnedAnimation.cpp */; };
 		819A8C1A1D2D18870065171E /* RenderTargetGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819A8C161D2D18870065171E /* RenderTargetGroupManager.cpp */; };
 		819A8C1D1D2D3B4A0065171E /* RenderTargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819A8C1B1D2D3B4A0065171E /* RenderTargetGroup.cpp */; };
 		81A125DB1CF44E490010853A /* RenderCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125D91CF44E490010853A /* RenderCamera.cpp */; };
@@ -1153,6 +1154,8 @@
 		819059441D301C1D00885DC1 /* RenderSkinnedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderSkinnedAnimation.h; sourceTree = "<group>"; };
 		819126FD1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplySkinnedAnimationRenderCommand.cpp; sourceTree = "<group>"; };
 		819126FE1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplySkinnedAnimationRenderCommand.h; sourceTree = "<group>"; };
+		819127001D33E216004A2CB2 /* GLSkinnedAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSkinnedAnimation.cpp; sourceTree = "<group>"; };
+		819127011D33E216004A2CB2 /* GLSkinnedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSkinnedAnimation.h; sourceTree = "<group>"; };
 		819A8C161D2D18870065171E /* RenderTargetGroupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTargetGroupManager.cpp; sourceTree = "<group>"; };
 		819A8C171D2D18870065171E /* RenderTargetGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTargetGroupManager.h; sourceTree = "<group>"; };
 		819A8C181D2D18870065171E /* Target.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Target.h; sourceTree = "<group>"; };
@@ -1377,6 +1380,8 @@
 				818C150A1D22F8F4001D639B /* GLDynamicMesh.h */,
 				818C150C1D22FB70001D639B /* GLMeshUtils.cpp */,
 				818C150D1D22FB70001D639B /* GLMeshUtils.h */,
+				819127001D33E216004A2CB2 /* GLSkinnedAnimation.cpp */,
+				819127011D33E216004A2CB2 /* GLSkinnedAnimation.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3544,6 +3549,7 @@
 				8158F6731C89D2AD00B13109 /* PNGImageProvider.cpp in Sources */,
 				8158F70F1C89D2AD00B13109 /* WidgetParserUtils.cpp in Sources */,
 				8158F7E01C89D2AD00B13109 /* SubtitlesRenderer.mm in Sources */,
+				819127021D33E216004A2CB2 /* GLSkinnedAnimation.cpp in Sources */,
 				8158F67C1C89D2AD00B13109 /* Random.cpp in Sources */,
 				8158F7191C89D2AD00B13109 /* NinePatchUIDrawableDef.cpp in Sources */,
 				8158F6C31C89D2AD00B13109 /* Material.cpp in Sources */,
