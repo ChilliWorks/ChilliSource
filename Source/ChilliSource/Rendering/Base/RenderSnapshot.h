@@ -169,6 +169,12 @@ namespace ChilliSource
         ///
         std::vector<RenderDynamicMeshAUPtr> ClaimRenderDynamicMeshes() noexcept;
         
+        /// Moves the list of render skinned animations to a new external owner.
+        ///
+        /// @return The moved list of skinned animations.
+        ///
+        std::vector<RenderSkinnedAnimationAUPtr> ClaimRenderSkinnedAnimations() noexcept;
+        
         /// Moves the pre render command list to a new external owner.
         ///
         /// @return The moved pre render command list.

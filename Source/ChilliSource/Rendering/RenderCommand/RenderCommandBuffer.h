@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
+#include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
 
 #include <vector>
 
@@ -59,8 +60,10 @@ namespace ChilliSource
         ///     The number of slots in the queue.
         /// @param renderDynamicMeshes
         ///     Any render dynamic meshes that are used by the commands for this frame.
+        /// @param renderSkinnedAnimations
+        ///     Any render render skinned animations that are used by the commands for this frame.
         ///
-        RenderCommandBuffer(IAllocator* frameAllocator, u32 numSlots, std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes) noexcept;
+        RenderCommandBuffer(IAllocator* frameAllocator, u32 numSlots, std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, std::vector<RenderSkinnedAnimationAUPtr> renderSkinnedAnimations) noexcept;
         
         /// @return The allocator from which all frame allocations should occur.
         ///
@@ -84,6 +87,7 @@ namespace ChilliSource
     private:
         IAllocator* m_frameAllocator;
         std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes;
+        std::vector<RenderSkinnedAnimationAUPtr> m_renderSkinnedAnimations;
         std::vector<const RenderCommandList*> m_queue;
         std::vector<RenderCommandListUPtr> m_renderCommandLists; //TODO: This should be changed to a pool.
     };

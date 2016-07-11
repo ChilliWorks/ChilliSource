@@ -124,6 +124,13 @@ namespace ChilliSource
         ShaderCSPtr m_staticBlinnDirectional;
         ShaderCSPtr m_staticBlinnDirectionalShadows;
         ShaderCSPtr m_staticBlinnPoint;
+        
+        ShaderCSPtr m_animatedShadowMap;
+        ShaderCSPtr m_animatedUnlit;
+        ShaderCSPtr m_animatedBlinnBase;
+        ShaderCSPtr m_animatedBlinnDirectional;
+        ShaderCSPtr m_animatedBlinnDirectionalShadows;
+        ShaderCSPtr m_animatedBlinnPoint;
     };
 }
 

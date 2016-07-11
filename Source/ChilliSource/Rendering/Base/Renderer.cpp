@@ -86,12 +86,13 @@ namespace ChilliSource
             auto renderPointLights = m_currentSnapshot.ClaimPointRenderLights();
             auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
             auto renderDynamicMeshes = m_currentSnapshot.ClaimRenderDynamicMeshes();
+            auto renderSkinnedAnimations = m_currentSnapshot.ClaimRenderSkinnedAnimations();
             auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();
             auto postRenderCommandList = m_currentSnapshot.ClaimPostRenderCommandList();
             
             auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, clearColour, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, frameAllocator, targetRenderPassGroups, std::move(renderDynamicMeshes),
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, frameAllocator, targetRenderPassGroups, std::move(renderDynamicMeshes), std::move(renderSkinnedAnimations),
                                                                                     std::move(preRenderCommandList), std::move(postRenderCommandList));
             
             WaitThenPushCommandBuffer(std::move(renderCommandBuffer));

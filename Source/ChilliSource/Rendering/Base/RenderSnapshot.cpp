@@ -143,6 +143,15 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    std::vector<RenderSkinnedAnimationAUPtr> RenderSnapshot::ClaimRenderSkinnedAnimations() noexcept
+    {
+        CS_ASSERT(!m_renderSkinnedAnimationsClaimed, "Render skinned animations have already been claimed.");
+        
+        m_renderSkinnedAnimationsClaimed = true;
+        return std::move(m_renderSkinnedAnimations);
+    }
+    
+    //------------------------------------------------------------------------------
     RenderCommandListUPtr RenderSnapshot::ClaimPreRenderCommandList() noexcept
     {
         CS_ASSERT(m_preRenderCommandList, "Pre-RenderCommandList has already been claimed.");

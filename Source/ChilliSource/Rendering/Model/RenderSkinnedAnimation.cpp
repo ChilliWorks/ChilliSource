@@ -30,5 +30,6 @@ namespace ChilliSource
     RenderSkinnedAnimation::RenderSkinnedAnimation(UniquePtr<Vector4[]> jointData, u32 jointDataSize) noexcept
         : m_jointData(std::move(jointData)), m_jointDataSize(jointDataSize)
     {
+        CS_ASSERT(m_jointData, "Joint data cannot be null.");
     }
 }

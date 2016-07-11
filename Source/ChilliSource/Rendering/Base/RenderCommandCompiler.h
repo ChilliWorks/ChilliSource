@@ -51,6 +51,8 @@ namespace ChilliSource
         ///     The list of TargetRenderPassGroups containing all of the render passes.
         /// @param renderDynamicMeshes
         ///     Any render dynamic meshes for this frame that the render commands require.
+        /// @param renderSkinnedAnimations
+        ///     Any render skinned animations for this frame that the render commands require.
         /// @param preRenderCommandList
         ///     The RenderCommandList that should be included first. Must be moved.
         /// @param postRenderCommandList
@@ -59,7 +61,8 @@ namespace ChilliSource
         /// @return The render command buffer.
         ///
         RenderCommandBufferCUPtr CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
-                                                       std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept;
+                                                       std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, std::vector<RenderSkinnedAnimationAUPtr> renderSkinnedAnimations,
+                                                       RenderCommandListUPtr preRenderCommandList, RenderCommandListUPtr postRenderCommandList) noexcept;
     }
 }
 

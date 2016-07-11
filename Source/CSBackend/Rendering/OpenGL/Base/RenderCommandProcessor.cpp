@@ -178,6 +178,9 @@ namespace CSBackend
                         case ChilliSource::RenderCommand::Type::k_applyDynamicMesh:
                             ApplyDynamicMesh(static_cast<const ChilliSource::ApplyDynamicMeshRenderCommand*>(renderCommand));
                             break;
+                        case ChilliSource::RenderCommand::Type::k_applySkinnedAnimation:
+                            ApplySkinnedAnimation(static_cast<const ChilliSource::ApplySkinnedAnimationRenderCommand*>(renderCommand));
+                            break;
                         case ChilliSource::RenderCommand::Type::k_renderInstance:
                             RenderInstance(static_cast<const ChilliSource::RenderInstanceRenderCommand*>(renderCommand));
                             break;
