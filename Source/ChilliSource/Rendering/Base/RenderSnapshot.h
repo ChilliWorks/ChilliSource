@@ -29,13 +29,12 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Memory/PagedLinearAllocator.h>
+#include <ChilliSource/Rendering/Base/RenderFrameData.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Camera/RenderCamera.h>
 #include <ChilliSource/Rendering/Lighting/AmbientRenderLight.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
 #include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
-#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
-#include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
 #include <vector>
@@ -75,7 +74,7 @@ namespace ChilliSource
         
         /// @return The allocator which should be used for all frame allocations.
         ///
-        IAllocator* GetFrameAllocator() const noexcept { return m_frameAllocator; }
+        IAllocator* GetFrameAllocator() const noexcept { return m_renderFrameData.GetFrameAllocator(); }
         
         /// @return The viewport resolution.
         ///
@@ -163,18 +162,6 @@ namespace ChilliSource
         ///
         std::vector<RenderObject> ClaimRenderObjects() noexcept;
         
-        /// Moves the list of render dynamic meshes to a new external owner.
-        ///
-        /// @return The moved list of dynamic meshes.
-        ///
-        std::vector<RenderDynamicMeshAUPtr> ClaimRenderDynamicMeshes() noexcept;
-        
-        /// Moves the list of render skinned animations to a new external owner.
-        ///
-        /// @return The moved list of skinned animations.
-        ///
-        std::vector<RenderSkinnedAnimationAUPtr> ClaimRenderSkinnedAnimations() noexcept;
-        
         /// Moves the pre render command list to a new external owner.
         ///
         /// @return The moved pre render command list.
@@ -187,8 +174,13 @@ namespace ChilliSource
         ///
         RenderCommandListUPtr ClaimPostRenderCommandList() noexcept;
         
+        /// Moves the render frame data to a new external owner.
+        ///
+        /// @return The moved container for data which needs to persist to the end of the frame.
+        ///
+        RenderFrameData ClaimRenderFrameData() noexcept;
+        
     private:
-        IAllocator* m_frameAllocator;
         Integer2 m_resolution;
         Colour m_clearColour;
         RenderCamera m_renderCamera;
@@ -196,18 +188,16 @@ namespace ChilliSource
         std::vector<DirectionalRenderLight> m_renderDirectionalLights;
         std::vector<PointRenderLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
-        std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes; //TODO: Render dynamic meshes and render skinned animations should be bundled into a single "Frame Data" object which is passed down the pipeline.
-        std::vector<RenderSkinnedAnimationAUPtr> m_renderSkinnedAnimations;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
+        RenderFrameData m_renderFrameData;
         
         bool m_renderCameraClaimed = false;
         bool m_renderAmbientLightsClaimed = false;
         bool m_renderDirectionalLightsClaimed = false;
         bool m_renderPointLightsClaimed = false;
         bool m_renderObjectsClaimed = false;
-        bool m_renderDynamicMeshesClaimed = false;
-        bool m_renderSkinnedAnimationsClaimed = false;
+        bool m_renderFrameDataClaimed = false;
     };
 };
 

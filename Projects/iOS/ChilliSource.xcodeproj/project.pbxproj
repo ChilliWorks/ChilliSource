@@ -312,6 +312,7 @@
 		819059451D301C1D00885DC1 /* RenderSkinnedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819059431D301C1D00885DC1 /* RenderSkinnedAnimation.cpp */; };
 		819126FF1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819126FD1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.cpp */; };
 		819127021D33E216004A2CB2 /* GLSkinnedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819127001D33E216004A2CB2 /* GLSkinnedAnimation.cpp */; };
+		819127051D342554004A2CB2 /* RenderFrameData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819127031D342554004A2CB2 /* RenderFrameData.cpp */; };
 		819A8C1A1D2D18870065171E /* RenderTargetGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819A8C161D2D18870065171E /* RenderTargetGroupManager.cpp */; };
 		819A8C1D1D2D3B4A0065171E /* RenderTargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819A8C1B1D2D3B4A0065171E /* RenderTargetGroup.cpp */; };
 		81A125DB1CF44E490010853A /* RenderCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A125D91CF44E490010853A /* RenderCamera.cpp */; };
@@ -1156,6 +1157,8 @@
 		819126FE1D33AD88004A2CB2 /* ApplySkinnedAnimationRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplySkinnedAnimationRenderCommand.h; sourceTree = "<group>"; };
 		819127001D33E216004A2CB2 /* GLSkinnedAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSkinnedAnimation.cpp; sourceTree = "<group>"; };
 		819127011D33E216004A2CB2 /* GLSkinnedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSkinnedAnimation.h; sourceTree = "<group>"; };
+		819127031D342554004A2CB2 /* RenderFrameData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderFrameData.cpp; sourceTree = "<group>"; };
+		819127041D342554004A2CB2 /* RenderFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderFrameData.h; sourceTree = "<group>"; };
 		819A8C161D2D18870065171E /* RenderTargetGroupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTargetGroupManager.cpp; sourceTree = "<group>"; };
 		819A8C171D2D18870065171E /* RenderTargetGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTargetGroupManager.h; sourceTree = "<group>"; };
 		819A8C181D2D18870065171E /* Target.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Target.h; sourceTree = "<group>"; };
@@ -2151,6 +2154,8 @@
 				818BC49B1CFDE6D9001DC484 /* TargetRenderPassGroup.h */,
 				8158F3631C89D2AD00B13109 /* VerticalTextJustification.cpp */,
 				8158F3641C89D2AD00B13109 /* VerticalTextJustification.h */,
+				819127031D342554004A2CB2 /* RenderFrameData.cpp */,
+				819127041D342554004A2CB2 /* RenderFrameData.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -3642,6 +3647,7 @@
 				8158F6971C89D2AD00B13109 /* Accelerometer.cpp in Sources */,
 				8158F7C41C89D2AD00B13109 /* PlatformSystem.mm in Sources */,
 				8158F69C1C89D2AD00B13109 /* GestureSystem.cpp in Sources */,
+				819127051D342554004A2CB2 /* RenderFrameData.cpp in Sources */,
 				8158F71E1C89D2AD00B13109 /* GridUILayout.cpp in Sources */,
 				81A125DB1CF44E490010853A /* RenderCamera.cpp in Sources */,
 				8158F65E1C89D2AD00B13109 /* BaseEncoding.cpp in Sources */,

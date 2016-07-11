@@ -22,32 +22,32 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
+#include <ChilliSource/Rendering/Base/RenderFrameData.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
+    
     //------------------------------------------------------------------------------
-    RenderCommandBuffer::RenderCommandBuffer(u32 numSlots, RenderFrameData renderFrameData) noexcept
-        : m_renderFrameData(std::move(renderFrameData))
+    RenderFrameData::RenderFrameData(IAllocator* frameAllocator) noexcept
+        : m_frameAllocator(frameAllocator)
     {
-        m_renderCommandLists.reserve(numSlots);
-        for (u32 i = 0; i < numSlots; ++i)
-        {
-            m_renderCommandLists.push_back(RenderCommandListUPtr(new RenderCommandList()));
-        }
-        
-        m_queue.reserve(numSlots);
-        for (const auto& renderCommandList : m_renderCommandLists)
-        {
-            m_queue.push_back(renderCommandList.get());
-        }
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandList* RenderCommandBuffer::GetRenderCommandList(u32 slotIndex) noexcept
+    void RenderFrameData::AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept
     {
-        CS_ASSERT(slotIndex < GetNumSlots(), "Index out of bounds.");
+        CS_ASSERT(renderDynamicMesh, "Cannot add null render frame data.");
         
-        return m_renderCommandLists[slotIndex].get();
+        m_renderDynamicMeshes.push_back(std::move(renderDynamicMesh));
     }
-}
+    
+    //------------------------------------------------------------------------------
+    void RenderFrameData::AddRenderSkinnedAnimation(RenderSkinnedAnimationAUPtr renderSkinnedAnimation) noexcept
+    {
+        CS_ASSERT(renderSkinnedAnimation, "Cannot add null render frame data.");
+        
+        m_renderSkinnedAnimations.push_back(std::move(renderSkinnedAnimation));
+    }
+};

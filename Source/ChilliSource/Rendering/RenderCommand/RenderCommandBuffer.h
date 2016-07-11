@@ -26,9 +26,10 @@
 #define _CHILLISOURCE_RENDERING_RENDERCOMMAND_RENDERCOMMANDQUEUE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
+#include <ChilliSource/Rendering/Base/RenderFrameData.h>
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
 #include <vector>
 
@@ -54,20 +55,16 @@ namespace ChilliSource
         
         /// Creates a new render command buffer with the requested number of slots.
         ///
-        /// @param frameAllocator
-        ///     The allocator from which all frame allocations should occur.
         /// @param numSlots
         ///     The number of slots in the queue.
-        /// @param renderDynamicMeshes
-        ///     Any render dynamic meshes that are used by the commands for this frame.
-        /// @param renderSkinnedAnimations
-        ///     Any render render skinned animations that are used by the commands for this frame.
+        /// @param renderFrameData
+        ///     The render frame data that must persist to the end of the frame. Must be moved.
         ///
-        RenderCommandBuffer(IAllocator* frameAllocator, u32 numSlots, std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, std::vector<RenderSkinnedAnimationAUPtr> renderSkinnedAnimations) noexcept;
+        RenderCommandBuffer(u32 numSlots, RenderFrameData renderFrameData) noexcept;
         
         /// @return The allocator from which all frame allocations should occur.
         ///
-        IAllocator* GetFrameAllocator() const noexcept { return m_frameAllocator; }
+        IAllocator* GetFrameAllocator() const noexcept { return m_renderFrameData.GetFrameAllocator(); }
         
         /// @return The number of slots in the queue.
         ///
@@ -85,11 +82,11 @@ namespace ChilliSource
         const std::vector<const RenderCommandList*>& GetQueue() const noexcept { return m_queue; }
         
     private:
-        IAllocator* m_frameAllocator;
         std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes;
         std::vector<RenderSkinnedAnimationAUPtr> m_renderSkinnedAnimations;
         std::vector<const RenderCommandList*> m_queue;
         std::vector<RenderCommandListUPtr> m_renderCommandLists; //TODO: This should be changed to a pool.
+        const RenderFrameData m_renderFrameData;
     };
 }
 

@@ -28,8 +28,8 @@ namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     RenderSnapshot::RenderSnapshot(IAllocator* frameAllocator, const Integer2& resolution, const Colour& clearColour, const RenderCamera& in_renderCamera) noexcept
-        : m_frameAllocator(frameAllocator), m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(in_renderCamera),
-          m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList())
+        : m_resolution(resolution), m_clearColour(clearColour), m_renderCamera(in_renderCamera), m_preRenderCommandList(new RenderCommandList()), m_postRenderCommandList(new RenderCommandList()),
+          m_renderFrameData(frameAllocator)
     {
     }
     
@@ -68,17 +68,17 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void RenderSnapshot::AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept
     {
-        CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes list cannot be changed after it has been claimed.");
+        CS_ASSERT(!m_renderFrameDataClaimed, "Cannot add RenderDynamicMesh after RenderFrameData has been claimed.");
         
-        m_renderDynamicMeshes.push_back(std::move(renderDynamicMesh));
+        m_renderFrameData.AddRenderDynamicMesh(std::move(renderDynamicMesh));
     }
     
     //------------------------------------------------------------------------------
     void RenderSnapshot::AddRenderSkinnedAnimation(RenderSkinnedAnimationAUPtr renderSkinnedAnimation) noexcept
     {
-        CS_ASSERT(!m_renderSkinnedAnimationsClaimed, "Render skinned animation list cannot be changed after it has been claimed.");
+        CS_ASSERT(!m_renderFrameDataClaimed, "Cannot add RenderDynamicMesh after RenderFrameData has been claimed.");
         
-        m_renderSkinnedAnimations.push_back(std::move(renderSkinnedAnimation));
+        m_renderFrameData.AddRenderSkinnedAnimation(std::move(renderSkinnedAnimation));
     }
     
     //------------------------------------------------------------------------------
@@ -134,24 +134,6 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    std::vector<RenderDynamicMeshAUPtr> RenderSnapshot::ClaimRenderDynamicMeshes() noexcept
-    {
-        CS_ASSERT(!m_renderDynamicMeshesClaimed, "Render dynamic meshes have already been claimed.");
-        
-        m_renderDynamicMeshesClaimed = true;
-        return std::move(m_renderDynamicMeshes);
-    }
-    
-    //------------------------------------------------------------------------------
-    std::vector<RenderSkinnedAnimationAUPtr> RenderSnapshot::ClaimRenderSkinnedAnimations() noexcept
-    {
-        CS_ASSERT(!m_renderSkinnedAnimationsClaimed, "Render skinned animations have already been claimed.");
-        
-        m_renderSkinnedAnimationsClaimed = true;
-        return std::move(m_renderSkinnedAnimations);
-    }
-    
-    //------------------------------------------------------------------------------
     RenderCommandListUPtr RenderSnapshot::ClaimPreRenderCommandList() noexcept
     {
         CS_ASSERT(m_preRenderCommandList, "Pre-RenderCommandList has already been claimed.");
@@ -165,5 +147,15 @@ namespace ChilliSource
         CS_ASSERT(m_postRenderCommandList, "Post-RenderCommandList has already been claimed.");
         
         return std::move(m_postRenderCommandList);
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderFrameData RenderSnapshot::ClaimRenderFrameData() noexcept
+    {
+        CS_ASSERT(!m_renderFrameDataClaimed, "RenderFrameData already claimed.");
+        
+        m_renderFrameDataClaimed = true;
+        
+        return std::move(m_renderFrameData);
     }
 };

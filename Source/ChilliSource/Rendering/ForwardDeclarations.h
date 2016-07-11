@@ -48,6 +48,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderComponentFactory);
     CS_FORWARDDECLARE_CLASS(Renderer);
     CS_FORWARDDECLARE_CLASS(RenderFrame);
+    CS_FORWARDDECLARE_CLASS(RenderFrameData);
     CS_FORWARDDECLARE_CLASS(RenderObject);
     CS_FORWARDDECLARE_CLASS(RenderPass);
     CS_FORWARDDECLARE_CLASS(RenderPassObject);
