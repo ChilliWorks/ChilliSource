@@ -99,10 +99,10 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    AnimatedModelComponentUPtr RenderComponentFactory::CreateAnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
+    AnimatedModelComponentUPtr RenderComponentFactory::CreateAnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material, const SkinnedAnimationCSPtr& in_animation,
+                                                                                    AnimatedModelComponent::PlaybackType in_playbackType) noexcept
     {
-        AnimatedModelComponentUPtr pResult(new AnimatedModelComponent(in_model, in_material));
-        return pResult;
+        return AnimatedModelComponentUPtr(new AnimatedModelComponent(in_model, in_material, in_animation, in_playbackType));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------

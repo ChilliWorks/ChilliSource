@@ -1,8 +1,4 @@
 //
-//  AnimatedModelComponent.cpp
-//  Chilli Source
-//  Created by Ian Copland on 17/10/2011.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2011 Tag Games Limited
@@ -41,44 +37,56 @@ namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(AnimatedModelComponent);
     
-    //----------------------------------------------------------
-    /// Constructor
-    //----------------------------------------------------------
-    AnimatedModelComponent::AnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material) noexcept
-    : mfPlaybackPosition(0.0f), mfPlaybackSpeedMultiplier(1.0f), mfBlendlinePosition(0.0f),
-    meBlendType(AnimationBlendType::k_linear), mePlaybackType(AnimationPlaybackType::k_once), meFadeType(AnimationBlendType::k_linear), mfFadeTimer(0.0f), mfFadeMaxTime(0.0f), mfFadePlaybackPosition(0.0f),
-    mfFadeBlendlinePosition(0.0f), mbFinished(false), mbAnimationDataDirty(true), mpModel(in_model)
+    //------------------------------------------------------------------------------
+    AnimatedModelComponent::AnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& material, const SkinnedAnimationCSPtr& skinnedAnimation, PlaybackType playbackType) noexcept
+    :  m_model(in_model)
     {
-        CS_ASSERT(mpModel, "Model cannot be null");
-        CS_ASSERT(mpModel->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
-        CS_ASSERT(in_material, "Material cannot be null");
-        CS_ASSERT(in_material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        CS_ASSERT(in_model, "Model cannot be null");
+        CS_ASSERT(in_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(material, "Material cannot be null");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
         
-        mMaterials.resize(mpModel->GetNumMeshes());
-        
-        for (u32 i = 0; i < u32(mMaterials.size()); ++i)
+        m_materials.resize(in_model->GetNumMeshes());
+        for (u32 i = 0; i < u32(m_materials.size()); ++i)
         {
-            mMaterials[i] = in_material;
+            m_materials[i] = material;
         }
         
         Reset();
+        SetAnimation(skinnedAnimation, playbackType);
     }
-    //----------------------------------------------------------
-    /// Is A
-    //----------------------------------------------------------
-    bool AnimatedModelComponent::IsA(InterfaceIDType inInterfaceID) const
+    
+    //------------------------------------------------------------------------------
+    AnimatedModelComponent::AnimatedModelComponent(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials, const SkinnedAnimationCSPtr& skinnedAnimation, PlaybackType playbackType) noexcept
+        : m_model(model), m_materials(materials)
     {
-        return  (inInterfaceID == VolumeComponent::InterfaceID || inInterfaceID == AnimatedModelComponent::InterfaceID);
+        CS_ASSERT(m_model, "Model cannot be null");
+        CS_ASSERT(m_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(m_materials.size() == m_model->GetNumMeshes(), "Model component must have the same number of materials as there are meshes in the model.");
+        
+        for (const auto& material : m_materials)
+        {
+            CS_ASSERT(material, "Material cannot be null");
+            CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        }
+        
+        Reset();
+        SetAnimation(skinnedAnimation, playbackType);
     }
-    //----------------------------------------------------
-    /// Get Axis Aligned Bounding Box
-    //----------------------------------------------------
-    const AABB& AnimatedModelComponent::GetAABB()
+    
+    //------------------------------------------------------------------------------
+    bool AnimatedModelComponent::IsA(InterfaceIDType interfaceId) const noexcept
+    {
+        return  (interfaceId == VolumeComponent::InterfaceID || interfaceId == AnimatedModelComponent::InterfaceID);
+    }
+    
+    //------------------------------------------------------------------------------
+    const AABB& AnimatedModelComponent::GetAABB() noexcept
     {
         if(GetEntity())
         {
             //Rebuild the box
-            const AABB& cAABB = mpModel->GetAABB();
+            const AABB& cAABB = m_model->GetAABB();
             const Matrix4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
             Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
             Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
@@ -145,208 +153,294 @@ namespace ChilliSource
             vMax.z = std::max(vMax.z, vFrontTopLeft.z);
             vMax.z = std::max(vMax.z, vFrontTopRight.z);
             
-            mBoundingBox.SetSize( vMax - vMin );
-            mBoundingBox.SetOrigin( cAABB.Centre() * matWorld);
+            m_aabb.SetSize( vMax - vMin );
+            m_aabb.SetOrigin( cAABB.Centre() * matWorld);
             
         }
         
-        return mBoundingBox;
+        return m_aabb;
     }
-    //----------------------------------------------------
-    /// Get Object Oriented Bounding Box
-    //----------------------------------------------------
-    const OOBB& AnimatedModelComponent::GetOOBB()
+    
+    //------------------------------------------------------------------------------
+    const OOBB& AnimatedModelComponent::GetOOBB() noexcept
     {
         if(GetEntity())
         {
-            mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
+            m_oobb.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
         }
-        return mOBBoundingBox;
+        return m_oobb;
     }
-    //----------------------------------------------------
-    /// Get Bounding Sphere
-    //----------------------------------------------------
-    const Sphere& AnimatedModelComponent::GetBoundingSphere()
+    
+    //------------------------------------------------------------------------------
+    const Sphere& AnimatedModelComponent::GetBoundingSphere() noexcept
     {
         if(GetEntity())
         {
             const AABB& sAABB = GetAABB();
-            mBoundingSphere.vOrigin = sAABB.GetOrigin();
-            mBoundingSphere.fRadius = (sAABB.BackTopRight() - sAABB.FrontBottomLeft()).Length() * 0.5f;
+            m_boundingSphere.vOrigin = sAABB.GetOrigin();
+            m_boundingSphere.fRadius = (sAABB.BackTopRight() - sAABB.FrontBottomLeft()).Length() * 0.5f;
         }
-        return mBoundingSphere;
+        return m_boundingSphere;
     }
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    void AnimatedModelComponent::SetMaterial(const MaterialCSPtr& in_material)
+    
+    //------------------------------------------------------------------------------
+    const ModelCSPtr& AnimatedModelComponent::GetModel() const noexcept
     {
-        CS_ASSERT(mpModel, "Cannot set material without a model.");
-        CS_ASSERT(in_material, "Cannot set null material.");
-        CS_ASSERT(in_material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
-        
-        for (u32 i = 0; i < mMaterials.size(); i++)
-        {
-            mMaterials[i] = in_material;
-        }
+        return m_model;
     }
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    void AnimatedModelComponent::SetMaterialForMesh(const MaterialCSPtr& in_material, u32 in_meshIndex)
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetModel(const ModelCSPtr& model) noexcept
     {
-        CS_ASSERT(mpModel, "Cannot set material without a model.");
-        CS_ASSERT(in_material, "Cannot set null material.");
-        CS_ASSERT(in_material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
-        CS_ASSERT(in_meshIndex < s32(mMaterials.size()), "Invalid mesh index.");
+        CS_ASSERT(model, "Cannot set null model.");
+        CS_ASSERT(model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
         
-        mMaterials[in_meshIndex] = in_material;
-    }
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    void AnimatedModelComponent::SetMaterialForMesh(const MaterialCSPtr& in_material, const std::string& in_meshName)
-    {
-        CS_ASSERT(mpModel, "Cannot set material without a model.");
-        CS_ASSERT(in_material, "Cannot set null material.");
-        CS_ASSERT(in_material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        m_model = model;
+        m_materials.resize(model->GetNumMeshes());
         
-        auto meshIndex = mpModel->GetMeshIndex(in_meshName);
-        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(mMaterials.size()), "Invalid mesh index.");
-        
-        mMaterials[meshIndex] = in_material;
-    }
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    const MaterialCSPtr& AnimatedModelComponent::GetMaterialForMesh(u32 in_meshIndex) const
-    {
-        CS_ASSERT(in_meshIndex < s32(mMaterials.size()), "Invalid mesh index.");
-        
-        return mMaterials[in_meshIndex];
-    }
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    const MaterialCSPtr& AnimatedModelComponent::GetMaterialForMesh(const std::string& in_meshName) const
-    {
-        CS_ASSERT(mpModel, "Cannot get material without a model.");
-        
-        auto meshIndex = mpModel->GetMeshIndex(in_meshName);
-        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(mMaterials.size()), "Invalid mesh index.");
-        
-        return mMaterials[meshIndex];
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    void AnimatedModelComponent::SetModel(const ModelCSPtr& in_model)
-    {
-        CS_ASSERT(in_model, "Cannot set null model.");
-        CS_ASSERT(in_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
-        
-        mpModel = in_model;
-        mMaterials.resize(mpModel->GetNumMeshes());
-        
-        // Update OOBB
-        mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
-        mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
+        m_oobb.SetSize(m_model->GetAABB().GetSize());
+        m_oobb.SetOrigin(m_model->GetAABB().GetOrigin());
         
         SetMaterial(GetMaterialForMesh(0));
         
         Reset();
     }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    void AnimatedModelComponent::SetModel(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetModel(const ModelCSPtr& model, const MaterialCSPtr& material) noexcept
     {
-        CS_ASSERT(in_model, "Cannot set null model.");
-        CS_ASSERT(in_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
-        CS_ASSERT(in_material, "Cannot set null material.");
-        CS_ASSERT(in_material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        CS_ASSERT(model, "Cannot set null model.");
+        CS_ASSERT(model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
         
-        mpModel = in_model;
-        mMaterials.resize(mpModel->GetNumMeshes());
+        m_model = model;
+        m_materials.resize(m_model->GetNumMeshes());
         
-        // Update OOBB
-        mOBBoundingBox.SetSize(mpModel->GetAABB().GetSize());
-        mOBBoundingBox.SetOrigin(mpModel->GetAABB().GetOrigin());
+        m_oobb.SetSize(m_model->GetAABB().GetSize());
+        m_oobb.SetOrigin(m_model->GetAABB().GetOrigin());
+        
+        SetMaterial(material);
+        
         Reset();
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetModel(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials) noexcept
+    {
+        CS_ASSERT(model, "Cannot set null model.");
+        CS_ASSERT(model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(materials.size() == model->GetNumMeshes(), "Model component must have the same number of materials as there are meshes in the model.");
         
-        SetMaterial(in_material);
-    }
-    //----------------------------------------------------------
-    /// Get Model
-    //----------------------------------------------------------
-    const ModelCSPtr& AnimatedModelComponent::GetModel() const
-    {
-        return mpModel;
-    }
-    //----------------------------------------------------------
-    /// Attach Animation
-    //----------------------------------------------------------
-    void AnimatedModelComponent::AttachAnimation(const SkinnedAnimationCSPtr& inpAnimation, f32 infBlendlinePosition)
-    {
-        if (nullptr != mActiveAnimationGroup)
+        for (const auto& material : materials)
         {
-            mActiveAnimationGroup->AttachAnimation(inpAnimation, infBlendlinePosition);
-            mbAnimationDataDirty = true;
+            CS_ASSERT(material, "Material cannot be null");
+            CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        }
+        
+        m_model = model;
+        m_materials = materials;
+        
+        m_oobb.SetSize(m_model->GetAABB().GetSize());
+        m_oobb.SetOrigin(m_model->GetAABB().GetOrigin());
+        
+        Reset();
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetModel(const ModelCSPtr& model, const SkinnedAnimationCSPtr& skinnedAnimation, PlaybackType playbackType) noexcept
+    {
+        SetModel(model);
+        SetAnimation(skinnedAnimation, playbackType);
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetModel(const ModelCSPtr& model, const MaterialCSPtr& material, const SkinnedAnimationCSPtr& skinnedAnimation, PlaybackType playbackType) noexcept
+    {
+        SetModel(model, material);
+        SetAnimation(skinnedAnimation, playbackType);
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetModel(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials, const SkinnedAnimationCSPtr& skinnedAnimation, PlaybackType playbackType) noexcept
+    {
+        SetModel(model, materials);
+        SetAnimation(skinnedAnimation, playbackType);
+    }
+    
+    //------------------------------------------------------------------------------
+    const MaterialCSPtr& AnimatedModelComponent::GetMaterialForMesh(u32 meshIndex) const noexcept
+    {
+        CS_ASSERT(meshIndex < s32(m_materials.size()), "Invalid mesh index.");
+        
+        return m_materials[meshIndex];
+    }
+    
+    //------------------------------------------------------------------------------
+    const MaterialCSPtr& AnimatedModelComponent::GetMaterialForMesh(const std::string& meshName) const noexcept
+    {
+        CS_ASSERT(m_model, "Cannot get material without a model.");
+        
+        auto meshIndex = m_model->GetMeshIndex(meshName);
+        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
+        
+        return m_materials[meshIndex];
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetMaterial(const MaterialCSPtr& material) noexcept
+    {
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        
+        for (u32 i = 0; i < m_materials.size(); i++)
+        {
+            m_materials[i] = material;
         }
     }
-    //----------------------------------------------------------
-    /// Get Animations
-    //----------------------------------------------------------
-    void AnimatedModelComponent::GetAnimations(std::vector<SkinnedAnimationCSPtr>& outapSkinnedAnimationList)
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetMaterialForMesh(const MaterialCSPtr& material, u32 meshIndex) noexcept
     {
-        if (nullptr != mActiveAnimationGroup)
-        {
-            mActiveAnimationGroup->GetAnimations(outapSkinnedAnimationList);
-        }
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        CS_ASSERT(meshIndex < s32(m_materials.size()), "Invalid mesh index.");
+        
+        m_materials[meshIndex] = material;
     }
-    //----------------------------------------------------------
-    /// Detatch Animation
-    //----------------------------------------------------------
-    void AnimatedModelComponent::DetatchAnimation(const SkinnedAnimationCSPtr& inpAnimation)
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetMaterialForMesh(const MaterialCSPtr& material, const std::string& meshName) noexcept
     {
-        if (nullptr != mActiveAnimationGroup)
-        {
-            mActiveAnimationGroup->DetatchAnimation(inpAnimation);
-        }
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        
+        auto meshIndex = m_model->GetMeshIndex(meshName);
+        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
+        
+        m_materials[meshIndex] = material;
     }
-    //----------------------------------------------------------
-    /// Fade Out
-    //----------------------------------------------------------
-    void AnimatedModelComponent::FadeOut(AnimationBlendType ineFadeType, f32 infFadeOutTime)
+    
+    //------------------------------------------------------------------------------
+    const std::vector<SkinnedAnimationCSPtr>& AnimatedModelComponent::GetAnimations() const noexcept
     {
-        if (nullptr != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
+        CS_ASSERT(m_activeAnimationGroup, "There must be an active animation group.");
+        
+        std::vector<SkinnedAnimationCSPtr> output;
+        m_activeAnimationGroup->GetAnimations(output);
+        
+        return output;
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetAnimation(const SkinnedAnimationCSPtr& animation, PlaybackType playbackType) noexcept
+    {
+        ClearAnimations();
+        AttachAnimation(animation, 0.0f);
+        SetPlaybackType(playbackType);
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::AttachAnimation(const SkinnedAnimationCSPtr& animation, f32 blendlinePosition) noexcept
+    {
+        CS_ASSERT(m_activeAnimationGroup, "There must be an active animation group.");
+        
+        m_activeAnimationGroup->AttachAnimation(animation, blendlinePosition);
+        m_animationDataDirty = true;
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::DetatchAnimation(const SkinnedAnimationCSPtr& animation) noexcept
+    {
+        CS_ASSERT(m_activeAnimationGroup, "There must be an active animation group.");
+
+        m_activeAnimationGroup->DetatchAnimation(animation);
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::FadeTo(const SkinnedAnimationCSPtr& animation, PlaybackType playbackType, AnimationBlendType fadeType, f32 fadeOutTime) noexcept
+    {
+        FadeOut(fadeType, fadeOutTime);
+        AttachAnimation(animation, 0.0f);
+        SetPlaybackType(playbackType);
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::FadeOut(AnimationBlendType fadeType, f32 fadeOutTime) noexcept
+    {
+        CS_ASSERT(m_activeAnimationGroup, "There must be an active animation group.");
+        
+        if (m_activeAnimationGroup->IsPrepared())
         {
-            mFadingAnimationGroup = mActiveAnimationGroup;
-            mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeleton()));
-            mfFadePlaybackPosition = mfPlaybackPosition;
-            mfFadeBlendlinePosition = mfBlendlinePosition;
-            mfFadeMaxTime = infFadeOutTime;
-            mfFadeTimer = 0.0f;
+            m_fadingAnimationGroup = m_activeAnimationGroup;
+            m_activeAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(m_model->GetSkeleton()));
+            m_fadePlaybackPosition = m_playbackPosition;
+            m_fadeBlendlinePosition = m_blendlinePosition;
+            m_maxFadeTime = fadeOutTime;
+            m_fadeTimer = 0.0f;
             SetPlaybackPosition(0.0f);
-            mAnimationChangedEvent.NotifyConnections(this);
+            m_animationChangedEvent.NotifyConnections(this);
         }
-        else if (nullptr != mActiveAnimationGroup)
+        else
         {
-            mActiveAnimationGroup->ClearAnimations();
+            m_activeAnimationGroup->ClearAnimations();
         }
     }
-    //----------------------------------------------------------
-    /// Clear Animations
-    //----------------------------------------------------------
-    void AnimatedModelComponent::ClearAnimations()
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::ClearAnimations() noexcept
     {
-        if (mActiveAnimationGroup != nullptr)
-        {
-            mActiveAnimationGroup->ClearAnimations();
-            mFadingAnimationGroup.reset();
-            SetPlaybackPosition(0.0f);
-            mfBlendlinePosition = 0.0f;
-            mfFadeTimer = 0.0f;
-            mAnimationChangedEvent.NotifyConnections(this);
-        }
+        CS_ASSERT(m_activeAnimationGroup, "There must be an active animation group.");
+
+        m_activeAnimationGroup->ClearAnimations();
+        m_fadingAnimationGroup.reset();
+        SetPlaybackPosition(0.0f);
+        m_blendlinePosition = 0.0f;
+        m_fadeTimer = 0.0f;
+        m_animationChangedEvent.NotifyConnections(this);
     }
-    //----------------------------------------------------------
-    /// Attach Entity
-    //----------------------------------------------------------
-    void AnimatedModelComponent::AttachEntity(const EntitySPtr& inpEntity, const std::string& instrNodeName)
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetBlendlinePosition(f32 blendlinePosition) noexcept
+    {
+        m_blendlinePosition = blendlinePosition;
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetPlaybackType(PlaybackType playbackType) noexcept
+    {
+        m_playbackType = playbackType;
+        m_finished = false;
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetPlaybackPosition(f32 position) noexcept
+    {
+        m_playbackPosition = position;
+        m_finished = false;
+        m_animationDataDirty = true;
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::SetPlaybackPositionNormalised(f32 position) noexcept
+    {
+        m_playbackPosition = position * GetAnimationLength();
+        m_finished = false;
+    }
+    
+    //------------------------------------------------------------------------------
+    f32 AnimatedModelComponent::GetAnimationLength() const noexcept
+    {
+        CS_ASSERT(m_activeAnimationGroup, "There must be an active animation group.");
+        
+        return m_activeAnimationGroup->GetAnimationLength();
+    }
+
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::AttachEntity(const EntitySPtr& entity, const std::string& nodeName) noexcept
     {
         if (nullptr == GetEntity())
         {
@@ -354,41 +448,33 @@ namespace ChilliSource
             return;
         }
         
-        if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetScene())
+        if (nullptr != entity->GetParent() || nullptr != entity->GetScene())
         {
             CS_LOG_ERROR("Could not attach entity to animated mesh because the entity already has a parent.");
             return;
         }
         
         //check that it has not already been added.
-        for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
+        for (auto it = m_attachedEntities.begin(); it != m_attachedEntities.end(); ++it)
         {
-            if (EntitySPtr pEntity = it->first.lock())
+            if (EntitySPtr attachedEntity = it->first.lock())
             {
-                if (pEntity.get() == inpEntity.get())
-                {
-                    return;
-                }
+                CS_ASSERT(attachedEntity.get() != entity.get(), "Entity is already attached.");
             }
         }
         
-        s32 dwNodeIndex = mpModel->GetSkeleton().GetNodeIndexByName(instrNodeName);
-        if (dwNodeIndex == -1)
-        {
-            CS_LOG_ERROR("Could not attach entity to the animated mesh because the skeleton node name could not be found.");
-            return;
-        }
-        
-        GetEntity()->AddEntity(inpEntity);
-        maAttachedEntities.push_back(std::pair<EntityWPtr, s32>(EntityWPtr(inpEntity), dwNodeIndex));
+        s32 dwNodeIndex = m_model->GetSkeleton().GetNodeIndexByName(nodeName);
+        CS_ASSERT(dwNodeIndex != -1, "Could not attach entity to the animated mesh because the skeleton node name could not be found.");
+
+        GetEntity()->AddEntity(entity);
+        m_attachedEntities.push_back(std::pair<EntityWPtr, s32>(EntityWPtr(entity), dwNodeIndex));
     }
-    //----------------------------------------------------------
-    /// Detatch Entity
-    //----------------------------------------------------------
-    void AnimatedModelComponent::DetatchEntity(Entity* inpEntity)
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::DetatchEntity(const Entity* inpEntity) noexcept
     {
         AttachedEntityList::iterator it;
-        for (it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
+        for (it = m_attachedEntities.begin(); it != m_attachedEntities.end(); ++it)
         {
             if (EntitySPtr pEntity = it->first.lock())
             {
@@ -400,17 +486,16 @@ namespace ChilliSource
             }
         }
         
-        if (it != maAttachedEntities.end())
+        if (it != m_attachedEntities.end())
         {
-            maAttachedEntities.erase(it);
+            m_attachedEntities.erase(it);
         }
     }
-    //----------------------------------------------------------
-    /// Detatch All Entities
-    //----------------------------------------------------------
-    void AnimatedModelComponent::DetatchAllEntities()
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::DetatchAllEntities() noexcept
     {
-        for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
+        for (AttachedEntityList::const_iterator it = m_attachedEntities.begin(); it != m_attachedEntities.end(); ++it)
         {
             if (EntitySPtr pEntity = it->first.lock())
             {
@@ -418,318 +503,166 @@ namespace ChilliSource
             }
         }
         
-        maAttachedEntities.clear();
+        m_attachedEntities.clear();
     }
-    //----------------------------------------------------------
-    /// Set Blendline Position
-    //----------------------------------------------------------
-    void AnimatedModelComponent::SetBlendlinePosition(f32 infBlendlinePosition)
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::UpdateAnimation(f32 deltaTime) noexcept
     {
-        mfBlendlinePosition = infBlendlinePosition;
-    }
-    //----------------------------------------------------------
-    /// Set Playback Type
-    //----------------------------------------------------------
-    void AnimatedModelComponent::SetPlaybackType(AnimationPlaybackType inePlaybackType)
-    {
-        mePlaybackType = inePlaybackType;
-        mbFinished = false;
-    }
-    //----------------------------------------------------------
-    /// Set Playback Speed Multiplier
-    //----------------------------------------------------------
-    void AnimatedModelComponent::SetPlaybackSpeedMultiplier(f32 infSpeedMultiplier)
-    {
-        mfPlaybackSpeedMultiplier = infSpeedMultiplier;
-    }
-    //----------------------------------------------------------
-    /// Set Playback Position
-    //----------------------------------------------------------
-    void AnimatedModelComponent::SetPlaybackPosition(f32 infPosition)
-    {
-        mfPlaybackPosition = infPosition;
-        mbFinished = false;
-        mbAnimationDataDirty = true;
-    }
-    //----------------------------------------------------------
-    /// Set Playback Position Normalised
-    //----------------------------------------------------------
-    void AnimatedModelComponent::SetPlaybackPositionNormalised(f32 infPosition)
-    {
-        mfPlaybackPosition = infPosition * GetAnimationLength();
-        mbFinished = false;
-    }
-    //----------------------------------------------------------
-    /// Set Blend Type
-    //----------------------------------------------------------
-    void AnimatedModelComponent::SetBlendType(AnimationBlendType ineBlendType)
-    {
-        meBlendType = ineBlendType;
-    }
-    //----------------------------------------------------------
-    /// Get Animation Changed Event
-    //----------------------------------------------------------
-    AnimationChangedEvent& AnimatedModelComponent::GetAnimationChangedEvent()
-    {
-        return mAnimationChangedEvent;
-    }
-    //----------------------------------------------------------
-    /// Get Animation Completion Event
-    //----------------------------------------------------------
-    AnimationCompletionEvent& AnimatedModelComponent::GetAnimationCompletionEvent()
-    {
-        return mAnimationCompletionEvent;
-    }
-    //----------------------------------------------------------
-    /// Get Animation Looped Event
-    //----------------------------------------------------------
-    AnimationLoopedEvent& AnimatedModelComponent::GetAnimationLoopedEvent()
-    {
-        return mAnimationLoopedEvent;
-    }
-    //----------------------------------------------------------
-    /// Get Blendline Position
-    //----------------------------------------------------------
-    f32 AnimatedModelComponent::GetBlendlinePosition() const
-    {
-        return mfBlendlinePosition;
-    }
-    //----------------------------------------------------------
-    /// Get Playback Type
-    //----------------------------------------------------------
-    AnimationPlaybackType AnimatedModelComponent::GetPlaybackType() const
-    {
-        return mePlaybackType;
-    }
-    //----------------------------------------------------------
-    /// Get Animation Length
-    //----------------------------------------------------------
-    f32 AnimatedModelComponent::GetAnimationLength()
-    {
-        if (mActiveAnimationGroup != nullptr)
+        CS_ASSERT(GetEntity(), "Must be attached to an entity.");
+        CS_ASSERT(GetEntity()->GetScene(), "Must be attached to the scene.");
+        CS_ASSERT(m_activeAnimationGroup, "Must have an active animation group.");
+        CS_ASSERT(m_activeAnimationGroup->GetAnimationCount() > 0, "Must have at least one attached animation.");
+        
+        UpdateAnimationTimer(deltaTime);
+        m_activeAnimationGroup->BuildAnimationData(m_animationBlendType, m_playbackPosition, m_blendlinePosition);
+        
+        //if there is a group fading out, then apply this to the active data.
+        if (m_fadingAnimationGroup)
         {
-            return mActiveAnimationGroup->GetAnimationLength();
+            if (m_maxFadeTime > 0.0f && m_fadeTimer < m_maxFadeTime)
+            {
+                m_fadingAnimationGroup->BuildAnimationData(m_animationBlendType, m_fadePlaybackPosition, m_fadeBlendlinePosition);
+                f32 fGroupBlendFactor = 1.0f - (m_fadeTimer / m_maxFadeTime);
+                m_activeAnimationGroup->BlendGroup(m_animationBlendType, m_fadingAnimationGroup, fGroupBlendFactor);
+            }
+            else
+            {
+                m_fadingAnimationGroup.reset();
+            }
         }
         
-        return 0;
-    }
-    //----------------------------------------------------------
-    /// Get Playback Speed Multiplier
-    //----------------------------------------------------------
-    f32 AnimatedModelComponent::GetPlaybackSpeedMultiplier() const
-    {
-        return mfPlaybackSpeedMultiplier;
-    }
-    //----------------------------------------------------------
-    /// Get Playback Position
-    //----------------------------------------------------------
-    f32 AnimatedModelComponent::GetPlaybackPosition() const
-    {
-        return mfPlaybackPosition;
-    }
-    //----------------------------------------------------------
-    /// get Playback Position Normalised
-    //----------------------------------------------------------
-    f32 AnimatedModelComponent::GetPlaybackPositionNormalised()
-    {
-        return mfPlaybackPosition / GetAnimationLength();
-    }
-    //----------------------------------------------------------
-    /// Get Blend Type
-    //----------------------------------------------------------
-    AnimationBlendType AnimatedModelComponent::GetBlendType() const
-    {
-        return meBlendType;
-    }
-    //----------------------------------------------------------
-    /// Has Finished
-    //----------------------------------------------------------
-    bool AnimatedModelComponent::HasFinished() const
-    {
-        return mbFinished;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    void AnimatedModelComponent::SetShadowCastingEnabled(bool inbEnabled)
-    {
-        m_shadowCastingEnabled = inbEnabled;
-    }
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-    bool AnimatedModelComponent::IsShadowCastingEnabled() const
-    {
-        return m_shadowCastingEnabled;
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    void AnimatedModelComponent::OnUpdate(f32 infDeltaTime)
-    {
-        UpdateAnimation(infDeltaTime);
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    void AnimatedModelComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
-    {
-        CS_ASSERT(mpModel->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
-        CS_ASSERT(mpModel->GetNumMeshes() == mMaterials.size(), "Invalid number of materials.");
+        m_activeAnimationGroup->BuildMatrices();
+        UpdateAttachedEntities();
         
-        if (mbAnimationDataDirty == true)
+        m_animationDataDirty = false;
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::UpdateAnimationTimer(f32 deltaTime) noexcept
+    {
+        CS_ASSERT(m_activeAnimationGroup, "Must have an active animation group.");
+        
+        //Update the playback position
+        m_playbackPosition += deltaTime * m_playbackSpeedMultiplier;
+        
+        switch (m_playbackType)
+        {
+            case PlaybackType::k_once:
+            {
+                if (m_playbackPosition >= m_activeAnimationGroup->GetAnimationLength())
+                {
+                    m_playbackPosition = m_activeAnimationGroup->GetAnimationLength();
+                    m_finished = true;
+                    m_animationCompletionEvent.NotifyConnections(this);
+                }
+                break;
+            }
+            case PlaybackType::k_looping:
+            {
+                while (m_playbackPosition >= m_activeAnimationGroup->GetAnimationLength() && m_activeAnimationGroup->GetAnimationLength() > 0.0f)
+                {
+                    m_playbackPosition -= m_activeAnimationGroup->GetAnimationLength();
+                    m_animationLoopedEvent.NotifyConnections(this);
+                }
+                break;
+            }
+        }
+        
+        //update the fade timer
+        if (m_fadingAnimationGroup)
+        {
+            m_fadeTimer += deltaTime;
+        }
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::UpdateAttachedEntities() noexcept
+    {
+        CS_ASSERT(m_activeAnimationGroup, "Must have an active animation group.");
+
+        for (AttachedEntityList::iterator it = m_attachedEntities.begin(); it != m_attachedEntities.end();)
+        {
+            if (EntitySPtr pEntity = it->first.lock())
+            {
+                s32 dwNodeIndex = it->second;
+                
+                const Matrix4& matTransform = m_activeAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
+                pEntity->GetTransform().SetLocalTransform(matTransform);
+                ++it;
+            }
+            else
+            {
+                it = m_attachedEntities.erase(it);
+            }
+        }
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::Reset() noexcept
+    {
+        DetatchAllEntities();
+        m_activeAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(m_model->GetSkeleton()));
+        m_fadingAnimationGroup.reset();
+        m_blendlinePosition = 0.0f;
+        m_fadeTimer = 0.0f;
+        SetPlaybackPosition(0.0f);
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::OnAddedToScene() noexcept
+    {
+        SetPlaybackPosition(0.0f);
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::OnUpdate(f32 deltaTime) noexcept
+    {
+        UpdateAnimation(deltaTime);
+    }
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    {
+        CS_ASSERT(m_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(m_model->GetNumMeshes() == m_materials.size(), "Invalid number of materials.");
+        CS_ASSERT(m_activeAnimationGroup, "An animated model must always have an active animation group.");
+        
+        if (m_animationDataDirty == true)
         {
             UpdateAnimation(0.0f);
         }
         
-        CS_ASSERT(mActiveAnimationGroup, "An animated model must always have an active animation group.");
-        
-        for (u32 index = 0; index < mpModel->GetNumMeshes(); ++index)
+        for (u32 index = 0; index < m_model->GetNumMeshes(); ++index)
         {
-            CS_ASSERT(mMaterials[index]->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+            CS_ASSERT(m_materials[index]->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
             
-            auto renderMaterialGroup = mMaterials[index]->GetRenderMaterialGroup();
-            auto renderMesh = mpModel->GetRenderMesh(index);
+            auto renderMaterialGroup = m_materials[index]->GetRenderMaterialGroup();
+            auto renderMesh = m_model->GetRenderMesh(index);
             
             const auto& transform = GetEntity()->GetTransform();
             auto boundingSphere = Sphere::Transform(renderMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
             
             RenderSkinnedAnimationAUPtr renderSkinnedAnimation;
-            if (mActiveAnimationGroup->IsPrepared() == true)
+            if (m_activeAnimationGroup->IsPrepared() == true)
             {
-                renderSkinnedAnimation = mActiveAnimationGroup->BuildRenderSkinnedAnimation(in_renderSnapshot.GetFrameAllocator(), renderMesh->GetInverseBindPoseMatrices());
+                renderSkinnedAnimation = m_activeAnimationGroup->BuildRenderSkinnedAnimation(renderSnapshot.GetFrameAllocator(), renderMesh->GetInverseBindPoseMatrices());
             }
-            else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
+            else if (m_fadingAnimationGroup != nullptr && m_fadingAnimationGroup->IsPrepared() == true)
             {
-                renderSkinnedAnimation = mFadingAnimationGroup->BuildRenderSkinnedAnimation(in_renderSnapshot.GetFrameAllocator(), renderMesh->GetInverseBindPoseMatrices());
+                renderSkinnedAnimation = m_fadingAnimationGroup->BuildRenderSkinnedAnimation(renderSnapshot.GetFrameAllocator(), renderMesh->GetInverseBindPoseMatrices());
             }
             
             CS_ASSERT(renderSkinnedAnimation, "No render skinned animation.");
-            in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, renderSkinnedAnimation.get(), GetEntity()->GetTransform().GetWorldTransform(), boundingSphere,
+            renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, renderSkinnedAnimation.get(), GetEntity()->GetTransform().GetWorldTransform(), boundingSphere,
                                                            m_shadowCastingEnabled, RenderLayer::k_standard));
-            in_renderSnapshot.AddRenderSkinnedAnimation(std::move(renderSkinnedAnimation));
+            renderSnapshot.AddRenderSkinnedAnimation(std::move(renderSkinnedAnimation));
         }
     }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    AnimatedModelComponent::~AnimatedModelComponent()
-    {
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void AnimatedModelComponent::OnAddedToScene()
-    {
-        SetPlaybackPosition(0.0f);
-    }
-    //----------------------------------------------------
-    //----------------------------------------------------
-    void AnimatedModelComponent::OnRemovedFromScene()
+    
+    //------------------------------------------------------------------------------
+    void AnimatedModelComponent::OnRemovedFromScene() noexcept
     {
         DetatchAllEntities();
-    }
-    //----------------------------------------------------------
-    /// Update Animation
-    //----------------------------------------------------------
-    void AnimatedModelComponent::UpdateAnimation(f32 infDeltaTime)
-    {
-        if (nullptr != GetEntity() && nullptr != GetEntity()->GetScene() && nullptr != mActiveAnimationGroup && mActiveAnimationGroup->GetAnimationCount() != 0)
-        {
-            //update the animation timer.
-            UpdateAnimationTimer(infDeltaTime);
-            
-            //calculate the animation data and convert to matrices.
-            mActiveAnimationGroup->BuildAnimationData(meBlendType, mfPlaybackPosition, mfBlendlinePosition);
-            
-            //if there is a group fading out, then apply this to the active data.
-            if (nullptr != mFadingAnimationGroup)
-            {
-                if (mfFadeMaxTime > 0.0f && mfFadeTimer < mfFadeMaxTime)
-                {
-                    mFadingAnimationGroup->BuildAnimationData(meBlendType, mfFadePlaybackPosition, mfFadeBlendlinePosition);
-                    f32 fGroupBlendFactor = 1.0f - (mfFadeTimer / mfFadeMaxTime);
-                    mActiveAnimationGroup->BlendGroup(meBlendType, mFadingAnimationGroup, fGroupBlendFactor);
-                }
-                else
-                {
-                    mFadingAnimationGroup = SkinnedAnimationGroupSPtr();
-                }
-            }
-            mActiveAnimationGroup->BuildMatrices();
-            UpdateAttachedEntities();
-            
-            mbAnimationDataDirty = false;
-        }
-    }
-    //----------------------------------------------------------
-    /// Update Animation Timer
-    //----------------------------------------------------------
-    void AnimatedModelComponent::UpdateAnimationTimer(f32 infDeltaTime)
-    {
-        if (nullptr != mActiveAnimationGroup)
-        {
-            //Update the playback position
-            mfPlaybackPosition += infDeltaTime * mfPlaybackSpeedMultiplier;
-            
-            switch (mePlaybackType)
-            {
-                case AnimationPlaybackType::k_once:
-                {
-                    if (mfPlaybackPosition >= mActiveAnimationGroup->GetAnimationLength())
-                    {
-                        mfPlaybackPosition = mActiveAnimationGroup->GetAnimationLength();
-                        mbFinished = true;
-                        mAnimationCompletionEvent.NotifyConnections(this);
-                    }
-                    break;
-                }
-                case AnimationPlaybackType::k_looping:
-                {
-                    while (mfPlaybackPosition >= mActiveAnimationGroup->GetAnimationLength() && mActiveAnimationGroup->GetAnimationLength() > 0.0f)
-                    {
-                        mfPlaybackPosition -= mActiveAnimationGroup->GetAnimationLength();
-                        mAnimationLoopedEvent.NotifyConnections(this);
-                    }
-                    break;
-                }
-            }
-            
-            //update the fade timer
-            if (nullptr != mFadingAnimationGroup)
-            {
-                mfFadeTimer += infDeltaTime;
-            }
-        }
-    }
-    //----------------------------------------------------------
-    /// Update Attached Entities
-    //----------------------------------------------------------
-    void AnimatedModelComponent::UpdateAttachedEntities()
-    {
-        if (nullptr != mActiveAnimationGroup)
-        {
-            for (AttachedEntityList::iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end();)
-            {
-                if (EntitySPtr pEntity = it->first.lock())
-                {
-                    s32 dwNodeIndex = it->second;
-                    
-                    const Matrix4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
-                    pEntity->GetTransform().SetLocalTransform(matTransform);
-                    ++it;
-                }
-                else
-                {
-                    it = maAttachedEntities.erase(it);
-                }
-            }
-        }
-    }
-    //----------------------------------------------------------
-    /// Reset
-    //----------------------------------------------------------
-    void AnimatedModelComponent::Reset()
-    {
-        DetatchAllEntities();
-        mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeleton()));
-        mFadingAnimationGroup.reset();
-        mfBlendlinePosition = 0.0f;
-        mfFadeTimer = 0.0f;
-        SetPlaybackPosition(0.0f);
     }
 }

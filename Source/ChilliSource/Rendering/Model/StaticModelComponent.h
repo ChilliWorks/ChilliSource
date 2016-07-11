@@ -103,6 +103,57 @@ namespace ChilliSource
         ///
         void SetVisible(bool isVisible) noexcept { m_isVisible = isVisible; }
         
+        /// @return The model that will be rendered.
+        ///
+        const ModelCSPtr& GetModel() const noexcept;
+        
+        /// Sets the model the component should use.
+        ///
+        /// The material currently applied to the first mesh will be applied to the entire model.
+        ///
+        /// @param model
+        ///     The model.
+        ///
+        void SetModel(const ModelCSPtr& model) noexcept;
+        
+        /// Sets the model the component should use. The given material will be applied to all meshes.
+        ///
+        /// @param model
+        ///     The model which should be used.
+        /// @param material
+        ///     The material which should be used.
+        ///
+        void SetModel(const ModelCSPtr& model, const MaterialCSPtr& material) noexcept;
+        
+        /// Sets the model the component should use. The given materials will be applied to the
+        /// respective meshes.
+        ///
+        /// @param model
+        ///     The model which should be used.
+        /// @param materials
+        ///     The material for each mesh in the model. Must have the same number of elements as
+        ///     there are meshes in the given model.
+        ///
+        void SetModel(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials) noexcept;
+        
+        /// Get the material of a single mesh.
+        ///
+        /// @param meshIndex
+        ///     Index to the mesh
+        ///
+        /// @return Handle to material
+        ///
+        const MaterialCSPtr& GetMaterialForMesh(u32 meshIndex) const noexcept;
+        
+        /// Get the material of a single mesh.
+        ///
+        /// @param meshName
+        ///     The name of the mesh.
+        ///
+        /// @return Handle to material
+        ///
+        const MaterialCSPtr& GetMaterialForMesh(const std::string& meshName) const noexcept;
+        
         /// Set the material that the model will use. Applies the material to all meshes.
         ///
         /// @param material
@@ -128,52 +179,14 @@ namespace ChilliSource
         ///
         void SetMaterialForMesh(const MaterialCSPtr& material, const std::string& meshName) noexcept;
         
-        /// Get the material of a single mesh.
+        /// @return Whether the render component casts shadows
         ///
-        /// @param meshIndex
-        ///     Index to the mesh
-        ///
-        /// @return Handle to material
-        ///
-        const MaterialCSPtr& GetMaterialForMesh(u32 meshIndex) const noexcept;
-        
-        /// Get the material of a single mesh.
-        ///
-        /// @param meshName
-        ///     The name of the mesh.
-        ///
-        /// @return Handle to material
-        ///
-        const MaterialCSPtr& GetMaterialForMesh(const std::string& meshName) const noexcept;
-        
-        /// Sets the model the component should use.
-        ///
-        /// @param model
-        ///     The model.
-        ///
-        void SetModel(const ModelCSPtr& model) noexcept;
-        
-        /// Sets the model and material that should be used.
-        ///
-        /// @param model
-        ///     The model
-        /// @param material
-        ///     The material
-        ///
-        void SetModel(const ModelCSPtr& in_model, const MaterialCSPtr& in_material) noexcept;
-        
-        /// @return The model that will be rendered.
-        ///
-        const ModelCSPtr& GetModel() const noexcept;
+        bool IsShadowCastingEnabled() const noexcept;
         
         /// @param enabled
         ///     Whether the render component casts shadows
         ///
         void SetShadowCastingEnabled(bool enabled) noexcept;
-        
-        /// @return Whether the render component casts shadows
-        ///
-        bool IsShadowCastingEnabled() const noexcept;
         
     private:
         /// Triggered when the component is attached to an entity on the scene

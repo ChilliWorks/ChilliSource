@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Model/AnimatedModelComponent.h>
 
 namespace ChilliSource
 {
@@ -89,23 +90,27 @@ namespace ChilliSource
         ///
         /// @author S Downie
         ///
-        /// @param Material
+        /// @param in_model - The model that should be rendered.
+        /// @param in_material - The material that should be applied to the model.
         ///
         /// @return Ownership of new mesh component
         //---------------------------------------------------------------------------
         StaticModelComponentUPtr CreateStaticModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material);
         //---------------------------------------------------------------------------
-        /// Creates an animated mesh component with the given material.
+        /// Creates an animated mesh component with the given material and animation.
         ///
-        /// NOTE: No animations will have been set on the component
+        /// @author Ian Copland
         ///
-        /// @author S Downie
+        /// @param in_model - The model that should be rendered.
+        /// @param in_material - The material that should be applied to the model.
+        /// @param in_animation - The skinned animation that should be applied to the
+        /// model
+        /// @param in_playbackType - The animation playback type.
         ///
-        /// @param Material
-        ///
-        /// @return Ownership of new mesh component
+        /// @return The newly created component.
         //---------------------------------------------------------------------------
-        AnimatedModelComponentUPtr CreateAnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material);
+        AnimatedModelComponentUPtr CreateAnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material, const SkinnedAnimationCSPtr& in_animation,
+                                                                AnimatedModelComponent::PlaybackType in_playbackType) noexcept;
         //---------------------------------------------------------------------------
         /// Create a camera with a perspective projection
         ///

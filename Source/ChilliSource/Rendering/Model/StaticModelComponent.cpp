@@ -191,59 +191,9 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void StaticModelComponent::SetMaterial(const MaterialCSPtr& material) noexcept
+    const ModelCSPtr& StaticModelComponent::GetModel() const noexcept
     {
-        CS_ASSERT(m_model, "Cannot set material without a model.");
-        CS_ASSERT(material, "Cannot set null material.");
-        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
-        
-        for (u32 i = 0; i < m_materials.size(); i++)
-        {
-            m_materials[i] = material;
-        }
-    }
-    
-    //------------------------------------------------------------------------------
-    void StaticModelComponent::SetMaterialForMesh(const MaterialCSPtr& material, u32 meshIndex) noexcept
-    {
-        CS_ASSERT(m_model, "Cannot set material without a model.");
-        CS_ASSERT(material, "Cannot set null material.");
-        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
-        CS_ASSERT(meshIndex < s32(m_materials.size()), "Invalid mesh index.");
-        
-        m_materials[meshIndex] = material;
-    }
-    
-    //------------------------------------------------------------------------------
-    void StaticModelComponent::SetMaterialForMesh(const MaterialCSPtr& material, const std::string& meshName) noexcept
-    {
-        CS_ASSERT(m_model, "Cannot set material without a model.");
-        CS_ASSERT(material, "Cannot set null material.");
-        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
-        
-        auto meshIndex = m_model->GetMeshIndex(meshName);
-        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
-        
-        m_materials[meshIndex] = material;
-    }
-    
-    //------------------------------------------------------------------------------
-    const MaterialCSPtr& StaticModelComponent::GetMaterialForMesh(u32 meshIndex) const noexcept
-    {
-        CS_ASSERT(meshIndex < s32(m_materials.size()), "Invalid mesh index.");
-        
-        return m_materials[meshIndex];
-    }
-    
-    //------------------------------------------------------------------------------
-    const MaterialCSPtr& StaticModelComponent::GetMaterialForMesh(const std::string& meshName) const noexcept
-    {
-        CS_ASSERT(m_model, "Cannot get material without a model.");
-        
-        auto meshIndex = m_model->GetMeshIndex(meshName);
-        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
-        
-        return m_materials[meshIndex];
+        return m_model;
     }
     
     //------------------------------------------------------------------------------
@@ -279,21 +229,91 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const ModelCSPtr& StaticModelComponent::GetModel() const noexcept
+    void StaticModelComponent::SetModel(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials) noexcept
     {
-        return m_model;
+        CS_ASSERT(model, "Cannot set null model.");
+        CS_ASSERT(model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
+        CS_ASSERT(materials.size() == model->GetNumMeshes(), "Model component must have the same number of materials as there are meshes in the model.");
+        
+        for (const auto& material : materials)
+        {
+            CS_ASSERT(material, "Material cannot be null");
+            CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        }
+        
+        m_model = model;
+        m_materials = materials;
+        
+        m_oobb.SetSize(m_model->GetAABB().GetSize());
+        m_oobb.SetOrigin(m_model->GetAABB().GetOrigin());
+    }
+    
+    //------------------------------------------------------------------------------
+    const MaterialCSPtr& StaticModelComponent::GetMaterialForMesh(u32 meshIndex) const noexcept
+    {
+        CS_ASSERT(meshIndex < s32(m_materials.size()), "Invalid mesh index.");
+        
+        return m_materials[meshIndex];
+    }
+    
+    //------------------------------------------------------------------------------
+    const MaterialCSPtr& StaticModelComponent::GetMaterialForMesh(const std::string& meshName) const noexcept
+    {
+        CS_ASSERT(m_model, "Cannot get material without a model.");
+        
+        auto meshIndex = m_model->GetMeshIndex(meshName);
+        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
+        
+        return m_materials[meshIndex];
+    }
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetMaterial(const MaterialCSPtr& material) noexcept
+    {
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        
+        for (u32 i = 0; i < m_materials.size(); i++)
+        {
+            m_materials[i] = material;
+        }
+    }
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetMaterialForMesh(const MaterialCSPtr& material, u32 meshIndex) noexcept
+    {
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        CS_ASSERT(meshIndex < s32(m_materials.size()), "Invalid mesh index.");
+        
+        m_materials[meshIndex] = material;
+    }
+    
+    //------------------------------------------------------------------------------
+    void StaticModelComponent::SetMaterialForMesh(const MaterialCSPtr& material, const std::string& meshName) noexcept
+    {
+        CS_ASSERT(m_model, "Cannot set material without a model.");
+        CS_ASSERT(material, "Cannot set null material.");
+        CS_ASSERT(material->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a material that hasn't been loaded yet.");
+        
+        auto meshIndex = m_model->GetMeshIndex(meshName);
+        CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
+        
+        m_materials[meshIndex] = material;
+    }
+
+    //------------------------------------------------------------------------------
+    bool StaticModelComponent::IsShadowCastingEnabled() const noexcept
+    {
+        return m_shadowCastingEnabled;
     }
     
     //------------------------------------------------------------------------------
     void StaticModelComponent::SetShadowCastingEnabled(bool enabled) noexcept
     {
         m_shadowCastingEnabled = enabled;
-    }
-    
-    //------------------------------------------------------------------------------
-    bool StaticModelComponent::IsShadowCastingEnabled() const noexcept
-    {
-        return m_shadowCastingEnabled;
     }
     
     //------------------------------------------------------------------------------
