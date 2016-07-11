@@ -59,6 +59,7 @@ namespace ChilliSource
             k_applyPointLight,
             k_applyMaterial,
             k_applyMesh,
+            k_applySkinnedAnimation,
             k_applyDynamicMesh,
             k_renderInstance,
             k_end,

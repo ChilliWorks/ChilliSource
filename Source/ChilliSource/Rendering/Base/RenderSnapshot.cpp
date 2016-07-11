@@ -74,6 +74,14 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    void RenderSnapshot::AddRenderSkinnedAnimation(RenderSkinnedAnimationAUPtr renderSkinnedAnimation) noexcept
+    {
+        CS_ASSERT(!m_renderSkinnedAnimationsClaimed, "Render skinned animation list cannot be changed after it has been claimed.");
+        
+        m_renderSkinnedAnimations.push_back(std::move(renderSkinnedAnimation));
+    }
+    
+    //------------------------------------------------------------------------------
     RenderCommandList* RenderSnapshot::GetPreRenderCommandList() noexcept
     {
         CS_ASSERT(m_preRenderCommandList, "Pre-RenderCommandList cannot be modified after it has been claimed.");

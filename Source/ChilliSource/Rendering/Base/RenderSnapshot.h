@@ -35,6 +35,7 @@
 #include <ChilliSource/Rendering/Lighting/DirectionalRenderLight.h>
 #include <ChilliSource/Rendering/Lighting/PointRenderLight.h>
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
+#include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
 #include <vector>
@@ -122,6 +123,12 @@ namespace ChilliSource
         ///
         void AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept;
         
+        /// Adds a RenderSkinnedAnimation to the snapshot. This will be deleted at the end of the frame.
+        ///
+        /// @param The render skinned animation.
+        ///
+        void AddRenderSkinnedAnimation(RenderSkinnedAnimationAUPtr renderSkinnedAnimation) noexcept;
+        
         /// @return A modifiable version of the pre render command list. This can be used to populate
         ///     The list with additional commands.
         ///
@@ -183,7 +190,8 @@ namespace ChilliSource
         std::vector<DirectionalRenderLight> m_renderDirectionalLights;
         std::vector<PointRenderLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
-        std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes;
+        std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes; //TODO: Render dynamic meshes and render skinned animations should be bundled into a single "Frame Data" object which is passed down the pipeline.
+        std::vector<RenderSkinnedAnimationAUPtr> m_renderSkinnedAnimations;
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
         
@@ -193,6 +201,7 @@ namespace ChilliSource
         bool m_renderPointLightsClaimed = false;
         bool m_renderObjectsClaimed = false;
         bool m_renderDynamicMeshesClaimed = false;
+        bool m_renderSkinnedAnimationsClaimed = false;
     };
 };
 

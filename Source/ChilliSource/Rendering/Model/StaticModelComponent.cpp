@@ -238,6 +238,8 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     const MaterialCSPtr& StaticModelComponent::GetMaterialForMesh(const std::string& meshName) const noexcept
     {
+        CS_ASSERT(m_model, "Cannot get material without a model.");
+        
         auto meshIndex = m_model->GetMeshIndex(meshName);
         CS_ASSERT(meshIndex >= 0 && meshIndex < s32(m_materials.size()), "Invalid mesh index.");
         

@@ -1,5 +1,5 @@
 //
-//  AnimatedMeshComponent.h
+//  AnimatedModelComponent.h
 //  Chilli Source
 //  Created by Ian Copland on 17/10/2011.
 //
@@ -53,25 +53,30 @@ namespace ChilliSource
     //===============================================================
     /// Events
     //===============================================================
-    typedef std::function<void(AnimatedMeshComponent*)> AnimationChangedDelegate;
+    typedef std::function<void(AnimatedModelComponent*)> AnimationChangedDelegate;
     typedef Event<AnimationChangedDelegate> AnimationChangedEvent;
-    typedef std::function<void(AnimatedMeshComponent*)> AnimationCompletionDelegate;
+    typedef std::function<void(AnimatedModelComponent*)> AnimationCompletionDelegate;
     typedef Event<AnimationCompletionDelegate> AnimationCompletionEvent;
-    typedef std::function<void(AnimatedMeshComponent*)> AnimationLoopedDelegate;
+    typedef std::function<void(AnimatedModelComponent*)> AnimationLoopedDelegate;
     typedef Event<AnimationLoopedDelegate> AnimationLoopedEvent;
     //===============================================================
     /// Animated Model component
     ///
-    /// An animated mesh component. This defines a 3D mesh that can
+    /// An animated model component. This defines a 3D model that can
     /// be manipulated, textured and animated.
     //===============================================================
-    class AnimatedMeshComponent : public VolumeComponent
+    class AnimatedModelComponent final : public VolumeComponent
     {
     public:
-        CS_DECLARE_NAMEDTYPE(AnimatedMeshComponent);
+        CS_DECLARE_NAMEDTYPE(AnimatedModelComponent);
         
-        AnimatedMeshComponent();
-        ~AnimatedMeshComponent();
+        //----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param in_model - The model.
+        /// @param in_material - The material.
+        //----------------------------------------------------------
+        AnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material) noexcept;
         //----------------------------------------------------------
         /// Is A
         ///
@@ -120,61 +125,51 @@ namespace ChilliSource
         //----------------------------------------------------
         void SetVisible(bool in_isVisible) { m_isVisible = in_isVisible; }
         //-----------------------------------------------------------
-        /// Set Material
-        ///
-        /// Set the material that the mesh will use. Applies the material
-        /// To all submeshes
+        /// Set the material that the model will use. Applies the material
+        /// To all meshes.
         ///
         /// @param Handle to material
         //-----------------------------------------------------------
         void SetMaterial(const MaterialCSPtr& inpMaterial);
         //-----------------------------------------------------------
-        /// Set Material For Sub Model
-        ///
-        /// Set the material that one sub mesh will use.
+        /// Set the material that one mesh will use.
         ///
         /// @param Handle to material
-        /// @Param Index to the submesh
+        /// @Param Index to the submodel
         //-----------------------------------------------------------
-        void SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, u32 indwSubMeshIndex);
+        void SetMaterialForMesh(const MaterialCSPtr& in_material, u32 in_meshIndex);
         //-----------------------------------------------------------
-        /// Set Material For Sub Model
-        ///
-        /// Set the material that one sub mesh will use.
+        /// Set the material that one mesh will use.
         ///
         /// @param Handle to material
-        /// @param The name of the submesh.
+        /// @param The name of the submodel.
         //-----------------------------------------------------------
-        void SetMaterialForSubMesh(const MaterialCSPtr& inpMaterial, const std::string& instrSubMeshName);
+        void SetMaterialForMesh(const MaterialCSPtr& in_material, const std::string& in_meshName);
         //-----------------------------------------------------------
-        /// Get Material Of Sub Model
+        /// Get the material of a single mesh.
         ///
-        /// Get the material of a single sub mesh.
-        ///
-        /// @param Index to the sub mesh
+        /// @param Index to the sub model
         /// @return Handle to material
         //-----------------------------------------------------------
-        const MaterialCSPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
+        const MaterialCSPtr& GetMaterialForMesh(u32 in_meshIndex) const;
         //-----------------------------------------------------------
-        /// Get Material Of Sub Model
+        /// Get the material of a single mesh.
         ///
-        /// Get the material of a single sub mesh.
-        ///
-        /// @param The name of the submesh.
+        /// @param The name of the submodel.
         /// @return Handle to material
         //-----------------------------------------------------------
-        MaterialCSPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
+        const MaterialCSPtr& GetMaterialForMesh(const std::string& in_meshName) const;
         //----------------------------------------------------------
         /// Attach Model
         ///
-        /// Attach a mesh to this component
+        /// Attach a model to this component
         /// @param Model object
         //----------------------------------------------------------
         void SetModel(const ModelCSPtr& inpModel);
         //----------------------------------------------------------
         /// Attach Model
         ///
-        /// Attach a mesh to this component but uses the given 
+        /// Attach a model to this component but uses the given 
         /// material
         /// @param Model object
         //----------------------------------------------------------
@@ -182,7 +177,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Model
         ///
-        /// @return The components internal mesh
+        /// @return The components internal model
         //----------------------------------------------------------
         const ModelCSPtr& GetModel() const;
         //----------------------------------------------------------
@@ -190,7 +185,7 @@ namespace ChilliSource
         ///
         /// Attaches an animation to the active animation group.
         /// The active animation group must have at least one 
-        /// animation in it for the mesh to render.
+        /// animation in it for the model to render.
         ///
         /// @param The animation pointer.
         /// @param the position of the animation on the blendline.
@@ -218,7 +213,7 @@ namespace ChilliSource
         /// will become the "fading" group while a new animation
         /// group will replace it as "active". This new group will
         /// need to have at least one animation attached to it 
-        /// before the mesh can be rendered.
+        /// before the model can be rendered.
         ///
         /// @param The animation fade type.
         /// @param the time to fade out over.
@@ -228,7 +223,7 @@ namespace ChilliSource
         /// Clear Animations
         ///
         /// Clears the content of all animation groups. The
-        /// mesh will not be able to render until at least one 
+        /// model will not be able to render until at least one 
         /// animation has been added again to the active animation
         /// group.
         //----------------------------------------------------------
@@ -236,7 +231,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Entity
         ///
-        /// Attached an entity to a node on the animated meshes
+        /// Attached an entity to a node on the animated modeles
         /// skeleton.
         ///
         /// @param The entity.
@@ -247,7 +242,7 @@ namespace ChilliSource
         /// Detatch Entity
         ///
         /// Removes an entity that has previously been attached to
-        /// the animated meshes skeleton.
+        /// the animated modeles skeleton.
         ///
         /// @param The entity.
         //----------------------------------------------------------
@@ -256,7 +251,7 @@ namespace ChilliSource
         /// Detatch All Entities
         ///
         /// Removes all entities that have previously been attached to
-        /// the animated meshes skeleton.
+        /// the animated modeles skeleton.
         //----------------------------------------------------------
         void DetatchAllEntities();
         //----------------------------------------------------------
@@ -394,6 +389,8 @@ namespace ChilliSource
         //-----------------------------------------------------
         bool IsShadowCastingEnabled() const;
         
+        ~AnimatedModelComponent();
+        
     private:
         //----------------------------------------------------------
         /// Update Animation
@@ -415,7 +412,7 @@ namespace ChilliSource
         /// Update Attached Entities
         ///
         /// Update the transforms of all entities attached to this
-        /// animated mesh components skeleton.
+        /// animated model components skeleton.
         //----------------------------------------------------------
         void UpdateAttachedEntities();
         //----------------------------------------------------------
@@ -439,6 +436,13 @@ namespace ChilliSource
         /// @param The delta time.
         //----------------------------------------------------------
         void OnUpdate(f32 infDeltaTime) override;
+        //----------------------------------------------------------
+        /// Called during the render snapshot phase. Adds render
+        /// objects to the scene describing the model.
+        ///
+        /// @param in_renderSnapshot - The render snapshot.
+        //----------------------------------------------------------
+        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
         //----------------------------------------------------------
         /// Triggered when the component is removed to the scene.
         ///

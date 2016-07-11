@@ -67,6 +67,10 @@ namespace ChilliSource
         ///
         const Sphere& GetBoundingSphere() const noexcept { return m_boundingSphere; }
         
+        /// @return The inverse bind pose matrices for this mesh. Only applies to animated meshes.
+        ///
+        const std::vector<Matrix4>& GetInverseBindPoseMatrices() const noexcept { return m_inverseBindPoseMatrices; }
+        
         /// This is not thread safe and should only be called from the render thread.
         ///
         /// @return A pointer to render system specific additional information.
@@ -97,8 +101,12 @@ namespace ChilliSource
         ///     The number of indices in the mesh.
         /// @param boundingSphere
         ///     A local space sphere enclosing the mesh.
+        /// @param inverseBindPoseMatrices
+        ///     (Optional) The inverse bind pose matices for this mesh. Only applies to animated models.
+        ///     Should be moved.
         ///
-        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere) noexcept;
+        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+                   std::vector<Matrix4> inverseBindPoseMatrices = std::vector<Matrix4>()) noexcept;
         
         PolygonType m_polygonType;
         VertexFormat m_vertexFormat;
@@ -106,6 +114,7 @@ namespace ChilliSource
         u32 m_numVertices;
         u32 m_numIndices;
         Sphere m_boundingSphere;
+        std::vector<Matrix4> m_inverseBindPoseMatrices;
         void* m_extraData = nullptr;
     };
 }

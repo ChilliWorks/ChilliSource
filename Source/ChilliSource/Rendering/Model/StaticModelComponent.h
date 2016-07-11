@@ -117,7 +117,7 @@ namespace ChilliSource
         /// @param meshIndex
         ///     The index of the mesh.
         ///
-        void SetMaterialForMesh(const MaterialCSPtr& imaterial, u32 meshIndex) noexcept;
+        void SetMaterialForMesh(const MaterialCSPtr& material, u32 meshIndex) noexcept;
         
         /// Sets the material for a single mesh.
         ///

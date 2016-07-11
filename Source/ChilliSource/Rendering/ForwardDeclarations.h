@@ -99,7 +99,7 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Model
     //------------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(AnimatedMeshComponent);
+    CS_FORWARDDECLARE_CLASS(AnimatedModelComponent);
     CS_FORWARDDECLARE_CLASS(CSAnimProvider);
     CS_FORWARDDECLARE_CLASS(CSModelProvider);
     CS_FORWARDDECLARE_CLASS(MeshDesc);
@@ -109,6 +109,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderDynamicMesh);
     CS_FORWARDDECLARE_CLASS(RenderMesh);
     CS_FORWARDDECLARE_CLASS(RenderMeshManager);
+    CS_FORWARDDECLARE_CLASS(RenderSkinnedAnimation);
     CS_FORWARDDECLARE_CLASS(Skeleton);
     CS_FORWARDDECLARE_CLASS(SkeletonDesc);
     CS_FORWARDDECLARE_STRUCT(SkeletonNode);

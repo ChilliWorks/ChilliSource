@@ -46,9 +46,10 @@ namespace ChilliSource
 
     //------------------------------------------------------------------------------
     const RenderMesh* RenderMeshManager::CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                                                          std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept
+                                                          std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize,
+                                                          std::vector<Matrix4> inverseBindPoseMatrices) noexcept
     {
-        RenderMeshUPtr renderMesh(new RenderMesh(polygonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere));
+        RenderMeshUPtr renderMesh(new RenderMesh(polygonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, std::move(inverseBindPoseMatrices)));
         auto rawRenderMesh = renderMesh.get();
         
         PendingLoadCommand loadCommand;

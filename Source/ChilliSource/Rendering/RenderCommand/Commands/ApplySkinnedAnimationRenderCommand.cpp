@@ -23,14 +23,13 @@
 //
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplySkinnedAnimationRenderCommand.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ApplyMeshRenderCommand::ApplyMeshRenderCommand(const RenderMesh* renderMesh) noexcept
-        : RenderCommand(Type::k_applyMesh), m_renderMesh(renderMesh)
+    ApplySkinnedAnimationRenderCommand::ApplySkinnedAnimationRenderCommand(const RenderSkinnedAnimation* renderSkinnedAnimation) noexcept
+        : RenderCommand(Type::k_applySkinnedAnimation), m_renderSkinnedAnimation(renderSkinnedAnimation)
     {
-        CS_ASSERT(m_renderMesh, "Render mesh cannot be null.");
     }
 }

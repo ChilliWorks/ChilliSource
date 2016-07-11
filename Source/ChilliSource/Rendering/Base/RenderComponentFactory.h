@@ -105,7 +105,7 @@ namespace ChilliSource
         ///
         /// @return Ownership of new mesh component
         //---------------------------------------------------------------------------
-        AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material);
+        AnimatedModelComponentUPtr CreateAnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material);
         //---------------------------------------------------------------------------
         /// Create a camera with a perspective projection
         ///
