@@ -29,8 +29,10 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/LinearAllocator.h>
 #include <ChilliSource/Rendering/Model/IndexFormat.h>
 #include <ChilliSource/Rendering/Model/PolygonType.h>
+#include <ChilliSource/Rendering/Model/RenderMeshBatch.h>
 
 namespace CSBackend
 {
@@ -40,6 +42,8 @@ namespace CSBackend
         /// buffer creation, and updating and binding the mesh. Binding includes setting up the
         /// relevant shader attributes. A dynamic mesh does not have a fixed vertex or index format,
         /// instead this is set when the data is bound.
+        ///
+        /// This also support batching of meshes.
         ///
         /// This is not thread-safe and should only be accessed from the render thread.
         ///
@@ -57,13 +61,41 @@ namespace CSBackend
             ///
             GLDynamicMesh(u32 vertexDataSize, u32 indexDataSize) noexcept;
             
+            /// @return The current polygon type.
+            ///
+            ChilliSource::PolygonType GetPolygonType() const noexcept { return m_polygonType; }
+            
+            /// @return The current vertex format.
+            ///
+            const ChilliSource::VertexFormat& GetVertexFormat() const noexcept { return m_vertexFormat; }
+            
+            /// @return The current index format.
+            ///
+            ChilliSource::IndexFormat GetIndexFormat() const noexcept { return m_indexFormat; }
+            
+            /// @return The current number of vertices.
+            ///
+            u32 GetNumVertices() const noexcept { return m_numVertices; }
+            
+            /// @return The current number of indices.
+            ///
+            u32 GetNumIndices() const noexcept { return m_numIndices; }
+            
             /// Updates the vertex and index data stored in the dynamic mesh, binds the mesh for use
             /// and applies attibutes to the given shader.
             ///
             /// @param glShader
             ///     The shader to apply attributes to.
+            /// @param polygonType
+            ///     The polygon type of the mesh.
             /// @param vertexFormat
             ///     The vertex format.
+            /// @param indexFormat
+            ///     The index format of the mesh.
+            /// @param numVertices
+            ///     The number of vertices in the mesh.
+            /// @param numIndices
+            ///     The number of indices in the mesh.
             /// @param vertexData
             ///     The vertex data.
             /// @param vertexDataSize
@@ -73,7 +105,33 @@ namespace CSBackend
             /// @param indexDataSize
             ///     The size of the index data.
             ///
-            void Bind(GLShader* glShader, const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
+            void Bind(GLShader* glShader, ChilliSource::PolygonType polygonType, const ChilliSource::VertexFormat& vertexFormat, ChilliSource::IndexFormat indexFormat, u32 numVertices, u32 numIndices,
+                      const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
+            
+            /// Updates the vertex and index data stored in the dynamic mesh, binds the mesh batch for use
+            /// and applies attibutes to the given shader.
+            ///
+            /// @param glShader
+            ///     The shader to apply attributes to.
+            /// @param polygonType
+            ///     The polygon type of the batch.
+            /// @param vertexFormat
+            ///     The vertex format of the batch.
+            /// @param indexFormat
+            ///     The index format of the batch.
+            /// @param numVertices
+            ///     The number of vertices in the batch.
+            /// @param numIndices
+            ///     The number of indices in the batch.
+            /// @param vertexDataSize
+            ///     The total size of the vertex data in the batch.
+            /// @param indexDataSize
+            ///     The total size of the index data in the batch.
+            /// @param batchMeshDescs
+            ///     The list of meshes that should be batched.
+            ///
+            void Bind(GLShader* glShader, ChilliSource::PolygonType polygonType, const ChilliSource::VertexFormat& vertexFormat, ChilliSource::IndexFormat indexFormat, u32 numVertices, u32 numIndices,
+                      u32 vertexDataSize, u32 indexDataSize, const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept;
             
             /// Called when graphics memory is lost, usually through the GLContext being destroyed
             /// on Android. Function will set a flag to handle safe destructing of this object, preventing
@@ -86,10 +144,25 @@ namespace CSBackend
             ~GLDynamicMesh() noexcept;
             
         private:
+            /// Applies the vertex attributes to the given shader.
+            ///
+            /// @param glShader
+            ///     The shader to apply the attributes to.
+            ///
+            void ApplyVertexAttributes(GLShader* glShader) const noexcept;
+            
+            ChilliSource::LinearAllocator m_allocator;
+            
             u32 m_maxVertexDataSize;
             u32 m_maxIndexDataSize;
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
+            
+            ChilliSource::PolygonType m_polygonType = ChilliSource::PolygonType::k_triangle;
+            ChilliSource::VertexFormat m_vertexFormat = ChilliSource::VertexFormat::k_staticMesh;
+            ChilliSource::IndexFormat m_indexFormat = ChilliSource::IndexFormat::k_short;
+            u32 m_numVertices = 0;
+            u32 m_numIndices = 0;
             
             bool m_invalidData = false;
         };

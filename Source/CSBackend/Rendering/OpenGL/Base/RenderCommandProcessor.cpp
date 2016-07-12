@@ -46,6 +46,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshBatchRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplySkinnedAnimationRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
@@ -185,6 +186,9 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyDynamicMesh:
                             ApplyDynamicMesh(static_cast<const ChilliSource::ApplyDynamicMeshRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applyMeshBatch:
+                            ApplyMeshBatch(static_cast<const ChilliSource::ApplyMeshBatchRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_applySkinnedAnimation:
                             ApplySkinnedAnimation(static_cast<const ChilliSource::ApplySkinnedAnimationRenderCommand*>(renderCommand));
@@ -413,6 +417,7 @@ namespace CSBackend
                     m_currentMesh = nullptr;
                     m_currentDynamicMesh = nullptr;
                     m_currentSkinnedAnimation = nullptr;
+                    
                     m_currentShader = renderShader;
                     
                     glShader->Bind();
@@ -465,14 +470,44 @@ namespace CSBackend
                 m_currentSkinnedAnimation = nullptr;
                 
                 auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
+                
+                auto polygonType = m_currentDynamicMesh->GetPolygonType();
                 const auto& vertexFormat = m_currentDynamicMesh->GetVertexFormat();
+                auto indexFormat = m_currentDynamicMesh->GetIndexFormat();
+                auto numVertices = m_currentDynamicMesh->GetNumVertices();
+                auto numIndices = m_currentDynamicMesh->GetNumIndices();
                 auto vertexData = m_currentDynamicMesh->GetVertexData();
                 auto vertexDataSize = m_currentDynamicMesh->GetVertexDataSize();
                 auto indexData = m_currentDynamicMesh->GetIndexData();
                 auto indexDataSize = m_currentDynamicMesh->GetIndexDataSize();
                 
-                m_glDynamicMesh->Bind(glShader, vertexFormat, vertexData, vertexDataSize, indexData, indexDataSize);
+                m_glDynamicMesh->Bind(glShader, polygonType, vertexFormat, indexFormat, numVertices, numIndices, vertexData, vertexDataSize, indexData, indexDataSize);
             }
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyMeshBatch(const ChilliSource::ApplyMeshBatchRenderCommand* renderCommand) noexcept
+        {
+            CS_ASSERT(m_currentMaterial, "A material must be applied before applying mesh batch.");
+            CS_ASSERT(m_currentShader, "A shader must be applied before applying mesh batch.");
+            
+            m_currentMesh = nullptr;
+            m_currentDynamicMesh = nullptr;
+            m_currentSkinnedAnimation = nullptr;
+            auto renderMeshBatch = renderCommand->GetRenderMeshBatch();
+            
+            auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
+            
+            auto polygonType = renderMeshBatch->GetPolygonType();
+            const auto& vertexFormat = renderMeshBatch->GetVertexFormat();
+            auto indexFormat = renderMeshBatch->GetIndexFormat();
+            auto numVertices = renderMeshBatch->GetNumVertices();
+            auto numIndices = renderMeshBatch->GetNumIndices();
+            auto vertexDataSize = renderMeshBatch->GetVertexDataSize();
+            auto indexDataSize = renderMeshBatch->GetIndexDataSize();
+            const auto& meshes = renderMeshBatch->GetMeshes();
+            
+            m_glDynamicMesh->Bind(glShader, polygonType, vertexFormat, indexFormat, numVertices, numIndices, vertexDataSize, indexDataSize, meshes);
         }
         
         //------------------------------------------------------------------------------
@@ -497,8 +532,6 @@ namespace CSBackend
         {
             CS_ASSERT(m_currentMaterial, "A material must be applied before rendering a mesh.");
             CS_ASSERT(m_currentShader, "A shader must be applied before rendering a mesh.");
-            CS_ASSERT(m_currentMesh || m_currentDynamicMesh, "A mesh must be applied before rendering.");
-            CS_ASSERT(!m_currentMesh != !m_currentDynamicMesh, "Both mesh types are currently bound, this shouldn't be possible.");
             
             auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
             glShader->SetUniform(k_uniformWorldMat, renderCommand->GetWorldMatrix(), GLShader::FailurePolicy::k_silent);
@@ -518,13 +551,13 @@ namespace CSBackend
             }
             else
             {
-                if (m_currentDynamicMesh->GetNumIndices() > 0)
+                if (m_glDynamicMesh->GetNumIndices() > 0)
                 {
-                    glDrawElements(ToGLPolygonType(m_currentDynamicMesh->GetPolygonType()), m_currentDynamicMesh->GetNumIndices(), ToGLIndexType(m_currentDynamicMesh->GetIndexFormat()), 0);
+                    glDrawElements(ToGLPolygonType(m_glDynamicMesh->GetPolygonType()), m_glDynamicMesh->GetNumIndices(), ToGLIndexType(m_glDynamicMesh->GetIndexFormat()), 0);
                 }
                 else
                 {
-                    glDrawArrays(ToGLPolygonType(m_currentDynamicMesh->GetPolygonType()), 0, m_currentDynamicMesh->GetNumVertices());
+                    glDrawArrays(ToGLPolygonType(m_glDynamicMesh->GetPolygonType()), 0, m_glDynamicMesh->GetNumVertices());
                 }
             }
             

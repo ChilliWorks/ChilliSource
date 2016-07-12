@@ -28,15 +28,105 @@
 #include <CSBackend/Rendering/OpenGL/Model/GLMeshUtils.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 
+#include <ChilliSource/Core/Base/ByteColour.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 namespace CSBackend
 {
     namespace OpenGL
     {
+        namespace
+        {
+            constexpr u32 k_allocatorSize = 1024 * 1024;
+            
+            /// TODO
+            struct SpriteVertex final
+            {
+                ChilliSource::Vector4 m_position;
+                ChilliSource::Vector2 m_uvs;
+                ChilliSource::ByteColour m_colour;
+            };
+            
+            /// TODO
+            ///
+            void ApplySpriteVertices(ChilliSource::LinearAllocator& allocator, u32 numVertices, u32 vertexDataSize, const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+            {
+                auto combinedVertices = ChilliSource::MakeUniqueArray<SpriteVertex>(allocator, numVertices);
+                
+                u32 vertexOffset = 0;
+                for (const auto& mesh : meshes)
+                {
+                    auto meshVertices = reinterpret_cast<const SpriteVertex*>(mesh.GetVertexData());
+                    
+                    for (u32 i = 0; i < mesh.GetNumVertices(); ++i)
+                    {
+                        combinedVertices[vertexOffset + i] = meshVertices[i];
+                        combinedVertices[vertexOffset + i].m_position *= mesh.GetWorldMatrix();
+                    }
+                    
+                    vertexOffset += mesh.GetNumVertices();
+                }
+                
+                glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, reinterpret_cast<const u8*>(combinedVertices.get()));
+                
+                combinedVertices.reset();
+                allocator.Reset();
+            }
+            
+            /// TODO
+            ///
+            void ApplyVertices(ChilliSource::LinearAllocator& allocator, const ChilliSource::VertexFormat& vertexFormat, u32 numVertices, u32 vertexDataSize,
+                               const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+            {
+                if (vertexFormat == ChilliSource::VertexFormat::k_sprite)
+                {
+                    ApplySpriteVertices(allocator, numVertices, vertexDataSize, meshes);
+                }
+                else if (vertexFormat == ChilliSource::VertexFormat::k_staticMesh)
+                {
+                    //TODO: handle mesh vertices
+                }
+                else
+                {
+                    CS_LOG_FATAL("Unsupported vertex format.");
+                }
+            }
+            
+            /// TODO
+            ///
+            void ApplyIndices(ChilliSource::LinearAllocator& allocator, ChilliSource::IndexFormat indexFormat, u32 numIndices, u32 indexDataSize,
+                              const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+            {
+                CS_ASSERT(indexFormat == ChilliSource::IndexFormat::k_short, "Only short indices are supported at the moment.");
+                
+                auto combinedIndices = ChilliSource::MakeUniqueArray<u16>(allocator, numIndices);
+                
+                u32 vertexOffset = 0;
+                u32 indexOffset = 0;
+                for (const auto& mesh : meshes)
+                {
+                    auto meshIndices = reinterpret_cast<const u16*>(mesh.GetIndexData());
+                    
+                    for (u32 i = 0; i < mesh.GetNumIndices(); ++i)
+                    {
+                        combinedIndices[indexOffset + i] = vertexOffset + meshIndices[i];
+                    }
+                    
+                    vertexOffset += mesh.GetNumVertices();
+                    indexOffset += mesh.GetNumIndices();
+                }
+                
+                glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexDataSize, reinterpret_cast<const u8*>(combinedIndices.get()));
+                
+                combinedIndices.reset();
+                allocator.Reset();
+            }
+        }
+        
         //------------------------------------------------------------------------------
         GLDynamicMesh::GLDynamicMesh(u32 vertexDataSize, u32 indexDataSize) noexcept
-        : m_maxVertexDataSize(vertexDataSize), m_maxIndexDataSize(indexDataSize)
+           : m_allocator(k_allocatorSize), m_maxVertexDataSize(vertexDataSize), m_maxIndexDataSize(indexDataSize)
         {
             glGenBuffers(1, &m_vertexBufferHandle);
             CS_ASSERT(m_vertexBufferHandle != 0, "Invalid vertex buffer.");
@@ -60,12 +150,14 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLDynamicMesh::Bind(GLShader* glShader, const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept
+        void GLDynamicMesh::Bind(GLShader* glShader, ChilliSource::PolygonType polygonType, const ChilliSource::VertexFormat& vertexFormat, ChilliSource::IndexFormat indexFormat, u32 numVertices, u32 numIndices,
+                                 const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept
         {
-            //TODO: This should be pre-calculated.
-            GLint maxVertexAttributes = 0;
-            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
-            CS_ASSERT(u32(maxVertexAttributes) >= vertexFormat.GetNumElements(), "Too many vertex elements.");
+            m_polygonType = polygonType;
+            m_vertexFormat = vertexFormat;
+            m_indexFormat = indexFormat;
+            m_numVertices = numVertices;
+            m_numIndices = m_numIndices;
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, vertexData);
@@ -78,21 +170,54 @@ namespace CSBackend
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding GLDynamicMesh.");
             
-            for (u32 i = 0; i < vertexFormat.GetNumElements(); ++i)
+            ApplyVertexAttributes(glShader);
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLDynamicMesh::Bind(GLShader* glShader, ChilliSource::PolygonType polygonType, const ChilliSource::VertexFormat& vertexFormat, ChilliSource::IndexFormat indexFormat,
+                                 u32 numVertices, u32 numIndices, u32 vertexDataSize, u32 indexDataSize, const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+        {
+            m_polygonType = polygonType;
+            m_vertexFormat = vertexFormat;
+            m_indexFormat = indexFormat;
+            m_numVertices = numVertices;
+            m_numIndices = numIndices;
+            
+            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
+            ApplyVertices(m_allocator, m_vertexFormat, numVertices, vertexDataSize, meshes);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
+            if (m_indexBufferHandle != 0)
+            {
+                ApplyIndices(m_allocator, indexFormat, numIndices, indexDataSize, meshes);
+            }
+            
+            ApplyVertexAttributes(glShader);
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLDynamicMesh::ApplyVertexAttributes(GLShader* glShader) const noexcept
+        {
+            //TODO: This should be pre-calculated.
+            GLint maxVertexAttributes = 0;
+            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
+            CS_ASSERT(u32(maxVertexAttributes) >= m_vertexFormat.GetNumElements(), "Too many vertex elements.");
+            
+            for (u32 i = 0; i < m_vertexFormat.GetNumElements(); ++i)
             {
                 glEnableVertexAttribArray(i);
                 
-                auto elementType = vertexFormat.GetElement(i);
+                auto elementType = m_vertexFormat.GetElement(i);
                 auto name = GLMeshUtils::GetAttributeName(elementType);
                 auto numComponents = ChilliSource::VertexFormat::GetNumComponents(elementType);
                 auto type = GLMeshUtils::GetGLType(ChilliSource::VertexFormat::GetDataType(elementType));
                 auto normalised = GLMeshUtils::IsNormalised(elementType);
-                auto offset = reinterpret_cast<const GLvoid*>(u64(vertexFormat.GetElementOffset(i)));
+                auto offset = reinterpret_cast<const GLvoid*>(u64(m_vertexFormat.GetElementOffset(i)));
                 
-                glShader->SetAttribute(name, numComponents, type, normalised, vertexFormat.GetSize(), offset);
+                glShader->SetAttribute(name, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
             }
             
-            for (s32 i = vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
+            for (s32 i = m_vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
             {
                 glDisableVertexAttribArray(i);
             }

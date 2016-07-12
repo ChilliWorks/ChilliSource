@@ -109,6 +109,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(PrimitiveModelFactory);
     CS_FORWARDDECLARE_CLASS(RenderDynamicMesh);
     CS_FORWARDDECLARE_CLASS(RenderMesh);
+    CS_FORWARDDECLARE_CLASS(RenderMeshBatch);
     CS_FORWARDDECLARE_CLASS(RenderMeshManager);
     CS_FORWARDDECLARE_CLASS(RenderSkinnedAnimation);
     CS_FORWARDDECLARE_CLASS(Skeleton);
@@ -116,6 +117,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_STRUCT(SkeletonNode);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
     CS_FORWARDDECLARE_CLASS(SkinnedAnimationGroup);
+    CS_FORWARDDECLARE_CLASS(SmallMeshBatcher);
     CS_FORWARDDECLARE_CLASS(StaticModelComponent);
     CS_FORWARDDECLARE_CLASS(VertexFormat);
     enum class IndexFormat;
@@ -175,6 +177,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ApplyDynamicMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplyMeshBatchRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyPointLightRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplySkinnedAnimationRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginRenderCommand);

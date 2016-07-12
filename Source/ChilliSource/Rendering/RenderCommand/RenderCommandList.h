@@ -197,6 +197,13 @@ namespace ChilliSource
         ///
         void AddApplyDynamicMeshCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept;
         
+        /// Creates and adds a new apply mesh batch command to the render command list.
+        ///
+        /// @param renderMeshBatch
+        ///     The render mesh batch which should be applied. Must be moved.
+        ///
+        void AddApplyMeshBatchCommand(RenderMeshBatchUPtr renderMeshBatch) noexcept;
+        
         /// Creates and adds a new apply skinned animation command to the render command list.
         ///
         /// @param renderSkinnedAnimation
