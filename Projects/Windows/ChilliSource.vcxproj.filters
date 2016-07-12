@@ -1302,6 +1302,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameData.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.cpp">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2764,6 +2767,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameData.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.h">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

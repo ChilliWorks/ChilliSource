@@ -248,6 +248,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\RenderCommandList.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\CSShaderProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderManager.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteMeshBuilder.cpp" />
@@ -712,6 +713,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\CSShaderProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderManager.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.h" />

@@ -36,6 +36,7 @@ namespace CSBackend
     {
         namespace
         {
+#ifdef CS_TARGETPLATFORM_WINDOWS
             /// Creates a new colour render buffer with the requested size.
             ///
             /// @param dimensions
@@ -54,6 +55,7 @@ namespace CSBackend
                 
                 return handle;
             }
+#endif
             
             /// Creates a new depth render buffer with the requested size.
             ///

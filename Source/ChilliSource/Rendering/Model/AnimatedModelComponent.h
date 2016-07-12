@@ -308,7 +308,7 @@ namespace ChilliSource
         
         /// @return The list of all active animations.
         ///
-        const std::vector<SkinnedAnimationCSPtr>& GetAnimations() const noexcept;
+        std::vector<SkinnedAnimationCSPtr> GetAnimations() const noexcept;
         
         /// Sets the currently playing animation with the given playback type.
         ///

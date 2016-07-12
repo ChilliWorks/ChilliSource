@@ -325,7 +325,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const std::vector<SkinnedAnimationCSPtr>& AnimatedModelComponent::GetAnimations() const noexcept
+    std::vector<SkinnedAnimationCSPtr> AnimatedModelComponent::GetAnimations() const noexcept
     {
         CS_ASSERT(m_activeAnimationGroup, "There must be an active animation group.");
         

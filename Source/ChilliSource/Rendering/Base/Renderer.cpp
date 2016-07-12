@@ -77,7 +77,6 @@ namespace ChilliSource
         auto taskScheduler = Application::Get()->GetTaskScheduler();
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
-            auto frameAllocator = m_currentSnapshot.GetFrameAllocator();
             auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
             auto renderCamera = m_currentSnapshot.GetRenderCamera();

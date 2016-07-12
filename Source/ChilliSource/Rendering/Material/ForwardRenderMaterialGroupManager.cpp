@@ -338,6 +338,7 @@ namespace ChilliSource
                                                                                                   RenderShaderVariablesUPtr renderShaderVariables) noexcept
     {
         //TODO: Create RenderMaterials from pools.
+        RenderMaterialUPtr shadowMapMaterial;
         auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
                                                             destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         
@@ -349,6 +350,16 @@ namespace ChilliSource
         }
         else
         {
+            if (vertexFormat == VertexFormat::k_staticMesh)
+            {
+                shadowMapMaterial = CreateShadowMap(m_staticShadowMap);
+            }
+            else if(vertexFormat == VertexFormat::k_animatedMesh)
+            {
+                shadowMapMaterial = CreateShadowMap(m_animatedShadowMap);
+            }
+            
+            renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = shadowMapMaterial.get();
             renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = renderMaterial.get();
         }
         
@@ -356,6 +367,11 @@ namespace ChilliSource
         
         std::vector<RenderMaterialUPtr> renderMaterials;
         renderMaterials.push_back(std::move(renderMaterial));
+        
+        if (shadowMapMaterial)
+        {
+            renderMaterials.push_back(std::move(shadowMapMaterial));
+        }
         
         RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
