@@ -99,7 +99,7 @@ namespace ChilliSource
      
         /// @return A copy of the render target groups
         ///
-        std::vector<const RenderTargetGroup*> GetRenderTargetGroups() const noexcept;
+        std::vector<const RenderTargetGroup*> GetRenderTargetGroups() noexcept;
         
         /// Removes the render target group from the manager and queues an UnloadTargetGroupRenderCommand
         /// for the next Render Snapshot stage in the render pipeline. The render command is given

@@ -80,8 +80,10 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    std::vector<const RenderTargetGroup*> RenderTargetGroupManager::GetRenderTargetGroups() const noexcept
+    std::vector<const RenderTargetGroup*> RenderTargetGroupManager::GetRenderTargetGroups() noexcept
     {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
         std::vector<const RenderTargetGroup*> renderTargetGroups;
         for(const auto& targetGroup : m_renderTargetGroups)
         {

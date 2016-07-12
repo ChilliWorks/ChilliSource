@@ -104,7 +104,7 @@ namespace CSBackend
                     }
                 }
                 
-                auto renderTargetGroupManager = CS::Application::Get()->GetSystem<CS::RenderTargetGroupManager>();
+                auto renderTargetGroupManager = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderTargetGroupManager>();
                 for(const auto renderTargetGroup : renderTargetGroupManager->GetRenderTargetGroups())
                 {
                     GLTargetGroup* targetGroup = static_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
@@ -151,7 +151,7 @@ namespace CSBackend
                 }
                 resourcePool->RefreshResources<ChilliSource::Model>();
                 
-                auto renderTargetGroupManager = CS::Application::Get()->GetSystem<CS::RenderTargetGroupManager>();
+                auto renderTargetGroupManager = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderTargetGroupManager>();
                 for(const auto renderTargetGroup : renderTargetGroupManager->GetRenderTargetGroups())
                 {
                     ChilliSource::RestoreRenderTargetGroupCommand command(renderTargetGroup);

@@ -291,7 +291,7 @@ namespace CSBackend
                 
                 if(renderTexture->IsMipmapped())
                 {
-                    CS_ASSERT(CS::MathUtils::IsPowerOfTwo(dimensions.x) && CS::MathUtils::IsPowerOfTwo(dimensions.y), "Mipmapped images must be a power of two.");
+                    CS_ASSERT(ChilliSource::MathUtils::IsPowerOfTwo(dimensions.x) && ChilliSource::MathUtils::IsPowerOfTwo(dimensions.y), "Mipmapped images must be a power of two.");
                     
                     glGenerateMipmap(GL_TEXTURE_2D);
                 }

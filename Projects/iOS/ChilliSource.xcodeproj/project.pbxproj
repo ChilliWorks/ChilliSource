@@ -363,6 +363,8 @@
 		818C150E1D22FB70001D639B /* GLMeshUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818C150C1D22FB70001D639B /* GLMeshUtils.cpp */; };
 		81A5AF5F1D11575A00307707 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A5AF5D1D11575A00307707 /* GLShader.cpp */; };
 		81A5AF671D1190FB00307707 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A5AF651D1190FB00307707 /* GLTexture.cpp */; };
+		81A616B11D357133007F7CC1 /* TargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A616AF1D357133007F7CC1 /* TargetGroup.cpp */; };
+		81A616B41D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */; };
 		81B096051D2AB8CA00E72835 /* GLContextRestorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B096031D2AB8CA00E72835 /* GLContextRestorer.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
 		81C7FF8C1C89DD0600D306F9 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE821C89DD0500D306F9 /* libCSBase.a */; };
@@ -1277,6 +1279,10 @@
 		81A5AF5E1D11575A00307707 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
 		81A5AF651D1190FB00307707 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
 		81A5AF661D1190FB00307707 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
+		81A616AF1D357133007F7CC1 /* TargetGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargetGroup.cpp; sourceTree = "<group>"; };
+		81A616B01D357133007F7CC1 /* TargetGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetGroup.h; sourceTree = "<group>"; };
+		81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RestoreRenderTargetGroupCommand.cpp; sourceTree = "<group>"; };
+		81A616B31D357159007F7CC1 /* RestoreRenderTargetGroupCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestoreRenderTargetGroupCommand.h; sourceTree = "<group>"; };
 		81B096031D2AB8CA00E72835 /* GLContextRestorer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLContextRestorer.cpp; sourceTree = "<group>"; };
 		81B096041D2AB8CA00E72835 /* GLContextRestorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLContextRestorer.h; sourceTree = "<group>"; };
 		81C7FE521C89DD0500D306F9 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -2810,6 +2816,8 @@
 		8184605D1D3503E8004B0C46 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */,
+				81A616B31D357159007F7CC1 /* RestoreRenderTargetGroupCommand.h */,
 				8184605E1D3503E8004B0C46 /* ApplyAmbientLightRenderCommand.cpp */,
 				8184605F1D3503E8004B0C46 /* ApplyAmbientLightRenderCommand.h */,
 				818460601D3503E8004B0C46 /* ApplyCameraRenderCommand.cpp */,
@@ -2892,6 +2900,8 @@
 		818460A61D3503E8004B0C46 /* Target */ = {
 			isa = PBXGroup;
 			children = (
+				81A616AF1D357133007F7CC1 /* TargetGroup.cpp */,
+				81A616B01D357133007F7CC1 /* TargetGroup.h */,
 				818460A71D3503E8004B0C46 /* RenderTargetGroup.cpp */,
 				818460A81D3503E8004B0C46 /* RenderTargetGroup.h */,
 				818460A91D3503E8004B0C46 /* RenderTargetGroupManager.cpp */,
@@ -3506,6 +3516,7 @@
 				818462321D3503E8004B0C46 /* RenderCommand.cpp in Sources */,
 				8184625B1D3503E8004B0C46 /* ToggleHighlightUIComponent.cpp in Sources */,
 				818461851D3503E8004B0C46 /* UnifiedCoordinates.cpp in Sources */,
+				81A616B11D357133007F7CC1 /* TargetGroup.cpp in Sources */,
 				8184623E1D3503E8004B0C46 /* CubemapProvider.cpp in Sources */,
 				818462161D3503E8004B0C46 /* SphereParticleEmitterDef.cpp in Sources */,
 				818462741D3503E8004B0C46 /* EditableTextUIComponent.cpp in Sources */,
@@ -3694,6 +3705,7 @@
 				818462631D3503E8004B0C46 /* UIDrawable.cpp in Sources */,
 				8184622A1D3503E8004B0C46 /* RenderInstanceRenderCommand.cpp in Sources */,
 				818461F91D3503E8004B0C46 /* AccelerationParticleAffectorDef.cpp in Sources */,
+				81A616B41D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp in Sources */,
 				818461B51D3503E8004B0C46 /* MoContentDownloader.cpp in Sources */,
 				818462561D3503E8004B0C46 /* WidgetFactory.cpp in Sources */,
 				818461691D3503E8004B0C46 /* Entity.cpp in Sources */,
