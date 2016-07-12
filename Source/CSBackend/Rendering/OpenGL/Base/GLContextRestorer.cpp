@@ -105,9 +105,8 @@ namespace CSBackend
                 }
                 
                 auto renderTargetGroupManager = CS::Application::Get()->GetSystem<CS::RenderTargetGroupManager>();
-                for(u32 i = 0; i < renderTargetGroupManager->GetNumRenderTargetGroups(); ++i)
+                for(const auto renderTargetGroup : renderTargetGroupManager->GetRenderTargetGroups())
                 {
-                    auto renderTargetGroup = renderTargetGroupManager->GetRenderTargetGroup(i);
                     GLTargetGroup* targetGroup = static_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
                     targetGroup->Invalidate();
                 }
@@ -153,9 +152,8 @@ namespace CSBackend
                 resourcePool->RefreshResources<ChilliSource::Model>();
                 
                 auto renderTargetGroupManager = CS::Application::Get()->GetSystem<CS::RenderTargetGroupManager>();
-                for(u32 i = 0; i < renderTargetGroupManager->GetNumRenderTargetGroups(); ++i)
+                for(const auto renderTargetGroup : renderTargetGroupManager->GetRenderTargetGroups())
                 {
-                    auto renderTargetGroup = renderTargetGroupManager->GetRenderTargetGroup(i);
                     ChilliSource::RestoreRenderTargetGroupCommand command(renderTargetGroup);
                     m_pendingRestoreRenderTargetGroupCommands.push_back(std::move(command));
                 }

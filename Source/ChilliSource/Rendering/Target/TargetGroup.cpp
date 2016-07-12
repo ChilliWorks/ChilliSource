@@ -63,19 +63,19 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    TargetGroupUPtr TargetGroup::CreateTargetGroup(const Texture* colourTarget, const Texture* depthTarget) noexcept
+    TargetGroupUPtr TargetGroup::CreateTargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget) noexcept
     {
         return TargetGroupUPtr(new TargetGroup(colourTarget, depthTarget, false));
     }
     
     //------------------------------------------------------------------------------
-    TargetGroupUPtr TargetGroup::CreateColourTargetGroup(const Texture* colourTarget, bool shouldUseDepthBuffer) noexcept
+    TargetGroupUPtr TargetGroup::CreateColourTargetGroup(const TextureCSPtr& colourTarget, bool shouldUseDepthBuffer) noexcept
     {
         return TargetGroupUPtr(new TargetGroup(colourTarget, nullptr, shouldUseDepthBuffer));
     }
     
     //------------------------------------------------------------------------------
-    TargetGroupUPtr TargetGroup::CreateDepthTargetGroup(const Texture* depthTarget) noexcept
+    TargetGroupUPtr TargetGroup::CreateDepthTargetGroup(const TextureCSPtr& depthTarget) noexcept
     {
         return TargetGroupUPtr(new TargetGroup(nullptr, depthTarget, false));
     }
@@ -109,15 +109,31 @@ namespace ChilliSource
             renderTargetGroupManager->DestroyRenderTargetGroup(m_renderTargetGroup);
             m_renderTargetGroup = nullptr;
         }
+        
+        if(m_cachedDepthTargetTexture)
+        {
+            m_cachedDepthTargetTexture.reset();
+        }
+        
+        if(m_cachedColourTargetTexture)
+        {
+            m_cachedColourTargetTexture.reset();
+        }
     }
     
     //------------------------------------------------------------------------------
-    TargetGroup::TargetGroup(const Texture* colourTarget, const Texture* depthTarget, bool shouldUseDepthBuffer) noexcept
+    TargetGroup::TargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget, bool shouldUseDepthBuffer) noexcept
         : m_cachedColourTargetTexture(colourTarget), m_cachedDepthTargetTexture(depthTarget), m_shouldUseDepthBuffer(shouldUseDepthBuffer)
     {
         m_cachedColourTargetRenderTexture = colourTarget == nullptr ? nullptr : colourTarget->GetRenderTexture();
         m_cachedDepthTargetRenderTexture = depthTarget == nullptr ? nullptr : depthTarget->GetRenderTexture();
         
         m_renderTargetGroup = CreateRenderTargetGroup(m_cachedColourTargetRenderTexture, m_cachedDepthTargetRenderTexture, m_shouldUseDepthBuffer);
+    }
+    
+    //------------------------------------------------------------------------------
+    TargetGroup::~TargetGroup() noexcept
+    {
+        DestroyRenderTargetGroup();
     }
 }

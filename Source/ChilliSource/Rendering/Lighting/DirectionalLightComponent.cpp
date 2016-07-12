@@ -120,13 +120,18 @@ namespace ChilliSource
             
             m_shadowMap = mutableShadowMap;
             
-            m_shadowMapTarget = TargetGroup::CreateDepthTargetGroup(m_shadowMap.get());
+            m_shadowMapTarget = TargetGroup::CreateDepthTargetGroup(m_shadowMap);
         }
     }
     
     //------------------------------------------------------------------------------
     void DirectionalLightComponent::TryDestroyShadowMapTarget() noexcept
     {
+        if (m_shadowMapTarget)
+        {
+            m_shadowMapTarget.reset();
+        }
+        
         if (m_shadowMap)
         {
             auto resourcePool = Application::Get()->GetResourcePool();
@@ -134,12 +139,6 @@ namespace ChilliSource
             auto release = m_shadowMap.get();
             m_shadowMap.reset();
             resourcePool->Release(release);
-        }
-        
-        if (m_shadowMapTarget)
-        {
-            m_shadowMapTarget->DestroyRenderTargetGroup();
-            m_shadowMapTarget.reset();
         }
     }
     

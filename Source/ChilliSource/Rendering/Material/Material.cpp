@@ -419,10 +419,9 @@ namespace ChilliSource
     //----------------------------------------------------------
     bool Material::VerifyTexturesAreValid() const noexcept
     {
-        bool valid = true;
         if(m_textures.size() != m_cachedRenderTextures.size())
         {
-            valid = false;
+            return false;
         }
         else
         {
@@ -431,13 +430,12 @@ namespace ChilliSource
                 const auto& texture = m_textures[i];
                 if(texture->GetRenderTexture() != m_cachedRenderTextures[i])
                 {
-                    valid = false;
-                    break;
+                    return false;
                 }
             }
         }
         
-        return valid;
+        return true;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------

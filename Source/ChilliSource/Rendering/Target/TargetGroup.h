@@ -29,10 +29,13 @@
 
 namespace ChilliSource
 {
-    /// Used to create and manage access to a RenderTargetGroup.
+    /// Represents a group of colour and depth render targets that can be bound for rendering.
+    /// There are two types of render target: colour and depth. Fragment colour data will be
+    /// written to the colour target, while fragment depth data will be written to the depth
+    /// target.
     ///
-    /// If the colour/depth target has changed since the last access, then a
-    /// new RenderTargetGroup will be created.
+    /// If creating a target group that only contains a colour target then, optionally,
+    /// an efficient depth buffer can be created.
     ///
     /// This is mutable and therefore not thread safe
     ///
@@ -49,7 +52,7 @@ namespace ChilliSource
         ///
         /// @return The new render group instance.
         ///
-        static TargetGroupUPtr CreateTargetGroup(const Texture* colourTarget, const Texture* depthTarget) noexcept;
+        static TargetGroupUPtr CreateTargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget) noexcept;
         
         /// Creates a new colour only TargetGroup.
         ///
@@ -60,7 +63,7 @@ namespace ChilliSource
         ///
         /// @return The new render group instance.
         ///
-        static TargetGroupUPtr CreateColourTargetGroup(const Texture* colourTarget, bool shouldUseDepthBuffer = true) noexcept;
+        static TargetGroupUPtr CreateColourTargetGroup(const TextureCSPtr& colourTarget, bool shouldUseDepthBuffer = true) noexcept;
         
         /// Creates a new depth only TargetGroup
         ///
@@ -69,15 +72,17 @@ namespace ChilliSource
         ///
         /// @return The new render group instance.
         ///
-        static TargetGroupUPtr CreateDepthTargetGroup(const Texture* depthTarget) noexcept;
+        static TargetGroupUPtr CreateDepthTargetGroup(const TextureCSPtr& depthTarget) noexcept;
         
+        /// Gets the current RenderTargetGroup. If the colour/depth target has
+        /// changed since the last access, then a new RenderTargetGroup will
+        /// be created.
+        ///
         /// @return The render target group.
         ///
         const RenderTargetGroup* GetRenderTargetGroup() noexcept;
         
-        /// Destroys the render target group if there is one.
-        ///
-        void DestroyRenderTargetGroup() noexcept;
+        ~TargetGroup() noexcept;
         
     private:
         
@@ -89,14 +94,18 @@ namespace ChilliSource
         ///     Whether or not to use an internal depth buffer if no depth buffer was specified.
         ///     This should always be false if a depth target was supplied.
         ///
-        TargetGroup(const Texture* colourTarget, const Texture* depthTarget, bool shouldUseDepthBuffer) noexcept;
+        TargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget, bool shouldUseDepthBuffer) noexcept;
+        
+        /// Destroys the render target group if there is one.
+        ///
+        void DestroyRenderTargetGroup() noexcept;
         
     private:
         
         const RenderTargetGroup* m_renderTargetGroup = nullptr;
         
-        const Texture* m_cachedColourTargetTexture = nullptr;
-        const Texture* m_cachedDepthTargetTexture = nullptr;
+        TextureCSPtr m_cachedColourTargetTexture = nullptr;
+        TextureCSPtr m_cachedDepthTargetTexture = nullptr;
         
         const RenderTexture* m_cachedColourTargetRenderTexture = nullptr;
         const RenderTexture* m_cachedDepthTargetRenderTexture = nullptr;
