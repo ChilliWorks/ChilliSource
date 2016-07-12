@@ -32,7 +32,9 @@
 
 #import <CSBackend/Platform/iOS/Networking/Http/HttpDelegate.h>
 #include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #import <Foundation/Foundation.h>
@@ -48,58 +50,72 @@ namespace CSBackend
 		{
             CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
             
-            @autoreleasepool
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:m_url];
-                NSURL* url = [NSURL URLWithString:urlString];
-                [urlString release];
-                
-                NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:in_timeoutSecs];
-                
-                //apply header
-                NSMutableDictionary* header = [NSMutableDictionary dictionaryWithCapacity:m_headers.size()];
-                for (const auto& fieldPair : m_headers)
+                @autoreleasepool
                 {
-                    NSString* key = [NSStringUtils newNSStringWithUTF8String:fieldPair.first];
-                    NSString* value = [NSStringUtils newNSStringWithUTF8String:fieldPair.second];
-                    [header setObject:value forKey:key];
-                    [value release];
-                    [key release];
-                }
-                [request setAllHTTPHeaderFields:header];
-                
-                //apply body if a post request.
-                if (m_type == Type::k_post)
-                {
-                    request.HTTPMethod = @"POST";
-                    request.HTTPBody = [NSData dataWithBytes:m_body.c_str() length:m_body.length()];
-                }
-                
-                auto connectionEstablishedDelegate = [this](u64 in_expectedSize)
-                {
-                    m_expectedSize = in_expectedSize;
-                };
-                
-                auto connectionFlushedDelegate = [this](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
-                {
-                    CS_ASSERT(m_complete == false, "Cannot flush an already completed request.");
-                    m_downloadedBytes += in_data.length();
-                    m_completionDelegate(this, ChilliSource::HttpResponse(in_result, in_responseCode, in_data));
-                };
-                
-                auto connectionCompleteDelegate = [this](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
-                {
-                    CS_ASSERT(m_complete == false, "Cannot complete an already completed request.");
+                    NSString* urlString = [NSStringUtils newNSStringWithUTF8String:m_url];
+                    NSURL* url = [NSURL URLWithString:urlString];
+                    [urlString release];
                     
-                    m_downloadedBytes += in_data.length();
+                    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:in_timeoutSecs];
                     
-                    m_complete = true;
-                    m_completionDelegate(this, ChilliSource::HttpResponse(in_result, in_responseCode, in_data));
-                };
-                
-                m_httpDelegate = [[HttpDelegate alloc] initWithConnectionDelegate:connectionEstablishedDelegate andFlushedDelegate:connectionFlushedDelegate andCompleteDelegate:connectionCompleteDelegate andMaxBufferSize:in_maxBufferSize];
-                m_connection = [[NSURLConnection connectionWithRequest:[request copy] delegate: m_httpDelegate] retain];
-            }
+                    //apply header
+                    NSMutableDictionary* header = [NSMutableDictionary dictionaryWithCapacity:m_headers.size()];
+                    for (const auto& fieldPair : m_headers)
+                    {
+                        NSString* key = [NSStringUtils newNSStringWithUTF8String:fieldPair.first];
+                        NSString* value = [NSStringUtils newNSStringWithUTF8String:fieldPair.second];
+                        [header setObject:value forKey:key];
+                        [value release];
+                        [key release];
+                    }
+                    [request setAllHTTPHeaderFields:header];
+                    
+                    //apply body if a post request.
+                    if (m_type == Type::k_post)
+                    {
+                        request.HTTPMethod = @"POST";
+                        request.HTTPBody = [NSData dataWithBytes:m_body.c_str() length:m_body.length()];
+                    }
+                    
+                    auto connectionEstablishedDelegate = [this](u64 in_expectedSize)
+                    {
+                        m_expectedSize = in_expectedSize;
+                    };
+                    
+                    auto connectionFlushedDelegate = [this](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+                    {
+                        if(!m_complete)
+                        {
+                            m_downloadedBytes += in_data.length();
+                            
+                            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                            {
+                                m_completionDelegate(this, ChilliSource::HttpResponse(in_result, in_responseCode, in_data));
+                            });
+                        }
+                    };
+                    
+                    auto connectionCompleteDelegate = [this](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+                    {
+                        if(!m_complete)
+                        {
+                            m_downloadedBytes += in_data.length();
+                            
+                            m_complete = true;
+                            
+                            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                            {
+                                m_completionDelegate(this, ChilliSource::HttpResponse(in_result, in_responseCode, in_data));
+                            });
+                        }
+                    };
+                    
+                    m_httpDelegate = [[HttpDelegate alloc] initWithConnectionDelegate:connectionEstablishedDelegate andFlushedDelegate:connectionFlushedDelegate andCompleteDelegate:connectionCompleteDelegate andMaxBufferSize:in_maxBufferSize];
+                    m_connection = [[NSURLConnection connectionWithRequest:[request copy] delegate: m_httpDelegate] retain];
+                }
+            });
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -145,16 +161,25 @@ namespace CSBackend
             
             m_complete = true;
             
-            [m_connection cancel];
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                [m_connection cancel];
+            });
 		}
         //------------------------------------------------------------------
         //------------------------------------------------------------------
         HttpRequest::~HttpRequest()
         {
-            [m_connection release];
-            [m_httpDelegate release];
+            NSURLConnection* connection = m_connection;
+            HttpDelegate* delegate = m_httpDelegate;
             m_connection = nil;
             m_httpDelegate = nil;
+            
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                [connection release];
+                [delegate release];
+            });
         }
 	}
 }

@@ -69,6 +69,15 @@ namespace ChilliSource
         
         static const u32 k_defaultTimeoutSecs = 15;
         
+        //----------------------------------------------------------------------------------------
+        /// Delegate called when a reachability request completes (either with success of failure)
+        ///
+        /// @param If network is reachable
+        ///
+        /// @author HMcLaughlin
+        //----------------------------------------------------------------------------------------
+        using ReachabilityResultDelegate = std::function<void(bool reachability)>;
+        
         //--------------------------------------------------------------------------------------------------
         /// Factory method
         ///
@@ -140,9 +149,9 @@ namespace ChilliSource
         ///
         /// @author S Downie
         ///
-        /// @return Success if net available
+        /// @param Delegate to call when reachability is determined
         //--------------------------------------------------------------------------------------------------
-        virtual bool CheckReachability() const = 0;
+        virtual void CheckReachability(ReachabilityResultDelegate in_reachabilityDelegate) const = 0;
         //--------------------------------------------------------------------------------------------------
         /// @author S Downie
         ///

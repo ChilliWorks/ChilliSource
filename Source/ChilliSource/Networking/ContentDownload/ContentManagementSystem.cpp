@@ -236,25 +236,10 @@ namespace ChilliSource
         //Clear any stale data from last update check
         ClearDownloadData();
         
+        m_onUpdateCheckCompleteDelegate = in_delegate;
+        
         //Have the downloader request the manifest in its own way
-        if(m_contentDownloader->DownloadContentManifest(MakeDelegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
-        {
-            //The request has started successfully
-            m_onUpdateCheckCompleteDelegate = in_delegate;
-        }
-        else
-        {
-            //The request has failed to start most likely due to internet connection
-            CS_LOG_ERROR("CMS: Internet not reachable");
-            if(m_dlcCachePurged)
-            {
-                in_delegate(CheckForUpdatesResult::k_checkFailedBlocking);
-            }
-            else
-            {
-                in_delegate(CheckForUpdatesResult::k_checkFailed);
-            }
-        }
+        m_contentDownloader->DownloadContentManifest(MakeDelegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete));
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------

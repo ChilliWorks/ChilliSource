@@ -108,12 +108,17 @@ namespace CSBackend
 		}
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        bool HttpRequestSystem::CheckReachability() const
+        void HttpRequestSystem::CheckReachability(ReachabilityResultDelegate in_reachabilityDelegate) const
         {
-            CSReachability* reachability = [CSReachability reachabilityForInternetConnection];
-            NetworkStatus status = [reachability currentReachabilityStatus];
+            CS_ASSERT(in_reachabilityDelegate, "The reachability delegate should not be null.");
             
-            return (status != NotReachable);
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                CSReachability* reachability = [CSReachability reachabilityForInternetConnection];
+                NetworkStatus status = [reachability currentReachabilityStatus];
+                
+                in_reachabilityDelegate(status != NotReachable);
+            });
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
