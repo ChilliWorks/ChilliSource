@@ -117,7 +117,10 @@ namespace CSBackend
                 CSReachability* reachability = [CSReachability reachabilityForInternetConnection];
                 NetworkStatus status = [reachability currentReachabilityStatus];
                 
-                in_reachabilityDelegate(status != NotReachable);
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                {
+                    in_reachabilityDelegate(status != NotReachable);
+                });
             });
         }
         //------------------------------------------------------------------

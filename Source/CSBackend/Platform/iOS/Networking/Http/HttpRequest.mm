@@ -50,6 +50,9 @@ namespace CSBackend
 		{
             CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
             
+            m_complete = std::shared_ptr<bool>(new bool(false));
+            m_isCancelled = std::shared_ptr<bool>(new bool(false));
+            
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
                 @autoreleasepool
@@ -84,32 +87,35 @@ namespace CSBackend
                         m_expectedSize = in_expectedSize;
                     };
                     
-                    auto connectionFlushedDelegate = [this](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+                    auto complete = m_complete;
+                    auto cancelled = m_isCancelled;
+                    
+                    auto connectionFlushedDelegate = [=](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
                     {
-                        if(!m_complete)
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
                         {
-                            m_downloadedBytes += in_data.length();
-                            
-                            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                            //Ensure that we only call the delegate when cancelled is false as (*this) may not be around
+                            if(!*complete && !*cancelled)
                             {
+                                m_downloadedBytes += in_data.length();
                                 m_completionDelegate(this, ChilliSource::HttpResponse(in_result, in_responseCode, in_data));
-                            });
-                        }
+                            }
+                        });
                     };
                     
-                    auto connectionCompleteDelegate = [this](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+                    auto connectionCompleteDelegate = [=](ChilliSource::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
                     {
-                        if(!m_complete)
+                        ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
                         {
-                            m_downloadedBytes += in_data.length();
-                            
-                            m_complete = true;
-                            
-                            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                            //Ensure that we only call the delegate when cancelled is false as (*this) may not be around
+                            if(!*complete && !*cancelled)
                             {
+                                *complete = true;
+                                m_downloadedBytes += in_data.length();
+                                
                                 m_completionDelegate(this, ChilliSource::HttpResponse(in_result, in_responseCode, in_data));
-                            });
-                        }
+                            }
+                        });
                     };
                     
                     m_httpDelegate = [[HttpDelegate alloc] initWithConnectionDelegate:connectionEstablishedDelegate andFlushedDelegate:connectionFlushedDelegate andCompleteDelegate:connectionCompleteDelegate andMaxBufferSize:in_maxBufferSize];
@@ -157,9 +163,9 @@ namespace CSBackend
         //------------------------------------------------------------------
 		void HttpRequest::Cancel()
 		{
-            CS_ASSERT(m_complete == false, "Cannot cancel an already complete request.");
+            CS_ASSERT(*m_complete == false, "Cannot cancel an already complete request.");
             
-            m_complete = true;
+            *m_isCancelled = true;
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
