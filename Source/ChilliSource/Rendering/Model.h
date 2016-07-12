@@ -31,7 +31,7 @@
 #define _CHILLISOURCE_RENDERING_MODEL_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
+#include <ChilliSource/Rendering/Model/AnimatedModelComponent.h>
 #include <ChilliSource/Rendering/Model/CSAnimProvider.h>
 #include <ChilliSource/Rendering/Model/CSModelProvider.h>
 #include <ChilliSource/Rendering/Model/IndexFormat.h>
@@ -43,6 +43,7 @@
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 #include <ChilliSource/Rendering/Model/RenderMeshManager.h>
+#include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 #include <ChilliSource/Rendering/Model/SkeletonDesc.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>

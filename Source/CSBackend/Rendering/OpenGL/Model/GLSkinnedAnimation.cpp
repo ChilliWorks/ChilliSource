@@ -22,15 +22,25 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <CSBackend/Rendering/OpenGL/Model/GLSkinnedAnimation.h>
 
-namespace ChilliSource
+#include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+
+#include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
+
+namespace CSBackend
 {
-    //------------------------------------------------------------------------------
-    ApplyMeshRenderCommand::ApplyMeshRenderCommand(const RenderMesh* renderMesh) noexcept
-        : RenderCommand(Type::k_applyMesh), m_renderMesh(renderMesh)
+    namespace OpenGL
     {
-        CS_ASSERT(m_renderMesh, "Render mesh cannot be null.");
+        namespace
+        {
+            const std::string k_uniformJoints = "u_joints";
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLSkinnedAnimation::Apply(const ChilliSource::RenderSkinnedAnimation* renderSkinnedAnimation, GLShader* glShader) noexcept
+        {
+            glShader->SetUniform(k_uniformJoints, renderSkinnedAnimation->GetJointData(), renderSkinnedAnimation->GetJointDataSize());
+        }
     }
 }

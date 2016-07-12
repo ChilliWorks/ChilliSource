@@ -47,7 +47,9 @@ namespace ChilliSource
         enum class Type
         {
             k_static,
-            k_dynamic
+            k_staticAnimated,
+            k_dynamic,
+            k_dynamicAnimated
         };
         
         /// Creates a new static mesh render pass object.
@@ -68,6 +70,27 @@ namespace ChilliSource
         ///
         RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, u32 priority) noexcept;
         
+        /// Creates a new static mesh render pass object with skinned animation
+        ///
+        /// @param renderMaterial
+        ///     The render material that should be used when rendering this object.
+        /// @param renderMesh
+        ///     The static mesh that should be used when rendering this object.
+        /// @param renderSkinnedAnimation
+        ///     The skinned animation data.
+        /// @param worldMatrix
+        ///     The world matrix describing the transform of the object.
+        /// @param boundingSphere
+        ///     The world space bounding sphere of the object. This should be build using the local mesh
+        ///     bounding sphere.
+        /// @param priority
+        ///     The order priority of the render object; lower values will be rendered first. This may or
+        ///     may not be used depending on the sort algorithm used, as is the order of objects with the
+        ///     same priority.
+        ///
+        RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const RenderSkinnedAnimation* renderSkinnedAnimation, const Matrix4& worldMatrix,
+                         const Sphere& boundingSphere, u32 priority) noexcept;
+        
         /// Creates a new dynamic mesh render pass object.
         ///
         /// @param renderMaterial
@@ -86,6 +109,27 @@ namespace ChilliSource
         ///
         RenderPassObject(const RenderMaterial* renderMaterial, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, u32 priority) noexcept;
         
+        /// Creates a new dynamic mesh render pass object.
+        ///
+        /// @param renderMaterial
+        ///     The render material that should be used when rendering this object.
+        /// @param renderDynamicMesh
+        ///     The dynamic mesh that should be used when rendering this object.
+        /// @param renderSkinnedAnimation
+        ///     The skinned animation data.
+        /// @param worldMatrix
+        ///     The world matrix describing the transform of the object.
+        /// @param boundingSphere
+        ///     The world space bounding sphere of the object. This should be build using the local mesh
+        ///     bounding sphere.
+        /// @param priority
+        ///     The order priority of the render object; lower values will be rendered first. This may or
+        ///     may not be used depending on the sort algorithm used, as is the order of objects with the
+        ///     same priority.
+        ///
+        RenderPassObject(const RenderMaterial* renderMaterial, const RenderDynamicMesh* renderDynamicMesh, const RenderSkinnedAnimation* renderSkinnedAnimation, const Matrix4& worldMatrix,
+                         const Sphere& boundingSphere, u32 priority) noexcept;
+        
         /// @return The type of object this describes.
         ///
         Type GetType() const noexcept { return m_type; }
@@ -103,6 +147,11 @@ namespace ChilliSource
         ///     a dynamic mesh object, otherwise this will return nullptr.
         ///
         const RenderDynamicMesh* GetRenderDynamicMesh() const noexcept { return m_renderDynamicMesh; }
+        
+        /// @return The skinned animation data for this object. Will be null if the object is not
+        ///     animated.
+        ///
+        const RenderSkinnedAnimation* GetRenderSkinnedAnimation() const noexcept { return m_renderSkinnedAnimation; }
         
         /// @return The world matrix describing the transform of the object.
         ///
@@ -123,6 +172,7 @@ namespace ChilliSource
         const RenderMaterial* m_renderMaterial;
         const RenderMesh* m_renderMesh = nullptr;
         const RenderDynamicMesh* m_renderDynamicMesh = nullptr;
+        const RenderSkinnedAnimation* m_renderSkinnedAnimation = nullptr;
         Matrix4 m_worldMatrix;
         Sphere m_boundingSphere;
         u32 m_priority;

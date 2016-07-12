@@ -165,17 +165,19 @@ namespace CSBackend
             ///
             void SetUniform(const std::string& name, const ChilliSource::Colour& value, FailurePolicy failurePolicy = FailurePolicy::k_hard) noexcept;
             
-            /// Sets the uniform with the given name to the given value. If if the hard failure policy
-            /// is specified and there is no uniform with the requested name, then this will assert.
+            /// Sets the uniform with the given name to the given array of values. If if the hard failure
+            /// policy is specified and there is no uniform with the requested name, then this will assert.
             ///
             /// @param name
             ///     The name of the uniform.
-            /// @param value
-            ///     The value to set the uniform to.
+            /// @param values
+            ///     The values to set the uniform to.
+            /// @param numValues
+            ///     The number of values to set.
             /// @param failurePolicy
             ///     The failure policy for if the uniform doesn't exist. Defaults to hard.
             ///
-            void SetUniform(const std::string& name, const std::vector<ChilliSource::Vector4>& value, FailurePolicy failurePolicy = FailurePolicy::k_hard) noexcept;
+            void SetUniform(const std::string& name, const ChilliSource::Vector4* values, u32 numValues, FailurePolicy failurePolicy = FailurePolicy::k_hard) noexcept;
             
             /// Sets the attribute with the given name and data information. If the attribute doesn't
             /// exist then it will be ignored.

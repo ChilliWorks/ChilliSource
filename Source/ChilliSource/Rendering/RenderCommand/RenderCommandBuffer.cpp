@@ -27,8 +27,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderCommandBuffer::RenderCommandBuffer(IAllocator* frameAllocator, u32 numSlots, std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes) noexcept
-        : m_frameAllocator(frameAllocator), m_renderDynamicMeshes(std::move(renderDynamicMeshes))
+    RenderCommandBuffer::RenderCommandBuffer(u32 numSlots, RenderFrameData renderFrameData) noexcept
+        : m_renderFrameData(std::move(renderFrameData))
     {
         m_renderCommandLists.reserve(numSlots);
         for (u32 i = 0; i < numSlots; ++i)

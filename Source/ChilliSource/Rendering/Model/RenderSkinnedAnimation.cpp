@@ -22,15 +22,14 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ApplyMeshRenderCommand::ApplyMeshRenderCommand(const RenderMesh* renderMesh) noexcept
-        : RenderCommand(Type::k_applyMesh), m_renderMesh(renderMesh)
+    RenderSkinnedAnimation::RenderSkinnedAnimation(UniquePtr<Vector4[]> jointData, u32 jointDataSize) noexcept
+        : m_jointData(std::move(jointData)), m_jointDataSize(jointDataSize)
     {
-        CS_ASSERT(m_renderMesh, "Render mesh cannot be null.");
+        CS_ASSERT(m_jointData, "Joint data cannot be null.");
     }
 }

@@ -27,6 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Rendering/Shader/RenderShaderVariables.h>
 
 #include <vector>
 
@@ -72,10 +73,12 @@ namespace ChilliSource
         ///     The diffuseColour.
         /// @param specularColour
         ///     The specularColour.
+        /// @param renderShaderVariables
+        ///     The container for all render shader variables. May be null if there are no shader variables.
         ///
         RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
                        bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour,
-                       const Colour& diffuseColour, const Colour& specularColour) noexcept;
+                       const Colour& diffuseColour, const Colour& specularColour, RenderShaderVariablesUPtr renderShaderVariables) noexcept;
         
         /// @return The shader applied by this material.
         ///
@@ -133,6 +136,10 @@ namespace ChilliSource
         ///
         const Colour& GetSpecularColour() const noexcept { return m_specularColour; }
         
+        /// @return The render shader variables. May be null if there are no shader variables.
+        ///
+        const RenderShaderVariables* GetRenderShaderVariables() const noexcept { return m_renderShaderVariables.get(); }
+        
         /// This is not thread safe and should only be called from the render thread.
         ///
         /// @return A pointer to render system specific additional information.
@@ -161,6 +168,7 @@ namespace ChilliSource
         Colour m_ambientColour;
         Colour m_diffuseColour;
         Colour m_specularColour;
+        RenderShaderVariablesUPtr m_renderShaderVariables;
         void* m_extraData = nullptr;
     };
 }

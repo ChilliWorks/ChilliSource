@@ -59,8 +59,14 @@ namespace ChilliSource
             {
                 case RenderObject::Type::k_static:
                     return RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(), renderObject.GetPriority());
+                case RenderObject::Type::k_staticAnimated:
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetRenderSkinnedAnimation(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(),
+                                            renderObject.GetPriority());
                 case RenderObject::Type::k_dynamic:
                     return RenderPassObject(renderMaterial, renderObject.GetRenderDynamicMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(), renderObject.GetPriority());
+                case RenderObject::Type::k_dynamicAnimated:
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderDynamicMesh(), renderObject.GetRenderSkinnedAnimation(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(),
+                                            renderObject.GetPriority());
                 default:
                     CS_LOG_FATAL("Invalid RenderObject type.");
                     return RenderPassObject(nullptr, reinterpret_cast<const RenderMesh*>(NULL), Matrix4::k_identity, Sphere(), 0);
@@ -79,8 +85,10 @@ namespace ChilliSource
             switch (renderObject.GetType())
             {
                 case RenderObject::Type::k_static:
+                case RenderObject::Type::k_staticAnimated:
                     return renderObject.GetRenderMesh()->GetVertexFormat();
                 case RenderObject::Type::k_dynamic:
+                case RenderObject::Type::k_dynamicAnimated:
                     return renderObject.GetRenderDynamicMesh()->GetVertexFormat();
                 default:
                     CS_LOG_FATAL("Invalid RenderObject type.");

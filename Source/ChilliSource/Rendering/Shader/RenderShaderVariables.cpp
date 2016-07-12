@@ -22,15 +22,16 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/Shader/RenderShaderVariables.h>
 
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ApplyMeshRenderCommand::ApplyMeshRenderCommand(const RenderMesh* renderMesh) noexcept
-        : RenderCommand(Type::k_applyMesh), m_renderMesh(renderMesh)
+    RenderShaderVariables::RenderShaderVariables(const std::unordered_map<std::string, f32>& floatVars, const std::unordered_map<std::string, Vector2>& vec2Vars, const std::unordered_map<std::string, Vector3>& vec3Vars,
+                                                 const std::unordered_map<std::string, Vector4>& vec4Vars, const std::unordered_map<std::string, Matrix4>& mat4Vars,
+                                                 const std::unordered_map<std::string, Colour>& colourVars) noexcept
+        : m_floatVars(floatVars), m_vec2Vars(vec2Vars), m_vec3Vars(vec3Vars), m_vec4Vars(vec4Vars), m_mat4Vars(mat4Vars), m_colourVars(colourVars)
     {
-        CS_ASSERT(m_renderMesh, "Render mesh cannot be null.");
     }
+        
 }

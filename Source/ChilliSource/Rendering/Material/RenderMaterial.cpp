@@ -29,10 +29,10 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     RenderMaterial::RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
                                    bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour,
-                                   const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour) noexcept
+                                   const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour, RenderShaderVariablesUPtr renderShaderVariables) noexcept
         : m_renderShader(renderShader), m_renderTextures(renderTextures), m_isTransparencyEnabled(isTransparencyEnabled), m_isColourWriteEnabled(isColourWriteEnabled), m_isDepthWriteEnabled(isDepthWriteEnabled),
-        m_isDepthTestEnabled(isDepthTestEnabled), m_isFaceCullingEnabled(isFaceCullingEnabled), m_sourceBlendMode(sourceBlendMode), m_destinationBlendMode(destinationBlendMode), m_cullFace(cullFace),
-        m_emissiveColour(emissiveColour), m_ambientColour(ambientColour), m_diffuseColour(diffuseColour), m_specularColour(specularColour)
+          m_isDepthTestEnabled(isDepthTestEnabled), m_isFaceCullingEnabled(isFaceCullingEnabled), m_sourceBlendMode(sourceBlendMode), m_destinationBlendMode(destinationBlendMode), m_cullFace(cullFace),
+          m_emissiveColour(emissiveColour), m_ambientColour(ambientColour), m_diffuseColour(diffuseColour), m_specularColour(specularColour), m_renderShaderVariables(std::move(renderShaderVariables))
     {
     }
 }

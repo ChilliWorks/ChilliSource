@@ -37,12 +37,34 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    RenderObject::RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderMesh* renderMesh, const RenderSkinnedAnimation* renderSkinnedAnimation, const Matrix4& worldMatrix,
+                               const Sphere& boundingSphere, bool shouldCastShadows, RenderLayer renderLayer, u32 priority) noexcept
+        : m_type(Type::k_staticAnimated), m_renderMaterialGroup(renderMaterialGroup), m_renderMesh(renderMesh), m_renderSkinnedAnimation(renderSkinnedAnimation), m_worldMatrix(worldMatrix),
+          m_boundingSphere(boundingSphere), m_shouldCastShadows(shouldCastShadows), m_renderLayer(renderLayer), m_priority(priority)
+    {
+        CS_ASSERT(m_renderMaterialGroup, "Cannot supply a null render material group.");
+        CS_ASSERT(m_renderMesh, "Cannot supply a null render mesh.");
+        CS_ASSERT(m_renderSkinnedAnimation, "Cannot supply a null render skinned animation.");
+    }
+    
+    //------------------------------------------------------------------------------
     RenderObject::RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, bool shouldCastShadows,
                                RenderLayer renderLayer, u32 priority) noexcept
-        : m_type(Type::k_dynamic), m_renderMaterialGroup(renderMaterialGroup), m_renderDynamicMesh(renderDynamicMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere), m_shouldCastShadows(shouldCastShadows),
-          m_renderLayer(renderLayer), m_priority(priority)
+        : m_type(Type::k_dynamic), m_renderMaterialGroup(renderMaterialGroup), m_renderDynamicMesh(renderDynamicMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere),
+          m_shouldCastShadows(shouldCastShadows), m_renderLayer(renderLayer), m_priority(priority)
     {
         CS_ASSERT(m_renderMaterialGroup, "Cannot supply a null render material group.");
         CS_ASSERT(m_renderDynamicMesh, "Cannot supply a null render dynamic mesh.");
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderObject::RenderObject(const RenderMaterialGroup* renderMaterialGroup, const RenderDynamicMesh* renderDynamicMesh, const RenderSkinnedAnimation* renderSkinnedAnimation,
+                               const Matrix4& worldMatrix, const Sphere& boundingSphere, bool shouldCastShadows, RenderLayer renderLayer, u32 priority) noexcept
+        : m_type(Type::k_dynamicAnimated), m_renderMaterialGroup(renderMaterialGroup), m_renderDynamicMesh(renderDynamicMesh), m_renderSkinnedAnimation(renderSkinnedAnimation), m_worldMatrix(worldMatrix),
+          m_boundingSphere(boundingSphere), m_shouldCastShadows(shouldCastShadows), m_renderLayer(renderLayer), m_priority(priority)
+    {
+        CS_ASSERT(m_renderMaterialGroup, "Cannot supply a null render material group.");
+        CS_ASSERT(m_renderDynamicMesh, "Cannot supply a null render dynamic mesh.");
+        CS_ASSERT(m_renderSkinnedAnimation, "Cannot supply a null render skinned animation.");
     }
 }

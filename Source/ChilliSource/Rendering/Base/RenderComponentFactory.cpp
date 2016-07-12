@@ -38,7 +38,7 @@
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
-#include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
+#include <ChilliSource/Rendering/Model/AnimatedModelComponent.h>
 #include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
@@ -99,11 +99,10 @@ namespace ChilliSource
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
-    AnimatedMeshComponentUPtr RenderComponentFactory::CreateAnimatedMeshComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
+    AnimatedModelComponentUPtr RenderComponentFactory::CreateAnimatedModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material, const SkinnedAnimationCSPtr& in_animation,
+                                                                                    AnimatedModelComponent::PlaybackType in_playbackType) noexcept
     {
-        AnimatedMeshComponentUPtr pResult(new AnimatedMeshComponent());
-        pResult->SetModel(in_model, in_material);
-        return pResult;
+        return AnimatedModelComponentUPtr(new AnimatedModelComponent(in_model, in_material, in_animation, in_playbackType));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------

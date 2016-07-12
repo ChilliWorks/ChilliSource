@@ -197,6 +197,13 @@ namespace ChilliSource
         ///
         void AddApplyDynamicMeshCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept;
         
+        /// Creates and adds a new apply skinned animation command to the render command list.
+        ///
+        /// @param renderSkinnedAnimation
+        ///     The render skinned animation to apply.
+        ///
+        void AddApplySkinnedAnimationCommand(const RenderSkinnedAnimation* renderSkinnedAnimation) noexcept;
+        
         /// Creates and adds a new render instance command to the render command list.
         ///
         /// @param renderMesh

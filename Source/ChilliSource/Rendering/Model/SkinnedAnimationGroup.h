@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
 namespace ChilliSource
@@ -59,7 +60,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Constructor
         //-----------------------------------------------------------
-        SkinnedAnimationGroup(const Skeleton* inpSkeleton);
+        SkinnedAnimationGroup(const Skeleton& inpSkeleton);
         //----------------------------------------------------------
         /// Attach Animation
         ///
@@ -122,15 +123,26 @@ namespace ChilliSource
         //----------------------------------------------------------
         const Matrix4& GetMatrixAtIndex(s32 indwIndex) const;
         //----------------------------------------------------------
-        /// Apply Inverse Bind Pose
+        /// Generates the joint data that will be passed to the
+        /// shaders by first combining the current animation frame
+        /// joint matrices with the supplied inverse bind pose
+        /// matrices. The resultant matrices are then each stripped
+        /// down to 3 Vector4s, each representing a single column
+        /// in the matrix, so that the final column can be omitted
+        /// as it will always be [0, 0, 0, 1] and can be rebuilt
+        /// manually in the shader.
         ///
-        /// outputs a copy of the current animation matrix data with
-        /// the inverse bind pose matrices applied.
+        /// The animation data will be allocated from the given
+        /// IAllocator.
         ///
-        /// @param the inverse bind pose matrices.
-        /// @param OUT: The combined matrices.
+        /// @author Ian Copland
+        ///
+        /// @param in_allocator - The allocator that will be used for
+        /// allocating the joint data.
+        /// @param in_inverseBindPoseMatrices - The inverse bind
+        /// pose matrices that will be applied.
         //----------------------------------------------------------
-        void ApplyInverseBindPose(const std::vector<Matrix4>& inInverseBindPoseMatrices, std::vector<Matrix4>& outCombinedMatrices);
+        RenderSkinnedAnimationAUPtr BuildRenderSkinnedAnimation(IAllocator* in_allocator, const std::vector<Matrix4>& in_inverseBindPoseMatrices) const noexcept;
         //----------------------------------------------------------
         /// Get Animation Length
         ///
@@ -197,7 +209,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         SkinnedAnimation::FrameCUPtr LerpBetweenFrames(const SkinnedAnimation::Frame* inFrameA, const SkinnedAnimation::Frame* inFrameB, f32 infInterpFactor);
         
-        const Skeleton* mpSkeleton;
+        const Skeleton& mpSkeleton;
         std::vector<AnimationItemPtr> mAnimations;
         SkinnedAnimation::FrameCUPtr mCurrentAnimationData;
         std::vector<Matrix4> mCurrentAnimationMatrices;

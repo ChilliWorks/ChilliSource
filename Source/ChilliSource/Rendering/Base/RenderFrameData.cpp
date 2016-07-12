@@ -22,15 +22,32 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/Base/RenderFrameData.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
+    
     //------------------------------------------------------------------------------
-    ApplyMeshRenderCommand::ApplyMeshRenderCommand(const RenderMesh* renderMesh) noexcept
-        : RenderCommand(Type::k_applyMesh), m_renderMesh(renderMesh)
+    RenderFrameData::RenderFrameData(IAllocator* frameAllocator) noexcept
+        : m_frameAllocator(frameAllocator)
     {
-        CS_ASSERT(m_renderMesh, "Render mesh cannot be null.");
     }
-}
+    
+    //------------------------------------------------------------------------------
+    void RenderFrameData::AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept
+    {
+        CS_ASSERT(renderDynamicMesh, "Cannot add null render frame data.");
+        
+        m_renderDynamicMeshes.push_back(std::move(renderDynamicMesh));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderFrameData::AddRenderSkinnedAnimation(RenderSkinnedAnimationAUPtr renderSkinnedAnimation) noexcept
+    {
+        CS_ASSERT(renderSkinnedAnimation, "Cannot add null render frame data.");
+        
+        m_renderSkinnedAnimations.push_back(std::move(renderSkinnedAnimation));
+    }
+};

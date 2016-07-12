@@ -71,7 +71,7 @@ namespace CSBackend
                 auto allShaders = resourcePool->GetAllResources<ChilliSource::Shader>();
                 for (const auto& shader : allShaders)
                 {
-                    GLShader* glShader = reinterpret_cast<GLShader*>(shader->GetRenderShader()->GetExtraData());
+                    GLShader* glShader = static_cast<GLShader*>(shader->GetRenderShader()->GetExtraData());
                     if(glShader)
                     {
                         glShader->Invalidate();
@@ -81,7 +81,7 @@ namespace CSBackend
                 auto allTextures = resourcePool->GetAllResources<ChilliSource::Texture>();
                 for (const auto& texture : allTextures)
                 {
-                    GLTexture* glTexture = reinterpret_cast<GLTexture*>(texture->GetRenderTexture()->GetExtraData());
+                    GLTexture* glTexture = static_cast<GLTexture*>(texture->GetRenderTexture()->GetExtraData());
                     if(glTexture)
                     {
                         glTexture->Invalidate();
@@ -93,7 +93,7 @@ namespace CSBackend
                 {
                     for(u32 i = 0; i < model->GetNumMeshes(); ++i)
                     {
-                        GLMesh* glMesh = reinterpret_cast<GLMesh*>(model->GetRenderMesh(i)->GetExtraData());
+                        GLMesh* glMesh = static_cast<GLMesh*>(model->GetRenderMesh(i)->GetExtraData());
                         
                         if(glMesh)
                         {

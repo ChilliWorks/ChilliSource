@@ -22,15 +22,39 @@
 //  THE SOFTWARE.
 //
 
+#ifndef _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYSKINNEDANIMATIONRENDERCOMMAND_H_
+#define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_APPLYSKINNEDANIMATIONRENDERCOMMAND_H_
+
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    ApplyMeshRenderCommand::ApplyMeshRenderCommand(const RenderMesh* renderMesh) noexcept
-        : RenderCommand(Type::k_applyMesh), m_renderMesh(renderMesh)
+    /// A render command for applying the given skinned animation to the current context state.
+    ///
+    /// This must be instantiated via a RenderCommandList.
+    ///
+    /// This is immutable and therefore thread-safe.
+    ///
+    class ApplySkinnedAnimationRenderCommand final : public RenderCommand
     {
-        CS_ASSERT(m_renderMesh, "Render mesh cannot be null.");
-    }
+    public:
+        /// @return The render skinned animation to apply.
+        ///
+        const RenderSkinnedAnimation* GetRenderSkinnedAnimation() const noexcept { return m_renderSkinnedAnimation; };
+        
+    private:
+        friend class RenderCommandList;
+        
+        /// Creates a new instance with the given render skinned animation.
+        ///
+        /// @param renderSkinnedAnimation
+        ///     The render skinned animation to apply.
+        ///
+        ApplySkinnedAnimationRenderCommand(const RenderSkinnedAnimation* renderSkinnedAnimation) noexcept;
+        
+        const RenderSkinnedAnimation* m_renderSkinnedAnimation;
+    };
 }
+
+#endif
