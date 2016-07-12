@@ -75,6 +75,12 @@ namespace CSBackend
             ///
             void Bind(GLShader* glShader, const ChilliSource::VertexFormat& vertexFormat, const u8* vertexData, u32 vertexDataSize, const u8* indexData, u32 indexDataSize) noexcept;
             
+            /// Called when graphics memory is lost, usually through the GLContext being destroyed
+            /// on Android. Function will set a flag to handle safe destructing of this object, preventing
+            /// us from trying to delete invalid memory.
+            ///
+            void Invalidate() noexcept { m_invalidData = true; }
+            
             /// Destroys the OpenGL dynamic mesh that this represents.
             ///
             ~GLDynamicMesh() noexcept;
@@ -84,6 +90,8 @@ namespace CSBackend
             u32 m_maxIndexDataSize;
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
+            
+            bool m_invalidData = false;
         };
     }
 }

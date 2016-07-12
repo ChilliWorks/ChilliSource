@@ -27,9 +27,10 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderMesh::RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere, std::vector<Matrix4> inverseBindPoseMatrices) noexcept
+    RenderMesh::RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+                           bool shouldBackupData, std::vector<Matrix4> inverseBindPoseMatrices) noexcept
         : m_polygonType(polygonType), m_vertexFormat(vertexFormat), m_indexFormat(indexFormat), m_numVertices(numVertices), m_numIndices(numIndices), m_boundingSphere(boundingSphere),
-          m_inverseBindPoseMatrices(std::move(inverseBindPoseMatrices))
+          m_shouldBackupData(shouldBackupData), m_inverseBindPoseMatrices(std::move(inverseBindPoseMatrices))
     {
     }
 }

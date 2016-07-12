@@ -223,6 +223,7 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplicati
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elapsedTime)
 {
 	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->SystemUpdate();
 	coreJI->Render();
 }
 //--------------------------------------------------------------------------------------
@@ -426,6 +427,12 @@ namespace CSBackend
         	{
             	m_lifecycleManager->Render();
         	}
+        }
+        //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
+        void CoreJavaInterface::SystemUpdate() noexcept
+        {
+            m_lifecycleManager->SystemUpdate();
         }
         //--------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------

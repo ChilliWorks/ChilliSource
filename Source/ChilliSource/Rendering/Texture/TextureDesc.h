@@ -138,7 +138,7 @@ namespace ChilliSource
         TextureWrapMode m_wrapModeS = TextureWrapMode::k_clamp;
         TextureWrapMode m_wrapModeT = TextureWrapMode::k_clamp;
         bool m_mipmappingEnabled = false;
-        bool m_restoreTextureDataEnabled = false;
+        bool m_restoreTextureDataEnabled = true;
     };
 }
 

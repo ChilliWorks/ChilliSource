@@ -42,6 +42,9 @@ namespace CSBackend
 		//--------------------------------------------------------
 		/// Android backend for the local notification system
 		///
+        /// The methods in this class aren't thread-safe, and 
+        /// must be accessed from the main thread.
+        ///
 		/// @author Steven Hendrie
 		//--------------------------------------------------------
 		class LocalNotificationSystem : public ChilliSource::LocalNotificationSystem
@@ -60,7 +63,7 @@ namespace CSBackend
 			/// Enables and disables addition of local notifications.
 			/// All existing notifications will be cancelled
 			/// when this is disabled. This is enabled by default.
-			///
+            /// 
 			/// @author Ian Copland
 			///
 			/// @param Whether or not to enable the scheduling
@@ -83,17 +86,19 @@ namespace CSBackend
 			/// to standard priority.
 			//---------------------------------------------------
 			void ScheduleNotificationForTime(ChilliSource::Notification::ID in_id, const ChilliSource::ParamDictionary& in_params, TimeIntervalSecs in_time, ChilliSource::Notification::Priority in_priority = ChilliSource::Notification::Priority::k_standard) override;
-			//--------------------------------------------------------
-			/// Builds a list of all notifications currently scheduled
-			/// within the given time period.
-			///
-			/// @author Ian Copland
-			///
-			/// @param [Out] The list of notifications.
-			/// @param [Optional] The start time.
-			/// @param [Optional] The end time.
-			//--------------------------------------------------------
-			void GetScheduledNotifications(std::vector<ChilliSource::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
+            //--------------------------------------------------------
+            /// Generates a list of all notifications that are currently
+            /// scheduled. Because the list cannot be immediately
+            /// calculated, the result is returned through the provided
+            /// delegate when ready.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The delegate function to execute.
+            /// @param [Optional] The start time.
+            /// @param [Optional] The end time.
+            //--------------------------------------------------------
+			void GetScheduledNotifications(const GetScheduledNotificationsDelegate& in_delegate, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
 			//-------------------------------------------------------
 			/// Prevent any notifications with given ID type from firing
 			///

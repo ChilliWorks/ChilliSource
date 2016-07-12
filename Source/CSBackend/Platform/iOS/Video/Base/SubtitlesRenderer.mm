@@ -183,6 +183,7 @@
     }
     
     [inpTextView setTextColor:[UIColor colorWithRed:pStyle->m_colour.r green:pStyle->m_colour.g blue:pStyle->m_colour.b alpha:(fFade * pStyle->m_colour.a)]];
+    [self SetAlignment: inpTextView WithAnchor: pStyle->m_alignment];
 }
 //--------------------------------------------------------
 /// Remove Text View
@@ -212,7 +213,8 @@
         case ChilliSource::AlignmentAnchor::k_middleRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
-            f32 fContentSize = [inpView contentSize].height;
+            CGSize textViewSize = [inpView sizeThatFits:CGSizeMake(inpView.frame.size.width, FLT_MAX)];
+            f32 fContentSize = textViewSize.height;
             f32 fOffset = (fBoxSize - fContentSize);
             if (fOffset < 0.0f)
             {
@@ -227,12 +229,14 @@
         case ChilliSource::AlignmentAnchor::k_bottomRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
-            f32 fContentSize = [inpView contentSize].height;
+            CGSize textViewSize = [inpView sizeThatFits:CGSizeMake(inpView.frame.size.width, FLT_MAX)];
+            f32 fContentSize = textViewSize.height;
             f32 fOffset = (fBoxSize - fContentSize);
             if (fOffset < 0.0f)
             {
                 fOffset = 0.0f;
             }
+            CGPoint newOffset = (CGPoint){.x = 0.0f, .y = -fOffset};
             inpView.contentOffset = (CGPoint){.x = 0.0f, .y = -fOffset};
             break;
         }
@@ -290,9 +294,9 @@
         vVideoViewDimensions.y = vScreenDimensions.y;
     }
     
-    ChilliSource::Vector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
-    return CGRectMake(vVideoViewTopLeft.x + inRelativeBounds.Left() * vVideoViewDimensions.x, vVideoViewTopLeft.y + inRelativeBounds.Top() * vVideoViewDimensions.y, inRelativeBounds.vSize.x * vVideoViewDimensions.x, inRelativeBounds.vSize.y * vVideoViewDimensions.y);
+    ChilliSource::Vector2 vVideoViewBottomLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
     
+    return CGRectMake(vVideoViewBottomLeft.x + inRelativeBounds.Left() * vVideoViewDimensions.x, vVideoViewBottomLeft.y + inRelativeBounds.Bottom() * vVideoViewDimensions.y, inRelativeBounds.vSize.x * vVideoViewDimensions.x, inRelativeBounds.vSize.y * vVideoViewDimensions.y);
 }
 
 //--------------------------------------------------------

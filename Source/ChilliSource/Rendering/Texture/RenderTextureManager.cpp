@@ -29,7 +29,7 @@
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderTextureManager);
-    
+
     //------------------------------------------------------------------------------
     RenderTextureManagerUPtr RenderTextureManager::Create() noexcept
     {
@@ -44,9 +44,9 @@ namespace ChilliSource
         
     //------------------------------------------------------------------------------
     const RenderTexture* RenderTextureManager::CreateRenderTexture(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
-                                             TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped) noexcept
+                                             TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept
     {
-        RenderTextureUPtr renderTexture(new RenderTexture(dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped));
+        RenderTextureUPtr renderTexture(new RenderTexture(dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped, shouldBackupData));
         auto rawRenderTexture = renderTexture.get();
         
         PendingLoadCommand loadCommand;

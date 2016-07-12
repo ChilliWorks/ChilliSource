@@ -34,7 +34,7 @@
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Model);
-    
+
     //------------------------------------------------------------------------------
     ModelUPtr Model::Create() noexcept
     {
@@ -78,7 +78,7 @@ namespace ChilliSource
             auto inverseBindPoseMatrices = meshDesc.ClaimInverseBindPoseMatrices();
             
             auto renderMesh = renderMeshManager->CreateRenderMesh(poylgonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize,
-                                                                  std::move(inverseBindPoseMatrices));
+                                                                  modelDesc.ShouldBackupData(), std::move(inverseBindPoseMatrices));
             m_renderMeshes.push_back(renderMesh);
         }
     }

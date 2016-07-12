@@ -32,7 +32,9 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/Accelerometer/AccelerometerJavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -55,12 +57,14 @@ namespace CSBackend
 		//----------------------------------------------------
 		bool Accelerometer::IsUpdating() const
 		{
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to check if accelerometer was updating outside of the main thread.");
 			return m_isUpdating;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void Accelerometer::StartUpdating()
 		{
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to start the accelerometer outside of the main thread.");
 			if (false == m_isUpdating)
 			{
 				m_isUpdating = true;
@@ -71,18 +75,21 @@ namespace CSBackend
 		//------------------------------------------------
 		ChilliSource::Vector3 Accelerometer::GetAcceleration() const
 		{
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to read the accelerometer outside of the main thread.");
 			return m_acceleration;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		ChilliSource::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
 		{
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to get acceleration update event outside of the main thread.");
 			return m_accelerationUpdatedEvent;
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void Accelerometer::StopUpdating()
 		{
+            CS_ASSERT(CS::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to stop the accelerometer outside of the main thread.");
 			if (true == m_isUpdating)
 			{
 				m_accelerometerJI->StopListening();
@@ -133,7 +140,7 @@ namespace CSBackend
 		//------------------------------------------------
 		void Accelerometer::OnAccelerationChanged(const ChilliSource::Vector3& in_acceleration)
 		{
-			m_acceleration = in_acceleration;
+            m_acceleration = in_acceleration;
 			m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);
 		}
 	}

@@ -85,6 +85,12 @@ namespace ChilliSource
         ///
         void Render() noexcept;
         
+        /// Executes scheduled system thread tasks.
+        ///
+        /// This is not thread safe, and must be called from the system thread.
+        ///
+        void SystemUpdate() noexcept;
+        
         /// Sends the destroy event to the main thread. The app must currently be
         /// suspended or this will assert.
         ///
@@ -195,6 +201,16 @@ namespace ChilliSource
         /// is not currently resumed or foregrounded.
         ///
         void BlockIfInactive() noexcept;
+        
+        /// Called when the raw platform resume event is triggered. This is guaranteed
+        /// to happen before the regular OnResume event.
+        ///
+        void SystemResume() noexcept;
+        
+        /// Called when the raw platform suspend event is triggered. This is guaranteed
+        /// to happen before the regular OnSuspend event.
+        ///
+        void SystemSuspend() noexcept;
         
         Application* m_application;
         

@@ -47,6 +47,8 @@ namespace ChilliSource
     class FrameAllocatorQueue final
     {
     public:
+        CS_DECLARE_NOCOPY(FrameAllocatorQueue);
+        
         FrameAllocatorQueue() noexcept;
         
         /// Pops the first frame allocator from the queue. If the queue is empty this will wait

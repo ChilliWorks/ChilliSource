@@ -57,6 +57,8 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
@@ -130,7 +132,7 @@ namespace CSBackend
                 Init();
             }
             
-            for (const auto& renderCommandList : renderCommandBuffer->GetQueue())
+            for(const auto& renderCommandList : renderCommandBuffer->GetQueue())
             {
                 for (const auto& renderCommand : renderCommandList->GetOrderedList())
                 {
@@ -147,6 +149,12 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_loadMesh:
                             LoadMesh(static_cast<const ChilliSource::LoadMeshRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_restoreMesh:
+                            RestoreMesh(static_cast<const ChilliSource::RestoreMeshRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_restoreTexture:
+                            RestoreTexture(static_cast<const ChilliSource::RestoreTextureRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_loadTargetGroup:
                             LoadTargetGroup(static_cast<const ChilliSource::LoadTargetGroupRenderCommand*>(renderCommand));
@@ -211,6 +219,24 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::Invalidate() noexcept
+        {
+            if(m_glDynamicMesh)
+            {
+                m_glDynamicMesh->Invalidate();
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::Restore() noexcept
+        {
+            ResetCache();
+            
+            m_glDynamicMesh.reset();
+            m_glDynamicMesh = GLDynamicMeshUPtr(new GLDynamicMesh(ChilliSource::RenderDynamicMesh::k_maxVertexDataSize, ChilliSource::RenderDynamicMesh::k_maxIndexDataSize));
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::Init() noexcept
         {
             m_textureUnitManager = GLTextureUnitManagerUPtr(new GLTextureUnitManager());
@@ -240,9 +266,7 @@ namespace CSBackend
             auto renderTexture = renderCommand->GetRenderTexture();
             
             //TODO: Should be pooled.
-            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture->GetDimensions(), renderTexture->GetImageFormat(),
-                                           renderTexture->GetImageCompression(), renderTexture->GetFilterMode(), renderTexture->GetWrapModeS(), renderTexture->GetWrapModeT(),
-                                           renderTexture->IsMipmapped());
+            auto glTexture = new GLTexture(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture);
             
             renderTexture->SetExtraData(glTexture);
         }
@@ -255,12 +279,25 @@ namespace CSBackend
             auto renderMesh = renderCommand->GetRenderMesh();
             
             //TODO: Should be pooled.
-            auto glMesh = new GLMesh(renderMesh->GetVertexFormat(), renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize());
+            auto glMesh = new GLMesh(renderCommand->GetVertexData(), renderCommand->GetVertexDataSize(), renderCommand->GetIndexData(), renderCommand->GetIndexDataSize(), renderMesh);
             
             renderMesh->SetExtraData(glMesh);
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreTexture(const ChilliSource::RestoreTextureRenderCommand* renderCommand) noexcept
+        {
+            GLTexture* glTexture = static_cast<GLTexture*>(renderCommand->GetRenderTexture()->GetExtraData());
+            glTexture->Restore();
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreMesh(const ChilliSource::RestoreMeshRenderCommand* renderCommand) noexcept
+        {
+            GLMesh* glMesh = static_cast<GLMesh*>(renderCommand->GetRenderMesh()->GetExtraData());
+            glMesh->Restore();
+        }
+        
         void RenderCommandProcessor::LoadTargetGroup(const ChilliSource::LoadTargetGroupRenderCommand* renderCommand) noexcept
         {
             ResetCache();
@@ -309,7 +346,7 @@ namespace CSBackend
             m_currentRenderTargetGroup = renderCommand->GetRenderTargetGroup();
             CS_ASSERT(m_currentRenderTargetGroup, "Cannot render with a null render target group.");
             
-            auto glTargetGroup = reinterpret_cast<GLTargetGroup*>(m_currentRenderTargetGroup->GetExtraData());
+            auto glTargetGroup = static_cast<GLTargetGroup*>(m_currentRenderTargetGroup->GetExtraData());
             CS_ASSERT(glTargetGroup, "Cannot render with a render target group which hasn't been loaded.");
             
             glTargetGroup->Bind();
@@ -408,8 +445,8 @@ namespace CSBackend
                 m_currentDynamicMesh = nullptr;
                 m_currentSkinnedAnimation = nullptr;
                 
-                auto glMesh = reinterpret_cast<GLMesh*>(m_currentMesh->GetExtraData());
-                auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
+                auto glMesh = static_cast<GLMesh*>(m_currentMesh->GetExtraData());
+                auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
                 glMesh->Bind(glShader);
             }
         }
@@ -427,7 +464,7 @@ namespace CSBackend
                 m_currentDynamicMesh = renderDynamicMesh;
                 m_currentSkinnedAnimation = nullptr;
                 
-                auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
+                auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
                 const auto& vertexFormat = m_currentDynamicMesh->GetVertexFormat();
                 auto vertexData = m_currentDynamicMesh->GetVertexData();
                 auto vertexDataSize = m_currentDynamicMesh->GetVertexDataSize();
@@ -449,7 +486,7 @@ namespace CSBackend
             {
                 m_currentSkinnedAnimation = renderCommand->GetRenderSkinnedAnimation();
                 
-                auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
+                auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
                 
                 GLSkinnedAnimation::Apply(m_currentSkinnedAnimation, glShader);
             }
@@ -511,7 +548,7 @@ namespace CSBackend
             ResetCache();
             
             auto renderShader = renderCommand->GetRenderShader();
-            auto glShader = reinterpret_cast<GLShader*>(renderShader->GetExtraData());
+            auto glShader = static_cast<GLShader*>(renderShader->GetExtraData());
             
             CS_SAFEDELETE(glShader);
         }
@@ -522,7 +559,7 @@ namespace CSBackend
             ResetCache();
             
             auto renderTexture = renderCommand->GetRenderTexture();
-            auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());
+            auto glTexture = static_cast<GLTexture*>(renderTexture->GetExtraData());
             
             CS_SAFEDELETE(glTexture);
         }
@@ -533,7 +570,7 @@ namespace CSBackend
             ResetCache();
             
             auto renderMesh = renderCommand->GetRenderMesh();
-            auto glMesh = reinterpret_cast<GLMesh*>(renderMesh->GetExtraData());
+            auto glMesh = static_cast<GLMesh*>(renderMesh->GetExtraData());
             
             CS_SAFEDELETE(glMesh);
         }
@@ -544,7 +581,7 @@ namespace CSBackend
             ResetCache();
             
             auto renderTargetGroup = renderCommand->GetRenderTargetGroup();
-            auto glTargetGroup = reinterpret_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
+            auto glTargetGroup = static_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
             
             CS_SAFEDELETE(glTargetGroup);
         }

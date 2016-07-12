@@ -114,7 +114,7 @@ namespace CSBackend
             
             if (m_renderTargetGroup->GetColourTarget())
             {
-                auto glTexture = reinterpret_cast<GLTexture*>(m_renderTargetGroup->GetColourTarget()->GetExtraData());
+                auto glTexture = static_cast<GLTexture*>(m_renderTargetGroup->GetColourTarget()->GetExtraData());
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, glTexture->GetHandle(), 0);
             }
             else
@@ -128,7 +128,7 @@ namespace CSBackend
             
             if (m_renderTargetGroup->GetDepthTarget())
             {
-                auto glTexture = reinterpret_cast<GLTexture*>(m_renderTargetGroup->GetDepthTarget()->GetExtraData());
+                auto glTexture = static_cast<GLTexture*>(m_renderTargetGroup->GetDepthTarget()->GetExtraData());
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, glTexture->GetHandle(), 0);
             }
             else if (m_renderTargetGroup->ShouldUseDepthBuffer())

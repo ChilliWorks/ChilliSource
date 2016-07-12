@@ -185,8 +185,11 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(LoadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
+    CS_FORWARDDECLARE_CLASS(RestoreMeshRenderCommand);
+    CS_FORWARDDECLARE_CLASS(RestoreTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandBuffer);
+    CS_FORWARDDECLARE_CLASS(RenderCommandBufferManager);
     CS_FORWARDDECLARE_CLASS(RenderCommandList);
     CS_FORWARDDECLARE_CLASS(RenderInstanceRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadMaterialGroupRenderCommand);

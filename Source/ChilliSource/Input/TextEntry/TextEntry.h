@@ -31,6 +31,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Input/TextEntry/TextEntryCapitalisation.h>
+#include <ChilliSource/Input/TextEntry/TextEntryType.h>
 
 #include <functional>
 
@@ -47,36 +49,6 @@ namespace ChilliSource
     public:
         CS_DECLARE_NAMEDTYPE(TextEntry);
         
-        //-------------------------------------------------------
-        /// An enum describing the different types of keyboard.
-        ///
-        /// @author S Downie
-        //-------------------------------------------------------
-        enum class Type
-        {
-            k_text,
-            k_numeric
-        };
-        //-------------------------------------------------------
-        /// An enum describing the various methods of keyboard
-        /// capitalisation that can be used.
-        ///
-        ///  - None: will not capitalise any thing.
-        ///  - Words: will capitalise the first letter
-        ///	   of each word.
-        ///  - Sentences: will capitalise the first letter
-        ///	   of each sentence.
-        ///  - All: will capitalise every letter.
-        ///
-        /// @author Ian Copland
-        //-------------------------------------------------------
-        enum class Capitalisation
-        {
-            k_none,
-            k_words,
-            k_sentences,
-            k_all
-        };
         //-------------------------------------------------------
         /// A delegate used for recieving text input events.
         ///
@@ -115,7 +87,7 @@ namespace ChilliSource
         /// @param Text changed delegate
         /// @param Deactivate delegate
         //-------------------------------------------------------
-        virtual void Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate) = 0;
+        virtual void Activate(const std::string& in_text, TextEntryType in_type, TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate) = 0;
         //-------------------------------------------------------
         /// The system will no longer receive text input. This
         /// will also hide the virtual keyboard if required
@@ -143,6 +115,8 @@ namespace ChilliSource
         //-------------------------------------------------------
         virtual void SetTextBuffer(const std::string& in_text) = 0;
     };
+
+
 }
 
 #endif

@@ -55,7 +55,7 @@ public final class LocalNotification
 	public final static String k_paramNameTime = "Time";
 	
 	private final static String k_paramNameParams = "Params";
-	private final static String k_intentAction = "com.chillisource.core.ALARM_NOTIFICATION_INTENT";
+	private final static String k_intentAction = "com.chilliworks.chillisource.core.ALARM_NOTIFICATION_INTENT";
 	
 	private int m_intentId = 0;
 	private int m_notificationId = 0;

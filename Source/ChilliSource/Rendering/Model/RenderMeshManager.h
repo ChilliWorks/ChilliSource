@@ -85,6 +85,8 @@ namespace ChilliSource
         ///     The index data buffer.
         /// @param indexDataSize
         ///     The size of the index data buffer.
+        /// @param shouldBackupData
+        ///     If the mesh data should be backed up in main memory for restoring it later.
         /// @param inverseBindPoseMatrices
         ///     (Optional) The inverse bind pose matices for this mesh. Only applies to animated models.
         ///     Should be moved.
@@ -92,7 +94,7 @@ namespace ChilliSource
         /// @return The RenderMesh instance.
         ///
         const RenderMesh* CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                                           std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize,
+                                           std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData,
                                            std::vector<Matrix4> inverseBindPoseMatrices = std::vector<Matrix4>()) noexcept;
         
         /// Removes the RenderMesh from the manager and queues an UnloadMeshRenderCommand for the

@@ -1,5 +1,5 @@
 //
-//  MainThreadTaskPool.cpp
+//  SingleThreadTaskPool.cpp
 //  ChilliSource
 //  Created by Ian Copland on 07/04/2016.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Threading/MainThreadTaskPool.h>
+#include <ChilliSource/Core/Threading/SingleThreadTaskPool.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -35,23 +35,21 @@ namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    MainThreadTaskPool::MainThreadTaskPool()
-        : m_taskContext(TaskType::k_mainThread)
+    SingleThreadTaskPool::SingleThreadTaskPool(TaskType in_taskContext)
+        : m_taskContext(in_taskContext)
     {
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void MainThreadTaskPool::AddTasks(const std::vector<Task>& in_tasks) noexcept
+    void SingleThreadTaskPool::AddTasks(const std::vector<Task>& in_tasks) noexcept
     {
         std::unique_lock<std::mutex> lock(m_taskQueueMutex);
         m_taskQueue.insert(m_taskQueue.end(), in_tasks.begin(), in_tasks.end());
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    void MainThreadTaskPool::PerformTasks() noexcept
+    void SingleThreadTaskPool::PerformTasks() noexcept
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Main thread tasks cannot be performed on a background thread.");
-        
         std::unique_lock<std::mutex> lock(m_taskQueueMutex);
         auto localTaskQueue = m_taskQueue;
         m_taskQueue.clear();

@@ -91,6 +91,20 @@ namespace ChilliSource
         ///
         void AddLoadMeshCommand(RenderMesh* renderMesh, std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize) noexcept;
         
+        /// Creates and adds a new restore texture command to the render command list.
+        ///
+        /// @param renderTexture
+        ///     The render texture that should be restored.
+        ///
+        void AddRestoreTextureCommand(const RenderTexture* renderTexture) noexcept;
+        
+        /// Creates and adds a new restore mesh command to the render command list.
+        ///
+        /// @param renderMesh
+        ///     The render mesh that should be restored.
+        ///
+        void AddRestoreMeshCommand(const RenderMesh* renderMesh) noexcept;
+
         /// Creates and adds a new load target group command to the render command list.
         ///
         /// @param renderTargetGroup
@@ -236,9 +250,17 @@ namespace ChilliSource
         ///
         void AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept;
 
+        /// @return The number of render commands in the list.
+        ///
+        u32 GetNumCommands() const noexcept { return u32(m_renderCommands.size()); }
+        
         /// @return The ordered list of render commands.
         ///
         const std::vector<const RenderCommand*>& GetOrderedList() const noexcept { return m_orderedCommands; };
+        
+        /// @return The RenderCommand at the given index
+        ///
+        RenderCommand* GetCommand(u32 index) noexcept;
         
     private:
         std::vector<const RenderCommand*> m_orderedCommands;

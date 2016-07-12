@@ -1,5 +1,5 @@
 //
-//  MainThreadTaskPool.h
+//  SingleThreadTaskPool.h
 //  ChilliSource
 //  Created by Ian Copland on 07/04/2016.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_THREADING_MAINTHREADTASKPOOL_H_
-#define _CHILLISOURCE_CORE_THREADING_MAINTHREADTASKPOOL_H_
+#ifndef _CHILLISOURCE_CORE_THREADING_SINGLETHREADTASKPOOL_H_
+#define _CHILLISOURCE_CORE_THREADING_SINGLETHREADTASKPOOL_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Threading/TaskContext.h>
@@ -40,23 +40,23 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    /// A collection of tasks which will be performed on the main thread.
+    /// A collection of tasks which will be performed on a single thread.
     ///
     /// Adding tasks is thread safe, but the perform task methods must be called on
-    /// the main thread.
+    /// the relevant thread.
     ///
     /// @author Ian Copland
     //------------------------------------------------------------------------------
-    class MainThreadTaskPool final
+    class SingleThreadTaskPool final
     {
     public:
-        CS_DECLARE_NOCOPY(MainThreadTaskPool);
+        CS_DECLARE_NOCOPY(SingleThreadTaskPool);
         //------------------------------------------------------------------------------
         /// Constructs a new main thread task pool.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        MainThreadTaskPool();
+        SingleThreadTaskPool(TaskType in_taskContext);
         //------------------------------------------------------------------------------
         /// Adds a series of tasks to the pool. The tasks will be executed when 
         /// PerformTasks() is called.
@@ -69,10 +69,10 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         /// Performs all tasks in the task pool. The task queue is copied locally and
         /// cleared before processing all tasks. This means that any tasks queued while
-        /// performing main thread tasks will be perfomed during the next call to
+        /// performing single thread tasks will be perfomed during the next call to
         /// PerformTasks() rather than the current one.
         ///
-        /// This must be called from the main thread.
+        /// This must be called from the relevant thread.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
