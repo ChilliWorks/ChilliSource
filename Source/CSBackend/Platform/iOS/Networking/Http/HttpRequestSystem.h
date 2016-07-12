@@ -127,7 +127,7 @@ namespace CSBackend
             ///
             /// @param Delegate to call when reachability is determined
             //------------------------------------------------------------------
-            void CheckReachability(ReachabilityResultDelegate in_reachabilityDelegate) const override;
+            void CheckReachability(const ReachabilityResultDelegate& in_reachabilityDelegate) const override;
             
         private:
             friend ChilliSource::HttpRequestSystemUPtr ChilliSource::HttpRequestSystem::Create();

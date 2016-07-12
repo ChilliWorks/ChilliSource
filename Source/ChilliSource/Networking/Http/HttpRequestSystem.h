@@ -151,7 +151,7 @@ namespace ChilliSource
         ///
         /// @param Delegate to call when reachability is determined
         //--------------------------------------------------------------------------------------------------
-        virtual void CheckReachability(ReachabilityResultDelegate in_reachabilityDelegate) const = 0;
+        virtual void CheckReachability(const ReachabilityResultDelegate& in_reachabilityDelegate) const = 0;
         //--------------------------------------------------------------------------------------------------
         /// @author S Downie
         ///

@@ -108,7 +108,7 @@ namespace CSBackend
 		}
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        void HttpRequestSystem::CheckReachability(ReachabilityResultDelegate in_reachabilityDelegate) const
+        void HttpRequestSystem::CheckReachability(const ReachabilityResultDelegate& in_reachabilityDelegate) const
         {
             CS_ASSERT(in_reachabilityDelegate, "The reachability delegate should not be null.");
             
