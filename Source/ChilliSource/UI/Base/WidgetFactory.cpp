@@ -64,6 +64,7 @@ namespace ChilliSource
         const std::string k_horizontalFillProgressBarKey = "HorizontalFillProgressBar";
         const std::string k_verticalStretchProgressBarKey = "VerticalStretchProgressBar";
         const std::string k_horizontalStretchProgressBarKey = "HorizontalStretchProgressBar";
+        const std::string k_editableLabelKey = "EditableLabel";
     }
     
     //---------------------------------------------------------------------------
@@ -122,6 +123,9 @@ namespace ChilliSource
         
         WidgetDefCSPtr labelDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/Label.csuidef");
         RegisterDefinition(labelDef);
+
+        WidgetDefCSPtr editableLabelDef = resPool->LoadResource<WidgetDef>(StorageLocation::k_chilliSource, "Widgets/EditableLabel.csuidef");
+        RegisterDefinition(editableLabelDef);
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
@@ -225,6 +229,12 @@ namespace ChilliSource
     WidgetUPtr WidgetFactory::CreateVerticalStretchProgressBar() const
     {
         return Create(m_widgetDefNameMap.find(k_verticalStretchProgressBarKey)->second);
+    }
+    //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
+    WidgetUPtr WidgetFactory::CreateEditableLabel() const
+    {
+        return Create(m_widgetDefNameMap.find(k_editableLabelKey)->second);
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------

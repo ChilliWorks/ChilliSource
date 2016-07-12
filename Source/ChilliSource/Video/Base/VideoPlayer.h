@@ -86,6 +86,13 @@ namespace ChilliSource
         //--------------------------------------------------------
         virtual void PresentWithSubtitles(StorageLocation in_storageLocation, const std::string& in_fileName, const SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                           bool in_dismissWithTap, const Colour& in_backgroundColour = Colour::k_black) = 0;
+        //-------------------------------------------------------
+        /// Returns whether or not the player is currently
+        /// presented.
+        ///
+        /// @author Jordan Brown
+        //-------------------------------------------------------
+        virtual bool IsPresented() const noexcept = 0;
         //--------------------------------------------------------
         /// Destructor
         ///

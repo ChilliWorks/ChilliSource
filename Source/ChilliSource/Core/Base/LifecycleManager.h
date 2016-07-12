@@ -85,6 +85,12 @@ namespace ChilliSource
         ///
         void Render() noexcept;
         
+        /// Executes scheduled system thread tasks.
+        ///
+        /// This is not thread safe, and must be called from the system thread.
+        ///
+        void SystemUpdate() noexcept;
+        
         /// Sends the destroy event to the main thread. The app must currently be
         /// suspended or this will assert.
         ///

@@ -30,5 +30,6 @@ namespace ChilliSource
     ApplyDynamicMeshRenderCommand::ApplyDynamicMeshRenderCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept
     : RenderCommand(Type::k_applyDynamicMesh), m_renderDynamicMesh(renderDynamicMesh)
     {
+        CS_ASSERT(m_renderDynamicMesh, "Render dynamic mesh cannot be null.");
     }
 }

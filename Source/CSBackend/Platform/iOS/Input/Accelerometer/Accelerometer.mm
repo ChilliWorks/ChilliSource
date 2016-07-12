@@ -30,7 +30,10 @@
 
 #import <CSBackend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Base/AppConfig.h>
 #import <ChilliSource/Core/Math/MathUtils.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #import <CoreMotion/CoreMotion.h>
 #import <Foundation/Foundation.h>
@@ -77,15 +80,56 @@ namespace CSBackend
         //----------------------------------------------------
         void Accelerometer::StartUpdating()
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to start accelerometer updating from background thread.");
             if (m_isUpdating == false)
             {
                 m_isUpdating = true;
-                [m_motionManager startAccelerometerUpdates];
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+                {
+                    [m_motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMAccelerometerData *accelerometerData, NSError *error)
+                    {
+                        OnAccelerationUpdated(accelerometerData, error);
+                    }];
+                });
             }
         }
         //----------------------------------------------------
         //----------------------------------------------------
         ChilliSource::Vector3 Accelerometer::GetAcceleration() const
+        {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to get current acceleration from background thread.");
+            return m_acceleration;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        ChilliSource::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
+        {
+            return m_accelerationUpdatedEvent;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Accelerometer::StopUpdating()
+        {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to stop accelerometer updating from background thread.");
+            if (m_isUpdating == true)
+            {
+                m_isUpdating = false;
+                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+                {
+                    [m_motionManager stopAccelerometerUpdates];
+                });
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Accelerometer::OnInit()
+        {
+            m_motionManager = [[CMMotionManager alloc] init];
+            m_motionManager.accelerometerUpdateInterval = 1.0f / ChilliSource::Application::Get()->GetAppConfig()->GetPreferredFPS();
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Accelerometer::OnAccelerationUpdated(CMAccelerometerData* accelerometerData, NSError *error) noexcept
         {
             ChilliSource::Matrix4 orientationTransform;
             switch ([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation)
@@ -108,42 +152,14 @@ namespace CSBackend
                     break;
             }
             
-            CMAcceleration acceleration(m_motionManager.accelerometerData.acceleration);
-            ChilliSource::Vector3 deviceSpaceAcceleration(acceleration.x, acceleration.y, acceleration.z);
-            deviceSpaceAcceleration.Transform3x4(orientationTransform);
-            return deviceSpaceAcceleration;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        ChilliSource::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
-        {
-            return m_accelerationUpdatedEvent;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Accelerometer::StopUpdating()
-        {
-            if (m_isUpdating == true)
+            ChilliSource::Vector3 newAcceleration(accelerometerData.acceleration.x, accelerometerData.acceleration.y, accelerometerData.acceleration.z);
+            newAcceleration.Transform3x4(orientationTransform);
+            
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
-                m_isUpdating = false;
-                [m_motionManager stopAccelerometerUpdates];
-            }
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Accelerometer::OnInit()
-        {
-            m_motionManager = [[CMMotionManager alloc] init];
-            m_motionManager.accelerometerUpdateInterval = 0.033;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Accelerometer::OnUpdate(f32 in_deltaTime)
-        {
-            if(m_isUpdating)
-            {
-                m_accelerationUpdatedEvent.NotifyConnections(GetAcceleration());
-            }
+                m_acceleration = newAcceleration;
+                m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);
+            });
         }
         //----------------------------------------------------
         //----------------------------------------------------

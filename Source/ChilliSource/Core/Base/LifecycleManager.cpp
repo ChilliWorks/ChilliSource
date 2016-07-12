@@ -25,6 +25,7 @@
 #include <ChilliSource/Core/Base/LifecycleManager.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 
@@ -114,6 +115,12 @@ namespace ChilliSource
         CS_ASSERT(m_targetLifecycleState == LifecycleState::k_resumed || m_targetLifecycleState == LifecycleState::k_foregrounded, "Cannot render as target lifecycle state is invalid.");
         
         m_application->Render();
+    }
+    
+    //------------------------------------------------------------------------------
+    void LifecycleManager::SystemUpdate() noexcept
+    {
+        m_application->GetTaskScheduler()->ExecuteSystemThreadTasks();
     }
     
     //------------------------------------------------------------------------------

@@ -103,30 +103,38 @@ namespace ChilliSource
         ///
         void SetVisible(bool isVisible) noexcept { m_isVisible = isVisible; }
         
-        /// Set the material that the model will use. Applies the material to all meshes.
+        /// @return The model that will be rendered.
         ///
-        /// @param material
-        ///     The material that should be used.
-        ///
-        void SetMaterial(const MaterialCSPtr& material) noexcept;
+        const ModelCSPtr& GetModel() const noexcept;
         
-        /// Sets the material for a single mesh.
+        /// Sets the model the component should use.
         ///
-        /// @param material
-        ///     The material that should be used.
-        /// @param meshIndex
-        ///     The index of the mesh.
+        /// The material currently applied to the first mesh will be applied to the entire model.
         ///
-        void SetMaterialForMesh(const MaterialCSPtr& imaterial, u32 meshIndex) noexcept;
+        /// @param model
+        ///     The model.
+        ///
+        void SetModel(const ModelCSPtr& model) noexcept;
         
-        /// Sets the material for a single mesh.
+        /// Sets the model the component should use. The given material will be applied to all meshes.
         ///
+        /// @param model
+        ///     The model which should be used.
         /// @param material
-        ///     The material that should be used.
-        /// @param meshName
-        ///     The name of the mesh
+        ///     The material which should be used.
         ///
-        void SetMaterialForMesh(const MaterialCSPtr& material, const std::string& meshName) noexcept;
+        void SetModel(const ModelCSPtr& model, const MaterialCSPtr& material) noexcept;
+        
+        /// Sets the model the component should use. The given materials will be applied to the
+        /// respective meshes.
+        ///
+        /// @param model
+        ///     The model which should be used.
+        /// @param materials
+        ///     The material for each mesh in the model. Must have the same number of elements as
+        ///     there are meshes in the given model.
+        ///
+        void SetModel(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials) noexcept;
         
         /// Get the material of a single mesh.
         ///
@@ -146,34 +154,39 @@ namespace ChilliSource
         ///
         const MaterialCSPtr& GetMaterialForMesh(const std::string& meshName) const noexcept;
         
-        /// Sets the model the component should use.
+        /// Set the material that the model will use. Applies the material to all meshes.
         ///
-        /// @param model
-        ///     The model.
-        ///
-        void SetModel(const ModelCSPtr& model) noexcept;
-        
-        /// Sets the model and material that should be used.
-        ///
-        /// @param model
-        ///     The model
         /// @param material
-        ///     The material
+        ///     The material that should be used.
         ///
-        void SetModel(const ModelCSPtr& in_model, const MaterialCSPtr& in_material) noexcept;
+        void SetMaterial(const MaterialCSPtr& material) noexcept;
         
-        /// @return The model that will be rendered.
+        /// Sets the material for a single mesh.
         ///
-        const ModelCSPtr& GetModel() const noexcept;
+        /// @param material
+        ///     The material that should be used.
+        /// @param meshIndex
+        ///     The index of the mesh.
+        ///
+        void SetMaterialForMesh(const MaterialCSPtr& material, u32 meshIndex) noexcept;
+        
+        /// Sets the material for a single mesh.
+        ///
+        /// @param material
+        ///     The material that should be used.
+        /// @param meshName
+        ///     The name of the mesh
+        ///
+        void SetMaterialForMesh(const MaterialCSPtr& material, const std::string& meshName) noexcept;
+        
+        /// @return Whether the render component casts shadows
+        ///
+        bool IsShadowCastingEnabled() const noexcept;
         
         /// @param enabled
         ///     Whether the render component casts shadows
         ///
         void SetShadowCastingEnabled(bool enabled) noexcept;
-        
-        /// @return Whether the render component casts shadows
-        ///
-        bool IsShadowCastingEnabled() const noexcept;
         
     private:
         /// Triggered when the component is attached to an entity on the scene

@@ -72,7 +72,6 @@ namespace ChilliSource
         auto taskScheduler = Application::Get()->GetTaskScheduler();
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
-            auto frameAllocator = m_currentSnapshot.GetFrameAllocator();
             auto resolution = m_currentSnapshot.GetResolution();
             auto clearColour = m_currentSnapshot.GetClearColour();
             auto renderCamera = m_currentSnapshot.GetRenderCamera();
@@ -80,14 +79,13 @@ namespace ChilliSource
             auto renderDirectionalLights = m_currentSnapshot.ClaimDirectionalRenderLights();
             auto renderPointLights = m_currentSnapshot.ClaimPointRenderLights();
             auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
-            auto renderDynamicMeshes = m_currentSnapshot.ClaimRenderDynamicMeshes();
             auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();
             auto postRenderCommandList = m_currentSnapshot.ClaimPostRenderCommandList();
+            auto renderFrameData = m_currentSnapshot.ClaimRenderFrameData();
             
             auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, clearColour, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
             auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, frameAllocator, targetRenderPassGroups, std::move(renderDynamicMeshes),
-                                                                                    std::move(preRenderCommandList), std::move(postRenderCommandList));
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, std::move(preRenderCommandList), std::move(postRenderCommandList), std::move(renderFrameData));
             
             m_commandRecycleSystem->WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
             EndRenderPrep();

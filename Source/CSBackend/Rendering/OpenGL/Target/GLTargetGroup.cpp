@@ -36,6 +36,7 @@ namespace CSBackend
     {
         namespace
         {
+#ifdef CS_TARGETPLATFORM_WINDOWS
             /// Creates a new colour render buffer with the requested size.
             ///
             /// @param dimensions
@@ -54,6 +55,7 @@ namespace CSBackend
                 
                 return handle;
             }
+#endif
             
             /// Creates a new depth render buffer with the requested size.
             ///
@@ -136,7 +138,7 @@ namespace CSBackend
             
             if (m_renderTargetGroup->GetColourTarget())
             {
-                auto glTexture = reinterpret_cast<GLTexture*>(m_renderTargetGroup->GetColourTarget()->GetExtraData());
+                auto glTexture = static_cast<GLTexture*>(m_renderTargetGroup->GetColourTarget()->GetExtraData());
                 CS_ASSERT(!glTexture->IsDataInvalid(), "GLTexture data is invalid! Ensure targets are restored after textures.");
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, glTexture->GetHandle(), 0);
             }
@@ -151,8 +153,7 @@ namespace CSBackend
             
             if (m_renderTargetGroup->GetDepthTarget())
             {
-                auto glTexture = reinterpret_cast<GLTexture*>(m_renderTargetGroup->GetDepthTarget()->GetExtraData());
-                
+                auto glTexture = static_cast<GLTexture*>(m_renderTargetGroup->GetDepthTarget()->GetExtraData());
                 CS_ASSERT(!glTexture->IsDataInvalid(), "GLTexture data is invalid! Ensure targets are restored after textures.");
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, glTexture->GetHandle(), 0);
             }

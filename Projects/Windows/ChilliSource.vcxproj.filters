@@ -837,6 +837,9 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
@@ -1095,9 +1098,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\ForwardRenderMaterialGroupManager.cpp">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.cpp">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
@@ -1233,6 +1233,21 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\GLTextureUnitManager.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.cpp">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.cpp">
+      <Filter>ChilliSource\Input\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryType.cpp">
+      <Filter>ChilliSource\Input\TextEntry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.cpp">
+      <Filter>ChilliSource\Input\TextEntry</Filter>
+	</ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
@@ -1304,6 +1319,23 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.cpp">
       <Filter>ChilliSource\Rendering\Target</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderSkinnedAnimation.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplySkinnedAnimationRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLSkinnedAnimation.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameData.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.cpp">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2219,6 +2251,9 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+	</ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
@@ -2516,9 +2551,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\ForwardRenderMaterialGroupManager.h">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h">
-      <Filter>ChilliSource\Rendering\Model</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
@@ -2666,6 +2698,18 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderLayer.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\EditableTextUIComponent.h">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\SingleThreadTaskPool.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryType.h">
+      <Filter>ChilliSource\Input\TextEntry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.h">
+      <Filter>ChilliSource\Input\TextEntry</Filter>
+	</ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
@@ -2770,6 +2814,23 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.h">
       <Filter>ChilliSource\Rendering\Target</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderSkinnedAnimation.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplySkinnedAnimationRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Model\GLSkinnedAnimation.h">
+      <Filter>CSBackend\Rendering\OpenGL\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameData.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.h">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

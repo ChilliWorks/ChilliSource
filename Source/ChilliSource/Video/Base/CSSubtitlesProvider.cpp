@@ -337,8 +337,8 @@ namespace ChilliSource
         f32 fBottom = (f32)in_boundsJSON.get(k_tagStyleBoundsBottom, k_defaultBottom).asDouble();
         f32 fLeft = (f32)in_boundsJSON.get(k_tagStyleBoundsLeft, k_defaultLeft).asDouble();
         f32 fRight = (f32)in_boundsJSON.get(k_tagStyleBoundsRight, k_defaultRight).asDouble();
-        
-        return Rectangle(Vector2(fLeft + (fRight - fLeft) * 0.5f, fBottom + (fTop - fBottom) * 0.5f), Vector2(fRight - fLeft, fBottom - fTop));
+
+        return Rectangle(Vector2(fLeft + (fRight - fLeft) * 0.5f, fBottom + (fTop - fBottom) * 0.5f), Vector2(fRight - fLeft, fTop - fBottom));
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

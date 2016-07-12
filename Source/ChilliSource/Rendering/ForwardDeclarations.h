@@ -48,6 +48,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderComponentFactory);
     CS_FORWARDDECLARE_CLASS(Renderer);
     CS_FORWARDDECLARE_CLASS(RenderFrame);
+    CS_FORWARDDECLARE_CLASS(RenderFrameData);
     CS_FORWARDDECLARE_CLASS(RenderObject);
     CS_FORWARDDECLARE_CLASS(RenderPass);
     CS_FORWARDDECLARE_CLASS(RenderPassObject);
@@ -99,7 +100,7 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Model
     //------------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(AnimatedMeshComponent);
+    CS_FORWARDDECLARE_CLASS(AnimatedModelComponent);
     CS_FORWARDDECLARE_CLASS(CSAnimProvider);
     CS_FORWARDDECLARE_CLASS(CSModelProvider);
     CS_FORWARDDECLARE_CLASS(MeshDesc);
@@ -109,6 +110,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderDynamicMesh);
     CS_FORWARDDECLARE_CLASS(RenderMesh);
     CS_FORWARDDECLARE_CLASS(RenderMeshManager);
+    CS_FORWARDDECLARE_CLASS(RenderSkinnedAnimation);
     CS_FORWARDDECLARE_CLASS(Skeleton);
     CS_FORWARDDECLARE_CLASS(SkeletonDesc);
     CS_FORWARDDECLARE_STRUCT(SkeletonNode);
@@ -174,6 +176,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ApplyMaterialRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(ApplyPointLightRenderCommand);
+    CS_FORWARDDECLARE_CLASS(ApplySkinnedAnimationRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginRenderCommand);
     CS_FORWARDDECLARE_CLASS(BeginWithTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(EndRenderCommand);
@@ -201,6 +204,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(CSShaderProvider);
     CS_FORWARDDECLARE_CLASS(RenderShader);
     CS_FORWARDDECLARE_CLASS(RenderShaderManager);
+    CS_FORWARDDECLARE_CLASS(RenderShaderVariables);
     CS_FORWARDDECLARE_CLASS(Shader);
     //------------------------------------------------------------
     /// Sprite

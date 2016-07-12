@@ -30,7 +30,9 @@
 
 #include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
 namespace CSBackend
@@ -47,80 +49,88 @@ namespace CSBackend
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
+		void TextEntry::Activate(const std::string& in_text, ChilliSource::TextEntryType in_type, ChilliSource::TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
 		{
-			if (IsActive() == false)
-			{
-				m_text = in_text;
-				m_textBufferChangedDelegate = in_changeDelegate;
-				m_textInputDeactivatedDelegate = in_deactivateDelegate;
-				m_textEnteredConnection = SFMLWindow::Get()->GetTextEnteredEvent().OpenConnection(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
-			}
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot activate system text entry outside of main thread.");
+            CS_ASSERT(!m_active, "Cannot activate TextEntry system while already active.");
+
+            m_active = true;
+			m_text = in_text;
+			m_textBufferChangedDelegate = in_changeDelegate;
+			m_textInputDeactivatedDelegate = in_deactivateDelegate;
+			SFMLWindow::Get()->SetTextEnteredDelegate(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void TextEntry::Deactivate()
-		{
-			if (IsActive() == true)
-			{
-				m_textEnteredConnection.reset();
-				if (m_textInputDeactivatedDelegate != nullptr)
-				{
-					auto delegate = m_textInputDeactivatedDelegate;
-					m_textInputDeactivatedDelegate = nullptr;
-					delegate();
-				}
-			}
+        void TextEntry::Deactivate()
+        {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot deactivate system text entry outside of main thread.");
+            CS_ASSERT(m_active, "Cannot deactivate TextEntry system when not active.");
+
+            m_active = false;
+            SFMLWindow::Get()->RemoveTextEnteredDelegate();
+            if (m_textInputDeactivatedDelegate != nullptr)
+            {
+                auto delegate = m_textInputDeactivatedDelegate;
+                m_textInputDeactivatedDelegate = nullptr;
+                delegate();
+            }
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
         bool TextEntry::IsActive() const
         {
-			return m_textEnteredConnection != nullptr;
+            return m_active;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         const std::string& TextEntry::GetTextBuffer() const
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot get system text entry buffer outside of main thread.");
             return m_text;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void TextEntry::SetTextBuffer(const std::string& in_text)
         {
+            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot set system text entry buffer outside of main thread.");
             m_text = in_text;
         }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void TextEntry::OnTextEntered(ChilliSource::UTF8Char in_unicodeChar)
-		{
-			const ChilliSource::UTF8Char k_backspace = 8;
+        void TextEntry::OnTextEntered(ChilliSource::UTF8Char in_unicodeChar)
+        {
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                std::unique_lock<std::mutex> lock(m_mutex);
+                const ChilliSource::UTF8Char k_backspace = 8;
 
-			std::string text;
+                std::string text;
 
-			if (in_unicodeChar != k_backspace)
-			{
-				text = ChilliSource::UTF8StringUtils::AppendCopy(in_unicodeChar, m_text);
-			}
-			else
-			{
-				s32 length = (s32)ChilliSource::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end());
-				length = std::max(length-1, 0);
-				text = ChilliSource::UTF8StringUtils::SubString(m_text, 0, (u32)length);
-			}
+                if (in_unicodeChar != k_backspace)
+                {
+                    text = ChilliSource::UTF8StringUtils::AppendCopy(in_unicodeChar, m_text);
+                }
+                else
+                {
+                    s32 length = (s32)ChilliSource::UTF8StringUtils::CalcLength(m_text.begin(), m_text.end());
+                    length = std::max(length - 1, 0);
+                    text = ChilliSource::UTF8StringUtils::SubString(m_text, 0, (u32)length);
+                }
 
-			bool acceptText = true;
+                bool acceptText = true;
 
-			if (m_textBufferChangedDelegate != nullptr)
-			{
-				acceptText = m_textBufferChangedDelegate(text);
-			}
+                if (m_textBufferChangedDelegate != nullptr)
+                {
+                    acceptText = m_textBufferChangedDelegate(text);
+                }
 
-			if (acceptText == true)
-			{
-				m_text = text;
-			}
-		}
+                if (acceptText == true)
+                {
+                    m_text = text;
+                }
+            });
+        }
 	}
 }
 

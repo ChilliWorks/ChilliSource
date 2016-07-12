@@ -72,10 +72,8 @@ void Java_com_chilliworks_chillisource_video_VideoPlayer_onUpdateSubtitles(JNIEn
 {
 	CS_ASSERT(g_activeVideoPlayer != nullptr, "No video player active!");
 
-	ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
-	{
-		g_activeVideoPlayer->OnUpdateSubtitles();
-	});
+    // This must run on the UI thread!
+	g_activeVideoPlayer->OnUpdateSubtitles();
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -151,7 +149,7 @@ namespace CSBackend
             auto taggedFilePath = ChilliSource::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
 
 			bool inApk = false;
-			std::string absFilePath = absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+			std::string absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
 			s32 fileOffset = -1;
 			s32 fileLength = -1;
             if (in_storageLocation == ChilliSource::StorageLocation::k_package || in_storageLocation == ChilliSource::StorageLocation::k_package)
@@ -190,6 +188,12 @@ namespace CSBackend
 			m_subtitles = in_subtitles;
 			Present(in_storageLocation, in_filePath, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
 		}
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        bool VideoPlayer::IsPresented() const noexcept
+        {
+            return m_isPlaying;
+        }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
         void VideoPlayer::OnInit()

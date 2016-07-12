@@ -75,6 +75,50 @@ namespace CSBackend
                         return GL_ZERO;
                 };
             }
+            
+            /// Applies the given batch of custom shader variables to the given shader. If
+            /// any of the variables do not exist in the shader, this will assert.
+            ///
+            /// @param renderShaderVariables
+            ///     The shader variables to apply.
+            /// @param glShader
+            ///     The shader to apply the variables to.
+            ///
+            void ApplyCustomShaderVariables(const ChilliSource::RenderShaderVariables* renderShaderVariables, GLShader* glShader) noexcept
+            {
+                CS_ASSERT(renderShaderVariables, "Cannot apply null shader variables.");
+                CS_ASSERT(glShader, "Cannot apply shader variables to null shader.");
+                
+                for (const auto& pair : renderShaderVariables->GetFloatVariables())
+                {
+                    glShader->SetUniform(pair.first, pair.second);
+                }
+                
+                for (const auto& pair : renderShaderVariables->GetVector2Variables())
+                {
+                    glShader->SetUniform(pair.first, pair.second);
+                }
+                
+                for (const auto& pair : renderShaderVariables->GetVector3Variables())
+                {
+                    glShader->SetUniform(pair.first, pair.second);
+                }
+                
+                for (const auto& pair : renderShaderVariables->GetVector4Variables())
+                {
+                    glShader->SetUniform(pair.first, pair.second);
+                }
+                
+                for (const auto& pair : renderShaderVariables->GetMatrix4Variables())
+                {
+                    glShader->SetUniform(pair.first, pair.second);
+                }
+                
+                for (const auto& pair : renderShaderVariables->GetColourVariables())
+                {
+                    glShader->SetUniform(pair.first, pair.second);
+                }
+            }
         }
         
         //------------------------------------------------------------------------------
@@ -136,6 +180,11 @@ namespace CSBackend
             glShader->SetUniform(k_uniformAmbient, renderMaterial->GetAmbientColour(), GLShader::FailurePolicy::k_silent);
             glShader->SetUniform(k_uniformDiffuse, renderMaterial->GetDiffuseColour(), GLShader::FailurePolicy::k_silent);
             glShader->SetUniform(k_uniformSpecular, renderMaterial->GetSpecularColour(), GLShader::FailurePolicy::k_silent);
+            
+            if (renderMaterial->GetRenderShaderVariables())
+            {
+                ApplyCustomShaderVariables(renderMaterial->GetRenderShaderVariables(), glShader);
+            }
         }
     }
 }

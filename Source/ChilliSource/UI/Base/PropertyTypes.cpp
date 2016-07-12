@@ -33,6 +33,7 @@
 #include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarType.h>
 #include <ChilliSource/UI/Slider/SliderDirection.h>
+#include <ChilliSource/Input/TextEntry.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
@@ -55,5 +56,7 @@ namespace ChilliSource
         CS_DEFINE_PROPERTYTYPE(ChilliSource::SliderDirection, SliderDirection, ChilliSource::SliderDirection::k_horizontal, &ParseSliderDirection);
         CS_DEFINE_PROPERTYTYPE(ChilliSource::ProgressBarDirection, ProgressBarDirection, ChilliSource::ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
         CS_DEFINE_PROPERTYTYPE(ChilliSource::ProgressBarType, ProgressBarType, ChilliSource::ProgressBarType::k_stretch, &ParseProgressBarType);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::TextEntryType, InputType, ChilliSource::TextEntryType::k_text, &ParseKeyboardInputType);
+        CS_DEFINE_PROPERTYTYPE(ChilliSource::TextEntryCapitalisation, CapitalisationFormat, ChilliSource::TextEntryCapitalisation::k_sentences, &ParseCapitalisationFormat);
     }
 }

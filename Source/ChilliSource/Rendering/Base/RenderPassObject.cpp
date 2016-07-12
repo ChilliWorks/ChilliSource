@@ -32,12 +32,38 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, u32 priority) noexcept
         : m_type(Type::k_static), m_renderMaterial(renderMaterial), m_renderMesh(renderMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere), m_priority(priority)
-    { 
+    {
+        CS_ASSERT(m_renderMaterial, "RenderMaterial cannot be null.");
+        CS_ASSERT(m_renderMesh, "RenderMesh cannot be null.");
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderMesh* renderMesh, const RenderSkinnedAnimation* renderSkinnedAnimation, const Matrix4& worldMatrix,
+                                       const Sphere& boundingSphere, u32 priority) noexcept
+        : m_type(Type::k_staticAnimated), m_renderMaterial(renderMaterial), m_renderMesh(renderMesh), m_renderSkinnedAnimation(renderSkinnedAnimation), m_worldMatrix(worldMatrix),
+        m_boundingSphere(boundingSphere), m_priority(priority)
+    {
+        CS_ASSERT(m_renderMaterial, "RenderMaterial cannot be null.");
+        CS_ASSERT(m_renderMesh, "RenderMesh cannot be null.");
+        CS_ASSERT(m_renderSkinnedAnimation, "RenderSkinnedAnimation cannot be null.");
     }
     
     //------------------------------------------------------------------------------
     RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderDynamicMesh* renderDynamicMesh, const Matrix4& worldMatrix, const Sphere& boundingSphere, u32 priority) noexcept
         : m_type(Type::k_dynamic), m_renderMaterial(renderMaterial), m_renderDynamicMesh(renderDynamicMesh), m_worldMatrix(worldMatrix), m_boundingSphere(boundingSphere), m_priority(priority)
     {
+        CS_ASSERT(m_renderMaterial, "RenderMaterial cannot be null.");
+        CS_ASSERT(m_renderDynamicMesh, "RenderDynamicMesh cannot be null.");
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderPassObject::RenderPassObject(const RenderMaterial* renderMaterial, const RenderDynamicMesh* renderDynamicMesh, const RenderSkinnedAnimation* renderSkinnedAnimation,
+                                       const Matrix4& worldMatrix, const Sphere& boundingSphere, u32 priority) noexcept
+        : m_type(Type::k_dynamicAnimated), m_renderMaterial(renderMaterial), m_renderDynamicMesh(renderDynamicMesh), m_renderSkinnedAnimation(renderSkinnedAnimation), m_worldMatrix(worldMatrix),
+          m_boundingSphere(boundingSphere), m_priority(priority)
+    {
+        CS_ASSERT(m_renderMaterial, "RenderMaterial cannot be null.");
+        CS_ASSERT(m_renderDynamicMesh, "RenderDynamicMesh cannot be null.");
+        CS_ASSERT(m_renderSkinnedAnimation, "RenderSkinnedAnimation cannot be null.");
     }
 }
