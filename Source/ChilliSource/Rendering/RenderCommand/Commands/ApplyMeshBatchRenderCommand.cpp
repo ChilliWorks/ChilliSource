@@ -1,11 +1,7 @@
 //
-//  CubeMap.cpp
-//  Chilli Source
-//  Created by Scott Downie on 15/07/2013.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2013 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +22,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Texture/Cubemap.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshBatchRenderCommand.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(Cubemap);
-    
-    //--------------------------------------------------------------
-    //--------------------------------------------------------------
-    CubemapUPtr Cubemap::Create()
+    //------------------------------------------------------------------------------
+    ApplyMeshBatchRenderCommand::ApplyMeshBatchRenderCommand(RenderMeshBatchUPtr renderMeshBatch) noexcept
+        : RenderCommand(Type::k_applyMeshBatch), m_renderMeshBatch(std::move(renderMeshBatch))
     {
-        return nullptr;
     }
 }

@@ -40,17 +40,6 @@ namespace ChilliSource
     namespace
     {
         //------------------------------------------------------------------------------
-        /// A struct containing the contents of a single vertex.
-        ///
-        /// @author Ian Copland
-        //------------------------------------------------------------------------------
-        struct Vertex
-        {
-            Vector4 m_position;
-            Vector3 m_normal;
-            Vector2 m_texCoord;
-        };
-        //------------------------------------------------------------------------------
         /// Creates a new model description describing a plane model.
         ///
         /// @author Ian Copland
@@ -67,7 +56,7 @@ namespace ChilliSource
             const Vector2 halfSize = in_size * 0.5f;
 
             // Vertices
-            Vertex* vertices = new Vertex[k_numVertices];
+            auto vertices = new StaticMeshVertex[k_numVertices];
             vertices[0] = { Vector4(-halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, 0.0f) };
             vertices[1] = { Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(0.0f, in_textureRepeat.y) };
             vertices[2] = { Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector2(in_textureRepeat.x, 0.0f) };
@@ -116,7 +105,7 @@ namespace ChilliSource
             const Vector3 halfSize = in_size * 0.5f;
             
             //Vertices
-            Vertex* vertices = new Vertex[k_numVertices];
+            auto vertices = new StaticMeshVertex[k_numVertices];
             float normalDir = (in_flipNormals == false) ? 1.0f : -1.0f;
             
             //bottom

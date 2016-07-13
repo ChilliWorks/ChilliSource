@@ -105,6 +105,13 @@ namespace ChilliSource
         ///
         void AddRestoreMeshCommand(const RenderMesh* renderMesh) noexcept;
 
+        /// Creates and adds a new restore render target group command to the render command list.
+        ///
+        /// @param renderTargetGroup
+        ///     The render target group that should be restored.
+        ///
+        void AddRestoreRenderTargetGroupCommand(const RenderTargetGroup* renderTargetGroup) noexcept;
+        
         /// Creates and adds a new load target group command to the render command list.
         ///
         /// @param renderTargetGroup
@@ -196,6 +203,13 @@ namespace ChilliSource
         ///     The render dynamic mesh to apply.
         ///
         void AddApplyDynamicMeshCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept;
+        
+        /// Creates and adds a new apply mesh batch command to the render command list.
+        ///
+        /// @param renderMeshBatch
+        ///     The render mesh batch which should be applied. Must be moved.
+        ///
+        void AddApplyMeshBatchCommand(RenderMeshBatchUPtr renderMeshBatch) noexcept;
         
         /// Creates and adds a new apply skinned animation command to the render command list.
         ///

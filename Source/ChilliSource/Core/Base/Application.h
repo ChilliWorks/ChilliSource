@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/System/AppSystem.h>
@@ -71,7 +72,7 @@ namespace ChilliSource
         
         /// Constructor
         ///
-        Application() noexcept;
+        Application(ChilliSource::SystemInfoCUPtr systemInfo) noexcept;
         
         /// Creates a new instance of the given system and adds it to the application.
         ///
@@ -444,6 +445,8 @@ namespace ChilliSource
         PointerSystem* m_pointerSystem = nullptr;
         AppConfig* m_appConfig = nullptr;
         WidgetFactory* m_widgetFactory = nullptr;
+
+        SystemInfoCUPtr m_systemInfo;
         
         std::atomic<u32> m_frameIndex;
         TimeIntervalSecs m_currentAppTime = 0;
@@ -537,6 +540,6 @@ namespace ChilliSource
 ///
 /// @return Instance of concrete CS application
 ///
-ChilliSource::Application* CreateApplication() noexcept;
+ChilliSource::Application* CreateApplication(ChilliSource::SystemInfoCUPtr systemInfo) noexcept;
 
 #endif

@@ -109,7 +109,6 @@ namespace ChilliSource
     void TaskPool::PerformTask(const std::atomic<bool>& in_forceContinue) noexcept
     {
         std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
-        CS_ASSERT(m_isFinished == false, "Task is being pushed after finishing.");
         
         if (m_taskQueue.empty() && !in_forceContinue)
         {

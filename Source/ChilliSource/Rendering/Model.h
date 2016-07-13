@@ -42,12 +42,14 @@
 #include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
+#include <ChilliSource/Rendering/Model/RenderMeshBatch.h>
 #include <ChilliSource/Rendering/Model/RenderMeshManager.h>
 #include <ChilliSource/Rendering/Model/RenderSkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 #include <ChilliSource/Rendering/Model/SkeletonDesc.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
+#include <ChilliSource/Rendering/Model/SmallMeshBatcher.h>
 #include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 

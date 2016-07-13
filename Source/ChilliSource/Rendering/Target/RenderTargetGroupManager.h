@@ -96,6 +96,10 @@ namespace ChilliSource
         /// @return The new render target group instance.
         ///
         const RenderTargetGroup* CreateDepthRenderTargetGroup(const RenderTexture* depthTarget) noexcept;
+     
+        /// @return A copy of the render target groups
+        ///
+        std::vector<const RenderTargetGroup*> GetRenderTargetGroups() noexcept;
         
         /// Removes the render target group from the manager and queues an UnloadTargetGroupRenderCommand
         /// for the next Render Snapshot stage in the render pipeline. The render command is given

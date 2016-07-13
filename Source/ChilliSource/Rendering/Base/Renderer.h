@@ -164,6 +164,10 @@ namespace ChilliSource
         /// from lifecycle manager and will be called before the OnSuspend.
         ///
         void OnSystemSuspend() noexcept;
+
+        /// Destroy method called immediately before all systems are destroyed.
+        ///
+        void OnDestroy() noexcept override;
         
         FrameAllocatorQueue m_frameAllocatorQueue;
         IRenderPassCompilerUPtr m_renderPassCompiler;

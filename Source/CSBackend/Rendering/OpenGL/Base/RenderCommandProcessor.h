@@ -34,6 +34,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
 
 namespace CSBackend
@@ -64,6 +65,8 @@ namespace CSBackend
             /// Called when the GL context is restored, need to rebuild any GL resources
             ///
             void Restore() noexcept override;
+
+            ~RenderCommandProcessor() noexcept;
             
         private:
             /// Initialises the render command processor. This is deferred until Process is first called
@@ -106,6 +109,13 @@ namespace CSBackend
             ///
             void RestoreMesh(const ChilliSource::RestoreMeshRenderCommand* renderCommand) noexcept;
 
+            /// Restores the render target group given by the command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void RestoreRenderTargetGroup(const ChilliSource::RestoreRenderTargetGroupCommand* renderCommand) noexcept;
+            
             /// Loads the target group described by the given load command
             ///
             /// @param renderCommand
@@ -185,6 +195,13 @@ namespace CSBackend
             ///     The render command
             ///
             void ApplyDynamicMesh(const ChilliSource::ApplyDynamicMeshRenderCommand* renderCommand) noexcept;
+            
+            /// Applies the given mesh batch to the OpenGL Context.
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void ApplyMeshBatch(const ChilliSource::ApplyMeshBatchRenderCommand* renderCommand) noexcept;
             
             /// Applies the given skinned animation to the OpenGL Context. If the skinned animation is null
             /// then skinned animation will be disabled.

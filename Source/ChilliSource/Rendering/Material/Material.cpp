@@ -114,20 +114,6 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetCubemap(const CubemapCSPtr& in_cubemap)
-    {
-        m_cubemap = in_cubemap;
-        
-        m_isCacheValid = false;
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    const CubemapCSPtr& Material::GetCubemap() const
-    {
-        return m_cubemap;
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
     bool Material::IsTransparencyEnabled() const
     {
         return m_isAlphaBlendingEnabled;
@@ -355,9 +341,15 @@ namespace ChilliSource
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Must be run in main thread.");
         
-        if (!m_isCacheValid || !m_isVariableCacheValid || !m_renderMaterialGroup)
+        if (!m_isCacheValid || !m_isVariableCacheValid || !m_renderMaterialGroup || !VerifyTexturesAreValid())
         {
             DestroyRenderMaterialGroup();
+            
+            m_cachedRenderTextures.clear();
+            for(const auto& texture : m_textures)
+            {
+                m_cachedRenderTextures.push_back(texture->GetRenderTexture());
+            }
             
             m_isCacheValid = true;
             m_isVariableCacheValid = true;
@@ -456,6 +448,28 @@ namespace ChilliSource
             renderMaterialGroupManager->DestroyRenderMaterialGroup(m_renderMaterialGroup);
             m_renderMaterialGroup = nullptr;
         }
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    bool Material::VerifyTexturesAreValid() const noexcept
+    {
+        if(m_textures.size() != m_cachedRenderTextures.size())
+        {
+            return false;
+        }
+        else
+        {
+            for(u32 i = 0; i < m_textures.size(); ++i)
+            {
+                const auto& texture = m_textures[i];
+                if(texture->GetRenderTexture() != m_cachedRenderTextures[i])
+                {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------

@@ -236,7 +236,7 @@ namespace ChilliSource
             count++;
         }
         
-        return MakeUnique<RenderSkinnedAnimation>(*in_allocator, std::move(jointData), jointDataSize);
+        return MakeUnique<RenderSkinnedAnimation>(*in_allocator, std::move(jointData), u32(jointDataSize));
     }
     //----------------------------------------------------------
     /// Get Animation Length

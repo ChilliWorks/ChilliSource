@@ -28,9 +28,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
-//TODO: Presently RenderTargetGroups don't correctly handle android context restoration if the
-//      render texture was created from file. Fortunately, this is a rare edge case.
-
 namespace ChilliSource
 {
     /// Represents a group of colour and depth render targets that can be bound for rendering.

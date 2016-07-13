@@ -645,15 +645,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.cpp">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.cpp">
       <Filter>ChilliSource\Rendering\Texture</Filter>
     </ClCompile>
@@ -783,9 +774,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Main.cpp">
       <Filter>CSBackend\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.cpp">
-      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\PlatformSystem.cpp">
       <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
     </ClCompile>
@@ -836,12 +824,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp">
-      <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
@@ -1247,7 +1229,7 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.cpp">
       <Filter>ChilliSource\Input\TextEntry</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
@@ -1314,6 +1296,12 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.cpp">
+      <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
@@ -1331,6 +1319,24 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.cpp">
       <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.cpp">
+      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshBatch.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SmallMeshBatcher.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshBatchRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2021,15 +2027,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.h">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.h">
       <Filter>ChilliSource\Rendering\Texture</Filter>
     </ClInclude>
@@ -2186,9 +2183,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\ForwardDeclarations.h">
       <Filter>CSBackend\Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.h">
-      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\PlatformSystem.h">
       <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
     </ClInclude>
@@ -2245,12 +2239,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-	</ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h">
-      <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h">
       <Filter>ChilliSource\Core\Threading</Filter>
@@ -2704,7 +2692,7 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.h">
       <Filter>ChilliSource\Input\TextEntry</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
@@ -2804,6 +2792,12 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.h">
+      <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
@@ -2821,6 +2815,24 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.h">
       <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.h">
+      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshBatch.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SmallMeshBatcher.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshBatchRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

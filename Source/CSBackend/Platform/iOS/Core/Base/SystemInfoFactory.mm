@@ -1,11 +1,6 @@
-//
-//  Device.mm
-//  Chilli Source
-//  Created by Ian Copland on 24/04/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +23,11 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <CSBackend/Platform/iOS/Core/Base/Device.h>
+#import <ChilliSource/Core/Base/DeviceInfo.h>
+#import <ChilliSource/Core/Base/SystemInfo.h>
+#import <ChilliSource/Core/String/StringUtils.h>
+
+#import <CSBackend/Platform/iOS/Core/Base/SystemInfoFactory.h>
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
@@ -43,9 +42,11 @@ namespace CSBackend
     {
         namespace
         {
-            //----------------------------------------------
-            //----------------------------------------------
-            std::string GetDeviceModel()
+            const std::string k_deviceManufacturer = "Apple";
+            
+            /// @return The current device model.
+            ///
+            std::string GetDeviceModel() noexcept
             {
                 @autoreleasepool
                 {
@@ -53,9 +54,10 @@ namespace CSBackend
                     return [NSStringUtils newUTF8StringWithNSString:type];
                 }
             }
-            //----------------------------------------------
-            //----------------------------------------------
-            std::string GetDeviceModelType()
+            
+            /// @return The current device model type.
+            ///
+            std::string GetDeviceModelType() noexcept
             {
                 size_t size = 0;
                 sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
@@ -80,15 +82,10 @@ namespace CSBackend
                 }
                 return output;
             }
-            //---------------------------------------------
-            //---------------------------------------------
-            std::string GetDeviceManufacturer()
-            {
-                return "Apple";
-            }
-            //---------------------------------------------
-            //---------------------------------------------
-            std::string GetOSVersion()
+            
+            /// @return The current OS version.
+            ///
+            std::string GetOSVersion() noexcept
             {
                 @autoreleasepool
                 {
@@ -96,9 +93,10 @@ namespace CSBackend
                     return [NSStringUtils newUTF8StringWithNSString:version];
                 }
             }
-            //---------------------------------------------
-            //---------------------------------------------
-            std::string GetLocale()
+            
+            /// @return The current locale.
+            ///
+            std::string GetLocale() noexcept
             {
                 @autoreleasepool
                 {
@@ -115,9 +113,10 @@ namespace CSBackend
                     }
                 }
             }
-            //---------------------------------------------
-            //---------------------------------------------
-            std::string GetLanguage()
+            
+            /// @return The current language.
+            ///
+            std::string GetLanguage() noexcept
             {
                 @autoreleasepool
                 {
@@ -137,9 +136,10 @@ namespace CSBackend
                     }
                 }
             }
-            //-----------------------------------------------
-            //-----------------------------------------------
-            std::string GetUDID()
+            
+            /// @return The unique device identifier.
+            ///
+            std::string GetUDID() noexcept
             {
                 @autoreleasepool
                 {
@@ -152,9 +152,10 @@ namespace CSBackend
                     return "";
                 }
             }
-            //-------------------------------------------------
-            //-------------------------------------------------
-            u32 GetNumberOfCPUCores()
+            
+            /// @return The number of cores.
+            ///
+            u32 GetNumberOfCPUCores() noexcept
             {
                 u32 numCores = 1;
                 size_t size = sizeof(numCores);
@@ -170,75 +171,18 @@ namespace CSBackend
             }
         }
         
-        CS_DEFINE_NAMEDTYPE(Device);
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Device::Device()
-            : m_locale("en_GB"), m_language("en")
-        {
-            m_model = CSBackend::iOS::GetDeviceModel();
-            m_modelType = CSBackend::iOS::GetDeviceModelType();
-            m_manufacturer = CSBackend::iOS::GetDeviceManufacturer();
-            m_locale = CSBackend::iOS::GetLocale();
-            m_language = CSBackend::iOS::GetLanguage();
-            m_osVersion = CSBackend::iOS::GetOSVersion();
-            m_udid = CSBackend::iOS::GetUDID();
-            m_numCPUCores = CSBackend::iOS::GetNumberOfCPUCores();
-        }
         //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool Device::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
+        ChilliSource::SystemInfoCUPtr SystemInfoFactory::CreateSystemInfo() noexcept
         {
-            return (ChilliSource::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
+			// Create DeviceInfo.
+			ChilliSource::DeviceInfo deviceInfo(GetDeviceModel(), GetDeviceModelType(), k_deviceManufacturer, GetUDID(), GetLocale(), GetLanguage(), GetOSVersion(), GetNumberOfCPUCores());
+
+            // Create SystemInfo.
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo));
+            
+            return std::move(systemInfo);
         }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        const std::string& Device::GetModel() const
-        {
-            return m_model;
-        }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        const std::string& Device::GetModelType() const
-        {
-            return m_modelType;
-        }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        const std::string& Device::GetManufacturer() const
-        {
-            return m_manufacturer;
-        }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        const std::string& Device::GetLocale() const
-        {
-            return m_locale;
-        }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        const std::string& Device::GetLanguage() const
-        {
-            return m_language;
-        }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        const std::string& Device::GetOSVersion() const
-        {
-            return m_osVersion;
-        }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        const std::string& Device::GetUDID() const
-        {
-            return m_udid;
-        }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        u32 Device::GetNumberOfCPUCores() const
-        {
-            return m_numCPUCores;
-        }
+        
     }
 }
 
