@@ -40,7 +40,7 @@ namespace CSBackend
         CS_DEFINE_NAMEDTYPE(Screen);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Screen::Screen()
+        Screen::Screen(const ChilliSource::ScreenInfo& screenInfo)
         {
         	CoreJavaInterfaceSPtr javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
         	CS_ASSERT(javaInterface != nullptr, "Cannot get CoreJavaInterface!");

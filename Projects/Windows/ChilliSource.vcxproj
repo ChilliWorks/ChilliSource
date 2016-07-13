@@ -36,6 +36,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Logging.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Screen.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Utils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.cpp" />
@@ -391,6 +392,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\QueryableInterface.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Screen.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Singleton.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\StandardMacros.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.h" />

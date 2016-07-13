@@ -1,11 +1,6 @@
-//
-//  Screen.cpp
-//  Chilli Source
-//  Created by Scott Downie on 12/10/2010.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,36 +21,27 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Base/Screen.h>
-
-#ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Main/JNI/Core/Base/Screen.h>
-#endif
-
-#ifdef CS_TARGETPLATFORM_IOS
-#include <CSBackend/Platform/iOS/Core/Base/Screen.h>
-#endif
-
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Core/Base/Screen.h>
-#endif
 
-namespace ChilliSource
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/ScreenInfo.h>
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
+
+namespace CSBackend
 {
-    CS_DEFINE_NAMEDTYPE(Screen);
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
-    ScreenUPtr Screen::Create(const ChilliSource::ScreenInfo& screenInfo)
+    namespace Windows
     {
-#if defined CS_TARGETPLATFORM_ANDROID
-        return ScreenUPtr(new CSBackend::Android::Screen(screenInfo));
-#elif defined CS_TARGETPLATFORM_IOS
-        return ScreenUPtr(new CSBackend::iOS::Screen(screenInfo));
-#elif defined CS_TARGETPLATFORM_WINDOWS
-        return ScreenUPtr(new CSBackend::Windows::Screen(screenInfo));
-#else
-        return nullptr;
-#endif
+        /// A factory for creating new instances of SystemInfo. This will query the Windows
+        /// API to gather information about the device.
+        ///
+        namespace ScreenInfoFactory
+        {
+            /// This function creates the new SystemInfo instance.
+            /// @return The new instance.
+            ///
+            ChilliSource::ScreenInfoCUPtr CreateScreenInfo() noexcept;
+        }
     }
 }
 
+#endif

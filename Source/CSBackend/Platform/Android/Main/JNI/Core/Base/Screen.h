@@ -134,14 +134,14 @@ namespace CSBackend
 			//------------------------------------------------------------
 			void OnResolutionChanged(const ChilliSource::Vector2& in_resolution);
         private:
-            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create();
+            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create(const ChilliSource::ScreenInfo& screenInfo);
             //-------------------------------------------------------
 			/// Private constructor to force the use of the Create()
             /// factory method.
 			///
             /// @author Ian Copland
 			//-------------------------------------------------------
-			Screen();
+			Screen(const ChilliSource::ScreenInfo& screenInfo);
             
 			std::vector<ChilliSource::Integer2> m_supportedResolutions;
             ChilliSource::Vector2 m_resolution;

@@ -30,8 +30,10 @@
 #define _CHILLISOURCE_CORE_BASE_SCREEN_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+
 
 #include <functional>
 
@@ -163,7 +165,7 @@ namespace ChilliSource
         ///
         /// @param The new instance of the system.
         //-----------------------------------------------------------
-        static ScreenUPtr Create();
+        static ScreenUPtr Create(const ChilliSource::ScreenInfo& screenInfo);
     };
 }
 
