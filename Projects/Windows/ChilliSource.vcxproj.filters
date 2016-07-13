@@ -1319,6 +1319,7 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.cpp">
       <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
@@ -2814,6 +2815,7 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.h">
       <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
