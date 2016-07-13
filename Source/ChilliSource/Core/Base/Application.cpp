@@ -74,7 +74,6 @@
 #include <ChilliSource/Rendering/Shader/CSShaderProvider.h>
 #include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
 #include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
-#include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
@@ -317,7 +316,6 @@ namespace ChilliSource
         CreateSystem<CSShaderProvider>();
         CreateSystem<TextureAtlasProvider>();
         CreateSystem<TextureProvider>();
-        CreateSystem<CubemapProvider>();
         CreateSystem<FontProvider>();
         CreateSystem<RenderComponentFactory>();
         
@@ -350,9 +348,8 @@ namespace ChilliSource
             }
         }
         
-        //Texture/Cubemap provider is a compound provider and needs to be informed when the other providers are created.
+        //Texture provider is a compound provider and needs to be informed when the other providers are created.
         GetSystem<TextureProvider>()->PostCreate();
-        GetSystem<CubemapProvider>()->PostCreate();
         
         //Load the app config set preferred FPS.
         m_appConfig->Load();

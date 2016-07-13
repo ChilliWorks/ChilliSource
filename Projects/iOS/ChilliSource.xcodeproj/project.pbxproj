@@ -293,9 +293,6 @@
 		8184623A1D3503E8004B0C46 /* SpriteMeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460A31D3503E8004B0C46 /* SpriteMeshBuilder.cpp */; };
 		8184623B1D3503E8004B0C46 /* RenderTargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460A71D3503E8004B0C46 /* RenderTargetGroup.cpp */; };
 		8184623C1D3503E8004B0C46 /* RenderTargetGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460A91D3503E8004B0C46 /* RenderTargetGroupManager.cpp */; };
-		8184623D1D3503E8004B0C46 /* Cubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460AD1D3503E8004B0C46 /* Cubemap.cpp */; };
-		8184623E1D3503E8004B0C46 /* CubemapProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460AF1D3503E8004B0C46 /* CubemapProvider.cpp */; };
-		8184623F1D3503E8004B0C46 /* CubemapResourceOptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460B11D3503E8004B0C46 /* CubemapResourceOptions.cpp */; };
 		818462401D3503E8004B0C46 /* RenderTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460B31D3503E8004B0C46 /* RenderTexture.cpp */; };
 		818462411D3503E8004B0C46 /* RenderTextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460B51D3503E8004B0C46 /* RenderTextureManager.cpp */; };
 		818462421D3503E8004B0C46 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460B71D3503E8004B0C46 /* Texture.cpp */; };
@@ -1122,12 +1119,6 @@
 		818460A91D3503E8004B0C46 /* RenderTargetGroupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTargetGroupManager.cpp; sourceTree = "<group>"; };
 		818460AA1D3503E8004B0C46 /* RenderTargetGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTargetGroupManager.h; sourceTree = "<group>"; };
 		818460AB1D3503E8004B0C46 /* Target.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Target.h; sourceTree = "<group>"; };
-		818460AD1D3503E8004B0C46 /* Cubemap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cubemap.cpp; sourceTree = "<group>"; };
-		818460AE1D3503E8004B0C46 /* Cubemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cubemap.h; sourceTree = "<group>"; };
-		818460AF1D3503E8004B0C46 /* CubemapProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubemapProvider.cpp; sourceTree = "<group>"; };
-		818460B01D3503E8004B0C46 /* CubemapProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubemapProvider.h; sourceTree = "<group>"; };
-		818460B11D3503E8004B0C46 /* CubemapResourceOptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubemapResourceOptions.cpp; sourceTree = "<group>"; };
-		818460B21D3503E8004B0C46 /* CubemapResourceOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubemapResourceOptions.h; sourceTree = "<group>"; };
 		818460B31D3503E8004B0C46 /* RenderTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTexture.cpp; sourceTree = "<group>"; };
 		818460B41D3503E8004B0C46 /* RenderTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTexture.h; sourceTree = "<group>"; };
 		818460B51D3503E8004B0C46 /* RenderTextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTextureManager.cpp; sourceTree = "<group>"; };
@@ -2928,12 +2919,6 @@
 		818460AC1D3503E8004B0C46 /* Texture */ = {
 			isa = PBXGroup;
 			children = (
-				818460AD1D3503E8004B0C46 /* Cubemap.cpp */,
-				818460AE1D3503E8004B0C46 /* Cubemap.h */,
-				818460AF1D3503E8004B0C46 /* CubemapProvider.cpp */,
-				818460B01D3503E8004B0C46 /* CubemapProvider.h */,
-				818460B11D3503E8004B0C46 /* CubemapResourceOptions.cpp */,
-				818460B21D3503E8004B0C46 /* CubemapResourceOptions.h */,
 				818460B31D3503E8004B0C46 /* RenderTexture.cpp */,
 				818460B41D3503E8004B0C46 /* RenderTexture.h */,
 				818460B51D3503E8004B0C46 /* RenderTextureManager.cpp */,
@@ -3533,7 +3518,6 @@
 				8184625B1D3503E8004B0C46 /* ToggleHighlightUIComponent.cpp in Sources */,
 				818461851D3503E8004B0C46 /* UnifiedCoordinates.cpp in Sources */,
 				81A616B11D357133007F7CC1 /* TargetGroup.cpp in Sources */,
-				8184623E1D3503E8004B0C46 /* CubemapProvider.cpp in Sources */,
 				818462161D3503E8004B0C46 /* SphereParticleEmitterDef.cpp in Sources */,
 				818462741D3503E8004B0C46 /* EditableTextUIComponent.cpp in Sources */,
 				818461ED1D3503E8004B0C46 /* PrimitiveModelFactory.cpp in Sources */,
@@ -3782,7 +3766,6 @@
 				818461B61D3503E8004B0C46 /* HttpRequestSystem.cpp in Sources */,
 				8184626D1D3503E8004B0C46 /* VListUILayout.cpp in Sources */,
 				818461801D3503E8004B0C46 /* ShapeIntersection.cpp in Sources */,
-				8184623D1D3503E8004B0C46 /* Cubemap.cpp in Sources */,
 				8184626A1D3503E8004B0C46 /* LayoutUIComponent.cpp in Sources */,
 				8184616F1D3503E8004B0C46 /* CSBinaryInputStream.cpp in Sources */,
 				818461DD1D3503E8004B0C46 /* PointLightComponent.cpp in Sources */,
@@ -3809,7 +3792,6 @@
 				8184615D1D3503E8004B0C46 /* ParamDictionary.cpp in Sources */,
 				818461F31D3503E8004B0C46 /* SkeletonDesc.cpp in Sources */,
 				818462451D3503E8004B0C46 /* TextureDesc.cpp in Sources */,
-				8184623F1D3503E8004B0C46 /* CubemapResourceOptions.cpp in Sources */,
 				8184621F1D3503E8004B0C46 /* ApplyMeshRenderCommand.cpp in Sources */,
 				8158F7DD1C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */,
 				818461861D3503E8004B0C46 /* LinearAllocator.cpp in Sources */,

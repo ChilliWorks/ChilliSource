@@ -103,8 +103,7 @@ namespace ChilliSource
         ///
         /// NOTE: Due to devices supporting different numbers of
         /// textures it is possible that textures at the end will be
-        /// ignored by the renderer. The cubemap can also steal
-        /// a texture slot and will take precedence over a texture.
+        /// ignored by the renderer.
         ///
         /// @author S Downie
         ///
@@ -139,18 +138,6 @@ namespace ChilliSource
         /// @return Number of textures set on the material
         //----------------------------------------------------------
         u32 GetNumTextures() const;
-        //----------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @param Cubemap
-        //----------------------------------------------------------
-        void SetCubemap(const CubemapCSPtr& in_cubemap);
-        //----------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Cubemap or null
-        //----------------------------------------------------------
-        const CubemapCSPtr& GetCubemap() const;
         //----------------------------------------------------------
         /// @author S Downie
         ///
@@ -453,8 +440,6 @@ namespace ChilliSource
         bool VerifyTexturesAreValid() const noexcept;
         
         std::vector<TextureCSPtr> m_textures;
-        
-        CubemapCSPtr m_cubemap;
         
         ShadingType m_shadingType = ShadingType::k_custom;
         
