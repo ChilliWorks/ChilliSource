@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Memory/UniquePtr.h>
+#include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 namespace CSBackend
@@ -38,7 +39,7 @@ namespace CSBackend
     {
         namespace
         {
-            constexpr u32 k_allocatorSize = 1024 * 1024;
+            constexpr u32 k_allocatorSize = ChilliSource::RenderDynamicMesh::k_maxVertexDataSize;
             
             /// Applies each of the sprite meshes' vertices to the combined mesh batch vertex buffer. The vertices
             /// are converted into world space before being added to the new buffer. The vertex data is applied to
