@@ -189,7 +189,7 @@ namespace CSBackend
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            IAPSystem() = default;
+            IAPSystem();
             //-------------------------------------------------------
             /// Called when the system is created. Initialises
             /// the StoreKit backend
@@ -229,6 +229,9 @@ namespace CSBackend
             ProductDescDelegate m_productDescDelegate;
             TransactionStatusDelegate m_transactionStatusDelegate;
             TransactionCloseDelegate m_transactionCloseDelegate;
+            
+            std::atomic_bool m_initialised;
+            std::atomic_bool m_isPurchasingEnabled;
         };
     }
 }
