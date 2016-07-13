@@ -31,7 +31,7 @@
 #import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
 
 #import <CSBackend/Platform/iOS/Core/Base/CSGLViewController.h>
-#import <CSBackend/Platform/iOS/Core/Base/SystemInfo.h>
+#import <CSBackend/Platform/iOS/Core/Base/SystemInfoFactory.h>
 #import <CSBackend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
 #import <CSBackend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
@@ -88,7 +88,7 @@ CSAppDelegate* singletonInstance = nil;
     
     m_subDelegates = [[NSMutableArray alloc] init];
     
-    m_application = ChilliSource::ApplicationUPtr(CreateApplication(CSBackend::iOS::BuildSystemInfo()));
+    m_application = ChilliSource::ApplicationUPtr(CreateApplication(CSBackend::iOS::SystemInfoFactory::CreateSystemInfo()));
     
     m_window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	viewControllerInternal = [[CSGLViewController alloc] initWithDelegate:self];

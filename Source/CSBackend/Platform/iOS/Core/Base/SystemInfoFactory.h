@@ -31,12 +31,15 @@ namespace CSBackend
 {
     namespace iOS
     {
-        /// This builds a SystemInfo structure, filling it with the
-        /// necessary information to use in Application's constructor.
+        /// A factory for creating new instances of SystemInfo. This will query the Windows
+        /// API to gather information about the device.
         ///
-        /// @return The system info structure
-        ///
-        ChilliSource::SystemInfoCUPtr BuildSystemInfo() noexcept;
+        namespace SystemInfoFactory
+        {
+            /// This function creates the new SystemInfo instance.
+            ///
+            ChilliSource::SystemInfoCUPtr CreateSystemInfo() noexcept;
+        }
     }
 }
 

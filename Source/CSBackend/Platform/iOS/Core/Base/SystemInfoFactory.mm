@@ -25,8 +25,9 @@
 
 #import <ChilliSource/Core/Base/DeviceInfo.h>
 #import <ChilliSource/Core/Base/SystemInfo.h>
+#import <ChilliSource/Core/String/StringUtils.h>
 
-#import <CSBackend/Platform/iOS/Core/Base/Device.h>
+#import <CSBackend/Platform/iOS/Core/Base/SystemInfoFactory.h>
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
@@ -45,7 +46,7 @@ namespace CSBackend
             
             /// @return The current device model.
             ///
-            std::string GetDeviceModel()
+            std::string GetDeviceModel() noexcept
             {
                 @autoreleasepool
                 {
@@ -56,7 +57,7 @@ namespace CSBackend
             
             /// @return The current device model type.
             ///
-            std::string GetDeviceModelType()
+            std::string GetDeviceModelType() noexcept
             {
                 size_t size = 0;
                 sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
@@ -84,7 +85,7 @@ namespace CSBackend
             
             /// @return The current OS version.
             ///
-            std::string GetOSVersion()
+            std::string GetOSVersion() noexcept
             {
                 @autoreleasepool
                 {
@@ -95,7 +96,7 @@ namespace CSBackend
             
             /// @return The current locale.
             ///
-            std::string GetLocale()
+            std::string GetLocale() noexcept
             {
                 @autoreleasepool
                 {
@@ -115,7 +116,7 @@ namespace CSBackend
             
             /// @return The current language.
             ///
-            std::string GetLanguage()
+            std::string GetLanguage() noexcept
             {
                 @autoreleasepool
                 {
@@ -138,7 +139,7 @@ namespace CSBackend
             
             /// @return The unique device identifier.
             ///
-            std::string GetUDID()
+            std::string GetUDID() noexcept
             {
                 @autoreleasepool
                 {
@@ -154,7 +155,7 @@ namespace CSBackend
             
             /// @return The number of cores.
             ///
-            u32 GetNumberOfCPUCores()
+            u32 GetNumberOfCPUCores() noexcept
             {
                 u32 numCores = 1;
                 size_t size = sizeof(numCores);
@@ -171,13 +172,10 @@ namespace CSBackend
         }
         
         //-------------------------------------------------------
-        ChilliSource::SystemInfoCUPtr BuildSystemInfo() noexcept
+        ChilliSource::SystemInfoCUPtr SystemInfoFactory::CreateSystemInfo() noexcept
         {
-            // Create DeviceInfo.
-            ChilliSource::DeviceInfo deviceInfo(GetDeviceModel(), GetDeviceModelType(), k_deviceManufacturer, GetUDID(), GetLocale(), GetLanguage(), GetOSVersion(), GetNumberOfCPUCores());
-            
             // Create SystemInfo.
-            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo));
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(GetDeviceModel(), GetDeviceModelType(), k_deviceManufacturer, GetUDID(), GetLocale(), GetLanguage(), GetOSVersion(), GetNumberOfCPUCores()));
             
             return std::move(systemInfo);
         }
