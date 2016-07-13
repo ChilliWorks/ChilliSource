@@ -106,9 +106,10 @@ namespace CSBackend
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        bool GooglePlayIAPSystem::IsPurchasingEnabled()
+        void GooglePlayIAPSystem::IsPurchasingEnabled(const PurchasingEnabledDelegate& in_delegate)
         {
-        	return m_javaInterface->IsPurchasingEnabled();
+            CS_ASSERT(in_delegate, "Cannot have empty delegate");
+        	in_delegate(m_javaInterface->IsPurchasingEnabled());
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------

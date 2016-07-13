@@ -134,6 +134,15 @@ namespace ChilliSource
         /// @param Success or failure
         //------------------------------------------------------
         using TransactionCloseDelegate = std::function<void(const std::string&, const std::string&, bool)>;
+        //------------------------------------------------------
+        /// Delegate to use in the querying of if purchasing is
+        /// enabled on the device.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @param If purchasing is enabled
+        //------------------------------------------------------
+        using PurchasingEnabledDelegate = std::function<void(bool enabled)>;
         
         CS_DECLARE_NAMEDTYPE(IAPSystem);
         
@@ -168,9 +177,9 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// @author S Downie
         ///
-        /// @return Whether the purchasing is allowed by the device/OS
+        /// @param Purchasing enabled delegate
         //---------------------------------------------------------------
-        virtual bool IsPurchasingEnabled() = 0;
+        virtual void IsPurchasingEnabled(const PurchasingEnabledDelegate& in_delegate) = 0;
         //---------------------------------------------------------------
         /// Calling this function will set the listener to which any
         /// transaction events are directed. This is not necessarily
