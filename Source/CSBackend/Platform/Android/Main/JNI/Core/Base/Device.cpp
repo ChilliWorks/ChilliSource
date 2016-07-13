@@ -28,6 +28,8 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
+#include <ChilliSource/Core/Base/DeviceInfo.h>
+
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/Device.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/DeviceJavaInterface.h>
@@ -37,52 +39,19 @@ namespace CSBackend
 {
     namespace Android
     {
-		namespace
-		{
-			const std::string k_defaultLocale = "en_US";
-			const std::string k_defaultLanguage = "en";
-
-			//----------------------------------------------------
-			/// Returns the language portion of a locale code.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The locale code.
-			///
-			/// @return The language code.
-			//----------------------------------------------------
-			std::string ParseLanguageFromLocale(const std::string& in_locale)
-			{
-				std::vector<std::string> strLocaleBrokenUp = ChilliSource::StringUtils::Split(in_locale, "_", 0);
-
-				if (strLocaleBrokenUp.size() > 0)
-				{
-					return strLocaleBrokenUp[0];
-				}
-				else
-				{
-					return k_defaultLanguage;
-				}
-			}
-		}
-
         CS_DEFINE_NAMEDTYPE(Device);
         //----------------------------------------------------
         //----------------------------------------------------
-        Device::Device()
-            : m_locale(k_defaultLocale), m_language(k_defaultLanguage)
+        Device::Device(const ChilliSource::DeviceInfo& deviceInfo)
         {
-        	DeviceJavaInterfaceSPtr javaInterface(new DeviceJavaInterface());
-        	JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(javaInterface);
-
-            m_model = javaInterface->GetDeviceModel();
-            m_modelType = javaInterface->GetDeviceModelType();
-            m_manufacturer = javaInterface->GetDeviceManufacturer();
-            m_osVersion = ChilliSource::ToString(javaInterface->GetOSVersionCode());
-            m_locale = javaInterface->GetDefaultLocaleCode();
-            m_language = ParseLanguageFromLocale(m_locale);
-            m_udid = javaInterface->GetUniqueId();
-            m_numCPUCores = javaInterface->GetNumberOfCores();
+            m_model = deviceInfo.GetModel();
+            m_modelType = deviceInfo.GetModelType();
+            m_manufacturer = deviceInfo.GetManufacturer();
+            m_osVersion = deviceInfo.GetOSVersion();
+            m_locale = deviceInfo.GetLocale();
+            m_language = deviceInfo.GetLanguage();
+            m_udid = deviceInfo.GetUDID();
+            m_numCPUCores = deviceInfo.GetNumCPUCores();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

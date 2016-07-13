@@ -21,6 +21,7 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
 
 #include <ChilliSource/Core/Base/DeviceInfo.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
@@ -161,3 +162,5 @@ namespace CSBackend
         
     }
 }
+
+#endif
