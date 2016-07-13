@@ -101,7 +101,7 @@ namespace ChilliSource
         //TODO: Add support for static render pass objects
         
         PolygonType newPolygonType = PolygonType::k_triangle;
-        const VertexFormat* newVertexFormat = &VertexFormat::k_sprite;
+        const VertexFormat* newVertexFormat = nullptr;
         IndexFormat newIndexFormat = IndexFormat::k_short;
         bool newHasIndices = false;
         
