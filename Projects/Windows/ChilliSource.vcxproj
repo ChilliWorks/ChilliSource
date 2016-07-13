@@ -267,9 +267,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTexture.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTextureManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.cpp" />
@@ -748,9 +745,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTexture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\RenderTextureManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.h" />

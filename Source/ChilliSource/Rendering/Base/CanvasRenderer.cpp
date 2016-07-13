@@ -680,58 +680,15 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void CanvasRenderer::PushClipBounds(const Vector2& in_blPosition, const Vector2& in_size)
     {
-        //TODO: Handle scissoring.
-        
-//        if(m_scissorPositions.empty())
-//        {
-//            m_scissorPositions.push_back(in_blPosition);
-//            m_scissorSizes.push_back(in_size);
-//        }
-//        else
-//        {
-//            Vector2 vOldBottomLeft = m_scissorPositions.back();
-//            Vector2 vOldTopRight = m_scissorSizes.back() + vOldBottomLeft;
-//            Vector2 vNewBottomLeft = in_blPosition;
-//            Vector2 vNewTopRight = in_blPosition + in_size;
-//
-//            //If the scissor region extends outside the bounds of the screen this is undefined behaviour and
-//            //the render system may wrap the values causing artefacts. We clamp them here to make sure this
-//            //doesn't happen.
-//            vNewBottomLeft.x = MathUtils::Clamp(std::max(vNewBottomLeft.x, vOldBottomLeft.x), 0.0f, m_screen->GetResolution().x);
-//            vNewBottomLeft.y = MathUtils::Clamp(std::max(vNewBottomLeft.y, vOldBottomLeft.y), 0.0f, m_screen->GetResolution().y);
-//
-//            vNewTopRight.x = MathUtils::Clamp(std::min(vNewTopRight.x, vOldTopRight.x), 0.0f, m_screen->GetResolution().x);
-//            vNewTopRight.y = MathUtils::Clamp(std::min(vNewTopRight.y, vOldTopRight.y), 0.0f, m_screen->GetResolution().y);
-//
-//            Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
-//
-//            m_scissorPositions.push_back(vNewBottomLeft);
-//            m_scissorSizes.push_back(vNewSize);
-//        }
-//
-//        m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
+        //TODO: Added support for scissor regions
+        CS_LOG_FATAL("Support for clip bounds is not currently implemented.");
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     void CanvasRenderer::PopClipBounds()
     {
-        //TODO: Handle scissoring.
-        
-//        if(!m_scissorPositions.empty())
-//        {
-//            m_scissorPositions.erase(m_scissorPositions.end()-1);
-//            m_scissorSizes.erase(m_scissorSizes.end()-1);
-//
-//            if(!m_scissorPositions.empty())
-//            {
-//                m_overlayBatcher->EnableScissoring(m_scissorPositions.back(), m_scissorSizes.back());
-//            }
-//        }
-//
-//        if(m_scissorPositions.empty())
-//        {
-//            m_overlayBatcher->DisableScissoring();
-//        }
+        //TODO: Added support for scissor regions
+        CS_LOG_FATAL("Support for clip bounds is not currently implemented.");
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------

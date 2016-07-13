@@ -645,15 +645,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.cpp">
       <Filter>ChilliSource\Rendering\Material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.cpp">
       <Filter>ChilliSource\Rendering\Texture</Filter>
     </ClCompile>
@@ -2035,15 +2026,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h">
       <Filter>ChilliSource\Rendering\Material</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.h">
-      <Filter>ChilliSource\Rendering\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.h">
       <Filter>ChilliSource\Rendering\Texture</Filter>

@@ -413,5 +413,12 @@ namespace ChilliSource
         m_staticBlinnDirectional.reset();
         m_staticBlinnPoint.reset();
         m_staticBlinnDirectionalShadows.reset();
+
+        m_animatedShadowMap.reset();
+        m_animatedUnlit.reset();
+        m_animatedBlinnBase.reset();
+        m_animatedBlinnDirectional.reset();
+        m_animatedBlinnPoint.reset();
+        m_animatedBlinnDirectionalShadows.reset();
     }
 }

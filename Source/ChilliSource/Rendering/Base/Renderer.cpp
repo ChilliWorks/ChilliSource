@@ -43,10 +43,8 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-        : m_renderCommandProcessor(IRenderCommandProcessor::Create()), m_currentSnapshot(nullptr, Integer2::k_zero, Colour::k_black, RenderCamera())
+        : m_currentSnapshot(nullptr, Integer2::k_zero, Colour::k_black, RenderCamera())
     {
-        //TODO: Handle forward vs deferred rendering
-        m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
     }
     
     //------------------------------------------------------------------------------
@@ -128,6 +126,10 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Renderer::OnInit() noexcept
     {
+        //TODO: Handle forward vs deferred rendering
+        m_renderPassCompiler = IRenderPassCompilerUPtr(new ForwardRenderPassCompiler());
+        m_renderCommandProcessor = IRenderCommandProcessor::Create();
+
         m_commandRecycleSystem = Application::Get()->GetSystem<RenderCommandBufferManager>();
     }
     
@@ -142,6 +144,14 @@ namespace ChilliSource
         }
         
         m_initialised = true;
+    }
+
+    //------------------------------------------------------------------------------
+    void Renderer::OnDestroy() noexcept
+    {
+        m_commandRecycleSystem = nullptr;
+        m_renderCommandProcessor.reset();
+        m_renderPassCompiler.reset();
     }
     
     //------------------------------------------------------------------------------
