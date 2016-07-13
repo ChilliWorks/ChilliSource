@@ -27,8 +27,9 @@
 #include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/Base/SystemInfoFactory.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/DeviceJavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 
 #include <vector>
@@ -69,7 +70,7 @@ namespace CSBackend
 		ChilliSource::SystemInfoCUPtr SystemInfoFactory::CreateSystemInfo() noexcept
 		{
 		    DeviceJavaInterfaceSPtr deviceJavaInterface(new DeviceJavaInterface());
-            JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(javaInterface);
+            JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(deviceJavaInterface);
 
             CoreJavaInterfaceSPtr coreJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
             CS_ASSERT(coreJavaInterface != nullptr, "Cannot get CoreJavaInterface!");
