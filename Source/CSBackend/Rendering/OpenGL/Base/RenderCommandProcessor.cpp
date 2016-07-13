@@ -663,5 +663,14 @@ namespace CSBackend
             m_currentMaterial = nullptr;
             m_currentSkinnedAnimation = nullptr;
         }
+
+        //------------------------------------------------------------------------------
+        RenderCommandProcessor::~RenderCommandProcessor() noexcept
+        {
+            // This is destroyed from the main thread so the GLDynamicMesh cannot be cleaned up gracefully.
+            // However, if this is called the context is about to be lost anyway so it doesn't need to be
+            // cleaned up, so we can just invalidate it.
+            m_glDynamicMesh->Invalidate();
+        }
     }
 }

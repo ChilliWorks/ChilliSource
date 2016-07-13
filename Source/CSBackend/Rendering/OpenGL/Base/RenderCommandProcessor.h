@@ -65,6 +65,8 @@ namespace CSBackend
             /// Called when the GL context is restored, need to rebuild any GL resources
             ///
             void Restore() noexcept override;
+
+            ~RenderCommandProcessor() noexcept;
             
         private:
             /// Initialises the render command processor. This is deferred until Process is first called
