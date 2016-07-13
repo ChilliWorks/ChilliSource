@@ -41,26 +41,15 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool SmallMeshBatcher::CanBatch(const RenderPassObject& renderPassObject) noexcept
     {
-//        if (renderPassObject.GetType() == RenderPassObject::Type::k_static)
-//        {
-//            auto renderMesh = renderPassObject.GetRenderMesh();
-//            CS_ASSERT(renderMesh, "Must have render mesh.");
-//            
-//            if (renderMesh->GetVertexFormat() == VertexFormat::k_sprite || renderMesh->GetVertexFormat() == VertexFormat::k_staticMesh)
-//            {
-//                if (renderMesh->GetNumVertices() <= k_batchVertexCountThreshold)
-//                {
-//                    return true;
-//                }
-//            }
-//        }
+        //TODO: Add support for static render pass objects
+        //TODO: Add support for static mesh vertex formats
         
         if (renderPassObject.GetType() == RenderPassObject::Type::k_dynamic)
         {
             auto renderDynamicMesh = renderPassObject.GetRenderDynamicMesh();
             CS_ASSERT(renderDynamicMesh, "Must have render dynamic mesh.");
             
-            if (renderDynamicMesh->GetVertexFormat() == VertexFormat::k_sprite || renderDynamicMesh->GetVertexFormat() == VertexFormat::k_staticMesh)
+            if (renderDynamicMesh->GetVertexFormat() == VertexFormat::k_sprite)
             {
                 if (renderDynamicMesh->GetNumVertices() <= k_batchVertexCountThreshold)
                 {
@@ -109,24 +98,15 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     bool SmallMeshBatcher::TryUpdateRenderState(const RenderPassObject& renderPassObject) noexcept
     {
-        PolygonType newPolygonType;
-        const VertexFormat* newVertexFormat;
-        IndexFormat newIndexFormat;
-        bool newHasIndices;
+        //TODO: Add support for static render pass objects
+        
+        PolygonType newPolygonType = PolygonType::k_triangle;
+        const VertexFormat* newVertexFormat = &VertexFormat::k_sprite;
+        IndexFormat newIndexFormat = IndexFormat::k_short;
+        bool newHasIndices = false;
         
         switch (renderPassObject.GetType())
         {
-//            case RenderPassObject::Type::k_static:
-//            {
-//                auto renderMesh = renderPassObject.GetRenderMesh();
-//                CS_ASSERT(renderMesh, "Must have render mesh.");
-//                
-//                newPolygonType = renderMesh->GetPolygonType();
-//                newVertexFormat = &renderMesh->GetVertexFormat();
-//                newIndexFormat = renderMesh->GetIndexFormat();
-//                newHasIndices = (renderMesh->GetNumIndices() > 0);
-//                break;
-//            }
             case RenderPassObject::Type::k_dynamic:
             {
                 auto renderDynamicMesh = renderPassObject.GetRenderDynamicMesh();
@@ -161,6 +141,8 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void SmallMeshBatcher::AddToBatch(const RenderPassObject& renderPassObject) noexcept
     {
+        //TODO: Add support for static render pass objects.
+        
         u32 numVertices = 0;
         u32 numIndices = 0;
         const u8* vertexData = nullptr;
@@ -170,14 +152,6 @@ namespace ChilliSource
         
         switch (renderPassObject.GetType())
         {
-//            case RenderPassObject::Type::k_static:
-//            {
-//                auto renderMesh = renderPassObject.GetRenderMesh();
-//                CS_ASSERT(renderMesh, "Must have render mesh.");
-//                
-//                //TODO: !?
-//                break;
-//            }
             case RenderPassObject::Type::k_dynamic:
             {
                 auto renderDynamicMesh = renderPassObject.GetRenderDynamicMesh();

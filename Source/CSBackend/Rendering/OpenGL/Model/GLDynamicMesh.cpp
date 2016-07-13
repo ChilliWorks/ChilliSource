@@ -40,24 +40,31 @@ namespace CSBackend
         {
             constexpr u32 k_allocatorSize = 1024 * 1024;
             
-            /// TODO
-            struct SpriteVertex final
-            {
-                ChilliSource::Vector4 m_position;
-                ChilliSource::Vector2 m_uvs;
-                ChilliSource::ByteColour m_colour;
-            };
-            
-            /// TODO
+            /// Applies each of the sprite meshes' vertices to the combined mesh batch vertex buffer. The vertices
+            /// are converted into world space before being added to the new buffer. The vertex data is applied to
+            /// the currently bound vertex buffer.
             ///
-            void ApplySpriteVertices(ChilliSource::LinearAllocator& allocator, u32 numVertices, u32 vertexDataSize, const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+            /// @param allocator
+            ///     The allocator which should be used to generate the temporary buffer. Note that the allocator
+            ///     will be reset, meaning it should have no other active allocations.
+            /// @param numVertices
+            ///     The total number of vertices in the batch.
+            /// @param vertexDataSize
+            ///     The total vertex data size of the batch.
+            /// @param meshes
+            ///     The meshes which should be added to the batch.
+            ///
+            void ApplySpriteBatchVertices(ChilliSource::LinearAllocator& allocator, u32 numVertices, u32 vertexDataSize, const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
             {
-                auto combinedVertices = ChilliSource::MakeUniqueArray<SpriteVertex>(allocator, numVertices);
+                CS_ASSERT(numVertices * ChilliSource::VertexFormat::k_sprite.GetSize() == vertexDataSize, "Vertex data size and number of vertices is out of sync.");
+                CS_ASSERT(!meshes.empty(), "Batch must contain at least one mesh.");
+                
+                auto combinedVertices = ChilliSource::MakeUniqueArray<ChilliSource::SpriteVertex>(allocator, numVertices);
                 
                 u32 vertexOffset = 0;
                 for (const auto& mesh : meshes)
                 {
-                    auto meshVertices = reinterpret_cast<const SpriteVertex*>(mesh.GetVertexData());
+                    auto meshVertices = reinterpret_cast<const ChilliSource::SpriteVertex*>(mesh.GetVertexData());
                     
                     for (u32 i = 0; i < mesh.GetNumVertices(); ++i)
                     {
@@ -74,18 +81,30 @@ namespace CSBackend
                 allocator.Reset();
             }
             
-            /// TODO
+            /// Applies each of the meshes' vertices to the combined mesh batch vertex buffer. The vertices are
+            /// converted into world space before being added to the new buffer. The vertex data is applied to
+            /// the currently bound vertex buffer.
             ///
-            void ApplyVertices(ChilliSource::LinearAllocator& allocator, const ChilliSource::VertexFormat& vertexFormat, u32 numVertices, u32 vertexDataSize,
+            /// @param allocator
+            ///     The allocator which should be used to generate the temporary buffer. Note that the allocator
+            ///     will be reset, meaning it should have no other active allocations.
+            /// @param vertexFormat
+            ///     The vertex format of the batch.
+            /// @param numVertices
+            ///     The total number of vertices in the batch.
+            /// @param vertexDataSize
+            ///     The total vertex data size of the batch.
+            /// @param meshes
+            ///     The meshes which should be added to the batch.
+            ///
+            void ApplyBatchVertices(ChilliSource::LinearAllocator& allocator, const ChilliSource::VertexFormat& vertexFormat, u32 numVertices, u32 vertexDataSize,
                                const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
             {
+                //TODO: Add support for static mesh vertex formats
+                
                 if (vertexFormat == ChilliSource::VertexFormat::k_sprite)
                 {
-                    ApplySpriteVertices(allocator, numVertices, vertexDataSize, meshes);
-                }
-                else if (vertexFormat == ChilliSource::VertexFormat::k_staticMesh)
-                {
-                    //TODO: handle mesh vertices
+                    ApplySpriteBatchVertices(allocator, numVertices, vertexDataSize, meshes);
                 }
                 else
                 {
@@ -93,12 +112,30 @@ namespace CSBackend
                 }
             }
             
-            /// TODO
+            /// Applies each of the meshes' indices to the combined mesh batch index buffer. The indices are
+            /// updated to reflect the new position of the vertices in the combined vertex buffer. The index
+            /// data is applied to the currently bound index buffer.
             ///
-            void ApplyIndices(ChilliSource::LinearAllocator& allocator, ChilliSource::IndexFormat indexFormat, u32 numIndices, u32 indexDataSize,
+            /// The temporary buffer is allocated from the given linear allocator.
+            ///
+            /// @param allocator
+            ///     The allocator which should be used to generate the temporary buffer. Note that the allocator
+            ///     will be reset, meaning it should have no other active allocations.
+            /// @param indexFormat
+            ///     The format of the indices. Currently only short indices are supported.
+            /// @param numIndices
+            ///     The total number of indices in the batch.
+            /// @param indexDataSize
+            ///     The total index data size of the batch.
+            /// @param meshes
+            ///     The list of meshes which should be batched.
+            ///
+            void ApplyBatchIndices(ChilliSource::LinearAllocator& allocator, ChilliSource::IndexFormat indexFormat, u32 numIndices, u32 indexDataSize,
                               const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
             {
                 CS_ASSERT(indexFormat == ChilliSource::IndexFormat::k_short, "Only short indices are supported at the moment.");
+                CS_ASSERT(numIndices * ChilliSource::GetIndexSize(indexFormat) == indexDataSize, "Index data size and number of indices is out of sync.");
+                CS_ASSERT(!meshes.empty(), "Batch must contain at least one mesh.");
                 
                 auto combinedIndices = ChilliSource::MakeUniqueArray<u16>(allocator, numIndices);
                 
@@ -184,12 +221,12 @@ namespace CSBackend
             m_numIndices = numIndices;
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
-            ApplyVertices(m_allocator, m_vertexFormat, numVertices, vertexDataSize, meshes);
+            ApplyBatchVertices(m_allocator, m_vertexFormat, numVertices, vertexDataSize, meshes);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
             if (m_indexBufferHandle != 0)
             {
-                ApplyIndices(m_allocator, indexFormat, numIndices, indexDataSize, meshes);
+                ApplyBatchIndices(m_allocator, indexFormat, numIndices, indexDataSize, meshes);
             }
             
             ApplyVertexAttributes(glShader);

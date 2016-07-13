@@ -79,7 +79,7 @@ namespace ChilliSource
 
         /// @return The number of bytes which are free in the buffer. 
         ///
-        std::size_t GetFreeSpace() const noexcept;
+        std::size_t GetRemainingSpace() const noexcept;
 
         /// Allocates a new block of memory of the requested size. If there is no space left in the
         /// buffer for the alloaction then this will assert.
