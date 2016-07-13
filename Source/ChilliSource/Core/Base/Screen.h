@@ -34,7 +34,6 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-
 #include <functional>
 
 namespace ChilliSource
@@ -165,7 +164,7 @@ namespace ChilliSource
         ///
         /// @param The new instance of the system.
         //-----------------------------------------------------------
-        static ScreenUPtr Create(const ChilliSource::ScreenInfo& screenInfo);
+        static ScreenUPtr Create(const ScreenInfo& screenInfo);
     };
 }
 

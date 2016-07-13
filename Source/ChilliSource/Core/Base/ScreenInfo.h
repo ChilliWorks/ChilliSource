@@ -49,11 +49,11 @@ namespace ChilliSource
         /// @param supportedResolutions
         ///         A list of resolutions supported by the display.
         ///
-        ScreenInfo(const ChilliSource::Vector2& initialResolution, f32 densityScale, f32 inverseDensityScale, const std::vector<ChilliSource::Integer2>& supportedResolutions) noexcept;
+        ScreenInfo(const Vector2& initialResolution, f32 densityScale, f32 inverseDensityScale, const std::vector<Integer2>& supportedResolutions) noexcept;
 
         /// @return The initial resolution for the application.
         ///
-        const ChilliSource::Vector2& GetInitialResolution() const noexcept;
+        const Vector2& GetInitialResolution() const noexcept;
 
         /// @return The density scale.
         ///
@@ -65,13 +65,13 @@ namespace ChilliSource
 
         /// @return A list of resolutions supported by the display.
         ///
-        const std::vector<ChilliSource::Integer2>& GetSupportedResolutions() const noexcept;
+        const std::vector<Integer2>& GetSupportedResolutions() const noexcept;
 
     private:
-        ChilliSource::Vector2 m_initialResolution;
+        Vector2 m_initialResolution;
         f32 m_densityScale;
         f32 m_inverseDensityScale;
-        std::vector<ChilliSource::Integer2> m_supportedResolutions;
+        std::vector<Integer2> m_supportedResolutions;
 
     };
 }

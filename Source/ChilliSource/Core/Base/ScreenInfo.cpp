@@ -26,13 +26,13 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------
-    ScreenInfo::ScreenInfo(const ChilliSource::Vector2& initialResolution, f32 densityScale, f32 inverseDensityScale, const std::vector<ChilliSource::Integer2>& supportedResolutions) noexcept
+    ScreenInfo::ScreenInfo(const Vector2& initialResolution, f32 densityScale, f32 inverseDensityScale, const std::vector<Integer2>& supportedResolutions) noexcept
         : m_initialResolution(initialResolution), m_densityScale(densityScale), m_inverseDensityScale(inverseDensityScale), m_supportedResolutions(supportedResolutions)
     {
     }
 
     //----------------------------------------------------------------
-    const ChilliSource::Vector2& ScreenInfo::GetInitialResolution() const noexcept
+    const Vector2& ScreenInfo::GetInitialResolution() const noexcept
     {
         return m_initialResolution;
     }
@@ -50,7 +50,7 @@ namespace ChilliSource
     }
 
     //----------------------------------------------------------------
-    const std::vector<ChilliSource::Integer2>& ScreenInfo::GetSupportedResolutions() const noexcept
+    const std::vector<Integer2>& ScreenInfo::GetSupportedResolutions() const noexcept
     {
         return m_supportedResolutions;
     }

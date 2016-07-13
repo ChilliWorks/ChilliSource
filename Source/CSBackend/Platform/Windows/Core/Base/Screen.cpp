@@ -92,12 +92,7 @@ namespace CSBackend
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
                 SFMLWindow::Get()->SetSize(in_size);
-
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
-                {
-                    OnResolutionChanged(in_size);
-                });
-                
+                OnResolutionChanged(in_size);               
             });
 		}
 		//----------------------------------------------------------
@@ -127,24 +122,30 @@ namespace CSBackend
         //------------------------------------------------------------
         void Screen::OnResolutionChanged(const ChilliSource::Integer2& in_resolution)
         {
-			m_resolution.x = (f32)in_resolution.x;
-			m_resolution.y = (f32)in_resolution.y;
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                m_resolution.x = (f32)in_resolution.x;
+                m_resolution.y = (f32)in_resolution.y;
 
-        	m_resolutionChangedEvent.NotifyConnections(m_resolution);
+                m_resolutionChangedEvent.NotifyConnections(m_resolution);
+            });
         }
 		//----------------------------------------------------------
 		//----------------------------------------------------------
 		void Screen::OnDisplayModeChanged(SFMLWindow::DisplayMode in_mode)
 		{
-			switch (in_mode)
-			{
-			case SFMLWindow::DisplayMode::k_windowed:
-				m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_windowed);
-				break;
-			case SFMLWindow::DisplayMode::k_fullscreen:
-				m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_fullscreen);
-				break;
-			}
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+			    switch (in_mode)
+			    {
+			    case SFMLWindow::DisplayMode::k_windowed:
+				    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_windowed);
+				    break;
+			    case SFMLWindow::DisplayMode::k_fullscreen:
+				    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_fullscreen);
+				    break;
+			    }
+            });
 		}
 		//------------------------------------------------
 		//------------------------------------------------

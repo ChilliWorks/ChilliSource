@@ -45,7 +45,7 @@ namespace ChilliSource
     CS_DEFINE_NAMEDTYPE(Screen);
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    ScreenUPtr Screen::Create(const ChilliSource::ScreenInfo& screenInfo)
+    ScreenUPtr Screen::Create(const ScreenInfo& screenInfo)
     {
 #if defined CS_TARGETPLATFORM_ANDROID
         return ScreenUPtr(new CSBackend::Android::Screen(screenInfo));

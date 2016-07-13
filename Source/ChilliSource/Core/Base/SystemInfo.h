@@ -36,14 +36,6 @@ namespace ChilliSource
     class SystemInfo final
     {
         public:
-            /// @return The device info for building the Device class.
-            ///
-            const DeviceInfo& GetDeviceInfo() const noexcept;
-
-            /// @return The screen info for building the Screen class.
-            ///
-            const ScreenInfo& GetScreenInfo() const noexcept;
-
             /// Constructs the SystemInfo class.
             ///
             /// @param deviceInfo
@@ -52,6 +44,14 @@ namespace ChilliSource
             ///         The screen info to populate screen with.
             ///
             SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo) noexcept;
+
+            /// @return The device info for building the Device class.
+            ///
+            const DeviceInfo& GetDeviceInfo() const noexcept;
+
+            /// @return The screen info for building the Screen class.
+            ///
+            const ScreenInfo& GetScreenInfo() const noexcept;
 
         private:
             DeviceInfo m_deviceInfo;

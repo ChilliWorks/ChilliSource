@@ -174,9 +174,6 @@ namespace CSBackend
 			void OnDestroy() override;
             
             ChilliSource::Vector2 m_resolution;
-            //f32 m_densityScale;
-            //f32 m_invDensityScale;
-
             ChilliSource::ScreenInfo m_screenInfo;
 
             ChilliSource::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
