@@ -837,12 +837,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
@@ -1247,7 +1241,7 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.cpp">
       <Filter>ChilliSource\Input\TextEntry</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
@@ -1331,6 +1325,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.cpp">
       <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfo.cpp">
+      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2246,12 +2249,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderTarget.h">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-	</ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
@@ -2704,7 +2701,7 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntryCapitalisation.h">
       <Filter>ChilliSource\Input\TextEntry</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
@@ -2821,6 +2818,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.h">
       <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfo.h">
+      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.h">
+      <Filter>ChilliSource\Core\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

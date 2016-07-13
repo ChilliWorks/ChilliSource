@@ -109,8 +109,8 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    Application::Application() noexcept
-        : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0)
+    Application::Application(ChilliSource::SystemInfoCUPtr systemInfo) noexcept
+        : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0), m_systemInfo(std::move(systemInfo))
     {
     }
 
@@ -278,7 +278,7 @@ namespace ChilliSource
         //Core
         m_platformSystem = CreateSystem<PlatformSystem>();
         m_appConfig = CreateSystem<AppConfig>();
-        CreateSystem<Device>();
+        CreateSystem<Device>(m_systemInfo->GetDeviceInfo());
         m_screen = CreateSystem<Screen>();
         
         m_taskScheduler = CreateSystem<TaskScheduler>();

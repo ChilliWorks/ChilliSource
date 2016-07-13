@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/System/AppSystem.h>
@@ -71,7 +72,7 @@ namespace ChilliSource
         
         /// Constructor
         ///
-        Application() noexcept;
+        Application(ChilliSource::SystemInfoCUPtr systemInfo) noexcept;
         
         /// Creates a new instance of the given system and adds it to the application.
         ///
@@ -438,6 +439,7 @@ namespace ChilliSource
         TaskScheduler* m_taskScheduler = nullptr;
         Renderer* m_renderer = nullptr;
         Screen* m_screen = nullptr;
+        SystemInfoCUPtr m_systemInfo = nullptr;
         PlatformSystem* m_platformSystem = nullptr;
         FileSystem* m_fileSystem = nullptr;
         TaggedFilePathResolver* m_taggedPathResolver = nullptr;
@@ -537,6 +539,6 @@ namespace ChilliSource
 ///
 /// @return Instance of concrete CS application
 ///
-ChilliSource::Application* CreateApplication() noexcept;
+ChilliSource::Application* CreateApplication(ChilliSource::SystemInfoCUPtr systemInfo) noexcept;
 
 #endif

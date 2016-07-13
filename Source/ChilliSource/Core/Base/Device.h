@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
+
 namespace ChilliSource
 {
     //---------------------------------------------------------
@@ -114,7 +115,7 @@ namespace ChilliSource
         ///
         /// @return The new instance.
         //---------------------------------------------------
-        static DeviceUPtr Create();
+        static DeviceUPtr Create(const ChilliSource::DeviceInfo& deviceInfo);
     };
 }
 

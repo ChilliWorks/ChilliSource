@@ -469,7 +469,9 @@ namespace CSBackend
 				exit(1);
 			}
 
-			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication());
+            // Create SystemInfo here (make into an immutable class)
+            // Pass to application
+			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(CSBackend::Windows::BuildSystemInfo()));
             m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
             m_lifecycleManager->Resume();
             m_lifecycleManager->Foreground();

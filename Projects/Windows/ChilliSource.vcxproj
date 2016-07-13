@@ -31,10 +31,12 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Colour.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Device.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Logging.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Screen.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Utils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.cpp" />
@@ -325,6 +327,7 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\PlatformSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Screen.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfo.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\DialogueBox\DialogueBoxSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\File\FileSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\File\WindowsFileUtils.cpp" />
@@ -376,6 +379,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ConstMethodCast.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Device.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\GenericFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Logging.h" />
@@ -385,6 +389,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Screen.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Singleton.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\StandardMacros.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Utils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_blocking_queue.h" />
@@ -818,6 +823,7 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\PlatformSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Screen.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfo.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\DialogueBox\DialogueBoxSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\File\FileSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\File\WindowsFileUtils.h" />

@@ -55,67 +55,67 @@ namespace CSBackend
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
 			//-------------------------------------------------------
-			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const noexcept override;
             //---------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The device model name.
             //---------------------------------------------------
-            const std::string& GetModel() const override;
+            const std::string& GetModel() const noexcept override;
             //---------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The name of the device model type.
             //---------------------------------------------------
-			const std::string& GetModelType() const override;
+			const std::string& GetModelType() const noexcept override;
             //---------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The name of the device manufacturer.
             //---------------------------------------------------
-			const std::string& GetManufacturer() const override;
+			const std::string& GetManufacturer() const noexcept override;
             //---------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The locale code registered with the
             /// device.
             //---------------------------------------------------
-			const std::string& GetLocale() const override;
+			const std::string& GetLocale() const noexcept override;
             //---------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The language the device is set to.
             //---------------------------------------------------
-			const std::string& GetLanguage() const override;
+			const std::string& GetLanguage() const noexcept override;
             //---------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The version of the operating system.
             //---------------------------------------------------
-			const std::string& GetOSVersion() const override;
+			const std::string& GetOSVersion() const noexcept override;
             //---------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return An identifier that can be used to uniquely
             /// identify the device.
             //---------------------------------------------------
-			const std::string& GetUDID() const override;
+			const std::string& GetUDID() const noexcept override;
 			//---------------------------------------------------
 			/// @author Ian Copland
 			///
 			/// @return The number of CPU cores available on the
             /// device.
 			//--------------------------------------------------
-			u32 GetNumberOfCPUCores() const override;
+			u32 GetNumberOfCPUCores() const noexcept override;
         private:
-            friend ChilliSource::DeviceUPtr ChilliSource::Device::Create();
+            friend ChilliSource::DeviceUPtr ChilliSource::Device::Create(const ChilliSource::DeviceInfo& deviceInfo);
             //----------------------------------------------------
 			/// Constructor. Declared private to force the use of
             /// the factory method.
             ///
             /// @author Ian Copland
 			//----------------------------------------------------
-			Device();
+			Device(const ChilliSource::DeviceInfo& deviceInfo) noexcept;
             
             std::string m_model;
             std::string m_modelType;

@@ -21,30 +21,19 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_BASE_SYSTEMINFO_H_
-#define _CHILLISOURCE_CORE_BASE_SYSTEMINFO_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/DeviceInfo.h>
+#include <ChilliSource/Core/Base/SystemInfo.h>
 
 namespace ChilliSource
 {
-    /// This class contains all information necessary for building
-    /// the Device, PlatformSystem, and Screen classes.
-    ///
-    class SystemInfo final
+    //----------------------------------------------------------------
+    SystemInfo::SystemInfo(DeviceInfo deviceInfo) noexcept
+        : m_deviceInfo(deviceInfo)
     {
-        public:
-            /// @return The device info for building the Device class.
-            ///
-            const DeviceInfo GetDeviceInfo() const noexcept;
+    }
 
-            /// Constructs the SystemInfo class.
-            SystemInfo(DeviceInfo deviceInfo) noexcept;
-
-        private:
-            DeviceInfo m_deviceInfo;
-    };
+    //----------------------------------------------------------------
+    const DeviceInfo SystemInfo::GetDeviceInfo() const noexcept
+    {
+        return m_deviceInfo;
+    }
 }
-
-#endif

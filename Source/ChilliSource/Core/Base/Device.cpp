@@ -45,14 +45,14 @@ namespace ChilliSource
     CS_DEFINE_NAMEDTYPE(Device);
     //--------------------------------------------------
     //--------------------------------------------------
-    DeviceUPtr Device::Create()
+    DeviceUPtr Device::Create(const ChilliSource::DeviceInfo& deviceInfo)
     {
 #if defined CS_TARGETPLATFORM_ANDROID
-        return DeviceUPtr(new CSBackend::Android::Device());
+        return DeviceUPtr(new CSBackend::Android::Device(deviceInfo));
 #elif defined CS_TARGETPLATFORM_IOS
-        return DeviceUPtr(new CSBackend::iOS::Device());
+        return DeviceUPtr(new CSBackend::iOS::Device(deviceInfo));
 #elif defined CS_TARGETPLATFORM_WINDOWS
-        return DeviceUPtr(new CSBackend::Windows::Device());
+        return DeviceUPtr(new CSBackend::Windows::Device(deviceInfo));
 #else
         return nullptr;
 #endif

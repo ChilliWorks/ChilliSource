@@ -21,30 +21,23 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_BASE_SYSTEMINFO_H_
-#define _CHILLISOURCE_CORE_BASE_SYSTEMINFO_H_
+#ifdef CS_TARGETPLATFORM_WINDOWS
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/DeviceInfo.h>
+#include <ChilliSource/Core/Base/SystemInfo.h>
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
-    /// This class contains all information necessary for building
-    /// the Device, PlatformSystem, and Screen classes.
-    ///
-    class SystemInfo final
+    namespace Windows
     {
-        public:
-            /// @return The device info for building the Device class.
-            ///
-            const DeviceInfo GetDeviceInfo() const noexcept;
-
-            /// Constructs the SystemInfo class.
-            SystemInfo(DeviceInfo deviceInfo) noexcept;
-
-        private:
-            DeviceInfo m_deviceInfo;
-    };
+        /// This builds a SystemInfo structure, filling it with the necessary
+        /// information to use in Application's constructor.
+        ///
+        /// @return The system info structure.
+        ///
+        ChilliSource::SystemInfoCUPtr BuildSystemInfo() noexcept;
+    }
 }
 
 #endif
