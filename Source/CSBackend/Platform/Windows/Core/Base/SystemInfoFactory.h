@@ -37,6 +37,7 @@ namespace CSBackend
         namespace SystemInfoFactory
         {
             /// This function creates the new SystemInfo instance.
+            /// @return The new instance.
             ///
             ChilliSource::SystemInfoCUPtr CreateSystemInfo() noexcept;
         }

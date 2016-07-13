@@ -31,12 +31,13 @@ namespace CSBackend
 {
     namespace iOS
     {
-        /// A factory for creating new instances of SystemInfo. This will query the Windows
+        /// A factory for creating new instances of SystemInfo. This will query the iOS
         /// API to gather information about the device.
         ///
         namespace SystemInfoFactory
         {
             /// This function creates the new SystemInfo instance.
+            /// @return The new instance.
             ///
             ChilliSource::SystemInfoCUPtr CreateSystemInfo() noexcept;
         }

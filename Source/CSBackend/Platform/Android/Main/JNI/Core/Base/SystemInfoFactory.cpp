@@ -67,8 +67,11 @@ namespace CSBackend
 		    DeviceJavaInterfaceSPtr javaInterface(new DeviceJavaInterface());
             JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(javaInterface);
 
+            // Create DeviceInfo.
+            ChilliSource::DeviceInfo deviceInfo(javaInterface->GetDeviceModel(), javaInterface->GetDeviceModelType(), javaInterface->GetDeviceManufacturer(), javaInterface->GetUniqueId(), javaInterface->GetDefaultLocaleCode(), ParseLanguageFromLocale(javaInterface->GetDefaultLocaleCode()), ChilliSource::ToString(javaInterface->GetOSVersionCode()), javaInterface->GetNumberOfCores());
+
 		    // Create SystemInfo.
-		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(javaInterface->GetDeviceModel(), javaInterface->GetDeviceModelType(), javaInterface->GetDeviceManufacturer(), javaInterface->GetUniqueId(), javaInterface->GetDefaultLocaleCode(), ParseLanguageFromLocale(javaInterface->GetDefaultLocaleCode()), ChilliSource::ToString(javaInterface->GetOSVersionCode()), javaInterface->GetNumberOfCores()));
+		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo));
 
 		    return std::move(systemInfo);
 		}

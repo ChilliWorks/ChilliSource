@@ -47,7 +47,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     bool Device::IsA(ChilliSource::InterfaceIDType in_interfaceId) const noexcept
     {
-        return (ChilliSource::Device::InterfaceID == in_interfaceId || Device::InterfaceID == in_interfaceId);
+        return (Device::InterfaceID == in_interfaceId);
     }
     //---------------------------------------------------
     //---------------------------------------------------

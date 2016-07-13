@@ -45,7 +45,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //---------------------------------------------------------
-    class Device : public AppSystem
+    class Device final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(Device);

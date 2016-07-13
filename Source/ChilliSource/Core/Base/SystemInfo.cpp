@@ -26,8 +26,8 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------
-    SystemInfo::SystemInfo(const std::string& model, const std::string& modelType, const std::string& manufacturer, const std::string& udid, const std::string& locale, const std::string& language, const std::string& osVersion, u32 numCPUCores) noexcept
-        : m_deviceInfo(DeviceInfo(model, modelType, manufacturer, udid, locale, language, osVersion, numCPUCores))
+    SystemInfo::SystemInfo(const DeviceInfo& deviceInfo) noexcept
+        : m_deviceInfo(deviceInfo)
     {   
     }
 
