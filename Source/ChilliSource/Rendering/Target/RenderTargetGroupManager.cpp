@@ -78,7 +78,21 @@ namespace ChilliSource
         
         return tenderTargetGroupRaw;
     }
-
+    
+    //------------------------------------------------------------------------------
+    std::vector<const RenderTargetGroup*> RenderTargetGroupManager::GetRenderTargetGroups() noexcept
+    {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
+        std::vector<const RenderTargetGroup*> renderTargetGroups;
+        for(const auto& targetGroup : m_renderTargetGroups)
+        {
+            renderTargetGroups.push_back(targetGroup.get());
+        }
+        
+        return renderTargetGroups;
+    }
+    
     //------------------------------------------------------------------------------
     void RenderTargetGroupManager::DestroyRenderTargetGroup(const RenderTargetGroup* renderTargetGroup) noexcept
     {

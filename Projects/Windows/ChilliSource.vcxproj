@@ -243,6 +243,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreMeshRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreTextureRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.cpp" />
@@ -260,6 +261,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteMeshBuilder.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp" />
@@ -712,6 +714,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreMeshRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreTextureRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.h" />
@@ -733,6 +736,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h" />

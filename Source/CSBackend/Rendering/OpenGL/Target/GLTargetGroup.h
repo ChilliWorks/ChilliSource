@@ -58,16 +58,33 @@ namespace CSBackend
             ///
             void Bind() noexcept;
             
+            /// Called when we should restore the target group.
+            ///
+            void Restore() noexcept;
+            
+            /// Called when graphics memory is lost, usually through the GLContext being destroyed
+            /// on Android. Function will set a flag to handle safe destructing of this object, preventing
+            /// us from trying to delete invalid memory.
+            ///
+            void Invalidate() noexcept { m_invalidData = true; }
+            
             /// Destroys the OpenGL texture that this represents.
             ///
             ~GLTargetGroup() noexcept;
             
         private:
+            
+            /// Creates glTextures for the depth|colour buffers of the stored RenderTargetGroup
+            ///
+            void BuildTargetGroup() noexcept;
+            
             const ChilliSource::RenderTargetGroup* m_renderTargetGroup;
             
             GLuint m_frameBufferHandle;
             GLuint m_colourRenderBufferHandle = 0;
             GLuint m_depthRenderBufferHandle = 0;
+            
+            bool m_invalidData = false;
         };
     }
 }

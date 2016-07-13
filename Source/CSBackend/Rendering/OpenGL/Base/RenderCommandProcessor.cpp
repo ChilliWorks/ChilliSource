@@ -58,6 +58,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreRenderTargetGroupCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
@@ -155,6 +156,9 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_restoreTexture:
                             RestoreTexture(static_cast<const ChilliSource::RestoreTextureRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_restoreRenderTargetGroup:
+                            RestoreRenderTargetGroup(static_cast<const ChilliSource::RestoreRenderTargetGroupCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_loadTargetGroup:
                             LoadTargetGroup(static_cast<const ChilliSource::LoadTargetGroupRenderCommand*>(renderCommand));
@@ -298,6 +302,33 @@ namespace CSBackend
             glMesh->Restore();
         }
         
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreRenderTargetGroup(const ChilliSource::RestoreRenderTargetGroupCommand* renderCommand) noexcept
+        {
+            //Check if any of the textures are invalid before restoring, if a texture is still invalid at this stage
+            //it was loaded from disk and the RenderTargetGroup will be recreated when TargetGroup is accessed again.
+            bool texturesInvalid = false;
+            const auto targetRenderGroup = renderCommand->GetTargetRenderGroup();
+            if(targetRenderGroup->GetDepthTarget())
+            {
+                GLTexture* glDepthTexture = static_cast<GLTexture*>(targetRenderGroup->GetDepthTarget()->GetExtraData());
+                texturesInvalid = glDepthTexture->IsDataInvalid();
+            }
+            
+            if(!texturesInvalid && targetRenderGroup->GetColourTarget())
+            {
+                GLTexture* glColourTexture = static_cast<GLTexture*>(targetRenderGroup->GetColourTarget()->GetExtraData());
+                texturesInvalid = glColourTexture->IsDataInvalid();
+            }
+            
+            if(!texturesInvalid)
+            {
+                GLTargetGroup* glTarget = static_cast<GLTargetGroup*>(targetRenderGroup->GetExtraData());
+                glTarget->Restore();
+            }
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadTargetGroup(const ChilliSource::LoadTargetGroupRenderCommand* renderCommand) noexcept
         {
             ResetCache();

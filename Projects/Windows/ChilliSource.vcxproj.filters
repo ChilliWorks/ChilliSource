@@ -1314,6 +1314,11 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.cpp">
+      <Filter>ChilliSource\Rendering\Target</Filter>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
@@ -2804,6 +2809,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.h">
+      <Filter>ChilliSource\Rendering\Target</Filter>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>

@@ -52,6 +52,7 @@ namespace ChilliSource
             k_loadMesh,
             k_restoreTexture,
             k_restoreMesh,
+            k_restoreRenderTargetGroup,
             k_loadTargetGroup,
             k_begin,
             k_beginWithTargetGroup,

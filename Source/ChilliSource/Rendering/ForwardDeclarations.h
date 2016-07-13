@@ -186,6 +186,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(LoadTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RestoreMeshRenderCommand);
+    CS_FORWARDDECLARE_CLASS(RestoreRenderTargetGroupCommand);
     CS_FORWARDDECLARE_CLASS(RestoreTextureRenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandBuffer);
@@ -214,6 +215,7 @@ namespace ChilliSource
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(RenderTargetGroup);
     CS_FORWARDDECLARE_CLASS(RenderTargetGroupManager);
+    CS_FORWARDDECLARE_CLASS(TargetGroup);
     //------------------------------------------------------------
     /// Texture
     //------------------------------------------------------------

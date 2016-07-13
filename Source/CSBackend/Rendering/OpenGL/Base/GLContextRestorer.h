@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreRenderTargetGroupCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
@@ -119,6 +120,7 @@ namespace CSBackend
             
             std::vector<ChilliSource::RestoreMeshRenderCommand> m_pendingRestoreMeshCommands;
             std::vector<ChilliSource::RestoreTextureRenderCommand> m_pendingRestoreTextureCommands;
+            std::vector<ChilliSource::RestoreRenderTargetGroupCommand> m_pendingRestoreRenderTargetGroupCommands;
         };
     }
 }

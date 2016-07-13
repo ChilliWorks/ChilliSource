@@ -42,6 +42,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreRenderTargetGroupCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
@@ -101,6 +102,15 @@ namespace ChilliSource
     {
         RenderCommandUPtr renderCommand(new RestoreMeshRenderCommand(renderMesh));
 
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddRestoreRenderTargetGroupCommand(const RenderTargetGroup* renderTargetGroup) noexcept
+    {
+        RenderCommandUPtr renderCommand(new RestoreRenderTargetGroupCommand(renderTargetGroup));
+        
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
     }
