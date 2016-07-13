@@ -185,12 +185,14 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderDynamicMesh.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshBatch.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderSkinnedAnimation.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkeletonDesc.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SmallMeshBatcher.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\VertexFormat.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.cpp" />
@@ -232,6 +234,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDirectionalLightRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDynamicMeshRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMaterialRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshBatchRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyPointLightRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplySkinnedAnimationRenderCommand.cpp" />
@@ -245,6 +248,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreMeshRenderCommand.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreTextureRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.cpp" />
@@ -262,6 +266,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteMeshBuilder.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp" />
@@ -645,12 +650,14 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderDynamicMesh.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMesh.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshBatch.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderSkinnedAnimation.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkeletonDesc.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SmallMeshBatcher.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticModelComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\VertexFormat.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle.h" />
@@ -703,6 +710,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDirectionalLightRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyDynamicMeshRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMaterialRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshBatchRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyPointLightRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplySkinnedAnimationRenderCommand.h" />
@@ -716,6 +724,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\LoadTextureRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RenderInstanceRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreMeshRenderCommand.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreTextureRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMeshRenderCommand.h" />
@@ -737,6 +746,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\RenderTargetGroupManager.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h" />

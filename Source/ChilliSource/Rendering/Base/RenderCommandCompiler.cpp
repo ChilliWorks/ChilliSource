@@ -28,6 +28,7 @@
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#include <ChilliSource/Rendering/Model/SmallMeshBatcher.h>
 #include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
 namespace ChilliSource
@@ -196,11 +197,15 @@ namespace ChilliSource
         ///     The render command list to add the command to.
         /// @param cache
         ///     The current render command list state cache.
+        /// @param batcher
+        ///     The current small mesh batcher.
         ///
-        void AddApplyMaterialCommand(const RenderPassObject& renderPassObject, RenderCommandList* renderCommandList, RenderCommandListStateCache& cache) noexcept
+        void AddApplyMaterialCommand(const RenderPassObject& renderPassObject, RenderCommandList* renderCommandList, RenderCommandListStateCache& cache, SmallMeshBatcher& batcher) noexcept
         {
             if (renderPassObject.GetRenderMaterial() != cache.m_material)
             {
+                batcher.Flush();
+                
                 cache.m_material = renderPassObject.GetRenderMaterial();
                 cache.m_mesh = nullptr;
                 cache.m_dynamicMesh = nullptr;
@@ -288,6 +293,8 @@ namespace ChilliSource
         ///     The render pass.
         /// @param renderCommandList
         ///     The render command list to add the commands to.
+        /// @param renderFrameData
+        ///     Container for all allocations which must live until the end of the frame.
         ///
         void CompileRenderCommandsForPass(const RenderPass& renderPass, RenderCommandList* renderCommandList) noexcept
         {
@@ -297,15 +304,31 @@ namespace ChilliSource
             CS_ASSERT(renderPassObjects.size() > 0, "Cannot compile a pass with no objects.");
             
             RenderCommandListStateCache cache;
+            SmallMeshBatcher batcher(renderCommandList);
             
             for (const auto& renderPassObject : renderPassObjects)
             {
-                AddApplyMaterialCommand(renderPassObject, renderCommandList, cache);
-                AddApplyMeshCommand(renderPassObject, renderCommandList, cache);
-                AddApplySkinnedAnimationCommand(renderPassObject, renderCommandList, cache);
+                AddApplyMaterialCommand(renderPassObject, renderCommandList, cache, batcher);
                 
-                renderCommandList->AddRenderInstanceCommand(renderPassObject.GetWorldMatrix());
+                if (SmallMeshBatcher::CanBatch(renderPassObject))
+                {
+                    cache.m_mesh = nullptr;
+                    cache.m_dynamicMesh = nullptr;
+                
+                    batcher.Batch(renderPassObject);
+                }
+                else
+                {
+                    batcher.Flush();
+                    
+                    AddApplyMeshCommand(renderPassObject, renderCommandList, cache);
+                    AddApplySkinnedAnimationCommand(renderPassObject, renderCommandList, cache);
+                    renderCommandList->AddRenderInstanceCommand(renderPassObject.GetWorldMatrix());
+                }
+                
             }
+            
+            batcher.Flush();
         }
     }
     
@@ -339,7 +362,7 @@ namespace ChilliSource
                         if (renderPass.GetRenderPassObjects().size() > 0)
                         {
                             auto renderCommandList = renderCommandBuffer->GetRenderCommandList(currentList++);
-                            tasks.push_back([=, &renderPass](const TaskContext& innerTaskContext)
+                            tasks.push_back([=, &renderPass, &renderCommandBuffer](const TaskContext& innerTaskContext)
                             {
                                 CompileRenderCommandsForPass(renderPass, renderCommandList);
                             });

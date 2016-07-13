@@ -84,9 +84,8 @@ namespace ChilliSource
         /// @author S Downie
         ///
         /// @param The delegate.
-        /// @return Whether the manifest download has begun.
         //----------------------------------------------------------
-        virtual bool DownloadContentManifest(const Delegate& in_delegate) = 0;
+        virtual void DownloadContentManifest(const Delegate& in_delegate) = 0;
         //----------------------------------------------------------
         /// Download the package file from the given URL
         ///

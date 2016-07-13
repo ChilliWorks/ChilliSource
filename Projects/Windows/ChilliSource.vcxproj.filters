@@ -1305,6 +1305,12 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.cpp">
+      <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
@@ -1331,6 +1337,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.cpp">
       <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshBatch.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SmallMeshBatcher.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshBatchRenderCommand.cpp">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2795,6 +2810,12 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\RestoreRenderTargetGroupCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Target\TargetGroup.h">
+      <Filter>ChilliSource\Rendering\Target</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedModelComponent.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
@@ -2821,6 +2842,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.h">
       <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshBatch.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SmallMeshBatcher.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshBatchRenderCommand.h">
+      <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

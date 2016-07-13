@@ -22,16 +22,38 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_VERTEXFORMAT_H_
-#define _CHILLISOURCE_RENDERING_BASE_VERTEXFORMAT_H_
+#ifndef _CHILLISOURCE_RENDERING_MODEL_VERTEXFORMAT_H_
+#define _CHILLISOURCE_RENDERING_MODEL_VERTEXFORMAT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/ByteColour.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector4.h>
 
 #include <array>
 #include <vector>
 
 namespace ChilliSource
 {
+    /// A container for the data in a single sprite vertex.
+    ///
+    struct SpriteVertex final
+    {
+        Vector4 m_position;
+        Vector2 m_texCoord;
+        ByteColour m_colour;
+    };
+    
+    /// A container for the data in a single static mesh vertex.
+    ///
+    struct StaticMeshVertex
+    {
+        Vector4 m_position;
+        Vector3 m_normal;
+        Vector2 m_texCoord;
+    };
+    
     /// Describes the format and layout of the vertices used in a single mesh. This
     /// consists of a series of vertex elements.
     ///

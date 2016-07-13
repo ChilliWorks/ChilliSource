@@ -358,6 +358,9 @@
 		818462791D3503E8004B0C46 /* VideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818461421D3503E8004B0C46 /* VideoPlayer.cpp */; };
 		8184627A1D3503E8004B0C46 /* WebView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818461481D3503E8004B0C46 /* WebView.cpp */; };
 		8184627D1D350409004B0C46 /* GLSkinnedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8184627B1D350409004B0C46 /* GLSkinnedAnimation.cpp */; };
+		818463691D353765004B0C46 /* SmallMeshBatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818463671D353765004B0C46 /* SmallMeshBatcher.cpp */; };
+		8184636C1D35493A004B0C46 /* ApplyMeshBatchRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8184636A1D35493A004B0C46 /* ApplyMeshBatchRenderCommand.cpp */; };
+		8184636F1D357706004B0C46 /* RenderMeshBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8184636D1D357706004B0C46 /* RenderMeshBatch.cpp */; };
 		8184CE901D0EFF9100E35BE8 /* RenderCommandProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8184CE8E1D0EFF9100E35BE8 /* RenderCommandProcessor.cpp */; };
 		818639751D2BE97C00FE085B /* GLDirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818639731D2BE97C00FE085B /* GLDirectionalLight.cpp */; };
 		8186397C1D2C195D00FE085B /* GLPointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8186397A1D2C195D00FE085B /* GLPointLight.cpp */; };
@@ -365,6 +368,8 @@
 		818C150E1D22FB70001D639B /* GLMeshUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818C150C1D22FB70001D639B /* GLMeshUtils.cpp */; };
 		81A5AF5F1D11575A00307707 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A5AF5D1D11575A00307707 /* GLShader.cpp */; };
 		81A5AF671D1190FB00307707 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A5AF651D1190FB00307707 /* GLTexture.cpp */; };
+		81A616B11D357133007F7CC1 /* TargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A616AF1D357133007F7CC1 /* TargetGroup.cpp */; };
+		81A616B41D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */; };
 		81B096051D2AB8CA00E72835 /* GLContextRestorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B096031D2AB8CA00E72835 /* GLContextRestorer.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
 		81C7FF8C1C89DD0600D306F9 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE821C89DD0500D306F9 /* libCSBase.a */; };
@@ -1269,6 +1274,12 @@
 		8184614B1D3503E8004B0C46 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		8184627B1D350409004B0C46 /* GLSkinnedAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSkinnedAnimation.cpp; sourceTree = "<group>"; };
 		8184627C1D350409004B0C46 /* GLSkinnedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSkinnedAnimation.h; sourceTree = "<group>"; };
+		818463671D353765004B0C46 /* SmallMeshBatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SmallMeshBatcher.cpp; sourceTree = "<group>"; };
+		818463681D353765004B0C46 /* SmallMeshBatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmallMeshBatcher.h; sourceTree = "<group>"; };
+		8184636A1D35493A004B0C46 /* ApplyMeshBatchRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplyMeshBatchRenderCommand.cpp; sourceTree = "<group>"; };
+		8184636B1D35493A004B0C46 /* ApplyMeshBatchRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplyMeshBatchRenderCommand.h; sourceTree = "<group>"; };
+		8184636D1D357706004B0C46 /* RenderMeshBatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderMeshBatch.cpp; sourceTree = "<group>"; };
+		8184636E1D357706004B0C46 /* RenderMeshBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderMeshBatch.h; sourceTree = "<group>"; };
 		8184CE8E1D0EFF9100E35BE8 /* RenderCommandProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommandProcessor.cpp; sourceTree = "<group>"; };
 		8184CE8F1D0EFF9100E35BE8 /* RenderCommandProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandProcessor.h; sourceTree = "<group>"; };
 		818639731D2BE97C00FE085B /* GLDirectionalLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDirectionalLight.cpp; sourceTree = "<group>"; };
@@ -1283,6 +1294,10 @@
 		81A5AF5E1D11575A00307707 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
 		81A5AF651D1190FB00307707 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
 		81A5AF661D1190FB00307707 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
+		81A616AF1D357133007F7CC1 /* TargetGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargetGroup.cpp; sourceTree = "<group>"; };
+		81A616B01D357133007F7CC1 /* TargetGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetGroup.h; sourceTree = "<group>"; };
+		81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RestoreRenderTargetGroupCommand.cpp; sourceTree = "<group>"; };
+		81A616B31D357159007F7CC1 /* RestoreRenderTargetGroupCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestoreRenderTargetGroupCommand.h; sourceTree = "<group>"; };
 		81B096031D2AB8CA00E72835 /* GLContextRestorer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLContextRestorer.cpp; sourceTree = "<group>"; };
 		81B096041D2AB8CA00E72835 /* GLContextRestorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLContextRestorer.h; sourceTree = "<group>"; };
 		81C7FE521C89DD0500D306F9 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -2667,6 +2682,8 @@
 				81845FF51D3503E8004B0C46 /* RenderDynamicMesh.h */,
 				81845FF61D3503E8004B0C46 /* RenderMesh.cpp */,
 				81845FF71D3503E8004B0C46 /* RenderMesh.h */,
+				8184636D1D357706004B0C46 /* RenderMeshBatch.cpp */,
+				8184636E1D357706004B0C46 /* RenderMeshBatch.h */,
 				81845FF81D3503E8004B0C46 /* RenderMeshManager.cpp */,
 				81845FF91D3503E8004B0C46 /* RenderMeshManager.h */,
 				81845FFA1D3503E8004B0C46 /* RenderSkinnedAnimation.cpp */,
@@ -2679,6 +2696,8 @@
 				818460011D3503E8004B0C46 /* SkinnedAnimation.h */,
 				818460021D3503E8004B0C46 /* SkinnedAnimationGroup.cpp */,
 				818460031D3503E8004B0C46 /* SkinnedAnimationGroup.h */,
+				818463671D353765004B0C46 /* SmallMeshBatcher.cpp */,
+				818463681D353765004B0C46 /* SmallMeshBatcher.h */,
 				818460041D3503E8004B0C46 /* StaticModelComponent.cpp */,
 				818460051D3503E8004B0C46 /* StaticModelComponent.h */,
 				818460061D3503E8004B0C46 /* VertexFormat.cpp */,
@@ -2820,6 +2839,8 @@
 		8184605D1D3503E8004B0C46 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */,
+				81A616B31D357159007F7CC1 /* RestoreRenderTargetGroupCommand.h */,
 				8184605E1D3503E8004B0C46 /* ApplyAmbientLightRenderCommand.cpp */,
 				8184605F1D3503E8004B0C46 /* ApplyAmbientLightRenderCommand.h */,
 				818460601D3503E8004B0C46 /* ApplyCameraRenderCommand.cpp */,
@@ -2830,6 +2851,8 @@
 				818460651D3503E8004B0C46 /* ApplyDynamicMeshRenderCommand.h */,
 				818460661D3503E8004B0C46 /* ApplyMaterialRenderCommand.cpp */,
 				818460671D3503E8004B0C46 /* ApplyMaterialRenderCommand.h */,
+				8184636A1D35493A004B0C46 /* ApplyMeshBatchRenderCommand.cpp */,
+				8184636B1D35493A004B0C46 /* ApplyMeshBatchRenderCommand.h */,
 				818460681D3503E8004B0C46 /* ApplyMeshRenderCommand.cpp */,
 				818460691D3503E8004B0C46 /* ApplyMeshRenderCommand.h */,
 				8184606A1D3503E8004B0C46 /* ApplyPointLightRenderCommand.cpp */,
@@ -2902,6 +2925,8 @@
 		818460A61D3503E8004B0C46 /* Target */ = {
 			isa = PBXGroup;
 			children = (
+				81A616AF1D357133007F7CC1 /* TargetGroup.cpp */,
+				81A616B01D357133007F7CC1 /* TargetGroup.h */,
 				818460A71D3503E8004B0C46 /* RenderTargetGroup.cpp */,
 				818460A81D3503E8004B0C46 /* RenderTargetGroup.h */,
 				818460A91D3503E8004B0C46 /* RenderTargetGroupManager.cpp */,
@@ -3501,6 +3526,7 @@
 				818462481D3503E8004B0C46 /* UVs.cpp in Sources */,
 				818462471D3503E8004B0C46 /* TextureResourceOptions.cpp in Sources */,
 				818462071D3503E8004B0C46 /* ParticleDrawableDefFactory.cpp in Sources */,
+				8184636F1D357706004B0C46 /* RenderMeshBatch.cpp in Sources */,
 				818461721D3503E8004B0C46 /* FileWriteMode.cpp in Sources */,
 				818461F21D3503E8004B0C46 /* Skeleton.cpp in Sources */,
 				8184623A1D3503E8004B0C46 /* SpriteMeshBuilder.cpp in Sources */,
@@ -3516,6 +3542,7 @@
 				818462321D3503E8004B0C46 /* RenderCommand.cpp in Sources */,
 				8184625B1D3503E8004B0C46 /* ToggleHighlightUIComponent.cpp in Sources */,
 				818461851D3503E8004B0C46 /* UnifiedCoordinates.cpp in Sources */,
+				81A616B11D357133007F7CC1 /* TargetGroup.cpp in Sources */,
 				8184623E1D3503E8004B0C46 /* CubemapProvider.cpp in Sources */,
 				818462161D3503E8004B0C46 /* SphereParticleEmitterDef.cpp in Sources */,
 				818462741D3503E8004B0C46 /* EditableTextUIComponent.cpp in Sources */,
@@ -3561,6 +3588,7 @@
 				818461A41D3503E8004B0C46 /* InputFilter.cpp in Sources */,
 				810C0C841D11B01100C32406 /* GLMesh.cpp in Sources */,
 				818461EF1D3503E8004B0C46 /* RenderMesh.cpp in Sources */,
+				8184636C1D35493A004B0C46 /* ApplyMeshBatchRenderCommand.cpp in Sources */,
 				818462591D3503E8004B0C46 /* WidgetTemplateProvider.cpp in Sources */,
 				818462391D3503E8004B0C46 /* SpriteComponent.cpp in Sources */,
 				8184617A1D3503E8004B0C46 /* ImageFormatConverter.cpp in Sources */,
@@ -3649,6 +3677,7 @@
 				8184620E1D3503E8004B0C46 /* ConeParticleEmitter.cpp in Sources */,
 				818462361D3503E8004B0C46 /* RenderShaderManager.cpp in Sources */,
 				818462721D3503E8004B0C46 /* SliderDirection.cpp in Sources */,
+				818463691D353765004B0C46 /* SmallMeshBatcher.cpp in Sources */,
 				8184616B1D3503E8004B0C46 /* Transform.cpp in Sources */,
 				8158F7C61C89D2AD00B13109 /* DialogueBoxListener.mm in Sources */,
 				818461831D3503E8004B0C46 /* MathUtils.cpp in Sources */,
@@ -3705,6 +3734,7 @@
 				818462631D3503E8004B0C46 /* UIDrawable.cpp in Sources */,
 				8184622A1D3503E8004B0C46 /* RenderInstanceRenderCommand.cpp in Sources */,
 				818461F91D3503E8004B0C46 /* AccelerationParticleAffectorDef.cpp in Sources */,
+				81A616B41D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp in Sources */,
 				818461B51D3503E8004B0C46 /* MoContentDownloader.cpp in Sources */,
 				818462561D3503E8004B0C46 /* WidgetFactory.cpp in Sources */,
 				818461691D3503E8004B0C46 /* Entity.cpp in Sources */,

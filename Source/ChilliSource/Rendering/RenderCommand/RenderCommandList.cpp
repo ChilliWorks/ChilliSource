@@ -30,6 +30,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshBatchRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplySkinnedAnimationRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
@@ -42,6 +43,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreRenderTargetGroupCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
@@ -101,6 +103,15 @@ namespace ChilliSource
     {
         RenderCommandUPtr renderCommand(new RestoreMeshRenderCommand(renderMesh));
 
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddRestoreRenderTargetGroupCommand(const RenderTargetGroup* renderTargetGroup) noexcept
+    {
+        RenderCommandUPtr renderCommand(new RestoreRenderTargetGroupCommand(renderTargetGroup));
+        
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
     }
@@ -186,18 +197,27 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddApplySkinnedAnimationCommand(const RenderSkinnedAnimation* renderSkinnedAnimation) noexcept
+    void RenderCommandList::AddApplyDynamicMeshCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept
     {
-        RenderCommandUPtr renderCommand(new ApplySkinnedAnimationRenderCommand(renderSkinnedAnimation));
+        RenderCommandUPtr renderCommand(new ApplyDynamicMeshRenderCommand(renderDynamicMesh));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddApplyDynamicMeshCommand(const RenderDynamicMesh* renderDynamicMesh) noexcept
+    void RenderCommandList::AddApplyMeshBatchCommand(RenderMeshBatchUPtr renderMeshBatch) noexcept
     {
-        RenderCommandUPtr renderCommand(new ApplyDynamicMeshRenderCommand(renderDynamicMesh));
+        RenderCommandUPtr renderCommand(new ApplyMeshBatchRenderCommand(std::move(renderMeshBatch)));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddApplySkinnedAnimationCommand(const RenderSkinnedAnimation* renderSkinnedAnimation) noexcept
+    {
+        RenderCommandUPtr renderCommand(new ApplySkinnedAnimationRenderCommand(renderSkinnedAnimation));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
