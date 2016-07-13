@@ -34,6 +34,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Event/Event.h>
 
 namespace CSBackend
@@ -142,11 +143,10 @@ namespace CSBackend
             /// @author Ian Copland
 			//-------------------------------------------------------
 			Screen(const ChilliSource::ScreenInfo& screenInfo);
-            
-			std::vector<ChilliSource::Integer2> m_supportedResolutions;
+
+            ChilliSource::ScreenInfo m_screenInfo;
             ChilliSource::Vector2 m_resolution;
-            f32 m_densityScale;
-            f32 m_invDensityScale;
+
             ChilliSource::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
             ChilliSource::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
         };
