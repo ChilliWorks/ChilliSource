@@ -29,6 +29,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Rendering/Target/TargetGroup.h>
 
 namespace ChilliSource
 {
@@ -186,7 +187,7 @@ namespace ChilliSource
         Integer2 m_shadowMapResolution;
         s32 m_shadowMapId = -1;
         TextureCSPtr m_shadowMap;
-        const RenderTargetGroup* m_shadowMapTarget = nullptr;
+        TargetGroupUPtr m_shadowMapTarget = nullptr;
         
         EventConnectionUPtr m_transformChangedConnection;
     };

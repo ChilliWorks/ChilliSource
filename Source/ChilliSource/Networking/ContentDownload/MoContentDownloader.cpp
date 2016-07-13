@@ -48,39 +48,41 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    bool MoContentDownloader::DownloadContentManifest(const Delegate& inDelegate)
+    void MoContentDownloader::DownloadContentManifest(const Delegate& inDelegate)
     {
         mOnContentManifestDownloadCompleteDelegate = inDelegate;
         
         //Request the content manifest
-        if(mpHttpRequestSystem->CheckReachability())
+        mpHttpRequestSystem->CheckReachability([=](bool in_reachable)
         {
-            Device* device = Application::Get()->GetSystem<Device>();
-            
-            //Build the JSON request with the device info so the server can decide what
-            //assets are suitable for us
-            Json::Value JDeviceData(Json::objectValue);
-            JDeviceData["Type"] = device->GetManufacturer() + device->GetModel() + device->GetModelType();
-            JDeviceData["OS"] = device->GetOSVersion();
-            JDeviceData["Locale"] = device->GetLocale();
-            JDeviceData["Language"] = device->GetLanguage();
-            
-            //The server uses the tags to determine which content to serve
-            Json::Value JTags(Json::arrayValue);
-            for(std::vector<std::string>::const_iterator it = mastrTags.begin(); it != mastrTags.end(); ++it)
+            if(!in_reachable && mOnContentManifestDownloadCompleteDelegate)
             {
-                JTags.append(*it);
+                mOnContentManifestDownloadCompleteDelegate(Result::k_failed, "");
             }
-            JDeviceData["Tags"] = JTags;
-            
-            Json::FastWriter JWriter;
-            mpHttpRequestSystem->MakePostRequest(mstrAssetServerURL, JWriter.write(JDeviceData), MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+            else
+            {
+                Device* device = Application::Get()->GetSystem<Device>();
+                
+                //Build the JSON request with the device info so the server can decide what
+                //assets are suitable for us
+                Json::Value JDeviceData(Json::objectValue);
+                JDeviceData["Type"] = device->GetManufacturer() + device->GetModel() + device->GetModelType();
+                JDeviceData["OS"] = device->GetOSVersion();
+                JDeviceData["Locale"] = device->GetLocale();
+                JDeviceData["Language"] = device->GetLanguage();
+                
+                //The server uses the tags to determine which content to serve
+                Json::Value JTags(Json::arrayValue);
+                for(std::vector<std::string>::const_iterator it = mastrTags.begin(); it != mastrTags.end(); ++it)
+                {
+                    JTags.append(*it);
+                }
+                JDeviceData["Tags"] = JTags;
+                
+                Json::FastWriter JWriter;
+                mpHttpRequestSystem->MakePostRequest(mstrAssetServerURL, JWriter.write(JDeviceData), MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
+            }
+        });
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------

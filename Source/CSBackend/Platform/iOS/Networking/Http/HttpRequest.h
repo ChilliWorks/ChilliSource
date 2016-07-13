@@ -124,7 +124,11 @@ namespace CSBackend
             const ChilliSource::ParamDictionary m_headers;
             const Delegate m_completionDelegate;
             
-            bool m_complete = false;
+            //These need to be shared_ptr so we can access them in result lambdas if
+            //(*this) is destroyed, which may occur if a callback occurs while waiting to cancel a request
+            //on the system thread.
+            std::shared_ptr<bool> m_complete;
+            std::shared_ptr<bool> m_isCancelled;
             
             NSURLConnection* m_connection = nil;
             HttpDelegate* m_httpDelegate = nil;
