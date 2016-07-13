@@ -88,9 +88,9 @@ namespace CSBackend
             //---------------------------------------------------------------
 			/// @author Ian Copland
 			///
-			/// @return Whether the purchasing is allowed by the device/OS
+            /// @param Purchasing enabled delegate
             //---------------------------------------------------------------
-            bool IsPurchasingEnabled() override;
+            void IsPurchasingEnabled(const PurchasingEnabledDelegate& in_delegate) override;
             //---------------------------------------------------------------
 			/// Calling this function will set the listener to which any
             /// transaction events are directed. This is not necessarily

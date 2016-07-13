@@ -71,12 +71,6 @@ namespace CSBackend
         
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        IAPSystem::IAPSystem()
-            : m_initialised(false), m_isPurchasingEnabled(false)
-        {
-        }
-        //---------------------------------------------------------------
-        //---------------------------------------------------------------
         bool IAPSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
         {
             return in_interfaceId == ChilliSource::IAPSystem::InterfaceID || in_interfaceId == IAPSystem::InterfaceID;
@@ -87,16 +81,13 @@ namespace CSBackend
         {
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
             {
-                m_initialised = true;
                 m_storeKitSystem = [[StoreKitIAPSystem alloc] init];
-                m_isPurchasingEnabled = [m_storeKitSystem isPurchasingEnabled];
             });
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
         void IAPSystem::RegisterProducts(const std::vector<ProductRegInfo>& in_productInfos)
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             CS_ASSERT(in_productInfos.empty() == false, "Must register at least one product");
             m_productRegInfos = in_productInfos;
         }
@@ -108,16 +99,18 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        bool IAPSystem::IsPurchasingEnabled()
+        void IAPSystem::IsPurchasingEnabled(const PurchasingEnabledDelegate& in_delegate)
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
-            return m_isPurchasingEnabled;
+            CS_ASSERT(in_delegate, "Cannot have empty delegate");
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+            {
+                in_delegate([m_storeKitSystem isPurchasingEnabled]);
+            });
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
         void IAPSystem::StartListeningForTransactionUpdates(const TransactionStatusDelegate& in_delegate)
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction delegate");
             m_transactionStatusDelegate = in_delegate;
             
@@ -178,7 +171,6 @@ namespace CSBackend
         //---------------------------------------------------------------
         void IAPSystem::StopListeningForTransactionUpdates()
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             m_transactionStatusDelegate = nullptr;
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
@@ -190,7 +182,6 @@ namespace CSBackend
         //---------------------------------------------------------------
         void IAPSystem::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const ProductDescDelegate& in_delegate)
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
             CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
             CS_ASSERT(m_productDescDelegate == nullptr, "Only 1 product description request can be active at a time");
@@ -217,7 +208,6 @@ namespace CSBackend
         //---------------------------------------------------------------
         void IAPSystem::RequestAllProductDescriptions(const ProductDescDelegate& in_delegate)
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             std::vector<std::string> productIds;
             productIds.reserve(m_productRegInfos.size());
             
@@ -232,37 +222,37 @@ namespace CSBackend
         //---------------------------------------------------------------
         void IAPSystem::OnProductDescriptionRequestComplete(NSArray* in_products)
         {
+            std::vector<ProductDesc> descriptions;
+            
+            if(in_products != nil)
+            {
+                NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
+                [formatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+                [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+                
+                for(SKProduct* product in in_products)
+                {
+                    ProductDesc description;
+                    description.m_id = [NSStringUtils newUTF8StringWithNSString:product.productIdentifier];
+                    description.m_name = [NSStringUtils newUTF8StringWithNSString:product.localizedTitle];
+                    description.m_description = [NSStringUtils newUTF8StringWithNSString:product.localizedDescription];
+                    
+                    [formatter setLocale:product.priceLocale];
+                    description.m_formattedPrice = [NSStringUtils newUTF8StringWithNSString:[formatter stringFromNumber:product.price]];
+                    
+                    NSLocale* storeLocale = product.priceLocale;
+                    description.m_countryCode = [NSStringUtils newUTF8StringWithNSString:(NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode)];
+                    
+                    descriptions.push_back(description);
+                }
+                
+                [formatter release];
+            }
+            
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& in_taskContext)
             {
                 if(m_productDescDelegate == nullptr)
                     return;
-     
-                std::vector<ProductDesc> descriptions;
-                
-                if(in_products != nil)
-                {
-                    NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
-                    [formatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-                    [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-                    
-                    for(SKProduct* product in in_products)
-                    {
-                        ProductDesc description;
-                        description.m_id = [NSStringUtils newUTF8StringWithNSString:product.productIdentifier];
-                        description.m_name = [NSStringUtils newUTF8StringWithNSString:product.localizedTitle];
-                        description.m_description = [NSStringUtils newUTF8StringWithNSString:product.localizedDescription];
-                        
-                        [formatter setLocale:product.priceLocale];
-                        description.m_formattedPrice = [NSStringUtils newUTF8StringWithNSString:[formatter stringFromNumber:product.price]];
-                        
-                        NSLocale* storeLocale = product.priceLocale;
-                        description.m_countryCode = [NSStringUtils newUTF8StringWithNSString:(NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode)];
-                        
-                        descriptions.push_back(description);
-                    }
-                    
-                    [formatter release];
-                }
 
                 m_productDescDelegate(descriptions);
                 m_productDescDelegate = nullptr;
@@ -272,11 +262,7 @@ namespace CSBackend
         //---------------------------------------------------------------
         void IAPSystem::CancelProductDescriptionsRequest()
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
-            if(m_productDescDelegate)
-            {
-                m_productDescDelegate = nullptr;
-            }
+            m_productDescDelegate = nullptr;
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
             {
@@ -287,7 +273,6 @@ namespace CSBackend
         //---------------------------------------------------------------
         void IAPSystem::RequestProductPurchase(const std::string& in_productId)
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
             {
                 CS_ASSERT(ContainsProductId(m_productRegInfos, in_productId), "Products must be registered with the IAP system before purchasing");
@@ -300,7 +285,6 @@ namespace CSBackend
         //---------------------------------------------------------------
         void IAPSystem::CloseTransaction(const TransactionSPtr& in_transaction, const TransactionCloseDelegate& in_delegate)
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             CS_ASSERT(in_delegate != nullptr, "Cannot have null transaction close delegate");
             CS_ASSERT(m_transactionCloseDelegate == nullptr, "Only 1 transaction can be closed at a time");
             
@@ -323,7 +307,6 @@ namespace CSBackend
         //---------------------------------------------------------------
         void IAPSystem::RestoreManagedPurchases()
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
             {
                 [m_storeKitSystem restoreNonConsumablePurchases];
@@ -333,7 +316,6 @@ namespace CSBackend
         //---------------------------------------------------------------
         std::vector<IAPSystem::ExtraProductInfo> IAPSystem::GetExtraProductInfo() const
         {
-            CS_ASSERT(m_initialised, "System is not initialised yet.");
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
             
             ExtraProductInfo extraProductInfo;
