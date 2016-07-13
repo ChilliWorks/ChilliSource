@@ -32,6 +32,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/Screen.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxSystem.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
@@ -403,7 +404,7 @@ namespace CSBackend
         //--------------------------------------------------------------------------------------
         void CoreJavaInterface::Init() noexcept
         {
-            m_application = ChilliSource::ApplicationUPtr(CreateApplication());
+            m_application = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
             m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(m_application.get()));
         }
         //--------------------------------------------------------------------------------------

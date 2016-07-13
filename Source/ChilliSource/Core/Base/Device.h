@@ -30,7 +30,9 @@
 #define _CHILLISOURCE_CORE_BASE_DEVICE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/DeviceInfo.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+
 
 namespace ChilliSource
 {
@@ -43,78 +45,91 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //---------------------------------------------------------
-    class Device : public AppSystem
+    class Device final : public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(Device);
+        //-------------------------------------------------------
+        /// Queries whether or not this system implements the
+        /// interface with the given Id.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The interface Id.
+        /// @param Whether system is of given type.
+        //-------------------------------------------------------
+        bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const noexcept override;
         //---------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The device model name.
         //---------------------------------------------------
-        virtual const std::string& GetModel() const = 0;
+        const std::string& GetModel() const noexcept;
         //---------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The name of the device model type.
         //---------------------------------------------------
-        virtual const std::string& GetModelType() const = 0;
+        const std::string& GetModelType() const noexcept;
         //---------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The name of the device manufacturer.
         //---------------------------------------------------
-        virtual const std::string& GetManufacturer() const = 0;
+        const std::string& GetManufacturer() const noexcept;
         //---------------------------------------------------
         /// @author S Downie
         ///
         /// @return The locale code registered with the
         /// device.
         //---------------------------------------------------
-        virtual const std::string& GetLocale() const = 0;
+        const std::string& GetLocale() const noexcept;
         //---------------------------------------------------
         /// @author S Downie
         ///
         /// @return The language the device is set to.
         //---------------------------------------------------
-        virtual const std::string& GetLanguage() const = 0;
+        const std::string& GetLanguage() const noexcept;
         //---------------------------------------------------
         /// @author S Downie
         ///
         /// @return The version of the operating system.
         //---------------------------------------------------
-        virtual const std::string& GetOSVersion() const = 0;
+        const std::string& GetOSVersion() const noexcept;
         //---------------------------------------------------
         /// @author S Downie
         ///
         /// @return An identifier that can be used to uniquely
         /// identify the device.
         //---------------------------------------------------
-        virtual const std::string& GetUDID() const = 0;
+        const std::string& GetUDID() const noexcept;
         //---------------------------------------------------
         /// @author S Downie
         ///
         /// @return The number of CPU cores available on the
         /// device.
         //---------------------------------------------------
-        virtual u32 GetNumberOfCPUCores() const = 0;
-        //---------------------------------------------------
-        /// Destructor
-        ///
-        /// @author Ian Copland
-        //---------------------------------------------------
-        virtual ~Device() {};
+        u32 GetNumberOfCPUCores() const noexcept;
+
     protected:
         friend class Application;
         //---------------------------------------------------
-        /// Creates a new platform specific backend for the
-        /// system.
+        /// Creates the system.
         ///
         /// @author Ian Copland
         ///
         /// @return The new instance.
         //---------------------------------------------------
-        static DeviceUPtr Create();
+        static DeviceUPtr Create(const ChilliSource::DeviceInfo& deviceInfo);
+        //----------------------------------------------------
+        /// Constructor. Declared private to force the use of
+        /// the factory method.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------
+        Device(const ChilliSource::DeviceInfo& deviceInfo) noexcept;
+
+        DeviceInfo m_deviceInfo;
     };
 }
 

@@ -46,7 +46,6 @@ namespace CSBackend
 		CS_FORWARDDECLARE_CLASS(FileSystem);
 		CS_FORWARDDECLARE_CLASS(PNGImageProvider);
 		CS_FORWARDDECLARE_CLASS(PngImage);
-        CS_FORWARDDECLARE_CLASS(Device);
         CS_FORWARDDECLARE_CLASS(Screen);
 		//------------------------------------------------------
 		/// Input

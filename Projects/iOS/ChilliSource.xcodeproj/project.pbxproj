@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27408C081D366C7A00A0B003 /* DeviceInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27408C041D366C7A00A0B003 /* DeviceInfo.cpp */; };
+		27408C091D366C7A00A0B003 /* SystemInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27408C061D366C7A00A0B003 /* SystemInfo.cpp */; };
+		27408C1C1D369F8D00A0B003 /* SystemInfoFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 27408C1B1D369F8D00A0B003 /* SystemInfoFactory.mm */; };
 		810C0C841D11B01100C32406 /* GLMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 810C0C821D11B01100C32406 /* GLMesh.cpp */; };
 		8156124B1D2E5D41000DD01B /* GLTargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 815612491D2E5D41000DD01B /* GLTargetGroup.cpp */; };
 		8158F7C11C89D2AD00B13109 /* CSAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F59C1C89D2AD00B13109 /* CSAppDelegate.mm */; };
 		8158F7C21C89D2AD00B13109 /* CSGLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F59E1C89D2AD00B13109 /* CSGLViewController.mm */; };
-		8158F7C31C89D2AD00B13109 /* Device.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5A01C89D2AD00B13109 /* Device.mm */; };
 		8158F7C41C89D2AD00B13109 /* PlatformSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5A21C89D2AD00B13109 /* PlatformSystem.mm */; };
 		8158F7C51C89D2AD00B13109 /* Screen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5A41C89D2AD00B13109 /* Screen.mm */; };
 		8158F7C61C89D2AD00B13109 /* DialogueBoxListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5A71C89D2AD00B13109 /* DialogueBoxListener.mm */; };
@@ -411,6 +413,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		27408C041D366C7A00A0B003 /* DeviceInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceInfo.cpp; sourceTree = "<group>"; };
+		27408C051D366C7A00A0B003 /* DeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfo.h; sourceTree = "<group>"; };
+		27408C061D366C7A00A0B003 /* SystemInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemInfo.cpp; sourceTree = "<group>"; };
+		27408C071D366C7A00A0B003 /* SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfo.h; sourceTree = "<group>"; };
+		27408C1A1D369F8D00A0B003 /* SystemInfoFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemInfoFactory.h; sourceTree = "<group>"; };
+		27408C1B1D369F8D00A0B003 /* SystemInfoFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SystemInfoFactory.mm; sourceTree = "<group>"; };
 		810C0C821D11B01100C32406 /* GLMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLMesh.cpp; sourceTree = "<group>"; };
 		810C0C831D11B01100C32406 /* GLMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLMesh.h; sourceTree = "<group>"; };
 		815612491D2E5D41000DD01B /* GLTargetGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTargetGroup.cpp; sourceTree = "<group>"; };
@@ -420,8 +428,6 @@
 		8158F59C1C89D2AD00B13109 /* CSAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CSAppDelegate.mm; sourceTree = "<group>"; };
 		8158F59D1C89D2AD00B13109 /* CSGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSGLViewController.h; sourceTree = "<group>"; };
 		8158F59E1C89D2AD00B13109 /* CSGLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CSGLViewController.mm; sourceTree = "<group>"; };
-		8158F59F1C89D2AD00B13109 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
-		8158F5A01C89D2AD00B13109 /* Device.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Device.mm; sourceTree = "<group>"; };
 		8158F5A11C89D2AD00B13109 /* PlatformSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlatformSystem.h; sourceTree = "<group>"; };
 		8158F5A21C89D2AD00B13109 /* PlatformSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlatformSystem.mm; sourceTree = "<group>"; };
 		8158F5A31C89D2AD00B13109 /* Screen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Screen.h; sourceTree = "<group>"; };
@@ -1507,12 +1513,12 @@
 		8158F59A1C89D2AD00B13109 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				27408C1A1D369F8D00A0B003 /* SystemInfoFactory.h */,
+				27408C1B1D369F8D00A0B003 /* SystemInfoFactory.mm */,
 				8158F59B1C89D2AD00B13109 /* CSAppDelegate.h */,
 				8158F59C1C89D2AD00B13109 /* CSAppDelegate.mm */,
 				8158F59D1C89D2AD00B13109 /* CSGLViewController.h */,
 				8158F59E1C89D2AD00B13109 /* CSGLViewController.mm */,
-				8158F59F1C89D2AD00B13109 /* Device.h */,
-				8158F5A01C89D2AD00B13109 /* Device.mm */,
 				8158F5A11C89D2AD00B13109 /* PlatformSystem.h */,
 				8158F5A21C89D2AD00B13109 /* PlatformSystem.mm */,
 				8158F5A31C89D2AD00B13109 /* Screen.h */,
@@ -1918,6 +1924,10 @@
 		81845E1A1D3503E8004B0C46 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				27408C041D366C7A00A0B003 /* DeviceInfo.cpp */,
+				27408C051D366C7A00A0B003 /* DeviceInfo.h */,
+				27408C061D366C7A00A0B003 /* SystemInfo.cpp */,
+				27408C071D366C7A00A0B003 /* SystemInfo.h */,
 				81845E1B1D3503E8004B0C46 /* AppConfig.cpp */,
 				81845E1C1D3503E8004B0C46 /* AppConfig.h */,
 				81845E1D1D3503E8004B0C46 /* Application.cpp */,
@@ -3569,6 +3579,7 @@
 				818462381D3503E8004B0C46 /* Shader.cpp in Sources */,
 				8184618C1D3503E8004B0C46 /* Resource.cpp in Sources */,
 				8184615E1D3503E8004B0C46 /* ParamDictionarySerialiser.cpp in Sources */,
+				27408C091D366C7A00A0B003 /* SystemInfo.cpp in Sources */,
 				8184627D1D350409004B0C46 /* GLSkinnedAnimation.cpp in Sources */,
 				818461FE1D3503E8004B0C46 /* ParticleAffector.cpp in Sources */,
 				818461BD1D3503E8004B0C46 /* CanvasRenderer.cpp in Sources */,
@@ -3638,7 +3649,7 @@
 				818461EC1D3503E8004B0C46 /* ModelDesc.cpp in Sources */,
 				818461771D3503E8004B0C46 /* CSImageProvider.cpp in Sources */,
 				81A5AF671D1190FB00307707 /* GLTexture.cpp in Sources */,
-				8158F7C31C89D2AD00B13109 /* Device.mm in Sources */,
+				27408C081D366C7A00A0B003 /* DeviceInfo.cpp in Sources */,
 				8184619A1D3503E8004B0C46 /* TaskContext.cpp in Sources */,
 				818462581D3503E8004B0C46 /* WidgetTemplate.cpp in Sources */,
 				8184617F1D3503E8004B0C46 /* LocalisedTextProvider.cpp in Sources */,
@@ -3787,6 +3798,7 @@
 				8184616F1D3503E8004B0C46 /* CSBinaryInputStream.cpp in Sources */,
 				818461DD1D3503E8004B0C46 /* PointLightComponent.cpp in Sources */,
 				8158F7DE1C89D2AD00B13109 /* FacebookPostSystem.cpp in Sources */,
+				27408C1C1D369F8D00A0B003 /* SystemInfoFactory.mm in Sources */,
 				818461591D3503E8004B0C46 /* Logging.cpp in Sources */,
 				818461631D3503E8004B0C46 /* HashCRC32.cpp in Sources */,
 				818461531D3503E8004B0C46 /* ByteBuffer.cpp in Sources */,
