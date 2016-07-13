@@ -253,8 +253,6 @@ namespace CSBackend
             ///
             void ResetCache() noexcept;
             
-            /// A container for information required to render a mesh batch.
-            
             bool m_initRequired = true;
             
             GLTextureUnitManagerUPtr m_textureUnitManager;
