@@ -99,28 +99,10 @@ namespace CSBackend
         CS_DEFINE_NAMEDTYPE(Screen);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Screen::Screen()
+        Screen::Screen(const ChilliSource::ScreenInfo& screenInfo)
+            : m_screenInfo(screenInfo)
         {
-            @autoreleasepool
-            {
-                if (ShouldCalculateBasedOnOrientation() == false)
-                {
-                    //get resolution for iOS 8 and higher.
-                    m_densityScale = [UIScreen mainScreen].nativeScale;
-                    m_resolution = CalculateResolution([[UIScreen mainScreen] bounds].size, m_densityScale);
-                }
-                else
-                {
-                    //get resolution for pre-iOS 8 devices.
-                    m_densityScale = [UIScreen mainScreen].scale;
-                    m_resolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation, [[UIScreen mainScreen] bounds].size, m_densityScale);
-                }
-                
-                m_invDensityScale = 1.0f / m_densityScale;
-            }
-            
-            m_supportedResolutions.push_back(ChilliSource::Integer2((s32)m_resolution.x, (s32)m_resolution.y));
-            m_supportedResolutions.push_back(ChilliSource::Integer2((s32)m_resolution.y, (s32)m_resolution.x));
+            m_resolution = m_screenInfo.GetInitialResolution();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -138,13 +120,13 @@ namespace CSBackend
         //-----------------------------------------------------------
         f32 Screen::GetDensityScale() const
         {
-            return m_densityScale;
+            return m_screenInfo.GetDensityScale();
         }
         //----------------------------------------------------------
         //-----------------------------------------------------------
         f32 Screen::GetInverseDensityScale() const
         {
-            return m_invDensityScale;
+            return m_screenInfo.GetInverseDensityScale();
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -162,7 +144,7 @@ namespace CSBackend
         //----------------------------------------------------------
         std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
         {
-            return m_supportedResolutions;
+            return m_screenInfo.GetSupportedResolutions();
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
@@ -191,7 +173,7 @@ namespace CSBackend
         {
             CS_ASSERT(ShouldCalculateBasedOnOrientation() == false, "OnResolutionChanged() should not get called on devices that require orientation based calculations.");
             
-            m_resolution = CalculateResolution(in_dipsSize, m_densityScale);
+            m_resolution = CalculateResolution(in_dipsSize, m_screenInfo.GetDensityScale());
             m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
     }
