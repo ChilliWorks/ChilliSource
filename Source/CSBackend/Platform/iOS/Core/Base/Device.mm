@@ -28,6 +28,8 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
+#import <ChilliSource/Core/Base/DeviceInfo.h>
+
 #import <CSBackend/Platform/iOS/Core/Base/Device.h>
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -41,149 +43,20 @@ namespace CSBackend
 {
     namespace iOS
     {
-        namespace
-        {
-            //----------------------------------------------
-            //----------------------------------------------
-            std::string GetDeviceModel()
-            {
-                @autoreleasepool
-                {
-                    NSString * type = [[UIDevice currentDevice] model];
-                    return [NSStringUtils newUTF8StringWithNSString:type];
-                }
-            }
-            //----------------------------------------------
-            //----------------------------------------------
-            std::string GetDeviceModelType()
-            {
-                size_t size = 0;
-                sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
-                s8* machine = new s8[size];
-                sysctlbyname("hw.machine", machine, &size, nullptr, 0);
-                std::string modelType(machine);
-                CS_SAFEDELETE(machine);
-                
-                std::string output;
-                bool record = false;
-                for(std::string::const_iterator it = modelType.begin(); it != modelType.end(); ++it)
-                {
-                    if(isdigit(*it))
-                    {
-                        record = true;
-                    }
-                    
-                    if(record)
-                    {
-                        output += (*it);
-                    }
-                }
-                return output;
-            }
-            //---------------------------------------------
-            //---------------------------------------------
-            std::string GetDeviceManufacturer()
-            {
-                return "Apple";
-            }
-            //---------------------------------------------
-            //---------------------------------------------
-            std::string GetOSVersion()
-            {
-                @autoreleasepool
-                {
-                    NSString* version = [[UIDevice currentDevice] systemVersion];
-                    return [NSStringUtils newUTF8StringWithNSString:version];
-                }
-            }
-            //---------------------------------------------
-            //---------------------------------------------
-            std::string GetLocale()
-            {
-                @autoreleasepool
-                {
-                    NSLocale* locale = [NSLocale currentLocale];
-                    NSString* languageCode = [locale objectForKey:NSLocaleLanguageCode];
-                    NSString* countryCode = [locale objectForKey:NSLocaleCountryCode];
-                    if (countryCode != nil && [countryCode length] > 0)
-                    {
-                        return [NSStringUtils newUTF8StringWithNSString:languageCode] + "_" + [NSStringUtils newUTF8StringWithNSString:countryCode];
-                    }
-                    else
-                    {
-                        return [NSStringUtils newUTF8StringWithNSString:languageCode];
-                    }
-                }
-            }
-            //---------------------------------------------
-            //---------------------------------------------
-            std::string GetLanguage()
-            {
-                @autoreleasepool
-                {
-                    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-                    NSArray* supportedLanguages = [userDefaults objectForKey:@"AppleLanguages"];
-                    NSString* userLocale = [supportedLanguages objectAtIndex:0];
-                    std::string localeCode = [userLocale UTF8String];
-                    
-                    std::vector<std::string> localeBrokenUp = ChilliSource::StringUtils::Split(localeCode, "-", 0);
-                    if (localeBrokenUp.size() > 0)
-                    {
-                        return localeBrokenUp[0];
-                    }
-                    else
-                    {
-                        return "en";
-                    }
-                }
-            }
-            //-----------------------------------------------
-            //-----------------------------------------------
-            std::string GetUDID()
-            {
-                @autoreleasepool
-                {
-                    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f)
-                    {
-                        NSUUID* uid = [UIDevice currentDevice].identifierForVendor;
-                        return [NSStringUtils newUTF8StringWithNSString:[uid UUIDString]];
-                    }
-                    
-                    return "";
-                }
-            }
-            //-------------------------------------------------
-            //-------------------------------------------------
-            u32 GetNumberOfCPUCores()
-            {
-                u32 numCores = 1;
-                size_t size = sizeof(numCores);
-                
-                if(sysctlbyname("hw.ncpu", &numCores, &size, nullptr, 0))
-                {
-                    return 1;
-                }
-                else
-                {
-                    return numCores;
-                }
-            }
-        }
-        
         CS_DEFINE_NAMEDTYPE(Device);
         //----------------------------------------------------
         //----------------------------------------------------
-        Device::Device()
+        Device::Device(const ChilliSource::DeviceInfo& deviceInfo)
             : m_locale("en_GB"), m_language("en")
         {
-            m_model = CSBackend::iOS::GetDeviceModel();
-            m_modelType = CSBackend::iOS::GetDeviceModelType();
-            m_manufacturer = CSBackend::iOS::GetDeviceManufacturer();
-            m_locale = CSBackend::iOS::GetLocale();
-            m_language = CSBackend::iOS::GetLanguage();
-            m_osVersion = CSBackend::iOS::GetOSVersion();
-            m_udid = CSBackend::iOS::GetUDID();
-            m_numCPUCores = CSBackend::iOS::GetNumberOfCPUCores();
+            m_model = deviceInfo.GetModel();
+            m_modelType = deviceInfo.GetModelType();
+            m_manufacturer = deviceInfo.GetManufacturer();
+            m_locale = deviceInfo.GetLocale();
+            m_language = deviceInfo.GetLanguage();
+            m_osVersion = deviceInfo.GetOSVersion();
+            m_udid = deviceInfo.GetUDID();
+            m_numCPUCores = deviceInfo.GetNumCPUCores();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

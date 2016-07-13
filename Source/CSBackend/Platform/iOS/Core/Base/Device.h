@@ -108,14 +108,14 @@ namespace CSBackend
 			//--------------------------------------------------
 			u32 GetNumberOfCPUCores() const override;
         private:
-            friend ChilliSource::DeviceUPtr ChilliSource::Device::Create();
+            friend ChilliSource::DeviceUPtr ChilliSource::Device::Create(const ChilliSource::DeviceInfo& deviceInfo);
             //----------------------------------------------------
 			/// Constructor. Declared private to force the use of
             /// the factory method.
             ///
             /// @author Ian Copland
 			//----------------------------------------------------
-			Device();
+			Device(const ChilliSource::DeviceInfo& deviceInfo);
             
             std::string m_model;
             std::string m_modelType;
