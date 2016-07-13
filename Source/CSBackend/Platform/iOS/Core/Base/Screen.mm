@@ -28,6 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
+#import <ChilliSource/Core/Base/Application.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
+
 #import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
 #import <CSBackend/Platform/iOS/Core/Base/Screen.h>
 
@@ -164,8 +167,11 @@ namespace CSBackend
         {
             CS_ASSERT(ShouldCalculateBasedOnOrientation() == true, "OnOrientationChanged() should not get called on devices that do not require orientation based calculations.");
             
-            m_resolution = CalculateResolution(in_orientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
-            m_resolutionChangedEvent.NotifyConnections(m_resolution);
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                m_resolution = CalculateResolution(in_orientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
+                m_resolutionChangedEvent.NotifyConnections(m_resolution);
+            });
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -173,8 +179,11 @@ namespace CSBackend
         {
             CS_ASSERT(ShouldCalculateBasedOnOrientation() == false, "OnResolutionChanged() should not get called on devices that require orientation based calculations.");
             
-            m_resolution = CalculateResolution(in_dipsSize, m_screenInfo.GetDensityScale());
-            m_resolutionChangedEvent.NotifyConnections(m_resolution);
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                m_resolution = CalculateResolution(in_dipsSize, m_screenInfo.GetDensityScale());
+                m_resolutionChangedEvent.NotifyConnections(m_resolution);
+            });
         }
     }
 }
