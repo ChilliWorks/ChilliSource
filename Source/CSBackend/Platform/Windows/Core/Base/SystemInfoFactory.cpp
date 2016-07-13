@@ -24,9 +24,11 @@
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
 #include <ChilliSource/Core/Base/DeviceInfo.h>
+#include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
+#include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 #include <CSBackend/Platform/Windows/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 
@@ -146,6 +148,22 @@ namespace CSBackend
                 GetSystemInfo(&SysInfo);
                 return SysInfo.dwNumberOfProcessors;
             }
+
+            /// @return The screen's current resolution.
+            ///
+            ChilliSource::Vector2 GetScreenResolution() noexcept
+            {
+                ChilliSource::Integer2 resolution = SFMLWindow::Get()->GetWindowSize();
+                return ChilliSource::Vector2((f32)resolution.x, (f32)resolution.y);
+            }
+
+            /// @return A list of resolutions supported by the display
+            ///
+            std::vector<ChilliSource::Integer2> GetSupportedResolutions() noexcept
+            {
+                return SFMLWindow::Get()->GetSupportedResolutions();
+            }
+
         }
 
         //--------------------------------------------------------------------------------
@@ -154,8 +172,11 @@ namespace CSBackend
             // Create DeviceInfo.
             ChilliSource::DeviceInfo deviceInfo(k_deviceModel, k_deviceModelType, k_deviceManufacturer, k_deviceUdid, GetLocale(), ParseLanguageFromLocale(GetLocale()), GetOSVersion(), GetNumberOfCPUCores());
 
+            // Create ScreenInfo.
+            ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
+
             // Create SystemInfo.
-            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo));
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo));
 
             return std::move(systemInfo);
         }

@@ -278,7 +278,7 @@ namespace ChilliSource
         m_platformSystem = CreateSystem<PlatformSystem>();
         m_appConfig = CreateSystem<AppConfig>();
         CreateSystem<Device>(m_systemInfo->GetDeviceInfo());
-        m_screen = CreateSystem<Screen>();
+        m_screen = CreateSystem<Screen>(m_systemInfo->GetScreenInfo());
         
         m_taskScheduler = CreateSystem<TaskScheduler>();
         m_fileSystem = CreateSystem<FileSystem>();

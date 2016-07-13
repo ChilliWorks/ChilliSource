@@ -1328,7 +1328,7 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.cpp">
       <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshBatch.cpp">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClCompile>
@@ -1337,6 +1337,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshBatchRenderCommand.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2824,7 +2827,7 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.h">
       <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\RenderMeshBatch.h">
       <Filter>ChilliSource\Rendering\Model</Filter>
     </ClInclude>
@@ -2833,6 +2836,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\ApplyMeshBatchRenderCommand.h">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.h">
+      <Filter>ChilliSource\Core\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

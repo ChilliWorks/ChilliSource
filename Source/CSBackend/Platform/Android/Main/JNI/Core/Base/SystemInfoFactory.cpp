@@ -24,11 +24,15 @@
 #ifdef CS_TARGETPLATFORM_ANDROID
 
 #include <ChilliSource/Core/Base/DeviceInfo.h>
+#include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/Base/SystemInfoFactory.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/DeviceJavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+
+#include <vector>
 
 namespace CSBackend
 {
@@ -59,19 +63,32 @@ namespace CSBackend
 					return k_defaultLanguage;
 				}
 			}
+
 		}
 
 		//---------------------------------------------------------
 		ChilliSource::SystemInfoCUPtr SystemInfoFactory::CreateSystemInfo() noexcept
 		{
-		    DeviceJavaInterfaceSPtr javaInterface(new DeviceJavaInterface());
-            JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(javaInterface);
+		    DeviceJavaInterfaceSPtr deviceJavaInterface(new DeviceJavaInterface());
+            JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(deviceJavaInterface);
+
+            CoreJavaInterfaceSPtr coreJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+            CS_ASSERT(coreJavaInterface != nullptr, "Cannot get CoreJavaInterface!");
 
             // Create DeviceInfo.
-            ChilliSource::DeviceInfo deviceInfo(javaInterface->GetDeviceModel(), javaInterface->GetDeviceModelType(), javaInterface->GetDeviceManufacturer(), javaInterface->GetUniqueId(), javaInterface->GetDefaultLocaleCode(), ParseLanguageFromLocale(javaInterface->GetDefaultLocaleCode()), ChilliSource::ToString(javaInterface->GetOSVersionCode()), javaInterface->GetNumberOfCores());
+            ChilliSource::DeviceInfo deviceInfo(deviceJavaInterface->GetDeviceModel(), deviceJavaInterface->GetDeviceModelType(), deviceJavaInterface->GetDeviceManufacturer(), deviceJavaInterface->GetUniqueId(), deviceJavaInterface->GetDefaultLocaleCode(), ParseLanguageFromLocale(deviceJavaInterface->GetDefaultLocaleCode()), ChilliSource::ToString(deviceJavaInterface->GetOSVersionCode()), deviceJavaInterface->GetNumberOfCores());
+
+            // Create ScreenInfo.
+            ChilliSource::Vector2 currentResolution((f32)coreJavaInterface->GetScreenWidth(), (f32)coreJavaInterface->GetScreenHeight());
+            f32 screenDensity = coreJavaInterface->GetScreenDensity();
+            std::vector<ChilliSource::Integer2> supportedResolutions;
+            supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.x, (s32)currentResolution.y));
+            supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.y, (s32)currentResolution.x));
+
+            ChilliSource::ScreenInfo screenInfo(currentResolution, screenDensity, 1.0f / screenDensity, supportedResolutions);
 
 		    // Create SystemInfo.
-		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo));
+		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo));
 
 		    return std::move(systemInfo);
 		}

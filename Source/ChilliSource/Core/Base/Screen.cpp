@@ -45,14 +45,14 @@ namespace ChilliSource
     CS_DEFINE_NAMEDTYPE(Screen);
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    ScreenUPtr Screen::Create()
+    ScreenUPtr Screen::Create(const ScreenInfo& screenInfo)
     {
 #if defined CS_TARGETPLATFORM_ANDROID
-        return ScreenUPtr(new CSBackend::Android::Screen());
+        return ScreenUPtr(new CSBackend::Android::Screen(screenInfo));
 #elif defined CS_TARGETPLATFORM_IOS
-        return ScreenUPtr(new CSBackend::iOS::Screen());
+        return ScreenUPtr(new CSBackend::iOS::Screen(screenInfo));
 #elif defined CS_TARGETPLATFORM_WINDOWS
-        return ScreenUPtr(new CSBackend::Windows::Screen());
+        return ScreenUPtr(new CSBackend::Windows::Screen(screenInfo));
 #else
         return nullptr;
 #endif

@@ -48,6 +48,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(PlatformSystem);
     CS_FORWARDDECLARE_CLASS(QueryableInterface);
     CS_FORWARDDECLARE_CLASS(Screen);
+    CS_FORWARDDECLARE_CLASS(ScreenInfo);
     CS_FORWARDDECLARE_CLASS(SystemInfo);
     CS_FORWARDDECLARE_CLASS(AppConfig);
     //---------------------------------------------------------

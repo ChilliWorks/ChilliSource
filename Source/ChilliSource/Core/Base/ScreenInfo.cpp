@@ -21,42 +21,39 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_BASE_SYSTEMINFO_H_
-#define _CHILLISOURCE_CORE_BASE_SYSTEMINFO_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/DeviceInfo.h>
 #include <ChilliSource/Core/Base/ScreenInfo.h>
 
 namespace ChilliSource
 {
-    /// This class contains all information necessary for building
-    /// the Device, PlatformSystem, and Screen classes.
-    ///
-    class SystemInfo final
+    //----------------------------------------------------------------
+    ScreenInfo::ScreenInfo(const Vector2& initialResolution, f32 densityScale, f32 inverseDensityScale, const std::vector<Integer2>& supportedResolutions) noexcept
+        : m_initialResolution(initialResolution), m_densityScale(densityScale), m_inverseDensityScale(inverseDensityScale), m_supportedResolutions(supportedResolutions)
     {
-        public:
-            /// Constructs the SystemInfo class.
-            ///
-            /// @param deviceInfo
-            ///         The device info to populate device with.
-            /// @param screenInfo
-            ///         The screen info to populate screen with.
-            ///
-            SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo) noexcept;
+    }
 
-            /// @return The device info for building the Device class.
-            ///
-            const DeviceInfo& GetDeviceInfo() const noexcept;
+    //----------------------------------------------------------------
+    const Vector2& ScreenInfo::GetInitialResolution() const noexcept
+    {
+        return m_initialResolution;
+    }
 
-            /// @return The screen info for building the Screen class.
-            ///
-            const ScreenInfo& GetScreenInfo() const noexcept;
+    //----------------------------------------------------------------
+    f32 ScreenInfo::GetDensityScale() const noexcept
+    {
+        return m_densityScale;
+    }
 
-        private:
-            DeviceInfo m_deviceInfo;
-            ScreenInfo m_screenInfo;
-    };
+    //----------------------------------------------------------------
+    f32 ScreenInfo::GetInverseDensityScale() const noexcept
+    {
+        return m_inverseDensityScale;
+    }
+
+    //----------------------------------------------------------------
+    const std::vector<Integer2>& ScreenInfo::GetSupportedResolutions() const noexcept
+    {
+        return m_supportedResolutions;
+    }
+
+
 }
-
-#endif

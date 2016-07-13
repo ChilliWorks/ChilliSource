@@ -33,6 +33,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
@@ -126,14 +127,14 @@ namespace CSBackend
 			//----------------------------------------------------------
 			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const override;
         private:
-            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create();
+            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create(const ChilliSource::ScreenInfo& screenInfo);
             //-------------------------------------------------------
 			/// Private constructor to force the use of the Create()
             /// factory method.
 			///
             /// @author Ian Copland
 			//-------------------------------------------------------
-			Screen();
+			Screen(const ChilliSource::ScreenInfo& screenInfo);
 			//------------------------------------------------
 			/// Initialisation method called at a time when
 			/// all App Systems have been created. System
@@ -173,8 +174,8 @@ namespace CSBackend
 			void OnDestroy() override;
             
             ChilliSource::Vector2 m_resolution;
-            f32 m_densityScale;
-            f32 m_invDensityScale;
+            ChilliSource::ScreenInfo m_screenInfo;
+
             ChilliSource::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
 			ChilliSource::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
 			ChilliSource::EventConnectionUPtr m_windowResizeConnection;

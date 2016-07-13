@@ -26,8 +26,8 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------
-    SystemInfo::SystemInfo(const DeviceInfo& deviceInfo) noexcept
-        : m_deviceInfo(deviceInfo)
+    SystemInfo::SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo) noexcept
+        : m_deviceInfo(deviceInfo), m_screenInfo(screenInfo)
     {   
     }
 
@@ -36,4 +36,12 @@ namespace ChilliSource
     {
         return m_deviceInfo;
     }
+
+    //----------------------------------------------------------------
+    const ScreenInfo& SystemInfo::GetScreenInfo() const noexcept
+    {
+        return m_screenInfo;
+    }
+
+
 }

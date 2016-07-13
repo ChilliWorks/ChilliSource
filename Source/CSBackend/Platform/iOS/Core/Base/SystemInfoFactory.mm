@@ -24,9 +24,12 @@
 #ifdef CS_TARGETPLATFORM_IOS
 
 #import <ChilliSource/Core/Base/DeviceInfo.h>
+#import <ChilliSource/Core/Base/ScreenInfo.h>
 #import <ChilliSource/Core/Base/SystemInfo.h>
 #import <ChilliSource/Core/String/StringUtils.h>
 
+#import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
+#import <CSBackend/Platform/iOS/Core/Base/Screen.h>
 #import <CSBackend/Platform/iOS/Core/Base/SystemInfoFactory.h>
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
@@ -169,6 +172,54 @@ namespace CSBackend
                     return numCores;
                 }
             }
+    
+            /// Calculate the resolution of the screen, pre-iOS 8.
+            ///
+            /// @param The orientation of the application.
+            /// @param The size of the screen in portrait DIPS.
+            /// @param The device pixel scale factor.
+            ///
+            /// @return The iOS device resolution.
+            ChilliSource::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation, CGSize in_dipsSize, f32 in_pixelScaleFactor)
+            {
+                ChilliSource::Vector2 resolution(in_dipsSize.width * in_pixelScaleFactor, in_dipsSize.height * in_pixelScaleFactor);
+                
+                if (in_orientation == UIInterfaceOrientationLandscapeLeft || in_orientation == UIInterfaceOrientationLandscapeRight)
+                {
+                    resolution = ChilliSource::Vector2(resolution.y, resolution.x);
+                }
+                
+                return resolution;
+            }
+            
+            /// Calculate the resolution of the screen in iOS 8
+            /// and above.
+            ///
+            /// @param The size of the screen in DIPS.
+            /// @param The device pixel scale factor.
+            ///
+            /// @return The iOS device resolution.
+            ///
+            ChilliSource::Vector2 CalculateResolution(CGSize in_dipsSize, f32 in_pixelScaleFactor)
+            {
+                ChilliSource::Vector2 resolution(std::round(in_dipsSize.width * in_pixelScaleFactor), std::round(in_dipsSize.height * in_pixelScaleFactor));
+                return resolution;
+            }
+
+            /// @return Whether or not the resolution should be
+            /// calculated based on the screen orientation. This
+            /// is only the case below iOS 8, and this is
+            /// effectively a check for pre-iOS 8.
+            ///
+            bool ShouldCalculateBasedOnOrientation()
+            {
+#ifdef NSFoundationVersionNumber_iOS_7_1
+                return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1);
+#else
+                return true;
+#endif
+            }
+
         }
         
         //-------------------------------------------------------
@@ -177,8 +228,34 @@ namespace CSBackend
 			// Create DeviceInfo.
 			ChilliSource::DeviceInfo deviceInfo(GetDeviceModel(), GetDeviceModelType(), k_deviceManufacturer, GetUDID(), GetLocale(), GetLanguage(), GetOSVersion(), GetNumberOfCPUCores());
 
+            // Create ScreenInfo
+            f32 densityScale;
+            ChilliSource::Vector2 currentResolution;
+            std::vector<ChilliSource::Integer2> supportedResolutions;
+            
+            @autoreleasepool
+            {
+                if (ShouldCalculateBasedOnOrientation() == false)
+                {
+                    //get resolution for iOS 8 and higher.
+                    densityScale = [UIScreen mainScreen].nativeScale;
+                    currentResolution = CalculateResolution([[UIScreen mainScreen] bounds].size, densityScale);
+                }
+                else
+                {
+                    //get resolution for pre-iOS 8 devices.
+                    densityScale = [UIScreen mainScreen].scale;
+                    currentResolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation, [[UIScreen mainScreen] bounds].size, densityScale);
+                }
+            }
+
+            supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.x, (s32)currentResolution.y));
+            supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.y, (s32)currentResolution.x));
+            
+            ChilliSource::ScreenInfo screenInfo(currentResolution, densityScale, 1.0f / densityScale, supportedResolutions);
+            
             // Create SystemInfo.
-            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo));
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo));
             
             return std::move(systemInfo);
         }

@@ -28,8 +28,8 @@
 
 namespace ChilliSource
 {
-    /// This class contains all information necessary for building
-    /// the Device, PlatformSystem, and Screen classes.
+    /// This class contains information necessary for building
+    /// the Device class.
     ///
     /// This class is immutable, and therefore thread-safe.
     ///
