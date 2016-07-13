@@ -95,9 +95,10 @@ namespace CSBackend
 		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
-        bool HttpRequestSystem::CheckReachability() const
+        void HttpRequestSystem::CheckReachability(const ReachabilityResultDelegate& in_reachabilityDelegate) const
         {
-            return m_javaSystem->CallBoolMethod("isConnected");
+            CS_ASSERT(in_reachabilityDelegate, "The reachability delegate should not be null.");
+            in_reachabilityDelegate(m_javaSystem->CallBoolMethod("isConnected"));
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
