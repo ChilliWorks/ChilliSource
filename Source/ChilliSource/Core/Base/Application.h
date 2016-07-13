@@ -439,13 +439,14 @@ namespace ChilliSource
         TaskScheduler* m_taskScheduler = nullptr;
         Renderer* m_renderer = nullptr;
         Screen* m_screen = nullptr;
-        SystemInfoCUPtr m_systemInfo = nullptr;
         PlatformSystem* m_platformSystem = nullptr;
         FileSystem* m_fileSystem = nullptr;
         TaggedFilePathResolver* m_taggedPathResolver = nullptr;
         PointerSystem* m_pointerSystem = nullptr;
         AppConfig* m_appConfig = nullptr;
         WidgetFactory* m_widgetFactory = nullptr;
+
+        SystemInfoCUPtr m_systemInfo;
         
         std::atomic<u32> m_frameIndex;
         TimeIntervalSecs m_currentAppTime = 0;

@@ -48,7 +48,6 @@ namespace CSBackend
         CS_FORWARDDECLARE_CLASS(PNGImageProvider);
         CS_FORWARDDECLARE_CLASS(LocalNotificationSystem);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
-        CS_FORWARDDECLARE_CLASS(Device);
         CS_FORWARDDECLARE_CLASS(Screen);
         //------------------------------------------------------
 		/// Input

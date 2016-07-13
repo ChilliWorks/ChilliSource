@@ -21,22 +21,25 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_ANDROID
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
-#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 
 namespace CSBackend
 {
-    namespace Windows
+    namespace Android
     {
-        /// This builds a SystemInfo structure, filling it with the necessary
-        /// information to use in Application's constructor.
+        /// A factory for creating new instances of SystemInfo. This will query the Windows
+        /// API to gather information about the device.
         ///
-        /// @return The system info structure.
-        ///
-        ChilliSource::SystemInfoCUPtr BuildSystemInfo() noexcept;
+        namespace SystemInfoFactory
+        {
+            /// This function creates the new SystemInfo instance.
+            ///
+            ChilliSource::SystemInfoCUPtr CreateSystemInfo() noexcept;
+        }
     }
 }
 

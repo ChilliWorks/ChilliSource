@@ -26,13 +26,13 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------
-    SystemInfo::SystemInfo(DeviceInfo deviceInfo) noexcept
-        : m_deviceInfo(deviceInfo)
-    {
+    SystemInfo::SystemInfo(const std::string& model, const std::string& modelType, const std::string& manufacturer, const std::string& udid, const std::string& locale, const std::string& language, const std::string& osVersion, u32 numCPUCores) noexcept
+        : m_deviceInfo(DeviceInfo(model, modelType, manufacturer, udid, locale, language, osVersion, numCPUCores))
+    {   
     }
 
     //----------------------------------------------------------------
-    const DeviceInfo SystemInfo::GetDeviceInfo() const noexcept
+    const DeviceInfo& SystemInfo::GetDeviceInfo() const noexcept
     {
         return m_deviceInfo;
     }

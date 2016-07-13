@@ -27,7 +27,7 @@
 #include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-#include <CSBackend/Platform/Windows/Core/Base/SystemInfo.h>
+#include <CSBackend/Platform/Windows/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 
 #include <algorithm>
@@ -103,7 +103,7 @@ namespace CSBackend
 
             /// @return The current locale.
             ///
-            std::string GetLocale()
+            std::string GetLocale() noexcept
             {
                 wchar_t localeName[LOCALE_NAME_MAX_LENGTH] = { 0 };
 
@@ -124,7 +124,7 @@ namespace CSBackend
             ///
             /// @return The language code.
             ///
-            std::string ParseLanguageFromLocale(const std::string& in_locale)
+            std::string ParseLanguageFromLocale(const std::string& in_locale) noexcept
             {
                 std::vector<std::string> strLocaleBrokenUp = ChilliSource::StringUtils::Split(in_locale, "_", 0);
 
@@ -140,7 +140,7 @@ namespace CSBackend
 
             /// @return The number of cores.
             ///
-            u32 GetNumberOfCPUCores()
+            u32 GetNumberOfCPUCores() noexcept
             {
                 SYSTEM_INFO SysInfo;
                 GetSystemInfo(&SysInfo);
@@ -149,13 +149,10 @@ namespace CSBackend
         }
 
         //--------------------------------------------------------------------------------
-        ChilliSource::SystemInfoCUPtr BuildSystemInfo() noexcept
+        ChilliSource::SystemInfoCUPtr SystemInfoFactory::CreateSystemInfo() noexcept
         {
-            // Create DeviceInfo.
-            ChilliSource::DeviceInfo deviceInfo(k_deviceModel, k_deviceModelType, k_deviceManufacturer, k_deviceUdid, GetLocale(), ParseLanguageFromLocale(GetLocale()), GetOSVersion(), GetNumberOfCPUCores());
-
             // Create SystemInfo.
-            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo));
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(k_deviceModel, k_deviceModelType, k_deviceManufacturer, k_deviceUdid, GetLocale(), ParseLanguageFromLocale(GetLocale()), GetOSVersion(), GetNumberOfCPUCores()));
 
             return std::move(systemInfo);
         }

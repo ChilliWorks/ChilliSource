@@ -335,6 +335,9 @@ namespace ChilliSource
 
         //Create any platform specific default systems
         m_platformSystem->CreateDefaultSystems(this);
+
+        //Clean up SystemInfo to prevent unintended uses
+        m_systemInfo.reset();
     }
 
     //------------------------------------------------------------------------------

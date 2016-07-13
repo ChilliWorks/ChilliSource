@@ -30,10 +30,12 @@
 
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
+#include <CSBackend/Platform/Windows/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/AppConfig.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/LifecycleManager.h>
+#include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -471,7 +473,7 @@ namespace CSBackend
 
             // Create SystemInfo here (make into an immutable class)
             // Pass to application
-			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(CSBackend::Windows::BuildSystemInfo()));
+			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
             m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
             m_lifecycleManager->Resume();
             m_lifecycleManager->Foreground();

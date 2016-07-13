@@ -783,9 +783,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Main.cpp">
       <Filter>CSBackend\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.cpp">
-      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\PlatformSystem.cpp">
       <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
     </ClCompile>
@@ -1326,14 +1323,14 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\RenderShaderVariables.cpp">
       <Filter>ChilliSource\Rendering\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfo.cpp">
-      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.cpp">
       <Filter>ChilliSource\Core\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.cpp">
       <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.cpp">
+      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2189,9 +2186,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\ForwardDeclarations.h">
       <Filter>CSBackend\Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.h">
-      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\PlatformSystem.h">
       <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
     </ClInclude>
@@ -2822,11 +2816,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\SystemInfo.h">
       <Filter>ChilliSource\Core\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfo.h">
-      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.h">
       <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.h">
+      <Filter>CSBackend\Platform\Windows\Core\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

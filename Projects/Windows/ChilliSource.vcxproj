@@ -324,10 +324,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Video\Base\Subtitles.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Video\Base\VideoPlayer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Web\Base\WebView.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\PlatformSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Screen.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfo.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\DialogueBox\DialogueBoxSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\File\FileSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\File\WindowsFileUtils.cpp" />
@@ -820,10 +819,9 @@
     <ClInclude Include="..\..\Source\ChilliSource\Web\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Web\Base\WebView.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Web\ForwardDeclarations.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\PlatformSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Screen.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfo.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\SystemInfoFactory.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\DialogueBox\DialogueBoxSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\File\FileSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\File\WindowsFileUtils.h" />

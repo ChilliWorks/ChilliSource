@@ -31,44 +31,11 @@ namespace ChilliSource
     /// This class contains all information necessary for building
     /// the Device, PlatformSystem, and Screen classes.
     ///
+    /// This class is immutable, and therefore thread-safe.
+    ///
     class DeviceInfo final
     {
         public:
-            /// @return The device model name.
-            ///
-            const std::string GetModel() const noexcept;
-
-            /// @return The name of the device model type.
-            ///
-            const std::string GetModelType() const noexcept;
-
-            /// @return The name of the device manufacturer.
-            ///
-            const std::string GetManufacturer() const noexcept;
-
-            /// @return An identifier that can be used to uniquely
-            /// identify the device.
-            ///
-            const std::string GetUDID() const noexcept;
-
-            /// @return The locale code registered with the
-            /// device.
-            ///
-            const std::string GetLocale() const noexcept;
-
-            /// @return The language the device is set to.
-            ///
-            const std::string GetLanguage() const noexcept;
-
-            /// @return The version of the operating system.
-            ///
-            const std::string GetOSVersion() const noexcept;
-
-            /// @return The number of CPU cores available on the
-            /// device.
-            ///
-            const u32 GetNumCPUCores() const noexcept;
-
             /// Constructs the DeviceInfo class.
             ///
             /// @param model
@@ -89,7 +56,42 @@ namespace ChilliSource
             /// @param numCPUCores
             ///         The number of CPU cores available on the device.
             ///
-            DeviceInfo(std::string model, std::string modelType, std::string manufacturer, std::string udid, std::string locale, std::string language, std::string osVersion, u32 numCPUCores) noexcept;
+            DeviceInfo(const std::string& model, const std::string& modelType, const std::string& manufacturer, const std::string& udid, const std::string& locale, const std::string& language, const std::string& osVersion, u32 numCPUCores) noexcept;
+
+            /// @return The device model name.
+            ///
+            const std::string& GetModel() const noexcept;
+
+            /// @return The name of the device model type.
+            ///
+            const std::string& GetModelType() const noexcept;
+
+            /// @return The name of the device manufacturer.
+            ///
+            const std::string& GetManufacturer() const noexcept;
+
+            /// @return An identifier that can be used to uniquely
+            /// identify the device.
+            ///
+            const std::string& GetUDID() const noexcept;
+
+            /// @return The locale code registered with the
+            /// device.
+            ///
+            const std::string& GetLocale() const noexcept;
+
+            /// @return The language the device is set to.
+            ///
+            const std::string& GetLanguage() const noexcept;
+
+            /// @return The version of the operating system.
+            ///
+            const std::string& GetOSVersion() const noexcept;
+
+            /// @return The number of CPU cores available on the
+            /// device.
+            ///
+            u32 GetNumCPUCores() const noexcept;
 
         private:
             std::string m_model;

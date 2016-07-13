@@ -26,55 +26,55 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------
-    DeviceInfo::DeviceInfo(std::string model, std::string modelType, std::string manufacturer, std::string udid, std::string locale, std::string language, std::string osVersion, u32 numCPUCores) noexcept
+    DeviceInfo::DeviceInfo(const std::string& model, const std::string& modelType, const std::string& manufacturer, const std::string& udid, const std::string& locale, const std::string& language, const std::string& osVersion, u32 numCPUCores) noexcept
         : m_model(model), m_modelType(modelType), m_manufacturer(manufacturer), m_udid(udid), m_locale(locale), m_language(language), m_osVersion(osVersion), m_numCPUCores(numCPUCores) 
     {
     }
 
     //----------------------------------------------------------------
-    const std::string DeviceInfo::GetModel() const noexcept
+    const std::string& DeviceInfo::GetModel() const noexcept
     {
         return m_model;
     }
     
     //----------------------------------------------------------------
-    const std::string DeviceInfo::GetModelType() const noexcept
+    const std::string& DeviceInfo::GetModelType() const noexcept
     {
         return m_modelType;
     }
 
     //----------------------------------------------------------------
-    const std::string DeviceInfo::GetManufacturer() const noexcept
+    const std::string& DeviceInfo::GetManufacturer() const noexcept
     {
         return m_manufacturer;
     }
 
     //----------------------------------------------------------------
-    const std::string DeviceInfo::GetUDID() const noexcept
+    const std::string& DeviceInfo::GetUDID() const noexcept
     {
         return m_udid;
     }
 
     //----------------------------------------------------------------
-    const std::string DeviceInfo::GetLocale() const noexcept
+    const std::string& DeviceInfo::GetLocale() const noexcept
     {
         return m_locale;
     }
 
     //----------------------------------------------------------------
-    const std::string DeviceInfo::GetLanguage() const noexcept
+    const std::string& DeviceInfo::GetLanguage() const noexcept
     {
         return m_language;
     }
 
     //----------------------------------------------------------------
-    const std::string DeviceInfo::GetOSVersion() const noexcept
+    const std::string& DeviceInfo::GetOSVersion() const noexcept
     {
         return m_osVersion;
     }
 
     //----------------------------------------------------------------
-    const u32 DeviceInfo::GetNumCPUCores() const noexcept
+    u32 DeviceInfo::GetNumCPUCores() const noexcept
     {
         return m_numCPUCores;
     }

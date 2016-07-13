@@ -31,11 +31,9 @@
 #define _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWINDOW_H_
 
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
-#include <CSBackend/Platform/Windows/Core/Base/SystemInfo.h>
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/LifeCycleManager.h>
 #include <ChilliSource/Core/Base/Singleton.h>
-#include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>

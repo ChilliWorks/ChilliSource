@@ -26,8 +26,7 @@
 #include <ChilliSource/Core/Base/DeviceInfo.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/Base/Device.h>
-
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/DeviceJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 
@@ -47,7 +46,7 @@ namespace CSBackend
 			///
 			/// @return The language code.
 			///
-			std::string ParseLanguageFromLocale(const std::string& in_locale)
+			std::string ParseLanguageFromLocale(const std::string& in_locale) noexcept
 			{
 				std::vector<std::string> strLocaleBrokenUp = ChilliSource::StringUtils::Split(in_locale, "_", 0);
 
@@ -63,16 +62,13 @@ namespace CSBackend
 		}
 
 		//---------------------------------------------------------
-		ChilliSource::SystemInfoCUPtr BuildSystemInfo() noexcept
+		ChilliSource::SystemInfoCUPtr SystemInfoFactory::CreateSystemInfo() noexcept
 		{
 		    DeviceJavaInterfaceSPtr javaInterface(new DeviceJavaInterface());
             JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(javaInterface);
 
-		    // Create DeviceInfo.
-		    ChilliSource::DeviceInfo deviceInfo(javaInterface->GetDeviceModel(), javaInterface->GetDeviceModelType(), javaInterface->GetDeviceManufacturer(), javaInterface->GetUniqueId(), javaInterface->GetDefaultLocaleCode(), ParseLanguageFromLocale(javaInterface->GetDefaultLocaleCode()), ChilliSource::ToString(javaInterface->GetOSVersionCode()), javaInterface->GetNumberOfCores());
-
 		    // Create SystemInfo.
-		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo));
+		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(javaInterface->GetDeviceModel(), javaInterface->GetDeviceModelType(), javaInterface->GetDeviceManufacturer(), javaInterface->GetUniqueId(), javaInterface->GetDefaultLocaleCode(), ParseLanguageFromLocale(javaInterface->GetDefaultLocaleCode()), ChilliSource::ToString(javaInterface->GetOSVersionCode()), javaInterface->GetNumberOfCores()));
 
 		    return std::move(systemInfo);
 		}

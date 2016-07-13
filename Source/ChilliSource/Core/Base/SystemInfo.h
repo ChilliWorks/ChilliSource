@@ -37,10 +37,29 @@ namespace ChilliSource
         public:
             /// @return The device info for building the Device class.
             ///
-            const DeviceInfo GetDeviceInfo() const noexcept;
+            const DeviceInfo& GetDeviceInfo() const noexcept;
 
             /// Constructs the SystemInfo class.
-            SystemInfo(DeviceInfo deviceInfo) noexcept;
+            ///
+            /// @param model
+            ///         The device model name.
+            /// @param modelType
+            ///         The device model type.
+            /// @param manufacturer
+            ///         The name of the device manufacturer.
+            /// @param udid
+            ///         An identifier that can be used to uniquely
+            ///         identify the device.
+            /// @param locale
+            ///         The locale code registered with the device.
+            /// @param language
+            ///         The language the device is set to.
+            /// @param osVersion
+            ///         The version of the operating system.
+            /// @param numCPUCores
+            ///         The number of CPU cores available on the device.
+            ///
+            SystemInfo(const std::string& model, const std::string& modelType, const std::string& manufacturer, const std::string& udid, const std::string& locale, const std::string& language, const std::string& osVersion, u32 numCPUCores) noexcept;
 
         private:
             DeviceInfo m_deviceInfo;
