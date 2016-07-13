@@ -222,7 +222,6 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Texture
     //------------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(Cubemap);
     CS_FORWARDDECLARE_CLASS(RenderTexture);
     CS_FORWARDDECLARE_CLASS(RenderTextureManager);
     CS_FORWARDDECLARE_CLASS(Texture);
@@ -230,7 +229,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(TextureAtlasProvider);
     CS_FORWARDDECLARE_CLASS(TextureDesc);
     CS_FORWARDDECLARE_CLASS(TextureProvider);
-    CS_FORWARDDECLARE_CLASS(CubemapProvider);
     CS_FORWARDDECLARE_CLASS(UVs);
     enum class TextureFilterMode;
     enum class TextureWrapMode;

@@ -67,7 +67,7 @@ namespace CSBackend
                 std::string m_unformattedPrice;     // Unformatted price e.g. 1.00
                 std::string m_currencyCode;         // ISO 4217 currency code, e.g. GBP, USD
             };
-
+            
             //---------------------------------------------------------------
             /// @author S Downie
             ///
@@ -93,10 +93,10 @@ namespace CSBackend
 			std::string GetProviderID() const override;
             //---------------------------------------------------------------
 			/// @author S Downie
-			///
-			/// @return Whether the purchasing is allowed by the device/OS
+            ///
+            /// @param Purchasing enabled delegate
             //---------------------------------------------------------------
-            bool IsPurchasingEnabled() override;
+            void IsPurchasingEnabled(const PurchasingEnabledDelegate& in_delegate) override;
             //---------------------------------------------------------------
 			/// Calling this function will set the listener to which any
             /// transaction events are directed. This is not necessarily

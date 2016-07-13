@@ -179,7 +179,6 @@ namespace CSBackend
         {
 #ifdef CS_TARGETPLATFORM_ANDROID
             auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
-            auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
             
             for(auto& restoreMeshCommand : m_pendingRestoreMeshCommands)
             {

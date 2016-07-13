@@ -236,6 +236,8 @@ namespace ChilliSource
                 return "Tab";
             case KeyCode::k_unknown:
                 return "Unknown";
+            case KeyCode::k_total:
+                break;
         }
         
         CS_LOG_FATAL("Invalid keycode.");

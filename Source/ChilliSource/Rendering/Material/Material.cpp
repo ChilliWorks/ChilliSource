@@ -114,20 +114,6 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetCubemap(const CubemapCSPtr& in_cubemap)
-    {
-        m_cubemap = in_cubemap;
-        
-        m_isCacheValid = false;
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    const CubemapCSPtr& Material::GetCubemap() const
-    {
-        return m_cubemap;
-    }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
     bool Material::IsTransparencyEnabled() const
     {
         return m_isAlphaBlendingEnabled;
