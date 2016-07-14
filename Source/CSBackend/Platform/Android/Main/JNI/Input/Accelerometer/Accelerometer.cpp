@@ -141,7 +141,10 @@ namespace CSBackend
 		void Accelerometer::OnAccelerationChanged(const ChilliSource::Vector3& in_acceleration)
 		{
             m_acceleration = in_acceleration;
-			m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+			    m_accelerationUpdatedEvent.NotifyConnections(m_acceleration);
+			});
 		}
 	}
 }
