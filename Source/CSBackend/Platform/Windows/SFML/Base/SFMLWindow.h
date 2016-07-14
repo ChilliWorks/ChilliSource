@@ -324,7 +324,7 @@ namespace CSBackend
 			///
 			/// @author HMcLaughlin
 			//-------------------------------------------------
-			void ScheduleQuit() { m_quitScheduled = true; }
+			void ScheduleQuit() noexcept { m_quitScheduled = true; }
             //-------------------------------------------------
             /// Destructor; makes sure that delegates have been
             /// properly un-set.
