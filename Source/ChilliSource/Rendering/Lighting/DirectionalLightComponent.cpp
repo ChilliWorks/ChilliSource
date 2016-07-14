@@ -83,11 +83,19 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     DirectionalLightComponent::DirectionalLightComponent(ShadowQuality shadowQuality, const Colour& colour, f32 intensity) noexcept
-        : m_colour(colour), m_intensity(intensity), m_shadowTolerance(k_defaultShadowTolerance), m_shadowMapResolution(GetShadowMapResolution(shadowQuality)), m_shadowMapId(++g_nextShadowMapId)
+        : m_colour(colour), m_intensity(intensity)
     {
-        SetShadowVolume(k_defaultShadowVolumeWidth, k_defaultShadowVolumeHeight, k_defaultShadowVolumeNear, k_defaultShadowVolumeFar);
-        
-        TryCreateShadowMapTarget();
+        auto renderCapabilities = Application::Get()->GetSystem<RenderCapabilities>();
+        if (renderCapabilities->IsShadowMappingSupported())
+        {
+            m_shadowMapId = ++g_nextShadowMapId;
+            m_shadowMapResolution = GetShadowMapResolution(shadowQuality);
+            m_shadowTolerance = k_defaultShadowTolerance;
+            
+            SetShadowVolume(k_defaultShadowVolumeWidth, k_defaultShadowVolumeHeight, k_defaultShadowVolumeNear, k_defaultShadowVolumeFar);
+            
+            TryCreateShadowMapTarget();
+        }
     }
     
     //------------------------------------------------------------------------------

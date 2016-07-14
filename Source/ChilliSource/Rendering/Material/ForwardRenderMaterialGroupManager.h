@@ -158,6 +158,8 @@ namespace ChilliSource
         
         ForwardRenderMaterialGroupManager() = default;
         
+        bool m_shadowsSupported = false;
+        
         ShaderCSPtr m_spriteUnlit;
         
         ShaderCSPtr m_staticShadowMap;
