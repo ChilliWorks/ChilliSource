@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Notification/Notification.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <UIKit/UIKit.h>
 
@@ -64,12 +65,15 @@ namespace CSBackend
         void RemoteNotificationSystem::OnInit()
         {
 #ifdef __IPHONE_8_0
-            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-                //From iOS 8 we need to request permissions to display notifications, to badge the app icon and to play a sound
-                UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
-                [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
-            }
+                if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
+                {
+                    //From iOS 8 we need to request permissions to display notifications, to badge the app icon and to play a sound
+                    UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+                    [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+                }
+            });
 #endif
         }
         //--------------------------------------------------
@@ -84,17 +88,20 @@ namespace CSBackend
         {
             m_delegate = in_delegate;
 
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
 #ifdef __IPHONE_8_0
-            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotifications)])
-            {
-                [[UIApplication sharedApplication] registerForRemoteNotifications];
-            }
-            else
+                if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotifications)])
+                {
+                    [[UIApplication sharedApplication] registerForRemoteNotifications];
+                }
+                else
 #endif
-            {
-                UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
-                [[UIApplication sharedApplication] registerForRemoteNotificationTypes:Types];
-            }
+                {
+                    UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
+                    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:Types];
+                }
+            });
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -114,11 +121,14 @@ namespace CSBackend
         {
             m_token = ChilliSource::BaseEncoding::Base64Encode((const s8*)[in_token bytes], static_cast<u32>(in_token.length));
             
-            if(m_delegate != nullptr)
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
-                m_delegate(m_token);
-                m_delegate = nullptr;
-            }
+                if(m_delegate != nullptr)
+                {
+                    m_delegate(m_token);
+                    m_delegate = nullptr;
+                }
+            });
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -166,8 +176,10 @@ namespace CSBackend
                         }
                     }
                     
-                    
-                    m_receivedEvent.NotifyConnections(notification);
+                    ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+                    {
+                        m_receivedEvent.NotifyConnections(notification);
+                    });
                 }
             }
         }
