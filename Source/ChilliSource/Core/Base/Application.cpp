@@ -515,7 +515,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Application::ApplicationMemoryWarning() noexcept
+    void Application::MemoryWarning() noexcept
     {
         CS_LOG_VERBOSE("Memory Warning. Clearing resource cache...");
         

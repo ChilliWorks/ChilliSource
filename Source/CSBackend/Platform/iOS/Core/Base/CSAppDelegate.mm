@@ -325,17 +325,15 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationDidReceiveMemoryWarning:(UIApplication*)in_application
 {
-    //TODO: Handle memory warnings
-    
-//    for(id<UIApplicationDelegate> delegate in subdelegates)
-//    {
-//        if([delegate respondsToSelector:@selector(applicationDidReceiveMemoryWarning:)])
-//        {
-//            [delegate applicationDidReceiveMemoryWarning:in_application];
-//        }
-//    }
-//    
-//    csApplication->ApplicationMemoryWarning();
+    for(id<UIApplicationDelegate> delegate in m_subDelegates)
+    {
+        if([delegate respondsToSelector:@selector(applicationDidReceiveMemoryWarning:)])
+        {
+            [delegate applicationDidReceiveMemoryWarning:in_application];
+        }
+    }
+
+    m_lifecycleManager->MemoryWarning();
 }
 
 #pragma mark -

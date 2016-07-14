@@ -25,6 +25,7 @@
 #include <ChilliSource/Core/Base/LifecycleManager.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
@@ -121,6 +122,17 @@ namespace ChilliSource
     void LifecycleManager::SystemUpdate() noexcept
     {
         m_application->GetTaskScheduler()->ExecuteSystemThreadTasks();
+    }
+    
+    //------------------------------------------------------------------------------
+    void LifecycleManager::MemoryWarning() noexcept
+    {
+        m_application->GetResourcePool()->ReleaseAllUnused();
+        
+        m_application->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&)
+        {
+            m_application->MemoryWarning();
+        });
     }
     
     //------------------------------------------------------------------------------

@@ -41,10 +41,6 @@
 		8158F7D91C89D2AD00B13109 /* StoreKitIAPSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5DA1C89D2AD00B13109 /* StoreKitIAPSystem.mm */; };
 		8158F7DA1C89D2AD00B13109 /* EmailComposer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5DE1C89D2AD00B13109 /* EmailComposer.mm */; };
 		8158F7DB1C89D2AD00B13109 /* EmailComposerDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5E01C89D2AD00B13109 /* EmailComposerDelegate.mm */; };
-		8158F7DC1C89D2AD00B13109 /* FacebookAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5E31C89D2AD00B13109 /* FacebookAppDelegate.mm */; };
-		8158F7DD1C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5E41C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp */; };
-		8158F7DE1C89D2AD00B13109 /* FacebookPostSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5E61C89D2AD00B13109 /* FacebookPostSystem.cpp */; };
-		8158F7DF1C89D2AD00B13109 /* FacebookUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5E91C89D2AD00B13109 /* FacebookUtils.mm */; };
 		8158F7E01C89D2AD00B13109 /* SubtitlesRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5EE1C89D2AD00B13109 /* SubtitlesRenderer.mm */; };
 		8158F7E11C89D2AD00B13109 /* VideoOverlayView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5F01C89D2AD00B13109 /* VideoOverlayView.mm */; };
 		8158F7E21C89D2AD00B13109 /* VideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5F21C89D2AD00B13109 /* VideoPlayer.mm */; };
@@ -307,8 +303,6 @@
 		818462471D3503E8004B0C46 /* TextureResourceOptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460C21D3503E8004B0C46 /* TextureResourceOptions.cpp */; };
 		818462481D3503E8004B0C46 /* UVs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460C51D3503E8004B0C46 /* UVs.cpp */; };
 		818462491D3503E8004B0C46 /* EmailComposer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460CA1D3503E8004B0C46 /* EmailComposer.cpp */; };
-		8184624A1D3503E8004B0C46 /* FacebookAuthenticationSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460CE1D3503E8004B0C46 /* FacebookAuthenticationSystem.cpp */; };
-		8184624B1D3503E8004B0C46 /* FacebookPostSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460D01D3503E8004B0C46 /* FacebookPostSystem.cpp */; };
 		8184624C1D3503E8004B0C46 /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460D61D3503E8004B0C46 /* Canvas.cpp */; };
 		8184624D1D3503E8004B0C46 /* PropertyLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460D81D3503E8004B0C46 /* PropertyLink.cpp */; };
 		8184624E1D3503E8004B0C46 /* PropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 818460DA1D3503E8004B0C46 /* PropertyTypes.cpp */; };
@@ -481,15 +475,6 @@
 		8158F5DE1C89D2AD00B13109 /* EmailComposer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmailComposer.mm; sourceTree = "<group>"; };
 		8158F5DF1C89D2AD00B13109 /* EmailComposerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailComposerDelegate.h; sourceTree = "<group>"; };
 		8158F5E01C89D2AD00B13109 /* EmailComposerDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmailComposerDelegate.mm; sourceTree = "<group>"; };
-		8158F5E21C89D2AD00B13109 /* FacebookAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookAppDelegate.h; sourceTree = "<group>"; };
-		8158F5E31C89D2AD00B13109 /* FacebookAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FacebookAppDelegate.mm; sourceTree = "<group>"; };
-		8158F5E41C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAuthenticationSystem.cpp; sourceTree = "<group>"; };
-		8158F5E51C89D2AD00B13109 /* FacebookAuthenticationSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookAuthenticationSystem.h; sourceTree = "<group>"; };
-		8158F5E61C89D2AD00B13109 /* FacebookPostSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookPostSystem.cpp; sourceTree = "<group>"; };
-		8158F5E71C89D2AD00B13109 /* FacebookPostSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookPostSystem.h; sourceTree = "<group>"; };
-		8158F5E81C89D2AD00B13109 /* FacebookUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookUtils.h; sourceTree = "<group>"; };
-		8158F5E91C89D2AD00B13109 /* FacebookUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FacebookUtils.mm; sourceTree = "<group>"; };
-		8158F5EA1C89D2AD00B13109 /* iOS Facebook SDK Revision Log.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "iOS Facebook SDK Revision Log.txt"; sourceTree = "<group>"; };
 		8158F5ED1C89D2AD00B13109 /* SubtitlesRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubtitlesRenderer.h; sourceTree = "<group>"; };
 		8158F5EE1C89D2AD00B13109 /* SubtitlesRenderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SubtitlesRenderer.mm; sourceTree = "<group>"; };
 		8158F5EF1C89D2AD00B13109 /* VideoOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoOverlayView.h; sourceTree = "<group>"; };
@@ -1155,11 +1140,6 @@
 		818460CA1D3503E8004B0C46 /* EmailComposer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmailComposer.cpp; sourceTree = "<group>"; };
 		818460CB1D3503E8004B0C46 /* EmailComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailComposer.h; sourceTree = "<group>"; };
 		818460CC1D3503E8004B0C46 /* Communications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Communications.h; sourceTree = "<group>"; };
-		818460CE1D3503E8004B0C46 /* FacebookAuthenticationSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookAuthenticationSystem.cpp; sourceTree = "<group>"; };
-		818460CF1D3503E8004B0C46 /* FacebookAuthenticationSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookAuthenticationSystem.h; sourceTree = "<group>"; };
-		818460D01D3503E8004B0C46 /* FacebookPostSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FacebookPostSystem.cpp; sourceTree = "<group>"; };
-		818460D11D3503E8004B0C46 /* FacebookPostSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookPostSystem.h; sourceTree = "<group>"; };
-		818460D21D3503E8004B0C46 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
 		818460D31D3503E8004B0C46 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		818460D61D3503E8004B0C46 /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		818460D71D3503E8004B0C46 /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
@@ -1670,7 +1650,6 @@
 			isa = PBXGroup;
 			children = (
 				8158F5DC1C89D2AD00B13109 /* Communications */,
-				8158F5E11C89D2AD00B13109 /* Facebook */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -1684,22 +1663,6 @@
 				8158F5E01C89D2AD00B13109 /* EmailComposerDelegate.mm */,
 			);
 			path = Communications;
-			sourceTree = "<group>";
-		};
-		8158F5E11C89D2AD00B13109 /* Facebook */ = {
-			isa = PBXGroup;
-			children = (
-				8158F5E21C89D2AD00B13109 /* FacebookAppDelegate.h */,
-				8158F5E31C89D2AD00B13109 /* FacebookAppDelegate.mm */,
-				8158F5E41C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp */,
-				8158F5E51C89D2AD00B13109 /* FacebookAuthenticationSystem.h */,
-				8158F5E61C89D2AD00B13109 /* FacebookPostSystem.cpp */,
-				8158F5E71C89D2AD00B13109 /* FacebookPostSystem.h */,
-				8158F5E81C89D2AD00B13109 /* FacebookUtils.h */,
-				8158F5E91C89D2AD00B13109 /* FacebookUtils.mm */,
-				8158F5EA1C89D2AD00B13109 /* iOS Facebook SDK Revision Log.txt */,
-			);
-			path = Facebook;
 			sourceTree = "<group>";
 		};
 		8158F5EB1C89D2AD00B13109 /* Video */ = {
@@ -2968,8 +2931,6 @@
 			children = (
 				818460C91D3503E8004B0C46 /* Communications */,
 				818460CC1D3503E8004B0C46 /* Communications.h */,
-				818460CD1D3503E8004B0C46 /* Facebook */,
-				818460D21D3503E8004B0C46 /* Facebook.h */,
 				818460D31D3503E8004B0C46 /* ForwardDeclarations.h */,
 			);
 			path = Social;
@@ -2982,17 +2943,6 @@
 				818460CB1D3503E8004B0C46 /* EmailComposer.h */,
 			);
 			path = Communications;
-			sourceTree = "<group>";
-		};
-		818460CD1D3503E8004B0C46 /* Facebook */ = {
-			isa = PBXGroup;
-			children = (
-				818460CE1D3503E8004B0C46 /* FacebookAuthenticationSystem.cpp */,
-				818460CF1D3503E8004B0C46 /* FacebookAuthenticationSystem.h */,
-				818460D01D3503E8004B0C46 /* FacebookPostSystem.cpp */,
-				818460D11D3503E8004B0C46 /* FacebookPostSystem.h */,
-			);
-			path = Facebook;
 			sourceTree = "<group>";
 		};
 		818460D41D3503E8004B0C46 /* UI */ = {
@@ -3620,7 +3570,6 @@
 				818461D11D3503E8004B0C46 /* TargetRenderPassGroup.cpp in Sources */,
 				818462401D3503E8004B0C46 /* RenderTexture.cpp in Sources */,
 				818461CF1D3503E8004B0C46 /* RenderSnapshot.cpp in Sources */,
-				8184624A1D3503E8004B0C46 /* FacebookAuthenticationSystem.cpp in Sources */,
 				818462441D3503E8004B0C46 /* TextureAtlasProvider.cpp in Sources */,
 				818462621D3503E8004B0C46 /* ThreePatchUIDrawableDef.cpp in Sources */,
 				8184620B1D3503E8004B0C46 /* CircleParticleEmitterDef.cpp in Sources */,
@@ -3719,7 +3668,6 @@
 				8186397C1D2C195D00FE085B /* GLPointLight.cpp in Sources */,
 				818461521D3503E8004B0C46 /* Application.cpp in Sources */,
 				8184617D1D3503E8004B0C46 /* JsonUtils.cpp in Sources */,
-				8158F7DF1C89D2AD00B13109 /* FacebookUtils.mm in Sources */,
 				8158F7C41C89D2AD00B13109 /* PlatformSystem.mm in Sources */,
 				8184626B1D3503E8004B0C46 /* UILayout.cpp in Sources */,
 				818462251D3503E8004B0C46 /* LoadMaterialGroupRenderCommand.cpp in Sources */,
@@ -3750,7 +3698,6 @@
 				818461C31D3503E8004B0C46 /* RenderCommandBufferManager.cpp in Sources */,
 				818462431D3503E8004B0C46 /* TextureAtlas.cpp in Sources */,
 				8184621A1D3503E8004B0C46 /* ApplyAmbientLightRenderCommand.cpp in Sources */,
-				8184624B1D3503E8004B0C46 /* FacebookPostSystem.cpp in Sources */,
 				818462141D3503E8004B0C46 /* PointParticleEmitterDef.cpp in Sources */,
 				8158F7E31C89D2AD00B13109 /* VideoPlayerTapListener.mm in Sources */,
 				818461FA1D3503E8004B0C46 /* AngularAccelerationParticleAffector.cpp in Sources */,
@@ -3792,7 +3739,6 @@
 				8184626A1D3503E8004B0C46 /* LayoutUIComponent.cpp in Sources */,
 				8184616F1D3503E8004B0C46 /* CSBinaryInputStream.cpp in Sources */,
 				818461DD1D3503E8004B0C46 /* PointLightComponent.cpp in Sources */,
-				8158F7DE1C89D2AD00B13109 /* FacebookPostSystem.cpp in Sources */,
 				27408C1C1D369F8D00A0B003 /* SystemInfoFactory.mm in Sources */,
 				818461591D3503E8004B0C46 /* Logging.cpp in Sources */,
 				818461631D3503E8004B0C46 /* HashCRC32.cpp in Sources */,
@@ -3809,7 +3755,6 @@
 				8158F7D41C89D2AD00B13109 /* Main.cpp in Sources */,
 				818461B81D3503E8004B0C46 /* IAPSystem.cpp in Sources */,
 				818461FB1D3503E8004B0C46 /* AngularAccelerationParticleAffectorDef.cpp in Sources */,
-				8158F7DC1C89D2AD00B13109 /* FacebookAppDelegate.mm in Sources */,
 				818461EA1D3503E8004B0C46 /* MeshDesc.cpp in Sources */,
 				818462701D3503E8004B0C46 /* ProgressBarType.cpp in Sources */,
 				818461641D3503E8004B0C46 /* HashMD5.cpp in Sources */,
@@ -3817,7 +3762,6 @@
 				818461F31D3503E8004B0C46 /* SkeletonDesc.cpp in Sources */,
 				818462451D3503E8004B0C46 /* TextureDesc.cpp in Sources */,
 				8184621F1D3503E8004B0C46 /* ApplyMeshRenderCommand.cpp in Sources */,
-				8158F7DD1C89D2AD00B13109 /* FacebookAuthenticationSystem.cpp in Sources */,
 				818461861D3503E8004B0C46 /* LinearAllocator.cpp in Sources */,
 				818461921D3503E8004B0C46 /* MarkupDef.cpp in Sources */,
 				8184616A1D3503E8004B0C46 /* PrimitiveEntityFactory.cpp in Sources */,

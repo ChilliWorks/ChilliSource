@@ -169,9 +169,6 @@
     <Filter Include="ChilliSource\Social\Communications">
       <UniqueIdentifier>{5b9932d7-d6e0-430c-b7db-3727a93bfce3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ChilliSource\Social\Facebook">
-      <UniqueIdentifier>{2d145235-5f64-4c1e-a0e0-9e5a10ce4ccd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ChilliSource\Rendering\Base">
       <UniqueIdentifier>{037448da-61e0-4e5e-a50f-eae2f90ccff4}</UniqueIdentifier>
     </Filter>
@@ -605,12 +602,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.cpp">
       <Filter>ChilliSource\Social\Communications</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookAuthenticationSystem.cpp">
-      <Filter>ChilliSource\Social\Facebook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.cpp">
-      <Filter>ChilliSource\Social\Facebook</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.cpp">
       <Filter>ChilliSource\Rendering\Camera</Filter>
@@ -1952,20 +1943,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications.h">
       <Filter>ChilliSource\Social</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook.h">
-      <Filter>ChilliSource\Social</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Social\ForwardDeclarations.h">
       <Filter>ChilliSource\Social</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.h">
       <Filter>ChilliSource\Social\Communications</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook\FacebookAuthenticationSystem.h">
-      <Filter>ChilliSource\Social\Facebook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.h">
-      <Filter>ChilliSource\Social\Facebook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base.h">
       <Filter>ChilliSource\Rendering</Filter>
