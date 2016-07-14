@@ -87,9 +87,6 @@ namespace CSBackend
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(EmailComposer);
 		CS_FORWARDDECLARE_CLASS(EmailComposerJavaInterface);
-		CS_FORWARDDECLARE_CLASS(FacebookAuthentication);
-		CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
-		CS_FORWARDDECLARE_CLASS(FacebookJavaInterface);
 		//------------------------------------------------------
 		/// Video
 		//------------------------------------------------------

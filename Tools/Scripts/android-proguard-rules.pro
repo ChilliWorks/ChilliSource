@@ -66,10 +66,6 @@
 -keep public class com.chilliworks.chillisource.core.ApkExpansionContentProvider { public *; }
 -keep public class com.chilliworks.chillisource.networking.HttpRequest { public *; }
 
-#keep facebook
--keep class com.facebook.** { *; }
--keepattributes Signature
-
 #keep google play classes
 -keep class com.google.android.vending.expansion.downloader.impl.DownloadsDB
 

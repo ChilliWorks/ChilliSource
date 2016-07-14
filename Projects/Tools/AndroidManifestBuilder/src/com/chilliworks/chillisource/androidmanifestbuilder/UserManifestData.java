@@ -37,7 +37,6 @@ public final class UserManifestData
 {
 	public String m_package = "";
 	public String m_orientation = "sensor";
-	public String m_facebookAppId = "";
 	public String m_apkExpansionDownloadView = "";
 	public String m_manifestExtra = "";
 	public String m_applicationExtra = "";

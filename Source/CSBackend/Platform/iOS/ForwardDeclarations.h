@@ -67,8 +67,6 @@ namespace CSBackend
 		/// Social
 		//------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(EmailComposer);
-        CS_FORWARDDECLARE_CLASS(FacebookAuthenticationSystem);
-        CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
         //------------------------------------------------------
 		/// Video
 		//------------------------------------------------------

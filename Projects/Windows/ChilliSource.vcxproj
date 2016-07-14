@@ -278,8 +278,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookAuthenticationSystem.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.cpp" />
@@ -760,9 +758,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook\FacebookAuthenticationSystem.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h" />

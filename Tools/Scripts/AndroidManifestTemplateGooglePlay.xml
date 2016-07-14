@@ -76,10 +76,6 @@ THE SOFTWARE.
                 <action android:name="com.chilliworks.chillisource.core.ALARM_NOTIFICATION_INTENT" />
             </intent-filter>
         </receiver>
-
-        <!-- Facebook -->
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="[[FACEBOOKAPPID]]"/>
-        <activity android:name="com.facebook.LoginActivity" />
         
         <!-- Google Play services -->
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />

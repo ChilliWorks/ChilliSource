@@ -39,11 +39,6 @@ namespace ChilliSource
     /// Communications
     //------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(EmailComposer);
-    //------------------------------------------------------
-    /// Facebook
-    //------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(FacebookAuthenticationSystem);
-    CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
 }
 
 #endif
