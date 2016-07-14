@@ -112,7 +112,7 @@ namespace ChilliSource
     Application::Application(ChilliSource::SystemInfoCUPtr systemInfo) noexcept
         : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0), m_systemInfo(std::move(systemInfo))
     {
-        m_appVersion = m_systemInfo->GetPlatformInfo().GetApplicationVersion();
+        m_appVersion = m_systemInfo->GetAppVersion();
     }
 
     //------------------------------------------------------------------------------
