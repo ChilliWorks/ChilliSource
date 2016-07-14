@@ -314,7 +314,7 @@ namespace CSBackend
 #ifdef CS_ENABLE_DEBUG
             auto renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
             auto dimensions = renderTexture->GetDimensions();
-            CS_ASSERT(dimensions.x <= renderCapabilities->GetMaxTextureSize() && dimensions.y <= renderCapabilities->GetMaxTextureSize(),
+            CS_ASSERT(u32(dimensions.x) <= renderCapabilities->GetMaxTextureSize() && u32(dimensions.y) <= renderCapabilities->GetMaxTextureSize(),
                       "OpenGL does not support textures of this size on this device (" + ChilliSource::ToString(dimensions.x) + ", " + ChilliSource::ToString(dimensions.y) + ")");
 #endif
             m_handle = BuildTexture(data, dataSize, m_renderTexture);
