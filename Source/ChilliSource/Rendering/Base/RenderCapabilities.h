@@ -43,66 +43,71 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------
-    class RenderCapabilities : public AppSystem
+    class RenderCapabilities final: public AppSystem
     {
     public:
         CS_DECLARE_NAMEDTYPE(RenderCapabilities);
         
-        //-------------------------------------------------------
         /// Create the platform dependent backend
         ///
-        /// @author S Downie
+        /// @param renderInfo
+        ///     The object containing the render info for the current device
         ///
-        /// @return New backend instance
-        //-------------------------------------------------------
-        static RenderCapabilitiesUPtr Create();
-        //-------------------------------------------------------
-        /// @author Ian Copland
+        /// @return New RenderCapabilities instance
         ///
+        static RenderCapabilitiesUPtr Create(const RenderInfo& renderInfo) noexcept;
+        
+        /// Query the interface type
+        ///
+        /// @param The interface to compare
+        ///
+        /// @return Whether the object implements that interface
+        ///
+        bool IsA(ChilliSource::InterfaceIDType interfaceId) const override;
+
         /// @return Whether or not shadow mapping is supported.
-        //-------------------------------------------------------
-        virtual bool IsShadowMappingSupported() const = 0;
-        //-------------------------------------------------------
-        /// @author Ian Copland
         ///
+        bool IsShadowMappingSupported() const noexcept;
+        
         /// @return Whether or not depth textures are supported.
-        //-------------------------------------------------------
-        virtual bool IsDepthTextureSupported() const = 0;
-        //-------------------------------------------------
-        /// @author Ian Copland
         ///
+        bool IsDepthTextureSupported() const noexcept;
+        
         /// @return Whether or not map buffer is supported
-        //-------------------------------------------------
-        virtual bool IsMapBufferSupported() const = 0;
-        //-------------------------------------------------------
-        /// @author Ian Copland
         ///
-        /// @return The maximum texture size available on this
-        /// device.
-        //-------------------------------------------------------
-        virtual u32 GetMaxTextureSize() const = 0;
-        //-------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @return The number of texture units supported by this
-        /// device.
-        //-------------------------------------------------------
-        virtual u32 GetNumTextureUnits() const = 0;
-        //-------------------------------------------------------
-        /// Destructor
-        ///
-        /// @author Ian Copland
-        //-------------------------------------------------------
-        virtual ~RenderCapabilities(){};
+        bool IsMapBufferSupported() const noexcept;
         
-    protected:
-        
-        //-------------------------------------------------------
-        /// Private constructor to force use of factory method
+        /// @return The maximum texture size available on this device.
         ///
-        /// @author S Downie
-        //-------------------------------------------------------
-        RenderCapabilities() = default;
+        u32 GetMaxTextureSize() const noexcept;
+        
+        /// @return The number of texture units supported by this device.
+        ///
+        u32 GetNumTextureUnits() const noexcept;
+       
+    private:
+        
+        /// @param areShadowMapsSupported
+        ///         Whether or not shadow mapping is supported.
+        /// @param areDepthTexturesSupported
+        ///         Whether or not depth textures are supported.
+        /// @param areMapBuffersSupported
+        ///         Whether or not map buffer is supported.
+        /// @param maxTextureSize
+        ///         The maximum texture size available on this device.
+        /// @param numTextureUnits
+        ///         The number of texture units supported by this device.
+        ///
+        RenderCapabilities(bool areShadowMapsSupported, bool areDepthTexturesSupported, bool areMapBuffersSupported, u32 maxTextureSize, u32 numTextureUnits);
+        
+    private:
+        
+        bool m_areShadowMapsSupported;
+        bool m_areDepthTexturesSupported;
+        bool m_areMapBuffersSupported;
+        
+        u32 m_maxTextureSize;
+        u32 m_maxTextureUnits;
     };
 }
 

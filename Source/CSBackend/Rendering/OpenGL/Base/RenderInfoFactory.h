@@ -1,3 +1,4 @@
+//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2016 Tag Games Limited
@@ -21,37 +22,27 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Base/SystemInfo.h>
+#ifndef _CSBACKEND_RENDERING_OPENGL_BASE_RENDERINFOFACTORY_H_
+#define _CSBACKEND_RENDERING_OPENGL_BASE_RENDERINFOFACTORY_H_
 
-namespace ChilliSource
+#include <ChilliSource/ChilliSource.h>
+
+#include <ChilliSource/Core/Base/RenderInfo.h>
+
+namespace CSBackend
 {
-    //----------------------------------------------------------------
-    SystemInfo::SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo, const RenderInfo& renderInfo, const std::string& appVersion) noexcept
-        : m_deviceInfo(deviceInfo), m_screenInfo(screenInfo), m_renderInfo(renderInfo), m_appVersion(appVersion)
-    {   
-    }
-
-    //----------------------------------------------------------------
-    const DeviceInfo& SystemInfo::GetDeviceInfo() const noexcept
+    namespace OpenGL
     {
-        return m_deviceInfo;
-    }
-    
-    //----------------------------------------------------------------
-    const RenderInfo& SystemInfo::GetRenderInfo() const noexcept
-    {
-        return m_renderInfo;
-    }
-    
-    //----------------------------------------------------------------
-    const ScreenInfo& SystemInfo::GetScreenInfo() const noexcept
-    {
-        return m_screenInfo;
-    }
-    
-    //----------------------------------------------------------------
-    const std::string& SystemInfo::GetAppVersion() const noexcept
-    {
-        return m_appVersion;
+        /// A factory for creating new instances of RenderInfo. This will query openGL
+        /// to gather information about the rendering capabilities of the current device.
+        ///
+        namespace RenderInfoFactory
+        {
+            /// @return The RenderInfo for this device.
+            ///
+            ChilliSource::RenderInfo CreateRenderInfo() noexcept;
+        }
     }
 }
+
+#endif

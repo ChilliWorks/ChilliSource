@@ -33,6 +33,7 @@
 #import <CSBackend/Platform/iOS/Core/Base/SystemInfoFactory.h>
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+#import <CSBackend/Rendering/OpenGL/Base/RenderInfoFactory.h>
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -256,10 +257,11 @@ namespace CSBackend
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.x, (s32)currentResolution.y));
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.y, (s32)currentResolution.x));
             
+            ChilliSource::RenderInfo renderInfo = CSBackend::OpenGL::RenderInfoFactory::CreateRenderInfo();
             ChilliSource::ScreenInfo screenInfo(currentResolution, densityScale, 1.0f / densityScale, supportedResolutions);
             
             // Create SystemInfo.
-            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, appVersion));
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, renderInfo, appVersion));
             
             return std::move(systemInfo);
         }

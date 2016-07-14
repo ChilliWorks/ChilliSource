@@ -31,6 +31,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/DeviceJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderInfoFactory.h>
 
 #include <vector>
 
@@ -85,10 +86,11 @@ namespace CSBackend
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.x, (s32)currentResolution.y));
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.y, (s32)currentResolution.x));
 
+            ChilliSource::RenderInfo renderInfo = CSBackend::OpenGL::RenderInfoFactory::CreateRenderInfo();
             ChilliSource::ScreenInfo screenInfo(currentResolution, screenDensity, 1.0f / screenDensity, supportedResolutions);
 
 		    // Create SystemInfo.
-		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, coreJavaInterface->GetApplicationVersionName()));
+		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, renderInfo, coreJavaInterface->GetApplicationVersionName()));
 
 		    return std::move(systemInfo);
 		}

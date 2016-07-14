@@ -822,9 +822,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
@@ -1340,6 +1337,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.cpp">
       <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderInfoFactory.cpp">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2240,9 +2240,6 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLIncludes.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h">
-      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
@@ -2839,6 +2836,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.h">
       <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderInfoFactory.h">
+      <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

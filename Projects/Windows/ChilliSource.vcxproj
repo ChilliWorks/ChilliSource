@@ -346,8 +346,8 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderInfoFactory.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLAmbientLight.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLDirectionalLight.cpp" />
@@ -845,8 +845,8 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLContextRestorer.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLIncludes.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCapabilities.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderCommandProcessor.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\RenderInfoFactory.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Camera\GLCamera.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Lighting\GLAmbientLight.h" />
