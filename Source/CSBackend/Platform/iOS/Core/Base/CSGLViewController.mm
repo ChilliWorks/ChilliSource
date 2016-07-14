@@ -283,6 +283,7 @@
         pointerSystem->OnTouchBegan(touch);
     }
 }
+
 //-------------------------------------------------------------
 /// Called by the OS when one or more touches are cancelled
 ///

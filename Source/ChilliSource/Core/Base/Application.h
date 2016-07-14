@@ -409,7 +409,7 @@ namespace ChilliSource
         ///
         /// This is called by the LifecycleManager.
         ///
-        void ApplicationMemoryWarning() noexcept;
+        void MemoryWarning() noexcept;
         
         /// Backgrounds the application and sends the background lifecycle event to
         /// all systems.

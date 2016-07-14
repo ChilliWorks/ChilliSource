@@ -264,13 +264,6 @@ namespace ChilliSource
             std::unordered_map<Resource::ResourceId, ResourceSPtr> m_cachedResources;
         };
         //------------------------------------------------------------------------------------
-        /// Called when the system receieves a memory warning. This will force the pool
-        /// to release any unused resources
-        ///
-        /// @author S Downie
-        //------------------------------------------------------------------------------------
-        void OnMemoryWarning() override;
-        //------------------------------------------------------------------------------------
         /// @author S Downie
         ///
         /// @param File path
