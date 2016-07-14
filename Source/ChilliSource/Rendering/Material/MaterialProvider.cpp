@@ -235,8 +235,7 @@ namespace ChilliSource
             }
             else if (materialTypeLower == k_custom)
             {
-                //TODO: Support custom shading types.
-                CS_LOG_FATAL("Unsupported: not implemented yet.");
+                return Material::ShadingType::k_custom;
             }
             
             CS_LOG_FATAL("Invalid material type: " + in_materialType);

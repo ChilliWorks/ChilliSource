@@ -425,9 +425,6 @@ namespace ChilliSource
     void Application::Resume() noexcept
     {
         CS_LOG_VERBOSE("App Resuming...");
-
-        //TODO: Remove?
-        //m_renderSystem->Resume();
         
         //resume all of the application systems
         for (const AppSystemUPtr& system : m_systems)
@@ -552,9 +549,6 @@ namespace ChilliSource
             (*it)->OnSuspend();
         }
         
-        //TODO: Re-implementing using new system
-        //m_renderSystem->Suspend();
-        
         CS_LOG_VERBOSE("App Finished Suspending...");
     }
     
@@ -572,9 +566,7 @@ namespace ChilliSource
         {
             (*it)->OnDestroy();
         }
-        
-        //TODO: Re-implementing using new system
-//        m_renderSystem->Destroy();
+
         m_resourcePool->Destroy();
         
         m_systems.clear();

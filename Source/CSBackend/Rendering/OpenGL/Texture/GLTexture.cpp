@@ -25,7 +25,9 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 #include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
 #include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
@@ -309,9 +311,12 @@ namespace CSBackend
         GLTexture::GLTexture(const u8* data, u32 dataSize, ChilliSource::RenderTexture* renderTexture) noexcept
             :m_imageDataSize(dataSize), m_renderTexture(renderTexture)
         {
-            //TODO: Re-add check
-            //CS_ASSERT(m_width <= m_renderCapabilities->GetMaxTextureSize() && m_height <= m_renderCapabilities->GetMaxTextureSize(), "OpenGL does not support textures of this size on this device (" + CSCore::ToString(m_width) + ", " + CSCore::ToString(m_height) + ")");
-
+#ifdef CS_ENABLE_DEBUG
+            auto renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
+            auto dimensions = renderTexture->GetDimensions();
+            CS_ASSERT(dimensions.x <= renderCapabilities->GetMaxTextureSize() && dimensions.y <= renderCapabilities->GetMaxTextureSize(),
+                      "OpenGL does not support textures of this size on this device (" + ChilliSource::ToString(dimensions.x) + ", " + ChilliSource::ToString(dimensions.y) + ")");
+#endif
             m_handle = BuildTexture(data, dataSize, m_renderTexture);
             
             if(k_shouldBackupMeshDataFromMemory && renderTexture->ShouldBackupData() && data)

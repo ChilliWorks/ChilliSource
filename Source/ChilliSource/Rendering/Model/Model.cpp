@@ -50,8 +50,6 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Model::Build(ModelDesc modelDesc) noexcept
     {
-        //TODO: correctly handle bounding sphere.
-        
         DestroyRenderMeshes();
         
         m_aabb = modelDesc.GetAABB();

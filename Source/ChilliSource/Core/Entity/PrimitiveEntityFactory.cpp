@@ -102,8 +102,6 @@ namespace ChilliSource
             const f32 shininess = 10.0f;
             
             auto texture = m_resourcePool->LoadResource<Texture>(StorageLocation::k_chilliSource, "Textures/Blank.csimage");
-            
-            //TODO: Change back to blinn shadowed once that is supported in the new renderer.
             material = m_materialFactory->CreateBlinn(materialName, texture, Colour::k_black, in_colour, in_colour, specularColour, shininess);
         }
         
