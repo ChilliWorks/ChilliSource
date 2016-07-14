@@ -325,7 +325,6 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationDidReceiveMemoryWarning:(UIApplication*)in_application
 {
-    CS_LOG_ERROR("MEMORY WARNING (2)");
     for(id<UIApplicationDelegate> delegate in m_subDelegates)
     {
         if([delegate respondsToSelector:@selector(applicationDidReceiveMemoryWarning:)])
