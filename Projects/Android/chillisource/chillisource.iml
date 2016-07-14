@@ -62,13 +62,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/assets" type="java-test-resource" />
@@ -76,6 +69,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testGooglePlay/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/assets" type="java-resource" />
@@ -83,13 +83,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmv7/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmv7/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmv7/assets" type="java-test-resource" />
@@ -97,6 +90,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmv7/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmv7/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmv7/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmv7/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/assets" type="java-resource" />
@@ -118,13 +118,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
@@ -132,6 +125,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/annotations" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/bundles" />
@@ -157,10 +157,10 @@
     <content url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/Main/Java">
       <sourceFolder url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/Main/Java" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 22 Platform (1)" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="play-services-wallet-7.5.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="mockable-android-22" level="project" />
+    <orderEntry type="library" exported="" name="play-services-wallet-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-cast-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="mediarouter-v7-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-drive-7.5.0" level="project" />
@@ -173,7 +173,6 @@
     <orderEntry type="library" exported="" name="play-services-ads-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-safetynet-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-7.5.0" level="project" />
-    <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="play-services-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-gcm-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appinvite-7.5.0" level="project" />
