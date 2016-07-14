@@ -264,7 +264,6 @@ namespace CSBackend
 			CreateMethodReference("getScreenHeight", "()I");
 			CreateMethodReference("getScreenDensity", "()F");
 			CreateMethodReference("forceQuit", "()V");
-			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
 			CreateMethodReference("setPreferredFPS", "(I)V");
 			CreateMethodReference("getActivity", "()Landroid/app/Activity;");
 		}
@@ -383,16 +382,6 @@ namespace CSBackend
 			}
 			return m_screenDensity;
 		}
-        //-----------------------------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------------------------
-        TimeIntervalMs CoreJavaInterface::GetSystemTimeInMilliseconds()
-        {
-        	TimeIntervalMs output = 0;
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			output = (TimeIntervalMs)env->CallLongMethod(GetJavaObject(), GetMethodID("getSystemTimeInMilliseconds"));
-			return output;
-        }
-
         //-----------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------
         void CoreJavaInterface::ForceQuit()

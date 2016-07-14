@@ -35,27 +35,34 @@ namespace ChilliSource
     ///
     class SystemInfo final
     {
-        public:
-            /// Constructs the SystemInfo class.
-            ///
-            /// @param deviceInfo
-            ///         The device info to populate device with.
-            /// @param screenInfo
-            ///         The screen info to populate screen with.
-            ///
-            SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo) noexcept;
+    public:
+        /// Constructs the SystemInfo class.
+        ///
+        /// @param deviceInfo
+        ///     The device info to populate device with.
+        /// @param screenInfo
+        ///     The screen info to populate screen with.
+        /// @param appVersion
+        ///     The application version.
+        ///
+        SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo, const std::string& appVersion) noexcept;
 
-            /// @return The device info for building the Device class.
-            ///
-            const DeviceInfo& GetDeviceInfo() const noexcept;
+        /// @return The device info for building the Device class.
+        ///
+        const DeviceInfo& GetDeviceInfo() const noexcept;
 
-            /// @return The screen info for building the Screen class.
-            ///
-            const ScreenInfo& GetScreenInfo() const noexcept;
+        /// @return The screen info for building the Screen class.
+        ///
+        const ScreenInfo& GetScreenInfo() const noexcept;
+        
+        /// @return The app version.
+        ///
+        const std::string& GetAppVersion() const noexcept;
 
-        private:
-            DeviceInfo m_deviceInfo;
-            ScreenInfo m_screenInfo;
+    private:
+        DeviceInfo m_deviceInfo;
+        ScreenInfo m_screenInfo;
+        std::string m_appVersion;
     };
 }
 

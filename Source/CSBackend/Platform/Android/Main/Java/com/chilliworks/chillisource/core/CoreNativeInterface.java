@@ -284,13 +284,4 @@ public class CoreNativeInterface extends System
     {
     	CSApplication.get().quit();
     }
-	/**
-	 * @author S Downie
-	 * 
-	 * @return system time in milliseconds
-	 */
-    public long getSystemTimeInMilliseconds()
-    {
-    	return java.lang.System.currentTimeMillis();
-    }
 }

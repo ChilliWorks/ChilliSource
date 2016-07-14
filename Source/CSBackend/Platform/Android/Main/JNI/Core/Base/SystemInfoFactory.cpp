@@ -88,7 +88,7 @@ namespace CSBackend
             ChilliSource::ScreenInfo screenInfo(currentResolution, screenDensity, 1.0f / screenDensity, supportedResolutions);
 
 		    // Create SystemInfo.
-		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo));
+		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, coreJavaInterface->GetApplicationVersionName()));
 
 		    return std::move(systemInfo);
 		}

@@ -26,8 +26,8 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------
-    SystemInfo::SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo) noexcept
-        : m_deviceInfo(deviceInfo), m_screenInfo(screenInfo)
+    SystemInfo::SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo, const std::string& appVersion) noexcept
+        : m_deviceInfo(deviceInfo), m_screenInfo(screenInfo), m_appVersion(appVersion)
     {   
     }
 
@@ -42,6 +42,10 @@ namespace ChilliSource
     {
         return m_screenInfo;
     }
-
-
+    
+    //----------------------------------------------------------------
+    const std::string& SystemInfo::GetAppVersion() const noexcept
+    {
+        return m_appVersion;
+    }
 }

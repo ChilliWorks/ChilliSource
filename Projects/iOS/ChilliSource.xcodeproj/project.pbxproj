@@ -1918,12 +1918,6 @@
 		81845E1A1D3503E8004B0C46 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				27408C271D36DCB600A0B003 /* ScreenInfo.cpp */,
-				27408C281D36DCB600A0B003 /* ScreenInfo.h */,
-				27408C041D366C7A00A0B003 /* DeviceInfo.cpp */,
-				27408C051D366C7A00A0B003 /* DeviceInfo.h */,
-				27408C061D366C7A00A0B003 /* SystemInfo.cpp */,
-				27408C071D366C7A00A0B003 /* SystemInfo.h */,
 				81845E1B1D3503E8004B0C46 /* AppConfig.cpp */,
 				81845E1C1D3503E8004B0C46 /* AppConfig.h */,
 				81845E1D1D3503E8004B0C46 /* Application.cpp */,
@@ -1939,6 +1933,8 @@
 				81845E271D3503E8004B0C46 /* ConstMethodCast.h */,
 				81845E281D3503E8004B0C46 /* Device.cpp */,
 				81845E291D3503E8004B0C46 /* Device.h */,
+				27408C041D366C7A00A0B003 /* DeviceInfo.cpp */,
+				27408C051D366C7A00A0B003 /* DeviceInfo.h */,
 				81845E2A1D3503E8004B0C46 /* GenericFactory.h */,
 				81845E2B1D3503E8004B0C46 /* LifecycleManager.cpp */,
 				81845E2C1D3503E8004B0C46 /* LifecycleManager.h */,
@@ -1950,8 +1946,12 @@
 				81845E321D3503E8004B0C46 /* QueryableInterface.h */,
 				81845E331D3503E8004B0C46 /* Screen.cpp */,
 				81845E341D3503E8004B0C46 /* Screen.h */,
+				27408C271D36DCB600A0B003 /* ScreenInfo.cpp */,
+				27408C281D36DCB600A0B003 /* ScreenInfo.h */,
 				81845E351D3503E8004B0C46 /* Singleton.h */,
 				81845E361D3503E8004B0C46 /* StandardMacros.h */,
+				27408C061D366C7A00A0B003 /* SystemInfo.cpp */,
+				27408C071D366C7A00A0B003 /* SystemInfo.h */,
 				81845E371D3503E8004B0C46 /* Utils.cpp */,
 				81845E381D3503E8004B0C46 /* Utils.h */,
 			);

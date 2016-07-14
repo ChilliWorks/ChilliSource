@@ -128,11 +128,9 @@ namespace ChilliSource
         /// Returns the version number of the application on the current platform
         /// as a string.
         ///
-        /// This is not thread-safe and should only be called from the main thread.
-        ///
         /// @return The version string.
         ///
-        std::string GetAppVersion() const noexcept;
+        const std::string& GetAppVersion() const noexcept;
 
         /// This is thread-safe.
         ///
@@ -454,6 +452,7 @@ namespace ChilliSource
         f32 m_updateSpeed = 1.0f;
         f32 m_updateIntervalRemainder = 0.0f;
         bool m_isSystemCreationAllowed = false;
+        std::string m_appVersion;
         
         static Application* s_application;
     };

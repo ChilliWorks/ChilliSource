@@ -84,6 +84,7 @@
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
 
 #include <algorithm>
+#include <chrono>
 #include <ctime>
 
 #if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
@@ -111,12 +112,13 @@ namespace ChilliSource
     Application::Application(ChilliSource::SystemInfoCUPtr systemInfo) noexcept
         : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0), m_systemInfo(std::move(systemInfo))
     {
+        m_appVersion = m_systemInfo->GetAppVersion();
     }
 
     //------------------------------------------------------------------------------
-    std::string Application::GetAppVersion() const noexcept
+    const std::string& Application::GetAppVersion() const noexcept
     {
-        return m_platformSystem->GetAppVersion();
+        return m_appVersion;
     }
 
     //------------------------------------------------------------------------------
@@ -136,13 +138,13 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     TimeIntervalSecs Application::GetSystemTime() const noexcept
     {
-        return time(0);
+        return std::chrono::duration_cast<std::chrono::seconds>((std::chrono::system_clock::now().time_since_epoch())).count();
     }
 
     //------------------------------------------------------------------------------
     TimeIntervalMs Application::GetSystemTimeInMilliseconds() const noexcept
     {
-        return m_platformSystem->GetSystemTimeMS();
+        return std::chrono::duration_cast<std::chrono::milliseconds>((std::chrono::system_clock::now().time_since_epoch())).count();
     }
 
     //------------------------------------------------------------------------------
@@ -356,7 +358,6 @@ namespace ChilliSource
         
         //Load the app config set preferred FPS.
         m_appConfig->Load();
-        m_platformSystem->SetPreferredFPS(m_appConfig->GetPreferredFPS());
     }
     
     //------------------------------------------------------------------------------
@@ -416,6 +417,8 @@ namespace ChilliSource
         
         OnInit();
         PushInitialState();
+        
+        m_platformSystem->SetPreferredFPS(m_appConfig->GetPreferredFPS());
     }
     
     //------------------------------------------------------------------------------
