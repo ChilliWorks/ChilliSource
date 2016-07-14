@@ -37,30 +37,36 @@ namespace ChilliSource
     class RenderInfo final
     {
     public:
-        /// @param areShadowMapsSupported
+        /// @param isShadowMapsSupported
         ///         Whether or not shadow mapping is supported.
-        /// @param areDepthTexturesSupported
-        ///         Whether or not depth textures are supported.
-        /// @param areMapBuffersSupported
+        /// @param isDepthTexturesSupported
+        ///         Whether or not depth textures is supported.
+        /// @param isMapBuffersSupported
         ///         Whether or not map buffer is supported.
+        /// @param isHighPrecisionFloatsSupported
+        ///         Whether or not the fragment shader supports highp floats.
         /// @param maxTextureSize
         ///         The maximum texture size available on this device.
         /// @param numTextureUnits
         ///         The number of texture units supported by this device.
         ///
-        RenderInfo(bool areShadowMapsSupported, bool areDepthTexturesSupported, bool areMapBuffersSupported, u32 maxTextureSize, u32 numTextureUnits) noexcept;
+        RenderInfo(bool  sShadowMapsSupported, bool  sDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits) noexcept;
        
         /// @return Whether or not shadow mapping is supported.
         ///
-        bool IsShadowMappingSupported() const noexcept { return m_areShadowMapsSupported; }
+        bool IsShadowMappingSupported() const noexcept { return m_isShadowMapsSupported; }
         
-        /// @return Whether or not depth textures are supported.
+        /// @return Whether or not depth textures is supported.
         ///
-        bool IsDepthTextureSupported() const noexcept { return m_areDepthTexturesSupported; }
+        bool IsDepthTextureSupported() const noexcept { return m_isDepthTexturesSupported; }
         
         /// @return Whether or not map buffer is supported.
         ///
-        bool IsMapBufferSupported() const noexcept { return m_areMapBuffersSupported; }
+        bool IsMapBufferSupported() const noexcept { return m_isMapBuffersSupported; }
+        
+        /// @return Whether or not the fragment shader supports highp floats.
+        ///
+        bool IsHighPrecisionFloatsSupported() const noexcept { return m_isHighPrecisionFloatsSupported; }
         
         /// @return The maximum texture size available on this device.
         ///
@@ -72,9 +78,10 @@ namespace ChilliSource
 
     private:
         
-        bool m_areShadowMapsSupported;
-        bool m_areDepthTexturesSupported;
-        bool m_areMapBuffersSupported;
+        bool m_isShadowMapsSupported;
+        bool m_isDepthTexturesSupported;
+        bool m_isMapBuffersSupported;
+        bool m_isHighPrecisionFloatsSupported;
         
         u32 m_maxTextureSize;
         u32 m_maxTextureUnits;

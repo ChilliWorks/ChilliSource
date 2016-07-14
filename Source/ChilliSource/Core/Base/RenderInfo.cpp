@@ -26,8 +26,8 @@
 
 namespace ChilliSource
 {
-    RenderInfo::RenderInfo(bool areShadowMapsSupported, bool areDepthTexturesSupported, bool areMapBuffersSupported, u32 maxTextureSize, u32 numTextureUnits) noexcept
-        : m_areShadowMapsSupported(areShadowMapsSupported), m_areDepthTexturesSupported(areDepthTexturesSupported), m_areMapBuffersSupported(areMapBuffersSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits)
+    RenderInfo::RenderInfo(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits) noexcept
+        : m_isShadowMapsSupported(isShadowMapsSupported), m_isDepthTexturesSupported(isDepthTexturesSupported), m_isMapBuffersSupported(isMapBuffersSupported), m_isHighPrecisionFloatsSupported(m_isHighPrecisionFloatsSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits)
     {
     }
 }

@@ -77,6 +77,10 @@ namespace ChilliSource
         ///
         bool IsMapBufferSupported() const noexcept;
         
+        /// @return Whether or not the fragment shader supports highp floats.
+        ///
+        bool IsHighPrecisionFloatsSupported() const noexcept;
+        
         /// @return The maximum texture size available on this device.
         ///
         u32 GetMaxTextureSize() const noexcept;
@@ -87,24 +91,27 @@ namespace ChilliSource
        
     private:
         
-        /// @param areShadowMapsSupported
+        /// @param isShadowMapsSupported
         ///         Whether or not shadow mapping is supported.
-        /// @param areDepthTexturesSupported
+        /// @param isDepthTexturesSupported
         ///         Whether or not depth textures are supported.
-        /// @param areMapBuffersSupported
+        /// @param isMapBuffersSupported
         ///         Whether or not map buffer is supported.
+        /// @param isHighPrecisionFloatsSupported
+        ///         Whether or not the fragment shader supports highp floats.
         /// @param maxTextureSize
         ///         The maximum texture size available on this device.
         /// @param numTextureUnits
         ///         The number of texture units supported by this device.
         ///
-        RenderCapabilities(bool areShadowMapsSupported, bool areDepthTexturesSupported, bool areMapBuffersSupported, u32 maxTextureSize, u32 numTextureUnits);
+        RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits);
         
     private:
         
-        bool m_areShadowMapsSupported;
-        bool m_areDepthTexturesSupported;
-        bool m_areMapBuffersSupported;
+        bool m_isShadowMapsSupported;
+        bool m_isDepthTexturesSupported;
+        bool m_isMapBuffersSupported;
+        bool m_isHighPrecisionFloatsSupported;
         
         u32 m_maxTextureSize;
         u32 m_maxTextureUnits;

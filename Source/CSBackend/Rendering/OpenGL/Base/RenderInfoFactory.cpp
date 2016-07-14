@@ -83,9 +83,9 @@ namespace CSBackend
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while getting render capabilities.");
             
-            ChilliSource::RenderInfo renderInfo(areShadowMapsSupported, areDepthTexturesSupported, areMapBuffersSupported, maxTextureSize, maxTextureUnits);
+            ChilliSource::RenderInfo renderInfo(areShadowMapsSupported, areDepthTexturesSupported, areMapBuffersSupported, areHighPrecFragmentsSupported, maxTextureSize, maxTextureUnits);
             
-            return std::move(renderInfo);
+            return renderInfo;
         }
     }
 } 

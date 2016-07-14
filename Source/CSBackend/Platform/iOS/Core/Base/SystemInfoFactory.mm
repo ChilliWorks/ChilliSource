@@ -257,7 +257,7 @@ namespace CSBackend
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.x, (s32)currentResolution.y));
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.y, (s32)currentResolution.x));
             
-            ChilliSource::RenderInfo renderInfo = CSBackend::OpenGL::RenderInfoFactory::CreateRenderInfo();
+            ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();
             ChilliSource::ScreenInfo screenInfo(currentResolution, densityScale, 1.0f / densityScale, supportedResolutions);
             
             // Create SystemInfo.

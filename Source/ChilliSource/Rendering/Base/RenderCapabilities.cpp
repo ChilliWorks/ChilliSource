@@ -38,12 +38,12 @@ namespace ChilliSource
     RenderCapabilitiesUPtr RenderCapabilities::Create(const RenderInfo& renderInfo) noexcept
     {
         return RenderCapabilitiesUPtr(new RenderCapabilities(renderInfo.IsShadowMappingSupported(), renderInfo.IsDepthTextureSupported(), renderInfo.IsMapBufferSupported(),
-                                                             renderInfo.GetMaxTextureSize(), renderInfo.GetNumTextureUnits()));
+                                                             renderInfo.IsHighPrecisionFloatsSupported(), renderInfo.GetMaxTextureSize(), renderInfo.GetNumTextureUnits()));
     }
     
     //-------------------------------------------------------
-    RenderCapabilities::RenderCapabilities(bool areShadowMapsSupported, bool areDepthTexturesSupported, bool areMapBuffersSupported, u32 maxTextureSize, u32 numTextureUnits)
-    : m_areShadowMapsSupported(areShadowMapsSupported), m_areDepthTexturesSupported(areDepthTexturesSupported), m_areMapBuffersSupported(areMapBuffersSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits)
+    RenderCapabilities::RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits)
+    : m_isShadowMapsSupported(isShadowMapsSupported), m_isDepthTexturesSupported(isDepthTexturesSupported), m_isMapBuffersSupported(isMapBuffersSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits)
     {
     }
     
@@ -56,19 +56,25 @@ namespace ChilliSource
     //-------------------------------------------------------
     bool RenderCapabilities::IsShadowMappingSupported() const noexcept
     {
-        return m_areShadowMapsSupported;
+        return m_isShadowMapsSupported;
     }
     
     //-------------------------------------------------------
     bool RenderCapabilities::IsDepthTextureSupported() const noexcept
     {
-        return m_areDepthTexturesSupported;
+        return m_isDepthTexturesSupported;
     }
     
     //-------------------------------------------------------
     bool RenderCapabilities::IsMapBufferSupported() const noexcept
     {
-        return m_areMapBuffersSupported;
+        return m_isMapBuffersSupported;
+    }
+    
+    //-------------------------------------------------------
+    bool RenderCapabilities::IsHighPrecisionFloatsSupported() const noexcept
+    {
+        return m_isHighPrecisionFloatsSupported;
     }
     
     //-------------------------------------------------------

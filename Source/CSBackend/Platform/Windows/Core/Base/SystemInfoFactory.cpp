@@ -177,7 +177,7 @@ namespace CSBackend
             ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
 
 			//Create RenderInfo
-			ChilliSource::RenderInfo renderInfo = CSBackend::OpenGL::RenderInfoFactory::CreateRenderInfo();
+			ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();
 
             // Create SystemInfo.
             ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, renderInfo, ""));
