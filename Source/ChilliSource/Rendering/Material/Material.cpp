@@ -419,7 +419,7 @@ namespace ChilliSource
     void Material::CreateCustomRenderMaterialGroup() const noexcept
     {
         CS_ASSERT(!m_renderMaterialGroup, "Render material group must be null.");
-        CS_ASSERT(m_customShader, "Custom material must be have shader.");
+        CS_ASSERT(m_customShader, "Custom material must have shader.");
         
         
         std::vector<const RenderTexture*> renderTextures;

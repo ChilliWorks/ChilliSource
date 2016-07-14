@@ -1257,7 +1257,6 @@ namespace ChilliSource
     //----------------------------------------------------------------------------------------
     Colour Widget::GetFinalColour() const
     {
-        //TODO: Do we implement the inherit colour option?
         if(m_parent != nullptr)
         {
             return m_localColour * m_parent->GetFinalColour();

@@ -83,11 +83,19 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     DirectionalLightComponent::DirectionalLightComponent(ShadowQuality shadowQuality, const Colour& colour, f32 intensity) noexcept
-        : m_colour(colour), m_intensity(intensity), m_shadowTolerance(k_defaultShadowTolerance), m_shadowMapResolution(GetShadowMapResolution(shadowQuality)), m_shadowMapId(++g_nextShadowMapId)
+        : m_colour(colour), m_intensity(intensity)
     {
-        SetShadowVolume(k_defaultShadowVolumeWidth, k_defaultShadowVolumeHeight, k_defaultShadowVolumeNear, k_defaultShadowVolumeFar);
-        
-        TryCreateShadowMapTarget();
+        auto renderCapabilities = Application::Get()->GetSystem<RenderCapabilities>();
+        if (renderCapabilities->IsShadowMappingSupported())
+        {
+            m_shadowMapId = ++g_nextShadowMapId;
+            m_shadowMapResolution = GetShadowMapResolution(shadowQuality);
+            m_shadowTolerance = k_defaultShadowTolerance;
+            
+            SetShadowVolume(k_defaultShadowVolumeWidth, k_defaultShadowVolumeHeight, k_defaultShadowVolumeNear, k_defaultShadowVolumeFar);
+            
+            TryCreateShadowMapTarget();
+        }
     }
     
     //------------------------------------------------------------------------------
@@ -107,9 +115,7 @@ namespace ChilliSource
     {
         CS_ASSERT(!m_shadowMap, "Shadow map already exists.");
         CS_ASSERT(!m_shadowMapTarget, "Shadow map target already exists.");
-        
-        //TODO: handle the case where the device doesn't support depth textures.
-        
+
         if(m_shadowMapResolution.x > 0 && m_shadowMapResolution.y > 0)
         {
             auto mutableShadowMap = Application::Get()->GetResourcePool()->CreateResource<Texture>("_DirectionalLightShadowMap" + ToString(m_shadowMapId));

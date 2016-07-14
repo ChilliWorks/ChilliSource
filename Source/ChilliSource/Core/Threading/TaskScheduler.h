@@ -116,6 +116,7 @@ namespace ChilliSource
         
     private:
         friend class Application;
+        friend class LifecycleManager;
         //------------------------------------------------------------------------------
         /// A factory method for creating new instances of the task scheduler.
         ///
@@ -147,8 +148,7 @@ namespace ChilliSource
         ///
         /// @author Jordan Brown
         //------------------------------------------------------------------------------
-    public:
-        void ExecuteSystemThreadTasks() noexcept; //TODO: don't expose this.
+        void ExecuteSystemThreadTasks() noexcept;
     private:
         //------------------------------------------------------------------------------
         /// Adds the given task to the large task pool. Once the task is complete then

@@ -37,7 +37,6 @@
 
 namespace ChilliSource
 {
-    //TODO: Need to address the mutable member with the new definition of const
     //-------------------------------------------------
     /// Key value array that uses a binary search to
     /// perform lookups on the key. The key is

@@ -108,7 +108,6 @@ namespace ChilliSource
             //Check the version so determine endianess correctness
             if(header->udwVersion == k_pvrVersionMismatch)
             {
-                //TODO:: Endianess is not correct, need to flip bits in the header data, possibly image data?
                 CS_LOG_FATAL("Image::UnpackPVRTCData >> Endianess Check failed for creating PVR");
             }
             

@@ -52,6 +52,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         enum class ResourceType
         {
+            k_shader,
             k_texture
         };
         //-------------------------------------------------------------------------
@@ -68,6 +69,7 @@ namespace ChilliSource
             TextureFilterMode m_filterMode;
             TextureWrapMode m_wrapModeU;
             TextureWrapMode m_wrapModeV;
+            VertexFormat m_vertexFormat;
         };
         //----------------------------------------------------------------------------
         /// @author S Downie
@@ -235,12 +237,47 @@ namespace ChilliSource
             }
             else if (materialTypeLower == k_custom)
             {
-                //TODO: Support custom shading types.
-                CS_LOG_FATAL("Unsupported: not implemented yet.");
+                return Material::ShadingType::k_custom;
             }
             
             CS_LOG_FATAL("Invalid material type: " + in_materialType);
             return Material::ShadingType::k_unlit;
+        }
+        //----------------------------------------------------------------------------
+        /// Parse the vertex format from the given string name. If the name doesn't
+        /// exist this will assert. Note that materials loaded from file cannot
+        /// describe custom vertex formats.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_vertexFormatName
+        ///
+        /// @return The vertex format with the given name.
+        //----------------------------------------------------------------------------
+        VertexFormat ParseVertexFormat(const std::string& in_vertexFormatName) noexcept
+        {
+            constexpr char k_sprite[] = "sprite";
+            constexpr char k_staticMesh[] = "staticmesh";
+            constexpr char k_animatedmesh[] = "animatedmesh";
+            
+            auto vertexFormatNameTypeLower = in_vertexFormatName;
+            StringUtils::ToLowerCase(vertexFormatNameTypeLower);
+            
+            if (vertexFormatNameTypeLower == k_sprite)
+            {
+                return VertexFormat::k_sprite;
+            }
+            else if (vertexFormatNameTypeLower == k_staticMesh)
+            {
+                return VertexFormat::k_staticMesh;
+            }
+            else if (vertexFormatNameTypeLower == k_animatedmesh)
+            {
+                return VertexFormat::k_animatedMesh;
+            }
+            
+            CS_LOG_FATAL("Invalid vertex format: " + in_vertexFormatName);
+            return VertexFormat::k_sprite;
         }
         //----------------------------------------------------------------------------
         /// Parse the render states from the XML element to the material
@@ -373,6 +410,66 @@ namespace ChilliSource
             }
         }
         //----------------------------------------------------------------------------
+        /// Parse the shader file paths
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param Root element
+        /// @param [Out] Shader files to populate
+        /// @param [Out] Material to populate
+        //----------------------------------------------------------------------------
+        void ParseShaders(XML::Node* in_rootElement, std::vector<MaterialProvider::ShaderDesc>& out_shaderFiles, Material* out_material)
+        {
+            XML::Node* shaderEl = XMLUtils::GetFirstChildElement(in_rootElement, "Shader");
+            if(shaderEl)
+            {
+                CS_ASSERT(out_material->GetShadingType() == Material::ShadingType::k_custom, "Only custom materials can have shaders.");
+                
+                MaterialProvider::ShaderDesc desc;
+                desc.m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(shaderEl, "location", "Package"));
+                desc.m_filePath = XMLUtils::GetAttributeValue<std::string>(shaderEl, "file-name", "");
+                desc.m_vertexFormat = ParseVertexFormat(XMLUtils::GetAttributeValue<std::string>(shaderEl, "vertex-format", "StaticMesh"));
+                out_shaderFiles.push_back(desc);
+                
+                // Get the shader variables
+                XML::Node* shaderVarEl = XMLUtils::GetFirstChildElement(shaderEl, "Var");
+                while(shaderVarEl)
+                {
+                    //Get the variable type
+                    std::string strType = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "type", "");
+                    //Get the variable name
+                    std::string strName = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "name", "");
+                    //Add the variable to the material
+                    if(strType == "Float")
+                    {
+                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<f32>(shaderVarEl, "value", 0.0f));
+                    }
+                    else if(strType == "Vec2")
+                    {
+                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector2>(shaderVarEl, "value", Vector2::k_zero));
+                    }
+                    else if(strType == "Vec3")
+                    {
+                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector3>(shaderVarEl, "value", Vector3::k_zero));
+                    }
+                    else if(strType == "Vec4")
+                    {
+                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector4>(shaderVarEl, "value", Vector4::k_zero));
+                    }
+                    else if(strType == "Colour")
+                    {
+                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Colour>(shaderVarEl, "value", Colour::k_white));
+                    }
+                    else if(strType == "Matrix")
+                    {
+                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Matrix4>(shaderVarEl, "value", Matrix4::k_identity));
+                    }
+                    //Move on to the next variable
+                    shaderVarEl =  XMLUtils::GetNextSiblingElement(shaderVarEl, "Var");
+                }
+            }
+        }
+        //----------------------------------------------------------------------------
         /// Parse the texture file paths
         ///
         /// @author S Downie
@@ -420,6 +517,42 @@ namespace ChilliSource
             
             switch(in_descs[in_loadIndex].m_type)
             {
+                case ResourceType::k_shader:
+                {
+                    resourcePool->LoadResourceAsync<Shader>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, [in_loadIndex, in_descs, in_delegate, out_material](const ShaderCSPtr& in_shader)
+                    {
+                        if(in_shader->GetLoadState() == Resource::LoadState::k_loaded)
+                        {
+                            out_material->SetCustomShader(in_descs[in_loadIndex].m_vertexFormat, in_shader);
+                            
+                            u32 newLoadIndex = in_loadIndex + 1;
+                            
+                            if(newLoadIndex < in_descs.size())
+                            {
+                                LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
+                            }
+                            else
+                            {
+                                out_material->SetLoadState(Resource::LoadState::k_loaded);
+                                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                                {
+                                    in_delegate(out_material);
+                                });
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            out_material->SetLoadState(Resource::LoadState::k_failed);
+                            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                            {
+                                in_delegate(out_material);
+                            });
+                            return;
+                        }
+                    });
+                    break;
+                }
                 case ResourceType::k_texture:
                 {
                     auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV));
@@ -491,9 +624,10 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void MaterialProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
+        std::vector<ShaderDesc> shaderFiles;
         std::vector<TextureDesc> textureFiles;
         
-        if(BuildMaterialFromFile(in_location, in_filePath, textureFiles, (Material*)out_resource.get()) == false)
+        if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, (Material*)out_resource.get()) == false)
         {
             out_resource->SetLoadState(Resource::LoadState::k_failed);
             return;
@@ -502,6 +636,20 @@ namespace ChilliSource
         MaterialSPtr material = std::static_pointer_cast<Material>(out_resource);
         
         ResourcePool* resourcePool = Application::Get()->GetResourcePool();
+        
+        for(u32 i=0; i<shaderFiles.size(); ++i)
+        {
+            if(shaderFiles[i].m_filePath.empty() == false)
+            {
+                ShaderCSPtr shader = resourcePool->LoadResource<Shader>(shaderFiles[i].m_location, shaderFiles[i].m_filePath);
+                if(shader == nullptr)
+                {
+                    out_resource->SetLoadState(Resource::LoadState::k_failed);
+                    return;
+                }
+                material->SetCustomShader(shaderFiles[i].m_vertexFormat, shader);
+            }
+        }
         
         for(u32 i=0; i<textureFiles.size(); ++i)
         {
@@ -533,8 +681,9 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void MaterialProvider::BuildMaterialTask(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
+        std::vector<ShaderDesc> shaderFiles;
         std::vector<TextureDesc> textureFiles;
-        if(BuildMaterialFromFile(in_location, in_filePath, textureFiles, (Material*)out_resource.get()) == false)
+        if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, (Material*)out_resource.get()) == false)
         {
             out_resource->SetLoadState(Resource::LoadState::k_failed);
             Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
@@ -544,10 +693,22 @@ namespace ChilliSource
             return;
         }
         
+        CS_ASSERT(shaderFiles.size() < 2, "Can have zero or one shaders.");
+        
         MaterialSPtr material = std::static_pointer_cast<Material>(out_resource);
         
         std::vector<ChainedLoadDesc> resourceFiles;
         resourceFiles.reserve(textureFiles.size());
+        
+        for(const auto& shaderDesc : shaderFiles)
+        {
+            ChainedLoadDesc desc;
+            desc.m_filePath = shaderDesc.m_filePath;
+            desc.m_location = shaderDesc.m_location;
+            desc.m_vertexFormat = shaderDesc.m_vertexFormat;
+            desc.m_type = ResourceType::k_shader;
+            resourceFiles.push_back(desc);
+        }
         
         for(const auto& textureDesc : textureFiles)
         {
@@ -567,7 +728,8 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     bool MaterialProvider::BuildMaterialFromFile(StorageLocation in_location, const std::string& in_filePath,
-                                                std::vector<TextureDesc>& out_textureFiles,
+                                                 std::vector<ShaderDesc>& out_shaderFiles,
+                                                 std::vector<TextureDesc>& out_textureFiles,
                                                 Material* out_material)
     {
         //Load the XML file
@@ -587,9 +749,8 @@ namespace ChilliSource
         ParseCullFunction(rootElement, out_material);
         ParseSurface(rootElement, out_material);
         
+        ParseShaders(rootElement, out_shaderFiles, out_material);
         ParseTextures(rootElement, out_textureFiles);
-        
-        //TODO: Add support for custom shaders.
         
         return true;
     }

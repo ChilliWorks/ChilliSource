@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Rendering/Model/VertexFormat.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
@@ -46,6 +47,18 @@ namespace ChilliSource
         
         CS_DECLARE_NAMEDTYPE(MaterialProvider);
         
+        //-------------------------------------------------------------------------
+        /// Holds the description of a shader as required by the material
+        /// including which vertex format it applies to.
+        ///
+        /// @author Ian Copland
+        //-------------------------------------------------------------------------
+        struct ShaderDesc
+        {
+            std::string m_filePath;
+            StorageLocation m_location;
+            VertexFormat m_vertexFormat;
+        };
         //-------------------------------------------------------------------------
         /// Holds the description of a texture as required by the material
         /// including where the texture file is
@@ -152,6 +165,7 @@ namespace ChilliSource
         /// @return Whether the resource was loaded 
         //----------------------------------------------------------------------------
         bool BuildMaterialFromFile(StorageLocation in_location, const std::string& in_filePath,
+                                   std::vector<ShaderDesc>& out_shaderFiles,
                                    std::vector<TextureDesc>& out_textureFiles,
                                    Material* out_material);
     };

@@ -76,7 +76,6 @@ namespace ChilliSource
     //------------------------------------------------------
     void OrthographicCameraComponent::UpdateFrustum()
     {
-        //TODO: Change this to use a bounding box
         m_frustum.CalculateClippingPlanes(GetView() * GetProjection());
     }
     //------------------------------------------------------
