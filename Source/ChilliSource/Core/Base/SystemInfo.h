@@ -26,6 +26,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/DeviceInfo.h>
+#include <ChilliSource/Core/Base/PlatformInfo.h>
 #include <ChilliSource/Core/Base/ScreenInfo.h>
 
 namespace ChilliSource
@@ -35,27 +36,34 @@ namespace ChilliSource
     ///
     class SystemInfo final
     {
-        public:
-            /// Constructs the SystemInfo class.
-            ///
-            /// @param deviceInfo
-            ///         The device info to populate device with.
-            /// @param screenInfo
-            ///         The screen info to populate screen with.
-            ///
-            SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo) noexcept;
+    public:
+        /// Constructs the SystemInfo class.
+        ///
+        /// @param deviceInfo
+        ///     The device info to populate device with.
+        /// @param screenInfo
+        ///     The screen info to populate screen with.
+        /// @param platformInfo
+        ///     The platform info to populate the app with.
+        ///
+        SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo, const PlatformInfo& platformInfo) noexcept;
 
-            /// @return The device info for building the Device class.
-            ///
-            const DeviceInfo& GetDeviceInfo() const noexcept;
+        /// @return The device info for building the Device class.
+        ///
+        const DeviceInfo& GetDeviceInfo() const noexcept;
 
-            /// @return The screen info for building the Screen class.
-            ///
-            const ScreenInfo& GetScreenInfo() const noexcept;
+        /// @return The screen info for building the Screen class.
+        ///
+        const ScreenInfo& GetScreenInfo() const noexcept;
+        
+        /// @return The platform info.
+        ///
+        const PlatformInfo& GetPlatformInfo() const noexcept;
 
-        private:
-            DeviceInfo m_deviceInfo;
-            ScreenInfo m_screenInfo;
+    private:
+        DeviceInfo m_deviceInfo;
+        ScreenInfo m_screenInfo;
+        PlatformInfo m_platformInfo;
     };
 }
 

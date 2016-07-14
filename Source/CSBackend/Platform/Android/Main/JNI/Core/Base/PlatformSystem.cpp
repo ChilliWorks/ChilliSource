@@ -65,18 +65,6 @@ namespace CSBackend
         {
         	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ForceQuit();
         }
-        //-------------------------------------------------
-        //-------------------------------------------------
-        std::string PlatformSystem::GetAppVersion() const
-		{
-			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetApplicationVersionName();
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const
-		{
-			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetSystemTimeInMilliseconds();
-		}
 	}
 }
 

@@ -31,6 +31,7 @@
 #include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -68,33 +69,28 @@ namespace CSBackend
 		//-------------------------------------------------
 		void PlatformSystem::SetPreferredFPS(u32 in_fps)
 		{
-			SFMLWindow::Get()->SetPreferredFPS(in_fps);
+			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+			{
+				SFMLWindow::Get()->SetPreferredFPS(in_fps);
+			});
 		}
 		//---------------------------------------------------
 		//---------------------------------------------------
 		void PlatformSystem::SetVSyncEnabled(bool in_enabled)
 		{
-			SFMLWindow::Get()->SetVSyncEnabled(in_enabled);
+			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+			{
+				SFMLWindow::Get()->SetVSyncEnabled(in_enabled);
+			});
 		}
 		//--------------------------------------------
 		//--------------------------------------------
 		void PlatformSystem::Quit()
 		{
-			SFMLWindow::Get()->Quit();
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		std::string PlatformSystem::GetAppVersion() const
-		{
-			return ""; 
-		}
-		//--------------------------------------------------
-		//--------------------------------------------------
-		u64 PlatformSystem::GetSystemTimeMS() const
-		{
-			LARGE_INTEGER currentTime;
-            QueryPerformanceCounter(&currentTime);
-			return (u64)((currentTime.QuadPart) * 1000.0 / g_frequency.QuadPart);
+			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
+			{
+				SFMLWindow::Get()->Quit();
+			});
 		}
 	}
 }

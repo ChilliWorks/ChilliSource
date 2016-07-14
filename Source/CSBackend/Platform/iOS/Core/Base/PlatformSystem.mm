@@ -34,6 +34,7 @@
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Image/PVRImageProvider.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #import <mach/mach.h>
 #import <mach/mach_time.h>
@@ -59,27 +60,11 @@ namespace CSBackend
         //-------------------------------------------------------
         void PlatformSystem::SetPreferredFPS(u32 in_fps)
         {
-            [[CSAppDelegate sharedInstance] setPreferredFPS:in_fps];
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        std::string PlatformSystem::GetAppVersion() const
-        {
-            @autoreleasepool
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
             {
-                NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-                return [NSStringUtils newUTF8StringWithNSString:version];
-            }
+                [[CSAppDelegate sharedInstance] setPreferredFPS:in_fps];
+            });
         }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const
-		{
-            mach_timebase_info_data_t machtimeBase;
-            mach_timebase_info(&machtimeBase);
-            u64 nanoSecs = (mach_absolute_time() * machtimeBase.numer) / machtimeBase.denom;
-			return nanoSecs / 1000000;
-		}
 	}
 }
 

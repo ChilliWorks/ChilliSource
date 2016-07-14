@@ -1,3 +1,4 @@
+//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2016 Tag Games Limited
@@ -21,31 +22,34 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Base/SystemInfo.h>
+#ifndef _CHILLISOURCE_CORE_BASE_PLATFORMINFO_H_
+#define _CHILLISOURCE_CORE_BASE_PLATFORMINFO_H_
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    //----------------------------------------------------------------
-    SystemInfo::SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo, const PlatformInfo& platformInfo) noexcept
-        : m_deviceInfo(deviceInfo), m_screenInfo(screenInfo), m_platformInfo(platformInfo)
-    {   
-    }
-
-    //----------------------------------------------------------------
-    const DeviceInfo& SystemInfo::GetDeviceInfo() const noexcept
+    /// This class contains information related to any platform
+    /// specific info.
+    ///
+    /// This class is immutable, and therefore thread-safe.
+    ///
+    class PlatformInfo final
     {
-        return m_deviceInfo;
-    }
-
-    //----------------------------------------------------------------
-    const ScreenInfo& SystemInfo::GetScreenInfo() const noexcept
-    {
-        return m_screenInfo;
-    }
+    public:
+        /// @param appVersion
+        ///     The application version for the current platform.
+        ///
+        PlatformInfo(const std::string& appVersion) noexcept;
+        
+        /// @return The application version
+        ///
+        const std::string& GetApplicationVersion() const noexcept { return m_appVersion; }
     
-    //----------------------------------------------------------------
-    const PlatformInfo& SystemInfo::GetPlatformInfo() const noexcept
-    {
-        return m_platformInfo;
-    }
+    private:
+        
+        std::string m_appVersion;
+    };
 }
+
+#endif

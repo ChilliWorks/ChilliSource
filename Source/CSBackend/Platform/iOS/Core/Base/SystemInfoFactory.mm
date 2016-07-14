@@ -232,6 +232,7 @@ namespace CSBackend
             f32 densityScale;
             ChilliSource::Vector2 currentResolution;
             std::vector<ChilliSource::Integer2> supportedResolutions;
+            std::string appVersion;
             
             @autoreleasepool
             {
@@ -247,15 +248,19 @@ namespace CSBackend
                     densityScale = [UIScreen mainScreen].scale;
                     currentResolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation, [[UIScreen mainScreen] bounds].size, densityScale);
                 }
+                
+                NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+                appVersion = [NSStringUtils newUTF8StringWithNSString:version];
             }
 
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.x, (s32)currentResolution.y));
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.y, (s32)currentResolution.x));
             
             ChilliSource::ScreenInfo screenInfo(currentResolution, densityScale, 1.0f / densityScale, supportedResolutions);
+            ChilliSource::PlatformInfo platformInfo(appVersion);
             
             // Create SystemInfo.
-            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo));
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, platformInfo));
             
             return std::move(systemInfo);
         }

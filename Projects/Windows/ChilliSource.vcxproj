@@ -34,6 +34,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Logging.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\PlatformInfo.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Screen.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.cpp" />
@@ -386,6 +387,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\LifecycleManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Logging.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\MakeSharedArray.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\PlatformInfo.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\QueryableInterface.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Screen.h" />

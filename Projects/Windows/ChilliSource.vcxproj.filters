@@ -1341,6 +1341,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.cpp">
       <Filter>ChilliSource\Core\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\PlatformInfo.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2838,6 +2841,9 @@
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ScreenInfo.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\PlatformInfo.h">
       <Filter>ChilliSource\Core\Base</Filter>
     </ClInclude>
   </ItemGroup>

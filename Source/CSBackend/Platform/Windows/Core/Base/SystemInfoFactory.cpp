@@ -24,6 +24,7 @@
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
 #include <ChilliSource/Core/Base/DeviceInfo.h>
+#include <ChilliSource/Core/Base/PlatformInfo.h>
 #include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/String/StringUtils.h>
@@ -175,8 +176,11 @@ namespace CSBackend
             // Create ScreenInfo.
             ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
 
+			//Create PlatformInfo
+			ChilliSource::PlatformInfo  platformInfo("");//TODO: Populate the app version with valid data
+
             // Create SystemInfo.
-            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo));
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, platformInfo));
 
             return std::move(systemInfo);
         }

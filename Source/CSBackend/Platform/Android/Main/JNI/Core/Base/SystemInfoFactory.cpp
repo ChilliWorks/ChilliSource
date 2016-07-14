@@ -24,6 +24,7 @@
 #ifdef CS_TARGETPLATFORM_ANDROID
 
 #include <ChilliSource/Core/Base/DeviceInfo.h>
+#include <ChilliSource/Core/Base/PlatformInfo.h>
 #include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
 
@@ -86,9 +87,10 @@ namespace CSBackend
             supportedResolutions.push_back(ChilliSource::Integer2((s32)currentResolution.y, (s32)currentResolution.x));
 
             ChilliSource::ScreenInfo screenInfo(currentResolution, screenDensity, 1.0f / screenDensity, supportedResolutions);
+            ChilliSource::PlatformInfo platformInfo(coreJavaInterface->GetApplicationVersionName());
 
 		    // Create SystemInfo.
-		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo));
+		    ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, platformInfo));
 
 		    return std::move(systemInfo);
 		}

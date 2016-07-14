@@ -82,18 +82,6 @@ namespace ChilliSource
         //---------------------------------------------------
         virtual void CreateDefaultSystems(Application* in_application) = 0;
         //---------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return the current time in milliseconds
-        //---------------------------------------------------
-        virtual TimeIntervalMs GetSystemTimeMS() const = 0;
-        //---------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return The version of the application
-        //---------------------------------------------------
-        virtual std::string GetAppVersion() const = 0;
-        //---------------------------------------------------
         /// Destructor
         ///
         /// @author S Downie
