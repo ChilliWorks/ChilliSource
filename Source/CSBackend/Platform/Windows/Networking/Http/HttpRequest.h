@@ -36,6 +36,7 @@
 #include <ChilliSource/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Networking/Http/HttpResponse.h>
 
+#include <atomic>
 #include <list>
 #include <mutex>
 
@@ -175,6 +176,8 @@ namespace CSBackend
 			bool m_isPollingComplete = false;
 			bool m_isRequestComplete = false;
 			bool m_isRequestCancelled = false;
+
+			std::atomic_int m_flushesPending = 0;
 
 			ChilliSource::TaskScheduler* m_taskScheduler;
 		};

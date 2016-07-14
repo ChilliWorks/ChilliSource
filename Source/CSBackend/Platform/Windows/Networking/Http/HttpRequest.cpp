@@ -188,7 +188,7 @@ namespace CSBackend
 		void HttpRequest::Update(f32 infDT)
 		{
 			//Check if the data has finished streaming and invoke the completion delegate on the main thread
-			if(m_isPollingComplete == true)
+			if(m_isPollingComplete == true && m_flushesPending <= 0)
 			{
 				m_isRequestComplete = true;
 
@@ -331,8 +331,10 @@ namespace CSBackend
 						m_responseData = streamBuffer.str();
 						m_requestResult = ChilliSource::HttpResponse::Result::k_flushed;
 
+						++m_flushesPending;
 						m_taskScheduler->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 						{
+							--m_flushesPending;
 							m_completionDelegate(this, ChilliSource::HttpResponse(m_requestResult, m_responseCode, m_responseData));
 						});
 

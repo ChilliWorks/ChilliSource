@@ -506,7 +506,7 @@ namespace CSBackend
 						default:
 							break;
 						case sf::Event::Closed:
-							app->Quit();
+							Quit();
 							return;
 						case sf::Event::Resized:
                         {
@@ -601,6 +601,11 @@ namespace CSBackend
                 m_lifecycleManager->SystemUpdate();
                 m_lifecycleManager->Render();
                 m_window.display();
+
+				if (m_quitScheduled)
+				{
+					Quit();
+				}
 			}
 		}
 		//--------------------------------------------
