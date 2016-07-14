@@ -89,7 +89,7 @@ namespace CSBackend
 		{
 			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
 			{
-				SFMLWindow::Get()->Quit();
+				SFMLWindow::Get()->ScheduleQuit();
 			});
 		}
 	}

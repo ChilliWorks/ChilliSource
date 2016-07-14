@@ -319,12 +319,12 @@ namespace CSBackend
 			//------------------------------------------------
 			ChilliSource::Integer2 GetMousePosition() const;
 			//-------------------------------------------------
-			/// Stops the update loop causing the application 
-			/// to terminate.
+			/// Schedules a quit to occur at the end of the 
+			/// the current update.
 			///
-			/// @author S Downie
+			/// @author HMcLaughlin
 			//-------------------------------------------------
-			void Quit();
+			void ScheduleQuit() { m_quitScheduled = true; }
             //-------------------------------------------------
             /// Destructor; makes sure that delegates have been
             /// properly un-set.
@@ -347,6 +347,13 @@ namespace CSBackend
 			/// @author S Downie
 			//-------------------------------------------------
 			void SetWindowed();
+			//-------------------------------------------------
+			/// Stops the update loop causing the application 
+			/// to terminate.
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void Quit();
 
 		private:
 
@@ -375,6 +382,8 @@ namespace CSBackend
 
 			bool m_isRunning = true;
 			bool m_isFocused = true;
+			bool m_quitScheduled = false;
+
 			DisplayMode m_displayMode = DisplayMode::k_windowed;
 
             ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
