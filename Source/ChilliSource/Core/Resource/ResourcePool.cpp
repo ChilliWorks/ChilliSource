@@ -114,8 +114,6 @@ namespace ChilliSource
     //-------------------------------------------------------------------------------------
     void ResourcePool::ReleaseAllUnused()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
-        
         std::unique_lock<std::mutex> lock(m_mutex);
         u32 numReleased = 0;
         
@@ -198,11 +196,5 @@ namespace ChilliSource
         {
             CS_LOG_FATAL("Resources are still in use. Indicates that there is leaky references");
         }
-    }
-    //------------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------
-    void ResourcePool::OnMemoryWarning()
-    {
-        ReleaseAllUnused();
     }
 }
