@@ -36,9 +36,6 @@
 #import <ChilliSource/Core/Image/PVRImageProvider.h>
 #import <ChilliSource/Core/Threading/TaskScheduler.h>
 
-#import <mach/mach.h>
-#import <mach/mach_time.h>
-
 namespace CSBackend 
 {
 	namespace iOS
