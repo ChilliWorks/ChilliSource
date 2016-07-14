@@ -28,22 +28,64 @@
 
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
-#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Rendering/OpenGL/Base/RenderCapabilities.h>
-#endif
+#include <ChilliSource/Core/Base/RenderInfo.h>
 
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderCapabilities);
     
     //-------------------------------------------------------
-    //-------------------------------------------------------
-    RenderCapabilitiesUPtr RenderCapabilities::Create()
+    RenderCapabilitiesUPtr RenderCapabilities::Create(const RenderInfo& renderInfo) noexcept
     {
-#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_WINDOWS
-        return RenderCapabilitiesUPtr(new CSBackend::OpenGL::RenderCapabilities());
-#else
-        return nullptr;
-#endif
+        return RenderCapabilitiesUPtr(new RenderCapabilities(renderInfo.IsShadowMappingSupported(), renderInfo.IsDepthTextureSupported(), renderInfo.IsMapBufferSupported(),
+                                                             renderInfo.IsHighPrecisionFloatsSupported(), renderInfo.GetMaxTextureSize(), renderInfo.GetNumTextureUnits()));
+    }
+    
+    //-------------------------------------------------------
+    RenderCapabilities::RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits)
+    : m_isShadowMapsSupported(isShadowMapsSupported), m_isDepthTexturesSupported(isDepthTexturesSupported), m_isMapBuffersSupported(isMapBuffersSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits)
+    {
+    }
+    
+    //-------------------------------------------------------
+    bool RenderCapabilities::IsA(ChilliSource::InterfaceIDType interfaceId) const
+    {
+        return (RenderCapabilities::InterfaceID == interfaceId);
+    }
+    
+    //-------------------------------------------------------
+    bool RenderCapabilities::IsShadowMappingSupported() const noexcept
+    {
+        return m_isShadowMapsSupported;
+    }
+    
+    //-------------------------------------------------------
+    bool RenderCapabilities::IsDepthTextureSupported() const noexcept
+    {
+        return m_isDepthTexturesSupported;
+    }
+    
+    //-------------------------------------------------------
+    bool RenderCapabilities::IsMapBufferSupported() const noexcept
+    {
+        return m_isMapBuffersSupported;
+    }
+    
+    //-------------------------------------------------------
+    bool RenderCapabilities::IsHighPrecisionFloatsSupported() const noexcept
+    {
+        return m_isHighPrecisionFloatsSupported;
+    }
+    
+    //-------------------------------------------------------
+    u32 RenderCapabilities::GetMaxTextureSize() const noexcept
+    {
+        return m_maxTextureSize;
+    }
+    
+    //-------------------------------------------------------
+    u32 RenderCapabilities::GetNumTextureUnits() const noexcept
+    {
+        return m_maxTextureUnits;
     }
 }

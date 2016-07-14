@@ -311,7 +311,7 @@ namespace ChilliSource
         CreateSystem<RenderShaderManager>();
         CreateSystem<RenderTextureManager>();
         CreateSystem<RenderTargetGroupManager>();
-        CreateSystem<RenderCapabilities>();
+        CreateSystem<RenderCapabilities>(m_systemInfo->GetRenderInfo());
         CreateSystem<CanvasRenderer>();
         CreateSystem<MaterialFactory>();
         CreateSystem<MaterialProvider>();

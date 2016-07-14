@@ -31,6 +31,7 @@
 #include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 #include <CSBackend/Platform/Windows/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <CSBackend/Rendering/OpenGL/Base/RenderInfoFactory.h>
 
 #include <algorithm>
 #include <vector>
@@ -175,8 +176,11 @@ namespace CSBackend
             // Create ScreenInfo.
             ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
 
+			//Create RenderInfo
+			ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();
+
             // Create SystemInfo.
-            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, ""));
+            ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, renderInfo, ""));
 
             return std::move(systemInfo);
         }

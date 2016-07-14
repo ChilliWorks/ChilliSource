@@ -1,3 +1,4 @@
+//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2016 Tag Games Limited
@@ -21,37 +22,12 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Base/SystemInfo.h>
+#include <ChilliSource/Core/Base/RenderInfo.h>
 
 namespace ChilliSource
 {
-    //----------------------------------------------------------------
-    SystemInfo::SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo, const RenderInfo& renderInfo, const std::string& appVersion) noexcept
-        : m_deviceInfo(deviceInfo), m_screenInfo(screenInfo), m_renderInfo(renderInfo), m_appVersion(appVersion)
-    {   
-    }
-
-    //----------------------------------------------------------------
-    const DeviceInfo& SystemInfo::GetDeviceInfo() const noexcept
+    RenderInfo::RenderInfo(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits) noexcept
+        : m_isShadowMapsSupported(isShadowMapsSupported), m_isDepthTexturesSupported(isDepthTexturesSupported), m_isMapBuffersSupported(isMapBuffersSupported), m_isHighPrecisionFloatsSupported(m_isHighPrecisionFloatsSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits)
     {
-        return m_deviceInfo;
-    }
-    
-    //----------------------------------------------------------------
-    const RenderInfo& SystemInfo::GetRenderInfo() const noexcept
-    {
-        return m_renderInfo;
-    }
-    
-    //----------------------------------------------------------------
-    const ScreenInfo& SystemInfo::GetScreenInfo() const noexcept
-    {
-        return m_screenInfo;
-    }
-    
-    //----------------------------------------------------------------
-    const std::string& SystemInfo::GetAppVersion() const noexcept
-    {
-        return m_appVersion;
     }
 }

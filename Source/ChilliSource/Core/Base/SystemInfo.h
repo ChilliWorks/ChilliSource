@@ -27,6 +27,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/DeviceInfo.h>
 #include <ChilliSource/Core/Base/ScreenInfo.h>
+#include <ChilliSource/Core/Base/RenderInfo.h>
 
 namespace ChilliSource
 {
@@ -42,15 +43,21 @@ namespace ChilliSource
         ///     The device info to populate device with.
         /// @param screenInfo
         ///     The screen info to populate screen with.
+        /// @param renderInfo
+        ///     The render info to populate render capabilities with.
         /// @param appVersion
         ///     The application version.
         ///
-        SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo, const std::string& appVersion) noexcept;
+        SystemInfo(const DeviceInfo& deviceInfo, const ScreenInfo& screenInfo, const RenderInfo& renderInfo, const std::string& appVersion) noexcept;
 
         /// @return The device info for building the Device class.
         ///
         const DeviceInfo& GetDeviceInfo() const noexcept;
 
+        /// @return The render info for building the render capabilities class.
+        ///
+        const RenderInfo& GetRenderInfo() const noexcept;
+        
         /// @return The screen info for building the Screen class.
         ///
         const ScreenInfo& GetScreenInfo() const noexcept;
@@ -61,7 +68,9 @@ namespace ChilliSource
 
     private:
         DeviceInfo m_deviceInfo;
+        RenderInfo m_renderInfo;
         ScreenInfo m_screenInfo;
+        
         std::string m_appVersion;
     };
 }
