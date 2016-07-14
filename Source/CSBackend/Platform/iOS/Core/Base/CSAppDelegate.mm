@@ -88,12 +88,12 @@ CSAppDelegate* singletonInstance = nil;
     
     m_subDelegates = [[NSMutableArray alloc] init];
     
-    m_application = ChilliSource::ApplicationUPtr(CreateApplication(CSBackend::iOS::SystemInfoFactory::CreateSystemInfo()));
-    
     m_window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	viewControllerInternal = [[CSGLViewController alloc] initWithDelegate:self];
     [m_window setRootViewController: viewControllerInternal];
     [m_window makeKeyAndVisible];
+    
+    m_application = ChilliSource::ApplicationUPtr(CreateApplication(CSBackend::iOS::SystemInfoFactory::CreateSystemInfo()));
     
     m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(m_application.get()));
     
