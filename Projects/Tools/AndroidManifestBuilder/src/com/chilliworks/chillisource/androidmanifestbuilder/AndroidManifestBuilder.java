@@ -112,12 +112,6 @@ public final class AndroidManifestBuilder
 				output.m_orientation = orientationNode.getNodeValue();
 			}
 			
-			Node facebookAppIdNode = root.getAttributes().getNamedItem("facebookAppId");
-			if (facebookAppIdNode != null)
-			{
-				output.m_facebookAppId = facebookAppIdNode.getNodeValue();
-			}
-			
 			Node apkExpansionDownloadViewNode = root.getAttributes().getNamedItem("apkExpansionDownloadView");
 			if (apkExpansionDownloadViewNode != null)
 			{
@@ -177,7 +171,6 @@ public final class AndroidManifestBuilder
 		
 		output = output.replace("[[PACKAGE]]", in_userData.m_package);
 		output = output.replace("[[ORIENTATION]]", in_userData.m_orientation);
-		output = output.replace("[[FACEBOOKAPPID]]", in_userData.m_facebookAppId);
 		output = output.replace("[[APKEXPANSIONDOWNLOADVIEW]]", in_userData.m_apkExpansionDownloadView);
 		output = output.replace("[[MANIFESTEXTRA]]", in_userData.m_manifestExtra);
 		output = output.replace("[[APPLICATIONEXTRA]]", in_userData.m_applicationExtra);
