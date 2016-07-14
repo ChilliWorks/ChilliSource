@@ -231,7 +231,8 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* i
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this)
 {
-	//TODO: Add memory warnings.
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->MemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
@@ -455,6 +456,12 @@ namespace CSBackend
             m_lifecycleManager.reset();
             m_application.reset();
         }
+		//--------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------
+		void CoreJavaInterface::MemoryWarning() noexcept
+		{
+			m_lifecycleManager->MemoryWarning();
+		}
 	}
 }
 
