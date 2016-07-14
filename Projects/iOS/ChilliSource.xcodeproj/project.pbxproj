@@ -364,7 +364,6 @@
 		81A616B11D357133007F7CC1 /* TargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A616AF1D357133007F7CC1 /* TargetGroup.cpp */; };
 		81A616B41D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */; };
 		81B096051D2AB8CA00E72835 /* GLContextRestorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B096031D2AB8CA00E72835 /* GLContextRestorer.cpp */; };
-		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
 		81C7FF8C1C89DD0600D306F9 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE821C89DD0500D306F9 /* libCSBase.a */; };
 		81C7FFA41C89DD0600D306F9 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FF621C89DD0600D306F9 /* libck.a */; };
 		81C7FFC21C89DDE300D306F9 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFAA1C89DDE300D306F9 /* Accounts.framework */; };
@@ -1389,7 +1388,6 @@
 				81C7FFD81C89DDE300D306F9 /* SystemConfiguration.framework in Frameworks */,
 				81C7FFD91C89DDE300D306F9 /* UIKit.framework in Frameworks */,
 				81C7FFA41C89DD0600D306F9 /* libck.a in Frameworks */,
-				81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */,
 				81C7FF8C1C89DD0600D306F9 /* libCSBase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
