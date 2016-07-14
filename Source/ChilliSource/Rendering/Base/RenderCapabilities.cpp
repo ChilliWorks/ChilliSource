@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
-#import <ChilliSource/Core/Base/RenderInfo.h>
+#include <ChilliSource/Core/Base/RenderInfo.h>
 
 namespace ChilliSource
 {
