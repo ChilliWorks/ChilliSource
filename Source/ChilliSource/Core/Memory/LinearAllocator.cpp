@@ -47,7 +47,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    std::size_t LinearAllocator::GetFreeSpace() const noexcept
+    std::size_t LinearAllocator::GetRemainingSpace() const noexcept
     {
         auto freeSpace = m_bufferSize - MemoryUtils::GetPointerOffset(m_nextPointer, m_buffer);
         auto freeSpaceAligned = freeSpace & ~(sizeof(std::intptr_t) - 1);
@@ -57,7 +57,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void* LinearAllocator::Allocate(std::size_t allocationSize) noexcept
     {
-        CS_ASSERT(allocationSize <= GetFreeSpace(), "Allocation is too big to fit in the remaining space.");
+        CS_ASSERT(allocationSize <= GetRemainingSpace(), "Allocation is too big to fit in the remaining space.");
 
         std::uint8_t* output = m_nextPointer;
         m_nextPointer = MemoryUtils::Align(m_nextPointer + allocationSize, sizeof(std::intptr_t));

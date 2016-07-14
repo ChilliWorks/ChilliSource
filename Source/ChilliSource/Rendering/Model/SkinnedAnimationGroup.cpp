@@ -38,10 +38,10 @@ namespace ChilliSource
     //-----------------------------------------------------------
     /// Constructor
     //-----------------------------------------------------------
-    SkinnedAnimationGroup::SkinnedAnimationGroup(const Skeleton* inpSkeleton)
+    SkinnedAnimationGroup::SkinnedAnimationGroup(const Skeleton& inpSkeleton)
     : mpSkeleton(inpSkeleton), mbAnimationLengthDirty(true), mfAnimationLength(0.0f), mbPrepared(false)
     {
-        for (s32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
+        for (s32 i = 0; i < mpSkeleton.GetNumNodes(); ++i)
         {
             mCurrentAnimationMatrices.push_back(Matrix4());
         }
@@ -175,7 +175,7 @@ namespace ChilliSource
     //----------------------------------------------------------
     void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Matrix4& inParentMatrix)
     {
-        const std::vector<SkeletonNodeCUPtr>& nodes = mpSkeleton->GetNodes();
+        const std::vector<SkeletonNodeCUPtr>& nodes = mpSkeleton.GetNodes();
         u32 currIndex = 0;
         for (auto it = nodes.begin(); it != nodes.end(); ++it)
         {
@@ -210,38 +210,33 @@ namespace ChilliSource
         return Matrix4::k_identity;
     }
     //----------------------------------------------------------
-    /// Apply Inverse Bind Pose
     //----------------------------------------------------------
-    void SkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Matrix4>& inInverseBindPoseMatrices, std::vector<Matrix4>& outCombinedMatrices)
+    RenderSkinnedAnimationAUPtr SkinnedAnimationGroup::BuildRenderSkinnedAnimation(IAllocator* in_allocator, const std::vector<Matrix4>& in_inverseBindPoseMatrices) const noexcept
     {
-        const std::vector<s32>& kadwJoints = mpSkeleton->GetJointIndices();
+        const std::vector<s32>& joints = mpSkeleton.GetJointIndices();
+        CS_ASSERT(joints.size() == in_inverseBindPoseMatrices.size(), "Cannot apply bind pose matrices to joint matrices, because they are not from the same skeleton.");
         
-        outCombinedMatrices.clear();
-        for (u32 i = 0; i < kadwJoints.size(); ++i)
-        {
-            outCombinedMatrices.push_back(Matrix4());
-        }
+        constexpr u32 k_numVectorsPerJoint = 3;
+        auto jointDataSize = joints.size() * k_numVectorsPerJoint;
+        auto jointData = MakeUniqueArray<Vector4>(*in_allocator, jointDataSize);
         
-        //check that they have the same number of joints
-        if (kadwJoints.size() != inInverseBindPoseMatrices.size())
-        {
-            CS_LOG_ERROR("Cannot apply bind pose matrices to joint matrices, because they are not from the same skeleton.");
-        }
-        
-        //iterate through and multiply together to get the new array
         s32 count = 0;
-        std::vector<s32>::const_iterator joint = kadwJoints.begin();
-        for (std::vector<Matrix4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
-             joint != kadwJoints.end() && ibp != inInverseBindPoseMatrices.end();)
+        std::vector<s32>::const_iterator joint = joints.begin();
+        for (auto ibp = in_inverseBindPoseMatrices.begin(); joint != joints.end() && ibp != in_inverseBindPoseMatrices.end();)
         {
-            //multiply together
-            outCombinedMatrices[count] = ((*ibp) * (mCurrentAnimationMatrices[*joint]));
+            Matrix4 combinedMatrix = ((*ibp) * (mCurrentAnimationMatrices[*joint]));
+            
+            jointData[count * 3 + 0] = Vector4(combinedMatrix.m[0], combinedMatrix.m[4], combinedMatrix.m[8], combinedMatrix.m[12]);
+            jointData[count * 3 + 1] = Vector4(combinedMatrix.m[1], combinedMatrix.m[5], combinedMatrix.m[9], combinedMatrix.m[13]);
+            jointData[count * 3 + 2] = Vector4(combinedMatrix.m[2], combinedMatrix.m[6], combinedMatrix.m[10], combinedMatrix.m[14]);
             
             //incriment the iterators
             ++joint;
             ++ibp;
             count++;
         }
+        
+        return MakeUnique<RenderSkinnedAnimation>(*in_allocator, std::move(jointData), u32(jointDataSize));
     }
     //----------------------------------------------------------
     /// Get Animation Length

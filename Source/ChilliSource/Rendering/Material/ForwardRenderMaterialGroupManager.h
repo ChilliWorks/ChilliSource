@@ -103,6 +103,48 @@ namespace ChilliSource
         const RenderMaterialGroup* CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
                                                                   const Colour& specularColour) noexcept override;
         
+        /// Creates a new custom RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
+        /// Render Snapshot stage in the render pipeline.
+        ///
+        /// @param vertexFormat
+        ///     The vertex format this material is for.
+        /// @param renderShader
+        ///     The render shader.
+        /// @param renderTextures
+        ///     The list of render texture.
+        /// @param isTransparencyEnabled
+        ///     Whether or not transparency is enabled.
+        /// @param isColourWriteEnabled
+        ///     Whether or not colour write is enabled.
+        /// @param isDepthWriteEnabled
+        ///     Whether or not depth write is enabled.
+        /// @param isDepthTestEnabled
+        ///     Whether or not the depth test will be performed.
+        /// @param isFaceCullingEnabled
+        ///     Whether or not face culling will be performed.
+        /// @param sourceBlendMode
+        ///     The source blend mode. This only applies if transparency is enabled.
+        /// @param destinationBlendMode
+        ///     The destination blend mode. This only applies if transparency is enabled.
+        /// @param cullFace
+        ///     The face which should be called. This only applies if face culling is enabled.
+        /// @param ambientColour
+        ///     The ambient colour.
+        /// @param emissiveColour
+        ///     The ambient colour.
+        /// @param diffuseColour
+        ///     The diffuse colour.
+        /// @param specularColour
+        ///     The specular colour.
+        /// @param renderShaderVariables
+        ///     The container for all render shader variables.
+        ///
+        /// @return The new material group.
+        ///
+        const RenderMaterialGroup* CreateCustomRenderMaterialGroup(const VertexFormat& vertexFormat, const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
+                                                                   bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour,
+                                                                   const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour, RenderShaderVariablesUPtr renderShaderVariables) noexcept override;
+        
     private:
         friend class RenderMaterialGroupManager;
         
@@ -124,6 +166,13 @@ namespace ChilliSource
         ShaderCSPtr m_staticBlinnDirectional;
         ShaderCSPtr m_staticBlinnDirectionalShadows;
         ShaderCSPtr m_staticBlinnPoint;
+        
+        ShaderCSPtr m_animatedShadowMap;
+        ShaderCSPtr m_animatedUnlit;
+        ShaderCSPtr m_animatedBlinnBase;
+        ShaderCSPtr m_animatedBlinnDirectional;
+        ShaderCSPtr m_animatedBlinnDirectionalShadows;
+        ShaderCSPtr m_animatedBlinnPoint;
     };
 }
 

@@ -32,6 +32,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/Screen.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxSystem.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
@@ -230,7 +231,8 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* i
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this)
 {
-	//TODO: Add memory warnings.
+	auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+	coreJI->MemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
@@ -263,7 +265,6 @@ namespace CSBackend
 			CreateMethodReference("getScreenHeight", "()I");
 			CreateMethodReference("getScreenDensity", "()F");
 			CreateMethodReference("forceQuit", "()V");
-			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
 			CreateMethodReference("setPreferredFPS", "(I)V");
 			CreateMethodReference("getActivity", "()Landroid/app/Activity;");
 		}
@@ -384,16 +385,6 @@ namespace CSBackend
 		}
         //-----------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------
-        TimeIntervalMs CoreJavaInterface::GetSystemTimeInMilliseconds()
-        {
-        	TimeIntervalMs output = 0;
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			output = (TimeIntervalMs)env->CallLongMethod(GetJavaObject(), GetMethodID("getSystemTimeInMilliseconds"));
-			return output;
-        }
-
-        //-----------------------------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------------------------
         void CoreJavaInterface::ForceQuit()
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
@@ -403,7 +394,7 @@ namespace CSBackend
         //--------------------------------------------------------------------------------------
         void CoreJavaInterface::Init() noexcept
         {
-            m_application = ChilliSource::ApplicationUPtr(CreateApplication());
+            m_application = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
             m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(m_application.get()));
         }
         //--------------------------------------------------------------------------------------
@@ -454,6 +445,12 @@ namespace CSBackend
             m_lifecycleManager.reset();
             m_application.reset();
         }
+		//--------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------
+		void CoreJavaInterface::MemoryWarning() noexcept
+		{
+			m_lifecycleManager->MemoryWarning();
+		}
 	}
 }
 

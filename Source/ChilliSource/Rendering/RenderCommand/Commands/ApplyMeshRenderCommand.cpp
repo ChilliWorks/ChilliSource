@@ -31,5 +31,6 @@ namespace ChilliSource
     ApplyMeshRenderCommand::ApplyMeshRenderCommand(const RenderMesh* renderMesh) noexcept
         : RenderCommand(Type::k_applyMesh), m_renderMesh(renderMesh)
     {
+        CS_ASSERT(m_renderMesh, "Render mesh cannot be null.");
     }
 }

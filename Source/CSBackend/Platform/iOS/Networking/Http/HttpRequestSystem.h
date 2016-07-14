@@ -125,9 +125,10 @@ namespace CSBackend
             ///
             /// @author S Downie
             ///
-            /// @return Success if net available
+            /// @param Delegate to call when reachability is determined
             //------------------------------------------------------------------
-            bool CheckReachability() const override;
+            void CheckReachability(const ReachabilityResultDelegate& in_reachabilityDelegate) const override;
+            
         private:
             friend ChilliSource::HttpRequestSystemUPtr ChilliSource::HttpRequestSystem::Create();
             //------------------------------------------------------------------

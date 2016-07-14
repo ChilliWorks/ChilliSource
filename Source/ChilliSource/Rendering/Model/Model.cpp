@@ -73,10 +73,12 @@ namespace ChilliSource
             auto boundingSphere = meshDesc.GetBoundingSphere();
             auto vertexData = meshDesc.ClaimVertexData();
             auto indexData = meshDesc.ClaimIndexData();
-            u32 vertexDataSize = meshDesc.GetNumVertices() * meshDesc.GetVertexFormat().GetSize();
-            u32 indexDataSize = meshDesc.GetNumIndices() * GetIndexSize(meshDesc.GetIndexFormat());
+            auto vertexDataSize = meshDesc.GetNumVertices() * meshDesc.GetVertexFormat().GetSize();
+            auto indexDataSize = meshDesc.GetNumIndices() * GetIndexSize(meshDesc.GetIndexFormat());
+            auto inverseBindPoseMatrices = meshDesc.ClaimInverseBindPoseMatrices();
             
-            auto renderMesh = renderMeshManager->CreateRenderMesh(poylgonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize, modelDesc.ShouldBackupData());
+            auto renderMesh = renderMeshManager->CreateRenderMesh(poylgonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize,
+                                                                  modelDesc.ShouldBackupData(), std::move(inverseBindPoseMatrices));
             m_renderMeshes.push_back(renderMesh);
         }
     }
@@ -114,7 +116,7 @@ namespace ChilliSource
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access a model before it is loaded.");
         CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
         
-        return u32(m_meshNames.size());
+        return u32(m_renderMeshes.size());
     }
     
     //------------------------------------------------------------------------------
@@ -164,6 +166,7 @@ namespace ChilliSource
             renderMeshManager->DestroyRenderMesh(renderMesh);
         }
         m_renderMeshes.clear();
+        m_meshNames.clear();
     }
     
     //------------------------------------------------------------------------------

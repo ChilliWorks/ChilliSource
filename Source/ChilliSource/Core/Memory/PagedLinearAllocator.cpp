@@ -62,11 +62,11 @@ namespace ChilliSource
 
         if (m_parentAllocator)
         {
-            for (const auto& blockAllocator : m_parentAllocatorLinearAllocators)
+            for (const auto& allocator : m_parentAllocatorLinearAllocators)
             {
-                if (blockAllocator->GetFreeSpace() >= allocationSize)
+                if (allocator->GetRemainingSpace() >= allocationSize)
                 {
-                    return blockAllocator->Allocate(allocationSize);
+                    return allocator->Allocate(allocationSize);
                 }
             }
 
@@ -75,11 +75,11 @@ namespace ChilliSource
         }
         else
         {
-            for (const auto& blockAllocator : m_freeStoreLinearAllocators)
+            for (const auto& allocator : m_freeStoreLinearAllocators)
             {
-                if (blockAllocator->GetFreeSpace() >= allocationSize)
+                if (allocator->GetRemainingSpace() >= allocationSize)
                 {
-                    return blockAllocator->Allocate(allocationSize);
+                    return allocator->Allocate(allocationSize);
                 }
             }
 
@@ -93,21 +93,21 @@ namespace ChilliSource
     {
         if (m_parentAllocator)
         {
-            for (const auto& blockAllocator : m_parentAllocatorLinearAllocators)
+            for (const auto& allocator : m_parentAllocatorLinearAllocators)
             {
-                if (blockAllocator->Contains(pointer))
+                if (allocator->Contains(pointer))
                 {
-                    return blockAllocator->Deallocate(pointer);
+                    return allocator->Deallocate(pointer);
                 }
             }
         }
         else
         {
-            for (const auto& blockAllocator : m_freeStoreLinearAllocators)
+            for (const auto& allocator : m_freeStoreLinearAllocators)
             {
-                if (blockAllocator->Contains(pointer))
+                if (allocator->Contains(pointer))
                 {
-                    return blockAllocator->Deallocate(pointer);
+                    return allocator->Deallocate(pointer);
                 }
             }
         }

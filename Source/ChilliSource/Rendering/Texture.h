@@ -31,9 +31,6 @@
 #define _CHILLISOURCE_RENDERING_TEXTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/Texture/CubemapProvider.h>
-#include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>

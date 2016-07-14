@@ -34,6 +34,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Event/Event.h>
 
 namespace CSBackend
@@ -134,19 +135,18 @@ namespace CSBackend
 			//------------------------------------------------------------
 			void OnResolutionChanged(const ChilliSource::Vector2& in_resolution);
         private:
-            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create();
+            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create(const ChilliSource::ScreenInfo& screenInfo);
             //-------------------------------------------------------
 			/// Private constructor to force the use of the Create()
             /// factory method.
 			///
             /// @author Ian Copland
 			//-------------------------------------------------------
-			Screen();
-            
-			std::vector<ChilliSource::Integer2> m_supportedResolutions;
+			Screen(const ChilliSource::ScreenInfo& screenInfo);
+
+            ChilliSource::ScreenInfo m_screenInfo;
             ChilliSource::Vector2 m_resolution;
-            f32 m_densityScale;
-            f32 m_invDensityScale;
+
             ChilliSource::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
             ChilliSource::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
         };

@@ -30,5 +30,6 @@ namespace ChilliSource
     ApplyMaterialRenderCommand::ApplyMaterialRenderCommand(const RenderMaterial* renderMaterial) noexcept
         : RenderCommand(Type::k_applyMaterial), m_renderMaterial(renderMaterial)
     {
+        CS_ASSERT(m_renderMaterial, "Render material cannot be null.");
     }
 }

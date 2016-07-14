@@ -30,6 +30,7 @@
 #include <CSBackend/Rendering/OpenGL/Lighting/GLPointLight.h>
 #include <CSBackend/Rendering/OpenGL/Material/GLMaterial.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
+#include <CSBackend/Rendering/OpenGL/Model/GLSkinnedAnimation.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 #include <CSBackend/Rendering/OpenGL/Target/GLTargetGroup.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
@@ -45,7 +46,9 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyDynamicMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMaterialRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplyMeshBatchRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/ApplyPointLightRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/ApplySkinnedAnimationRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/BeginWithTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/EndRenderCommand.h>
@@ -56,6 +59,7 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreRenderTargetGroupCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
@@ -154,6 +158,9 @@ namespace CSBackend
                         case ChilliSource::RenderCommand::Type::k_restoreTexture:
                             RestoreTexture(static_cast<const ChilliSource::RestoreTextureRenderCommand*>(renderCommand));
                             break;
+                        case ChilliSource::RenderCommand::Type::k_restoreRenderTargetGroup:
+                            RestoreRenderTargetGroup(static_cast<const ChilliSource::RestoreRenderTargetGroupCommand*>(renderCommand));
+                            break;
                         case ChilliSource::RenderCommand::Type::k_loadTargetGroup:
                             LoadTargetGroup(static_cast<const ChilliSource::LoadTargetGroupRenderCommand*>(renderCommand));
                             break;
@@ -183,6 +190,12 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_applyDynamicMesh:
                             ApplyDynamicMesh(static_cast<const ChilliSource::ApplyDynamicMeshRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applyMeshBatch:
+                            ApplyMeshBatch(static_cast<const ChilliSource::ApplyMeshBatchRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_applySkinnedAnimation:
+                            ApplySkinnedAnimation(static_cast<const ChilliSource::ApplySkinnedAnimationRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_renderInstance:
                             RenderInstance(static_cast<const ChilliSource::RenderInstanceRenderCommand*>(renderCommand));
@@ -293,6 +306,33 @@ namespace CSBackend
             glMesh->Restore();
         }
         
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreRenderTargetGroup(const ChilliSource::RestoreRenderTargetGroupCommand* renderCommand) noexcept
+        {
+            //Check if any of the textures are invalid before restoring, if a texture is still invalid at this stage
+            //it was loaded from disk and the RenderTargetGroup will be recreated when TargetGroup is accessed again.
+            bool texturesInvalid = false;
+            const auto targetRenderGroup = renderCommand->GetTargetRenderGroup();
+            if(targetRenderGroup->GetDepthTarget())
+            {
+                GLTexture* glDepthTexture = static_cast<GLTexture*>(targetRenderGroup->GetDepthTarget()->GetExtraData());
+                texturesInvalid = glDepthTexture->IsDataInvalid();
+            }
+            
+            if(!texturesInvalid && targetRenderGroup->GetColourTarget())
+            {
+                GLTexture* glColourTexture = static_cast<GLTexture*>(targetRenderGroup->GetColourTarget()->GetExtraData());
+                texturesInvalid = glColourTexture->IsDataInvalid();
+            }
+            
+            if(!texturesInvalid)
+            {
+                GLTargetGroup* glTarget = static_cast<GLTargetGroup*>(targetRenderGroup->GetExtraData());
+                glTarget->Restore();
+            }
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadTargetGroup(const ChilliSource::LoadTargetGroupRenderCommand* renderCommand) noexcept
         {
             ResetCache();
@@ -341,7 +381,7 @@ namespace CSBackend
             m_currentRenderTargetGroup = renderCommand->GetRenderTargetGroup();
             CS_ASSERT(m_currentRenderTargetGroup, "Cannot render with a null render target group.");
             
-            auto glTargetGroup = reinterpret_cast<GLTargetGroup*>(m_currentRenderTargetGroup->GetExtraData());
+            auto glTargetGroup = static_cast<GLTargetGroup*>(m_currentRenderTargetGroup->GetExtraData());
             CS_ASSERT(glTargetGroup, "Cannot render with a render target group which hasn't been loaded.");
             
             glTargetGroup->Bind();
@@ -407,6 +447,8 @@ namespace CSBackend
                 {
                     m_currentMesh = nullptr;
                     m_currentDynamicMesh = nullptr;
+                    m_currentSkinnedAnimation = nullptr;
+                    
                     m_currentShader = renderShader;
                     
                     glShader->Bind();
@@ -437,9 +479,10 @@ namespace CSBackend
             {
                 m_currentMesh = renderMesh;
                 m_currentDynamicMesh = nullptr;
+                m_currentSkinnedAnimation = nullptr;
                 
-                auto glMesh = reinterpret_cast<GLMesh*>(m_currentMesh->GetExtraData());
-                auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
+                auto glMesh = static_cast<GLMesh*>(m_currentMesh->GetExtraData());
+                auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
                 glMesh->Bind(glShader);
             }
         }
@@ -455,15 +498,63 @@ namespace CSBackend
             {
                 m_currentMesh = nullptr;
                 m_currentDynamicMesh = renderDynamicMesh;
+                m_currentSkinnedAnimation = nullptr;
                 
-                auto glShader = reinterpret_cast<GLShader*>(m_currentShader->GetExtraData());
+                auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
+                
+                auto polygonType = m_currentDynamicMesh->GetPolygonType();
                 const auto& vertexFormat = m_currentDynamicMesh->GetVertexFormat();
+                auto indexFormat = m_currentDynamicMesh->GetIndexFormat();
+                auto numVertices = m_currentDynamicMesh->GetNumVertices();
+                auto numIndices = m_currentDynamicMesh->GetNumIndices();
                 auto vertexData = m_currentDynamicMesh->GetVertexData();
                 auto vertexDataSize = m_currentDynamicMesh->GetVertexDataSize();
                 auto indexData = m_currentDynamicMesh->GetIndexData();
                 auto indexDataSize = m_currentDynamicMesh->GetIndexDataSize();
                 
-                m_glDynamicMesh->Bind(glShader, vertexFormat, vertexData, vertexDataSize, indexData, indexDataSize);
+                m_glDynamicMesh->Bind(glShader, polygonType, vertexFormat, indexFormat, numVertices, numIndices, vertexData, vertexDataSize, indexData, indexDataSize);
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplyMeshBatch(const ChilliSource::ApplyMeshBatchRenderCommand* renderCommand) noexcept
+        {
+            CS_ASSERT(m_currentMaterial, "A material must be applied before applying mesh batch.");
+            CS_ASSERT(m_currentShader, "A shader must be applied before applying mesh batch.");
+            
+            m_currentMesh = nullptr;
+            m_currentDynamicMesh = nullptr;
+            m_currentSkinnedAnimation = nullptr;
+            auto renderMeshBatch = renderCommand->GetRenderMeshBatch();
+            
+            auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
+            
+            auto polygonType = renderMeshBatch->GetPolygonType();
+            const auto& vertexFormat = renderMeshBatch->GetVertexFormat();
+            auto indexFormat = renderMeshBatch->GetIndexFormat();
+            auto numVertices = renderMeshBatch->GetNumVertices();
+            auto numIndices = renderMeshBatch->GetNumIndices();
+            auto vertexDataSize = renderMeshBatch->GetVertexDataSize();
+            auto indexDataSize = renderMeshBatch->GetIndexDataSize();
+            const auto& meshes = renderMeshBatch->GetMeshes();
+            
+            m_glDynamicMesh->Bind(glShader, polygonType, vertexFormat, indexFormat, numVertices, numIndices, vertexDataSize, indexDataSize, meshes);
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::ApplySkinnedAnimation(const ChilliSource::ApplySkinnedAnimationRenderCommand* renderCommand) noexcept
+        {
+            CS_ASSERT(m_currentMaterial, "A material must be applied before applying skinned animation.");
+            CS_ASSERT(m_currentShader, "A shader must be applied before applying skinned animation.");
+            CS_ASSERT(m_currentMesh || m_currentDynamicMesh, "A mesh must be applied before applying skinned animation.");
+            
+            if (m_currentSkinnedAnimation != renderCommand->GetRenderSkinnedAnimation())
+            {
+                m_currentSkinnedAnimation = renderCommand->GetRenderSkinnedAnimation();
+                
+                auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
+                
+                GLSkinnedAnimation::Apply(m_currentSkinnedAnimation, glShader);
             }
         }
         
@@ -472,8 +563,6 @@ namespace CSBackend
         {
             CS_ASSERT(m_currentMaterial, "A material must be applied before rendering a mesh.");
             CS_ASSERT(m_currentShader, "A shader must be applied before rendering a mesh.");
-            CS_ASSERT(m_currentMesh || m_currentDynamicMesh, "A mesh must be applied before rendering.");
-            CS_ASSERT(!m_currentMesh != !m_currentDynamicMesh, "Both mesh types are currently bound, this shouldn't be possible.");
             
             auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
             glShader->SetUniform(k_uniformWorldMat, renderCommand->GetWorldMatrix(), GLShader::FailurePolicy::k_silent);
@@ -493,13 +582,13 @@ namespace CSBackend
             }
             else
             {
-                if (m_currentDynamicMesh->GetNumIndices() > 0)
+                if (m_glDynamicMesh->GetNumIndices() > 0)
                 {
-                    glDrawElements(ToGLPolygonType(m_currentDynamicMesh->GetPolygonType()), m_currentDynamicMesh->GetNumIndices(), ToGLIndexType(m_currentDynamicMesh->GetIndexFormat()), 0);
+                    glDrawElements(ToGLPolygonType(m_glDynamicMesh->GetPolygonType()), m_glDynamicMesh->GetNumIndices(), ToGLIndexType(m_glDynamicMesh->GetIndexFormat()), 0);
                 }
                 else
                 {
-                    glDrawArrays(ToGLPolygonType(m_currentDynamicMesh->GetPolygonType()), 0, m_currentDynamicMesh->GetNumVertices());
+                    glDrawArrays(ToGLPolygonType(m_glDynamicMesh->GetPolygonType()), 0, m_glDynamicMesh->GetNumVertices());
                 }
             }
             
@@ -523,7 +612,7 @@ namespace CSBackend
             ResetCache();
             
             auto renderShader = renderCommand->GetRenderShader();
-            auto glShader = reinterpret_cast<GLShader*>(renderShader->GetExtraData());
+            auto glShader = static_cast<GLShader*>(renderShader->GetExtraData());
             
             CS_SAFEDELETE(glShader);
         }
@@ -534,7 +623,7 @@ namespace CSBackend
             ResetCache();
             
             auto renderTexture = renderCommand->GetRenderTexture();
-            auto glTexture = reinterpret_cast<GLTexture*>(renderTexture->GetExtraData());
+            auto glTexture = static_cast<GLTexture*>(renderTexture->GetExtraData());
             
             CS_SAFEDELETE(glTexture);
         }
@@ -545,7 +634,7 @@ namespace CSBackend
             ResetCache();
             
             auto renderMesh = renderCommand->GetRenderMesh();
-            auto glMesh = reinterpret_cast<GLMesh*>(renderMesh->GetExtraData());
+            auto glMesh = static_cast<GLMesh*>(renderMesh->GetExtraData());
             
             CS_SAFEDELETE(glMesh);
         }
@@ -556,7 +645,7 @@ namespace CSBackend
             ResetCache();
             
             auto renderTargetGroup = renderCommand->GetRenderTargetGroup();
-            auto glTargetGroup = reinterpret_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
+            auto glTargetGroup = static_cast<GLTargetGroup*>(renderTargetGroup->GetExtraData());
             
             CS_SAFEDELETE(glTargetGroup);
         }
@@ -572,6 +661,16 @@ namespace CSBackend
             m_currentDynamicMesh = nullptr;
             m_currentShader = nullptr;
             m_currentMaterial = nullptr;
+            m_currentSkinnedAnimation = nullptr;
+        }
+
+        //------------------------------------------------------------------------------
+        RenderCommandProcessor::~RenderCommandProcessor() noexcept
+        {
+            // This is destroyed from the main thread so the GLDynamicMesh cannot be cleaned up gracefully.
+            // However, if this is called the context is about to be lost anyway so it doesn't need to be
+            // cleaned up, so we can just invalidate it.
+            m_glDynamicMesh->Invalidate();
         }
     }
 }

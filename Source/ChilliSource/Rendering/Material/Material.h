@@ -36,6 +36,7 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Rendering/Model/VertexFormat.h>
 
 #include <array>
 #include <unordered_map>
@@ -64,7 +65,8 @@ namespace ChilliSource
         enum class ShadingType
         {
             k_unlit,
-            k_blinn
+            k_blinn,
+            k_custom
         };
         //----------------------------------------------------------
         /// @author S Downie
@@ -75,12 +77,6 @@ namespace ChilliSource
         //----------------------------------------------------------
         bool IsA(InterfaceIDType in_interfaceId) const override;
         //----------------------------------------------------------
-        /// @author Ian Copland
-        ///
-        /// @return The shading type that this material uses.
-        //----------------------------------------------------------
-        ShadingType GetShadingType() const noexcept;
-        //----------------------------------------------------------
         ///Sets the shading type that this material uses.
         ///
         /// @author Ian Copland
@@ -88,6 +84,12 @@ namespace ChilliSource
         /// @param in_shadingType - The shading type to use.
         //----------------------------------------------------------
         void SetShadingType(ShadingType in_shadingType) noexcept;
+        //----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The shading type that this material uses.
+        //----------------------------------------------------------
+        ShadingType GetShadingType() const noexcept;
         //----------------------------------------------------------
         /// Clear the textures from the slots
         ///
@@ -101,8 +103,7 @@ namespace ChilliSource
         ///
         /// NOTE: Due to devices supporting different numbers of
         /// textures it is possible that textures at the end will be
-        /// ignored by the renderer. The cubemap can also steal
-        /// a texture slot and will take precedence over a texture.
+        /// ignored by the renderer.
         ///
         /// @author S Downie
         ///
@@ -137,18 +138,6 @@ namespace ChilliSource
         /// @return Number of textures set on the material
         //----------------------------------------------------------
         u32 GetNumTextures() const;
-        //----------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @param Cubemap
-        //----------------------------------------------------------
-        void SetCubemap(const CubemapCSPtr& in_cubemap);
-        //----------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Cubemap or null
-        //----------------------------------------------------------
-        const CubemapCSPtr& GetCubemap() const;
         //----------------------------------------------------------
         /// @author S Downie
         ///
@@ -306,6 +295,17 @@ namespace ChilliSource
         //----------------------------------------------------------
         const Colour& GetSpecular() const;
         //-----------------------------------------------------------
+        /// Sets a custom shader for the given vertex format. The
+        /// shading type must be set to custom or this will assert.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param vertexFormat - The vertex format that the custom
+        /// shader will be applied to.
+        /// @param shader - The custom shader.
+        //-----------------------------------------------------------
+        void SetCustomShader(const VertexFormat& vertexFormat, const ShaderCSPtr& shader) noexcept;
+        //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
         ///
@@ -382,14 +382,6 @@ namespace ChilliSource
         
         ~Material() noexcept;
         
-        //TODO: Make private when we rework the render system
-        std::unordered_map<std::string, f32> m_floatVars;
-        std::unordered_map<std::string, Vector2> m_vec2Vars;
-        std::unordered_map<std::string, Vector3> m_vec3Vars;
-        std::unordered_map<std::string, Vector4> m_vec4Vars;
-        std::unordered_map<std::string, Matrix4> m_mat4Vars;
-        std::unordered_map<std::string, Colour> m_colourVars;
-        
     private:
         friend class ResourcePool;
         //----------------------------------------------------------
@@ -405,7 +397,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------
-        Material();
+        Material() noexcept;
         //----------------------------------------------------------
         /// Generates an unlit render material group using the
         /// current material setting. If any of the settings are
@@ -413,10 +405,8 @@ namespace ChilliSource
         /// will assert.
         ///
         /// @author Ian Copland
-        ///
-        /// @return The RenderMaterialGroup.
         //----------------------------------------------------------
-        const RenderMaterialGroup* CreateUnlitRenderMaterialGroup() const noexcept;
+        void CreateUnlitRenderMaterialGroup() const noexcept;
         //----------------------------------------------------------
         /// Generates an blinn render material group using the
         /// current material setting. If any of the settings are
@@ -424,22 +414,34 @@ namespace ChilliSource
         /// will assert.
         ///
         /// @author Ian Copland
-        ///
-        /// @return The RenderMaterialGroup.
         //----------------------------------------------------------
-        const RenderMaterialGroup* CreateBlinnRenderMaterialGroup() const noexcept;
+        void CreateBlinnRenderMaterialGroup() const noexcept;
+        //----------------------------------------------------------
+        /// Generates a custom render material group using the
+        /// current material setting. 
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------
+        void CreateCustomRenderMaterialGroup() const noexcept;
         //----------------------------------------------------------
         /// Destroys the render material group if there is one.
         ///
         /// @author Ian Copland
         //----------------------------------------------------------
         void DestroyRenderMaterialGroup() const noexcept;
+        //----------------------------------------------------------
+        /// Checks if the current textures are still valid, i.e. the containing
+        /// render textures match the ones cached on creation.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @return If the current texture list is invalid
+        //----------------------------------------------------------
+        bool VerifyTexturesAreValid() const noexcept;
         
         std::vector<TextureCSPtr> m_textures;
         
-        CubemapCSPtr m_cubemap;
-        
-        ShadingType m_shadingType = ShadingType::k_unlit;
+        ShadingType m_shadingType = ShadingType::k_custom;
         
         Colour m_emissive;
         Colour m_ambient;
@@ -457,12 +459,23 @@ namespace ChilliSource
         bool m_isDepthTestEnabled = true;
         bool m_isFaceCullingEnabled = true;
         
+        ShaderCSPtr m_customShader;
+        VertexFormat m_customShaderVertexFormat = VertexFormat::k_sprite;
+        
+        std::unordered_map<std::string, f32> m_floatVars;
+        std::unordered_map<std::string, Vector2> m_vec2Vars;
+        std::unordered_map<std::string, Vector3> m_vec3Vars;
+        std::unordered_map<std::string, Vector4> m_vec4Vars;
+        std::unordered_map<std::string, Matrix4> m_mat4Vars;
+        std::unordered_map<std::string, Colour> m_colourVars;
+        
         RenderMaterialGroupManager* m_renderMaterialGroupManager = nullptr;
         
         //TODO: When the material system is improved, remove the need to make this mutable.
         mutable bool m_isCacheValid = false;
         mutable bool m_isVariableCacheValid = true;
         mutable const RenderMaterialGroup* m_renderMaterialGroup = nullptr;
+        mutable std::vector<const RenderTexture*> m_cachedRenderTextures;
     };
 }
 

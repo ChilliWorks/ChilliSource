@@ -74,7 +74,6 @@
 #include <ChilliSource/Rendering/Shader/CSShaderProvider.h>
 #include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
 #include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
-#include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
@@ -85,6 +84,7 @@
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
 
 #include <algorithm>
+#include <chrono>
 #include <ctime>
 
 #if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
@@ -109,15 +109,16 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    Application::Application() noexcept
-        : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0)
+    Application::Application(ChilliSource::SystemInfoCUPtr systemInfo) noexcept
+        : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0), m_systemInfo(std::move(systemInfo))
     {
+        m_appVersion = m_systemInfo->GetAppVersion();
     }
 
     //------------------------------------------------------------------------------
-    std::string Application::GetAppVersion() const noexcept
+    const std::string& Application::GetAppVersion() const noexcept
     {
-        return m_platformSystem->GetAppVersion();
+        return m_appVersion;
     }
 
     //------------------------------------------------------------------------------
@@ -137,13 +138,13 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     TimeIntervalSecs Application::GetSystemTime() const noexcept
     {
-        return time(0);
+        return std::chrono::duration_cast<std::chrono::seconds>((std::chrono::system_clock::now().time_since_epoch())).count();
     }
 
     //------------------------------------------------------------------------------
     TimeIntervalMs Application::GetSystemTimeInMilliseconds() const noexcept
     {
-        return m_platformSystem->GetSystemTimeMS();
+        return std::chrono::duration_cast<std::chrono::milliseconds>((std::chrono::system_clock::now().time_since_epoch())).count();
     }
 
     //------------------------------------------------------------------------------
@@ -278,8 +279,8 @@ namespace ChilliSource
         //Core
         m_platformSystem = CreateSystem<PlatformSystem>();
         m_appConfig = CreateSystem<AppConfig>();
-        CreateSystem<Device>();
-        m_screen = CreateSystem<Screen>();
+        CreateSystem<Device>(m_systemInfo->GetDeviceInfo());
+        m_screen = CreateSystem<Screen>(m_systemInfo->GetScreenInfo());
         
         m_taskScheduler = CreateSystem<TaskScheduler>();
         m_fileSystem = CreateSystem<FileSystem>();
@@ -317,7 +318,6 @@ namespace ChilliSource
         CreateSystem<CSShaderProvider>();
         CreateSystem<TextureAtlasProvider>();
         CreateSystem<TextureProvider>();
-        CreateSystem<CubemapProvider>();
         CreateSystem<FontProvider>();
         CreateSystem<RenderComponentFactory>();
         
@@ -335,6 +335,9 @@ namespace ChilliSource
 
         //Create any platform specific default systems
         m_platformSystem->CreateDefaultSystems(this);
+
+        //Clean up SystemInfo to prevent unintended uses
+        m_systemInfo.reset();
     }
 
     //------------------------------------------------------------------------------
@@ -350,13 +353,11 @@ namespace ChilliSource
             }
         }
         
-        //Texture/Cubemap provider is a compound provider and needs to be informed when the other providers are created.
+        //Texture provider is a compound provider and needs to be informed when the other providers are created.
         GetSystem<TextureProvider>()->PostCreate();
-        GetSystem<CubemapProvider>()->PostCreate();
         
         //Load the app config set preferred FPS.
         m_appConfig->Load();
-        m_platformSystem->SetPreferredFPS(m_appConfig->GetPreferredFPS());
     }
     
     //------------------------------------------------------------------------------
@@ -416,6 +417,8 @@ namespace ChilliSource
         
         OnInit();
         PushInitialState();
+        
+        m_platformSystem->SetPreferredFPS(m_appConfig->GetPreferredFPS());
     }
     
     //------------------------------------------------------------------------------
@@ -512,7 +515,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Application::ApplicationMemoryWarning() noexcept
+    void Application::MemoryWarning() noexcept
     {
         CS_LOG_VERBOSE("Memory Warning. Clearing resource cache...");
         

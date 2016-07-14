@@ -39,8 +39,6 @@
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
-#include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
 #include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
 
 namespace ChilliSource
@@ -54,8 +52,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         enum class ResourceType
         {
-            k_texture,
-            k_cubemap
+            k_texture
         };
         //-------------------------------------------------------------------------
         /// Holds the description of a generic resource load from the supported types
@@ -406,29 +403,6 @@ namespace ChilliSource
             }
         }
         //----------------------------------------------------------------------------
-        /// Parse the cubemap file paths
-        ///
-        /// @author S Downie
-        ///
-        /// @param Root element
-        /// @param [Out] Cubemap files to populate
-        //----------------------------------------------------------------------------
-        void ParseCubemaps(XML::Node* in_rootElement, std::vector<MaterialProvider::TextureDesc>& out_cubemapFiles)
-        {
-            XML::Node* cubemapEl = XMLUtils::GetFirstChildElement(in_rootElement, "Cubemap");
-            if(cubemapEl)
-            {
-                MaterialProvider::TextureDesc desc;
-                desc.m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(cubemapEl, "location", "Package"));
-                desc.m_filePath = XMLUtils::GetAttributeValue<std::string>(cubemapEl, "base-name", "");
-                desc.m_shouldMipMap = XMLUtils::GetAttributeValue<bool>(cubemapEl, "mipmapped", false);
-                desc.m_filterMode = ConvertStringToFilterMode(XMLUtils::GetAttributeValue<std::string>(cubemapEl, "filter-mode", "Bilinear"));
-                desc.m_wrapModeU = ConvertStringToWrapMode(XMLUtils::GetAttributeValue<std::string>(cubemapEl, "wrap-mode-u", "Clamp"));
-                desc.m_wrapModeV = ConvertStringToWrapMode(XMLUtils::GetAttributeValue<std::string>(cubemapEl, "wrap-mode-v", "Clamp"));
-                out_cubemapFiles.push_back(desc);
-            }
-        }
-        //----------------------------------------------------------------------------
         /// Load the resource from the given descs at the given index. On
         /// completion this will recursively kick off the next load if one
         /// is required, otherwise will call the delegate
@@ -457,43 +431,6 @@ namespace ChilliSource
                             
                             u32 newLoadIndex = in_loadIndex + 1;
                             
-                            if(newLoadIndex < in_descs.size())
-                            {
-                                LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
-                            }
-                            else
-                            {
-                                out_material->SetLoadState(Resource::LoadState::k_loaded);
-                                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                                {
-                                    in_delegate(out_material);
-                                });
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            out_material->SetLoadState(Resource::LoadState::k_failed);
-                            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                            {
-                                in_delegate(out_material);
-                            });
-                            return;
-                        }
-                    });
-                    break;
-                }
-                case ResourceType::k_cubemap:
-                {
-                    auto options(std::make_shared<CubemapResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV, true));
-                    resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [=](const CubemapCSPtr& in_cubemap)
-                    {
-                        if(in_cubemap->GetLoadState() == Resource::LoadState::k_loaded)
-                        {
-                            out_material->SetCubemap(in_cubemap);
-
-                            u32 newLoadIndex = in_loadIndex + 1;
-
                             if(newLoadIndex < in_descs.size())
                             {
                                 LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
@@ -555,9 +492,8 @@ namespace ChilliSource
     void MaterialProvider::CreateResourceFromFile(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
     {
         std::vector<TextureDesc> textureFiles;
-        std::vector<TextureDesc> cubemapFiles;
         
-        if(BuildMaterialFromFile(in_location, in_filePath, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
+        if(BuildMaterialFromFile(in_location, in_filePath, textureFiles, (Material*)out_resource.get()) == false)
         {
             out_resource->SetLoadState(Resource::LoadState::k_failed);
             return;
@@ -582,22 +518,6 @@ namespace ChilliSource
             }
         }
         
-        CS_ASSERT(cubemapFiles.size() <= 1, "Currently only 1 cubemap is supported");
-        for(u32 i=0; i<cubemapFiles.size(); ++i)
-        {
-            if(cubemapFiles[i].m_filePath.empty() == false)
-            {
-                auto options(std::make_shared<CubemapResourceOptions>(cubemapFiles[i].m_shouldMipMap, cubemapFiles[i].m_filterMode, cubemapFiles[i].m_wrapModeU, cubemapFiles[i].m_wrapModeV, true));
-                CubemapCSPtr cubemap = resourcePool->LoadResource<Cubemap>(cubemapFiles[i].m_location, cubemapFiles[i].m_filePath, options);
-                if(cubemap == nullptr)
-                {
-                    out_resource->SetLoadState(Resource::LoadState::k_failed);
-                    return;
-                }
-                material->SetCubemap(cubemap);
-            }
-        }
-        
         out_resource->SetLoadState(Resource::LoadState::k_loaded);
     }
     //----------------------------------------------------------------------------
@@ -614,8 +534,7 @@ namespace ChilliSource
     void MaterialProvider::BuildMaterialTask(StorageLocation in_location, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
     {
         std::vector<TextureDesc> textureFiles;
-        std::vector<TextureDesc> cubemapFiles;
-        if(BuildMaterialFromFile(in_location, in_filePath, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
+        if(BuildMaterialFromFile(in_location, in_filePath, textureFiles, (Material*)out_resource.get()) == false)
         {
             out_resource->SetLoadState(Resource::LoadState::k_failed);
             Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
@@ -625,12 +544,10 @@ namespace ChilliSource
             return;
         }
         
-        CS_ASSERT(cubemapFiles.size() <= 1, "Currently only 1 cubemap is supported");
-        
         MaterialSPtr material = std::static_pointer_cast<Material>(out_resource);
         
         std::vector<ChainedLoadDesc> resourceFiles;
-        resourceFiles.reserve(textureFiles.size() + cubemapFiles.size());
+        resourceFiles.reserve(textureFiles.size());
         
         for(const auto& textureDesc : textureFiles)
         {
@@ -645,26 +562,12 @@ namespace ChilliSource
             resourceFiles.push_back(desc);
         }
         
-        for(const auto& cubemapDesc : cubemapFiles)
-        {
-            ChainedLoadDesc desc;
-            desc.m_filePath = cubemapDesc.m_filePath;
-            desc.m_location = cubemapDesc.m_location;
-            desc.m_shouldMipMap = cubemapDesc.m_shouldMipMap;
-            desc.m_filterMode = cubemapDesc.m_filterMode;
-            desc.m_wrapModeU = cubemapDesc.m_wrapModeU;
-            desc.m_wrapModeV = cubemapDesc.m_wrapModeV;
-            desc.m_type = ResourceType::k_cubemap;
-            resourceFiles.push_back(desc);
-        }
-        
         LoadResourcesChained(0, resourceFiles, in_delegate, material);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     bool MaterialProvider::BuildMaterialFromFile(StorageLocation in_location, const std::string& in_filePath,
                                                 std::vector<TextureDesc>& out_textureFiles,
-                                                std::vector<TextureDesc>& out_cubemapFiles,
                                                 Material* out_material)
     {
         //Load the XML file
@@ -685,7 +588,6 @@ namespace ChilliSource
         ParseSurface(rootElement, out_material);
         
         ParseTextures(rootElement, out_textureFiles);
-        ParseCubemaps(rootElement, out_cubemapFiles);
         
         //TODO: Add support for custom shaders.
         

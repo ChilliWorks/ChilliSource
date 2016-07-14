@@ -147,14 +147,12 @@ namespace ChilliSource
         /// @param File path
         /// @param [Out] Shaders to load
         /// @param [Out] Textures to load
-        /// @param [Out] Cubemaps to load
         /// @param [Out] Material resource
         ///
         /// @return Whether the resource was loaded 
         //----------------------------------------------------------------------------
         bool BuildMaterialFromFile(StorageLocation in_location, const std::string& in_filePath,
                                    std::vector<TextureDesc>& out_textureFiles,
-                                   std::vector<TextureDesc>& out_cubemapFiles,
                                    Material* out_material);
     };
 }

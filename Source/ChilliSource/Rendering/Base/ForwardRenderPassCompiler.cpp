@@ -59,8 +59,14 @@ namespace ChilliSource
             {
                 case RenderObject::Type::k_static:
                     return RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(), renderObject.GetPriority());
+                case RenderObject::Type::k_staticAnimated:
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderMesh(), renderObject.GetRenderSkinnedAnimation(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(),
+                                            renderObject.GetPriority());
                 case RenderObject::Type::k_dynamic:
                     return RenderPassObject(renderMaterial, renderObject.GetRenderDynamicMesh(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(), renderObject.GetPriority());
+                case RenderObject::Type::k_dynamicAnimated:
+                    return RenderPassObject(renderMaterial, renderObject.GetRenderDynamicMesh(), renderObject.GetRenderSkinnedAnimation(), renderObject.GetWorldMatrix(), renderObject.GetBoundingSphere(),
+                                            renderObject.GetPriority());
                 default:
                     CS_LOG_FATAL("Invalid RenderObject type.");
                     return RenderPassObject(nullptr, reinterpret_cast<const RenderMesh*>(NULL), Matrix4::k_identity, Sphere(), 0);
@@ -79,8 +85,10 @@ namespace ChilliSource
             switch (renderObject.GetType())
             {
                 case RenderObject::Type::k_static:
+                case RenderObject::Type::k_staticAnimated:
                     return renderObject.GetRenderMesh()->GetVertexFormat();
                 case RenderObject::Type::k_dynamic:
+                case RenderObject::Type::k_dynamicAnimated:
                     return renderObject.GetRenderDynamicMesh()->GetVertexFormat();
                 default:
                     CS_LOG_FATAL("Invalid RenderObject type.");
@@ -381,7 +389,7 @@ namespace ChilliSource
         {
             constexpr f32 k_near = 0.0f;
             constexpr f32 k_far = 1.0f;
-            auto projMatrix = Matrix4::CreateOrthographicProjectionLH(0, renderFrame.GetResolution().x, 0, renderFrame.GetResolution().y, k_near, k_far);
+            auto projMatrix = Matrix4::CreateOrthographicProjectionLH(0, f32(renderFrame.GetResolution().x), 0, f32(renderFrame.GetResolution().y), k_near, k_far);
             RenderCamera uiCamera(Matrix4::k_identity, projMatrix, Quaternion::k_identity);
             
             auto uiRenderObjects = GetLayerRenderObjects(RenderLayer::k_ui, renderFrame.GetRenderObjects());

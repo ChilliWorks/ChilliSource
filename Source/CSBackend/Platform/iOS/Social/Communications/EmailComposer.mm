@@ -200,23 +200,7 @@ namespace CSBackend
         //------------------------------------------------------
         void EmailComposer::OnDestroy()
         {
-            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& tastContext)
-            {
-                Cleanup();
-            });
-            
-            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
-            {
-                if (m_resultDelegate != nullptr)
-                {
-                    SendResultDelegate delegate = m_resultDelegate;
-                    m_resultDelegate = nullptr;
-                    delegate(SendResult::k_cancelled);
-                }
-            
-                m_isPresented = false;
-            });
-            
+            CS_ASSERT(!m_isPresented, "Cannot destroy Email Composer while presented.");
             [m_emailComposerDelegate release];
             m_emailComposerDelegate = nil;
         }

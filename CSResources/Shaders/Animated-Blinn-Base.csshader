@@ -36,7 +36,7 @@ GLSL
 		//attributes
 		attribute highp vec4 a_position;
 		attribute mediump vec2 a_texCoord;
-		attribute mediump vec4 a_weights;
+		attribute highp vec4 a_weights;
 		attribute highp vec4 a_jointIndices;
 
 		//uniforms

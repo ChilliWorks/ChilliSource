@@ -142,12 +142,6 @@ namespace CSBackend
             //--------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return the system time in milliseconds.
-            //--------------------------------------------------------------------------------------
-            TimeIntervalMs GetSystemTimeInMilliseconds();
-            //--------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
             /// Kill the application process
             //--------------------------------------------------------------------------------------
             void ForceQuit();
@@ -199,6 +193,12 @@ namespace CSBackend
             /// @author Ian Copland
             //--------------------------------------------------------------------------------------
             void Destroy() noexcept;
+            //--------------------------------------------------------------------------------------
+            /// Sends the memory warning lifecycle event.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------------------------------------
+            void MemoryWarning() noexcept;
 		private:
 
 			ChilliSource::ApplicationUPtr m_application;

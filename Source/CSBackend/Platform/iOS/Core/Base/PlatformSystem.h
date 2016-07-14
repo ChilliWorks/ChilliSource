@@ -87,18 +87,6 @@ namespace CSBackend
             /// @author S Downie
             //------------------------------------------------------
             void Quit() override {}
-            //------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The bundle version as found in the plist
-            //------------------------------------------------------
-            std::string GetAppVersion() const override;
-			//------------------------------------------------------
-			/// @author S Downie
-            ///
-			/// @return The current time in milliseconds
-			//------------------------------------------------------
-			TimeIntervalMs GetSystemTimeMS() const override;
 		private:
             
             friend ChilliSource::PlatformSystemUPtr ChilliSource::PlatformSystem::Create();

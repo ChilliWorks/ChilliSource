@@ -42,11 +42,14 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ByteBuffer);
     CS_FORWARDDECLARE_CLASS(Colour);
     CS_FORWARDDECLARE_CLASS(Device);
+    CS_FORWARDDECLARE_CLASS(DeviceInfo);
     CS_FORWARDDECLARE_CLASS(LifecycleManager);
     CS_FORWARDDECLARE_CLASS(Logging);
     CS_FORWARDDECLARE_CLASS(PlatformSystem);
     CS_FORWARDDECLARE_CLASS(QueryableInterface);
     CS_FORWARDDECLARE_CLASS(Screen);
+    CS_FORWARDDECLARE_CLASS(ScreenInfo);
+    CS_FORWARDDECLARE_CLASS(SystemInfo);
     CS_FORWARDDECLARE_CLASS(AppConfig);
     //---------------------------------------------------------
     /// Container

@@ -28,12 +28,23 @@
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#include <ChilliSource/Rendering/Model/SmallMeshBatcher.h>
 #include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
 namespace ChilliSource
 {
     namespace
     {
+        /// An container for the current cached state of a render command list.
+        ///
+        struct RenderCommandListStateCache final
+        {
+            const RenderMaterial* m_material = nullptr;
+            const RenderMesh* m_mesh = nullptr;
+            const RenderDynamicMesh* m_dynamicMesh = nullptr;
+            const RenderSkinnedAnimation* m_skinnedAnimation = nullptr;
+        };
+        
         /// Calculates whether a Camera Render Pass Group contains at least one render pass
         /// object.
         ///
@@ -176,6 +187,105 @@ namespace ChilliSource
             }
         }
         
+        /// Adds a new apply material command.
+        ///
+        /// If the cache already contains the material the no command will be generated.
+        ///
+        /// @param renderPassObject
+        ///     The render pass object to create the command for.
+        /// @param renderCommandList
+        ///     The render command list to add the command to.
+        /// @param cache
+        ///     The current render command list state cache.
+        /// @param batcher
+        ///     The current small mesh batcher.
+        ///
+        void AddApplyMaterialCommand(const RenderPassObject& renderPassObject, RenderCommandList* renderCommandList, RenderCommandListStateCache& cache, SmallMeshBatcher& batcher) noexcept
+        {
+            if (renderPassObject.GetRenderMaterial() != cache.m_material)
+            {
+                batcher.Flush();
+                
+                cache.m_material = renderPassObject.GetRenderMaterial();
+                cache.m_mesh = nullptr;
+                cache.m_dynamicMesh = nullptr;
+                cache.m_skinnedAnimation = nullptr;
+                
+                renderCommandList->AddApplyMaterialCommand(cache.m_material);
+            }
+        }
+        
+        /// Adds either a new apply mesh, or apply dynamic mesh command depending on the type of
+        /// render pass object.
+        ///
+        /// The the cache already contains the mesh then no command will be generated.
+        ///
+        /// @param renderPassObject
+        ///     The render pass object to create the command for.
+        /// @param renderCommandList
+        ///     The render command list to add the command to.
+        /// @param cache
+        ///     The current render command list state cache.
+        ///
+        void AddApplyMeshCommand(const RenderPassObject& renderPassObject, RenderCommandList* renderCommandList, RenderCommandListStateCache& cache) noexcept
+        {
+            switch (renderPassObject.GetType())
+            {
+                case RenderPassObject::Type::k_static:
+                case RenderPassObject::Type::k_staticAnimated:
+                {
+                    if (renderPassObject.GetRenderMesh() != cache.m_mesh)
+                    {
+                        cache.m_mesh = renderPassObject.GetRenderMesh();
+                        cache.m_dynamicMesh = nullptr;
+                        cache.m_skinnedAnimation = nullptr;
+                        
+                        renderCommandList->AddApplyMeshCommand(cache.m_mesh);
+                    }
+                    break;
+                }
+                case RenderPassObject::Type::k_dynamic:
+                case RenderPassObject::Type::k_dynamicAnimated:
+                {
+                    if (renderPassObject.GetRenderDynamicMesh() != cache.m_dynamicMesh)
+                    {
+                        cache.m_mesh = nullptr;
+                        cache.m_dynamicMesh = renderPassObject.GetRenderDynamicMesh();
+                        cache.m_skinnedAnimation = nullptr;
+                        
+                        renderCommandList->AddApplyDynamicMeshCommand(cache.m_dynamicMesh);
+                    }
+                    break;
+                }
+                default:
+                    CS_LOG_FATAL("Invalid RenderPassObject type.");
+                    break;
+            }
+        }
+        
+        /// Adds either a new apply skinned animation command if the object has animation.
+        ///
+        /// The the cache already contains the skinned animation, then no command will be
+        /// generated.
+        ///
+        /// @param renderPassObject
+        ///     The render pass object to create the command for.
+        /// @param renderCommandList
+        ///     The render command list to add the command to.
+        /// @param cache
+        ///     The current render command list state cache.
+        ///
+        void AddApplySkinnedAnimationCommand(const RenderPassObject& renderPassObject, RenderCommandList* renderCommandList, RenderCommandListStateCache& cache) noexcept
+        {
+            if ((renderPassObject.GetType() == RenderPassObject::Type::k_staticAnimated || renderPassObject.GetType() == RenderPassObject::Type::k_dynamicAnimated)
+                && cache.m_skinnedAnimation != renderPassObject.GetRenderSkinnedAnimation())
+            {
+                cache.m_skinnedAnimation = renderPassObject.GetRenderSkinnedAnimation();
+                
+                renderCommandList->AddApplySkinnedAnimationCommand(cache.m_skinnedAnimation);
+            }
+        }
+        
         /// Compiles the render commands for the given render pass. The render pass must contain
         /// render pass objects otherwise this will assert.
         ///
@@ -183,6 +293,8 @@ namespace ChilliSource
         ///     The render pass.
         /// @param renderCommandList
         ///     The render command list to add the commands to.
+        /// @param renderFrameData
+        ///     Container for all allocations which must live until the end of the frame.
         ///
         void CompileRenderCommandsForPass(const RenderPass& renderPass, RenderCommandList* renderCommandList) noexcept
         {
@@ -191,61 +303,41 @@ namespace ChilliSource
             const auto& renderPassObjects = renderPass.GetRenderPassObjects();
             CS_ASSERT(renderPassObjects.size() > 0, "Cannot compile a pass with no objects.");
             
-            const RenderMaterial* currentMaterial = nullptr;
-            const RenderMesh* currentStaticMesh = nullptr;
-            const RenderDynamicMesh* currentDynamicMesh = nullptr;
+            RenderCommandListStateCache cache;
+            SmallMeshBatcher batcher(renderCommandList);
             
             for (const auto& renderPassObject : renderPassObjects)
             {
-                if (renderPassObject.GetRenderMaterial() != currentMaterial)
+                AddApplyMaterialCommand(renderPassObject, renderCommandList, cache, batcher);
+                
+                if (SmallMeshBatcher::CanBatch(renderPassObject))
                 {
-                    currentMaterial = renderPassObject.GetRenderMaterial();
-                    currentStaticMesh = nullptr;
+                    cache.m_mesh = nullptr;
+                    cache.m_dynamicMesh = nullptr;
+                
+                    batcher.Batch(renderPassObject);
+                }
+                else
+                {
+                    batcher.Flush();
                     
-                    renderCommandList->AddApplyMaterialCommand(currentMaterial);
+                    AddApplyMeshCommand(renderPassObject, renderCommandList, cache);
+                    AddApplySkinnedAnimationCommand(renderPassObject, renderCommandList, cache);
+                    renderCommandList->AddRenderInstanceCommand(renderPassObject.GetWorldMatrix());
                 }
                 
-                switch (renderPassObject.GetType())
-                {
-                    case RenderPassObject::Type::k_static:
-                    {
-                        if (renderPassObject.GetRenderMesh() != currentStaticMesh)
-                        {
-                            currentStaticMesh = renderPassObject.GetRenderMesh();
-                            currentDynamicMesh = nullptr;
-                            
-                            renderCommandList->AddApplyMeshCommand(currentStaticMesh);
-                        }
-                        break;
-                    }
-                    case RenderPassObject::Type::k_dynamic:
-                    {
-                        if (renderPassObject.GetRenderDynamicMesh() != currentDynamicMesh)
-                        {
-                            currentStaticMesh = nullptr;
-                            currentDynamicMesh = renderPassObject.GetRenderDynamicMesh();
-                            
-                            renderCommandList->AddApplyDynamicMeshCommand(currentDynamicMesh);
-                        }
-                        break;
-                    }
-                    default:
-                        CS_LOG_FATAL("Invalid RenderPassObject type.");
-                        break;
-                }
-                
-                renderCommandList->AddRenderInstanceCommand(renderPassObject.GetWorldMatrix());
             }
+            
+            batcher.Flush();
         }
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups,
-                                                                          std::vector<RenderDynamicMeshAUPtr> renderDynamicMeshes, RenderCommandListUPtr preRenderCommandList,
-                                                                          RenderCommandListUPtr postRenderCommandList) noexcept
+    RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, RenderCommandListUPtr preRenderCommandList,
+                                                                          RenderCommandListUPtr postRenderCommandList, RenderFrameData renderFrameData) noexcept
     {
         u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());
-        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(frameAllocator, numLists, std::move(renderDynamicMeshes)));
+        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(numLists, std::move(renderFrameData)));
         std::vector<Task> tasks;
         u32 currentList = 0;
         
@@ -270,7 +362,7 @@ namespace ChilliSource
                         if (renderPass.GetRenderPassObjects().size() > 0)
                         {
                             auto renderCommandList = renderCommandBuffer->GetRenderCommandList(currentList++);
-                            tasks.push_back([=, &renderPass](const TaskContext& innerTaskContext)
+                            tasks.push_back([=, &renderPass, &renderCommandBuffer](const TaskContext& innerTaskContext)
                             {
                                 CompileRenderCommandsForPass(renderPass, renderCommandList);
                             });

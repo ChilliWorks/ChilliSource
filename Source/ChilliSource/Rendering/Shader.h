@@ -34,6 +34,7 @@
 #include <ChilliSource/Rendering/Shader/CSShaderProvider.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
 #include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
+#include <ChilliSource/Rendering/Shader/RenderShaderVariables.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
 #endif

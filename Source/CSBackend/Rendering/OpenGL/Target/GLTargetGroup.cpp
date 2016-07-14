@@ -36,6 +36,7 @@ namespace CSBackend
     {
         namespace
         {
+#ifdef CS_TARGETPLATFORM_WINDOWS
             /// Creates a new colour render buffer with the requested size.
             ///
             /// @param dimensions
@@ -54,6 +55,7 @@ namespace CSBackend
                 
                 return handle;
             }
+#endif
             
             /// Creates a new depth render buffer with the requested size.
             ///
@@ -107,12 +109,37 @@ namespace CSBackend
         GLTargetGroup::GLTargetGroup(const ChilliSource::RenderTargetGroup* renderTargetGroup) noexcept
             : m_renderTargetGroup(renderTargetGroup)
         {
+            BuildTargetGroup();
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLTargetGroup::Bind() noexcept
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferHandle);
+            
+             CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding target group.");
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLTargetGroup::Restore() noexcept
+        {
+            if(m_invalidData)
+            {
+                BuildTargetGroup();
+                m_invalidData = false;
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLTargetGroup::BuildTargetGroup() noexcept
+        {
             glGenFramebuffers(1, &m_frameBufferHandle);
             glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferHandle);
             
             if (m_renderTargetGroup->GetColourTarget())
             {
-                auto glTexture = reinterpret_cast<GLTexture*>(m_renderTargetGroup->GetColourTarget()->GetExtraData());
+                auto glTexture = static_cast<GLTexture*>(m_renderTargetGroup->GetColourTarget()->GetExtraData());
+                CS_ASSERT(!glTexture->IsDataInvalid(), "GLTexture data is invalid! Ensure targets are restored after textures.");
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, glTexture->GetHandle(), 0);
             }
             else
@@ -126,7 +153,8 @@ namespace CSBackend
             
             if (m_renderTargetGroup->GetDepthTarget())
             {
-                auto glTexture = reinterpret_cast<GLTexture*>(m_renderTargetGroup->GetDepthTarget()->GetExtraData());
+                auto glTexture = static_cast<GLTexture*>(m_renderTargetGroup->GetDepthTarget()->GetExtraData());
+                CS_ASSERT(!glTexture->IsDataInvalid(), "GLTexture data is invalid! Ensure targets are restored after textures.");
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, glTexture->GetHandle(), 0);
             }
             else if (m_renderTargetGroup->ShouldUseDepthBuffer())
@@ -143,29 +171,24 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLTargetGroup::Bind() noexcept
-        {
-            glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferHandle);
-            
-             CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding target group.");
-        }
-
-        //------------------------------------------------------------------------------
         GLTargetGroup::~GLTargetGroup() noexcept
         {
-            if (m_colourRenderBufferHandle > 0)
+            if(!m_invalidData)
             {
-                glDeleteRenderbuffers(1, &m_colourRenderBufferHandle);
-            }
+                if (m_colourRenderBufferHandle > 0)
+                {
+                    glDeleteRenderbuffers(1, &m_colourRenderBufferHandle);
+                }
 
-            if (m_depthRenderBufferHandle > 0)
-            {
-                glDeleteRenderbuffers(1, &m_depthRenderBufferHandle);
-            }
-            
-            glDeleteFramebuffers(1, &m_frameBufferHandle);
+                if (m_depthRenderBufferHandle > 0)
+                {
+                    glDeleteRenderbuffers(1, &m_depthRenderBufferHandle);
+                }
+                
+                glDeleteFramebuffers(1, &m_frameBufferHandle);
 
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying target group.");
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying target group.");
+            }
         }
     }
 }

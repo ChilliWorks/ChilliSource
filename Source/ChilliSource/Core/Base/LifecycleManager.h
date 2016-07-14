@@ -91,9 +91,11 @@ namespace ChilliSource
         ///
         void SystemUpdate() noexcept;
         
-        /// Sends the destroy event to the main thread. The app must currently be
-        /// suspended or this will assert.
+        /// Tells the resource manager to release all and then sends the memory warning
+        /// event to the application.
         ///
+        void MemoryWarning() noexcept;
+        
         ~LifecycleManager() noexcept;
         
     private:

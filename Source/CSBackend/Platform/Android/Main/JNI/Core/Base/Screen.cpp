@@ -40,17 +40,10 @@ namespace CSBackend
         CS_DEFINE_NAMEDTYPE(Screen);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Screen::Screen()
+        Screen::Screen(const ChilliSource::ScreenInfo& screenInfo)
+            : m_screenInfo(screenInfo)
         {
-        	CoreJavaInterfaceSPtr javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
-        	CS_ASSERT(javaInterface != nullptr, "Cannot get CoreJavaInterface!");
-
-			m_resolution = ChilliSource::Vector2((f32)javaInterface->GetScreenWidth(), (f32)javaInterface->GetScreenHeight());
-			m_densityScale = javaInterface->GetScreenDensity();
-			m_invDensityScale = 1.0f / m_densityScale;
-
-            m_supportedResolutions.push_back(ChilliSource::Integer2((s32)m_resolution.x, (s32)m_resolution.y));
-            m_supportedResolutions.push_back(ChilliSource::Integer2((s32)m_resolution.y, (s32)m_resolution.x));
+            m_resolution = m_screenInfo.GetInitialResolution();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -68,13 +61,13 @@ namespace CSBackend
         //-----------------------------------------------------------
         f32 Screen::GetDensityScale() const
         {
-            return m_densityScale;
+            return m_screenInfo.GetDensityScale();
         }
         //----------------------------------------------------------
         //-----------------------------------------------------------
         f32 Screen::GetInverseDensityScale() const
         {
-            return m_invDensityScale;
+            return m_screenInfo.GetInverseDensityScale();
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -104,7 +97,7 @@ namespace CSBackend
         //----------------------------------------------------------
         std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
         {
-            return m_supportedResolutions;
+            return m_screenInfo.GetSupportedResolutions();
         }
         //-----------------------------------------------------------
         //------------------------------------------------------------

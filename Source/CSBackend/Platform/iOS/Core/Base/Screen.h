@@ -144,19 +144,18 @@ namespace CSBackend
             //------------------------------------------------------------
             void OnResolutionChanged(CGSize in_dipsSize);
         private:
-            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create();
+            friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create(const ChilliSource::ScreenInfo& screenInfo);
             //-------------------------------------------------------
 			/// Private constructor to force the use of the Create()
             /// factory method.
 			///
             /// @author Ian Copland
 			//-------------------------------------------------------
-			Screen();
+			Screen(const ChilliSource::ScreenInfo& screenInfo);
     
-            std::vector<ChilliSource::Integer2> m_supportedResolutions;
+            ChilliSource::ScreenInfo m_screenInfo;
             ChilliSource::Vector2 m_resolution;
-            f32 m_densityScale;
-            f32 m_invDensityScale;
+
             ChilliSource::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
             ChilliSource::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
         };

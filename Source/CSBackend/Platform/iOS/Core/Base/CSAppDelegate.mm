@@ -31,6 +31,7 @@
 #import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
 
 #import <CSBackend/Platform/iOS/Core/Base/CSGLViewController.h>
+#import <CSBackend/Platform/iOS/Core/Base/SystemInfoFactory.h>
 #import <CSBackend/Platform/iOS/Core/Notification/LocalNotificationSystem.h>
 #import <CSBackend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
@@ -87,12 +88,12 @@ CSAppDelegate* singletonInstance = nil;
     
     m_subDelegates = [[NSMutableArray alloc] init];
     
-    m_application = ChilliSource::ApplicationUPtr(CreateApplication());
-    
     m_window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	viewControllerInternal = [[CSGLViewController alloc] initWithDelegate:self];
     [m_window setRootViewController: viewControllerInternal];
     [m_window makeKeyAndVisible];
+    
+    m_application = ChilliSource::ApplicationUPtr(CreateApplication(CSBackend::iOS::SystemInfoFactory::CreateSystemInfo()));
     
     m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(m_application.get()));
     
@@ -324,17 +325,15 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationDidReceiveMemoryWarning:(UIApplication*)in_application
 {
-    //TODO: Handle memory warnings
-    
-//    for(id<UIApplicationDelegate> delegate in subdelegates)
-//    {
-//        if([delegate respondsToSelector:@selector(applicationDidReceiveMemoryWarning:)])
-//        {
-//            [delegate applicationDidReceiveMemoryWarning:in_application];
-//        }
-//    }
-//    
-//    csApplication->ApplicationMemoryWarning();
+    for(id<UIApplicationDelegate> delegate in m_subDelegates)
+    {
+        if([delegate respondsToSelector:@selector(applicationDidReceiveMemoryWarning:)])
+        {
+            [delegate applicationDidReceiveMemoryWarning:in_application];
+        }
+    }
+
+    m_lifecycleManager->MemoryWarning();
 }
 
 #pragma mark -

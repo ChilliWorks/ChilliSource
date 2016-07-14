@@ -54,9 +54,8 @@ namespace ChilliSource
         /// the download is complete
         ///
         /// @param Delegate
-        /// @return Whether the manifest download has begun
         //----------------------------------------------------------------
-        bool DownloadContentManifest(const Delegate& inDelegate);
+        void DownloadContentManifest(const Delegate& inDelegate);
         //----------------------------------------------------------------
         /// Download the package file from the given URL
         ///

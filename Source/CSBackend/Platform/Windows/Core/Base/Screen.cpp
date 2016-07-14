@@ -32,6 +32,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -40,13 +41,11 @@ namespace CSBackend
         CS_DEFINE_NAMEDTYPE(Screen);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Screen::Screen()
+        Screen::Screen(const ChilliSource::ScreenInfo& screenInfo)
+            : m_screenInfo(screenInfo)
         {
-			ChilliSource::Integer2 size = SFMLWindow::Get()->GetWindowSize();
-			m_resolution.x = (f32)size.x;
-			m_resolution.y = (f32)size.y;
-
-			m_densityScale = m_invDensityScale = 1.0f;
+            m_resolution.x = screenInfo.GetInitialResolution().x;
+            m_resolution.y = screenInfo.GetInitialResolution().y;
 
             SFMLWindow::Get()->SetWindowDelegates(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged), ChilliSource::MakeDelegate(this, &Screen::OnDisplayModeChanged));
         }
@@ -66,13 +65,13 @@ namespace CSBackend
         //-----------------------------------------------------------
         f32 Screen::GetDensityScale() const
         {
-            return m_densityScale;
+            return m_screenInfo.GetDensityScale();
         }
         //----------------------------------------------------------
         //-----------------------------------------------------------
         f32 Screen::GetInverseDensityScale() const
         {
-            return m_invDensityScale;
+            return m_screenInfo.GetInverseDensityScale();
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -90,51 +89,63 @@ namespace CSBackend
 		//----------------------------------------------------------
 		void Screen::SetResolution(const ChilliSource::Integer2& in_size)
 		{
-			SFMLWindow::Get()->SetSize(in_size);
-			OnResolutionChanged(in_size);
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                SFMLWindow::Get()->SetSize(in_size);
+                OnResolutionChanged(in_size);               
+            });
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
 		void Screen::SetDisplayMode(DisplayMode in_mode)
 		{
-			switch (in_mode)
-			{
-			case DisplayMode::k_windowed:
-				SFMLWindow::Get()->SetDisplayMode(SFMLWindow::DisplayMode::k_windowed);
-				break;
-			case DisplayMode::k_fullscreen:
-				SFMLWindow::Get()->SetDisplayMode(SFMLWindow::DisplayMode::k_fullscreen);
-				break;
-			}
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+			    switch (in_mode)
+			    {
+			    case DisplayMode::k_windowed:
+				    SFMLWindow::Get()->SetDisplayMode(SFMLWindow::DisplayMode::k_windowed);
+				    break;
+			    case DisplayMode::k_fullscreen:
+				    SFMLWindow::Get()->SetDisplayMode(SFMLWindow::DisplayMode::k_fullscreen);
+				    break;
+			    }
+            });
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
 		std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
 		{
-			return SFMLWindow::Get()->GetSupportedResolutions();
+            return m_screenInfo.GetSupportedResolutions();
 		}
         //-----------------------------------------------------------
         //------------------------------------------------------------
         void Screen::OnResolutionChanged(const ChilliSource::Integer2& in_resolution)
         {
-			m_resolution.x = (f32)in_resolution.x;
-			m_resolution.y = (f32)in_resolution.y;
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                m_resolution.x = (f32)in_resolution.x;
+                m_resolution.y = (f32)in_resolution.y;
 
-        	m_resolutionChangedEvent.NotifyConnections(m_resolution);
+                m_resolutionChangedEvent.NotifyConnections(m_resolution);
+            });
         }
 		//----------------------------------------------------------
 		//----------------------------------------------------------
 		void Screen::OnDisplayModeChanged(SFMLWindow::DisplayMode in_mode)
 		{
-			switch (in_mode)
-			{
-			case SFMLWindow::DisplayMode::k_windowed:
-				m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_windowed);
-				break;
-			case SFMLWindow::DisplayMode::k_fullscreen:
-				m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_fullscreen);
-				break;
-			}
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+			    switch (in_mode)
+			    {
+			    case SFMLWindow::DisplayMode::k_windowed:
+				    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_windowed);
+				    break;
+			    case SFMLWindow::DisplayMode::k_fullscreen:
+				    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_fullscreen);
+				    break;
+			    }
+            });
 		}
 		//------------------------------------------------
 		//------------------------------------------------
