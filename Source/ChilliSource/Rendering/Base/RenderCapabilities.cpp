@@ -28,8 +28,6 @@
 
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
-#include <ChilliSource/Core/Base/RenderInfo.h>
-
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(RenderCapabilities);

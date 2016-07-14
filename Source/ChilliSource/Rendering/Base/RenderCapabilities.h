@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_RENDERING_BASE_RENDERCAPABILITIES_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/RenderInfo.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
