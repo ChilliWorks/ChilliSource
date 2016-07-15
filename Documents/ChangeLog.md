@@ -1,6 +1,33 @@
 ChilliSource Change Log
 =======================
 
+Version 2.0.0, 2016-07-15
+-------------------------
+* Added: A new multi-threaded renderer. The previous renderer has been completely stripped out and replaced with a brand new renderer which makes much better use of multi-core devices. The new renderer also allows us to add deferred rendering support in the future.
+* Added: Small mesh batching. This is a major optimisation which combines small meshes into a single draw call where possible. Currently this only supports dynamic sprites but other mesh types will be added in the future.
+* Added: New allocator types, which allow for very efficient allocation of memory.
+* Added: An editable label ui widget type.
+* Improved: As a result of the changes for the multi-threaded renderer, the main thread is no longer the same as the system/render thread. This thread is now solely for scene management and game logic.
+* Improved: The task scheduler has been completely overhauled. It now supports batching of tasks, task depedancies and a number of different task types.
+* Improved: The ChilliSource namespaces have been significantly simplified. The sub-namespaces (For example: ChilliSource::Rendering) have been removed and all classes are now located the ChilliSource namespace. An optional CS:: alias is available, and its use is recommened. As a result of this change, some classes have been renamed, for example CSUI::Drawable is now called CS::UIDrawable. 
+* Improved: Materials have been improved such that models with different vertex formats (for example static models and animated models) require different materials. The material type system has been simplified down to three types: Unlit, Blinn and Custom.
+* Improved: The FileStream API has been significantly improved.
+* Improved: Improved the API for manual creation of Textures and Meshes.
+* Improved: StaticMeshComponent and AnimatedMeshComponent have been renamed StaticModelComponent and AnimatedModelComponent, and have had their API improved.
+* Improved: Updated all systems to support the new threading model. Some minor API changes were required to make this work.
+* Improved: Key codes can now request a text description of the key the represent.
+* Fixed: Issues with local notifications on Android.
+* Fixed: Issues with video subtitles on both Android and iOS.
+* Fixed: A problem with keyboard presentation during text entry on Android.
+* Removed: Support for custom render sort predicates. This will be re-added in the future.
+* Removed: Cubemaps. These will be re-added in the future.
+* Removed: Scissor regions. These will be re-added in the future.
+* Removed: Render to texture support. This will be re-added soon.
+* Removed: Facebook support. This will be re-added soon.
+* Removed: Remote notifications on Android.
+* Removed: Mesh Batch.
+* And many other minor improvements and tweaks that would take too long to list.
+
 Version 1.6.0, 2016-04-01
 -------------------------
 
