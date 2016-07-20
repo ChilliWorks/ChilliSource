@@ -195,7 +195,7 @@ namespace CSBackend
             m_vertexFormat = vertexFormat;
             m_indexFormat = indexFormat;
             m_numVertices = numVertices;
-            m_numIndices = m_numIndices;
+            m_numIndices = numIndices;
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, vertexData);
