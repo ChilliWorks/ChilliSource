@@ -57,10 +57,16 @@ namespace ChilliSource
         ///
         /// @param numSlots
         ///     The number of slots in the queue.
-        /// @param renderFrameData
+        /// @param frameAllocator
+        ///     The allocator used for this render frame
+        /// @param renderFramesData
         ///     The render frame data that must persist to the end of the frame. Must be moved.
         ///
-        RenderCommandBuffer(u32 numSlots, RenderFrameData renderFrameData) noexcept;
+        RenderCommandBuffer(u32 numSlots, IAllocator* frameAllocator, std::vector<RenderFrameData>&& renderFramesData) noexcept;
+        
+        /// @return The allocator from which all frame allocations should occur.
+        ///
+        IAllocator* GetFrameAllocator() const noexcept { return m_frameAllocator; }
         
         /// @return The number of slots in the queue.
         ///
@@ -82,7 +88,8 @@ namespace ChilliSource
         std::vector<RenderSkinnedAnimationAUPtr> m_renderSkinnedAnimations;
         std::vector<const RenderCommandList*> m_queue;
         std::vector<RenderCommandListUPtr> m_renderCommandLists; //TODO: This should be changed to a pool.
-        const RenderFrameData m_renderFrameData;
+        const std::vector<RenderFrameData> m_renderFramesData;
+        IAllocator* m_frameAllocator;
     };
 }
 

@@ -112,11 +112,16 @@ namespace ChilliSource
         ///
         /// This must be called from the main thread.
         ///
-        /// @param renderSnapshots
-        ///     The render snapshots to process. They should have already been populated by passing it
+        /// @param frameAllocator
+        ///     Allocator used to allocate the render snapshots that should be released when the frame is rendererd
+        /// @param mainRenderSnapshot
+        ///     The render snapshot to process for the main scene. This should have already been populated by passing it
         ///     to each system and component in the scene. This must be moved.
+        /// @param offscreenRenderSnapshots
+        ///     The render snapshots to process for offscreen targets. They should have already been populated by passing them
+        ///     to each system and component in the scene. They must be moved.
         ///
-        void ProcessRenderSnapshots(std::vector<RenderSnapshot>&& renderSnapshots) noexcept;
+        void ProcessRenderSnapshots(IAllocator*&& frameAllocator, RenderSnapshot&& mainRenderSnapshot, std::vector<RenderSnapshot>&& offscreenRenderSnapshots) noexcept;
         
         /// Processes the next render command buffers. If there are no render command buffers ready to be
         /// processed then this will block until there is.
@@ -180,7 +185,8 @@ namespace ChilliSource
         bool m_renderPrepActive = false;
         bool m_initialised = false;
         
-        std::vector<RenderSnapshot> m_currentSnapshots;
+        RenderSnapshot m_currentMainSnapshot;
+        std::vector<RenderSnapshot> m_currentOffscreenSnapshots;
         
         RenderCommandBufferManager* m_commandRecycleSystem = nullptr;
     };

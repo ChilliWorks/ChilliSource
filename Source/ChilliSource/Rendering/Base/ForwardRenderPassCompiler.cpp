@@ -488,32 +488,40 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    std::vector<TargetRenderPassGroup> ForwardRenderPassCompiler::CompileTargetRenderPassGroups(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
+    std::vector<TargetRenderPassGroup> ForwardRenderPassCompiler::CompileTargetRenderPassGroups(const TaskContext& taskContext, std::vector<RenderFrame>&& renderFrames) noexcept
     {
-        auto numTargets = CalcNumTargets(renderFrame);
+        u32 numTargets = 0;
+        for(const auto& renderFrame : renderFrames)
+        {
+            numTargets += CalcNumTargets(renderFrame);
+        }
+        
         std::vector<TargetRenderPassGroup> targetRenderPassGroups(numTargets);
         std::vector<Task> tasks;
         u32 nextPassIndex = 0;
         
-        // Shadow targets
-        for (const auto& directionalRenderLight : renderFrame.GetDirectionalRenderLights())
+        for(const auto& renderFrame : renderFrames)
         {
-            if (directionalRenderLight.GetShadowMapTarget())
+            // Shadow targets
+            for (const auto& directionalRenderLight : renderFrame.GetDirectionalRenderLights())
             {
-                u32 shadowPassIndex = nextPassIndex++;
-                tasks.push_back([=, &targetRenderPassGroups, &renderFrame, &directionalRenderLight](const TaskContext& innerTaskContext)
+                if (directionalRenderLight.GetShadowMapTarget())
                 {
-                    targetRenderPassGroups[shadowPassIndex] = CompileShadowMapTargetRenderPassGroup(innerTaskContext, renderFrame, directionalRenderLight);
-                });
+                    u32 shadowPassIndex = nextPassIndex++;
+                    tasks.push_back([=, &targetRenderPassGroups, &renderFrame, &directionalRenderLight](const TaskContext& innerTaskContext)
+                    {
+                        targetRenderPassGroups[shadowPassIndex] = CompileShadowMapTargetRenderPassGroup(innerTaskContext, renderFrame, directionalRenderLight);
+                    });
+                }
             }
+            
+            // Main target (screen or offscreen target)
+            u32 mainPassIndex = nextPassIndex++;
+            tasks.push_back([=, &targetRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
+            {
+                targetRenderPassGroups[mainPassIndex] = CompileMainTargetRenderPassGroup(innerTaskContext, renderFrame);
+            });
         }
-        
-        // Main target
-        u32 mainPassIndex = nextPassIndex++;
-        tasks.push_back([=, &targetRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
-        {
-            targetRenderPassGroups[mainPassIndex] = CompileMainTargetRenderPassGroup(innerTaskContext, renderFrame);
-        });
         
         taskContext.ProcessChildTasks(tasks);
         

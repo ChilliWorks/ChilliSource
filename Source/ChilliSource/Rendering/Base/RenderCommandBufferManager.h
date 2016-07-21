@@ -78,12 +78,12 @@ namespace ChilliSource
         ///
         void WaitThenPushCommandBuffer(RenderCommandBufferUPtr renderCommandBuffer) noexcept;
         
-        /// If the queue of command buffers is empty then this waits until one or more has been pushed to continue.
-        /// It pops all command buffers from the list and notifies any threads which are waiting.
+        /// If the queue of command buffers is empty then this waits until one has been pushed to continue.
+        /// It pops the command buffer from the list and notifies any threads which are waiting.
         ///
-        /// @return The render command buffers which have been popped.
+        /// @return The render command buffer that has been popped.
         ///
-        std::vector<RenderCommandBufferCUPtr> WaitThenPopCommandBuffers() noexcept;
+        RenderCommandBufferCUPtr WaitThenPopCommandBuffer() noexcept;
         
     private:
         friend class Application;

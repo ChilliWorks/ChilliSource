@@ -312,6 +312,15 @@ namespace ChilliSource
         ///
         const WidgetFactory* GetWidgetFactory() const noexcept;
         
+        /// Takes a snapshot of the given scene and renders it to the given offscree
+        /// render target during the render stage of the application. NOTE: This
+        /// means the texture of the target will not be populated til next frame.
+        ///
+        /// @param scene
+        ///     Scene that should be rendered to given target
+        /// @param target
+        ///     Target to render into
+        ///
         void RenderToTarget(Scene* scene, TargetGroup* target);
 
         virtual ~Application() noexcept;
@@ -449,7 +458,6 @@ namespace ChilliSource
         SystemInfoCUPtr m_systemInfo;
         
         std::atomic<u32> m_frameIndex;
-        std::atomic<u32> m_renderFrameIndex;
         TimeIntervalSecs m_currentAppTime = 0;
         f32 m_updateInterval;
         f32 m_updateSpeed = 1.0f;

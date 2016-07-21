@@ -256,7 +256,7 @@ namespace ChilliSource
         m_renderCommandBuffersCondition.notify_all();
     }
     //------------------------------------------------------------------------------
-    std::vector<RenderCommandBufferCUPtr> RenderCommandBufferManager::WaitThenPopCommandBuffers() noexcept
+    RenderCommandBufferCUPtr RenderCommandBufferManager::WaitThenPopCommandBuffer() noexcept
     {
         std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
         
@@ -265,16 +265,11 @@ namespace ChilliSource
             m_renderCommandBuffersCondition.wait(lock);
         }
         
-        std::vector<RenderCommandBufferCUPtr> buffers(m_renderCommandBuffers.size());
-        
-        while (m_renderCommandBuffers.empty() == false)
-        {
-            buffers.push_back(std::move(m_renderCommandBuffers.front()));
-            m_renderCommandBuffers.pop_front();
-        }
+        auto buffer = std::move(m_renderCommandBuffers.front());
+        m_renderCommandBuffers.pop_front();
         
         m_renderCommandBuffersCondition.notify_all();
         
-        return buffers;
+        return std::move(buffer);
     }
 }

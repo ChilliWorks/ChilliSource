@@ -58,6 +58,13 @@ namespace ChilliSource
         ///
         IAllocator* Pop() noexcept;
         
+        /// Reads the first frame allocator from the queue. If the queue is empty this will wait
+        /// until one is pushed before reading.
+        ///
+        /// @return The front frame allocator.
+        ///
+        IAllocator* Front() noexcept;
+        
         /// Pushes an allocator back into the queue for reuse. Prior to being added to the queue
         /// the allocator will be wiped.
         ///

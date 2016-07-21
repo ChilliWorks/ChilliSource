@@ -45,6 +45,9 @@ namespace ChilliSource
     class RenderFrame final
     {
     public:
+        
+        RenderFrame() = default;
+        
         /// Creates a new instance with the given camera, lights and objects.
         ///
         /// @param renderTarget

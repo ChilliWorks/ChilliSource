@@ -60,6 +60,21 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    IAllocator* FrameAllocatorQueue::Front() noexcept
+    {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
+        while (m_queue.empty())
+        {
+            m_condition.wait(lock);
+        }
+        
+        auto front = m_queue.front();
+        
+        return front;
+    }
+    
+    //------------------------------------------------------------------------------
     void FrameAllocatorQueue::Push(IAllocator* allocator) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);

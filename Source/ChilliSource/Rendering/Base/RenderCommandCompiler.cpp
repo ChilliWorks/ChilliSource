@@ -333,11 +333,11 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, RenderCommandListUPtr preRenderCommandList,
-                                                                          RenderCommandListUPtr postRenderCommandList, RenderFrameData renderFrameData) noexcept
+    RenderCommandBufferUPtr RenderCommandCompiler::CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, RenderCommandListUPtr preRenderCommandList,
+                                                                         RenderCommandListUPtr postRenderCommandList, std::vector<RenderFrameData>&& renderFramesData) noexcept
     {
         u32 numLists = CalcNumRenderCommandLists(targetRenderPassGroups, preRenderCommandList.get(), postRenderCommandList.get());
-        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(numLists, std::move(renderFrameData)));
+        RenderCommandBufferUPtr renderCommandBuffer(new RenderCommandBuffer(numLists, frameAllocator, std::move(renderFramesData)));
         std::vector<Task> tasks;
         u32 currentList = 0;
         
