@@ -130,8 +130,10 @@ namespace ChilliSource
         ///
         /// @param renderSnapshot
         ///     The render shapshot for storing snapshotted data.
+        /// @param frameAllocator
+        ///     Allocate memory from this render frame from here
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         std::mutex m_mutex;
         std::vector<RenderTextureUPtr> m_renderTextures; //TODO: This should be changed to an object pool.

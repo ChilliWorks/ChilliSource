@@ -68,10 +68,12 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param in_renderSnapshot - The render snapshot that particles
+        /// @param renderSnapshot - The render snapshot that particles
         /// will be added to.
+        /// @param frameAllocator - Allocate memory for this render frame
+        /// from here
         //----------------------------------------------------------------
-        void Draw(RenderSnapshot& in_renderSnapshot) noexcept;
+        void Draw(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept;
         //----------------------------------------------------------------
         /// Destructor
         ///
@@ -115,8 +117,10 @@ namespace ChilliSource
         /// @param in_particleData - The particle draw data.
         /// @param in_renderSnapshot - The render snapshot that particles
         /// will be added to.
+        /// @param frameAllocator - Allocate memory for this render frame
+        /// from here
         //----------------------------------------------------------------
-        virtual void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) = 0;
+        virtual void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& particleData, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) = 0;
         
     private:
         const Entity* m_entity = nullptr;

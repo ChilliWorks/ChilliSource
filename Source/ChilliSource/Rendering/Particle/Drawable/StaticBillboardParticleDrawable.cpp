@@ -121,15 +121,15 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void StaticBillboardParticleDrawable::DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot)
+    void StaticBillboardParticleDrawable::DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& particleData, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator)
     {
         switch (GetDrawableDef()->GetParticleEffect()->GetSimulationSpace())
         {
         case ParticleEffect::SimulationSpace::k_local:
-            DrawLocalSpace(in_particleData, in_renderSnapshot);
+            DrawLocalSpace(particleData, renderSnapshot, frameAllocator);
             break;
         case ParticleEffect::SimulationSpace::k_world:
-            DrawWorldSpace(in_particleData, in_renderSnapshot);
+            DrawWorldSpace(particleData, renderSnapshot, frameAllocator);
             break;
         default:
             CS_LOG_FATAL("Invalid simulation space.");
@@ -183,7 +183,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void StaticBillboardParticleDrawable::DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) const
+    void StaticBillboardParticleDrawable::DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& particleData, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) const
     {
         auto renderMaterialGroup = m_billboardDrawableDef->GetMaterial()->GetRenderMaterialGroup();
         auto entityWorldTransform = GetEntity()->GetTransform().GetWorldTransform();
@@ -195,11 +195,11 @@ namespace ChilliSource
         f32 particleScaleFactor = (entityScale.x + entityScale.y + entityScale.z) / 3.0f;
 
         //billboard by applying the inverse of the view orientation. The view orientation is the inverse of the camera entity orientation.
-        auto inverseView = in_renderSnapshot.GetRenderCamera().GetOrientation();
+        auto inverseView = renderSnapshot.GetRenderCamera().GetOrientation();
 
-        for (u32 i = 0; i < in_particleData.size(); ++i)
+        for (u32 i = 0; i < particleData.size(); ++i)
         {
-            const auto& particle = in_particleData[i];
+            const auto& particle = particleData[i];
 
             if (particle.m_isActive == true && particle.m_colour != Colour::k_transparent)
             {
@@ -210,27 +210,27 @@ namespace ChilliSource
                 auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView; //rotate locally in the XY plane before rotating to face the camera.
                 auto worldMatrix = Matrix4::CreateTransform(worldPosition, worldScale, worldOrientation);
                 
-                auto renderDynamicMesh = SpriteMeshBuilder::Build(in_renderSnapshot.GetFrameAllocator(), Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs,
+                auto renderDynamicMesh = SpriteMeshBuilder::Build(frameAllocator, Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs,
                                                                   particle.m_colour, AlignmentAnchor::k_middleCentre);
                 auto worldBoundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldPosition, worldScale);
                 
-                in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderDynamicMesh.get(), worldMatrix, worldBoundingSphere, false, RenderLayer::k_standard));
-                in_renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
+                renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderDynamicMesh.get(), worldMatrix, worldBoundingSphere, false, RenderLayer::k_standard));
+                renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
             }
         }
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void StaticBillboardParticleDrawable::DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) const
+    void StaticBillboardParticleDrawable::DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& particleData, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) const
     {
         auto renderMaterialGroup = m_billboardDrawableDef->GetMaterial()->GetRenderMaterialGroup();
 
         //billboard by applying the inverse of the view orientation. The view orientation is the inverse of the camera entity orientation.
-        auto inverseView = in_renderSnapshot.GetRenderCamera().GetOrientation();
+        auto inverseView = renderSnapshot.GetRenderCamera().GetOrientation();
 
-        for (u32 i = 0; i < in_particleData.size(); ++i)
+        for (u32 i = 0; i < particleData.size(); ++i)
         {
-            const auto& particle = in_particleData[i];
+            const auto& particle = particleData[i];
 
             if (particle.m_isActive == true && particle.m_colour != Colour::k_transparent)
             {
@@ -241,12 +241,12 @@ namespace ChilliSource
                 auto worldOrientation = Quaternion(Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;  //rotate locally in the XY plane before rotating to face the camera.
                 auto worldMatrix = Matrix4::CreateTransform(worldPosition, worldScale, worldOrientation);
 
-                auto renderDynamicMesh = SpriteMeshBuilder::Build(in_renderSnapshot.GetFrameAllocator(), Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs,
+                auto renderDynamicMesh = SpriteMeshBuilder::Build(frameAllocator, Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs,
                                                                   particle.m_colour, AlignmentAnchor::k_middleCentre);
                 auto worldBoundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldPosition, worldScale);
                 
-                in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderDynamicMesh.get(), worldMatrix, worldBoundingSphere, false, RenderLayer::k_standard));
-                in_renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
+                renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderDynamicMesh.get(), worldMatrix, worldBoundingSphere, false, RenderLayer::k_standard));
+                renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
             }
         }
     }

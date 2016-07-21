@@ -113,16 +113,14 @@ namespace ChilliSource
     }
     //-----------------------------------------
     //-----------------------------------------
-    void State::RenderSnapshot(class RenderSnapshot& in_renderSnapshot) noexcept
+    void State::RenderSnapshot(class RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         for(auto& system : m_systems)
         {
-            system->OnRenderSnapshot(in_renderSnapshot);
+            system->OnRenderSnapshot(renderSnapshot, frameAllocator);
         }
         
-        m_scene->RenderSnapshotEntities(in_renderSnapshot);
-        
-        OnRenderSnapshot(in_renderSnapshot);
+        m_scene->RenderSnapshotEntities(renderSnapshot, frameAllocator);
     }
     //-----------------------------------------
     //-----------------------------------------

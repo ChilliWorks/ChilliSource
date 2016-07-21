@@ -175,7 +175,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLContextRestorer::OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot) noexcept
+        void GLContextRestorer::OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot, ChilliSource::IAllocator* frameAllocator) noexcept
         {
 #ifdef CS_TARGETPLATFORM_ANDROID
             auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();

@@ -333,7 +333,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void StaticModelComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    void StaticModelComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         CS_ASSERT(m_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
         CS_ASSERT(m_model->GetNumMeshes() == m_materials.size(), "Invalid number of materials.");
@@ -348,7 +348,7 @@ namespace ChilliSource
             const auto& transform = GetEntity()->GetTransform();
             auto boundingSphere = Sphere::Transform(renderMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
             
-            in_renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform(), boundingSphere, m_shadowCastingEnabled, RenderLayer::k_standard));
+            renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderMesh, GetEntity()->GetTransform().GetWorldTransform(), boundingSphere, m_shadowCastingEnabled, RenderLayer::k_standard));
         }
     }
     

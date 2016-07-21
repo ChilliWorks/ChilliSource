@@ -168,10 +168,13 @@ namespace ChilliSource
         /// the current state of the renderable portion of the scene. This will add all relevant light
         /// data to this snapshot.
         ///
+        /// @param renderSnapshot - Add anything to this that must be captured for rendering
+        /// @param frameAllocator - Allocate any memory required for rendering from this
+        ///
         /// @return renderSnapshot
         ///     The snapshot that the light data will be added to.
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         /// Triggered when either the component is removed from an entity which is currently in the
         /// scene, or the owning entity is removed from the scene.

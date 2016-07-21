@@ -105,8 +105,10 @@ namespace CSBackend
             ///
             /// @param renderSnapshot
             ///     The render snapshot object which contains all snapshotted data.
+            /// @param frameAllocator
+            ///     Allocate memory for this render frame from here
             ///
-            void OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot) noexcept override;
+            void OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot, ChilliSource::IAllocator* frameAllocator) noexcept override;
             
             /// Called when the application delegate is suspended. This is called directly
             /// from lifecycle manager and will be called before the OnSuspend.

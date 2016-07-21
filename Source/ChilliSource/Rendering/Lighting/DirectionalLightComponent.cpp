@@ -167,7 +167,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void DirectionalLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void DirectionalLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         if (m_shadowMap)
         {

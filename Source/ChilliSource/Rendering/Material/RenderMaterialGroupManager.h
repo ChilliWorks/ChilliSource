@@ -181,8 +181,10 @@ namespace ChilliSource
         ///
         /// @param renderSnapshot
         ///     The render shapshot for storing snapshotted data.
+        /// @param frameAllocator
+        ///     Allocate memory for this render frame from here
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         std::mutex m_mutex;
         std::vector<RenderMaterialGroupUPtr> m_renderMaterialGroups;

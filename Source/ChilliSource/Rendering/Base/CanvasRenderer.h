@@ -197,8 +197,10 @@ namespace ChilliSource
         ///
         /// @param in_renderSnapshot - The render snapshot object which contains all
         /// snapshotted data.
+        /// @param frameAllocator
+        ///     Allocate memory for this render frame from here
         //----------------------------------------------------------------------------
-        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         //----------------------------------------------------------------------------
         /// Called when the system is destroyed
         ///
@@ -207,6 +209,7 @@ namespace ChilliSource
         void OnDestroy() override;
 
     private:
+        IAllocator* m_currentFrameAllocator = nullptr;
         RenderSnapshot* m_currentRenderSnapshot = nullptr;
         u32 m_nextPriority = 0;
         

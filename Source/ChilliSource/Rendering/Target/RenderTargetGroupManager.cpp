@@ -123,7 +123,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    void RenderTargetGroupManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void RenderTargetGroupManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
         auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();

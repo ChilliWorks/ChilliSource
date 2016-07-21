@@ -208,11 +208,14 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param in_renderSnapshot - The render
+        /// @param renderSnapshot - The render
         /// snapshot object which contains all
         /// snapshotted data.
+        /// @param frameAllocator - Allocate
+        /// any data required for rendering this frame
+        /// from here
         //-----------------------------------------
-        void RenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept;
+        void RenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept;
         //-----------------------------------------
         /// Triggered when a state is the
         /// active state in the state manager and
@@ -307,19 +310,6 @@ namespace ChilliSource
         /// @param Fixed time since last update (Secs)
         //-----------------------------------------
         virtual void OnFixedUpdate(f32 in_deltaTime){};
-        //-----------------------------------------
-        /// The render snapshot event can be
-        /// implemented by a state to allow it to
-        /// snapshot any data which pertains to the
-        /// renderer.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param in_renderSnapshot - The render
-        /// snapshot object which contains all
-        /// snapshotted data.
-        //-----------------------------------------
-        virtual void OnRenderSnapshot(class RenderSnapshot& in_renderSnapshot) noexcept {};
         //-----------------------------------------
         /// Triggered when a state is the
         /// active state in the state manager and

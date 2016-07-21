@@ -81,7 +81,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderShaderManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void RenderShaderManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
         auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();

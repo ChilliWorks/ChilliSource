@@ -95,11 +95,11 @@ namespace ChilliSource
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    void Scene::RenderSnapshotEntities(RenderSnapshot& in_renderSnapshot) noexcept
+    void Scene::RenderSnapshotEntities(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         for(u32 i=0; i<m_entities.size(); ++i)
         {
-            m_entities[i]->OnRenderSnapshot(in_renderSnapshot);
+            m_entities[i]->OnRenderSnapshot(renderSnapshot, frameAllocator);
         }
     }
     //-------------------------------------------------------

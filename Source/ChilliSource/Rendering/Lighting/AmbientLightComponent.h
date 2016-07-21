@@ -86,10 +86,12 @@ namespace ChilliSource
         /// the current state of the renderable portion of the scene. This will add all relevant light
         /// data to this snapshot.
         ///
-        /// @return renderSnapshot
+        /// @param renderSnapshot
         ///     The snapshot that the light data will be added to.
+        /// @param frameAllocator
+        ///     Allocate any render memory for this frame from here
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         Colour m_colour;
         f32 m_intensity;

@@ -115,10 +115,12 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param in_renderSnapshot - The render snapshot
+        /// @param renderSnapshot - The render snapshot
         /// object which contains all snapshotted data.
+        /// @param frameAllocator - Allocate memory for
+        /// this render frame from here
         //------------------------------------------------
-        virtual void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept {};
+        virtual void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept {};
         //------------------------------------------------
         /// Called when the application transitions from
         /// being active app into the background. This

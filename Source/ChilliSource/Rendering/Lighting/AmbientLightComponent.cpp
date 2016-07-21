@@ -44,7 +44,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void AmbientLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void AmbientLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         renderSnapshot.AddAmbientRenderLight(AmbientRenderLight(GetFinalColour()));
     }

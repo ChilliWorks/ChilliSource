@@ -434,7 +434,7 @@ namespace ChilliSource
     }
     //------------------------------------------------------------
     //------------------------------------------------------------
-    void SpriteComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    void SpriteComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         Vector2 frameCenter;
         Vector2 frameSize;
@@ -464,10 +464,10 @@ namespace ChilliSource
         }
         
         const auto& transform = GetEntity()->GetTransform();
-        auto renderDynamicMesh = SpriteMeshBuilder::Build(in_renderSnapshot.GetFrameAllocator(), Vector3(frameCenter, 0.0f), frameSize, transformedUVs, m_colour, m_originAlignment);
+        auto renderDynamicMesh = SpriteMeshBuilder::Build(frameAllocator, Vector3(frameCenter, 0.0f), frameSize, transformedUVs, m_colour, m_originAlignment);
         auto boundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
-        in_renderSnapshot.AddRenderObject(RenderObject(GetMaterial()->GetRenderMaterialGroup(), renderDynamicMesh.get(), transform.GetWorldTransform(), boundingSphere, false, RenderLayer::k_standard));
-        in_renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
+        renderSnapshot.AddRenderObject(RenderObject(GetMaterial()->GetRenderMaterialGroup(), renderDynamicMesh.get(), transform.GetWorldTransform(), boundingSphere, false, RenderLayer::k_standard));
+        renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
     }
     //----------------------------------------------------
     //----------------------------------------------------
