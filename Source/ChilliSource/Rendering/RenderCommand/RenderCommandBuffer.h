@@ -62,10 +62,6 @@ namespace ChilliSource
         ///
         RenderCommandBuffer(u32 numSlots, RenderFrameData renderFrameData) noexcept;
         
-        /// @return The allocator from which all frame allocations should occur.
-        ///
-        IAllocator* GetFrameAllocator() const noexcept { return m_renderFrameData.GetFrameAllocator(); }
-        
         /// @return The number of slots in the queue.
         ///
         u32 GetNumSlots() const noexcept { return u32(m_queue.size()); }
