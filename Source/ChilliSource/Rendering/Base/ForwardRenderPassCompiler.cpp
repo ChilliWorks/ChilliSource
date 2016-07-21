@@ -443,7 +443,14 @@ namespace ChilliSource
             
             taskContext.ProcessChildTasks(tasks);
             
-            return TargetRenderPassGroup(renderFrame.GetResolution(), renderFrame.GetClearColour(), std::move(cameraRenderPassGroups));
+            if(renderFrame.GetOffscreenRenderTarget() == nullptr)
+            {
+                return TargetRenderPassGroup(renderFrame.GetResolution(), renderFrame.GetClearColour(), std::move(cameraRenderPassGroups));
+            }
+            else
+            {
+                return TargetRenderPassGroup(renderFrame.GetOffscreenRenderTarget(), renderFrame.GetClearColour(), std::move(cameraRenderPassGroups));
+            }
         }
         
         /// Gather all render objects in the frame that are to be renderered into a shadow RenderTarget

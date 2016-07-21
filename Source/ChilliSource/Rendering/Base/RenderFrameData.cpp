@@ -30,8 +30,7 @@ namespace ChilliSource
 {
     
     //------------------------------------------------------------------------------
-    RenderFrameData::RenderFrameData(IAllocator* frameAllocator) noexcept
-        : m_frameAllocator(frameAllocator)
+    RenderFrameData::RenderFrameData() noexcept
     {
     }
     

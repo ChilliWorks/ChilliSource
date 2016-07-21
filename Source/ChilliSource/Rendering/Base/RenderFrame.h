@@ -47,6 +47,8 @@ namespace ChilliSource
     public:
         /// Creates a new instance with the given camera, lights and objects.
         ///
+        /// @param renderTarget
+        ///     The render target to render into, if null renders to screen (frame buffer)
         /// @param resolution
         ///     The resolution of the viewport.
         /// @param clearColour
@@ -63,7 +65,7 @@ namespace ChilliSource
         /// @param renderObjects
         ///     A list of objects in the frame.
         ///
-        RenderFrame(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight, const std::vector<DirectionalRenderLight>& renderDirectionalLights,
+        RenderFrame(const RenderTargetGroup* renderTarget, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera, const AmbientRenderLight& renderAmbientLight, const std::vector<DirectionalRenderLight>& renderDirectionalLights,
                     const std::vector<PointRenderLight>& renderPointLights, const std::vector<RenderObject>& renderObjects) noexcept;
         
         /// @return The resolution of the viewport.
@@ -95,6 +97,10 @@ namespace ChilliSource
         ///
         const std::vector<RenderObject>& GetRenderObjects() const noexcept { return m_renderObjects; }
         
+        ///@return Render target for this frame, if null defaults to the frame buffer
+        ///
+        const RenderTargetGroup* GetOffscreenRenderTarget() const noexcept { return m_offscreenRenderTarget; }
+        
     private:
         Integer2 m_resolution;
         Colour m_clearColour;
@@ -103,6 +109,7 @@ namespace ChilliSource
         std::vector<DirectionalRenderLight> m_renderDirectionalLights;
         std::vector<PointRenderLight> m_renderPointLights;
         std::vector<RenderObject> m_renderObjects;
+        const RenderTargetGroup* m_offscreenRenderTarget;
     };
 }
 

@@ -94,7 +94,7 @@ namespace ChilliSource
         m_renderCommandBuffersCondition.notify_all();
     }
     //------------------------------------------------------------------------------
-    void RenderCommandBufferManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void RenderCommandBufferManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         if(!m_discardCommands)
         {
@@ -161,9 +161,9 @@ namespace ChilliSource
             RecycleCommandList(buffer->GetRenderCommandList(i));
         }
         
-        auto frameAllocator = buffer->GetFrameAllocator();
-        buffer.reset();
-        m_renderer->GetFrameAllocatorQueue().Push(frameAllocator);
+//        auto frameAllocator = buffer->GetFrameAllocator();
+//        buffer.reset();
+//        m_renderer->GetFrameAllocatorQueue().Push(frameAllocator);
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::RecycleCommandList(RenderCommandList* renderCommandList) noexcept
@@ -256,7 +256,7 @@ namespace ChilliSource
         m_renderCommandBuffersCondition.notify_all();
     }
     //------------------------------------------------------------------------------
-    RenderCommandBufferCUPtr RenderCommandBufferManager::WaitThenPopCommandBuffer() noexcept
+    std::vector<RenderCommandBufferCUPtr> RenderCommandBufferManager::WaitThenPopCommandBuffers() noexcept
     {
         std::unique_lock<std::mutex> lock(m_renderCommandBuffersMutex);
         
@@ -265,11 +265,16 @@ namespace ChilliSource
             m_renderCommandBuffersCondition.wait(lock);
         }
         
-        auto renderCommandBuffer = std::move(m_renderCommandBuffers.front());
-        m_renderCommandBuffers.pop_front();
+        std::vector<RenderCommandBufferCUPtr> buffers(m_renderCommandBuffers.size());
+        
+        while (m_renderCommandBuffers.empty() == false)
+        {
+            buffers.push_back(std::move(m_renderCommandBuffers.front()));
+            m_renderCommandBuffers.pop_front();
+        }
         
         m_renderCommandBuffersCondition.notify_all();
         
-        return std::move(renderCommandBuffer);
+        return buffers;
     }
 }

@@ -89,6 +89,8 @@ namespace ChilliSource
         /// scene. This will be created with the next queued frame allocator; if one isn't available
         /// this will block until one is.
         ///
+        /// @param renderTarget
+        ///     The render target to render into, if null renders to screen (frame buffer)
         /// @param resolution
         ///     The viewport resolution.
         /// @param clearColour
@@ -99,7 +101,7 @@ namespace ChilliSource
         ///
         /// @return The new render snapshot object.
         ///
-        RenderSnapshot CreateRenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
+        RenderSnapshot CreateRenderSnapshot(const RenderTargetGroup* renderTarget, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
         
         /// Performs the Scene Snapshot through to the Render Command Queue Compilation Stages and
         /// then stores the output render command buffer render to later be processed by the
@@ -110,18 +112,18 @@ namespace ChilliSource
         ///
         /// This must be called from the main thread.
         ///
-        /// @param renderSnapshot
-        ///     The render snapshot to process. This should have already been populated by passing it
+        /// @param renderSnapshots
+        ///     The render snapshots to process. They should have already been populated by passing it
         ///     to each system and component in the scene. This must be moved.
         ///
-        void ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept;
+        void ProcessRenderSnapshots(std::vector<RenderSnapshot>&& renderSnapshots) noexcept;
         
-        /// Processes the next render command buffer. If there is no render command buffer ready to be
+        /// Processes the next render command buffers. If there are no render command buffers ready to be
         /// processed then this will block until there is.
         ///
         /// This must be called from the render thread.
         ///
-        void ProcessRenderCommandBuffer() noexcept;
+        void ProcessRenderCommandBuffers() noexcept;
         
         /// @return The renderers frame allocator queue
         ///
@@ -173,12 +175,12 @@ namespace ChilliSource
         IRenderPassCompilerUPtr m_renderPassCompiler;
         IRenderCommandProcessorUPtr m_renderCommandProcessor;
         
-        RenderSnapshot m_currentSnapshot;
-        
         std::mutex m_renderPrepMutex;
         std::condition_variable m_renderPrepCondition;
         bool m_renderPrepActive = false;
         bool m_initialised = false;
+        
+        std::vector<RenderSnapshot> m_currentSnapshots;
         
         RenderCommandBufferManager* m_commandRecycleSystem = nullptr;
     };

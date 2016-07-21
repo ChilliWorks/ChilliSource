@@ -311,6 +311,8 @@ namespace ChilliSource
         /// @return A const pointer to the widget factory system.
         ///
         const WidgetFactory* GetWidgetFactory() const noexcept;
+        
+        void RenderToTarget(Scene* scene, TargetGroup* target);
 
         virtual ~Application() noexcept;
         
@@ -447,6 +449,7 @@ namespace ChilliSource
         SystemInfoCUPtr m_systemInfo;
         
         std::atomic<u32> m_frameIndex;
+        std::atomic<u32> m_renderFrameIndex;
         TimeIntervalSecs m_currentAppTime = 0;
         f32 m_updateInterval;
         f32 m_updateSpeed = 1.0f;

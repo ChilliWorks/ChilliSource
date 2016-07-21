@@ -110,7 +110,7 @@ namespace ChilliSource
 
     //------------------------------------------------------------------------------
     Application::Application(ChilliSource::SystemInfoCUPtr systemInfo) noexcept
-        : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0), m_systemInfo(std::move(systemInfo))
+        : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0), m_systemInfo(std::move(systemInfo)), m_renderFrameIndex(0)
     {
         m_appVersion = m_systemInfo->GetAppVersion();
     }
@@ -360,6 +360,8 @@ namespace ChilliSource
         m_appConfig->Load();
     }
     
+    std::vector<RenderSnapshot> snapshots;
+    std::array<IAllocator*, 6> m_frameAllocators;
     //------------------------------------------------------------------------------
     void Application::ProcessRenderSnapshotEvent() noexcept
     {
@@ -382,15 +384,50 @@ namespace ChilliSource
             renderCamera = RenderCamera(transform.GetWorldTransform(), camera->GetProjection(), transform.GetWorldOrientation());
         }
         
-        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(resolution, clearColour, renderCamera);
+        RenderSnapshot mainSnapshot = m_renderer->CreateRenderSnapshot(nullptr, resolution, clearColour, renderCamera);
+        
+        if(m_frameAllocators[m_renderFrameIndex%6] == nullptr)
+            m_frameAllocators[m_renderFrameIndex%6] = m_renderer->GetFrameAllocatorQueue().Pop();
+            
         for (const AppSystemUPtr& system : m_systems)
         {
-            system->OnRenderSnapshot(renderSnapshot);
+            system->OnRenderSnapshot(mainSnapshot, m_frameAllocators[m_renderFrameIndex%6]);
         }
         
-        m_stateManager->RenderSnapshotStates(renderSnapshot);
+        m_stateManager->RenderSnapshotStates(mainSnapshot, m_frameAllocators[m_renderFrameIndex%6]);
         
-        m_renderer->ProcessRenderSnapshot(std::move(renderSnapshot));
+        snapshots.push_back(std::move(mainSnapshot));
+        m_renderer->ProcessRenderSnapshots(std::move(snapshots));
+        snapshots.clear();
+    }
+    
+    void Application::RenderToTarget(Scene* scene, TargetGroup* target)
+    {
+        auto clearColour = scene->GetClearColour();
+        auto camera = scene->GetActiveCamera();
+        
+        RenderCamera renderCamera;
+        if (camera)
+        {
+            Entity* cameraEntity = camera->GetEntity();
+            CS_ASSERT(cameraEntity, "Active CameraComponent must be attached to an entity.");
+            
+            const auto& transform = cameraEntity->GetTransform();
+            renderCamera = RenderCamera(transform.GetWorldTransform(), camera->GetProjection(), transform.GetWorldOrientation());
+        }
+        
+        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(target->GetRenderTargetGroup(), Integer2(400, 400), clearColour, renderCamera);
+        
+        m_frameAllocators[m_renderFrameIndex%6] = m_renderer->GetFrameAllocatorQueue().Pop();
+        
+        for (const AppSystemUPtr& system : m_systems)
+        {
+            system->OnRenderSnapshot(renderSnapshot, m_frameAllocators[m_renderFrameIndex%6]);
+        }
+        
+        m_stateManager->RenderSnapshotStates(renderSnapshot, m_frameAllocators[m_renderFrameIndex%6]);
+        
+        snapshots.push_back(std::move(renderSnapshot));
     }
     
     //------------------------------------------------------------------------------
@@ -508,7 +545,10 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::Render() noexcept
     {
-        m_renderer->ProcessRenderCommandBuffer();
+        m_renderer->ProcessRenderCommandBuffers();
+        m_renderer->GetFrameAllocatorQueue().Push(m_frameAllocators[m_renderFrameIndex%6]);
+        m_frameAllocators[m_renderFrameIndex%6] = nullptr;
+        ++m_renderFrameIndex;
     }
     
     //------------------------------------------------------------------------------
