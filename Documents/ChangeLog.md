@@ -1,6 +1,10 @@
 ChilliSource Change Log
 =======================
 
+Version 2.0.1, 2016-07-21
+-------------------------
+* Hotfix for issue in GLDynamicMesh where indices were not being assigned correctly on construction
+
 Version 2.0.0, 2016-07-15
 -------------------------
 * Added: A new multi-threaded renderer. The previous renderer has been completely stripped out and replaced with a brand new renderer which makes much better use of multi-core devices. The new renderer also allows us to add deferred rendering support in the future.

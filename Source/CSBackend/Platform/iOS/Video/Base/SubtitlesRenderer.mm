@@ -236,7 +236,6 @@
             {
                 fOffset = 0.0f;
             }
-            CGPoint newOffset = (CGPoint){.x = 0.0f, .y = -fOffset};
             inpView.contentOffset = (CGPoint){.x = 0.0f, .y = -fOffset};
             break;
         }
