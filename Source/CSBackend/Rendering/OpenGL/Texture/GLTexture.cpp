@@ -26,6 +26,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Image/ImageFormatConverter.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
@@ -341,6 +342,66 @@ namespace CSBackend
                     m_handle = BuildTexture(nullptr, 0, m_renderTexture);
                 }
                 m_invalidData = false;
+            }
+        }
+        
+        //------------------------------------------------------------------------------
+        void GLTexture::UpdateRestorableBackup() noexcept
+        {
+            if(k_shouldBackupMeshDataFromMemory && m_renderTexture->ShouldBackupData())
+            {
+                //create an bind a new frame buffer.
+                GLuint frameBufferHandle = 0;
+                glGenFramebuffers(1, &frameBufferHandle);
+                glBindFramebuffer(GL_FRAMEBUFFER, frameBufferHandle);
+                
+                //attach the texture
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_handle, 0);
+                GLuint glCheck = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+                if(glCheck != GL_FRAMEBUFFER_COMPLETE)
+                {
+                    CS_LOG_FATAL("Framebuffer incomplete while updating texture restoration data.");
+                }
+                
+                //read the data from the texture. This can only be read back in RGBA8888 format so it will need
+                //to be converted back to the format of the texture.
+                u32 unconvertedDataSize = m_renderTexture->GetDimensions().x * m_renderTexture->GetDimensions().y * 4;
+                std::unique_ptr<u8[]> unconvertedData(new u8[unconvertedDataSize]);
+                glReadPixels(0, 0, m_renderTexture->GetDimensions().x, m_renderTexture->GetDimensions().y, GL_RGBA, GL_UNSIGNED_BYTE, unconvertedData.get());
+                
+                //Convert to the format of this texture
+                ChilliSource::ImageFormatConverter::ImageBuffer convertedData;
+                switch (m_renderTexture->GetImageFormat())
+                {
+                    case ChilliSource::ImageFormat::k_RGBA8888:
+                        convertedData.m_size = unconvertedDataSize;
+                        convertedData.m_data = std::move(unconvertedData);
+                        break;
+                    case ChilliSource::ImageFormat::k_RGB888:
+                        convertedData = CS::ImageFormatConverter::RGBA8888ToRGB888(unconvertedData.get(), unconvertedDataSize);
+                        unconvertedData.reset();
+                        break;
+                    case ChilliSource::ImageFormat::k_RGBA4444:
+                        convertedData = CS::ImageFormatConverter::RGBA8888ToRGBA4444(unconvertedData.get(), unconvertedDataSize);
+                        unconvertedData.reset();
+                        break;
+                    case ChilliSource::ImageFormat::k_RGB565:
+                        convertedData = CS::ImageFormatConverter::RGBA8888ToRGB565(unconvertedData.get(), unconvertedDataSize);
+                        unconvertedData.reset();
+                        break;
+                    default:
+                        CS_LOG_FATAL("Texture is not in a restorable format. The restorable texture data option must be disabled for this texture.");
+                        break;
+                }
+                
+                m_imageDataSize = convertedData.m_size;
+                m_imageDataBackup = std::move(convertedData.m_data);
+                
+                //clean up the frame buffer.
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                glDeleteFramebuffers(1, &frameBufferHandle);
+                
+                CS_ASSERT_NOGLERROR("An OpenGL error occurred while updating texture restoration data.");
             }
         }
         

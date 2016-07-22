@@ -600,7 +600,19 @@ namespace CSBackend
         {
             if (m_currentRenderTargetGroup)
             {
-                //TODO: Update texture data for bound target group, when render to texture is implemented.
+                // For some platforms we need to store a shadow copy of textures in memory
+                // so we can restore if the context is lost. This updates that shadow copy
+                if(m_currentRenderTargetGroup->GetColourTarget())
+                {
+                    auto glColourTexture = static_cast<GLTexture*>(m_currentRenderTargetGroup->GetColourTarget()->GetExtraData());
+                    glColourTexture->UpdateRestorableBackup();
+                }
+                
+                if(m_currentRenderTargetGroup->GetDepthTarget())
+                {
+                    auto glDepthTexture = static_cast<GLTexture*>(m_currentRenderTargetGroup->GetDepthTarget()->GetExtraData());
+                    glDepthTexture->UpdateRestorableBackup();
+                }
             }
             
             ResetCache();
