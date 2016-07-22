@@ -67,15 +67,21 @@ namespace ChilliSource
         //----------------------------------------------------
         /// @author S Downie
         ///
-        /// @return A pointer to the scene.
+        /// @return A pointer to the main scene (that renders to screen).
         //----------------------------------------------------
         Scene* GetScene();
         //----------------------------------------------------
         /// @author Ian Copland
         ///
-        /// @return A const pointer to the scene.
+        /// @return A const pointer to the main scene (that renders to screen).
         //----------------------------------------------------
         const Scene* GetScene() const;
+        //----------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return List of pointers to the scenes (main and offscreen).
+        //----------------------------------------------------
+        const std::vector<Scene*>& GetScenes() const noexcept { return m_scenes; }
         //----------------------------------------------------
         /// @author S Downie
         ///
@@ -345,7 +351,7 @@ namespace ChilliSource
         
         std::vector<StateSystemUPtr> m_systems;
         
-        Scene* m_scene = nullptr;
+        std::vector<Scene*> m_scenes;
         Canvas* m_canvas = nullptr;
         bool m_canAddSystems = false;
         

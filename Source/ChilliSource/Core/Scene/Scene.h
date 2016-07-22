@@ -53,10 +53,10 @@ namespace ChilliSource
         ///
         /// @author S Downie
         ///
-        /// @param Input system used by the window to listen
-        /// for input events
+        /// @param renderTarget
+        ///     The target into which the scene renders, if null renders to screen
         //-------------------------------------------------------
-        static SceneUPtr Create();
+        static SceneUPtr Create(TargetGroupUPtr renderTarget = nullptr);
         
         //-------------------------------------------------------
         /// Destructor
@@ -75,6 +75,19 @@ namespace ChilliSource
         /// @return Whether the system has the given interface
         //-------------------------------------------------------
         bool IsA(InterfaceIDType in_interfaceId) const override;
+        
+        /// Enable updating and rendering on the scene
+        ///
+        void Enable() noexcept { m_enabled = true; }
+        
+        /// Disable updating and rendering on the scene
+        ///
+        void Disable() noexcept { m_enabled = false; }
+        
+        /// @return TRUE if the scene is updating and rendering
+        ///
+        bool IsEnabled() const noexcept { return m_enabled; }
+        
         //-------------------------------------------------------
         /// Add an entity to the scene. This entity cannot
         /// exist on another scene prior to adding. The entity
@@ -132,6 +145,10 @@ namespace ChilliSource
         /// there isn't one.
         //------------------------------------------------------
         CameraComponent* GetActiveCamera() const noexcept { return m_activeCameraComponent; }
+        //------------------------------------------------------
+        /// @return The render target, if nullptr then renders to screen
+        //------------------------------------------------------
+        TargetGroup* GetRenderTarget() const noexcept { return m_renderTarget.get(); }
         //-------------------------------------------------------
         /// Sends the resume event on to the entities.
         ///
@@ -251,8 +268,11 @@ namespace ChilliSource
         /// Private to enforce use of factory method
         ///
         /// @author S Downie
+        ///
+        /// @param renderTarget
+        ///     The target into which the scene renders, if null renders to screen
         //-------------------------------------------------------
-        Scene();
+        Scene(TargetGroupUPtr renderTarget);
         //-------------------------------------------------------
         /// Remove the entity from the scene
         ///
@@ -262,13 +282,23 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Remove(Entity* inpEntity);
         
+        //------------------------------------------------
+        /// Called when the owning state is being destroyed.
+        /// Used to release held objects
+        ///
+        /// @author S Downie
+        //------------------------------------------------
+        void OnDestroy() noexcept override;
+        
     private:
         
         SharedEntityList m_entities;
         Colour m_clearColour;
         bool m_entitiesActive = false;
         bool m_entitiesForegrounded = false;
+        bool m_enabled = true;
         CameraComponent* m_activeCameraComponent = nullptr;
+        TargetGroupUPtr m_renderTarget;
     };		
 }
 

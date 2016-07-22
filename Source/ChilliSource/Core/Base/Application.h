@@ -312,16 +312,17 @@ namespace ChilliSource
         ///
         const WidgetFactory* GetWidgetFactory() const noexcept;
         
-        /// Takes a snapshot of the given scene and renders it to the given offscree
-        /// render target during the render stage of the application. NOTE: This
-        /// means the texture of the target will not be populated til next frame.
+        /// Takes a snapshot of the given scene and renders it to its
+        /// render target during the render stage of the application.
+        /// This is used mostly for single shot render to texture
+        /// NOTE: This means the texture of the target will not be populated til next frame.
         ///
         /// @param scene
-        ///     Scene that should be rendered to given target
+        ///     Scene that should be rendered
         /// @param target
-        ///     Target to render into
+        ///     Optiona, if wanting to render the scene to a target other than its own
         ///
-        void RenderToTarget(Scene* scene, TargetGroup* target);
+        void RenderScene(Scene* scene, TargetGroup* target = nullptr) noexcept;
 
         virtual ~Application() noexcept;
         
@@ -369,7 +370,8 @@ namespace ChilliSource
         
         /// Sends the render snapshot event to all active systems and components
         /// that are current in the scene to generate the render snapshot. This
-        /// snapshot is then passed to the render pipeline for processing.
+        /// snapshot is then passed to the render pipeline for processing. This is done
+        /// for all enabled scenes
         ///
         void ProcessRenderSnapshotEvent() noexcept;
         
@@ -441,9 +443,8 @@ namespace ChilliSource
         ///
         void Destroy() noexcept;
         
-        std::vector<AppSystemUPtr> m_systems;
-        
         std::vector<RenderSnapshot> m_currentRenderSnapshots;
+        std::vector<AppSystemUPtr> m_systems;
         
         ResourcePool* m_resourcePool = nullptr;
         StateManager* m_stateManager = nullptr;

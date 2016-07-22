@@ -27,6 +27,7 @@
 //
 
 #include <ChilliSource/Core/Scene/Scene.h>
+#include <ChilliSource/Rendering/Target/TargetGroup.h>
 
 #include <algorithm>
 
@@ -36,13 +37,14 @@ namespace ChilliSource
     
     //-------------------------------------------------------
     //-------------------------------------------------------
-    SceneUPtr Scene::Create()
+    SceneUPtr Scene::Create(TargetGroupUPtr renderTarget)
     {
-        return SceneUPtr(new Scene());
+        return SceneUPtr(new Scene(std::move(renderTarget)));
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Scene::Scene()
+    Scene::Scene(TargetGroupUPtr renderTarget)
+    : m_renderTarget(std::move(renderTarget))
     {
     }
     //-------------------------------------------------------
@@ -79,18 +81,24 @@ namespace ChilliSource
     //-------------------------------------------------------
     void Scene::UpdateEntities(f32 in_timeSinceLastUpdate)
     {
-        for(u32 i = 0; i < m_entities.size(); ++i)
+        if(m_enabled)
         {
-            m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
+            for(u32 i = 0; i < m_entities.size(); ++i)
+            {
+                m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
+            }
         }
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
     void Scene::FixedUpdateEntities(f32 in_fixedTimeSinceLastUpdate)
     {
-        for(u32 i=0; i<m_entities.size(); ++i)
+        if(m_enabled)
         {
-            m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+            for(u32 i=0; i<m_entities.size(); ++i)
+            {
+                m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+            }
         }
     }
     //-------------------------------------------------------
@@ -260,6 +268,12 @@ namespace ChilliSource
             it->swap(m_entities.back());
             m_entities.pop_back();
         }
+    }
+    //--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
+    void Scene::OnDestroy() noexcept
+    {
+        m_renderTarget.reset();
     }
     //--------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------

@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Input/Gesture/GestureSystem.h>
+#include <ChilliSource/Rendering/Target/TargetGroup.h>
 #include <ChilliSource/UI/Base/Canvas.h>
 
 namespace ChilliSource
@@ -42,8 +43,8 @@ namespace ChilliSource
     {
         m_canAddSystems = true;
         
-        //Create the default systems
-        m_scene = CreateSystem<Scene>();
+        //Create the default systems and main scene
+        m_scenes.push_back(CreateSystem<Scene>());
         m_canvas = CreateSystem<Canvas>();
         CreateSystem<GestureSystem>();
         
@@ -54,6 +55,10 @@ namespace ChilliSource
         
         for(auto& system : m_systems)
         {
+            if(system->IsA<Scene>() && system.get() != m_scenes[0])
+            {
+                m_scenes.push_back(static_cast<Scene*>(system.get()));
+            }
             system->OnInit();
         }
         
@@ -68,7 +73,10 @@ namespace ChilliSource
             system->OnResume();
         }
         
-        m_scene->ResumeEntities();
+        for(auto scene : m_scenes)
+        {
+            scene->ResumeEntities();
+        }
         
         OnResume();
     }
@@ -81,7 +89,10 @@ namespace ChilliSource
             system->OnForeground();
         }
         
-        m_scene->ForegroundEntities();
+        for(auto scene : m_scenes)
+        {
+            scene->ForegroundEntities();
+        }
         
         OnForeground();
     }
@@ -94,7 +105,10 @@ namespace ChilliSource
             system->OnUpdate(in_timeSinceLastUpdate);
         }
         
-        m_scene->UpdateEntities(in_timeSinceLastUpdate);
+        for(auto scene : m_scenes)
+        {
+            scene->UpdateEntities(in_timeSinceLastUpdate);
+        }
         
         OnUpdate(in_timeSinceLastUpdate);
     }
@@ -107,7 +121,10 @@ namespace ChilliSource
             system->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
         }
         
-        m_scene->FixedUpdateEntities(in_fixedTimeSinceLastUpdate);
+        for(auto scene : m_scenes)
+        {
+            scene->FixedUpdateEntities(in_fixedTimeSinceLastUpdate);
+        }
         
         OnFixedUpdate(in_fixedTimeSinceLastUpdate);
     }
@@ -119,8 +136,6 @@ namespace ChilliSource
         {
             system->OnRenderSnapshot(renderSnapshot, frameAllocator);
         }
-        
-        m_scene->RenderSnapshotEntities(renderSnapshot, frameAllocator);
     }
     //-----------------------------------------
     //-----------------------------------------
@@ -128,7 +143,10 @@ namespace ChilliSource
     {
         OnBackground();
         
-        m_scene->BackgroundEntities();
+        for (auto it = m_scenes.rbegin(); it != m_scenes.rend(); ++it)
+        {
+            (*it)->BackgroundEntities();
+        }
         
         for (auto it = m_systems.rbegin(); it != m_systems.rend(); ++it)
         {
@@ -141,7 +159,10 @@ namespace ChilliSource
     {
         OnSuspend();
         
-        m_scene->SuspendEntities();
+        for (auto it = m_scenes.rbegin(); it != m_scenes.rend(); ++it)
+        {
+            (*it)->SuspendEntities();
+        }
         
         for(auto it = m_systems.rbegin(); it != m_systems.rend(); ++it)
         {
@@ -154,7 +175,10 @@ namespace ChilliSource
     {
         OnDestroy();
         
-        m_scene->RemoveAllEntities();
+        for (auto it = m_scenes.rbegin(); it != m_scenes.rend(); ++it)
+        {
+            (*it)->RemoveAllEntities();
+        }
         
         for(auto it = m_systems.rbegin(); it != m_systems.rend(); ++it)
         {
@@ -174,13 +198,13 @@ namespace ChilliSource
     //------------------------------------------
     Scene* State::GetScene()
     {
-        return m_scene;
+        return m_scenes[0];
     }
     //------------------------------------------
     //------------------------------------------
     const Scene* State::GetScene() const
     {
-        return m_scene;
+        return m_scenes[0];
     }
     //------------------------------------------
     //------------------------------------------
