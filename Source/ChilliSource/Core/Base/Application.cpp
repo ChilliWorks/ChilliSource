@@ -359,8 +359,6 @@ namespace ChilliSource
         //Load the app config set preferred FPS.
         m_appConfig->Load();
     }
-    
-    std::vector<RenderSnapshot> snapshots;
 
     //------------------------------------------------------------------------------
     void Application::ProcessRenderSnapshotEvent() noexcept
@@ -376,7 +374,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::RenderToTarget(Scene* scene, TargetGroup* target)
     {
-        CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to render to texture from background thread.");
+        CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to render to target from background thread.");
         
         auto clearColour = scene->GetClearColour();
         auto camera = scene->GetActiveCamera();
@@ -404,15 +402,15 @@ namespace ChilliSource
             
             m_stateManager->RenderSnapshotStates(renderSnapshot, frameAllocator);
             
-            m_renderer->ProcessRenderSnapshots(std::move(frameAllocator), std::move(renderSnapshot), std::move(snapshots));
-            snapshots.clear();
+            m_renderer->ProcessRenderSnapshots(std::move(frameAllocator), std::move(renderSnapshot), std::move(m_currentRenderSnapshots));
+            m_currentRenderSnapshots.clear();
         }
         else
         {
             IAllocator* frameAllocator = m_renderer->GetFrameAllocatorQueue().Front();
             RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(target->GetRenderTargetGroup(), target->GetRenderTargetGroup()->GetResolution(), clearColour, renderCamera);
             scene->RenderSnapshotEntities(renderSnapshot, frameAllocator);
-            snapshots.push_back(std::move(renderSnapshot));
+            m_currentRenderSnapshots.push_back(std::move(renderSnapshot));
         }
     }
     

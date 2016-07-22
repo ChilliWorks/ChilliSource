@@ -443,6 +443,8 @@ namespace ChilliSource
         
         std::vector<AppSystemUPtr> m_systems;
         
+        std::vector<RenderSnapshot> m_currentRenderSnapshots;
+        
         ResourcePool* m_resourcePool = nullptr;
         StateManager* m_stateManager = nullptr;
         TaskScheduler* m_taskScheduler = nullptr;

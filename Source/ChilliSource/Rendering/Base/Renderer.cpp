@@ -77,6 +77,7 @@ namespace ChilliSource
     {
         return (Renderer::InterfaceID == interfaceId);
     }
+    
     //------------------------------------------------------------------------------
     RenderSnapshot Renderer::CreateRenderSnapshot(const RenderTargetGroup* renderTarget, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept
     {
