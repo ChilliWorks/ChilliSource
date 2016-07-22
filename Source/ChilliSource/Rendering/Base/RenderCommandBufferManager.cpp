@@ -161,9 +161,9 @@ namespace ChilliSource
             RecycleCommandList(buffer->GetRenderCommandList(i));
         }
         
-//        auto frameAllocator = buffer->GetFrameAllocator();
-//        buffer.reset();
-//        m_renderer->GetFrameAllocatorQueue().Push(frameAllocator);
+        auto frameAllocator = buffer->GetFrameAllocator();
+        buffer.reset();
+        m_renderer->GetFrameAllocatorQueue().Push(frameAllocator);
     }
     //------------------------------------------------------------------------------
     void RenderCommandBufferManager::RecycleCommandList(RenderCommandList* renderCommandList) noexcept
