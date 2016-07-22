@@ -390,6 +390,7 @@ namespace ChilliSource
         CS_ASSERT(activeState, "Must have active state.");
  
         auto scenes = activeState->GetScenes();
+        CS_ASSERT(scenes.size() > 0, "No scenes on active state");
         
         m_currentRenderSnapshots.reserve(scenes.size());
 

@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
+#include <ChilliSource/Rendering/Target/TargetGroup.h>
 
 namespace ChilliSource
 {
