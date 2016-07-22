@@ -120,7 +120,7 @@ namespace ChilliSource
         {
             auto mutableShadowMap = Application::Get()->GetResourcePool()->CreateResource<Texture>("_DirectionalLightShadowMap" + ToString(m_shadowMapId));
             
-            TextureDesc desc(m_shadowMapResolution, ImageFormat::k_Depth16, ImageCompression::k_none);
+            TextureDesc desc(m_shadowMapResolution, ImageFormat::k_Depth16, ImageCompression::k_none, false);
             mutableShadowMap->Build(nullptr, 0, desc);
             mutableShadowMap->SetLoadState(Resource::LoadState::k_loaded);
             

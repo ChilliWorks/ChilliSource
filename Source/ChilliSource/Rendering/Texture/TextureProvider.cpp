@@ -165,12 +165,11 @@ namespace ChilliSource
             auto texture = static_cast<Texture*>(out_resource.get());
             auto options = static_cast<const TextureResourceOptions*>(in_options.get());
             
-            TextureDesc desc(Integer2(image->GetWidth(), image->GetHeight()), image->GetFormat(), image->GetCompression());
+            TextureDesc desc(Integer2(image->GetWidth(), image->GetHeight()), image->GetFormat(), image->GetCompression(), false);
             desc.SetFilterMode(options->GetFilterMode());
             desc.SetWrapModeS(options->GetWrapModeS());
             desc.SetWrapModeT(options->GetWrapModeT());
             desc.SetMipmappingEnabled(options->IsMipMapsEnabled());
-            desc.SetTextureDataRestoreEnabled(false);
 
             texture->Build(Texture::DataUPtr(image->MoveData()), image->GetDataSize(), desc);
             texture->SetLoadState(Resource::LoadState::k_loaded);
@@ -182,12 +181,11 @@ namespace ChilliSource
                 auto texture = static_cast<Texture*>(out_resource.get());
                 auto options = static_cast<const TextureResourceOptions*>(in_options.get());
 
-                TextureDesc desc(Integer2(image->GetWidth(), image->GetHeight()), image->GetFormat(), image->GetCompression());
+                TextureDesc desc(Integer2(image->GetWidth(), image->GetHeight()), image->GetFormat(), image->GetCompression(), false);
                 desc.SetFilterMode(options->GetFilterMode());
                 desc.SetWrapModeS(options->GetWrapModeS());
                 desc.SetWrapModeT(options->GetWrapModeT());
                 desc.SetMipmappingEnabled(options->IsMipMapsEnabled());
-                desc.SetTextureDataRestoreEnabled(false);
 
                 texture->Build(Texture::DataUPtr(image->MoveData()), image->GetDataSize(), desc);
                 texture->SetLoadState(Resource::LoadState::k_loaded);
