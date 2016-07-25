@@ -59,8 +59,10 @@
 #include <ChilliSource/Rendering/Base/RenderPassVisibilityChecker.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
+#include <ChilliSource/Rendering/Base/StencilOp.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 
 #endif
