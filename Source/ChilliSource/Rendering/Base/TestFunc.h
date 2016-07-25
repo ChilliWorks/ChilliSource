@@ -1,8 +1,4 @@
 //
-//  BlendMode.h
-//  Chilli Source
-//  Created by Scott Downie on 09/04/2014.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2014 Tag Games Limited
@@ -26,37 +22,23 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_BLENDMODE_H_
-#define _CHILLISOURCE_RENDERING_BASE_BLENDMODE_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_TESTFUNC_H_
+#define _CHILLISOURCE_RENDERING_BASE_TESTFUNC_H_
 
 namespace ChilliSource
 {
-    /// The blend modes that are used to describe
-    /// a blend function for rendering. The blend
-    /// function takes 2 modes - the source and
-    /// the destination.
+    /// Standard test functions that are used for depth and stencil testing
     ///
-    enum class BlendMode
+    enum class TestFunc
     {
-        k_zero,
-        k_one,
-        k_sourceCol,
-        k_oneMinusSourceCol,
-        k_sourceAlpha,
-        k_oneMinusSourceAlpha,
-        k_destAlpha,
-        k_oneMinusDestAlpha
-    };
-    
-    /// Blend equation that governs how pixels are blended.
-    /// The equation specified how the new pixel colour is
-    /// combined with the colour already in the framebuffer
-    ///
-    enum class BlendEqn
-    {
-        k_add,
-        k_subtractSrcDst,
-        k_subtractDstSrc
+        k_never,    
+        k_less,     
+        k_lessEqual,
+        k_greater,
+        k_greaterEqual,
+        k_equal,
+        k_notEqual,
+        k_always
     };
 }
 

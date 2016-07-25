@@ -29,6 +29,8 @@
 
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
+#include <ChilliSource/Rendering/Base/StencilOp.h>
+#include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Material/RenderMaterial.h>
 
 namespace CSBackend
@@ -43,7 +45,7 @@ namespace CSBackend
             const std::string k_uniformSpecular = "u_specular";
             const std::string k_uniformTexturePrefix = "u_texture";
             
-            /// Converts from a ChilliSource blend mode to a OpenGL blend mode.
+            /// Converts from a ChilliSource blend mode to an OpenGL blend mode.
             ///
             /// @param blendMode
             ///     The ChilliSource blend mode.
@@ -73,6 +75,95 @@ namespace CSBackend
                     default:
                         CS_LOG_FATAL("Invalid blend mode.");
                         return GL_ZERO;
+                };
+            }
+            
+            /// Converts from a ChilliSource blend equation to an OpenGL blend mode.
+            ///
+            /// @param blendMode
+            ///     The ChilliSource blend equation.
+            ///
+            /// @return The OpenGL blend equation.
+            ///
+            GLenum ToGLBlendEqn(ChilliSource::BlendEqn blendEqn)
+            {
+                switch(blendEqn)
+                {
+                    case ChilliSource::BlendEqn::k_add:
+                        return GL_FUNC_ADD;
+                    case ChilliSource::BlendEqn::k_subtractSrcDst:
+                        return GL_FUNC_SUBTRACT;
+                    case ChilliSource::BlendEqn::k_subtractDstSrc:
+                        return GL_FUNC_REVERSE_SUBTRACT;
+                    default:
+                        CS_LOG_FATAL("Invalid blend equation.");
+                        return GL_FUNC_ADD;
+                };
+            }
+            
+            /// Converts from a ChilliSource stencil op to an OpenGL one
+            ///
+            /// @param stencilOp
+            ///     The ChilliSource stencil op
+            ///
+            /// @return The OpenGL stencil op.
+            ///
+            GLenum ToGLStencilOp(ChilliSource::StencilOp stencilOp)
+            {
+                switch(stencilOp)
+                {
+                    case ChilliSource::StencilOp::k_keep:
+                        return GL_KEEP;
+                    case ChilliSource::StencilOp::k_zero:
+                        return GL_ZERO;
+                    case ChilliSource::StencilOp::k_replace:
+                        return GL_REPLACE;
+                    case ChilliSource::StencilOp::k_increment:
+                        return GL_INCR;
+                    case ChilliSource::StencilOp::k_incrementWrap:
+                        return GL_INCR_WRAP;
+                    case ChilliSource::StencilOp::k_decrement:
+                        return GL_DECR;
+                    case ChilliSource::StencilOp::k_decrementWrap:
+                        return GL_DECR_WRAP;
+                    case ChilliSource::StencilOp::k_invert:
+                        return GL_INVERT;
+                    default:
+                        CS_LOG_FATAL("Invalid stencil op.");
+                        return GL_KEEP;
+                };
+            }
+            
+            /// Converts from a ChilliSource test func to an OpenGL one
+            ///
+            /// @param testFunc
+            ///     The ChilliSource test func
+            ///
+            /// @return The OpenGL test func.
+            ///
+            GLenum ToGLTestFunc(ChilliSource::TestFunc testFunc)
+            {
+                switch(testFunc)
+                {
+                    case ChilliSource::TestFunc::k_never:
+                        return GL_NEVER;
+                    case ChilliSource::TestFunc::k_less:
+                        return GL_LESS;
+                    case ChilliSource::TestFunc::k_lessEqual:
+                        return GL_LEQUAL;
+                    case ChilliSource::TestFunc::k_greater:
+                        return GL_GREATER;
+                    case ChilliSource::TestFunc::k_greaterEqual:
+                        return GL_GEQUAL;
+                    case ChilliSource::TestFunc::k_equal:
+                        return GL_EQUAL;
+                    case ChilliSource::TestFunc::k_notEqual:
+                        return GL_NOTEQUAL;
+                    case ChilliSource::TestFunc::k_always:
+                        return GL_ALWAYS;
+                    default:
+                        CS_LOG_FATAL("Invalid test func.");
+                        return GL_ALWAYS;
                 };
             }
             
@@ -124,31 +215,17 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void GLMaterial::Apply(const ChilliSource::RenderMaterial* renderMaterial, GLShader* glShader) noexcept
         {
-            if (renderMaterial->IsDepthTestEnabled())
+            renderMaterial->IsDepthWriteEnabled() ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);
+            renderMaterial->IsColourWriteEnabled() ? glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE) : glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+            if(renderMaterial->IsDepthTestEnabled())
             {
                 glEnable(GL_DEPTH_TEST);
+                glDepthFunc(ToGLTestFunc(renderMaterial->GetDepthTestFunc()));
             }
             else
             {
                 glDisable(GL_DEPTH_TEST);
-            }
-            
-            if (renderMaterial->IsDepthWriteEnabled())
-            {
-                glDepthMask(GL_TRUE);
-            }
-            else
-            {
-                glDepthMask(GL_FALSE);
-            }
-            
-            if (renderMaterial->IsColourWriteEnabled())
-            {
-                glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-            }
-            else
-            {
-                glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
             }
             
             if (renderMaterial->IsFaceCullingEnabled())
@@ -164,11 +241,23 @@ namespace CSBackend
             if (renderMaterial->IsTransparencyEnabled())
             {
                 glEnable(GL_BLEND);
+                glBlendEquation(ToGLBlendEqn(renderMaterial->GetBlendEqn()));
                 glBlendFunc(ToGLBlendMode(renderMaterial->GetSourceBlendMode()), ToGLBlendMode(renderMaterial->GetDestinationBlendMode()));
             }
             else
             {
                 glDisable(GL_BLEND);
+            }
+            
+            if(renderMaterial->IsStencilTestEnabled())
+            {
+                glEnable(GL_STENCIL_TEST);
+                glStencilOp(ToGLStencilOp(renderMaterial->GetStencilFailOp()), ToGLStencilOp(renderMaterial->GetStencilDepthFailOp()), ToGLStencilOp(renderMaterial->GetStencilPassOp()));
+                glStencilFunc(ToGLTestFunc(renderMaterial->GetStencilTestFunc()), (GLint)renderMaterial->GetStencilTestFuncRef(), (GLuint)renderMaterial->GetStencilTestFuncMask());
+            }
+            else
+            {
+                glDisable(GL_STENCIL_TEST);
             }
             
             for (s32 i = 0; i < renderMaterial->GetRenderTextures().size(); ++i)

@@ -198,6 +198,24 @@ namespace ChilliSource
         /// @param Whether face culling is enabled
         //----------------------------------------------------------
         void SetFaceCullingEnabled(bool in_enable);
+    
+        /// @return Whether or not to perform stencil testing
+        ///
+        bool IsStencilTestEnabled() const noexcept { return m_isStencilTestEnabled; }
+
+        /// @param in_enable
+        ///     Whether to turn stencil testing on or off
+        ///
+        void SetStencilTestEnabled(bool in_enable) noexcept { m_isStencilTestEnabled = in_enable; }
+        
+        /// @param Function that handles comparing depth values for pass/fail testing
+        ///
+        void SetDepthTestFunc(TestFunc testFunc) noexcept { m_depthTestFunc = testFunc; }
+        
+        /// @return Function that handles comparing depth values for pass/fail testing
+        ///
+        TestFunc GetDepthTestFunc() const noexcept { return m_depthTestFunc; }
+        
         //----------------------------------------------------------
         /// Tells the render system how to blend pixels based on the
         /// source and destination mode
@@ -220,6 +238,56 @@ namespace ChilliSource
         /// @return Dest BlendMode of blending functions
         //----------------------------------------------------------
         BlendMode GetDestBlendMode() const;
+
+        /// @param The equation that describes how source and dest pixels are blended
+        ///
+        void SetBlendEqn(BlendEqn eqn) noexcept { m_blendEqn = eqn; }
+        
+        /// @return The equation that describes how source and dest pixels are blended
+        ///
+        BlendEqn GetBlendEqn() const noexcept { return m_blendEqn; }
+        
+        /// Tells the render system what action to take when performing
+        /// a stencil test
+        ///
+        /// @param stencilFail
+        ///     Action to take if the stencil test fails
+        /// @param depthFail
+        ///     Action to take if the stencil test passes but depth test fails
+        /// @param pass
+        ///     Action to take when stencil and depth tests pass
+        /// @param testFunc
+        ///     Function that uses the value in the stencil and the ref to decide whether a comparison passes or fails
+        /// @param ref
+        ///     Comparison value for the test func
+        /// @param mask
+        ///     ANDed with the ref and the sampled value prior to the comparison test
+        void SetStencilTests(StencilOp stencilFail, StencilOp depthFail, StencilOp pass, TestFunc testFunc, s32 ref, u32 mask) noexcept;
+        
+        /// @return Op to use if stencil test fails
+        ///
+        StencilOp GetStencilFailOp() const noexcept { return m_stencilFailOp; }
+        
+        /// @return Op to use if stencil test passes but depth test fails
+        ///
+        StencilOp GetStencilDepthFailOp() const noexcept { return m_stencilDepthFailOp; }
+        
+        /// @return Op to use if stencil and depth tests pass
+        ///
+        StencilOp GetStencilPassOp() const noexcept { return m_stencilPassOp; }
+        
+        /// @return Function that handles comparing stencil values for pass/fail testing
+        ///
+        TestFunc GetStencilTestFunc() const noexcept { return m_stencilTestFunc; }
+        
+        /// @return The comparison value for the stencil test function
+        ///
+        s32 GetStencilTestFuncRef() const noexcept { return m_stencilTestFuncRef; }
+        
+        /// @return The mask that is ANDed with the ref and stored value
+        ///
+        u32 GetStencilTestFuncMask() const noexcept { return m_stencilTestFuncMask; }
+        
         //----------------------------------------------------------
         /// @author S Downie
         ///
@@ -448,16 +516,27 @@ namespace ChilliSource
         Colour m_diffuse;
         Colour m_specular;
         
+        TestFunc m_depthTestFunc;
+        
         BlendMode m_srcBlendMode;
         BlendMode m_dstBlendMode;
+        BlendEqn m_blendEqn;
+        
         CullFace m_cullFace;
         
+        StencilOp m_stencilFailOp;
+        StencilOp m_stencilDepthFailOp;
+        StencilOp m_stencilPassOp;
+        s32 m_stencilTestFuncRef = 1;
+        u32 m_stencilTestFuncMask = 0xff;
+        TestFunc m_stencilTestFunc;
 
         bool m_isAlphaBlendingEnabled = false;
         bool m_isColWriteEnabled = true;
         bool m_isDepthWriteEnabled = true;
         bool m_isDepthTestEnabled = true;
         bool m_isFaceCullingEnabled = true;
+        bool m_isStencilTestEnabled = false;
         
         ShaderCSPtr m_customShader;
         VertexFormat m_customShaderVertexFormat = VertexFormat::k_sprite;

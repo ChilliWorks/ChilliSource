@@ -29,6 +29,8 @@
 #include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/StencilOp.h>
+#include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
 namespace ChilliSource
@@ -51,10 +53,28 @@ namespace ChilliSource
         ///     Whether or not the depth test will be performed.
         /// @param isFaceCullingEnabled
         ///     Whether or not face culling will be performed.
+        /// @param isStencilTestEnabled
+        ///     Whether or not to perform stencil testing
+        /// @param depthTestFunc
+        ///     Function that determines whether a depth test comparison should pass or fail
         /// @param sourceBlendMode
         ///     The source blend mode. This only applies if transparency is enabled.
         /// @param destinationBlendMode
         ///     The destination blend mode. This only applies if transparency is enabled.
+        /// @param blendEqn
+        ///     Describes how the source and destination colours are blended
+        /// @param stencilFailOp
+        ///     Op applied if stencil test fails
+        /// @param stencilDepthFailOp
+        ///     Op applied if stencil depth test fails
+        /// @param stencilPassOp
+        ///     Op applied if stencil and depth tests pass
+        /// @param stencilTestFunc
+        ///     Function that determines whether a stencil test comparison should pass or fail
+        /// @param stencilRef
+        ///     Value used as comparison for stencil tests
+        /// @param stencilMask
+        ///     Value ANDed to with the comparison and stencil value
         /// @param cullFace
         ///     The face which should be called. This only applies if face culling is enabled.
         /// @param ambientColour
@@ -64,8 +84,12 @@ namespace ChilliSource
         ///
         /// @return The new RenderMaterial.
         ///
-        RenderMaterialUPtr CreateUnlit(const ShaderCSPtr& shader, const RenderTexture* renderTexture, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled,
-                                       bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept
+        RenderMaterialUPtr CreateUnlit(const ShaderCSPtr& shader, const RenderTexture* renderTexture,
+                                       bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
+                                       TestFunc depthTestFunc,
+                                       BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                                       StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
+                                       CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures { renderTexture };
@@ -73,8 +97,11 @@ namespace ChilliSource
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                                         depthTestFunc,
+                                                         sourceBlendMode, destinationBlendMode, blendEqn,
+                                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
         
         /// Creates a new shadow map RenderMaterial with the given shader.
@@ -93,8 +120,17 @@ namespace ChilliSource
             auto isDepthWriteEnabled = true;
             auto isDepthTestEnabled = true;
             auto isFaceCullingEnabled = true;
+            auto isStencilTestEnabled = false;
+            auto depthTestFunc = TestFunc::k_lessEqual;
             auto sourceBlendMode = BlendMode::k_one;
             auto destinationBlendMode = BlendMode::k_one;
+            auto blendEqn = BlendEqn::k_add;
+            auto stencilFailOp = StencilOp::k_keep;
+            auto stencilDepthFailOp = StencilOp::k_keep;
+            auto stencilPassOp = StencilOp::k_keep;
+            auto stencilTestFunc = TestFunc::k_always;
+            auto stencilRef = 1;
+            auto stencilMask = 0xff;
             auto cullFace = CullFace::k_front;
             auto emissiveColour = Colour::k_black;
             auto ambientColour = Colour::k_black;
@@ -102,8 +138,11 @@ namespace ChilliSource
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                                         depthTestFunc,
+                                                         sourceBlendMode, destinationBlendMode, blendEqn,
+                                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
         
         /// Creates a new base pass blinn RenderMaterial with the given info.
@@ -130,15 +169,27 @@ namespace ChilliSource
             auto isDepthWriteEnabled = true;
             auto isDepthTestEnabled = true;
             auto isFaceCullingEnabled = true;
+            auto isStencilTestEnabled = false;
+            auto depthTestFunc = TestFunc::k_lessEqual;
             auto sourceBlendMode = BlendMode::k_one;
             auto destinationBlendMode = BlendMode::k_oneMinusSourceAlpha;
+            auto blendEqn = BlendEqn::k_add;
+            auto stencilFailOp = StencilOp::k_keep;
+            auto stencilDepthFailOp = StencilOp::k_keep;
+            auto stencilPassOp = StencilOp::k_keep;
+            auto stencilTestFunc = TestFunc::k_always;
+            auto stencilRef = 1;
+            auto stencilMask = 0xff;
             auto cullFace = CullFace::k_back;
             auto diffuseColour = Colour::k_black;
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                                         depthTestFunc,
+                                                         sourceBlendMode, destinationBlendMode, blendEqn,
+                                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
         
         /// Creates a new light pass (directional or point) blinn RenderMaterial with the given info.
@@ -165,15 +216,27 @@ namespace ChilliSource
             auto isDepthWriteEnabled = false;
             auto isDepthTestEnabled = true;
             auto isFaceCullingEnabled = true;
+            auto isStencilTestEnabled = false;
+            auto depthTestFunc = TestFunc::k_lessEqual;
             auto sourceBlendMode = BlendMode::k_one;
             auto destinationBlendMode = BlendMode::k_one;
+            auto blendEqn = BlendEqn::k_add;
+            auto stencilFailOp = StencilOp::k_keep;
+            auto stencilDepthFailOp = StencilOp::k_keep;
+            auto stencilPassOp = StencilOp::k_keep;
+            auto stencilTestFunc = TestFunc::k_always;
+            auto stencilRef = 1;
+            auto stencilMask = 0xff;
             auto cullFace = CullFace::k_back;
             auto emissiveColour = Colour::k_black;
             auto ambientColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                         destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                                         depthTestFunc,
+                                                         sourceBlendMode, destinationBlendMode, blendEqn,
+                                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
     }
     
@@ -186,8 +249,11 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
-                                                                                                 bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode,
+    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
+                                                                                                 bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
+                                                                                                 TestFunc depthTestFunc,
+                                                                                                 BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                                                                                                 StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                                                                                                  CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept
     {
         //TODO: Create RenderMaterials from pools.
@@ -199,17 +265,26 @@ namespace ChilliSource
         
         if (isTransparencyEnabled)
         {
-            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode, cullFace,
-                                        emissiveColour, ambientColour);
+            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                        depthTestFunc,
+                                        sourceBlendMode, destinationBlendMode, blendEqn,
+                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                        cullFace, emissiveColour, ambientColour);
             spriteRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = spriteRM.get();
             renderMaterials.push_back(std::move(spriteRM));
             
-            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
+            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                        depthTestFunc,
+                                        sourceBlendMode, destinationBlendMode, blendEqn,
+                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
                                         cullFace, emissiveColour, ambientColour);
             staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = staticRM.get();
             renderMaterials.push_back(std::move(staticRM));
             
-            auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
+            auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                          depthTestFunc,
+                                          sourceBlendMode, destinationBlendMode, blendEqn,
+                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
                                         cullFace, emissiveColour, ambientColour);
             animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = animatedRM.get();
             renderMaterials.push_back(std::move(animatedRM));
@@ -217,17 +292,26 @@ namespace ChilliSource
         else
         {
             //TODO: Create RenderMaterials from pools.
-            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode, cullFace,
-                                        emissiveColour, ambientColour);
+            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                        depthTestFunc,
+                                        sourceBlendMode, destinationBlendMode, blendEqn,
+                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                        cullFace, emissiveColour, ambientColour);
             spriteRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = spriteRM.get();
             renderMaterials.push_back(std::move(spriteRM));
             
-            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
+            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                        depthTestFunc,
+                                        sourceBlendMode, destinationBlendMode, blendEqn,
+                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
                                         cullFace, emissiveColour, ambientColour);
             staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticRM.get();
             renderMaterials.push_back(std::move(staticRM));
             
-            auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode, destinationBlendMode,
+            auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                          depthTestFunc,
+                                          sourceBlendMode, destinationBlendMode, blendEqn,
+                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
                                           cullFace, emissiveColour, ambientColour);
             animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = animatedRM.get();
             renderMaterials.push_back(std::move(animatedRM));
@@ -326,9 +410,11 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateCustomRenderMaterialGroup(const VertexFormat& vertexFormat, const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
-                                                                                                  bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled,
-                                                                                                  bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace,
-                                                                                                  const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
+                                                                                                  bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
+                                                                                                  TestFunc depthTestFunc,
+                                                                                                  BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                                                                                                  StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
+                                                                                                  CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
                                                                                                   RenderShaderVariablesUPtr renderShaderVariables) noexcept
     {
         //TODO: Create RenderMaterials from pools.
@@ -338,15 +424,23 @@ namespace ChilliSource
         
         if (isTransparencyEnabled)
         {
-            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                                        destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures,
+                                                                        isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                                                        depthTestFunc,
+                                                                        sourceBlendMode, destinationBlendMode, blendEqn,
+                                                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                                                        cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
             renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_transparent)] = renderMaterial.get();
             renderMaterials.push_back(std::move(renderMaterial));
         }
         else
         {
-            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, sourceBlendMode,
-                                                                        destinationBlendMode, cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures,
+                                                                        isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                                                        depthTestFunc,
+                                                                        sourceBlendMode, destinationBlendMode, blendEqn,
+                                                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                                                        cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
             renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = renderMaterial.get();
             renderMaterials.push_back(std::move(renderMaterial));
             

@@ -56,6 +56,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(TargetRenderPassGroup);
     CS_FORWARDDECLARE_CLASS(CameraRenderPassGroup);
     enum class AlignmentAnchor;
+    enum class BlendEqn;
     enum class BlendMode;
     enum class CullFace;
     enum class DepthTestComparison;
@@ -63,7 +64,9 @@ namespace ChilliSource
     enum class HorizontalTextJustification;
     enum class RenderLayer;
     enum class SizePolicy;
+    enum class StencilOp;
     enum class SurfaceFormat;
+    enum class TestFunc;
     enum class VerticalTextJustification;
     //------------------------------------------------------------
     /// Camera

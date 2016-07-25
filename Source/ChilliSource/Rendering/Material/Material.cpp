@@ -32,6 +32,8 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
+#include <ChilliSource/Rendering/Base/StencilOp.h>
+#include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
 #include <ChilliSource/Rendering/Shader/RenderShaderVariables.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
@@ -50,7 +52,10 @@ namespace ChilliSource
     //------------------------------------------------
     //------------------------------------------------
     Material::Material() noexcept
-        : m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_cullFace(CullFace::k_back)
+    :   m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_blendEqn(BlendEqn::k_add),
+        m_depthTestFunc(TestFunc::k_lessEqual),
+        m_cullFace(CullFace::k_back),
+        m_stencilPassOp(StencilOp::k_keep), m_stencilFailOp(StencilOp::k_keep), m_stencilDepthFailOp(StencilOp::k_keep)
     {
         m_renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
         CS_ASSERT(m_renderMaterialGroupManager, "RenderMaterialGroupManager is required.");
@@ -205,6 +210,17 @@ namespace ChilliSource
     BlendMode Material::GetDestBlendMode() const
     {
         return m_dstBlendMode;
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    void Material::SetStencilTests(StencilOp stencilFail, StencilOp depthFail, StencilOp pass, TestFunc testFunc, s32 ref, u32 mask) noexcept
+    {
+        m_stencilFailOp = stencilFail;
+        m_stencilDepthFailOp = depthFail;
+        m_stencilPassOp = pass;
+        m_stencilTestFunc = testFunc;
+        m_stencilTestFuncRef = ref;
+        m_stencilTestFuncMask = mask;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
@@ -388,8 +404,12 @@ namespace ChilliSource
         CS_ASSERT(m_colourVars.size() == 0, "Unlit materials cannot have custom shader variables.");
         
         auto renderTexture = m_textures[0]->GetRenderTexture();
-        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateUnlitRenderMaterialGroup(renderTexture, m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled,
-                                                                          m_srcBlendMode, m_dstBlendMode, m_cullFace, m_emissive, m_ambient);
+        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateUnlitRenderMaterialGroup(renderTexture,
+                                                                                             m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled, m_isStencilTestEnabled,
+                                                                                             m_depthTestFunc,
+                                                                                             m_srcBlendMode, m_dstBlendMode, m_blendEqn,
+                                                                                             m_stencilFailOp, m_stencilDepthFailOp, m_stencilPassOp, m_stencilTestFunc, m_stencilTestFuncRef, m_stencilTestFuncMask,
+                                                                                             m_cullFace, m_emissive, m_ambient);
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
@@ -432,9 +452,12 @@ namespace ChilliSource
         auto renderShader = m_customShader->GetRenderShader();
         RenderShaderVariablesUPtr renderShaderVariables(new RenderShaderVariables(m_floatVars, m_vec2Vars, m_vec3Vars, m_vec4Vars, m_mat4Vars, m_colourVars));
         
-        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateCustomRenderMaterialGroup(m_customShaderVertexFormat, renderShader, renderTextures, m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled,
-                                                                                              m_isDepthTestEnabled, m_isFaceCullingEnabled, m_srcBlendMode, m_dstBlendMode, m_cullFace, m_emissive, m_ambient, m_diffuse,
-                                                                                              m_specular, std::move(renderShaderVariables));
+        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateCustomRenderMaterialGroup(m_customShaderVertexFormat, renderShader, renderTextures,
+                                                                                              m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled, m_isStencilTestEnabled,
+                                                                                              m_depthTestFunc,
+                                                                                              m_srcBlendMode, m_dstBlendMode, m_blendEqn,
+                                                                                              m_stencilFailOp, m_stencilDepthFailOp, m_stencilPassOp, m_stencilTestFunc, m_stencilTestFuncRef, m_stencilTestFuncMask,
+                                                                                              m_cullFace, m_emissive, m_ambient, m_diffuse, m_specular, std::move(renderShaderVariables));
     }
     //----------------------------------------------------------
     //----------------------------------------------------------

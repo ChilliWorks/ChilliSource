@@ -66,10 +66,28 @@ namespace ChilliSource
         ///     Whether or not the depth test will be performed.
         /// @param isFaceCullingEnabled
         ///     Whether or not face culling will be performed.
+        /// @param isStencilTestEnabled
+        ///     Whether or not to perform stencil testing
+        /// @param depthTestFunc
+        ///     Function that determines whether a depth test comparison should pass or fail
         /// @param sourceBlendMode
         ///     The source blend mode. This only applies if transparency is enabled.
         /// @param destinationBlendMode
         ///     The destination blend mode. This only applies if transparency is enabled.
+        /// @param blendEqn
+        ///     Describes how the source and destination colours are blended
+        /// @param stencilFailOp
+        ///     Op applied if stencil test fails
+        /// @param stencilDepthFailOp
+        ///     Op applied if stencil depth test fails
+        /// @param stencilPassOp
+        ///     Op applied if stencil and depth tests pass
+        /// @param stencilTestFunc
+        ///     Function that determines whether a stencil test comparison should pass or fail
+        /// @param stencilRef
+        ///     Value used as comparison for stencil tests
+        /// @param stencilMask
+        ///     Value ANDed to with the comparison and stencil value
         /// @param cullFace
         ///     The face which should be called. This only applies if face culling is enabled.
         /// @param ambientColour
@@ -79,9 +97,12 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        virtual const RenderMaterialGroup* CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
-                                                                          bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace,
-                                                                          const Colour& emissiveColour, const Colour& ambientColour) noexcept = 0;
+        virtual const RenderMaterialGroup* CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
+                                                                  bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
+                                                                  TestFunc depthTestFunc,
+                                                                  BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                                                                  StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
+                                                                  CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept = 0;
         
         /// Creates a new blinn RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
         /// Render Snapshot stage in the render pipeline.
@@ -102,6 +123,7 @@ namespace ChilliSource
         virtual const RenderMaterialGroup* CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
                                                                           const Colour& specularColour) noexcept = 0;
         
+        
         /// Creates a new custom RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
         /// Render Snapshot stage in the render pipeline.
         ///
@@ -121,15 +143,33 @@ namespace ChilliSource
         ///     Whether or not the depth test will be performed.
         /// @param isFaceCullingEnabled
         ///     Whether or not face culling will be performed.
+        /// @param isStencilTestEnabled
+        ///     Whether or not to perform stencil testing
+        /// @param depthTestFunc
+        ///     Function that determines whether a depth test comparison should pass or fail
         /// @param sourceBlendMode
         ///     The source blend mode. This only applies if transparency is enabled.
         /// @param destinationBlendMode
         ///     The destination blend mode. This only applies if transparency is enabled.
+        /// @param blendEqn
+        ///     Describes how the source and destination colours are blended
+        /// @param stencilFailOp
+        ///     Op applied if stencil test fails
+        /// @param stencilDepthFailOp
+        ///     Op applied if stencil depth test fails
+        /// @param stencilPassOp
+        ///     Op applied if stencil and depth tests pass
+        /// @param stencilTestFunc
+        ///     Function that determines whether a stencil test comparison should pass or fail
+        /// @param stencilRef
+        ///     Value used as comparison for stencil tests
+        /// @param stencilMask
+        ///     Value ANDed to with the comparison and stencil value
         /// @param cullFace
         ///     The face which should be called. This only applies if face culling is enabled.
-        /// @param ambientColour
-        ///     The ambient colour.
         /// @param emissiveColour
+        ///     The ambient colour.
+        /// @param ambientColour
         ///     The ambient colour.
         /// @param diffuseColour
         ///     The diffuse colour.
@@ -140,10 +180,13 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        virtual const RenderMaterialGroup* CreateCustomRenderMaterialGroup(const VertexFormat& vertexFormat, const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled,
-                                                                           bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode,
-                                                                           BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
-                                                                           const Colour& specularColour, RenderShaderVariablesUPtr renderShaderVariables) noexcept = 0;
+        virtual const RenderMaterialGroup* CreateCustomRenderMaterialGroup(const VertexFormat& vertexFormat, const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
+                                                                   bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
+                                                                   TestFunc depthTestFunc,
+                                                                   BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                                                                   StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
+                                                                   CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
+                                                                   RenderShaderVariablesUPtr renderShaderVariables) noexcept = 0;
         
         /// Removes the RenderMaterialGroup from the manager and queues an UnloadMaterialGroupRenderCommand
         /// for the next Render Snapshot stage in the render pipeline. The render command is given ownership

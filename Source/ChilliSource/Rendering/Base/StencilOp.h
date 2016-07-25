@@ -1,8 +1,4 @@
 //
-//  DepthTestComparison.h
-//  Chilli Source
-//  Created by Scott Downie on 09/04/2014.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2014 Tag Games Limited
@@ -26,24 +22,24 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_DEPTHTESTCOMPARISON_H_
-#define _CHILLISOURCE_RENDERING_BASE_DEPTHTESTCOMPARISON_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_STENCILOP_H_
+#define _CHILLISOURCE_RENDERING_BASE_STENCILOP_H_
 
 namespace ChilliSource
 {
-    //---------------------------------------------
-    /// Used in the depth test function to decide
-    /// whether a pixel should be rendered or not.
-    /// These types describe which comparison operator
-    /// should be used
+    /// The stencil ops are used to determine which action to take
+    /// on a pixel after the result of stencil testing
     ///
-    /// @author S Downie
-    //---------------------------------------------
-    enum class DepthTestComparison
+    enum class StencilOp
     {
-        k_less,
-        k_equal,
-        k_lequal
+        k_keep,             // Keeps the current value
+        k_zero,             // Sets the stencil buffer value to zero
+        k_replace,          // Sets the stencil bufer value as specified by the stencil func
+        k_increment,        // Increments the stencil buffer value, clamps to max
+        k_incrementWrap,    // Increments the stencil buffer value, wraps to zero
+        k_decrement,        // Decrements the stencil buffer value, clamps to zero
+        k_decrementWrap,    // Decrements the stencil buffer value, wraps to max
+        k_invert            // Inverts the stencil buffer value
     };
 }
 

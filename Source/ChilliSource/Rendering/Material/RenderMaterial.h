@@ -59,10 +59,28 @@ namespace ChilliSource
         ///     Whether or not the depth test will be performed.
         /// @param isFaceCullingEnabled
         ///     Whether or not face culling will be performed.
+        /// @param isStencilTestEnabled
+        ///     Whether or not to perform stencil testing
+        /// @param depthTestFunc
+        ///     Function that determines whether a depth test comparison should pass or fail
         /// @param sourceBlendMode
         ///     The source blend mode. This only applies if transparency is enabled.
         /// @param destinationBlendMode
         ///     The destination blend mode. This only applies if transparency is enabled.
+        /// @param blendEqn
+        ///     Describes how the source and destination colours are blended
+        /// @param stencilFailOp
+        ///     Op applied if stencil test fails
+        /// @param stencilDepthFailOp
+        ///     Op applied if stencil depth test fails
+        /// @param stencilPassOp
+        ///     Op applied if stencil and depth tests pass
+        /// @param stencilTestFunc
+        ///     Function that determines whether a stencil test comparison should pass or fail
+        /// @param stencilRef
+        ///     Value used as comparison for stencil tests
+        /// @param stencilMask
+        ///     Value ANDed to with the comparison and stencil value
         /// @param cullFace
         ///     The face which should be called. This only applies if face culling is enabled.
         /// @param emissiveColour
@@ -76,9 +94,14 @@ namespace ChilliSource
         /// @param renderShaderVariables
         ///     The container for all render shader variables. May be null if there are no shader variables.
         ///
-        RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures, bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled,
-                       bool isDepthTestEnabled, bool isFaceCullingEnabled, BlendMode sourceBlendMode, BlendMode destinationBlendMode, CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour,
-                       const Colour& diffuseColour, const Colour& specularColour, RenderShaderVariablesUPtr renderShaderVariables) noexcept;
+        RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
+                       bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
+                       TestFunc depthTestFunc,
+                       BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                       StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
+                       CullFace cullFace,
+                       const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
+                       RenderShaderVariablesUPtr renderShaderVariables) noexcept;
         
         /// @return The shader applied by this material.
         ///
@@ -108,6 +131,14 @@ namespace ChilliSource
         ///
         bool IsFaceCullingEnabled() const noexcept { return m_isFaceCullingEnabled; }
         
+        /// @return Whether or not to perform stencil testing
+        ///
+        bool IsStencilTestEnabled() const noexcept { return m_isStencilTestEnabled; }
+        
+        /// @return Function that handles comparing depth values for pass/fail testing
+        ///
+        TestFunc GetDepthTestFunc() const noexcept { return m_depthTestFunc; }
+        
         /// @return The source blend mode. This only applies if transparency is enabled.
         ///
         BlendMode GetSourceBlendMode() const noexcept { return m_sourceBlendMode; }
@@ -116,9 +147,37 @@ namespace ChilliSource
         ///
         BlendMode GetDestinationBlendMode() const noexcept { return m_destinationBlendMode; }
         
+        /// @return The equation that describes how source and dest pixels are blended
+        ///
+        BlendEqn GetBlendEqn() const noexcept { return m_blendEqn; }
+        
         /// @return The face which should be called. This only applies if face culling is enabled.
         ///
         CullFace GetCullFace() const noexcept { return m_cullFace; }
+        
+        /// @return Op to use if stencil test fails
+        ///
+        StencilOp GetStencilFailOp() const noexcept { return m_stencilFailOp; }
+        
+        /// @return Op to use if stencil test passes but depth test fails
+        ///
+        StencilOp GetStencilDepthFailOp() const noexcept { return m_stencilDepthFailOp; }
+        
+        /// @return Op to use if stencil and depth tests pass
+        ///
+        StencilOp GetStencilPassOp() const noexcept { return m_stencilPassOp; }
+        
+        /// @return Function that handles comparing stencil values for pass/fail testing
+        ///
+        TestFunc GetStencilTestFunc() const noexcept { return m_stencilTestFunc; }
+        
+        /// @return The comparison value for the stencil test function
+        ///
+        s32 GetStencilTestFuncRef() const noexcept { return m_stencilTestFuncRef; }
+        
+        /// @return The mask that is ANDed with the ref and stored value
+        ///
+        u32 GetStencilTestFuncMask() const noexcept { return m_stencilTestFuncMask; }
         
         /// @return The emissive colour
         ///
@@ -161,8 +220,17 @@ namespace ChilliSource
         bool m_isDepthWriteEnabled;
         bool m_isDepthTestEnabled;
         bool m_isFaceCullingEnabled;
+        bool m_isStencilTestEnabled;
+        TestFunc m_depthTestFunc;
         BlendMode m_sourceBlendMode;
         BlendMode m_destinationBlendMode;
+        BlendEqn m_blendEqn;
+        StencilOp m_stencilFailOp;
+        StencilOp m_stencilDepthFailOp;
+        StencilOp m_stencilPassOp;
+        s32 m_stencilTestFuncRef;
+        u32 m_stencilTestFuncMask;
+        TestFunc m_stencilTestFunc;
         CullFace m_cullFace;
         Colour m_emissiveColour;
         Colour m_ambientColour;
