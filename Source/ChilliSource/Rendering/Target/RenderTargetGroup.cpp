@@ -29,8 +29,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderTargetGroup::RenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, bool shouldUseDepthBuffer) noexcept
-        : m_colourTarget(colourTarget), m_depthTarget(depthTarget), m_shouldUseDepthBuffer(shouldUseDepthBuffer)
+    RenderTargetGroup::RenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, RenderTargetGroupType type) noexcept
+        : m_colourTarget(colourTarget), m_depthTarget(depthTarget), m_type(type)
     {
         CS_ASSERT(colourTarget || depthTarget, "Must supply either a colour target or a depth target.");
         
@@ -53,7 +53,7 @@ namespace ChilliSource
             CS_ASSERT(depthTarget->GetImageFormat() == ImageFormat::k_Depth16 || depthTarget->GetImageFormat() == ImageFormat::k_Depth32, "Depth target must be depth texture.");
             CS_ASSERT(depthTarget->GetImageCompression() == ImageCompression::k_none, "Depth target cannot be compressed.");
             CS_ASSERT(depthTarget->IsMipmapped() == false, "Depth target cannot be mipmapped.");
-            CS_ASSERT(!m_shouldUseDepthBuffer, "If a depth target is supplied, shouldUseDepthBuffer must be false.");
+            CS_ASSERT(m_type == RenderTargetGroupType::k_colour, "If a depth target is supplied, type must be colour only.");
             
             m_resolution = depthTarget->GetDimensions();
         }

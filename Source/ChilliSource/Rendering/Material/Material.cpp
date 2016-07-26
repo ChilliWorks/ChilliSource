@@ -213,11 +213,16 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetStencilTests(StencilOp stencilFail, StencilOp depthFail, StencilOp pass, TestFunc testFunc, s32 ref, u32 mask) noexcept
+    void Material::SetStencilPostTestOps(StencilOp stencilFail, StencilOp depthFail, StencilOp pass) noexcept
     {
         m_stencilFailOp = stencilFail;
         m_stencilDepthFailOp = depthFail;
         m_stencilPassOp = pass;
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    void Material::SetStencilTestFunc(TestFunc testFunc, s32 ref, u32 mask) noexcept
+    {
         m_stencilTestFunc = testFunc;
         m_stencilTestFuncRef = ref;
         m_stencilTestFuncMask = mask;

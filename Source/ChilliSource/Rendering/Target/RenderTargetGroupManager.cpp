@@ -48,7 +48,7 @@ namespace ChilliSource
         CS_ASSERT(colourTarget, "Must supply a colour target.");
         CS_ASSERT(depthTarget, "Must supply a depth target.");
         
-        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(colourTarget, depthTarget, false));
+        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(colourTarget, depthTarget, RenderTargetGroupType::k_colour));
         auto tenderTargetGroupRaw = tenderTargetGroup.get();
         AddRenderTargetGroup(std::move(tenderTargetGroup));
         
@@ -56,11 +56,11 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    const RenderTargetGroup* RenderTargetGroupManager::CreateColourRenderTargetGroup(const RenderTexture* colourTarget, bool shouldUseDepthBuffer) noexcept
+    const RenderTargetGroup* RenderTargetGroupManager::CreateColourRenderTargetGroup(const RenderTexture* colourTarget, RenderTargetGroupType type) noexcept
     {
         CS_ASSERT(colourTarget, "Must supply a colour target.");
         
-        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(colourTarget, nullptr, shouldUseDepthBuffer));
+        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(colourTarget, nullptr, type));
         auto tenderTargetGroupRaw = tenderTargetGroup.get();
         AddRenderTargetGroup(std::move(tenderTargetGroup));
         
@@ -72,7 +72,7 @@ namespace ChilliSource
     {
         CS_ASSERT(depthTarget, "Must supply a depth target.");
         
-        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(nullptr, depthTarget, false));
+        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(nullptr, depthTarget, RenderTargetGroupType::k_colour));
         auto tenderTargetGroupRaw = tenderTargetGroup.get();
         AddRenderTargetGroup(std::move(tenderTargetGroup));
         

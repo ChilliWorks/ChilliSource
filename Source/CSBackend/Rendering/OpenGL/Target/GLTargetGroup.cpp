@@ -61,15 +61,17 @@ namespace CSBackend
             ///
             /// @param dimensions
             ///     The dimensions of the colour buffer.
+            /// @param format
+            ///     Format of the depth buffer
             ///
             /// @return The handle of the buffer.
             ///
-            GLuint CreateDepthRenderBuffer(const ChilliSource::Integer2& dimensions) noexcept
+            GLuint CreateDepthRenderBuffer(const ChilliSource::Integer2& dimensions, GLenum format) noexcept
             {
                 GLuint handle = 0;
                 glGenRenderbuffers(1, &handle);
                 glBindRenderbuffer(GL_RENDERBUFFER, handle);
-                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, dimensions.x, dimensions.y);
+                glRenderbufferStorage(GL_RENDERBUFFER, format, dimensions.x, dimensions.y);
                 
                 CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating a depth render buffer.");
                 
@@ -159,7 +161,7 @@ namespace CSBackend
             }
             else if (m_renderTargetGroup->ShouldUseDepthBuffer())
             {
-                m_depthRenderBufferHandle = CreateDepthRenderBuffer(m_renderTargetGroup->GetResolution());
+                m_depthRenderBufferHandle = CreateDepthRenderBuffer(m_renderTargetGroup->GetResolution(), m_renderTargetGroup->ShouldUseStencilBuffer() ? GL_DEPTH24_STENCIL8_OES : GL_DEPTH_COMPONENT16);
                 glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBufferHandle);
             }
             

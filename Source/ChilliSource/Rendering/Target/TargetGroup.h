@@ -59,11 +59,11 @@ namespace ChilliSource
         /// @param colourTarget
         ///     The texture that will be used as the colour target. must not be null.
         /// @param shouldUseDepthBuffer
-        ///     Whether or not an internal, efficient, depth buffer should be used.
+        ///     Whether or not an internal, efficient, depth or stencil buffer should be used.
         ///
         /// @return The new render group instance.
         ///
-        static TargetGroupUPtr CreateColourTargetGroup(const TextureCSPtr& colourTarget, bool shouldUseDepthBuffer = true) noexcept;
+        static TargetGroupUPtr CreateColourTargetGroup(const TextureCSPtr& colourTarget, RenderTargetGroupType type) noexcept;
         
         /// Creates a new depth only TargetGroup
         ///
@@ -90,11 +90,10 @@ namespace ChilliSource
         ///     The colour render target. Can be null if no colour target is needed.
         /// @param depthTarget
         ///     The depth render target. Can be null if no depth target is needed.
-        /// @param shouldUseDepthBuffer
-        ///     Whether or not to use an internal depth buffer if no depth buffer was specified.
-        ///     This should always be false if a depth target was supplied.
+        /// @param type
+        ///     Whether or not an internal, efficient, depth or stencil buffer should be used.
         ///
-        TargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget, bool shouldUseDepthBuffer) noexcept;
+        TargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget, RenderTargetGroupType type) noexcept;
         
         /// Destroys the render target group if there is one.
         ///
@@ -110,7 +109,7 @@ namespace ChilliSource
         const RenderTexture* m_cachedColourTargetRenderTexture = nullptr;
         const RenderTexture* m_cachedDepthTargetRenderTexture = nullptr;
         
-        bool m_shouldUseDepthBuffer = true;
+        RenderTargetGroupType m_type;
     };
 }
 

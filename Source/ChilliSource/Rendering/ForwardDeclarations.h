@@ -222,6 +222,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderTargetGroup);
     CS_FORWARDDECLARE_CLASS(RenderTargetGroupManager);
     CS_FORWARDDECLARE_CLASS(TargetGroup);
+    enum class RenderTargetGroupType;
     //------------------------------------------------------------
     /// Texture
     //------------------------------------------------------------

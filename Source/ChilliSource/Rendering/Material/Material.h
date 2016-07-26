@@ -247,8 +247,7 @@ namespace ChilliSource
         ///
         BlendEqn GetBlendEqn() const noexcept { return m_blendEqn; }
         
-        /// Tells the render system what action to take when performing
-        /// a stencil test
+        /// Tells the render system what action to take with the result of a stencil test
         ///
         /// @param stencilFail
         ///     Action to take if the stencil test fails
@@ -256,13 +255,19 @@ namespace ChilliSource
         ///     Action to take if the stencil test passes but depth test fails
         /// @param pass
         ///     Action to take when stencil and depth tests pass
+        ///
+        void SetStencilPostTestOps(StencilOp stencilFail, StencilOp depthFail, StencilOp pass) noexcept;
+        
+        /// Tells the render system what comparison function to apply when performing a stencil test
+        ///
         /// @param testFunc
         ///     Function that uses the value in the stencil and the ref to decide whether a comparison passes or fails
         /// @param ref
         ///     Comparison value for the test func
         /// @param mask
         ///     ANDed with the ref and the sampled value prior to the comparison test
-        void SetStencilTests(StencilOp stencilFail, StencilOp depthFail, StencilOp pass, TestFunc testFunc, s32 ref, u32 mask) noexcept;
+        ///
+        void SetStencilTestFunc(TestFunc testFunc, s32 ref, u32 mask) noexcept;
         
         /// @return Op to use if stencil test fails
         ///

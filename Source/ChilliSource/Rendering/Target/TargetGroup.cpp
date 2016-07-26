@@ -38,11 +38,10 @@ namespace ChilliSource
         ///     The colour render target. Can be null if no colour target is needed.
         /// @param depthTarget
         ///     The depth render target. Can be null if no depth target is needed.
-        /// @param shouldUseDepthBuffer
-        ///     Whether or not to use an internal depth buffer if no depth buffer was specified.
-        ///     This should always be false if a depth target was supplied.
+        /// @param type
+        ///    Whether or not an internal, efficient, depth or stencil buffer should be used.
         ///
-        const RenderTargetGroup* CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, bool shouldUseDepthBuffer)
+        const RenderTargetGroup* CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, RenderTargetGroupType type)
         {
             auto renderTargetGroupManager = Application::Get()->GetSystem<RenderTargetGroupManager>();
             if (colourTarget && depthTarget)
@@ -51,7 +50,7 @@ namespace ChilliSource
             }
             else if (colourTarget)
             {
-                return renderTargetGroupManager->CreateColourRenderTargetGroup(colourTarget, shouldUseDepthBuffer);
+                return renderTargetGroupManager->CreateColourRenderTargetGroup(colourTarget, type);
             }
             else if (depthTarget)
             {
@@ -65,19 +64,19 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     TargetGroupUPtr TargetGroup::CreateTargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget) noexcept
     {
-        return TargetGroupUPtr(new TargetGroup(colourTarget, depthTarget, false));
+        return TargetGroupUPtr(new TargetGroup(colourTarget, depthTarget, RenderTargetGroupType::k_colour));
     }
     
     //------------------------------------------------------------------------------
-    TargetGroupUPtr TargetGroup::CreateColourTargetGroup(const TextureCSPtr& colourTarget, bool shouldUseDepthBuffer) noexcept
+    TargetGroupUPtr TargetGroup::CreateColourTargetGroup(const TextureCSPtr& colourTarget, RenderTargetGroupType type) noexcept
     {
-        return TargetGroupUPtr(new TargetGroup(colourTarget, nullptr, shouldUseDepthBuffer));
+        return TargetGroupUPtr(new TargetGroup(colourTarget, nullptr, type));
     }
     
     //------------------------------------------------------------------------------
     TargetGroupUPtr TargetGroup::CreateDepthTargetGroup(const TextureCSPtr& depthTarget) noexcept
     {
-        return TargetGroupUPtr(new TargetGroup(nullptr, depthTarget, false));
+        return TargetGroupUPtr(new TargetGroup(nullptr, depthTarget, RenderTargetGroupType::k_colour));
     }
     
     //------------------------------------------------------------------------------
@@ -92,7 +91,7 @@ namespace ChilliSource
             m_cachedColourTargetRenderTexture = m_cachedColourTargetTexture == nullptr ? nullptr : m_cachedColourTargetTexture->GetRenderTexture();
             m_cachedDepthTargetRenderTexture = m_cachedDepthTargetTexture == nullptr ? nullptr : m_cachedDepthTargetTexture->GetRenderTexture();
             
-            m_renderTargetGroup = CreateRenderTargetGroup(m_cachedColourTargetRenderTexture, m_cachedDepthTargetRenderTexture, m_shouldUseDepthBuffer);
+            m_renderTargetGroup = CreateRenderTargetGroup(m_cachedColourTargetRenderTexture, m_cachedDepthTargetRenderTexture, m_type);
         }
         
         return m_renderTargetGroup;
@@ -122,13 +121,13 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    TargetGroup::TargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget, bool shouldUseDepthBuffer) noexcept
-        : m_cachedColourTargetTexture(colourTarget), m_cachedDepthTargetTexture(depthTarget), m_shouldUseDepthBuffer(shouldUseDepthBuffer)
+    TargetGroup::TargetGroup(const TextureCSPtr& colourTarget, const TextureCSPtr& depthTarget, RenderTargetGroupType type) noexcept
+        : m_cachedColourTargetTexture(colourTarget), m_cachedDepthTargetTexture(depthTarget), m_type(type)
     {
         m_cachedColourTargetRenderTexture = colourTarget == nullptr ? nullptr : colourTarget->GetRenderTexture();
         m_cachedDepthTargetRenderTexture = depthTarget == nullptr ? nullptr : depthTarget->GetRenderTexture();
         
-        m_renderTargetGroup = CreateRenderTargetGroup(m_cachedColourTargetRenderTexture, m_cachedDepthTargetRenderTexture, m_shouldUseDepthBuffer);
+        m_renderTargetGroup = CreateRenderTargetGroup(m_cachedColourTargetRenderTexture, m_cachedDepthTargetRenderTexture, type);
     }
     
     //------------------------------------------------------------------------------

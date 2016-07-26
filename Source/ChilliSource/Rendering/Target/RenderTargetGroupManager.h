@@ -80,12 +80,12 @@ namespace ChilliSource
         ///
         /// @param colourTarget
         ///     The texture that will be used as the colour target. must not be null.
-        /// @param shouldUseDepthBuffer
-        ///     Whether or not an internal, efficient, depth buffer should be used.
+        /// @param type
+        ///     Whether or not an internal, efficient, depth buffer or stencil buffer should be used.
         ///
         /// @return The new render target group instance.
         ///
-        const RenderTargetGroup* CreateColourRenderTargetGroup(const RenderTexture* colourTarget, bool shouldUseDepthBuffer = true) noexcept;
+        const RenderTargetGroup* CreateColourRenderTargetGroup(const RenderTexture* colourTarget, RenderTargetGroupType type) noexcept;
         
         /// Creates a new depth only RenderTargetGroup and queues a LoadTargetGroupRenderCommand for the next
         /// RenderSnapshot stage in the render pipeline.

@@ -44,7 +44,11 @@ namespace ChilliSource
         k_rgb565_depth24,
         k_rgb565_depth32,
         k_rgb888_depth24,
-        k_rgb888_depth32
+        k_rgb888_depth32,
+        k_rgb565_depth24_stencil8,
+        k_rgb565_depth32_stencil8,
+        k_rgb888_depth24_stencil8,
+        k_rgb888_depth32_stencil8
     };
 }
 

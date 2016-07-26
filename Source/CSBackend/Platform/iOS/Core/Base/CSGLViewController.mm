@@ -161,6 +161,26 @@
             in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
             in_view.drawableStencilFormat = GLKViewDrawableStencilFormatNone;
             break;
+        case ChilliSource::SurfaceFormat::k_rgb565_depth24_stencil8:
+            in_view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
+            in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+            in_view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
+            break;
+        case ChilliSource::SurfaceFormat::k_rgb565_depth32_stencil8:
+            in_view.drawableColorFormat = GLKViewDrawableColorFormatRGB565;
+            in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+            in_view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
+            break;
+        case ChilliSource::SurfaceFormat::k_rgb888_depth24_stencil8:
+            in_view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
+            in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+            in_view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
+            break;
+        case ChilliSource::SurfaceFormat::k_rgb888_depth32_stencil8:
+            in_view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
+            in_view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+            in_view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
+            break;
     }
 }
 //-------------------------------------------------------------

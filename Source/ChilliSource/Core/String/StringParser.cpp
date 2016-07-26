@@ -312,6 +312,22 @@ namespace ChilliSource
         {
             return SurfaceFormat::k_rgb888_depth32;
         }
+        else if (lowerCase == "rgb565_depth24_stencil8")
+        {
+            return SurfaceFormat::k_rgb565_depth24_stencil8;
+        }
+        else if (lowerCase == "rgb565_depth32_stencil8")
+        {
+            return SurfaceFormat::k_rgb565_depth32_stencil8;
+        }
+        else if (lowerCase == "rgb888_depth24_stencil8")
+        {
+            return SurfaceFormat::k_rgb888_depth24_stencil8;
+        }
+        else if (lowerCase == "rgb888_depth32_stencil8")
+        {
+            return SurfaceFormat::k_rgb888_depth32_stencil8;
+        }
         
         CS_ASSERT(false, "Invalid surface format.");
         CS_LOG_ERROR("String Parser: Invalid surface format.");

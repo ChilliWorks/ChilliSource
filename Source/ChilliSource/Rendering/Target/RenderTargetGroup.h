@@ -30,6 +30,13 @@
 
 namespace ChilliSource
 {
+    enum class RenderTargetGroupType
+    {
+        k_colour,
+        k_colourDepth,
+        k_colourDepthStencil
+    };
+    
     /// Represents a group of colour and depth render targets that can be bound for rendering.
     /// There are two types of render target: colour and depth. Fragment colour data will be
     /// written to the colour target, while fragment depth data will be written to the depth
@@ -41,6 +48,7 @@ namespace ChilliSource
     class RenderTargetGroup final
     {
     public:
+        
         CS_DECLARE_NOCOPY(RenderTargetGroup);
         
         /// @return The colour render target. Can be null if no colour target is needed.
@@ -54,7 +62,12 @@ namespace ChilliSource
         /// @return Whether or not to use an internal depth buffer if no depth target was specified.
         ///     This should always be false if a depth target was supplied.
         ///
-        bool ShouldUseDepthBuffer() const noexcept { return m_shouldUseDepthBuffer; }
+        bool ShouldUseDepthBuffer() const noexcept { return m_type == RenderTargetGroupType::k_colourDepth || m_type == RenderTargetGroupType::k_colourDepthStencil; }
+        
+        /// @return Whether or not to use an internal stencil buffer.
+        ///     This should always be false if not using a depth buffer.
+        ///
+        bool ShouldUseStencilBuffer() const noexcept { return m_type == RenderTargetGroupType::k_colourDepthStencil; }
         
         /// @return The resolution of the render target.
         ///
@@ -83,15 +96,15 @@ namespace ChilliSource
         ///     The colour render target. Can be null if no colour target is needed.
         /// @param depthTarget
         ///     The depth render target. Can be null if no depth target is needed.
-        /// @param shouldUseDepthBuffer
-        ///     Whether or not to use an internal depth buffer if no depth buffer was specified.
-        ///     This should always be false if a depth target was supplied.
+        /// @param type
+        ///     Whether or not to use an internal depth buffer or stencil buffer.
+        ///     NOTE: Stencil requires depth and type must be colour only if explicit depth target is supplied
         ///
-        RenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, bool shouldUseDepthBuffer) noexcept;
+        RenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, RenderTargetGroupType type) noexcept;
         
         const RenderTexture* m_colourTarget;
         const RenderTexture* m_depthTarget;
-        bool m_shouldUseDepthBuffer;
+        RenderTargetGroupType m_type;
         Integer2 m_resolution;
         void* m_extraData = nullptr;
     };
