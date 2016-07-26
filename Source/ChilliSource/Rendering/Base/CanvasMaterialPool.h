@@ -31,30 +31,32 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <tuple>
 #include <vector>
 #include <unordered_map>
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
     /// Materials are not exposed to the user of the canvas renderer, but it still
     /// internally uses materials for rendering. This manages those materials,
-    /// providing a means to get a shared material for the given texture, ensuring
-    /// objects with the same texture can be rendered as part of the same batch.
+    /// providing a means to get a shared material for the given texture and stencil mask,
+    /// ensuring objects with the same values can be rendered as part of the same batch.
     /// Materials can be re-used for different textures in subsequent frames.
     ///
-    /// @author Ian Copland
-    //------------------------------------------------------------------------------
     class CanvasMaterialPool final
     {
     public:
-        //------------------------------------------------------------------------------
-        /// @author Ian Copland
+        
+        using MaterialSetupDelegate = std::function<void(Material*)>;
+        
+        /// @param materialFactory
+        ///     The material factory which is used to generate new materials as required.
+        /// @param materialNamePrefix
+        ///     The base name for any created materials
+        /// @param materialSetupDelegate
+        ///     Called after creating a material allowing it to be customised
         ///
-        /// @param in_materialFactory - the material factory which is used to generate
-        /// new materials as required.
-        //------------------------------------------------------------------------------
-        CanvasMaterialPool(MaterialFactory* in_materialFactory);
+        CanvasMaterialPool(MaterialFactory* materialFactory, const std::string& materialNamePrefix, const MaterialSetupDelegate& materialSetupDelegate);
         //------------------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -62,7 +64,7 @@ namespace ChilliSource
         ///
         /// @return The material associated with the given texture.
         //------------------------------------------------------------------------------
-        MaterialCSPtr GetMaterial(const TextureCSPtr& in_texture);
+        MaterialCSPtr GetMaterial(const TextureCSPtr& texture, s32 stencilRef);
         //------------------------------------------------------------------------------
         /// Clears all associations between textures and materials, ensuring the
         /// the materials no longer reference the previously associated texture.
@@ -73,10 +75,30 @@ namespace ChilliSource
         void Clear();
         
     private:
+        
+        // Unique identifier for canvas materials (texture and stencil mask)
+        using Key = std::tuple<const Texture*, s32>;
+        
+        struct KeyHash : public std::unary_function<Key, std::size_t>
+        {
+            /// Custom hashing functor for the Key tuple.
+            ///
+            /// @param key
+            ///     Tuple containing texture and stencil
+            /// @return Hash of the given tuple
+            ///
+            std::size_t operator()(const Key& key) const
+            {
+                return std::size_t(std::get<0>(key)) ^ std::get<1>(key);
+            }
+        };
+        
+        MaterialSetupDelegate m_materialSetupDelegate;
+        std::string m_materialNamePrefix;
         MaterialFactory* m_materialFactory = nullptr;
         u32 m_nextMaterial = 0;
         std::vector<MaterialSPtr> m_materials;
-        std::unordered_map<const Texture*, MaterialCSPtr> m_associations;
+        std::unordered_map<Key, MaterialCSPtr, KeyHash> m_associations;
     };
 }
 

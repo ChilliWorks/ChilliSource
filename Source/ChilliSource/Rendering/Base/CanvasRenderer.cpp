@@ -36,6 +36,8 @@
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/StencilOp.h>
+#include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
@@ -51,6 +53,7 @@ namespace ChilliSource
     {
         const f32 k_maxAutoScaleIterations = 10.0f;//Max number of recursions to find the correct scale
         const f32 k_autoScaleTolerance = 0.01f;//Min difference in max/min scaling to warrant further recursion for AutoScaled text
+        const u32 k_uiStencilMaskChannel = 0x0000000f; //The "channel" of the stencil buffer used by the UI. If other systems use the stencil buffer they must use an alternate channel
         
         //------------------------------------------------------
         /// Converts a 2D transformation matrix to a 3D
@@ -674,29 +677,81 @@ namespace ChilliSource
         auto materialFactory = Application::Get()->GetSystem<MaterialFactory>();
         CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
         
-        m_materialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory));
+        // Masking works as follows:
+        // 1. When drawing a masked shape as well as writing to the colour buffer the shape also writes the current clip mask value to the stencil buffer
+        // 2. When rendering to colour buffer, both stencil and colour material are stencil tested using the current clip mask agains the value currently in the stencil buffer.
+        // 3. The current clip mask value is incremented after the mask has been rendered but before a widget renders its children.
+        // 4. The clip mask value is decremented after the masking widget has rendered its children.
+        //
+        // Example hierarchy showing clip mask in use:
+        //
+        // Here is a widget hierarchy where the number represents the draw order
+        //
+        //      0
+        //      |
+        //      1
+        //     / \
+        //    2   4
+        //   /     \
+        //  3       5
+        //
+        // Here is the same widget hierarchy indicating which widgets clip (C = clips, D = doesn't)
+        //
+        //      D
+        //      |
+        //      C
+        //     / \
+        //    C   D
+        //   /     \
+        //  D       D
+        //
+        // By incrementing and decrementing the clip mask prior to and post child rendering the child will only render on pixels of the screen where there parent rendered.
+        // Here is the same widget hierarchy showing the clip mask test value/write value at each stage. Essentially the child tests against the value written by the parent.
+        //
+        //     0/-
+        //      |
+        //     0/1
+        //     / \
+        //   1/2 1/-
+        //   /     \
+        // 2/-     1/-
+        //
+        
+        //Pool for creating materials for standard rendering
+        m_colourMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasCol-", [](Material* material)
+        {
+            material->SetShadingType(Material::ShadingType::k_unlit);
+            material->SetTransparencyEnabled(true);
+            material->SetDepthTestEnabled(false);
+            material->SetStencilTestEnabled(true);
+            material->SetStencilPostTestOps(StencilOp::k_keep, StencilOp::k_keep, StencilOp::k_keep);
+            material->SetStencilTestFunc(TestFunc::k_equal, 0, k_uiStencilMaskChannel);
+        }));
+        
+        //Pool for creating materials for mask rendering
+        m_stencilMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasStcl-", [](Material* material)
+        {
+            material->SetShadingType(Material::ShadingType::k_unlit);
+            material->SetTransparencyEnabled(true);
+            material->SetDepthTestEnabled(false);
+            material->SetStencilTestEnabled(true);
+            material->SetStencilPostTestOps(StencilOp::k_keep, StencilOp::k_keep, StencilOp::k_increment);
+            material->SetStencilTestFunc(TestFunc::k_equal, 0, k_uiStencilMaskChannel);
+        }));
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::PushClipBounds(const Vector2& in_blPosition, const Vector2& in_size)
+    void CanvasRenderer::DrawMaskedBox(const Matrix3& transform, const Vector2& size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& uvs, AlignmentAnchor anchor)
     {
-        //TODO: Added support for scissor regions
-        CS_LOG_FATAL("Support for clip bounds is not currently implemented.");
+        auto material = m_stencilMaterialPool->GetMaterial(in_texture, m_clipMaskCount);
+        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(in_offset, 0.0f), size, uvs, Colour::k_white, anchor, Convert2DTransformTo3D(transform), material, m_nextPriority++);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::PopClipBounds()
+    void CanvasRenderer::DrawBox(const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor)
     {
-        //TODO: Added support for scissor regions
-        CS_LOG_FATAL("Support for clip bounds is not currently implemented.");
-    }
-    //----------------------------------------------------------------------------
-    //----------------------------------------------------------------------------
-    void CanvasRenderer::DrawBox(const Matrix3& in_transform, const Vector2& in_size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& in_UVs,
-                                 const Colour& in_colour, AlignmentAnchor in_anchor)
-    {
-        auto material = m_materialPool->GetMaterial(in_texture);
-        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(in_offset, 0.0f), in_size, in_UVs, in_colour, in_anchor, Convert2DTransformTo3D(in_transform), material, m_nextPriority++);
+        auto material = m_colourMaterialPool->GetMaterial(texture, m_clipMaskCount);
+        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(offset, 0.0f), size, uvs, colour, anchor, Convert2DTransformTo3D(transform), material, m_nextPriority++);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
@@ -765,17 +820,17 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Matrix3& in_transform, const Colour& in_colour, const TextureCSPtr& in_texture)
+    void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& characters, const Matrix3& transform, const Colour& colour, const TextureCSPtr& texture)
     {
-        auto material = m_materialPool->GetMaterial(in_texture);
+        auto material = m_colourMaterialPool->GetMaterial(texture, m_clipMaskCount);
 
-        Matrix4 matTransform = Convert2DTransformTo3D(in_transform);
+        Matrix4 matTransform = Convert2DTransformTo3D(transform);
         Matrix4 matTransformedLocal;
 
-        for (const auto& character : in_characters)
+        for (const auto& character : characters)
         {
             matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
-            AddSpriteRenderObject(m_currentRenderSnapshot, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
+            AddSpriteRenderObject(m_currentRenderSnapshot, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
         }
     }
     //----------------------------------------------------------------------------
@@ -795,13 +850,17 @@ namespace ChilliSource
         
         m_currentRenderSnapshot = nullptr;
         
-        m_materialPool->Clear();
+        m_colourMaterialPool->Clear();
+        m_stencilMaterialPool->Clear();
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     void CanvasRenderer::OnDestroy()
     {
-        m_materialPool->Clear();
-        m_materialPool.reset();
+        m_colourMaterialPool->Clear();
+        m_colourMaterialPool.reset();
+        
+        m_stencilMaterialPool->Clear();
+        m_stencilMaterialPool.reset();
     }
 }

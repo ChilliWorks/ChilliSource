@@ -152,18 +152,21 @@ namespace ChilliSource
         /// texture size
         //----------------------------------------------------------------------------------------
         Vector2 GetPreferredSize() const override;
-        //----------------------------------------------------------------------------------------
-        /// Render the widget using the canvas renderer. The widget has is rendered using the
-        /// set texture and UVs.
+        
+        /// Render the widget using the canvas renderer.
         ///
-        /// @author S Downie
+        /// @param renderer
+        ///     Performs the actual drawing to canvas
+        /// @param transform
+        ///     Absolute screen transform
+        /// @param absSize
+        ///     Asbolute screen size
+        /// @param absColour
+        ///     Absolute colour
+        /// @param toMask
+        ///     Whether to create a clip mask for this drawable
         ///
-        /// @param Renderer
-        /// @param Absolute screen transform
-        /// @param Asbolute screen size
-        /// @param Absolute colour
-        //----------------------------------------------------------------------------------------
-        void Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
+        void Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept override;
         
     private:
         friend class StandardUIDrawableDef;

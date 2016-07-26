@@ -37,8 +37,6 @@
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
-#include <unordered_map>
-
 namespace ChilliSource
 {
     //----------------------------------------------------------------------------
@@ -109,36 +107,58 @@ namespace ChilliSource
         /// @return Whether the class implements the given interface
         //----------------------------------------------------------------------------
         bool IsA(InterfaceIDType in_interfaceId) const override;
-        //----------------------------------------------------------------------------
-        /// Set the bounds beyond which any subviews will clip
-        /// Pushes to a stack which tracks when to enable and
-        /// disable scissoring
+
+        /// Increment the the clip mask value. When performing a stencil clip test
+        /// this is the value that will be used. Generally it is incremented prior to
+        /// rendering the contents of a clipping box and decremented afterwards
         ///
-        /// @author A Mackie
+        void IncrementClipMask() noexcept { ++m_clipMaskCount; }
+        
+        /// Decrement the clip mask
         ///
-        /// @param Position of the bottom left corner of the rect in screen space
-        /// @param Size of the clip region in screen space
-        //----------------------------------------------------------------------------
-        void PushClipBounds(const Vector2& in_blPosition, const Vector2& in_size);
-        //----------------------------------------------------------------------------
-        /// Pop the scissor tracking stack and disable clipping if the stack is empty
+        void DecrementClipMask() noexcept { --m_clipMaskCount; }
+        
+        /// Renders the given sprite box to the stencil buffer to create a clip mask
+        /// as well as rendering to the screen
         ///
-        /// @author A Mackie
-        //----------------------------------------------------------------------------
-        void PopClipBounds();
-        //----------------------------------------------------------------------------
-        /// Build a sprite box and render it to screen
+        /// @param transform
+        ///     2D Transformation matrix
+        /// @param size
+        ///     Dimensions of the box in canvas space
+        /// @param offset
+        ///     Offset from TL of the bounds. Used to restore the cropped alpha
+        /// @param texture
+        ///     Texture (alpha channel is used to create mask shape)
+        /// @param uvs
+        ///     UVs for texture
+        /// @param anchor
+        ///     Origin anchor
+        /// @param maskValue
+        ///     Value to write into the clip mask
         ///
-        /// @param Transform
-        /// @param Dimensions
-        /// @param Offset
-        /// @param Texture
-        /// @param UVs
-        /// @param Colour
-        /// @param Origin anchor
-        //----------------------------------------------------------------------------
-        void DrawBox(const Matrix3& in_transform, const Vector2& in_size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& in_UVs,
-                     const Colour& in_colour, AlignmentAnchor in_anchor);
+        void DrawMaskedBox(const Matrix3& transform, const Vector2& size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& uvs, AlignmentAnchor anchor);
+
+        /// Renders the given sprite box to the screen
+        ///
+        /// @param transform
+        ///     2D Transformation matrix
+        /// @param size
+        ///     Dimensions of the box in canvas space
+        /// @param offset
+        ///     Offset from TL of the bounds. Used to restore the cropped alpha
+        /// @param texture
+        ///     Texture
+        /// @param uvs
+        ///     UVs for texture
+        /// @param colour
+        ///     Colour to apply to the sprite box
+        /// @param anchor
+        ///     Origin anchor
+        /// @param maskValue
+        ///     Clip mask value used to determine if the box gets clipped or not
+        ///
+        void DrawBox(const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor);
+        
         //----------------------------------------------------------------------------
         /// Build the descriptions for all characters. The descriptions can then be
         /// passed into the draw method for rendering. The characters will be
@@ -156,15 +176,19 @@ namespace ChilliSource
         /// @return Built text struct containing all the character infos
         //----------------------------------------------------------------------------
         BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, const Vector2& in_bounds, const TextProperties& in_textProperties, f32& out_textScale) const;
-        //----------------------------------------------------------------------------
+
         /// Build the sprites for each given character and render them to screen.
         ///
-        /// @param Characters in text space
-        /// @param Transform to screen space
-        /// @param Colour
-        /// @param Texture
-        //----------------------------------------------------------------------------
-        void DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Matrix3& in_transform, const Colour& in_colour, const TextureCSPtr& in_texture);
+        /// @param characters
+        ///     List of character display infos in text space
+        /// @param transform
+        ///     2D transform to screen space
+        /// @param colour
+        ///     Tint colour to apply to character sprites
+        /// @param texture
+        ///     Font texture
+        ///
+        void DrawText(const std::vector<DisplayCharacterInfo>& characters, const Matrix3& transform, const Colour& colour, const TextureCSPtr& texture);
 
     private:
 
@@ -210,10 +234,10 @@ namespace ChilliSource
         RenderSnapshot* m_currentRenderSnapshot = nullptr;
         u32 m_nextPriority = 0;
         
-        std::vector<Vector2> m_scissorPositions;
-        std::vector<Vector2> m_scissorSizes;
+        s32 m_clipMaskCount = 0;
 
-        CanvasMaterialPoolUPtr m_materialPool;
+        CanvasMaterialPoolUPtr m_colourMaterialPool;
+        CanvasMaterialPoolUPtr m_stencilMaterialPool;
 
         ResourcePool* m_resourcePool;
         Screen* m_screen;

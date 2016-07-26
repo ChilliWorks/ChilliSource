@@ -58,7 +58,6 @@ namespace ChilliSource
         const char k_properyNameOriginAnchor[] = "originanchor";
         const char k_properyNameParentalAnchor[] = "parentalanchor";
         const char k_properyNameVisible[] = "visible";
-        const char k_properyNameClipChildren[] = "clipchildren";
         const char k_properyNameInputEnabled[] = "inputenabled";
         const char k_properyNameInputConsumeEnabled[] = "inputconsumeenabled";
         const char k_properyNameSizePolicy[] = "sizepolicy";
@@ -77,7 +76,6 @@ namespace ChilliSource
             {PropertyTypes::AlignmentAnchor(), k_properyNameOriginAnchor},
             {PropertyTypes::AlignmentAnchor(), k_properyNameParentalAnchor},
             {PropertyTypes::Bool(), k_properyNameVisible},
-            {PropertyTypes::Bool(), k_properyNameClipChildren},
             {PropertyTypes::Bool(), k_properyNameInputEnabled},
             {PropertyTypes::Bool(), k_properyNameInputConsumeEnabled},
             {PropertyTypes::SizePolicy(), k_properyNameSizePolicy},
@@ -262,7 +260,6 @@ namespace ChilliSource
         m_baseProperties.emplace(k_properyNameOriginAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(MakeDelegate(this, &Widget::GetOriginAnchor), MakeDelegate(this, &Widget::SetOriginAnchor)));
         m_baseProperties.emplace(k_properyNameParentalAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(MakeDelegate(this, &Widget::GetParentalAnchor), MakeDelegate(this, &Widget::SetParentalAnchor)));
         m_baseProperties.emplace(k_properyNameVisible, PropertyTypes::Bool()->CreateProperty(MakeDelegate(this, &Widget::IsVisible), MakeDelegate(this, &Widget::SetVisible)));
-        m_baseProperties.emplace(k_properyNameClipChildren, PropertyTypes::Bool()->CreateProperty(MakeDelegate(this, &Widget::IsClippingEnabled), MakeDelegate(this, &Widget::SetClippingEnabled)));
         m_baseProperties.emplace(k_properyNameInputEnabled, PropertyTypes::Bool()->CreateProperty(MakeDelegate(this, &Widget::IsInputEnabled), MakeDelegate(this, &Widget::SetInputEnabled)));
         m_baseProperties.emplace(k_properyNameInputConsumeEnabled, PropertyTypes::Bool()->CreateProperty(MakeDelegate(this, &Widget::IsInputConsumeEnabled), MakeDelegate(this, &Widget::SetInputConsumeEnabled)));
         m_baseProperties.emplace(k_properyNameSizePolicy, PropertyTypes::SizePolicy()->CreateProperty(MakeDelegate(this, &Widget::GetSizePolicy), MakeDelegate(this, &Widget::SetSizePolicy)));
@@ -654,18 +651,6 @@ namespace ChilliSource
     bool Widget::IsVisible() const
     {
         return m_isVisible;
-    }
-    //----------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------------------
-    void Widget::SetClippingEnabled(bool in_enabled)
-    {
-        m_isSubviewClippingEnabled = in_enabled;
-    }
-    //----------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------------------
-    bool Widget::IsClippingEnabled() const
-    {
-        return m_isSubviewClippingEnabled;
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -1488,12 +1473,9 @@ namespace ChilliSource
             }
         }
         
-        if(m_isSubviewClippingEnabled == true)
+        for (auto& component : m_components)
         {
-            Vector2 bottomLeftPos = GetAnchorPoint(AlignmentAnchor::k_bottomLeft, finalSize * 0.5f);
-            bottomLeftPos += GetFinalPositionOfCentre();
-            
-            in_renderer->PushClipBounds(bottomLeftPos, finalSize);
+            component->OnPreDrawChildren(in_renderer);
         }
         
         m_internalChildren.lock();
@@ -1510,9 +1492,9 @@ namespace ChilliSource
         }
         m_children.unlock();
         
-        if(m_isSubviewClippingEnabled == true)
+        for (auto& component : m_components)
         {
-            in_renderer->PopClipBounds();
+            component->OnPostDrawChildren(in_renderer);
         }
     }
     //----------------------------------------------------------------------------------------

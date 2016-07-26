@@ -145,6 +145,10 @@ namespace ChilliSource
         //--------------------------------------------------------------
         const Colour& GetColour() const override;
         
+        /// @return Whether the drawable creates a clipping mask
+        ///
+        bool IsMask() const noexcept override { return m_isMask; }
+        
     private:
         //--------------------------------------------------------------
         /// Creates a new instance of a standard drawable as described
@@ -162,6 +166,8 @@ namespace ChilliSource
         std::string m_atlasId;
         UVs m_uvs;
         Colour m_colour;
+        
+        bool m_isMask = false;
     };
 }
 

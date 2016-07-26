@@ -35,15 +35,15 @@ namespace ChilliSource
 {
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    CanvasMaterialPool::CanvasMaterialPool(MaterialFactory* in_materialFactory)
-        : m_materialFactory(in_materialFactory)
+    CanvasMaterialPool::CanvasMaterialPool(MaterialFactory* materialFactory, const std::string& materialNamePrefix, const MaterialSetupDelegate& materialSetupDelegate)
+        : m_materialFactory(materialFactory), m_materialNamePrefix(materialNamePrefix), m_materialSetupDelegate(materialSetupDelegate)
     {
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    MaterialCSPtr CanvasMaterialPool::GetMaterial(const TextureCSPtr& in_texture)
+    MaterialCSPtr CanvasMaterialPool::GetMaterial(const TextureCSPtr& in_texture, s32 stencilRef)
     {
-        auto it = m_associations.find(in_texture.get());
+        auto it = m_associations.find(std::make_tuple(in_texture.get(), stencilRef));
         if(it != m_associations.end())
         {
             return it->second;
@@ -51,20 +51,18 @@ namespace ChilliSource
         
         if (m_nextMaterial >= m_materials.size())
         {
-            auto material = m_materialFactory->CreateCustom("_Canvas-" + ToString(m_materials.size()));
-            material->SetShadingType(Material::ShadingType::k_unlit);
-            material->SetTransparencyEnabled(true);
-            material->SetDepthTestEnabled(false);
-
+            auto material = m_materialFactory->CreateCustom(m_materialNamePrefix + ToString(m_materials.size()));
+            m_materialSetupDelegate(material.get());
             m_materials.push_back(material);
             CS_ASSERT(m_nextMaterial < m_materials.size(), "We've added a new material yet we still don't have enough - something has gone wrong.");
         }
         
         auto material = m_materials[m_nextMaterial++];
         material->AddTexture(in_texture);
+        material->SetStencilTestFunc(material->GetStencilTestFunc(), stencilRef, material->GetStencilTestFuncMask());
         material->SetLoadState(Resource::LoadState::k_loaded);
         
-        m_associations.emplace(in_texture.get(), material);
+        m_associations.emplace(std::make_tuple(in_texture.get(), stencilRef), material);
         return material;
     }
     //------------------------------------------------------------------------------

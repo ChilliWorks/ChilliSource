@@ -176,18 +176,21 @@ namespace ChilliSource
         /// texture size
         //----------------------------------------------------------------------------------------
         Vector2 GetPreferredSize() const override;
-        //----------------------------------------------------------------------------------------
-        /// Render the widget using the canvas renderer. The widget has is rendered using the
-        /// set texture and UVs.
+        
+        /// Render the widget using the canvas renderer.
         ///
-        /// @author S Downie
+        /// @param renderer
+        ///     Performs the actual drawing to canvas
+        /// @param transform
+        ///     Absolute screen transform
+        /// @param absSize
+        ///     Asbolute screen size
+        /// @param absColour
+        ///     Absolute colour
+        /// @param toMask
+        ///     Whether or not to create a clip mask for this drawable
         ///
-        /// @param Renderer
-        /// @param Absolute screen transform
-        /// @param Asbolute screen size
-        /// @param Absolute colour
-        //----------------------------------------------------------------------------------------
-        void Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
+        void Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept override;
         
     private:
         friend class NinePatchUIDrawableDef;
@@ -217,6 +220,14 @@ namespace ChilliSource
         /// @param The bottom inset.
         //----------------------------------------------------------------------------------------
         NinePatchUIDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
+        
+        /// Patches (size, pos, etc) are calculated and cached. This function when called will
+        /// update the cache if required, otherwise it will do nothing
+        ///
+        /// @param absSize
+        ///     Canvas space size of the widget, if changed from last draw, update the cache
+        ///
+        void UpdatePatchCache(const Vector2& absSize);
         
         TextureCSPtr m_texture;
         TextureAtlasCSPtr m_atlas;

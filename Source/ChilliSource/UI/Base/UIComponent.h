@@ -227,6 +227,18 @@ namespace ChilliSource
         //----------------------------------------------------------------
         virtual void OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) {}
         //----------------------------------------------------------------
+        /// Called prior to the widget drawing its children
+        ///
+        /// @param The canvas renderer.
+        //----------------------------------------------------------------
+        virtual void OnPreDrawChildren(CanvasRenderer* in_renderer) {}
+        //----------------------------------------------------------------
+        /// Called after the widget draws its children
+        ///
+        /// @param The canvas renderer.
+        //----------------------------------------------------------------
+        virtual void OnPostDrawChildren(CanvasRenderer* in_renderer) {}
+        //----------------------------------------------------------------
         /// This is called when the application is backgrounded while the
         /// owning widget is on the canvas. This will also be called when
         /// the owning widget is removed from the canvas if the application

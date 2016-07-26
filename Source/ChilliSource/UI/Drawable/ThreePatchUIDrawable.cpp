@@ -590,29 +590,46 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchUIDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
+    void ThreePatchUIDrawable::UpdatePatchCache(const Vector2& absSize)
     {
-        CS_ASSERT(m_texture != nullptr, "ThreePatchUIDrawable cannot draw without texture");
-        
-        if(m_cachedWidgetSize != in_absSize)
+        if(m_cachedWidgetSize != absSize)
         {
             m_isPatchCatchValid = false;
-            m_cachedWidgetSize = in_absSize;
+            m_cachedWidgetSize = absSize;
         }
         
         if(m_isPatchCatchValid == false)
         {
             //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the patches.
             m_cachedUvs = m_uvCalculationDelegate(m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
-            m_cachedSizes = m_sizeCalculationDelegate(in_absSize, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
-            m_cachedPositions = m_positionCalculationDelegate(in_absSize, m_cachedSizes);
-            m_cachedOffsetTL = m_offsetCalculationDelegate(in_absSize, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
+            m_cachedSizes = m_sizeCalculationDelegate(absSize, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
+            m_cachedPositions = m_positionCalculationDelegate(absSize, m_cachedSizes);
+            m_cachedOffsetTL = m_offsetCalculationDelegate(absSize, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
         }
+    }
+    //----------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------
+    void ThreePatchUIDrawable::Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept
+    {
+        CS_ASSERT(m_texture != nullptr, "ThreePatchUIDrawable cannot draw without texture");
+        
+        UpdatePatchCache(absSize);
 
-        for(u32 i=0; i<k_numPatches; ++i)
+        if(toMask == false)
         {
-            Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
-            in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, AlignmentAnchor::k_middleCentre);
+            for(u32 i=0; i<k_numPatches; ++i)
+            {
+                Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
+                renderer->DrawBox(patchTransform * transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], absColour * m_colour, AlignmentAnchor::k_middleCentre);
+            }
+        }
+        else
+        {
+            for(u32 i=0; i<k_numPatches; ++i)
+            {
+                Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
+                renderer->DrawMaskedBox(patchTransform * transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], AlignmentAnchor::k_middleCentre);
+            }
         }
     }
 }

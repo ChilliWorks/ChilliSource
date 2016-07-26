@@ -502,31 +502,48 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void NinePatchUIDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
+    void NinePatchUIDrawable::UpdatePatchCache(const Vector2& absSize)
     {
-        CS_ASSERT(m_texture != nullptr, "NinePatchUIDrawable cannot draw without texture");
-        
-        if(m_cachedWidgetSize != in_absSize)
+        if(m_cachedWidgetSize != absSize)
         {
             m_isPatchCatchValid = false;
-            m_cachedWidgetSize = in_absSize;
+            m_cachedWidgetSize = absSize;
         }
         
         if(m_isPatchCatchValid == false)
         {
             //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the patches.
             m_cachedUvs = CalculateNinePatchUVs(m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
-            m_cachedSizes = CalculateNinePatchSizes(in_absSize, m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
-            m_cachedPositions = CalculateNinePatchPositions(in_absSize, m_cachedSizes);
-            m_cachedOffsetTL = CalculatePatchesOffset(in_absSize, m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
+            m_cachedSizes = CalculateNinePatchSizes(absSize, m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
+            m_cachedPositions = CalculateNinePatchPositions(absSize, m_cachedSizes);
+            m_cachedOffsetTL = CalculatePatchesOffset(absSize, m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
             
             m_isPatchCatchValid = true;
         }
+    }
+    //----------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------
+    void NinePatchUIDrawable::Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept
+    {
+        CS_ASSERT(m_texture != nullptr, "NinePatchUIDrawable cannot draw without texture");
         
-        for(u32 i=0; i<k_numPatches; ++i)
+        UpdatePatchCache(absSize);
+        
+        if(toMask == false)
         {
-            Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
-            in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, AlignmentAnchor::k_middleCentre);
+            for(u32 i=0; i<k_numPatches; ++i)
+            {
+                Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
+                renderer->DrawBox(patchTransform * transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], absColour * m_colour, AlignmentAnchor::k_middleCentre);
+            }
+        }
+        else
+        {
+            for(u32 i=0; i<k_numPatches; ++i)
+            {
+                Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
+                renderer->DrawMaskedBox(patchTransform * transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], AlignmentAnchor::k_middleCentre);
+            }
         }
     }
 }

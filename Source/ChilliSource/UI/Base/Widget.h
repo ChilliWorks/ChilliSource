@@ -88,8 +88,6 @@ namespace ChilliSource
     ///
     /// "Visible": A boolean describing whether or not the widget and it's children are visible.
     ///
-    /// "ClipChildren": A boolean describing whether children that exceed bounds are clipped.
-    ///
     /// "OriginAnchor": The anchor point of the widgets origin. Possible values are: 'TopLeft',
     /// 'TopCentre', 'TopRight', 'MiddleLeft', 'MiddleCentre', 'MiddleRight', 'BottomLeft',
     /// 'BottomCentre', 'BottomRight'
@@ -461,20 +459,6 @@ namespace ChilliSource
         /// @return Whether the widget hierarchy from here down is visible
         //----------------------------------------------------------------------------------------
         bool IsVisible() const;
-        //----------------------------------------------------------------------------------------
-        /// NOTE: Clipping does not work well with rotation as it requires an AABB clip region
-        ///
-        /// @author S Downie
-        ///
-        /// @param Set whether the widget will clip pixels that exceed its bounds
-        //----------------------------------------------------------------------------------------
-        void SetClippingEnabled(bool in_enabled);
-        //----------------------------------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @return Set whether the widget will clip pixels that exceed its bounds
-        //----------------------------------------------------------------------------------------
-        bool IsClippingEnabled() const;
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -1265,7 +1249,6 @@ namespace ChilliSource
         UnifiedVector2 m_originPosition;
         
         bool m_isVisible = true;
-        bool m_isSubviewClippingEnabled = false;
         bool m_isInputEnabled = true;
         bool m_isInputConsumeEnabled = false;
         

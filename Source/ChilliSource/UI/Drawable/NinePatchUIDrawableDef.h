@@ -159,6 +159,10 @@ namespace ChilliSource
         //--------------------------------------------------------------
         const Vector4& GetInsets() const;
         
+        /// @return Whether the drawable creates a clipping mask
+        ///
+        bool IsMask() const noexcept override { return m_isMask; }
+        
     private:
         //--------------------------------------------------------------
         /// Creates a new instance of a standard drawable as described
@@ -177,6 +181,7 @@ namespace ChilliSource
         UVs m_uvs;
         Colour m_colour;
         Vector4 m_insets;
+        bool m_isMask = false;
     };
 }
 

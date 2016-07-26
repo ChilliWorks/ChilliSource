@@ -73,6 +73,8 @@ namespace ChilliSource
     ///
     /// "Colour": The colour of the drawable.
     ///
+    /// "Masking": True or False - Whether the widget should create a child clipping mask
+    ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
     class UIDrawableDef : public QueryableInterface
@@ -129,6 +131,11 @@ namespace ChilliSource
         /// @param The colour of the drawable.
         //--------------------------------------------------------------
         virtual const Colour& GetColour() const = 0;
+        
+        /// @return Whether the drawable creates a clipping mask
+        ///
+        virtual bool IsMask() const noexcept = 0;
+        
         //--------------------------------------------------------------
         /// Destructor
         ///

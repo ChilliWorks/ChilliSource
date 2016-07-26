@@ -184,18 +184,21 @@ namespace ChilliSource
         /// texture size
         //----------------------------------------------------------------------------------------
         Vector2 GetPreferredSize() const override;
-        //----------------------------------------------------------------------------------------
-        /// Render the widget using the canvas renderer. The widget has is rendered using the
-        /// set texture and UVs.
+        
+        /// Render the widget using the canvas renderer.
         ///
-        /// @author S Downie
+        /// @param renderer
+        ///     Performs the actual drawing to canvas
+        /// @param transform
+        ///     Absolute screen transform
+        /// @param absSize
+        ///     Asbolute screen size
+        /// @param absColour
+        ///     Absolute colour
+        /// @param toMask
+        ///     Whether or not to create a clipping mask from this drawable
         ///
-        /// @param Renderer
-        /// @param Absolute screen transform
-        /// @param Asbolute screen size
-        /// @param Absolute colour
-        //----------------------------------------------------------------------------------------
-        void Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
+        void Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept override;
         
     private:
         friend class ThreePatchUIDrawableDef;
@@ -278,6 +281,14 @@ namespace ChilliSource
         /// This should be provided as a normalised fraction, 0.0 - 1.0.
         //----------------------------------------------------------------------------------------
         ThreePatchUIDrawable(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
+        
+        /// Patches (size, pos, etc) are calculated and cached. This function when called will
+        /// update the cache if required, otherwise it will do nothing
+        ///
+        /// @param absSize
+        ///     Canvas space size of the widget, if changed from last draw, update the cache
+        ///
+        void UpdatePatchCache(const Vector2& absSize);
         
         CalculateUVsDelegate m_uvCalculationDelegate;
         CalculateSizesDelegate m_sizeCalculationDelegate;

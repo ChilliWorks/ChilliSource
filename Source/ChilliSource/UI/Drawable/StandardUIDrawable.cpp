@@ -38,6 +38,44 @@
 
 namespace ChilliSource
 {
+    namespace
+    {
+        /// When textures are packed into an atlas their alpha space is cropped from the top left. This function
+        /// calculates the positional offset required to restore the alpha space to the box
+        ///
+        /// @param atlasFrame
+        ///     Frame from the atlas that holds info on how much cropping occurred
+        /// @param absSize
+        ///     Canvas space size of the box
+        /// @return Offset from top left required to "restore" the cropped alpha
+        ///
+        Vector2 CalculateAlphaRestoreOffset(const TextureAtlas::Frame& atlasFrame, const Vector2& absSize)
+        {
+            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the box.
+            Vector2 offsetTL
+            (
+             (-atlasFrame.m_originalSize.x * 0.5f) + (atlasFrame.m_croppedSize.x * 0.5f) + atlasFrame.m_offset.x,
+             (atlasFrame.m_originalSize.y * 0.5f) - (atlasFrame.m_croppedSize.y * 0.5f) - atlasFrame.m_offset.y
+             );
+            offsetTL = absSize/atlasFrame.m_originalSize * offsetTL;
+            
+            return offsetTL;
+        }
+        
+        /// When textures are packed into an atlas their alpha space is cropped from the top left. This function
+        /// calculates the size required to restore the alpha space to the box
+        ///
+        /// @param atlasFrame
+        ///     Frame from the atlas that holds info on how much cropping occurred
+        /// @param absSize
+        ///     Canvas space size of the box
+        /// @return Updated size of the box once the alpha has been "restored"
+        ///
+        Vector2 CalculateAlphaRestoreSize(const TextureAtlas::Frame& atlasFrame, const Vector2& absSize)
+        {
+            return absSize/atlasFrame.m_originalSize * atlasFrame.m_croppedSize;
+        }
+    }
     CS_DEFINE_NAMEDTYPE(StandardUIDrawable);
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -143,19 +181,16 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardUIDrawable::Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour)
+    void StandardUIDrawable::Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept
     {
         CS_ASSERT(m_texture != nullptr, "StandardUIDrawable cannot draw without texture");
-        
-        //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the box.
-        Vector2 offsetTL
-        (
-            (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x,
-            (m_atlasFrame.m_originalSize.y * 0.5f) - (m_atlasFrame.m_croppedSize.y * 0.5f) - m_atlasFrame.m_offset.y
-        );
-        offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
-        Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
-        
-        in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour * m_colour, AlignmentAnchor::k_middleCentre);
+        if(toMask == false)
+        {
+            renderer->DrawBox(transform, CalculateAlphaRestoreSize(m_atlasFrame, absSize), CalculateAlphaRestoreOffset(m_atlasFrame, absSize), m_texture, m_atlasFrame.m_uvs, absColour * m_colour, AlignmentAnchor::k_middleCentre);
+        }
+        else
+        {
+            renderer->DrawMaskedBox(transform, CalculateAlphaRestoreSize(m_atlasFrame, absSize), CalculateAlphaRestoreOffset(m_atlasFrame, absSize), m_texture, m_atlasFrame.m_uvs, AlignmentAnchor::k_middleCentre);
+        }
     }
 }

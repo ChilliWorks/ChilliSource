@@ -135,8 +135,23 @@ namespace ChilliSource
         /// @param The final screen space transform.
         /// @param The final screen space size.
         /// @param The final colour.
+        /// @param Number of the layer in the UI hierarchy
         //----------------------------------------------------------------
         void OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
+        //----------------------------------------------------------------
+        /// Called prior to the widget drawing its children. Used for
+        /// setting up subview clipping
+        ///
+        /// @param The canvas renderer.
+        //----------------------------------------------------------------
+        void OnPreDrawChildren(CanvasRenderer* in_renderer) override;
+        //----------------------------------------------------------------
+        /// Called after the widget draws its children. Used for cleaning
+        /// up subview clipping
+        ///
+        /// @param The canvas renderer.
+        //----------------------------------------------------------------
+        void OnPostDrawChildren(CanvasRenderer* in_renderer) override;
         
         UIDrawableDefCSPtr m_drawableDef;
         UIDrawableUPtr m_drawable;

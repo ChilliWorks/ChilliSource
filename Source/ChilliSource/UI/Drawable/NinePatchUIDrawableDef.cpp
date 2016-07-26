@@ -51,6 +51,7 @@ namespace ChilliSource
         const char k_uvsKey[] = "UVs";
         const char k_colourKey[] = "Colour";
         const char k_insetsKey[] = "Insets";
+        const char k_maskKey[] = "Masking";
         
         CS_ASSERT(in_json.isObject() == true, "UIDrawable Def must be created from a json value of type Object.");
         
@@ -98,6 +99,10 @@ namespace ChilliSource
             else if (key == k_insetsKey)
             {
                 m_insets = ParseVector4(value);
+            }
+            else if (key == k_maskKey)
+            {
+                m_isMask = ParseBool(value);
             }
             else if (key == k_typeKey)
             {

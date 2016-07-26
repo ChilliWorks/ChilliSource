@@ -145,17 +145,21 @@ namespace ChilliSource
         /// @param The colour.
         //----------------------------------------------------------------------------------------
         virtual void SetColour(const Colour& in_colour) = 0;
-        //----------------------------------------------------------------------------------------
-        /// Render the widget using the canvas renderer
+        
+        /// Render the widget using the canvas renderer.
         ///
-        /// @author S Downie
+        /// @param renderer
+        ///     Performs the actual drawing to canvas
+        /// @param transform
+        ///     Absolute screen transform
+        /// @param absSize
+        ///     Asbolute screen size
+        /// @param absColour
+        ///     Absolute colour
+        /// @param toMask
+        ///     Whether or not to create a clipping mask from this drawable
         ///
-        /// @param Renderer
-        /// @param Absolute screen space transform
-        /// @param Asbolute screen size
-        /// @param Absolute colour
-        //----------------------------------------------------------------------------------------
-        virtual void Draw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) = 0;
+        virtual void Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept = 0;
         //----------------------------------------------------------------------------------------
         /// Virtual destructor
         ///
