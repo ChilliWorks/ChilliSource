@@ -118,25 +118,6 @@ namespace ChilliSource
         ///
         void DecrementClipMask() noexcept { --m_clipMaskCount; }
         
-        /// Renders the given sprite box to the stencil buffer to create a clip mask
-        /// as well as rendering to the screen
-        ///
-        /// @param transform
-        ///     2D Transformation matrix
-        /// @param size
-        ///     Dimensions of the box in canvas space
-        /// @param offset
-        ///     Offset from TL of the bounds. Used to restore the cropped alpha
-        /// @param texture
-        ///     Texture (alpha channel is used to create mask shape)
-        /// @param uvs
-        ///     UVs for texture
-        /// @param anchor
-        ///     Origin anchor
-        /// @param maskValue
-        ///     Value to write into the clip mask
-        ///
-        void DrawMaskedBox(const Matrix3& transform, const Vector2& size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& uvs, AlignmentAnchor anchor);
 
         /// Renders the given sprite box to the screen
         ///
@@ -154,10 +135,10 @@ namespace ChilliSource
         ///     Colour to apply to the sprite box
         /// @param anchor
         ///     Origin anchor
-        /// @param maskValue
-        ///     Clip mask value used to determine if the box gets clipped or not
+        /// @param createMask
+        ///     Whether to create a clip mask from this box shape
         ///
-        void DrawBox(const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor);
+        void DrawBox(const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor, bool createMask);
         
         //----------------------------------------------------------------------------
         /// Build the descriptions for all characters. The descriptions can then be

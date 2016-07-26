@@ -512,7 +512,7 @@ namespace ChilliSource
         // Draw images
         for(const auto& iconData : m_cachedIcons)
         {
-            in_renderer->DrawBox(in_transform, iconData.m_size, iconData.m_offset, iconData.m_texture, iconData.m_uvs, GetWidget()->GetFinalColour(), AlignmentAnchor::k_middleCentre);
+            in_renderer->DrawBox(in_transform, iconData.m_size, iconData.m_offset, iconData.m_texture, iconData.m_uvs, GetWidget()->GetFinalColour(), AlignmentAnchor::k_middleCentre, false);
         }
     }
 }

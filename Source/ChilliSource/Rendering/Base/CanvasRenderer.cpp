@@ -41,6 +41,7 @@
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
+#include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Sprite/SpriteMeshBuilder.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Base/Canvas.h>
@@ -728,10 +729,14 @@ namespace ChilliSource
             material->SetStencilTestFunc(TestFunc::k_equal, 0, k_uiStencilMaskChannel);
         }));
         
-        //Pool for creating materials for mask rendering
-        m_stencilMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasStcl-", [](Material* material)
+        //Pool for creating materials for mask rendering using the following shader to create the mask
+        auto resourcePool = Application::Get()->GetResourcePool();
+        auto shader = resourcePool->LoadResource<Shader>(CS::StorageLocation::k_chilliSource, "Shaders/Sprite-UnlitStencil.csshader");
+        
+        m_stencilMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasStcl-", [shader](Material* material)
         {
-            material->SetShadingType(Material::ShadingType::k_unlit);
+            material->SetShadingType(Material::ShadingType::k_custom);
+            material->SetCustomShader(VertexFormat::k_sprite, shader);
             material->SetTransparencyEnabled(true);
             material->SetDepthTestEnabled(false);
             material->SetStencilTestEnabled(true);
@@ -741,16 +746,9 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::DrawMaskedBox(const Matrix3& transform, const Vector2& size, const Vector2& in_offset, const TextureCSPtr& in_texture, const UVs& uvs, AlignmentAnchor anchor)
+    void CanvasRenderer::DrawBox(const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor, bool createMask)
     {
-        auto material = m_stencilMaterialPool->GetMaterial(in_texture, m_clipMaskCount);
-        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(in_offset, 0.0f), size, uvs, Colour::k_white, anchor, Convert2DTransformTo3D(transform), material, m_nextPriority++);
-    }
-    //----------------------------------------------------------------------------
-    //----------------------------------------------------------------------------
-    void CanvasRenderer::DrawBox(const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor)
-    {
-        auto material = m_colourMaterialPool->GetMaterial(texture, m_clipMaskCount);
+        auto material = createMask == false ? m_colourMaterialPool->GetMaterial(texture, m_clipMaskCount) : m_stencilMaterialPool->GetMaterial(texture, m_clipMaskCount);
         AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(offset, 0.0f), size, uvs, colour, anchor, Convert2DTransformTo3D(transform), material, m_nextPriority++);
     }
     //----------------------------------------------------------------------------
