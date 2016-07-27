@@ -73,7 +73,9 @@ GLSL
 		void main()
 		{
 			gl_FragColor = texture2D(u_texture0, vvTexCoord) * vvColour;
-			if(gl_FragColor.a == 0.0)
+
+			//Pick a small alpha test value for pixels that are invisble to the eye
+			if(gl_FragColor.a < 0.05)
 			{
 				discard;
 			}

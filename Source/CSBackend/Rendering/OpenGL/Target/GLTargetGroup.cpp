@@ -30,6 +30,10 @@
 #include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
+#ifdef CS_OPENGLVERSION_ES
+	#define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
+#endif
+
 namespace CSBackend
 {
     namespace OpenGL
@@ -161,7 +165,7 @@ namespace CSBackend
             }
             else if (m_renderTargetGroup->ShouldUseDepthBuffer())
             {
-                m_depthRenderBufferHandle = CreateDepthRenderBuffer(m_renderTargetGroup->GetResolution(), m_renderTargetGroup->ShouldUseStencilBuffer() ? GL_DEPTH24_STENCIL8_OES : GL_DEPTH_COMPONENT16);
+                m_depthRenderBufferHandle = CreateDepthRenderBuffer(m_renderTargetGroup->GetResolution(), m_renderTargetGroup->ShouldUseStencilBuffer() ? GL_DEPTH24_STENCIL8 : GL_DEPTH_COMPONENT16);
                 glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBufferHandle);
             }
             

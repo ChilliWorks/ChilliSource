@@ -610,8 +610,10 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderSnapshot.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SizePolicy.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\StencilOp.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\TargetRenderPassGroup.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\TestFunc.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.h" />

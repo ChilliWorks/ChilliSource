@@ -2828,5 +2828,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\RenderInfo.h">
       <Filter>ChilliSource\Core\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\StencilOp.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\TestFunc.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

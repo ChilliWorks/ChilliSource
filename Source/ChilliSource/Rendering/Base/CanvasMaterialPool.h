@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <functional>
 #include <tuple>
 #include <vector>
 #include <unordered_map>
