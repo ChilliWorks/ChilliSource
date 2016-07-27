@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Rendering/Base/CanvasDrawMode.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/UI/Drawable/StandardUIDrawable.h>
@@ -43,6 +44,7 @@ namespace ChilliSource
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     StandardUIDrawableDef::StandardUIDrawableDef(const Json::Value& in_json, StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+    : m_drawMode(CanvasDrawMode::k_standard)
     {
         const char k_typeKey[] = "Type";
         const char k_textureLocationKey[] = "TextureLocation";
@@ -52,7 +54,7 @@ namespace ChilliSource
         const char k_atlasIdKey[] = "AtlasId";
         const char k_uvsKey[] = "UVs";
         const char k_colourKey[] = "Colour";
-        const char k_maskKey[] = "Masking";
+        const char k_drawModeKey[] = "DrawMode";
         
         CS_ASSERT(in_json.isObject() == true, "UIDrawable Def must be created from a json value of type Object.");
         
@@ -97,9 +99,9 @@ namespace ChilliSource
             {
                 m_colour = ParseColour(value);
             }
-            else if (key == k_maskKey)
+            else if (key == k_drawModeKey)
             {
-                m_isMask = ParseBool(value);
+                m_drawMode = ParseCanvasDrawMode(value);
             }
             else if (key == k_typeKey)
             {
@@ -145,14 +147,14 @@ namespace ChilliSource
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     StandardUIDrawableDef::StandardUIDrawableDef(const TextureCSPtr& in_texture, const Colour& in_colour, const UVs& in_uvs)
-        : m_texture(in_texture), m_colour(in_colour), m_uvs(in_uvs)
+    : m_texture(in_texture), m_colour(in_colour), m_uvs(in_uvs), m_drawMode(CanvasDrawMode::k_standard)
     {
         CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard UIDrawable Def.");
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     StandardUIDrawableDef::StandardUIDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Colour& in_colour, const UVs& in_uvs)
-        : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_colour(in_colour), m_uvs(in_uvs)
+    : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_colour(in_colour), m_uvs(in_uvs), m_drawMode(CanvasDrawMode::k_standard)
     {
         CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard UIDrawable Def.");
         CS_ASSERT(m_atlas != nullptr, "Cannot specify a null texture atlas in a Standard UIDrawable Def. Use the texture only constructor instead.");

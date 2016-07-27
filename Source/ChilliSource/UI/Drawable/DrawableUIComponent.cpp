@@ -29,6 +29,7 @@
 #include <ChilliSource/UI/Drawable/DrawableUIComponent.h>
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Rendering/Base/CanvasDrawMode.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Drawable/UIDrawable.h>
@@ -103,14 +104,16 @@ namespace ChilliSource
     {
         if (m_drawable != nullptr)
         {
-            m_drawable->Draw(in_renderer, in_transform, in_absSize, in_absColour, m_drawableDef->IsMask());
+            m_drawable->Draw(in_renderer, in_transform, in_absSize, in_absColour, m_drawableDef->GetDrawMode());
         }
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
     void DrawableUIComponent::OnPreDrawChildren(CanvasRenderer* in_renderer)
     {
-        if(m_drawable != nullptr && m_drawableDef->IsMask())
+        auto drawMode = m_drawableDef->GetDrawMode();
+        
+        if(m_drawable != nullptr && (drawMode == CanvasDrawMode::k_mask || drawMode == CanvasDrawMode::k_maskOnly))
         {
             in_renderer->IncrementClipMask();
         }
@@ -119,7 +122,9 @@ namespace ChilliSource
     //----------------------------------------------------------------
     void DrawableUIComponent::OnPostDrawChildren(CanvasRenderer* in_renderer)
     {
-        if(m_drawable != nullptr && m_drawableDef->IsMask())
+        auto drawMode = m_drawableDef->GetDrawMode();
+        
+        if(m_drawable != nullptr && (drawMode == CanvasDrawMode::k_mask || drawMode == CanvasDrawMode::k_maskOnly))
         {
             in_renderer->DecrementClipMask();
         }

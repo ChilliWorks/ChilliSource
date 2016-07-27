@@ -181,10 +181,10 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void StandardUIDrawable::Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept
+    void StandardUIDrawable::Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, CanvasDrawMode drawMode) noexcept
     {
         CS_ASSERT(m_texture != nullptr, "StandardUIDrawable cannot draw without texture");
 
-        renderer->DrawBox(transform, CalculateAlphaRestoreSize(m_atlasFrame, absSize), CalculateAlphaRestoreOffset(m_atlasFrame, absSize), m_texture, m_atlasFrame.m_uvs, absColour * m_colour, AlignmentAnchor::k_middleCentre, toMask);
+        renderer->DrawBox(drawMode, transform, CalculateAlphaRestoreSize(m_atlasFrame, absSize), CalculateAlphaRestoreOffset(m_atlasFrame, absSize), m_texture, m_atlasFrame.m_uvs, absColour * m_colour, AlignmentAnchor::k_middleCentre);
     }
 }

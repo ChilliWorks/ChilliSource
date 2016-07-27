@@ -145,9 +145,9 @@ namespace ChilliSource
         //--------------------------------------------------------------
         const Colour& GetColour() const override;
         
-        /// @return Whether the drawable creates a clipping mask
+        /// @return Draw mode of the drawable
         ///
-        bool IsMask() const noexcept override { return m_isMask; }
+        CanvasDrawMode GetDrawMode() const noexcept override { return m_drawMode; }
         
     private:
         //--------------------------------------------------------------
@@ -166,8 +166,7 @@ namespace ChilliSource
         std::string m_atlasId;
         UVs m_uvs;
         Colour m_colour;
-        
-        bool m_isMask = false;
+        CanvasDrawMode m_drawMode;
     };
 }
 

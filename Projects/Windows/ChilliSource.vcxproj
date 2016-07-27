@@ -135,6 +135,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CameraRenderPassGroup.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasDrawMode.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.cpp" />
@@ -584,6 +585,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\BlendMode.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CameraRenderPassGroup.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasDrawMode.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h" />

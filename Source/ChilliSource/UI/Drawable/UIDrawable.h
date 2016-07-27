@@ -156,10 +156,10 @@ namespace ChilliSource
         ///     Asbolute screen size
         /// @param absColour
         ///     Absolute colour
-        /// @param toMask
-        ///     Whether or not to create a clipping mask from this drawable
+        /// @param drawMode
+        ///     Whether or not to create a clipping mask from this drawable or just render it
         ///
-        virtual void Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept = 0;
+        virtual void Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, CanvasDrawMode drawMode) noexcept = 0;
         //----------------------------------------------------------------------------------------
         /// Virtual destructor
         ///

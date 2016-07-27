@@ -58,6 +58,7 @@ namespace ChilliSource
     enum class AlignmentAnchor;
     enum class BlendEqn;
     enum class BlendMode;
+    enum class CanvasDrawMode;
     enum class CullFace;
     enum class DepthTestComparison;
     enum class ForwardRenderPasses;

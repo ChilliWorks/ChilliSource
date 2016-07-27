@@ -159,9 +159,9 @@ namespace ChilliSource
         //--------------------------------------------------------------
         const Vector4& GetInsets() const;
         
-        /// @return Whether the drawable creates a clipping mask
+        /// @return Draw mode of the drawable
         ///
-        bool IsMask() const noexcept override { return m_isMask; }
+        CanvasDrawMode GetDrawMode() const noexcept override { return m_drawMode; }
         
     private:
         //--------------------------------------------------------------
@@ -181,7 +181,7 @@ namespace ChilliSource
         UVs m_uvs;
         Colour m_colour;
         Vector4 m_insets;
-        bool m_isMask = false;
+        CanvasDrawMode m_drawMode;
     };
 }
 

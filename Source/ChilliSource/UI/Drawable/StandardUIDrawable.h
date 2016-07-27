@@ -163,10 +163,10 @@ namespace ChilliSource
         ///     Asbolute screen size
         /// @param absColour
         ///     Absolute colour
-        /// @param toMask
-        ///     Whether to create a clip mask for this drawable
+        /// @param drawMode
+        ///     Whether to create a clip mask for this drawable or just render it
         ///
-        void Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept override;
+        void Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, CanvasDrawMode drawMode) noexcept override;
         
     private:
         friend class StandardUIDrawableDef;

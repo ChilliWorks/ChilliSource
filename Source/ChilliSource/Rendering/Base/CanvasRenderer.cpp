@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
+#include <ChilliSource/Rendering/Base/CanvasDrawMode.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/StencilOp.h>
 #include <ChilliSource/Rendering/Base/TestFunc.h>
@@ -718,8 +719,12 @@ namespace ChilliSource
         // 2/-     1/-
         //
         
-        //Pool for creating materials for standard rendering
-        m_colourMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasCol-", [](Material* material)
+        //Shader for creating a mask
+        auto resourcePool = Application::Get()->GetResourcePool();
+        auto shader = resourcePool->LoadResource<Shader>(CS::StorageLocation::k_chilliSource, "Shaders/Sprite-UnlitStencil.csshader");
+        
+        //Pool for creating materials for standard rendering to canvas
+        m_screenMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasCol-", [](Material* material)
         {
             material->SetShadingType(Material::ShadingType::k_unlit);
             material->SetTransparencyEnabled(true);
@@ -729,11 +734,8 @@ namespace ChilliSource
             material->SetStencilTestFunc(TestFunc::k_equal, 0, k_uiStencilMaskChannel);
         }));
         
-        //Pool for creating materials for mask rendering using the following shader to create the mask
-        auto resourcePool = Application::Get()->GetResourcePool();
-        auto shader = resourcePool->LoadResource<Shader>(CS::StorageLocation::k_chilliSource, "Shaders/Sprite-UnlitStencil.csshader");
-        
-        m_stencilMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasStcl-", [shader](Material* material)
+        //Pool for creating materials for rendering to screen and creating a mask
+        m_screenMaskMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasColStcl-", [shader](Material* material)
         {
             material->SetShadingType(Material::ShadingType::k_custom);
             material->SetCustomShader(VertexFormat::k_sprite, shader);
@@ -743,12 +745,39 @@ namespace ChilliSource
             material->SetStencilPostTestOps(StencilOp::k_keep, StencilOp::k_keep, StencilOp::k_increment);
             material->SetStencilTestFunc(TestFunc::k_equal, 0, k_uiStencilMaskChannel);
         }));
+        
+        //Pool for creating materials for only creating a mask
+        m_maskMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasStcl-", [shader](Material* material)
+        {
+            material->SetShadingType(Material::ShadingType::k_custom);
+            material->SetCustomShader(VertexFormat::k_sprite, shader);
+            material->SetTransparencyEnabled(true);
+            material->SetDepthTestEnabled(false);
+            material->SetColourWriteEnabled(false);
+            material->SetStencilTestEnabled(true);
+            material->SetStencilPostTestOps(StencilOp::k_keep, StencilOp::k_keep, StencilOp::k_increment);
+            material->SetStencilTestFunc(TestFunc::k_equal, 0, k_uiStencilMaskChannel);
+        }));
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::DrawBox(const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor, bool createMask)
+    void CanvasRenderer::DrawBox(CanvasDrawMode drawMode, const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor)
     {
-        auto material = createMask == false ? m_colourMaterialPool->GetMaterial(texture, m_clipMaskCount) : m_stencilMaterialPool->GetMaterial(texture, m_clipMaskCount);
+        MaterialCSPtr material;
+        
+        switch (drawMode)
+        {
+            case CanvasDrawMode::k_standard:
+                material = m_screenMaterialPool->GetMaterial(texture, m_clipMaskCount);
+                break;
+            case CanvasDrawMode::k_mask:
+                material = m_screenMaskMaterialPool->GetMaterial(texture, m_clipMaskCount);
+                break;
+            case CanvasDrawMode::k_maskOnly:
+                material = m_maskMaterialPool->GetMaterial(texture, m_clipMaskCount);
+                break;
+        }
+
         AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(offset, 0.0f), size, uvs, colour, anchor, Convert2DTransformTo3D(transform), material, m_nextPriority++);
     }
     //----------------------------------------------------------------------------
@@ -820,7 +849,7 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& characters, const Matrix3& transform, const Colour& colour, const TextureCSPtr& texture)
     {
-        auto material = m_colourMaterialPool->GetMaterial(texture, m_clipMaskCount);
+        auto material = m_screenMaterialPool->GetMaterial(texture, m_clipMaskCount);
 
         Matrix4 matTransform = Convert2DTransformTo3D(transform);
         Matrix4 matTransformedLocal;
@@ -848,17 +877,21 @@ namespace ChilliSource
         
         m_currentRenderSnapshot = nullptr;
         
-        m_colourMaterialPool->Clear();
-        m_stencilMaterialPool->Clear();
+        m_screenMaterialPool->Clear();
+        m_screenMaskMaterialPool->Clear();
+        m_maskMaterialPool->Clear();
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     void CanvasRenderer::OnDestroy()
     {
-        m_colourMaterialPool->Clear();
-        m_colourMaterialPool.reset();
+        m_screenMaterialPool->Clear();
+        m_screenMaterialPool.reset();
         
-        m_stencilMaterialPool->Clear();
-        m_stencilMaterialPool.reset();
+        m_screenMaskMaterialPool->Clear();
+        m_screenMaskMaterialPool.reset();
+        
+        m_maskMaterialPool->Clear();
+        m_maskMaterialPool.reset();
     }
 }

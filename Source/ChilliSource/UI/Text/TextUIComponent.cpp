@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Rendering/Base/CanvasDrawMode.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
@@ -512,7 +513,7 @@ namespace ChilliSource
         // Draw images
         for(const auto& iconData : m_cachedIcons)
         {
-            in_renderer->DrawBox(in_transform, iconData.m_size, iconData.m_offset, iconData.m_texture, iconData.m_uvs, GetWidget()->GetFinalColour(), AlignmentAnchor::k_middleCentre, false);
+            in_renderer->DrawBox(CanvasDrawMode::k_standard, in_transform, iconData.m_size, iconData.m_offset, iconData.m_texture, iconData.m_uvs, GetWidget()->GetFinalColour(), AlignmentAnchor::k_middleCentre);
         }
     }
 }

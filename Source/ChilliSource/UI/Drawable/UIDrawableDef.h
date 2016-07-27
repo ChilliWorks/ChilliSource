@@ -73,7 +73,10 @@ namespace ChilliSource
     ///
     /// "Colour": The colour of the drawable.
     ///
-    /// "Masking": True or False - Whether the widget should create a child clipping mask
+    /// "DrawMode": Describes the draw mode for this drawable
+    ///     "Standard" - Draw to canvas as usual
+    ///     "Mask" - Draw to canvas and create a clip mask
+    ///     "MaskOnly" - Don't render to canvas just create the clip mask
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
@@ -132,9 +135,9 @@ namespace ChilliSource
         //--------------------------------------------------------------
         virtual const Colour& GetColour() const = 0;
         
-        /// @return Whether the drawable creates a clipping mask
+        /// @return Draw mode of the drawable
         ///
-        virtual bool IsMask() const noexcept = 0;
+        virtual CanvasDrawMode GetDrawMode() const noexcept = 0;
         
         //--------------------------------------------------------------
         /// Destructor

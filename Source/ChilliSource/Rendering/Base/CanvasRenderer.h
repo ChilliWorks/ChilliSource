@@ -49,6 +49,7 @@ namespace ChilliSource
     {
     public:
         CS_DECLARE_NAMEDTYPE(CanvasRenderer);
+    
         //----------------------------------------------------------------------------
         /// A container for text properties for altering the look of built text.
         ///
@@ -119,8 +120,10 @@ namespace ChilliSource
         void DecrementClipMask() noexcept { --m_clipMaskCount; }
         
 
-        /// Renders the given sprite box to the screen
+        /// Renders the given sprite box to the screen or as a mask
         ///
+        /// @param drawMode
+        ///     Describes whether to render the box to the canvas or as a mask
         /// @param transform
         ///     2D Transformation matrix
         /// @param size
@@ -135,10 +138,8 @@ namespace ChilliSource
         ///     Colour to apply to the sprite box
         /// @param anchor
         ///     Origin anchor
-        /// @param createMask
-        ///     Whether to create a clip mask from this box shape
         ///
-        void DrawBox(const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor, bool createMask);
+        void DrawBox(CanvasDrawMode drawMode, const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor);
         
         //----------------------------------------------------------------------------
         /// Build the descriptions for all characters. The descriptions can then be
@@ -217,8 +218,9 @@ namespace ChilliSource
         
         s32 m_clipMaskCount = 0;
 
-        CanvasMaterialPoolUPtr m_colourMaterialPool;
-        CanvasMaterialPoolUPtr m_stencilMaterialPool;
+        CanvasMaterialPoolUPtr m_screenMaterialPool;
+        CanvasMaterialPoolUPtr m_screenMaskMaterialPool;
+        CanvasMaterialPoolUPtr m_maskMaterialPool;
 
         ResourcePool* m_resourcePool;
         Screen* m_screen;

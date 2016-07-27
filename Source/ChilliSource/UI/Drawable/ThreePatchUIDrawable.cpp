@@ -609,7 +609,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
-    void ThreePatchUIDrawable::Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, bool toMask) noexcept
+    void ThreePatchUIDrawable::Draw(CanvasRenderer* renderer, const Matrix3& transform, const Vector2& absSize, const Colour& absColour, CanvasDrawMode drawMode) noexcept
     {
         CS_ASSERT(m_texture != nullptr, "ThreePatchUIDrawable cannot draw without texture");
         
@@ -618,7 +618,7 @@ namespace ChilliSource
         for(u32 i=0; i<k_numPatches; ++i)
         {
             Matrix3 patchTransform = Matrix3::CreateTranslation(m_cachedPositions[i]);
-            renderer->DrawBox(patchTransform * transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], absColour * m_colour, AlignmentAnchor::k_middleCentre, toMask);
+            renderer->DrawBox(drawMode, patchTransform * transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], absColour * m_colour, AlignmentAnchor::k_middleCentre);
         }
     }
 }

@@ -390,6 +390,7 @@
 		81C7FFD71C89DDE300D306F9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */; };
 		81C7FFD81C89DDE300D306F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */; };
 		81C7FFD91C89DDE300D306F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FFC11C89DDE300D306F9 /* UIKit.framework */; };
+		81EB41181D48B3E9005A7CE9 /* CanvasDrawMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81EB41171D48B3E9005A7CE9 /* CanvasDrawMode.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1357,6 +1358,8 @@
 		81C7FFC11C89DDE300D306F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		81EB410D1D460C99005A7CE9 /* StencilOp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StencilOp.h; sourceTree = "<group>"; };
 		81EB410E1D461267005A7CE9 /* TestFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFunc.h; sourceTree = "<group>"; };
+		81EB41161D48AEFD005A7CE9 /* CanvasDrawMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasDrawMode.h; sourceTree = "<group>"; };
+		81EB41171D48B3E9005A7CE9 /* CanvasDrawMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasDrawMode.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2499,6 +2502,8 @@
 				81845F7B1D3503E8004B0C46 /* BlendMode.h */,
 				81845F7C1D3503E8004B0C46 /* CameraRenderPassGroup.cpp */,
 				81845F7D1D3503E8004B0C46 /* CameraRenderPassGroup.h */,
+				81EB41171D48B3E9005A7CE9 /* CanvasDrawMode.cpp */,
+				81EB41161D48AEFD005A7CE9 /* CanvasDrawMode.h */,
 				81845F7E1D3503E8004B0C46 /* CanvasMaterialPool.cpp */,
 				81845F7F1D3503E8004B0C46 /* CanvasMaterialPool.h */,
 				81845F801D3503E8004B0C46 /* CanvasRenderer.cpp */,
@@ -3774,6 +3779,7 @@
 				818461E51D3503E8004B0C46 /* RenderMaterialGroupManager.cpp in Sources */,
 				8158F7C71C89D2AD00B13109 /* DialogueBoxSystem.mm in Sources */,
 				818462311D3503E8004B0C46 /* UnloadTextureRenderCommand.cpp in Sources */,
+				81EB41181D48B3E9005A7CE9 /* CanvasDrawMode.cpp in Sources */,
 				8158F7CA1C89D2AD00B13109 /* RNGContainer.mm in Sources */,
 				818461731D3503E8004B0C46 /* TextInputStream.cpp in Sources */,
 				818461F41D3503E8004B0C46 /* SkinnedAnimation.cpp in Sources */,

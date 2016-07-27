@@ -172,9 +172,9 @@ namespace ChilliSource
         //--------------------------------------------------------------
         ThreePatchUIDrawable::Direction GetDirection() const;
         
-        /// @return Whether the drawable creates a clipping mask
+        /// @return Draw mode of the drawable
         ///
-        bool IsMask() const noexcept override { return m_isMask; }
+        CanvasDrawMode GetDrawMode() const noexcept override { return m_drawMode; }
         
     private:
         //--------------------------------------------------------------
@@ -195,7 +195,7 @@ namespace ChilliSource
         Colour m_colour;
         Vector2 m_insets;
         ThreePatchUIDrawable::Direction m_direction;
-        bool m_isMask = false;
+        CanvasDrawMode m_drawMode;
     };
 }
 

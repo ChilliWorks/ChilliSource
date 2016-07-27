@@ -35,6 +35,7 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Base/CameraRenderPassGroup.h>
+#include <ChilliSource/Rendering/Base/CanvasDrawMode.h>
 #include <ChilliSource/Rendering/Base/CanvasMaterialPool.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
