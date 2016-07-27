@@ -320,7 +320,7 @@ namespace ChilliSource
         /// @param scene
         ///     Scene that should be rendered
         /// @param target
-        ///     Optiona, if wanting to render the scene to a target other than its own
+        ///     Optional, if wanting to render the scene to a target other than its own
         ///
         void RenderScene(Scene* scene, TargetGroup* target = nullptr) noexcept;
 
