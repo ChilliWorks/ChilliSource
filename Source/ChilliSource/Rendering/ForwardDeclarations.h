@@ -64,6 +64,7 @@ namespace ChilliSource
     enum class RenderLayer;
     enum class SizePolicy;
     enum class SurfaceFormat;
+    enum class TargetType;
     enum class VerticalTextJustification;
     //------------------------------------------------------------
     /// Camera

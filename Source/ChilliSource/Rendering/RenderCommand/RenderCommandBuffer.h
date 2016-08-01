@@ -62,7 +62,7 @@ namespace ChilliSource
         /// @param renderFramesData
         ///     The render frame data that must persist to the end of the frame. Must be moved.
         ///
-        RenderCommandBuffer(u32 numSlots, IAllocator* frameAllocator, std::vector<RenderFrameData>&& renderFramesData) noexcept;
+        RenderCommandBuffer(u32 numSlots, IAllocator* frameAllocator, std::vector<RenderFrameData> renderFramesData) noexcept;
         
         /// @return The allocator from which all frame allocations should occur.
         ///

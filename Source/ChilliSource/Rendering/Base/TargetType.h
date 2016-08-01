@@ -22,32 +22,16 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
+#ifndef _CHILLISOURCE_RENDERING_BASE_TARGETTYPE_H_
+#define _CHILLISOURCE_RENDERING_BASE_TARGETTYPE_H_
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    RenderCommandBuffer::RenderCommandBuffer(u32 numSlots, IAllocator* frameAllocator, std::vector<RenderFrameData> renderFramesData) noexcept
-        : m_renderFramesData(std::move(renderFramesData)), m_frameAllocator(frameAllocator)
+    enum class TargetType
     {
-        m_renderCommandLists.reserve(numSlots);
-        for (u32 i = 0; i < numSlots; ++i)
-        {
-            m_renderCommandLists.push_back(RenderCommandListUPtr(new RenderCommandList()));
-        }
-        
-        m_queue.reserve(numSlots);
-        for (const auto& renderCommandList : m_renderCommandLists)
-        {
-            m_queue.push_back(renderCommandList.get());
-        }
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderCommandList* RenderCommandBuffer::GetRenderCommandList(u32 slotIndex) noexcept
-    {
-        CS_ASSERT(slotIndex < GetNumSlots(), "Index out of bounds.");
-        
-        return m_renderCommandLists[slotIndex].get();
-    }
+        k_main,
+        k_offscreen
+    };
 }
+
+#endif

@@ -1356,6 +1356,7 @@
 		81C7FFBF1C89DDE300D306F9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		81C7FFC01C89DDE300D306F9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		81C7FFC11C89DDE300D306F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		81E377C71D4F43E500128CCA /* TargetType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TargetType.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2548,6 +2549,7 @@
 				81845FAD1D3503E8004B0C46 /* SurfaceFormat.h */,
 				81845FAE1D3503E8004B0C46 /* TargetRenderPassGroup.cpp */,
 				81845FAF1D3503E8004B0C46 /* TargetRenderPassGroup.h */,
+				81E377C71D4F43E500128CCA /* TargetType.h */,
 				81845FB01D3503E8004B0C46 /* VerticalTextJustification.cpp */,
 				81845FB11D3503E8004B0C46 /* VerticalTextJustification.h */,
 			);

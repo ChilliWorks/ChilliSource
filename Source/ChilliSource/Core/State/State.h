@@ -69,13 +69,13 @@ namespace ChilliSource
         ///
         /// @return A pointer to the main scene (that renders to screen).
         //----------------------------------------------------
-        Scene* GetScene();
+        Scene* GetMainScene() noexcept;
         //----------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A const pointer to the main scene (that renders to screen).
         //----------------------------------------------------
-        const Scene* GetScene() const;
+        const Scene* GetMainScene() const noexcept;
         //----------------------------------------------------
         /// @author S Downie
         ///
@@ -214,6 +214,8 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
+        /// @param targetType - Whether the snapshot is
+        /// for the main screen or an offscreen target
         /// @param renderSnapshot - The render
         /// snapshot object which contains all
         /// snapshotted data.
@@ -221,7 +223,7 @@ namespace ChilliSource
         /// any data required for rendering this frame
         /// from here
         //-----------------------------------------
-        void RenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept;
+        void RenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept;
         //-----------------------------------------
         /// Triggered when a state is the
         /// active state in the state manager and
@@ -316,6 +318,21 @@ namespace ChilliSource
         /// @param Fixed time since last update (Secs)
         //-----------------------------------------
         virtual void OnFixedUpdate(f32 in_deltaTime){};
+        
+        /// The render snapshot event can be implemented by a state to allow it to
+        /// snapshot any data which pertains to the renderer.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param targetType
+        ///     Whether the snapshot is for the main screen or offscreen
+        /// @param renderSnapshot
+        ///     The render snapshot object which contains all snapshotted data.
+        /// @param frameAllocator
+        ///     Use this to allocate any memory required for this frame
+        ///
+        virtual void OnRenderSnapshot(TargetType targetType, class RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept {};
+        
         //-----------------------------------------
         /// Triggered when a state is the
         /// active state in the state manager and

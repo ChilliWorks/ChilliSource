@@ -311,18 +311,6 @@ namespace ChilliSource
         /// @return A const pointer to the widget factory system.
         ///
         const WidgetFactory* GetWidgetFactory() const noexcept;
-        
-        /// Takes a snapshot of the given scene and renders it to its
-        /// render target during the render stage of the application.
-        /// This is used mostly for single shot render to texture
-        /// NOTE: This means the texture of the target will not be populated til next frame.
-        ///
-        /// @param scene
-        ///     Scene that should be rendered
-        /// @param target
-        ///     Optional, if wanting to render the scene to a target other than its own
-        ///
-        void RenderScene(Scene* scene, TargetGroup* target = nullptr) noexcept;
 
         virtual ~Application() noexcept;
         
@@ -443,7 +431,21 @@ namespace ChilliSource
         ///
         void Destroy() noexcept;
         
-        std::vector<RenderSnapshot> m_currentRenderSnapshots;
+        friend class Scene;
+        
+        /// Takes a snapshot of the given scene and renders it to its
+        /// render target during the render stage of the application.
+        /// This is used mostly for single shot render to texture
+        /// NOTE: This means the texture of the target will not be populated til next frame.
+        ///
+        /// @param scene
+        ///     Scene that should be rendered
+        /// @param target
+        ///     Optional, if wanting to render the scene to a target other than its own
+        ///
+        void RenderScene(Scene* scene, TargetGroup* target = nullptr) noexcept;
+        
+        std::vector<RenderSnapshot> m_pendingRenderSnapshots;
         std::vector<AppSystemUPtr> m_systems;
         
         ResourcePool* m_resourcePool = nullptr;

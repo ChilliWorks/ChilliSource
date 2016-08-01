@@ -25,6 +25,7 @@
 #include <ChilliSource/Rendering/Model/RenderMeshManager.h>
 
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 
 #include <mutex>
 
@@ -88,24 +89,27 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    void RenderMeshManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
+    void RenderMeshManager::OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
-        auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
-        auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
-        
-        std::unique_lock<std::mutex> lock(m_mutex);
-        
-        for (auto& loadCommand : m_pendingLoadCommands)
+        if(targetType == TargetType::k_main)
         {
-            preRenderCommandList->AddLoadMeshCommand(loadCommand.m_renderMesh, std::move(loadCommand.m_vertexData), loadCommand.m_vertexDataSize, std::move(loadCommand.m_indexData), loadCommand.m_indexDataSize);
+            auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
+            auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+            for (auto& loadCommand : m_pendingLoadCommands)
+            {
+                preRenderCommandList->AddLoadMeshCommand(loadCommand.m_renderMesh, std::move(loadCommand.m_vertexData), loadCommand.m_vertexDataSize, std::move(loadCommand.m_indexData), loadCommand.m_indexDataSize);
+            }
+            m_pendingLoadCommands.clear();
+            
+            for (auto& unloadCommand : m_pendingUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadMeshCommand(std::move(unloadCommand));
+            }
+            m_pendingUnloadCommands.clear();
         }
-        m_pendingLoadCommands.clear();
-        
-        for (auto& unloadCommand : m_pendingUnloadCommands)
-        {
-            postRenderCommandList->AddUnloadMeshCommand(std::move(unloadCommand));
-        }
-        m_pendingUnloadCommands.clear();
     }
     
     //------------------------------------------------------------------------------

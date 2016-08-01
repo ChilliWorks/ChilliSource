@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Model/Model.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
@@ -175,29 +176,32 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLContextRestorer::OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot, ChilliSource::IAllocator* frameAllocator) noexcept
+        void GLContextRestorer::OnRenderSnapshot(ChilliSource::TargetType targetType, ChilliSource::RenderSnapshot& renderSnapshot, ChilliSource::IAllocator* frameAllocator) noexcept
         {
 #ifdef CS_TARGETPLATFORM_ANDROID
-            auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
-            
-            for(auto& restoreMeshCommand : m_pendingRestoreMeshCommands)
+            if(targetType == ChilliSource::TargetType::k_main)
             {
-                preRenderCommandList->AddRestoreMeshCommand(restoreMeshCommand.GetRenderMesh());
+                auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
+                
+                for(auto& restoreMeshCommand : m_pendingRestoreMeshCommands)
+                {
+                    preRenderCommandList->AddRestoreMeshCommand(restoreMeshCommand.GetRenderMesh());
+                }
+                
+                for(auto& restoreTextureCommand : m_pendingRestoreTextureCommands)
+                {
+                    preRenderCommandList->AddRestoreTextureCommand(restoreTextureCommand.GetRenderTexture());
+                }
+                
+                for(auto& restoreRenderTargetGroupCommand : m_pendingRestoreRenderTargetGroupCommands)
+                {
+                    preRenderCommandList->AddRestoreRenderTargetGroupCommand(restoreRenderTargetGroupCommand.GetTargetRenderGroup());
+                }
+                
+                m_pendingRestoreMeshCommands.clear();
+                m_pendingRestoreTextureCommands.clear();
+                m_pendingRestoreRenderTargetGroupCommands.clear();
             }
-            
-            for(auto& restoreTextureCommand : m_pendingRestoreTextureCommands)
-            {
-                preRenderCommandList->AddRestoreTextureCommand(restoreTextureCommand.GetRenderTexture());
-            }
-            
-            for(auto& restoreRenderTargetGroupCommand : m_pendingRestoreRenderTargetGroupCommands)
-            {
-                preRenderCommandList->AddRestoreRenderTargetGroupCommand(restoreRenderTargetGroupCommand.GetTargetRenderGroup());
-            }
-            
-            m_pendingRestoreMeshCommands.clear();
-            m_pendingRestoreTextureCommands.clear();
-            m_pendingRestoreRenderTargetGroupCommands.clear();
 #endif
         }
         

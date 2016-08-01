@@ -27,6 +27,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
@@ -94,9 +95,9 @@ namespace ChilliSource
         m_renderCommandBuffersCondition.notify_all();
     }
     //------------------------------------------------------------------------------
-    void RenderCommandBufferManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
+    void RenderCommandBufferManager::OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
-        if(!m_discardCommands)
+        if(!m_discardCommands && targetType == TargetType::k_main)
         {
             auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
             auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();

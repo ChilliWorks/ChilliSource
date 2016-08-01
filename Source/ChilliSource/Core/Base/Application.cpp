@@ -59,6 +59,7 @@
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Font/FontProvider.h>
@@ -392,11 +393,11 @@ namespace ChilliSource
         auto scenes = activeState->GetScenes();
         CS_ASSERT(scenes.size() > 0, "No scenes on active state");
         
-        m_currentRenderSnapshots.reserve(scenes.size());
+        m_pendingRenderSnapshots.reserve(scenes.size());
 
         // We handle scenes backwards as the main one is always first in the list and
         // we need to process that one last
-        for(auto it = scenes.rbegin(); it != scenes.rend()-1; ++it)
+        for(auto it = scenes.rbegin(); it != scenes.rend(); ++it)
         {
             auto scene = (*it);
             
@@ -405,40 +406,61 @@ namespace ChilliSource
                 RenderScene(scene);
             }
         }
-        
-        //The main render target (i.e. the screen) take ownership of the allocator and use the screen resolution as target res
-        auto scene = scenes.front();
-        auto clearColour = scene->GetClearColour();
-        
-        IAllocator* frameAllocator = m_renderer->GetFrameAllocatorQueue().Pop();
-        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(nullptr, Integer2(s32(m_screen->GetResolution().x), s32(m_screen->GetResolution().y)), clearColour, GenerateRenderCamera(scene));
-        
-        for (const AppSystemUPtr& system : m_systems)
-        {
-            system->OnRenderSnapshot(renderSnapshot, frameAllocator);
-        }
-        
-        m_stateManager->RenderSnapshotStates(renderSnapshot, frameAllocator);
-        scene->RenderSnapshotEntities(renderSnapshot, frameAllocator);
-        
-        m_renderer->ProcessRenderSnapshots(std::move(frameAllocator), std::move(renderSnapshot), std::move(m_currentRenderSnapshots));
     }
     
     //------------------------------------------------------------------------------
     void Application::RenderScene(Scene* scene, TargetGroup* target) noexcept
     {
-        CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to render scene from background thread.");
-        CS_ASSERT(target != nullptr || scene->GetRenderTarget() != nullptr, "Cannot force render scene to screen. Scene must have a render target");
+        CS_ASSERT(GetTaskScheduler()->IsMainThread(), "Tried to render scene from background thread.");
         
-        // We handle scenes backwards as the main one is always first in the list and
-        // we need to process that one last
-        auto clearColour = scene->GetClearColour();
         auto targetToUse = target == nullptr ? scene->GetRenderTarget() : target;
+        auto clearColour = scene->GetClearColour();
+        IAllocator* frameAllocator;
+        Integer2 resolution;
+        TargetType targetType;
+        const RenderTargetGroup* targetGroup;
         
-        IAllocator* frameAllocator = m_renderer->GetFrameAllocatorQueue().Front();
-        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(targetToUse->GetRenderTargetGroup(), targetToUse->GetRenderTargetGroup()->GetResolution(), clearColour, GenerateRenderCamera(scene));
+        if(targetToUse == nullptr)
+        {
+            // Main (screen) render target
+            
+            // Main render target claims the allocator
+            frameAllocator = m_renderer->GetFrameAllocatorQueue().Pop();
+            resolution = Integer2(s32(m_screen->GetResolution().x), s32(m_screen->GetResolution().y));
+            targetType = TargetType::k_main;
+            targetGroup = nullptr;
+        }
+        else
+        {
+            // Offscreen render target
+            
+            // Just borrows the allocator of the main target
+            frameAllocator = m_renderer->GetFrameAllocatorQueue().Front();
+            resolution = targetToUse->GetRenderTargetGroup()->GetResolution();
+            targetType = TargetType::k_offscreen;
+            targetGroup = targetToUse->GetRenderTargetGroup();
+        }
+
+        
+        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(targetGroup, resolution, clearColour, GenerateRenderCamera(scene));
+        
+        for (const AppSystemUPtr& system : m_systems)
+        {
+            system->OnRenderSnapshot(targetType, renderSnapshot, frameAllocator);
+        }
+        
+        m_stateManager->RenderSnapshotStates(targetType, renderSnapshot, frameAllocator);
         scene->RenderSnapshotEntities(renderSnapshot, frameAllocator);
-        m_currentRenderSnapshots.push_back(std::move(renderSnapshot));
+        
+        if(targetToUse == nullptr)
+        {
+            // The renderer takes ownership of the frame allocator and will return it to the allocator queue
+            m_renderer->ProcessRenderSnapshots(frameAllocator, std::move(renderSnapshot), std::move(m_pendingRenderSnapshots));
+        }
+        else
+        {
+            m_pendingRenderSnapshots.push_back(std::move(renderSnapshot));
+        }
     }
     
     //------------------------------------------------------------------------------
@@ -556,7 +578,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::Render() noexcept
     {
-        m_renderer->ProcessRenderCommandBuffers();
+        m_renderer->ProcessRenderCommandBuffer();
     }
     
     //------------------------------------------------------------------------------

@@ -57,7 +57,7 @@ namespace ChilliSource
         /// @param renderTarget
         ///     The target into which the scene renders, if null renders to screen
         //-------------------------------------------------------
-        static SceneUPtr Create(TargetGroupUPtr renderTarget = nullptr);
+        static SceneUPtr Create(TargetGroupUPtr renderTarget) noexcept;
         
         //-------------------------------------------------------
         /// Destructor
@@ -77,13 +77,12 @@ namespace ChilliSource
         //-------------------------------------------------------
         bool IsA(InterfaceIDType in_interfaceId) const override;
         
-        /// Enable updating and rendering on the scene
+        /// Enable/Disable updating and rendering on the scene
         ///
-        void Enable() noexcept { m_enabled = true; }
-        
-        /// Disable updating and rendering on the scene
+        /// @param enabled
+        ///     True if enabling, False if disabling
         ///
-        void Disable() noexcept { m_enabled = false; }
+        void SetEnabled(bool enabled) noexcept { m_enabled = enabled; }
         
         /// @return TRUE if the scene is updating and rendering
         ///
@@ -202,6 +201,21 @@ namespace ChilliSource
         /// @author Ian Copland
         //-------------------------------------------------------
         void SuspendEntities();
+        
+        /// Takes a snapshot of the scene and renders it to its
+        /// render target during the render stage of the application.
+        ///
+        /// Should only be called directly by app if performing single shot RTT on a disabled scene
+        ///
+        /// NOTE: The texture of the target will not be populated until next frame.
+        ///
+        /// @param scene
+        ///     Scene that should be rendered
+        /// @param target
+        ///     Optional, if wanting to render the scene to a target other than its own
+        ///
+        void Render(TargetGroup* target = nullptr) noexcept;
+        
         //--------------------------------------------------------------------------------------------------
         /// Traverses the contents of the scene and adds any objects that intersect with the ray to the
         /// list. The list order is undefined. Use the query intersection value on the volume component
@@ -273,7 +287,7 @@ namespace ChilliSource
         /// @param renderTarget
         ///     The target into which the scene renders, if null renders to screen
         //-------------------------------------------------------
-        Scene(TargetGroupUPtr renderTarget);
+        Scene(TargetGroupUPtr renderTarget) noexcept;
         //-------------------------------------------------------
         /// Remove the entity from the scene
         ///

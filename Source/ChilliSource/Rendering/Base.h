@@ -62,6 +62,7 @@
 #include <ChilliSource/Rendering/Base/SizePolicy.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Rendering/Base/TargetRenderPassGroup.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 
 #endif

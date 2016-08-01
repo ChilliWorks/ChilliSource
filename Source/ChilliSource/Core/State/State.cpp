@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Input/Gesture/GestureSystem.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/Target/TargetGroup.h>
 #include <ChilliSource/UI/Base/Canvas.h>
 
@@ -44,7 +45,7 @@ namespace ChilliSource
         m_canAddSystems = true;
         
         //Create the default systems and main scene
-        m_scenes.push_back(CreateSystem<Scene>());
+        CreateSystem<Scene>(nullptr);
         m_canvas = CreateSystem<Canvas>();
         CreateSystem<GestureSystem>();
         
@@ -55,10 +56,14 @@ namespace ChilliSource
         
         for(auto& system : m_systems)
         {
-            if(system->IsA<Scene>() && system.get() != m_scenes[0])
-            {
-                m_scenes.push_back(static_cast<Scene*>(system.get()));
-            }
+           if(system->IsA<Scene>())
+           {
+               m_scenes.push_back(static_cast<Scene*>(system.get()));
+           }
+        }
+        
+        for(auto& system : m_systems)
+        {
             system->OnInit();
         }
         
@@ -130,12 +135,14 @@ namespace ChilliSource
     }
     //-----------------------------------------
     //-----------------------------------------
-    void State::RenderSnapshot(class RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
+    void State::RenderSnapshot(TargetType targetType, class RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         for(auto& system : m_systems)
         {
-            system->OnRenderSnapshot(renderSnapshot, frameAllocator);
+            system->OnRenderSnapshot(targetType, renderSnapshot, frameAllocator);
         }
+        
+        OnRenderSnapshot(targetType, renderSnapshot, frameAllocator);
     }
     //-----------------------------------------
     //-----------------------------------------
@@ -196,13 +203,13 @@ namespace ChilliSource
     }
     //------------------------------------------
     //------------------------------------------
-    Scene* State::GetScene()
+    Scene* State::GetMainScene() noexcept
     {
         return m_scenes[0];
     }
     //------------------------------------------
     //------------------------------------------
-    const Scene* State::GetScene() const
+    const Scene* State::GetMainScene() const noexcept
     {
         return m_scenes[0];
     }

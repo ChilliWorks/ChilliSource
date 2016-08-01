@@ -27,6 +27,7 @@
 //
 
 #include <ChilliSource/Core/Scene/Scene.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Target/TargetGroup.h>
 
 #include <algorithm>
@@ -37,13 +38,13 @@ namespace ChilliSource
     
     //-------------------------------------------------------
     //-------------------------------------------------------
-    SceneUPtr Scene::Create(TargetGroupUPtr renderTarget)
+    SceneUPtr Scene::Create(TargetGroupUPtr renderTarget) noexcept
     {
         return SceneUPtr(new Scene(std::move(renderTarget)));
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Scene::Scene(TargetGroupUPtr renderTarget)
+    Scene::Scene(TargetGroupUPtr renderTarget) noexcept
     : m_renderTarget(std::move(renderTarget))
     {
     }
@@ -184,6 +185,15 @@ namespace ChilliSource
         
         m_entities.clear();
     }
+    
+    //------------------------------------------------------------------------------
+    void Scene::Render(TargetGroup* target) noexcept
+    {
+        CS_ASSERT(target != nullptr || m_renderTarget != nullptr, "Cannot force render the main scene");
+        
+        Application::Get()->RenderScene(this, target);
+    }
+    
     //-------------------------------------------------------
     //-------------------------------------------------------
     const SharedEntityList& Scene::GetEntities() const

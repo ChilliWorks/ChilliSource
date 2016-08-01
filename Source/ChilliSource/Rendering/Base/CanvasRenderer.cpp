@@ -36,6 +36,7 @@
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
@@ -782,24 +783,27 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
+    void CanvasRenderer::OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
-        auto activeState = CS::Application::Get()->GetStateManager()->GetActiveState();
-        CS_ASSERT(activeState, "must have active state.");
-        
-        auto activeUICanvas = activeState->GetUICanvas();
-        CS_ASSERT(activeUICanvas != nullptr, "Cannot render null UI canvas");
-        
-        m_currentRenderSnapshot = &renderSnapshot;
-        m_currentFrameAllocator = frameAllocator;
-        m_nextPriority = 0;
-        
-        activeUICanvas->Draw(this);
-        
-        m_currentFrameAllocator = nullptr;
-        m_currentRenderSnapshot = nullptr;
-        
-        m_materialPool->Clear();
+        if(targetType == TargetType::k_main)
+        {
+            auto activeState = CS::Application::Get()->GetStateManager()->GetActiveState();
+            CS_ASSERT(activeState, "must have active state.");
+            
+            auto activeUICanvas = activeState->GetUICanvas();
+            CS_ASSERT(activeUICanvas != nullptr, "Cannot render null UI canvas");
+            
+            m_currentRenderSnapshot = &renderSnapshot;
+            m_currentFrameAllocator = frameAllocator;
+            m_nextPriority = 0;
+            
+            activeUICanvas->Draw(this);
+            
+            m_currentFrameAllocator = nullptr;
+            m_currentRenderSnapshot = nullptr;
+            
+            m_materialPool->Clear();
+        }
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------

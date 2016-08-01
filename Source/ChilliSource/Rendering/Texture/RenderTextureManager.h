@@ -128,12 +128,14 @@ namespace ChilliSource
         /// Called during the Render Snapshot stage of the render pipeline. All pending load and
         /// unload commands are added to the render snapshot.
         ///
+        /// @param targetType
+        ///     Whether the snapshot is for the main screen or an offscreen render target
         /// @param renderSnapshot
         ///     The render shapshot for storing snapshotted data.
         /// @param frameAllocator
         ///     Allocate memory from this render frame from here
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
+        void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         std::mutex m_mutex;
         std::vector<RenderTextureUPtr> m_renderTextures; //TODO: This should be changed to an object pool.

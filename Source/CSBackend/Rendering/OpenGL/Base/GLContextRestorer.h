@@ -103,12 +103,14 @@ namespace CSBackend
             /// The render snapshot event can be implemented by a system to
             /// allow it to snapshot any data which pertains to the renderer.
             ///
+            /// @param targetType
+            ///     Whether the snapshot is for the main screen or an offscreen render target
             /// @param renderSnapshot
             ///     The render snapshot object which contains all snapshotted data.
             /// @param frameAllocator
             ///     Allocate memory for this render frame from here
             ///
-            void OnRenderSnapshot(ChilliSource::RenderSnapshot& renderSnapshot, ChilliSource::IAllocator* frameAllocator) noexcept override;
+            void OnRenderSnapshot(ChilliSource::TargetType targetType, ChilliSource::RenderSnapshot& renderSnapshot, ChilliSource::IAllocator* frameAllocator) noexcept override;
             
             /// Called when the application delegate is suspended. This is called directly
             /// from lifecycle manager and will be called before the OnSuspend.

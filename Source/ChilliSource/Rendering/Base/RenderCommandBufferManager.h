@@ -138,12 +138,14 @@ namespace ChilliSource
         /// Called during the Render Snapshot stage of the render pipeline. All pending load commands
         /// are added to the render snapshot.
         ///
+        /// @param targetType
+        ///     Whether the snapshot is for the main screen or an offscreen render target
         /// @param renderSnapshot
         ///     The render shapshot for storing snapshotted data.
         /// @param frameAllocator
         ///     Allocate memory for this render frame from here
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
+        void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         /// Called when the application delegate is suspended. This event is called directly
         /// from the platform application implementation and will be called before the lifecycle

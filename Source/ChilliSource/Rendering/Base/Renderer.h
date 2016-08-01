@@ -121,14 +121,14 @@ namespace ChilliSource
         ///     The render snapshots to process for offscreen targets. They should have already been populated by passing them
         ///     to each system and component in the scene. They must be moved.
         ///
-        void ProcessRenderSnapshots(IAllocator*&& frameAllocator, RenderSnapshot&& mainRenderSnapshot, std::vector<RenderSnapshot>&& offscreenRenderSnapshots) noexcept;
+        void ProcessRenderSnapshots(IAllocator* frameAllocator, RenderSnapshot mainRenderSnapshot, std::vector<RenderSnapshot> offscreenRenderSnapshots) noexcept;
         
-        /// Processes the next render command buffers. If there are no render command buffers ready to be
+        /// Processes the next render command buffer. If there is no render command buffer ready to be
         /// processed then this will block until there is.
         ///
         /// This must be called from the render thread.
         ///
-        void ProcessRenderCommandBuffers() noexcept;
+        void ProcessRenderCommandBuffer() noexcept;
         
         /// @return The renderers frame allocator queue
         ///

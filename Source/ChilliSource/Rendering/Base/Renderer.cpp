@@ -85,7 +85,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::ProcessRenderSnapshots(IAllocator*&& frameAllocator, RenderSnapshot&& mainRenderSnapshot, std::vector<RenderSnapshot>&& offscreenRenderSnapshots) noexcept
+    void Renderer::ProcessRenderSnapshots(IAllocator* frameAllocator, RenderSnapshot mainRenderSnapshot, std::vector<RenderSnapshot> offscreenRenderSnapshots) noexcept
     {
         WaitThenStartRenderPrep();
         
@@ -127,7 +127,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::ProcessRenderCommandBuffers() noexcept
+    void Renderer::ProcessRenderCommandBuffer() noexcept
     {
         auto renderCommandBuffer = m_commandRecycleSystem->WaitThenPopCommandBuffer();
         m_renderCommandProcessor->Process(renderCommandBuffer.get());

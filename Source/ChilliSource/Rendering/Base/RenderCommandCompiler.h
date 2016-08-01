@@ -60,7 +60,7 @@ namespace ChilliSource
         /// @return The render command buffer.
         ///
         RenderCommandBufferUPtr CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, RenderCommandListUPtr preRenderCommandList,
-                                                      RenderCommandListUPtr postRenderCommandList, std::vector<RenderFrameData>&& renderFramesData) noexcept;
+                                                      RenderCommandListUPtr postRenderCommandList, std::vector<RenderFrameData> renderFramesData) noexcept;
     }
 }
 
