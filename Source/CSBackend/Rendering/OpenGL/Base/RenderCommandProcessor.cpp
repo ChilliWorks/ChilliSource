@@ -367,6 +367,8 @@ namespace CSBackend
             glClearColor(renderCommand->GetClearColour().r, renderCommand->GetClearColour().g, renderCommand->GetClearColour().b, renderCommand->GetClearColour().a);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             
+            glBlendEquation(GL_FUNC_ADD);
+            
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while beginning rendering.");
         }
         

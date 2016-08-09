@@ -78,29 +78,6 @@ namespace CSBackend
                 };
             }
             
-            /// Converts from a ChilliSource blend equation to an OpenGL blend mode.
-            ///
-            /// @param blendMode
-            ///     The ChilliSource blend equation.
-            ///
-            /// @return The OpenGL blend equation.
-            ///
-            GLenum ToGLBlendEqn(ChilliSource::BlendEqn blendEqn)
-            {
-                switch(blendEqn)
-                {
-                    case ChilliSource::BlendEqn::k_add:
-                        return GL_FUNC_ADD;
-                    case ChilliSource::BlendEqn::k_subtractSrcDst:
-                        return GL_FUNC_SUBTRACT;
-                    case ChilliSource::BlendEqn::k_subtractDstSrc:
-                        return GL_FUNC_REVERSE_SUBTRACT;
-                    default:
-                        CS_LOG_FATAL("Invalid blend equation.");
-                        return GL_FUNC_ADD;
-                };
-            }
-            
             /// Converts from a ChilliSource stencil op to an OpenGL one
             ///
             /// @param stencilOp
@@ -241,7 +218,6 @@ namespace CSBackend
             if (renderMaterial->IsTransparencyEnabled())
             {
                 glEnable(GL_BLEND);
-                glBlendEquation(ToGLBlendEqn(renderMaterial->GetBlendEqn()));
                 glBlendFunc(ToGLBlendMode(renderMaterial->GetSourceBlendMode()), ToGLBlendMode(renderMaterial->GetDestinationBlendMode()));
             }
             else

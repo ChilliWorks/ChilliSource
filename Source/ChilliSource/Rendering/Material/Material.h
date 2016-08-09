@@ -238,14 +238,6 @@ namespace ChilliSource
         /// @return Dest BlendMode of blending functions
         //----------------------------------------------------------
         BlendMode GetDestBlendMode() const;
-
-        /// @param The equation that describes how source and dest pixels are blended
-        ///
-        void SetBlendEqn(BlendEqn eqn) noexcept { m_blendEqn = eqn; }
-        
-        /// @return The equation that describes how source and dest pixels are blended
-        ///
-        BlendEqn GetBlendEqn() const noexcept { return m_blendEqn; }
         
         /// Tells the render system what action to take with the result of a stencil test
         ///
@@ -525,7 +517,6 @@ namespace ChilliSource
         
         BlendMode m_srcBlendMode;
         BlendMode m_dstBlendMode;
-        BlendEqn m_blendEqn;
         
         CullFace m_cullFace;
         

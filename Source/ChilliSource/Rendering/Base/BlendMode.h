@@ -47,17 +47,6 @@ namespace ChilliSource
         k_destAlpha,
         k_oneMinusDestAlpha
     };
-    
-    /// Blend equation that governs how pixels are blended.
-    /// The equation specified how the new pixel colour is
-    /// combined with the colour already in the framebuffer
-    ///
-    enum class BlendEqn
-    {
-        k_add,
-        k_subtractSrcDst,
-        k_subtractDstSrc
-    };
 }
 
 #endif

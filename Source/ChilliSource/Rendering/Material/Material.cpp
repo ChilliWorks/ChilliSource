@@ -52,7 +52,7 @@ namespace ChilliSource
     //------------------------------------------------
     //------------------------------------------------
     Material::Material() noexcept
-    :   m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha), m_blendEqn(BlendEqn::k_add),
+    :   m_srcBlendMode(BlendMode::k_one), m_dstBlendMode(BlendMode::k_oneMinusSourceAlpha),
         m_depthTestFunc(TestFunc::k_lessEqual),
         m_cullFace(CullFace::k_back),
         m_stencilPassOp(StencilOp::k_keep), m_stencilFailOp(StencilOp::k_keep), m_stencilDepthFailOp(StencilOp::k_keep)
@@ -412,7 +412,7 @@ namespace ChilliSource
         m_renderMaterialGroup = m_renderMaterialGroupManager->CreateUnlitRenderMaterialGroup(renderTexture,
                                                                                              m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled, m_isStencilTestEnabled,
                                                                                              m_depthTestFunc,
-                                                                                             m_srcBlendMode, m_dstBlendMode, m_blendEqn,
+                                                                                             m_srcBlendMode, m_dstBlendMode,
                                                                                              m_stencilFailOp, m_stencilDepthFailOp, m_stencilPassOp, m_stencilTestFunc, m_stencilTestFuncRef, m_stencilTestFuncMask,
                                                                                              m_cullFace, m_emissive, m_ambient);
     }
@@ -460,7 +460,7 @@ namespace ChilliSource
         m_renderMaterialGroup = m_renderMaterialGroupManager->CreateCustomRenderMaterialGroup(m_customShaderVertexFormat, renderShader, renderTextures,
                                                                                               m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled, m_isStencilTestEnabled,
                                                                                               m_depthTestFunc,
-                                                                                              m_srcBlendMode, m_dstBlendMode, m_blendEqn,
+                                                                                              m_srcBlendMode, m_dstBlendMode,
                                                                                               m_stencilFailOp, m_stencilDepthFailOp, m_stencilPassOp, m_stencilTestFunc, m_stencilTestFuncRef, m_stencilTestFuncMask,
                                                                                               m_cullFace, m_emissive, m_ambient, m_diffuse, m_specular, std::move(renderShaderVariables));
     }

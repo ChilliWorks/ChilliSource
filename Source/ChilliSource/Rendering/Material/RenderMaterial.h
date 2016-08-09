@@ -67,8 +67,6 @@ namespace ChilliSource
         ///     The source blend mode. This only applies if transparency is enabled.
         /// @param destinationBlendMode
         ///     The destination blend mode. This only applies if transparency is enabled.
-        /// @param blendEqn
-        ///     Describes how the source and destination colours are blended
         /// @param stencilFailOp
         ///     Op applied if stencil test fails
         /// @param stencilDepthFailOp
@@ -97,7 +95,7 @@ namespace ChilliSource
         RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
                        bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                        TestFunc depthTestFunc,
-                       BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                       BlendMode sourceBlendMode, BlendMode destinationBlendMode,
                        StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                        CullFace cullFace,
                        const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
@@ -146,10 +144,6 @@ namespace ChilliSource
         /// @return The destination blend mode. This only applies if transparency is enabled.
         ///
         BlendMode GetDestinationBlendMode() const noexcept { return m_destinationBlendMode; }
-        
-        /// @return The equation that describes how source and dest pixels are blended
-        ///
-        BlendEqn GetBlendEqn() const noexcept { return m_blendEqn; }
         
         /// @return The face which should be called. This only applies if face culling is enabled.
         ///
@@ -224,7 +218,6 @@ namespace ChilliSource
         TestFunc m_depthTestFunc;
         BlendMode m_sourceBlendMode;
         BlendMode m_destinationBlendMode;
-        BlendEqn m_blendEqn;
         StencilOp m_stencilFailOp;
         StencilOp m_stencilDepthFailOp;
         StencilOp m_stencilPassOp;

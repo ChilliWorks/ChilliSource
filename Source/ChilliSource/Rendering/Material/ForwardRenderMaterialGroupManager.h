@@ -75,8 +75,6 @@ namespace ChilliSource
         ///     The source blend mode. This only applies if transparency is enabled.
         /// @param destinationBlendMode
         ///     The destination blend mode. This only applies if transparency is enabled.
-        /// @param blendEqn
-        ///     Describes how the source and destination colours are blended
         /// @param stencilFailOp
         ///     Op applied if stencil test fails
         /// @param stencilDepthFailOp
@@ -101,7 +99,7 @@ namespace ChilliSource
         const RenderMaterialGroup* CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
                                                                   bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                   TestFunc depthTestFunc,
-                                                                  BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                                                                  BlendMode sourceBlendMode, BlendMode destinationBlendMode,
                                                                   StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                                                                   CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept override;
         
@@ -151,8 +149,6 @@ namespace ChilliSource
         ///     The source blend mode. This only applies if transparency is enabled.
         /// @param destinationBlendMode
         ///     The destination blend mode. This only applies if transparency is enabled.
-        /// @param blendEqn
-        ///     Describes how the source and destination colours are blended
         /// @param stencilFailOp
         ///     Op applied if stencil test fails
         /// @param stencilDepthFailOp
@@ -183,7 +179,7 @@ namespace ChilliSource
         const RenderMaterialGroup* CreateCustomRenderMaterialGroup(const VertexFormat& vertexFormat, const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
                                                                    bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                    TestFunc depthTestFunc,
-                                                                   BlendMode sourceBlendMode, BlendMode destinationBlendMode, BlendEqn blendEqn,
+                                                                   BlendMode sourceBlendMode, BlendMode destinationBlendMode,
                                                                    StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                                                                    CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
                                                                    RenderShaderVariablesUPtr renderShaderVariables) noexcept override;
