@@ -622,7 +622,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void AnimatedModelComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void AnimatedModelComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         CS_ASSERT(m_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
         CS_ASSERT(m_model->GetNumMeshes() == m_materials.size(), "Invalid number of materials.");
@@ -646,11 +646,11 @@ namespace ChilliSource
             RenderSkinnedAnimationAUPtr renderSkinnedAnimation;
             if (m_activeAnimationGroup->IsPrepared() == true)
             {
-                renderSkinnedAnimation = m_activeAnimationGroup->BuildRenderSkinnedAnimation(renderSnapshot.GetFrameAllocator(), renderMesh->GetInverseBindPoseMatrices());
+                renderSkinnedAnimation = m_activeAnimationGroup->BuildRenderSkinnedAnimation(frameAllocator, renderMesh->GetInverseBindPoseMatrices());
             }
             else if (m_fadingAnimationGroup != nullptr && m_fadingAnimationGroup->IsPrepared() == true)
             {
-                renderSkinnedAnimation = m_fadingAnimationGroup->BuildRenderSkinnedAnimation(renderSnapshot.GetFrameAllocator(), renderMesh->GetInverseBindPoseMatrices());
+                renderSkinnedAnimation = m_fadingAnimationGroup->BuildRenderSkinnedAnimation(frameAllocator, renderMesh->GetInverseBindPoseMatrices());
             }
             
             CS_ASSERT(renderSkinnedAnimation, "No render skinned animation.");

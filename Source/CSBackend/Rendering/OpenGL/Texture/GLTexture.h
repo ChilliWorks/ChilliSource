@@ -67,6 +67,12 @@ namespace CSBackend
             ///
             bool IsDataInvalid() const noexcept { return m_invalidData; }
             
+            /// Called prior to the app suspending and losing context to update
+            /// the restorable copy of the image data. This is used primarily
+            /// or render textures which are changed after creation
+            ///
+            void UpdateRestorableBackup() noexcept;
+            
             /// Called when we should restore any cached texture data.
             ///
             /// This will assert if called without having data backed up.

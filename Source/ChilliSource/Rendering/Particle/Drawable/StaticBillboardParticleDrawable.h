@@ -82,11 +82,13 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param The particle draw data.
-        /// @param in_renderSnapshot - The render snapshot that particles
+        /// @param particleData - The particle draw data.
+        /// @param renderSnapshot - The render snapshot that particles
         /// will be added to.
+        /// @param frameAllocator - Allocate memory for this render frame
+        /// from here
         //----------------------------------------------------------------
-        void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) override;
+        void DrawParticles(const dynamic_array<ConcurrentParticleData::Particle>& particleData, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) override;
         //----------------------------------------------------------------
         /// Builds the billboard image data from the provided texture
         /// or texture atlas.
@@ -108,11 +110,13 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param The particle draw data.
-        /// @param in_renderSnapshot - The render snapshot that particles
+        /// @param particleData - The particle draw data.
+        /// @param renderSnapshot - The render snapshot that particles
         /// will be added to.
+        /// @param frameAllocator - Allocate memory for this render frame
+        /// from here
         //----------------------------------------------------------------
-        void DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) const;
+        void DrawLocalSpace(const dynamic_array<ConcurrentParticleData::Particle>& particleData, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) const;
         //----------------------------------------------------------------
         /// Draws the particles without taking into account the world
         /// space transform of the owning entity as the particles are
@@ -120,11 +124,13 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param The particle draw data.
-        /// @param in_renderSnapshot - The render snapshot that particles
+        /// @param particleData - The particle draw data.
+        /// @param renderSnapshot - The render snapshot that particles
         /// will be added to.
+        /// @param frameAllocator - Allocate memory for this render frame
+        /// from here
         //----------------------------------------------------------------
-        void DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& in_particleData, RenderSnapshot& in_renderSnapshot) const;
+        void DrawWorldSpace(const dynamic_array<ConcurrentParticleData::Particle>& particleData, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) const;
 
         const StaticBillboardParticleDrawableDef* m_billboardDrawableDef;
         std::unique_ptr <dynamic_array<BillboardData>> m_billboards;

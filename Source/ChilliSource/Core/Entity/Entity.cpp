@@ -441,11 +441,11 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------
     //-------------------------------------------------------------
-    void Entity::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    void Entity::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         for(u32 i=0; i<m_components.size(); ++i)
         {
-            m_components[i]->OnRenderSnapshot(in_renderSnapshot);
+            m_components[i]->OnRenderSnapshot(renderSnapshot, frameAllocator);
         }
     }
     //-------------------------------------------------------------

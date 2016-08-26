@@ -530,8 +530,10 @@ namespace ChilliSource
         ///
         /// @param renderSnapshot
         ///     The render snapshot.
+        /// @param frameAllocator - Use this to allocate any memory
+        /// for this render frame
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         /// Triggered when the component is removed to the scene.
         ///

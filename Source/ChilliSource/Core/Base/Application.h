@@ -358,7 +358,8 @@ namespace ChilliSource
         
         /// Sends the render snapshot event to all active systems and components
         /// that are current in the scene to generate the render snapshot. This
-        /// snapshot is then passed to the render pipeline for processing.
+        /// snapshot is then passed to the render pipeline for processing. This is done
+        /// for all enabled scenes
         ///
         void ProcessRenderSnapshotEvent() noexcept;
         
@@ -430,6 +431,21 @@ namespace ChilliSource
         ///
         void Destroy() noexcept;
         
+        friend class Scene;
+        
+        /// Takes a snapshot of the given scene and renders it to its
+        /// render target during the render stage of the application.
+        /// This is used mostly for single shot render to texture
+        /// NOTE: This means the texture of the target will not be populated til next frame.
+        ///
+        /// @param scene
+        ///     Scene that should be rendered
+        /// @param target
+        ///     Optional, if wanting to render the scene to a target other than its own
+        ///
+        void RenderScene(Scene* scene, TargetGroup* target = nullptr) noexcept;
+        
+        std::vector<RenderSnapshot> m_pendingRenderSnapshots;
         std::vector<AppSystemUPtr> m_systems;
         
         ResourcePool* m_resourcePool = nullptr;

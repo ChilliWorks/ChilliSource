@@ -321,11 +321,11 @@ namespace ChilliSource
     }
     //---------------------------------------------------------
     //---------------------------------------------------------
-    void StateManager::RenderSnapshotStates(RenderSnapshot& in_renderSnapshot) noexcept
+    void StateManager::RenderSnapshotStates(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         if(!m_states.empty())
         {
-            m_states.back()->RenderSnapshot(in_renderSnapshot);
+            m_states.back()->RenderSnapshot(targetType, renderSnapshot, frameAllocator);
         }
     }
     //---------------------------------------------------------

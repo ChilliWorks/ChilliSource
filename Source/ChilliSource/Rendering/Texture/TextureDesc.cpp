@@ -40,9 +40,10 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    TextureDesc::TextureDesc(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression) noexcept
+    TextureDesc::TextureDesc(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression, bool restorable) noexcept
         : m_dimensions(dimensions), m_imageFormat(imageFormat), m_imageCompression(imageCompression)
     {
+        SetTextureDataRestoreEnabled(restorable);
     }
 
     //------------------------------------------------------------------------------

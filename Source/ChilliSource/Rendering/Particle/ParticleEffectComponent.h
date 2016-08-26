@@ -358,9 +358,13 @@ namespace ChilliSource
         /// to acquire all render primitives in the scene. This adds new
         /// render objects for each a particle in the effect.
         ///
+        /// @param renderSnapshot - Add anything to this that must be
+        ///     captured for this frame
+        /// @param frameAllocator - Allocate any memory for this frame from here
+        ///
         /// @author Ian Copland
         //----------------------------------------------------------------
-        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         //----------------------------------------------------------------
         /// Called when the entities transform changes. This invalidates
         /// the bounding shape cache.

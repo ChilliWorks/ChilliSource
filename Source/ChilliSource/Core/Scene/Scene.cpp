@@ -27,6 +27,8 @@
 //
 
 #include <ChilliSource/Core/Scene/Scene.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Rendering/Target/TargetGroup.h>
 
 #include <algorithm>
 
@@ -36,13 +38,14 @@ namespace ChilliSource
     
     //-------------------------------------------------------
     //-------------------------------------------------------
-    SceneUPtr Scene::Create()
+    SceneUPtr Scene::Create(TargetGroupUPtr renderTarget) noexcept
     {
-        return SceneUPtr(new Scene());
+        return SceneUPtr(new Scene(std::move(renderTarget)));
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    Scene::Scene()
+    Scene::Scene(TargetGroupUPtr renderTarget) noexcept
+    : m_renderTarget(std::move(renderTarget))
     {
     }
     //-------------------------------------------------------
@@ -79,27 +82,33 @@ namespace ChilliSource
     //-------------------------------------------------------
     void Scene::UpdateEntities(f32 in_timeSinceLastUpdate)
     {
-        for(u32 i = 0; i < m_entities.size(); ++i)
+        if(m_enabled)
         {
-            m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
+            for(u32 i = 0; i < m_entities.size(); ++i)
+            {
+                m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
+            }
         }
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
     void Scene::FixedUpdateEntities(f32 in_fixedTimeSinceLastUpdate)
     {
-        for(u32 i=0; i<m_entities.size(); ++i)
+        if(m_enabled)
         {
-            m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+            for(u32 i=0; i<m_entities.size(); ++i)
+            {
+                m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+            }
         }
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
-    void Scene::RenderSnapshotEntities(RenderSnapshot& in_renderSnapshot) noexcept
+    void Scene::RenderSnapshotEntities(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         for(u32 i=0; i<m_entities.size(); ++i)
         {
-            m_entities[i]->OnRenderSnapshot(in_renderSnapshot);
+            m_entities[i]->OnRenderSnapshot(renderSnapshot, frameAllocator);
         }
     }
     //-------------------------------------------------------
@@ -176,6 +185,15 @@ namespace ChilliSource
         
         m_entities.clear();
     }
+    
+    //------------------------------------------------------------------------------
+    void Scene::Render(TargetGroup* target) noexcept
+    {
+        CS_ASSERT(target != nullptr || m_renderTarget != nullptr, "Cannot force render the main scene");
+        
+        Application::Get()->RenderScene(this, target);
+    }
+    
     //-------------------------------------------------------
     //-------------------------------------------------------
     const SharedEntityList& Scene::GetEntities() const
@@ -260,6 +278,12 @@ namespace ChilliSource
             it->swap(m_entities.back());
             m_entities.pop_back();
         }
+    }
+    //--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
+    void Scene::OnDestroy() noexcept
+    {
+        m_renderTarget.reset();
     }
     //--------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------

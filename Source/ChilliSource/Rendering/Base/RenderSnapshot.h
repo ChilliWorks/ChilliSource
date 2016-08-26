@@ -60,8 +60,8 @@ namespace ChilliSource
         
         /// Creates a new instance with the given viewport resolution and clear colour.
         ///
-        /// @param frameAllocator
-        ///     The allocator which should be used for all frame allocations.
+        /// @param renderTarget
+        ///     The render target to render into, if null renders to screen (frame buffer)
         /// @param resolution
         ///     The viewport resolution.
         /// @param clearColour
@@ -70,11 +70,7 @@ namespace ChilliSource
         ///     The main camera that will be used to render the scene. Currently only one camera per
         ///     scene is supported.
         ///
-        RenderSnapshot(IAllocator* frameAllocator, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
-        
-        /// @return The allocator which should be used for all frame allocations.
-        ///
-        IAllocator* GetFrameAllocator() const noexcept { return m_renderFrameData.GetFrameAllocator(); }
+        RenderSnapshot(const RenderTargetGroup* renderTarget, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept;
         
         /// @return The viewport resolution.
         ///
@@ -180,6 +176,10 @@ namespace ChilliSource
         ///
         RenderFrameData ClaimRenderFrameData() noexcept;
         
+        ///@return Render target for this frame, if null defaults to the frame buffer
+        ///
+        const RenderTargetGroup* GetOffscreenRenderTarget() const noexcept { return m_offscreenRenderTarget; }
+        
     private:
         Integer2 m_resolution;
         Colour m_clearColour;
@@ -191,6 +191,7 @@ namespace ChilliSource
         RenderCommandListUPtr m_preRenderCommandList;
         RenderCommandListUPtr m_postRenderCommandList;
         RenderFrameData m_renderFrameData;
+        const RenderTargetGroup* m_offscreenRenderTarget;
         
         bool m_renderCameraClaimed = false;
         bool m_renderAmbientLightsClaimed = false;

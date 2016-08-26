@@ -292,10 +292,12 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param in_renderSnapshot - The snapshot containing all
+        /// @param renderSnapshot - The snapshot containing all
         /// data pertaining to a single frame.
+        /// @param frameAllocator - Use this to allocate any memory
+        /// for this render frame
         //------------------------------------------------------------
-        void OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept override;
+        void OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         //------------------------------------------------------------
         /// Triggered when the component is removed from an entity on
         /// the scene

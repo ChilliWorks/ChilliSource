@@ -59,6 +59,7 @@
 #include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Font/FontProvider.h>
@@ -98,6 +99,27 @@ namespace ChilliSource
         constexpr f32 k_defaultUpdateInterval = 1.0f / 60.0f;
         constexpr f32 k_updateClampThreshold = 0.33f;
         constexpr f32 k_updateIntervalMax = k_updateClampThreshold;
+        
+        /// Snapshot the view/camera data from the given scene into a render camera
+        ///
+        /// @return Render camera
+        ///
+        RenderCamera GenerateRenderCamera(Scene* scene) noexcept
+        {
+            auto camera = scene->GetActiveCamera();
+            
+            RenderCamera renderCamera;
+            if (camera)
+            {
+                Entity* cameraEntity = camera->GetEntity();
+                CS_ASSERT(cameraEntity, "Active CameraComponent must be attached to an entity.");
+                
+                const auto& transform = cameraEntity->GetTransform();
+                renderCamera = RenderCamera(transform.GetWorldTransform(), camera->GetProjection(), transform.GetWorldOrientation());
+            }
+            
+            return renderCamera;
+        }
     }
     
     Application* Application::s_application = nullptr;
@@ -359,38 +381,86 @@ namespace ChilliSource
         //Load the app config set preferred FPS.
         m_appConfig->Load();
     }
-    
+
     //------------------------------------------------------------------------------
     void Application::ProcessRenderSnapshotEvent() noexcept
     {
-        auto resolution = Integer2(s32(m_screen->GetResolution().x), s32(m_screen->GetResolution().y));
+        CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to render to target from background thread.");
         
         auto activeState = m_stateManager->GetActiveState();
         CS_ASSERT(activeState, "Must have active state.");
+ 
+        auto scenes = activeState->GetScenes();
+        CS_ASSERT(scenes.size() > 0, "No scenes on active state");
         
-        auto scene = activeState->GetScene();
-        auto clearColour = scene->GetClearColour();
-        auto camera = scene->GetActiveCamera();
-        
-        RenderCamera renderCamera;
-        if (camera)
+        m_pendingRenderSnapshots.reserve(scenes.size());
+
+        // We handle scenes backwards as the main one is always first in the list and
+        // we need to process that one last
+        for(auto it = scenes.rbegin(); it != scenes.rend(); ++it)
         {
-            Entity* cameraEntity = camera->GetEntity();
-            CS_ASSERT(cameraEntity, "Active CameraComponent must be attached to an entity.");
+            auto scene = (*it);
             
-            const auto& transform = cameraEntity->GetTransform();
-            renderCamera = RenderCamera(transform.GetWorldTransform(), camera->GetProjection(), transform.GetWorldOrientation());
+            if(scene->IsEnabled())
+            {
+                RenderScene(scene);
+            }
         }
+    }
+    
+    //------------------------------------------------------------------------------
+    void Application::RenderScene(Scene* scene, TargetGroup* target) noexcept
+    {
+        CS_ASSERT(GetTaskScheduler()->IsMainThread(), "Tried to render scene from background thread.");
         
-        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(resolution, clearColour, renderCamera);
+        auto targetToUse = target == nullptr ? scene->GetRenderTarget() : target;
+        auto clearColour = scene->GetClearColour();
+        IAllocator* frameAllocator;
+        Integer2 resolution;
+        TargetType targetType;
+        const RenderTargetGroup* targetGroup;
+        
+        if(targetToUse == nullptr)
+        {
+            // Main (screen) render target
+            
+            // Main render target claims the allocator
+            frameAllocator = m_renderer->GetFrameAllocatorQueue().Pop();
+            resolution = Integer2(s32(m_screen->GetResolution().x), s32(m_screen->GetResolution().y));
+            targetType = TargetType::k_main;
+            targetGroup = nullptr;
+        }
+        else
+        {
+            // Offscreen render target
+            
+            // Just borrows the allocator of the main target
+            frameAllocator = m_renderer->GetFrameAllocatorQueue().Front();
+            resolution = targetToUse->GetRenderTargetGroup()->GetResolution();
+            targetType = TargetType::k_offscreen;
+            targetGroup = targetToUse->GetRenderTargetGroup();
+        }
+
+        
+        RenderSnapshot renderSnapshot = m_renderer->CreateRenderSnapshot(targetGroup, resolution, clearColour, GenerateRenderCamera(scene));
+        
         for (const AppSystemUPtr& system : m_systems)
         {
-            system->OnRenderSnapshot(renderSnapshot);
+            system->OnRenderSnapshot(targetType, renderSnapshot, frameAllocator);
         }
         
-        m_stateManager->RenderSnapshotStates(renderSnapshot);
+        m_stateManager->RenderSnapshotStates(targetType, renderSnapshot, frameAllocator);
+        scene->RenderSnapshotEntities(renderSnapshot, frameAllocator);
         
-        m_renderer->ProcessRenderSnapshot(std::move(renderSnapshot));
+        if(targetToUse == nullptr)
+        {
+            // The renderer takes ownership of the frame allocator and will return it to the allocator queue
+            m_renderer->ProcessRenderSnapshots(frameAllocator, std::move(renderSnapshot), std::move(m_pendingRenderSnapshots));
+        }
+        else
+        {
+            m_pendingRenderSnapshots.push_back(std::move(renderSnapshot));
+        }
     }
     
     //------------------------------------------------------------------------------

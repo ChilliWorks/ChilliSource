@@ -22,31 +22,16 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/RenderFrameData.h>
-
-#include <vector>
+#ifndef _CHILLISOURCE_RENDERING_BASE_TARGETTYPE_H_
+#define _CHILLISOURCE_RENDERING_BASE_TARGETTYPE_H_
 
 namespace ChilliSource
 {
-    
-    //------------------------------------------------------------------------------
-    RenderFrameData::RenderFrameData() noexcept
+    enum class TargetType
     {
-    }
-    
-    //------------------------------------------------------------------------------
-    void RenderFrameData::AddRenderDynamicMesh(RenderDynamicMeshAUPtr renderDynamicMesh) noexcept
-    {
-        CS_ASSERT(renderDynamicMesh, "Cannot add null render frame data.");
-        
-        m_renderDynamicMeshes.push_back(std::move(renderDynamicMesh));
-    }
-    
-    //------------------------------------------------------------------------------
-    void RenderFrameData::AddRenderSkinnedAnimation(RenderSkinnedAnimationAUPtr renderSkinnedAnimation) noexcept
-    {
-        CS_ASSERT(renderSkinnedAnimation, "Cannot add null render frame data.");
-        
-        m_renderSkinnedAnimations.push_back(std::move(renderSkinnedAnimation));
-    }
-};
+        k_main,
+        k_offscreen
+    };
+}
+
+#endif

@@ -47,17 +47,7 @@ namespace ChilliSource
         
         RenderFrameData(RenderFrameData&&) = default;
         RenderFrameData& operator=(RenderFrameData&&) = default;
-        
-        /// Creates a new instance with the given viewport resolution and clear colour.
-        ///
-        /// @param frameAllocator
-        ///     The allocator which should be used for all frame allocations.
-        ///
-        RenderFrameData(IAllocator* frameAllocator) noexcept;
-        
-        /// @return The allocator which should be used for all frame allocations.
-        ///
-        IAllocator* GetFrameAllocator() const noexcept { return m_frameAllocator; }
+        RenderFrameData() noexcept;
         
         /// Adds a RenderDynamicMesh. This will be deleted at the end of the frame.
         ///
@@ -74,7 +64,6 @@ namespace ChilliSource
         void AddRenderSkinnedAnimation(RenderSkinnedAnimationAUPtr renderSkinnedAnimation) noexcept;
         
     private:
-        IAllocator* m_frameAllocator;
         std::vector<RenderDynamicMeshAUPtr> m_renderDynamicMeshes;
         std::vector<RenderSkinnedAnimationAUPtr> m_renderSkinnedAnimations;
     };

@@ -35,6 +35,29 @@ namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Renderer);
     
+    namespace
+    {
+        /// Converts the snapshot into a render frame
+        ///
+        /// @param snapshot
+        ///     Snapshot to convert. Some of the data will be moved
+        /// @return Render frame
+        ///
+        RenderFrame CompileRenderFrame(RenderSnapshot& snapshot)
+        {
+            auto resolution = snapshot.GetResolution();
+            auto clearColour = snapshot.GetClearColour();
+            auto renderCamera = snapshot.GetRenderCamera();
+            auto renderAmbientLights = snapshot.ClaimAmbientRenderLights();
+            auto renderDirectionalLights = snapshot.ClaimDirectionalRenderLights();
+            auto renderPointLights = snapshot.ClaimPointRenderLights();
+            auto renderObjects = snapshot.ClaimRenderObjects();
+            auto offscreenTarget = snapshot.GetOffscreenRenderTarget();
+            
+            return RenderFrameCompiler::CompileRenderFrame(offscreenTarget, resolution, clearColour, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
+        }
+    }
+    
     //------------------------------------------------------------------------------
     RendererUPtr Renderer::Create() noexcept
     {
@@ -43,8 +66,10 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     Renderer::Renderer() noexcept
-        : m_currentSnapshot(nullptr, Integer2::k_zero, Colour::k_black, RenderCamera())
+        : m_currentMainSnapshot(nullptr, Integer2::k_zero, Colour::k_black, RenderCamera())
+
     {
+
     }
     
     //------------------------------------------------------------------------------
@@ -52,40 +77,53 @@ namespace ChilliSource
     {
         return (Renderer::InterfaceID == interfaceId);
     }
+    
     //------------------------------------------------------------------------------
-    RenderSnapshot Renderer::CreateRenderSnapshot(const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept
+    RenderSnapshot Renderer::CreateRenderSnapshot(const RenderTargetGroup* renderTarget, const Integer2& resolution, const Colour& clearColour, const RenderCamera& renderCamera) noexcept
     {
-        auto allocator = m_frameAllocatorQueue.Pop();
-        
-        return RenderSnapshot(allocator, resolution, clearColour, renderCamera);
+        return RenderSnapshot(renderTarget, resolution, clearColour, renderCamera);
     }
     
     //------------------------------------------------------------------------------
-    void Renderer::ProcessRenderSnapshot(RenderSnapshot renderSnapshot) noexcept
+    void Renderer::ProcessRenderSnapshots(IAllocator* frameAllocator, RenderSnapshot mainRenderSnapshot, std::vector<RenderSnapshot> offscreenRenderSnapshots) noexcept
     {
         WaitThenStartRenderPrep();
         
-        m_currentSnapshot = std::move(renderSnapshot);
+        m_currentMainSnapshot = std::move(mainRenderSnapshot);
+        m_currentOffscreenSnapshots = std::move(offscreenRenderSnapshots);
         
         auto taskScheduler = Application::Get()->GetTaskScheduler();
+        
         taskScheduler->ScheduleTask(TaskType::k_small, [=](const TaskContext& taskContext)
         {
-            auto resolution = m_currentSnapshot.GetResolution();
-            auto clearColour = m_currentSnapshot.GetClearColour();
-            auto renderCamera = m_currentSnapshot.GetRenderCamera();
-            auto renderAmbientLights = m_currentSnapshot.ClaimAmbientRenderLights();
-            auto renderDirectionalLights = m_currentSnapshot.ClaimDirectionalRenderLights();
-            auto renderPointLights = m_currentSnapshot.ClaimPointRenderLights();
-            auto renderObjects = m_currentSnapshot.ClaimRenderObjects();
-            auto preRenderCommandList = m_currentSnapshot.ClaimPreRenderCommandList();
-            auto postRenderCommandList = m_currentSnapshot.ClaimPostRenderCommandList();
-            auto renderFrameData = m_currentSnapshot.ClaimRenderFrameData();
+            std::vector<RenderFrame> renderFrames(m_currentOffscreenSnapshots.size());
+            std::vector<RenderFrameData> renderFramesData(m_currentOffscreenSnapshots.size());
             
-            auto renderFrame = RenderFrameCompiler::CompileRenderFrame(resolution, clearColour, renderCamera, renderAmbientLights, renderDirectionalLights, renderPointLights, renderObjects);
-            auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, renderFrame);
-            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, targetRenderPassGroups, std::move(preRenderCommandList), std::move(postRenderCommandList), std::move(renderFrameData));
+            for(auto i=0; i<m_currentOffscreenSnapshots.size(); ++i)
+            {
+                CS_ASSERT(m_currentOffscreenSnapshots[i].GetPreRenderCommandList()->GetOrderedList().size() == 0 && m_currentOffscreenSnapshots[i].GetPostRenderCommandList()->GetOrderedList().size() == 0, "Offscreen render snapshots cannot have pre or post render commands");
+                
+                auto renderFrameData = m_currentOffscreenSnapshots[i].ClaimRenderFrameData();
+                renderFramesData.push_back(std::move(renderFrameData));
+                
+                auto renderFrame = CompileRenderFrame(m_currentOffscreenSnapshots[i]);
+                renderFrames.push_back(std::move(renderFrame));
+            }
+            
+            auto preRenderCommandList = m_currentMainSnapshot.ClaimPreRenderCommandList();
+            auto postRenderCommandList = m_currentMainSnapshot.ClaimPostRenderCommandList();
+            
+            auto renderFrameData = m_currentMainSnapshot.ClaimRenderFrameData();
+            renderFramesData.push_back(std::move(renderFrameData));
+            
+            auto renderFrame = CompileRenderFrame(m_currentMainSnapshot);
+            renderFrames.push_back(std::move(renderFrame));
+            
+            auto targetRenderPassGroups = m_renderPassCompiler->CompileTargetRenderPassGroups(taskContext, std::move(renderFrames));
+            auto renderCommandBuffer = RenderCommandCompiler::CompileRenderCommands(taskContext, std::move(frameAllocator), targetRenderPassGroups, std::move(preRenderCommandList), std::move(postRenderCommandList), std::move(renderFramesData));
             
             m_commandRecycleSystem->WaitThenPushCommandBuffer(std::move(renderCommandBuffer));
+            
             EndRenderPrep();
         });
     }
@@ -119,6 +157,7 @@ namespace ChilliSource
     void Renderer::EndRenderPrep() noexcept
     {
         std::unique_lock<std::mutex> lock(m_renderPrepMutex);
+        m_currentOffscreenSnapshots.clear();
         m_renderPrepActive = false;
         m_renderPrepCondition.notify_all();
     }

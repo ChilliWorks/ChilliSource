@@ -25,6 +25,7 @@
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 
 namespace ChilliSource
 {
@@ -82,24 +83,27 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderTextureManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void RenderTextureManager::OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
-        auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
-        auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
-        
-        std::unique_lock<std::mutex> lock(m_mutex);
-        
-        for (auto& loadCommand : m_pendingLoadCommands)
+        if(targetType == TargetType::k_main)
         {
-            preRenderCommandList->AddLoadTextureCommand(loadCommand.m_renderTexture, std::move(loadCommand.m_textureData), loadCommand.m_textureDataSize);
+            auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
+            auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+            for (auto& loadCommand : m_pendingLoadCommands)
+            {
+                preRenderCommandList->AddLoadTextureCommand(loadCommand.m_renderTexture, std::move(loadCommand.m_textureData), loadCommand.m_textureDataSize);
+            }
+            m_pendingLoadCommands.clear();
+            
+            for (auto& unloadCommand : m_pendingUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadTextureCommand(std::move(unloadCommand));
+            }
+            m_pendingUnloadCommands.clear();
         }
-        m_pendingLoadCommands.clear();
-        
-        for (auto& unloadCommand : m_pendingUnloadCommands)
-        {
-            postRenderCommandList->AddUnloadTextureCommand(std::move(unloadCommand));
-        }
-        m_pendingUnloadCommands.clear();
     }
     
     //------------------------------------------------------------------------------

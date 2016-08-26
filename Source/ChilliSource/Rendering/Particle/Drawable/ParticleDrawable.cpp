@@ -40,7 +40,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void ParticleDrawable::Draw(RenderSnapshot& in_renderSnapshot) noexcept
+    void ParticleDrawable::Draw(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         m_concurrentParticleData->Lock();
 
@@ -50,7 +50,7 @@ namespace ChilliSource
             ActivateParticle(m_concurrentParticleData->GetParticles(), index);
         }
 
-        DrawParticles(m_concurrentParticleData->GetParticles(), in_renderSnapshot);
+        DrawParticles(m_concurrentParticleData->GetParticles(), renderSnapshot, frameAllocator);
 
         m_concurrentParticleData->Unlock();
     }

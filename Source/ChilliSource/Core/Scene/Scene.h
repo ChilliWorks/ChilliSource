@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
+#include <ChilliSource/Rendering/Target/TargetGroup.h>
 
 namespace ChilliSource
 {
@@ -53,10 +54,10 @@ namespace ChilliSource
         ///
         /// @author S Downie
         ///
-        /// @param Input system used by the window to listen
-        /// for input events
+        /// @param renderTarget
+        ///     The target into which the scene renders, if null renders to screen
         //-------------------------------------------------------
-        static SceneUPtr Create();
+        static SceneUPtr Create(TargetGroupUPtr renderTarget) noexcept;
         
         //-------------------------------------------------------
         /// Destructor
@@ -75,6 +76,18 @@ namespace ChilliSource
         /// @return Whether the system has the given interface
         //-------------------------------------------------------
         bool IsA(InterfaceIDType in_interfaceId) const override;
+        
+        /// Enable/Disable updating and rendering on the scene
+        ///
+        /// @param enabled
+        ///     True if enabling, False if disabling
+        ///
+        void SetEnabled(bool enabled) noexcept { m_enabled = enabled; }
+        
+        /// @return TRUE if the scene is updating and rendering
+        ///
+        bool IsEnabled() const noexcept { return m_enabled; }
+        
         //-------------------------------------------------------
         /// Add an entity to the scene. This entity cannot
         /// exist on another scene prior to adding. The entity
@@ -132,6 +145,10 @@ namespace ChilliSource
         /// there isn't one.
         //------------------------------------------------------
         CameraComponent* GetActiveCamera() const noexcept { return m_activeCameraComponent; }
+        //------------------------------------------------------
+        /// @return The render target, if nullptr then renders to screen
+        //------------------------------------------------------
+        TargetGroup* GetRenderTarget() const noexcept { return m_renderTarget.get(); }
         //-------------------------------------------------------
         /// Sends the resume event on to the entities.
         ///
@@ -166,10 +183,12 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param in_renderSnapshot - The render snapshot object
+        /// @param renderSnapshot - The render snapshot object
         /// which contains all snapshotted data.
+        /// @param frameAllocator - Allocate any render frame data
+        /// from here
         //-------------------------------------------------------
-        void RenderSnapshotEntities(RenderSnapshot& in_renderSnapshot) noexcept;
+        void RenderSnapshotEntities(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept;
         //-------------------------------------------------------
         /// Sends the background event on to the entities.
         ///
@@ -182,6 +201,21 @@ namespace ChilliSource
         /// @author Ian Copland
         //-------------------------------------------------------
         void SuspendEntities();
+        
+        /// Takes a snapshot of the scene and renders it to its
+        /// render target during the render stage of the application.
+        ///
+        /// Should only be called directly by app if performing single shot RTT on a disabled scene
+        ///
+        /// NOTE: The texture of the target will not be populated until next frame.
+        ///
+        /// @param scene
+        ///     Scene that should be rendered
+        /// @param target
+        ///     Optional, if wanting to render the scene to a target other than its own
+        ///
+        void Render(TargetGroup* target = nullptr) noexcept;
+        
         //--------------------------------------------------------------------------------------------------
         /// Traverses the contents of the scene and adds any objects that intersect with the ray to the
         /// list. The list order is undefined. Use the query intersection value on the volume component
@@ -249,8 +283,11 @@ namespace ChilliSource
         /// Private to enforce use of factory method
         ///
         /// @author S Downie
+        ///
+        /// @param renderTarget
+        ///     The target into which the scene renders, if null renders to screen
         //-------------------------------------------------------
-        Scene();
+        Scene(TargetGroupUPtr renderTarget) noexcept;
         //-------------------------------------------------------
         /// Remove the entity from the scene
         ///
@@ -260,13 +297,23 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Remove(Entity* inpEntity);
         
+        //------------------------------------------------
+        /// Called when the owning state is being destroyed.
+        /// Used to release held objects
+        ///
+        /// @author S Downie
+        //------------------------------------------------
+        void OnDestroy() noexcept override;
+        
     private:
         
         SharedEntityList m_entities;
         Colour m_clearColour;
         bool m_entitiesActive = false;
         bool m_entitiesForegrounded = false;
+        bool m_enabled = true;
         CameraComponent* m_activeCameraComponent = nullptr;
+        TargetGroupUPtr m_renderTarget;
     };		
 }
 

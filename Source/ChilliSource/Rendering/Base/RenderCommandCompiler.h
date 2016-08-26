@@ -41,6 +41,8 @@ namespace ChilliSource
         /// render passes generated during the Compile Render Passes stage and breaks them down
         /// into a series of render commands. The output is an immutable render command buffer.
         ///
+        /// @param frameAllocator
+        ///     Allocator that was used to build this render frame
         /// @param taskContext
         ///     The task context that child tasks should be run within. This assumes that the
         ///     method is being called from within another task, as per the render pipeline
@@ -51,14 +53,14 @@ namespace ChilliSource
         ///     The RenderCommandList that should be included first. Must be moved.
         /// @param postRenderCommandList
         ///     The RenderCommandList that should be included last. Must be moved.
-        /// @param renderFrameData
-        ///     The container for all data allocated this frame that must persist to the end of the
+        /// @param renderFramesData
+        ///     List of containers for all data allocated this frame that must persist to the end of the
         ///     render pipeline. Must be moved.
         ///
         /// @return The render command buffer.
         ///
-        RenderCommandBufferUPtr CompileRenderCommands(const TaskContext& taskContext, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, RenderCommandListUPtr preRenderCommandList,
-                                                      RenderCommandListUPtr postRenderCommandList, RenderFrameData renderFrameData) noexcept;
+        RenderCommandBufferUPtr CompileRenderCommands(const TaskContext& taskContext, IAllocator* frameAllocator, const std::vector<TargetRenderPassGroup>& targetRenderPassGroups, RenderCommandListUPtr preRenderCommandList,
+                                                      RenderCommandListUPtr postRenderCommandList, std::vector<RenderFrameData> renderFramesData) noexcept;
     }
 }
 

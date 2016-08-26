@@ -49,12 +49,12 @@ namespace ChilliSource
         ///
         /// @param taskContext
         ///     Context to manage any spawned tasks
-        /// @param renderFrame
+        /// @param renderFrames
         ///     Current frame data
         ///
         /// @return The list of target render pass groups
         ///
-        std::vector<TargetRenderPassGroup> CompileTargetRenderPassGroups(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept override;
+        std::vector<TargetRenderPassGroup> CompileTargetRenderPassGroups(const TaskContext& taskContext, std::vector<RenderFrame>&& renderFrames) noexcept override;
     };
 }
 

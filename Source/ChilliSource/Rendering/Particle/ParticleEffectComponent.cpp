@@ -636,13 +636,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------------
     //----------------------------------------------------------------
-    void ParticleEffectComponent::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    void ParticleEffectComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         if (m_particleEffect != nullptr && (m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping))
         {
             CS_ASSERT(m_drawable != nullptr, "Cannot render without a drawable.");
             
-            m_drawable->Draw(in_renderSnapshot);
+            m_drawable->Draw(renderSnapshot, frameAllocator);
         }
     }
     //----------------------------------------------------------------

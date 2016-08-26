@@ -25,6 +25,7 @@
 #include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
 
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/Material/ForwardRenderMaterialGroupManager.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandList.h>
 
@@ -69,24 +70,27 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderMaterialGroupManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void RenderMaterialGroupManager::OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
-        auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
-        auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
-        
-        std::unique_lock<std::mutex> lock(m_mutex);
-        
-        for (auto& loadCommand : m_pendingLoadCommands)
+        if(targetType == TargetType::k_main)
         {
-            preRenderCommandList->AddLoadMaterialGroupCommand(loadCommand);
+            auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
+            auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+            for (auto& loadCommand : m_pendingLoadCommands)
+            {
+                preRenderCommandList->AddLoadMaterialGroupCommand(loadCommand);
+            }
+            m_pendingLoadCommands.clear();
+            
+            for (auto& unloadCommand : m_pendingUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadMaterialGroupCommand(std::move(unloadCommand));
+            }
+            m_pendingUnloadCommands.clear();
         }
-        m_pendingLoadCommands.clear();
-        
-        for (auto& unloadCommand : m_pendingUnloadCommands)
-        {
-            postRenderCommandList->AddUnloadMaterialGroupCommand(std::move(unloadCommand));
-        }
-        m_pendingUnloadCommands.clear();
     }
     
     //------------------------------------------------------------------------------

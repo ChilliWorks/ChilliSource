@@ -68,6 +68,7 @@ namespace ChilliSource
     enum class StencilOp;
     enum class SurfaceFormat;
     enum class TestFunc;
+    enum class TargetType;
     enum class VerticalTextJustification;
     //------------------------------------------------------------
     /// Camera

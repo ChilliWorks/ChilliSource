@@ -79,9 +79,9 @@ namespace ChilliSource
         void WaitThenPushCommandBuffer(RenderCommandBufferUPtr renderCommandBuffer) noexcept;
         
         /// If the queue of command buffers is empty then this waits until one has been pushed to continue.
-        /// It pops a command buffer from the list and notifies any threads which are waiting.
+        /// It pops the command buffer from the list and notifies any threads which are waiting.
         ///
-        /// @return The render command buffer which has been popped.
+        /// @return The render command buffer that has been popped.
         ///
         RenderCommandBufferCUPtr WaitThenPopCommandBuffer() noexcept;
         
@@ -138,10 +138,14 @@ namespace ChilliSource
         /// Called during the Render Snapshot stage of the render pipeline. All pending load commands
         /// are added to the render snapshot.
         ///
+        /// @param targetType
+        ///     Whether the snapshot is for the main screen or an offscreen render target
         /// @param renderSnapshot
         ///     The render shapshot for storing snapshotted data.
+        /// @param frameAllocator
+        ///     Allocate memory for this render frame from here
         ///
-        void OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept override;
+        void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         /// Called when the application delegate is suspended. This event is called directly
         /// from the platform application implementation and will be called before the lifecycle

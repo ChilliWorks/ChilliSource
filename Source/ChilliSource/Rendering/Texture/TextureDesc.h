@@ -52,8 +52,10 @@ namespace ChilliSource
         ///     The format of the image.
         /// @param imageCompression
         ///     The compression type applied to the texture data.
+        /// @param restorable
+        ///     Whether or not the texture is restored automatically after context loss
         ///
-        TextureDesc(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression) noexcept;
+        TextureDesc(const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression, bool restorable) noexcept;
         
         /// Sets the texture filter mode that will be used when rendering the texture.
         ///
@@ -82,21 +84,6 @@ namespace ChilliSource
         ///     Whether or not the texture should be mipmapped.
         ///
         void SetMipmappingEnabled(bool mipmappingEnabled) noexcept { m_mipmappingEnabled = mipmappingEnabled; };
-        
-        /// Sets whether or not the texture data should be restored after a context loss. This involves
-        /// maintaining a copy of the texture data in memory which is costly so this should be disabled
-        /// for any textures that can easily be recreated, i.e any texture that is rendered into every
-        /// frame.
-        ///
-        /// This has no effect on textures that are loaded from file as they are always restored from
-        /// disk.
-        ///
-        /// This will only work for RGBA8888, RGB888, RGBA4444 and RGB565 textures.
-        ///
-        /// @param restoreTextureDataEnabled
-        ///     Whether or not texture data should be restored on context loss.
-        ///
-        void SetTextureDataRestoreEnabled(bool restoreTextureDataEnabled) noexcept;
         
         /// @return The texture dimensions.
         ///
@@ -129,6 +116,23 @@ namespace ChilliSource
         /// @return Whether or not texture data should be restored on context loss.
         ///
         bool IsRestoreTextureDataEnabled() const noexcept { return m_restoreTextureDataEnabled; }
+        
+    private:
+        
+        /// Sets whether or not the texture data should be restored after a context loss. This involves
+        /// maintaining a copy of the texture data in memory which is costly so this should be disabled
+        /// for any textures that can easily be recreated, i.e any texture that is rendered into every
+        /// frame.
+        ///
+        /// This has no effect on textures that are loaded from file as they are always restored from
+        /// disk.
+        ///
+        /// This will only work for RGBA8888, RGB888, RGBA4444 and RGB565 textures.
+        ///
+        /// @param restoreTextureDataEnabled
+        ///     Whether or not texture data should be restored on context loss.
+        ///
+        void SetTextureDataRestoreEnabled(bool restoreTextureDataEnabled) noexcept;
         
     private:
         Integer2 m_dimensions;

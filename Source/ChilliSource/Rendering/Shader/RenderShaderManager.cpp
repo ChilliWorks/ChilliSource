@@ -25,6 +25,7 @@
 #include <ChilliSource/Rendering/Shader/RenderShaderManager.h>
 
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 
 namespace ChilliSource
 {
@@ -81,24 +82,27 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderShaderManager::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void RenderShaderManager::OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
-        auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
-        auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
-        
-        std::unique_lock<std::mutex> lock(m_mutex);
-        
-        for (auto& loadCommand : m_pendingLoadCommands)
+        if(targetType == TargetType::k_main)
         {
-            preRenderCommandList->AddLoadShaderCommand(loadCommand.m_renderShader, loadCommand.m_vertexShader, loadCommand.m_fragmentShader);
+            auto preRenderCommandList = renderSnapshot.GetPreRenderCommandList();
+            auto postRenderCommandList = renderSnapshot.GetPostRenderCommandList();
+            
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+            for (auto& loadCommand : m_pendingLoadCommands)
+            {
+                preRenderCommandList->AddLoadShaderCommand(loadCommand.m_renderShader, loadCommand.m_vertexShader, loadCommand.m_fragmentShader);
+            }
+            m_pendingLoadCommands.clear();
+            
+            for (auto& unloadCommand : m_pendingUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadShaderCommand(std::move(unloadCommand));
+            }
+            m_pendingUnloadCommands.clear();
         }
-        m_pendingLoadCommands.clear();
-        
-        for (auto& unloadCommand : m_pendingUnloadCommands)
-        {
-            postRenderCommandList->AddUnloadShaderCommand(std::move(unloadCommand));
-        }
-        m_pendingUnloadCommands.clear();
     }
     
     //------------------------------------------------------------------------------

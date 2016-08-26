@@ -38,6 +38,7 @@
 #include <ChilliSource/Rendering/Base/CanvasDrawMode.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/StencilOp.h>
+#include <ChilliSource/Rendering/Base/TargetType.h>
 #include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
@@ -622,6 +623,8 @@ namespace ChilliSource
         ///
         /// @param renderSnapshot
         ///     The render snapshot.
+        /// @param frameAllocator
+        ///     Allocate memory for this render frame from here
         /// @param localPosition
         ///     The local position of the sprite. This is often used to represent the sprite offset
         ///     when cropping when texture packing.
@@ -640,10 +643,10 @@ namespace ChilliSource
         /// @param priority
         ///     the order priority of the render object.
         ///
-        void AddSpriteRenderObject(RenderSnapshot* renderSnapshot, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour,
+        void AddSpriteRenderObject(RenderSnapshot* renderSnapshot, IAllocator* frameAllocator, const Vector3& localPosition, const Vector2& localSize, const UVs& uvs, const Colour& colour,
                                    AlignmentAnchor alignmentAnchor, const Matrix4& worldMatrix, const MaterialCSPtr& material, u32 priority) noexcept
         {
-            auto renderDynamicMesh = SpriteMeshBuilder::Build(renderSnapshot->GetFrameAllocator(), localPosition, localSize, uvs, colour, alignmentAnchor);
+            auto renderDynamicMesh = SpriteMeshBuilder::Build(frameAllocator, localPosition, localSize, uvs, colour, alignmentAnchor);
             auto boundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldMatrix.GetTranslation(), Vector3(localSize, 0.0f));
             
             renderSnapshot->AddRenderObject(RenderObject(material->GetRenderMaterialGroup(), renderDynamicMesh.get(), worldMatrix, boundingSphere, false, RenderLayer::k_ui, priority));
@@ -763,6 +766,7 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void CanvasRenderer::DrawBox(CanvasDrawMode drawMode, const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor)
     {
+<<<<<<< HEAD
         MaterialCSPtr material;
         
         switch (drawMode)
@@ -779,6 +783,10 @@ namespace ChilliSource
         }
 
         AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(offset, 0.0f), size, uvs, colour, anchor, Convert2DTransformTo3D(transform), material, m_nextPriority++);
+=======
+        auto material = m_materialPool->GetMaterial(in_texture);
+        AddSpriteRenderObject(m_currentRenderSnapshot, m_currentFrameAllocator, Vector3(in_offset, 0.0f), in_size, in_UVs, in_colour, in_anchor, Convert2DTransformTo3D(in_transform), material, m_nextPriority++);
+>>>>>>> feature-renderToTexture
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
@@ -857,13 +865,18 @@ namespace ChilliSource
         for (const auto& character : characters)
         {
             matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
+<<<<<<< HEAD
             AddSpriteRenderObject(m_currentRenderSnapshot, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
+=======
+            AddSpriteRenderObject(m_currentRenderSnapshot, m_currentFrameAllocator, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
+>>>>>>> feature-renderToTexture
         }
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
-    void CanvasRenderer::OnRenderSnapshot(RenderSnapshot& in_renderSnapshot) noexcept
+    void CanvasRenderer::OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
+<<<<<<< HEAD
         auto activeState = CS::Application::Get()->GetStateManager()->GetActiveState();
         CS_ASSERT(activeState, "must have active state.");
         
@@ -880,6 +893,27 @@ namespace ChilliSource
         m_screenMaterialPool->Clear();
         m_screenMaskMaterialPool->Clear();
         m_maskMaterialPool->Clear();
+=======
+        if(targetType == TargetType::k_main)
+        {
+            auto activeState = CS::Application::Get()->GetStateManager()->GetActiveState();
+            CS_ASSERT(activeState, "must have active state.");
+            
+            auto activeUICanvas = activeState->GetUICanvas();
+            CS_ASSERT(activeUICanvas != nullptr, "Cannot render null UI canvas");
+            
+            m_currentRenderSnapshot = &renderSnapshot;
+            m_currentFrameAllocator = frameAllocator;
+            m_nextPriority = 0;
+            
+            activeUICanvas->Draw(this);
+            
+            m_currentFrameAllocator = nullptr;
+            m_currentRenderSnapshot = nullptr;
+            
+            m_materialPool->Clear();
+        }
+>>>>>>> feature-renderToTexture
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------

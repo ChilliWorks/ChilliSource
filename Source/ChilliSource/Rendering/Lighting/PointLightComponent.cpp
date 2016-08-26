@@ -105,7 +105,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void PointLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot) noexcept
+    void PointLightComponent::OnRenderSnapshot(RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
         renderSnapshot.AddPointRenderLight(PointRenderLight(GetFinalColour(), m_lightPosition, m_attenuation, m_rangeOfInfluence));
     }
