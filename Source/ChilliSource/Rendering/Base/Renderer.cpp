@@ -101,6 +101,8 @@ namespace ChilliSource
             
             for(auto i=0; i<m_currentOffscreenSnapshots.size(); ++i)
             {
+                CS_ASSERT(m_currentOffscreenSnapshots[i].GetPreRenderCommandList()->GetOrderedList().size() == 0 && m_currentOffscreenSnapshots[i].GetPostRenderCommandList()->GetOrderedList().size() == 0, "Offscreen render snapshots cannot have pre or post render commands");
+                
                 auto renderFrameData = m_currentOffscreenSnapshots[i].ClaimRenderFrameData();
                 renderFramesData.push_back(std::move(renderFrameData));
                 
