@@ -766,7 +766,6 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     void CanvasRenderer::DrawBox(CanvasDrawMode drawMode, const Matrix3& transform, const Vector2& size, const Vector2& offset, const TextureCSPtr& texture, const UVs& uvs, const Colour& colour, AlignmentAnchor anchor)
     {
-<<<<<<< HEAD
         MaterialCSPtr material;
         
         switch (drawMode)
@@ -782,11 +781,7 @@ namespace ChilliSource
                 break;
         }
 
-        AddSpriteRenderObject(m_currentRenderSnapshot, Vector3(offset, 0.0f), size, uvs, colour, anchor, Convert2DTransformTo3D(transform), material, m_nextPriority++);
-=======
-        auto material = m_materialPool->GetMaterial(in_texture);
-        AddSpriteRenderObject(m_currentRenderSnapshot, m_currentFrameAllocator, Vector3(in_offset, 0.0f), in_size, in_UVs, in_colour, in_anchor, Convert2DTransformTo3D(in_transform), material, m_nextPriority++);
->>>>>>> feature-renderToTexture
+        AddSpriteRenderObject(m_currentRenderSnapshot, m_currentFrameAllocator, Vector3(offset, 0.0f), size, uvs, colour, anchor, Convert2DTransformTo3D(transform), material, m_nextPriority++);
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
@@ -865,35 +860,13 @@ namespace ChilliSource
         for (const auto& character : characters)
         {
             matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
-<<<<<<< HEAD
-            AddSpriteRenderObject(m_currentRenderSnapshot, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
-=======
-            AddSpriteRenderObject(m_currentRenderSnapshot, m_currentFrameAllocator, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
->>>>>>> feature-renderToTexture
+            AddSpriteRenderObject(m_currentRenderSnapshot, m_currentFrameAllocator, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
         }
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
     void CanvasRenderer::OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept
     {
-<<<<<<< HEAD
-        auto activeState = CS::Application::Get()->GetStateManager()->GetActiveState();
-        CS_ASSERT(activeState, "must have active state.");
-        
-        auto activeUICanvas = activeState->GetUICanvas();
-        CS_ASSERT(activeUICanvas != nullptr, "Cannot render null UI canvas");
-        
-        m_currentRenderSnapshot = &in_renderSnapshot;
-        m_nextPriority = 0;
-        
-        activeUICanvas->Draw(this);
-        
-        m_currentRenderSnapshot = nullptr;
-        
-        m_screenMaterialPool->Clear();
-        m_screenMaskMaterialPool->Clear();
-        m_maskMaterialPool->Clear();
-=======
         if(targetType == TargetType::k_main)
         {
             auto activeState = CS::Application::Get()->GetStateManager()->GetActiveState();
@@ -902,18 +875,18 @@ namespace ChilliSource
             auto activeUICanvas = activeState->GetUICanvas();
             CS_ASSERT(activeUICanvas != nullptr, "Cannot render null UI canvas");
             
-            m_currentRenderSnapshot = &renderSnapshot;
             m_currentFrameAllocator = frameAllocator;
+            m_currentRenderSnapshot = &renderSnapshot;
             m_nextPriority = 0;
             
             activeUICanvas->Draw(this);
             
-            m_currentFrameAllocator = nullptr;
             m_currentRenderSnapshot = nullptr;
             
-            m_materialPool->Clear();
+            m_screenMaterialPool->Clear();
+            m_screenMaskMaterialPool->Clear();
+            m_maskMaterialPool->Clear();
         }
->>>>>>> feature-renderToTexture
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------

@@ -416,6 +416,7 @@
 		27408C281D36DCB600A0B003 /* ScreenInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenInfo.h; sourceTree = "<group>"; };
 		810C0C821D11B01100C32406 /* GLMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLMesh.cpp; sourceTree = "<group>"; };
 		810C0C831D11B01100C32406 /* GLMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLMesh.h; sourceTree = "<group>"; };
+		813291FE1D704EA300CA7612 /* TargetType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetType.h; sourceTree = "<group>"; };
 		813BA9D61D379F6D00A3B091 /* RenderInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderInfo.cpp; sourceTree = "<group>"; };
 		813BA9D71D379F6D00A3B091 /* RenderInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderInfo.h; sourceTree = "<group>"; };
 		813BA9D91D37BE0600A3B091 /* RenderInfoFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderInfoFactory.cpp; sourceTree = "<group>"; };
@@ -2554,6 +2555,7 @@
 				81845FAD1D3503E8004B0C46 /* SurfaceFormat.h */,
 				81845FAE1D3503E8004B0C46 /* TargetRenderPassGroup.cpp */,
 				81845FAF1D3503E8004B0C46 /* TargetRenderPassGroup.h */,
+				813291FE1D704EA300CA7612 /* TargetType.h */,
 				81EB410E1D461267005A7CE9 /* TestFunc.h */,
 				81845FB01D3503E8004B0C46 /* VerticalTextJustification.cpp */,
 				81845FB11D3503E8004B0C46 /* VerticalTextJustification.h */,
