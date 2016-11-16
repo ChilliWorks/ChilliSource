@@ -37,10 +37,15 @@
 //------------------------------------------------------------
 /// Logging macros
 //------------------------------------------------------------
-#define CS_LOG_VERBOSE(in_message)      (ChilliSource::Logging::Get()->LogVerbose(in_message))
-#define CS_LOG_WARNING(in_message)      (ChilliSource::Logging::Get()->LogWarning(in_message))
-#define CS_LOG_ERROR(in_message)        (ChilliSource::Logging::Get()->LogError(in_message))
-#define CS_LOG_FATAL(in_message)        (ChilliSource::Logging::Get()->LogFatal(in_message))
+#define CS_LOG_VERBOSE(message)      (ChilliSource::Logging::Get()->LogVerbose(message))
+#define CS_LOG_WARNING(message)      (ChilliSource::Logging::Get()->LogWarning(message))
+#define CS_LOG_ERROR(message)        (ChilliSource::Logging::Get()->LogError(message))
+#define CS_LOG_FATAL(message)        (ChilliSource::Logging::Get()->LogFatal(message))
+
+#define CS_LOG_VERBOSE_FMT(message, ...)  (ChilliSource::Logging::Get()->LogVerboseFormatted(message, __VA_ARGS__))
+#define CS_LOG_WARNING_FMT(message, ...)  (ChilliSource::Logging::Get()->LogWarningFormatted(message, __VA_ARGS__))
+#define CS_LOG_ERROR_FMT(message, ...)  (ChilliSource::Logging::Get()->LogErrorFormatted(message, __VA_ARGS__))
+#define CS_LOG_FATAL_FMT(message, ...)  (ChilliSource::Logging::Get()->LogFatalFormatted(message, __VA_ARGS__))
 //------------------------------------------------------------
 /// Assertion macros
 //------------------------------------------------------------
