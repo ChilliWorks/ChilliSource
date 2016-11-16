@@ -132,6 +132,17 @@ namespace ChilliSource
         /// @return the dot product of these two vectors.
         //-----------------------------------------------------
         static TType DotProduct(const GenericVector4<TType>& in_a, const GenericVector4<TType>& in_b);
+        
+        ///
+        /// @param a
+        ///     First position vector
+        /// @param b
+        ///     Second position vector
+        ///
+        /// @return Distance between the 2 given positions (magnitude of the vector between them)
+        ///
+        static TType Distance(const GenericVector4<TType>& a, const GenericVector4<TType>& b);
+        
         //-----------------------------------------------------
         /// Constructor
         ///
@@ -521,6 +532,11 @@ namespace ChilliSource
     template <typename TType> TType GenericVector4<TType>::DotProduct(const GenericVector4<TType>& in_a, const GenericVector4<TType>& in_b)
     {
         return (in_a.x * in_b.x + in_a.y * in_b.y + in_a.z * in_b.z + in_a.w * in_b.w);
+    }
+    //-----------------------------------------------------
+    template <typename TType> TType GenericVector4<TType>::Distance(const GenericVector4<TType>& a, const GenericVector4<TType>& b)
+    {
+        return (b - a).Length();
     }
     //-----------------------------------------------------
     //-----------------------------------------------------

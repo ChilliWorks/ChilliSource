@@ -183,6 +183,17 @@ namespace ChilliSource
         /// @param The transform matrix.
         //-----------------------------------------------------
         static GenericVector2<TType> Transform2x3(const GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_transform);
+        
+        ///
+        /// @param a
+        ///     First position vector
+        /// @param b
+        ///     Second position vector
+        ///
+        /// @return Distance between the 2 given positions (magnitude of the vector between them)
+        ///
+        static TType Distance(const GenericVector2<TType>& a, const GenericVector2<TType>& b);
+        
         //-----------------------------------------------------
         /// Constructor
         ///
@@ -563,6 +574,11 @@ namespace ChilliSource
         c.x = in_a.x * in_transform.m[0] + in_a.y * in_transform.m[3] + in_transform.m[6];
         c.y = in_a.x * in_transform.m[1] + in_a.y * in_transform.m[4] + in_transform.m[7];
         return c;
+    }
+    //-----------------------------------------------------
+    template <typename TType> TType GenericVector2<TType>::Distance(const GenericVector2<TType>& a, const GenericVector2<TType>& b)
+    {
+        return (b - a).Length();
     }
     //-----------------------------------------------------
     //-----------------------------------------------------
