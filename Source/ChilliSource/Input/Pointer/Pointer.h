@@ -78,6 +78,12 @@ namespace ChilliSource
         /// @return the default press type.
         //----------------------------------------------------
         static InputType GetDefaultInputType();
+        
+        ///
+        /// Default constructor required for TryGetPointer
+        ///
+        Pointer() = default;
+        
         //----------------------------------------------------
         /// Constructor
         ///
