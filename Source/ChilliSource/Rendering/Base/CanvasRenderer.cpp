@@ -693,33 +693,33 @@ namespace ChilliSource
         // Here is a widget hierarchy where the number represents the draw order
         //
         //      0
-        //      |
+        //
         //      1
-        //     / \
+        //
         //    2   4
-        //   /     \
+        //
         //  3       5
         //
         // Here is the same widget hierarchy indicating which widgets clip (C = clips, D = doesn't)
         //
         //      D
-        //      |
+        //
         //      C
-        //     / \
+        //
         //    C   D
-        //   /     \
+        //
         //  D       D
         //
         // By incrementing and decrementing the clip mask prior to and post child rendering the child will only render on pixels of the screen where there parent rendered.
         // Here is the same widget hierarchy showing the clip mask test value/write value at each stage. Essentially the child tests against the value written by the parent.
         //
-        //     0/-
-        //      |
-        //     0/1
-        //     / \
-        //   1/2 1/-
-        //   /     \
-        // 2/-     1/-
+        //     0|-
+        //
+        //     0|1
+        //
+        //   1|2 1|-
+        //
+        // 2|-     1|-
         //
         
         //Shader for creating a mask
