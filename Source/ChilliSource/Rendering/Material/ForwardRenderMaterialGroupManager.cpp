@@ -441,13 +441,13 @@ namespace ChilliSource
             
             if (m_shadowsSupported)
             {
-                if (m_shadowsSupported && vertexFormat == VertexFormat::k_staticMesh)
+                if (vertexFormat == VertexFormat::k_staticMesh)
                 {
                     auto shadowMapMaterial = CreateShadowMap(m_staticShadowMap);
                     renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = shadowMapMaterial.get();
                     renderMaterials.push_back(std::move(shadowMapMaterial));
                 }
-                else if(m_shadowsSupported && vertexFormat == VertexFormat::k_animatedMesh)
+                else if(vertexFormat == VertexFormat::k_animatedMesh)
                 {
                     auto shadowMapMaterial = CreateShadowMap(m_animatedShadowMap);
                     renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = shadowMapMaterial.get();
