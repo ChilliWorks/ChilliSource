@@ -301,12 +301,17 @@ namespace ChilliSource
     {
         m_customShaderVertexFormat = vertexFormat;
         m_customShaderFallbackType = fallbackType;
+        m_customForwardShaders.clear();
+        
+        m_isCacheValid = false;
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
     void Material::AddCustomForwardShader(const ShaderCSPtr& shader, ForwardRenderPasses pass) noexcept
     {
         m_customForwardShaders.push_back(std::make_pair(shader, pass));
+        
+        m_isCacheValid = false;
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
