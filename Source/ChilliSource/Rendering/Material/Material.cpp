@@ -68,13 +68,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    Material::ShadingType Material::GetShadingType() const noexcept
+    MaterialShadingType Material::GetShadingType() const noexcept
     {
         return m_shadingType;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetShadingType(ShadingType in_shadingType) noexcept
+    void Material::SetShadingType(MaterialShadingType in_shadingType) noexcept
     {
         m_shadingType = in_shadingType;
     }
@@ -297,10 +297,16 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetCustomShader(const VertexFormat& vertexFormat, const ShaderCSPtr& shader) noexcept
+    void Material::PrepCustomShaders(const VertexFormat& vertexFormat, MaterialShadingType fallbackType) noexcept
     {
-        m_customShader = shader;
         m_customShaderVertexFormat = vertexFormat;
+        m_customShaderFallbackType = fallbackType;
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    void Material::AddCustomForwardShader(const ShaderCSPtr& shader, ForwardRenderPasses pass) noexcept
+    {
+        m_customForwardShaders.push_back(std::make_pair(shader, pass));
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
@@ -377,13 +383,13 @@ namespace ChilliSource
             
             switch (m_shadingType)
             {
-                case ShadingType::k_unlit:
+                case MaterialShadingType::k_unlit:
                     CreateUnlitRenderMaterialGroup();
                     break;
-                case ShadingType::k_blinn:
+                case MaterialShadingType::k_blinn:
                     CreateBlinnRenderMaterialGroup();
                     break;
-                case ShadingType::k_custom:
+                case MaterialShadingType::k_custom:
                     CreateCustomRenderMaterialGroup();
                     break;
                 default:
@@ -400,7 +406,7 @@ namespace ChilliSource
     {
         CS_ASSERT(!m_renderMaterialGroup, "Render material group must be null.");
         CS_ASSERT(m_textures.size() == 1, "Unlit materials must have one texture.");
-        CS_ASSERT(!m_customShader, "Unlit materials cannot have a custom shader.");
+        CS_ASSERT(m_customForwardShaders.size() == 0, "Unlit materials cannot have custom shaders.");
         CS_ASSERT(m_floatVars.size() == 0, "Unlit materials cannot have custom shader variables.");
         CS_ASSERT(m_vec2Vars.size() == 0, "Unlit materials cannot have custom shader variables.");
         CS_ASSERT(m_vec3Vars.size() == 0, "Unlit materials cannot have custom shader variables.");
@@ -428,7 +434,7 @@ namespace ChilliSource
         CS_ASSERT(m_isDepthTestEnabled, "Blinn materials must have depth test enabled.");
         CS_ASSERT(m_isFaceCullingEnabled, "Blinn materials must have face culling enabled.");
         CS_ASSERT(m_cullFace == CullFace::k_back, "Blinn materials must use back-face culling.");
-        CS_ASSERT(!m_customShader, "Blinn materials cannot have a custom shader.");
+        CS_ASSERT(m_customForwardShaders.size() == 0, "Blinn materials cannot have custom shaders.");
         CS_ASSERT(m_floatVars.size() == 0, "Blinn materials cannot have custom shader variables.");
         CS_ASSERT(m_vec2Vars.size() == 0, "Blinn materials cannot have custom shader variables.");
         CS_ASSERT(m_vec3Vars.size() == 0, "Blinn materials cannot have custom shader variables.");
@@ -444,20 +450,27 @@ namespace ChilliSource
     void Material::CreateCustomRenderMaterialGroup() const noexcept
     {
         CS_ASSERT(!m_renderMaterialGroup, "Render material group must be null.");
-        CS_ASSERT(m_customShader, "Custom material must have shader.");
+        CS_ASSERT(m_customForwardShaders.size() > 0, "Custom material must have at least one custom shader.");
         
         
         std::vector<const RenderTexture*> renderTextures;
+        renderTextures.reserve(m_textures.size());
         for (const auto& texture : m_textures)
         {
             CS_ASSERT(texture, "Cannot have a null texture in material");
             renderTextures.push_back(texture->GetRenderTexture());
         }
         
-        auto renderShader = m_customShader->GetRenderShader();
+        std::vector<std::pair<const RenderShader*, ForwardRenderPasses>> renderShaders;
+        renderShaders.reserve(m_customForwardShaders.size());
+        for(const auto& shader : m_customForwardShaders)
+        {
+            renderShaders.push_back(std::make_pair(shader.first->GetRenderShader(), shader.second));
+        }
+        
         RenderShaderVariablesUPtr renderShaderVariables(new RenderShaderVariables(m_floatVars, m_vec2Vars, m_vec3Vars, m_vec4Vars, m_mat4Vars, m_colourVars));
         
-        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateCustomRenderMaterialGroup(m_customShaderVertexFormat, renderShader, renderTextures,
+        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateCustomRenderMaterialGroup(m_customShaderFallbackType, m_customShaderVertexFormat, renderShaders, renderTextures,
                                                                                               m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled, m_isStencilTestEnabled,
                                                                                               m_depthTestFunc,
                                                                                               m_srcBlendMode, m_dstBlendMode,

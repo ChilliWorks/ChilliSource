@@ -729,7 +729,7 @@ namespace ChilliSource
         //Pool for creating materials for standard rendering to canvas
         m_screenMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasCol-", [](Material* material)
         {
-            material->SetShadingType(Material::ShadingType::k_unlit);
+            material->SetShadingType(MaterialShadingType::k_unlit);
             material->SetTransparencyEnabled(true);
             material->SetDepthTestEnabled(false);
             material->SetStencilTestEnabled(true);
@@ -740,8 +740,9 @@ namespace ChilliSource
         //Pool for creating materials for rendering to screen and creating a mask
         m_screenMaskMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasColStcl-", [shader](Material* material)
         {
-            material->SetShadingType(Material::ShadingType::k_custom);
-            material->SetCustomShader(VertexFormat::k_sprite, shader);
+            material->SetShadingType(MaterialShadingType::k_custom);
+            material->PrepCustomShaders(VertexFormat::k_sprite, MaterialShadingType::k_custom);
+            material->AddCustomForwardShader(shader, ForwardRenderPasses::k_base);
             material->SetTransparencyEnabled(true);
             material->SetDepthTestEnabled(false);
             material->SetStencilTestEnabled(true);
@@ -752,8 +753,9 @@ namespace ChilliSource
         //Pool for creating materials for only creating a mask
         m_maskMaterialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory, "_CanvasStcl-", [shader](Material* material)
         {
-            material->SetShadingType(Material::ShadingType::k_custom);
-            material->SetCustomShader(VertexFormat::k_sprite, shader);
+            material->SetShadingType(MaterialShadingType::k_custom);
+            material->PrepCustomShaders(VertexFormat::k_sprite, MaterialShadingType::k_custom);
+            material->AddCustomForwardShader(shader, ForwardRenderPasses::k_base);
             material->SetTransparencyEnabled(true);
             material->SetDepthTestEnabled(false);
             material->SetColourWriteEnabled(false);

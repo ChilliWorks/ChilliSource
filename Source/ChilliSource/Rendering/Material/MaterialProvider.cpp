@@ -69,7 +69,7 @@ namespace ChilliSource
             TextureFilterMode m_filterMode;
             TextureWrapMode m_wrapModeU;
             TextureWrapMode m_wrapModeV;
-            VertexFormat m_vertexFormat;
+            ForwardRenderPasses m_forwardPass;
         };
         //----------------------------------------------------------------------------
         /// @author S Downie
@@ -218,7 +218,7 @@ namespace ChilliSource
         ///
         /// @return The shading type.
         //----------------------------------------------------------------------------
-        Material::ShadingType GetShadingType(const std::string& in_materialType) noexcept
+        MaterialShadingType ConvertStringToShadingType(const std::string& in_materialType) noexcept
         {
             constexpr char k_unlit[] = "unlit";
             constexpr char k_blinn[] = "blinn";
@@ -229,19 +229,59 @@ namespace ChilliSource
             
             if (materialTypeLower == k_unlit)
             {
-                return Material::ShadingType::k_unlit;
+                return MaterialShadingType::k_unlit;
             }
             else if (materialTypeLower == k_blinn)
             {
-                return Material::ShadingType::k_blinn;
+                return MaterialShadingType::k_blinn;
             }
             else if (materialTypeLower == k_custom)
             {
-                return Material::ShadingType::k_custom;
+                return MaterialShadingType::k_custom;
             }
             
             CS_LOG_FATAL("Invalid material type: " + in_materialType);
-            return Material::ShadingType::k_unlit;
+            return MaterialShadingType::k_unlit;
+        }
+
+        ///
+        /// @param forwardPass
+        ///     The forward pass as a string.
+        ///
+        /// @return The forward pass as an type.
+        ///
+        ForwardRenderPasses ConvertStringToForwardPass(const std::string& forwardPass) noexcept
+        {
+            auto forwardPassLower = forwardPass;
+            StringUtils::ToLowerCase(forwardPassLower);
+            
+            if (forwardPassLower == "shadowmap")
+            {
+                return ForwardRenderPasses::k_shadowMap;
+            }
+            else if (forwardPassLower == "base")
+            {
+                return ForwardRenderPasses::k_base;
+            }
+            else if (forwardPassLower == "directionallight")
+            {
+                return ForwardRenderPasses::k_directionalLight;
+            }
+            else if (forwardPassLower == "directionallightshadows")
+            {
+                return ForwardRenderPasses::k_directionalLightShadows;
+            }
+            else if (forwardPassLower == "pointlight")
+            {
+                return ForwardRenderPasses::k_pointLight;
+            }
+            else if (forwardPassLower == "transparent")
+            {
+                return ForwardRenderPasses::k_transparent;
+            }
+            
+            CS_LOG_FATAL("Invalid forward pass: " + forwardPass);
+            return ForwardRenderPasses::k_base;
         }
         //----------------------------------------------------------------------------
         /// Parse the vertex format from the given string name. If the name doesn't
@@ -420,52 +460,59 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         void ParseShaders(XML::Node* in_rootElement, std::vector<MaterialProvider::ShaderDesc>& out_shaderFiles, Material* out_material)
         {
-            XML::Node* shaderEl = XMLUtils::GetFirstChildElement(in_rootElement, "Shader");
-            if(shaderEl)
+            XML::Node* shadersEl = XMLUtils::GetFirstChildElement(in_rootElement, "Shaders");
+            if(shadersEl)
             {
-                CS_ASSERT(out_material->GetShadingType() == Material::ShadingType::k_custom, "Only custom materials can have shaders.");
+                CS_ASSERT(out_material->GetShadingType() == MaterialShadingType::k_custom, "Only custom materials can have shaders.");
                 
-                MaterialProvider::ShaderDesc desc;
-                desc.m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(shaderEl, "location", "Package"));
-                desc.m_filePath = XMLUtils::GetAttributeValue<std::string>(shaderEl, "file-name", "");
-                desc.m_vertexFormat = ParseVertexFormat(XMLUtils::GetAttributeValue<std::string>(shaderEl, "vertex-format", "StaticMesh"));
-                out_shaderFiles.push_back(desc);
+                //Get the fallback shader type which will populate all the other passes
+                out_material->PrepCustomShaders(ParseVertexFormat(XMLUtils::GetAttributeValue<std::string>(shadersEl, "vertex-format", "StaticMesh")), ConvertStringToShadingType(XMLUtils::GetAttributeValue<std::string>(shadersEl, "fallback-type", "Custom")));
                 
-                // Get the shader variables
-                XML::Node* shaderVarEl = XMLUtils::GetFirstChildElement(shaderEl, "Var");
-                while(shaderVarEl)
+                XML::Node* shaderEl = XMLUtils::GetFirstChildElement(shadersEl, "Texture");
+                while(shaderEl)
                 {
-                    //Get the variable type
-                    std::string strType = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "type", "");
-                    //Get the variable name
-                    std::string strName = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "name", "");
-                    //Add the variable to the material
-                    if(strType == "Float")
+                    MaterialProvider::ShaderDesc desc;
+                    desc.m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(shaderEl, "location", "Package"));
+                    desc.m_filePath = XMLUtils::GetAttributeValue<std::string>(shaderEl, "file-name", "");
+                    desc.m_forwardPass = ConvertStringToForwardPass(XMLUtils::GetAttributeValue<std::string>(shaderEl, "forward-pass", "Base"));
+                    out_shaderFiles.push_back(desc);
+                    
+                    // Get the shader variables
+                    XML::Node* shaderVarEl = XMLUtils::GetFirstChildElement(shaderEl, "Var");
+                    while(shaderVarEl)
                     {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<f32>(shaderVarEl, "value", 0.0f));
+                        //Get the variable type
+                        std::string strType = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "type", "");
+                        //Get the variable name
+                        std::string strName = XMLUtils::GetAttributeValue<std::string>(shaderVarEl, "name", "");
+                        //Add the variable to the material
+                        if(strType == "Float")
+                        {
+                            out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<f32>(shaderVarEl, "value", 0.0f));
+                        }
+                        else if(strType == "Vec2")
+                        {
+                            out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector2>(shaderVarEl, "value", Vector2::k_zero));
+                        }
+                        else if(strType == "Vec3")
+                        {
+                            out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector3>(shaderVarEl, "value", Vector3::k_zero));
+                        }
+                        else if(strType == "Vec4")
+                        {
+                            out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector4>(shaderVarEl, "value", Vector4::k_zero));
+                        }
+                        else if(strType == "Colour")
+                        {
+                            out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Colour>(shaderVarEl, "value", Colour::k_white));
+                        }
+                        else if(strType == "Matrix")
+                        {
+                            out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Matrix4>(shaderVarEl, "value", Matrix4::k_identity));
+                        }
+                        //Move on to the next variable
+                        shaderVarEl =  XMLUtils::GetNextSiblingElement(shaderVarEl, "Var");
                     }
-                    else if(strType == "Vec2")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector2>(shaderVarEl, "value", Vector2::k_zero));
-                    }
-                    else if(strType == "Vec3")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector3>(shaderVarEl, "value", Vector3::k_zero));
-                    }
-                    else if(strType == "Vec4")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Vector4>(shaderVarEl, "value", Vector4::k_zero));
-                    }
-                    else if(strType == "Colour")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Colour>(shaderVarEl, "value", Colour::k_white));
-                    }
-                    else if(strType == "Matrix")
-                    {
-                        out_material->SetShaderVar(strName, XMLUtils::GetAttributeValue<Matrix4>(shaderVarEl, "value", Matrix4::k_identity));
-                    }
-                    //Move on to the next variable
-                    shaderVarEl =  XMLUtils::GetNextSiblingElement(shaderVarEl, "Var");
                 }
             }
         }
@@ -523,7 +570,7 @@ namespace ChilliSource
                     {
                         if(in_shader->GetLoadState() == Resource::LoadState::k_loaded)
                         {
-                            out_material->SetCustomShader(in_descs[in_loadIndex].m_vertexFormat, in_shader);
+                            out_material->AddCustomForwardShader(in_shader, in_descs[in_loadIndex].m_forwardPass);
                             
                             u32 newLoadIndex = in_loadIndex + 1;
                             
@@ -647,7 +694,8 @@ namespace ChilliSource
                     out_resource->SetLoadState(Resource::LoadState::k_failed);
                     return;
                 }
-                material->SetCustomShader(shaderFiles[i].m_vertexFormat, shader);
+                
+                material->AddCustomForwardShader(shader, shaderFiles[i].m_forwardPass);
             }
         }
         
@@ -705,8 +753,8 @@ namespace ChilliSource
             ChainedLoadDesc desc;
             desc.m_filePath = shaderDesc.m_filePath;
             desc.m_location = shaderDesc.m_location;
-            desc.m_vertexFormat = shaderDesc.m_vertexFormat;
             desc.m_type = ResourceType::k_shader;
+            desc.m_forwardPass = shaderDesc.m_forwardPass;
             resourceFiles.push_back(desc);
         }
         
@@ -742,7 +790,7 @@ namespace ChilliSource
         }
         
         std::string materialType = XMLUtils::GetAttributeValue<std::string>(rootElement, "type", "Static");
-        out_material->SetShadingType(GetShadingType(materialType));
+        out_material->SetShadingType(ConvertStringToShadingType(materialType));
 
         ParseRenderStates(rootElement, out_material);
         ParseAlphaBlendFunction(rootElement, out_material);

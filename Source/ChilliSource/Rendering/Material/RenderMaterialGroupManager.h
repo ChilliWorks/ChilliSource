@@ -125,10 +125,12 @@ namespace ChilliSource
         /// Creates a new custom RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
         /// Render Snapshot stage in the render pipeline.
         ///
+        /// @param fallbackType
+        ///     Any unspecified render pass shaders us the equivalent shader from the fallback type
         /// @param vertexFormat
         ///     The vertex format this material is for.
-        /// @param renderShader
-        ///     The render shader.
+        /// @param renderShaders
+        ///     The render shaders for each pass.
         /// @param renderTextures
         ///     The list of render texture.
         /// @param isTransparencyEnabled
@@ -176,7 +178,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        virtual const RenderMaterialGroup* CreateCustomRenderMaterialGroup(const VertexFormat& vertexFormat, const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
+        virtual const RenderMaterialGroup* CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, ForwardRenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures,
                                                                    bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                    TestFunc depthTestFunc,
                                                                    BlendMode sourceBlendMode, BlendMode destinationBlendMode,

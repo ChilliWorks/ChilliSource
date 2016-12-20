@@ -102,6 +102,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderMaterial);
     CS_FORWARDDECLARE_CLASS(RenderMaterialGroup);
     CS_FORWARDDECLARE_CLASS(RenderMaterialGroupManager);
+    enum class MaterialShadingType;
     //------------------------------------------------------------
     /// Model
     //------------------------------------------------------------

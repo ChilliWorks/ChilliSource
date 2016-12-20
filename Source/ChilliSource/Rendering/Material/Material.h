@@ -37,6 +37,8 @@
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
+#include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
+#include <ChilliSource/Rendering/Material/MaterialShadingType.h>
 
 #include <array>
 #include <unordered_map>
@@ -56,19 +58,6 @@ namespace ChilliSource
         CS_DECLARE_NAMEDTYPE(Material);
         
         //----------------------------------------------------------
-        /// Describes the different shading types that materials can
-        /// use. These affect the shaders that the render system
-        /// will use when rendering objects with this material.
-        ///
-        /// @author Ian Copland
-        //----------------------------------------------------------
-        enum class ShadingType
-        {
-            k_unlit,
-            k_blinn,
-            k_custom
-        };
-        //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Comparison Type
@@ -83,13 +72,13 @@ namespace ChilliSource
         ///
         /// @param in_shadingType - The shading type to use.
         //----------------------------------------------------------
-        void SetShadingType(ShadingType in_shadingType) noexcept;
+        void SetShadingType(MaterialShadingType in_shadingType) noexcept;
         //----------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return The shading type that this material uses.
         //----------------------------------------------------------
-        ShadingType GetShadingType() const noexcept;
+        MaterialShadingType GetShadingType() const noexcept;
         //----------------------------------------------------------
         /// Clear the textures from the slots
         ///
@@ -360,16 +349,26 @@ namespace ChilliSource
         //----------------------------------------------------------
         const Colour& GetSpecular() const;
         //-----------------------------------------------------------
-        /// Sets a custom shader for the given vertex format. The
-        /// shading type must be set to custom or this will assert.
+        /// Sets the custom shaders vertex format and fallback type.
+        /// Shaders are then added via AddCustomShaders
+        /// The shading type must be set to custom or this will assert.
         ///
         /// @author Ian Copland
         ///
-        /// @param vertexFormat - The vertex format that the custom
-        /// shader will be applied to.
-        /// @param shader - The custom shader.
+        /// @param vertexFormat - The vertex format that the custom shader will be applied to.
+        /// @param fallbackType - The shader types to fallback on for any passes not specified in shaders
         //-----------------------------------------------------------
-        void SetCustomShader(const VertexFormat& vertexFormat, const ShaderCSPtr& shader) noexcept;
+        void PrepCustomShaders(const VertexFormat& vertexFormat, MaterialShadingType fallbackType) noexcept;
+        //-----------------------------------------------------------
+        /// Add the custom shaders for the given passes.
+        /// The shading type must be set to custom or this will assert.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param shader - The custom shader.
+        /// @param pass - The forward render pass that the shader is bound to
+        //-----------------------------------------------------------
+        void AddCustomForwardShader(const ShaderCSPtr& shader, ForwardRenderPasses pass) noexcept;
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -506,7 +505,7 @@ namespace ChilliSource
         
         std::vector<TextureCSPtr> m_textures;
         
-        ShadingType m_shadingType = ShadingType::k_custom;
+        MaterialShadingType m_shadingType = MaterialShadingType::k_custom;
         
         Colour m_emissive;
         Colour m_ambient;
@@ -534,8 +533,9 @@ namespace ChilliSource
         bool m_isFaceCullingEnabled = true;
         bool m_isStencilTestEnabled = false;
         
-        ShaderCSPtr m_customShader;
+        std::vector<std::pair<ShaderCSPtr, ForwardRenderPasses>> m_customForwardShaders;
         VertexFormat m_customShaderVertexFormat = VertexFormat::k_sprite;
+        MaterialShadingType m_customShaderFallbackType;
         
         std::unordered_map<std::string, f32> m_floatVars;
         std::unordered_map<std::string, Vector2> m_vec2Vars;

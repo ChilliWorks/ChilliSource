@@ -31,6 +31,7 @@
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/StencilOp.h>
 #include <ChilliSource/Rendering/Base/TestFunc.h>
+#include <ChilliSource/Rendering/Material/MaterialShadingType.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
 namespace ChilliSource
@@ -258,70 +259,9 @@ namespace ChilliSource
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials {};
         std::vector<RenderMaterialUPtr> renderMaterials;
         
-        if (isTransparencyEnabled)
-        {
-            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
-                                        depthTestFunc,
-                                        sourceBlendMode, destinationBlendMode,
-                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                        cullFace, emissiveColour, ambientColour);
-            spriteRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = spriteRM.get();
-            renderMaterials.push_back(std::move(spriteRM));
-            
-            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
-                                        depthTestFunc,
-                                        sourceBlendMode, destinationBlendMode,
-                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                        cullFace, emissiveColour, ambientColour);
-            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = staticRM.get();
-            renderMaterials.push_back(std::move(staticRM));
-            
-            auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
-                                          depthTestFunc,
-                                          sourceBlendMode, destinationBlendMode,
-                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                        cullFace, emissiveColour, ambientColour);
-            animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_transparent)] = animatedRM.get();
-            renderMaterials.push_back(std::move(animatedRM));
-        }
-        else
-        {
-            //TODO: Create RenderMaterials from pools.
-            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
-                                        depthTestFunc,
-                                        sourceBlendMode, destinationBlendMode,
-                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                        cullFace, emissiveColour, ambientColour);
-            spriteRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = spriteRM.get();
-            renderMaterials.push_back(std::move(spriteRM));
-            
-            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
-                                        depthTestFunc,
-                                        sourceBlendMode, destinationBlendMode,
-                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                        cullFace, emissiveColour, ambientColour);
-            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticRM.get();
-            renderMaterials.push_back(std::move(staticRM));
-            
-            auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
-                                          depthTestFunc,
-                                          sourceBlendMode, destinationBlendMode,
-                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                          cullFace, emissiveColour, ambientColour);
-            animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = animatedRM.get();
-            renderMaterials.push_back(std::move(animatedRM));
-            
-            if (m_shadowsSupported)
-            {
-                auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
-                staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
-                renderMaterials.push_back(std::move(staticShadowMapRM));
-                
-                auto animatedShadowMapRM = CreateShadowMap(m_animatedShadowMap);
-                animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = animatedShadowMapRM.get();
-                renderMaterials.push_back(std::move(animatedShadowMapRM));
-            }
-        }
+        CreateUnlitRenderMaterialGroupCollection(VertexFormat::k_sprite, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, spriteRenderMaterials, renderMaterials);
+        CreateUnlitRenderMaterialGroupCollection(VertexFormat::k_staticMesh, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, staticRenderMaterials, renderMaterials);
+        CreateUnlitRenderMaterialGroupCollection(VertexFormat::k_animatedMesh, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, animatedRenderMaterials, renderMaterials);
         
         std::vector<RenderMaterialGroup::Collection> collections
         {
@@ -338,64 +278,117 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
-                                                                                                 const Colour& specularColour) noexcept
+    void ForwardRenderMaterialGroupManager::CreateUnlitRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderTexture,
+                                                                                     bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
+                                                                                     TestFunc depthTestFunc,
+                                                                                     BlendMode sourceBlendMode, BlendMode destinationBlendMode,
+                                                                                     StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
+                                                                                     CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour,
+                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept
     {
         //TODO: Create RenderMaterials from pools.
         
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials {};
+        if(format == VertexFormat::k_sprite)
+        {
+            if(isTransparencyEnabled == true)
+            {
+                auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                            depthTestFunc,
+                                            sourceBlendMode, destinationBlendMode,
+                                            stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                            cullFace, emissiveColour, ambientColour);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_transparent)] = spriteRM.get();
+                out_renderMaterials.push_back(std::move(spriteRM));
+            }
+            else
+            {
+                auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                            depthTestFunc,
+                                            sourceBlendMode, destinationBlendMode,
+                                            stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                            cullFace, emissiveColour, ambientColour);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = spriteRM.get();
+                out_renderMaterials.push_back(std::move(spriteRM));
+            }
+        }
+        else if(format == VertexFormat::k_staticMesh)
+        {
+            if (isTransparencyEnabled)
+            {
+                auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                            depthTestFunc,
+                                            sourceBlendMode, destinationBlendMode,
+                                            stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                            cullFace, emissiveColour, ambientColour);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_transparent)] = staticRM.get();
+                out_renderMaterials.push_back(std::move(staticRM));
+            }
+            else
+            {
+                auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                            depthTestFunc,
+                                            sourceBlendMode, destinationBlendMode,
+                                            stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                            cullFace, emissiveColour, ambientColour);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = staticRM.get();
+                out_renderMaterials.push_back(std::move(staticRM));
+                
+                if (m_shadowsSupported)
+                {
+                    auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
+                    out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
+                    out_renderMaterials.push_back(std::move(staticShadowMapRM));
+                }
+            }
+        }
+        else if(format == VertexFormat::k_animatedMesh)
+        {
+            if (isTransparencyEnabled)
+            {
+                auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                              depthTestFunc,
+                                              sourceBlendMode, destinationBlendMode,
+                                              stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                              cullFace, emissiveColour, ambientColour);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_transparent)] = animatedRM.get();
+                out_renderMaterials.push_back(std::move(animatedRM));
+            }
+            else
+            {
+                auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                              depthTestFunc,
+                                              sourceBlendMode, destinationBlendMode,
+                                              stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                              cullFace, emissiveColour, ambientColour);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = animatedRM.get();
+                out_renderMaterials.push_back(std::move(animatedRM));
+                
+                if (m_shadowsSupported)
+                {
+                    auto animatedShadowMapRM = CreateShadowMap(m_animatedShadowMap);
+                    out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = animatedShadowMapRM.get();
+                    out_renderMaterials.push_back(std::move(animatedShadowMapRM));
+                }
+            }
+        }
+    }
+    
+    //------------------------------------------------------------------------------
+    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour) noexcept
+    {
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials;
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials;
         std::vector<RenderMaterialUPtr> renderMaterials;
         
-        auto staticBaseRM = CreateBlinnBase(m_staticBlinnBase, renderTexture, emissiveColour, ambientColour);
-        staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = staticBaseRM.get();
-        renderMaterials.push_back(std::move(staticBaseRM));
-        
-        auto staticDirectionalRM = CreateBlinnLight(m_staticBlinnDirectional, renderTexture, diffuseColour, specularColour);
-        staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticDirectionalRM.get();
-        renderMaterials.push_back(std::move(staticDirectionalRM));
-        
-        auto staticPointRM = CreateBlinnLight(m_staticBlinnPoint, renderTexture, diffuseColour, specularColour);
-        staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_pointLight)] = staticPointRM.get();
-        renderMaterials.push_back(std::move(staticPointRM));
-        
-        auto animatedBaseRM = CreateBlinnBase(m_animatedBlinnBase, renderTexture, emissiveColour, ambientColour);
-        animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_base)] = animatedBaseRM.get();
-        renderMaterials.push_back(std::move(animatedBaseRM));
-        
-        auto animatedDirectionalRM = CreateBlinnLight(m_animatedBlinnDirectional, renderTexture, diffuseColour, specularColour);
-        animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = animatedDirectionalRM.get();
-        renderMaterials.push_back(std::move(animatedDirectionalRM));
-        
-        auto animatedPointRM = CreateBlinnLight(m_animatedBlinnPoint, renderTexture, diffuseColour, specularColour);
-        animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_pointLight)] = animatedPointRM.get();
-        renderMaterials.push_back(std::move(animatedPointRM));
-        
-        if (m_shadowsSupported)
-        {
-            auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
-            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
-            renderMaterials.push_back(std::move(staticShadowMapRM));
-            
-            auto staticDirectionalShadowsRM = CreateBlinnLight(m_staticBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
-            staticRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLightShadows)] = staticDirectionalShadowsRM.get();
-            renderMaterials.push_back(std::move(staticDirectionalShadowsRM));
-            
-            auto animatedShadowMapRM = CreateShadowMap(m_animatedShadowMap);
-            animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = animatedShadowMapRM.get();
-            renderMaterials.push_back(std::move(animatedShadowMapRM));
-            
-            auto animatedDirectionalShadowsRM = CreateBlinnLight(m_animatedBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
-            animatedRenderMaterials[static_cast<u32>(ForwardRenderPasses::k_directionalLightShadows)] = animatedDirectionalShadowsRM.get();
-            renderMaterials.push_back(std::move(animatedDirectionalShadowsRM));
-        }
+        CreateBlinnRenderMaterialGroupCollection(VertexFormat::k_staticMesh, renderTexture, emissiveColour, ambientColour, diffuseColour, specularColour, staticRenderMaterials, renderMaterials);
+        CreateBlinnRenderMaterialGroupCollection(VertexFormat::k_animatedMesh, renderTexture, emissiveColour, ambientColour, diffuseColour, specularColour, animatedRenderMaterials, renderMaterials);
         
         std::vector<RenderMaterialGroup::Collection> collections
         {
             RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticRenderMaterials),
             RenderMaterialGroup::Collection(VertexFormat::k_animatedMesh, animatedRenderMaterials)
         };
-
+        
         RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
         AddRenderMaterialGroup(std::move(renderMaterialGroup));
@@ -404,7 +397,67 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateCustomRenderMaterialGroup(const VertexFormat& vertexFormat, const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
+    void ForwardRenderMaterialGroupManager::CreateBlinnRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
+                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept
+    {
+        //TODO: Create RenderMaterials from pools.
+        
+        if(format == VertexFormat::k_staticMesh)
+        {
+            auto staticBaseRM = CreateBlinnBase(m_staticBlinnBase, renderTexture, emissiveColour, ambientColour);
+            out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = staticBaseRM.get();
+            out_renderMaterials.push_back(std::move(staticBaseRM));
+            
+            auto staticDirectionalRM = CreateBlinnLight(m_staticBlinnDirectional, renderTexture, diffuseColour, specularColour);
+            out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = staticDirectionalRM.get();
+            out_renderMaterials.push_back(std::move(staticDirectionalRM));
+            
+            auto staticPointRM = CreateBlinnLight(m_staticBlinnPoint, renderTexture, diffuseColour, specularColour);
+            out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_pointLight)] = staticPointRM.get();
+            out_renderMaterials.push_back(std::move(staticPointRM));
+            
+            if (m_shadowsSupported)
+            {
+                auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = staticShadowMapRM.get();
+                out_renderMaterials.push_back(std::move(staticShadowMapRM));
+                
+                auto staticDirectionalShadowsRM = CreateBlinnLight(m_staticBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_directionalLightShadows)] = staticDirectionalShadowsRM.get();
+                out_renderMaterials.push_back(std::move(staticDirectionalShadowsRM));
+            }
+        }
+        else if(format == VertexFormat::k_animatedMesh)
+        {
+            auto animatedBaseRM = CreateBlinnBase(m_animatedBlinnBase, renderTexture, emissiveColour, ambientColour);
+            out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = animatedBaseRM.get();
+            out_renderMaterials.push_back(std::move(animatedBaseRM));
+            
+            auto animatedDirectionalRM = CreateBlinnLight(m_animatedBlinnDirectional, renderTexture, diffuseColour, specularColour);
+            out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_directionalLight)] = animatedDirectionalRM.get();
+            out_renderMaterials.push_back(std::move(animatedDirectionalRM));
+            
+            auto animatedPointRM = CreateBlinnLight(m_animatedBlinnPoint, renderTexture, diffuseColour, specularColour);
+            out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_pointLight)] = animatedPointRM.get();
+            out_renderMaterials.push_back(std::move(animatedPointRM));
+            
+            if (m_shadowsSupported)
+            {
+                auto animatedShadowMapRM = CreateShadowMap(m_animatedShadowMap);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = animatedShadowMapRM.get();
+                out_renderMaterials.push_back(std::move(animatedShadowMapRM));
+                
+                auto animatedDirectionalShadowsRM = CreateBlinnLight(m_animatedBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
+                out_renderMaterialSlots[static_cast<u32>(ForwardRenderPasses::k_directionalLightShadows)] = animatedDirectionalShadowsRM.get();
+                out_renderMaterials.push_back(std::move(animatedDirectionalShadowsRM));
+            }
+        }
+        
+
+    }
+    
+    //------------------------------------------------------------------------------
+    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, ForwardRenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures,
                                                                                                   bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                                                   TestFunc depthTestFunc,
                                                                                                   BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -417,44 +470,31 @@ namespace ChilliSource
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> renderMaterialsSlots {};
         std::vector<RenderMaterialUPtr> renderMaterials;
         
-        if (isTransparencyEnabled)
+        switch(fallbackType)
         {
-            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures,
+            case MaterialShadingType::k_unlit:
+                CreateUnlitRenderMaterialGroupCollection(vertexFormat, renderTextures[0], isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, renderMaterialsSlots, renderMaterials);
+                break;
+            case MaterialShadingType::k_blinn:
+                 CreateBlinnRenderMaterialGroupCollection(vertexFormat, renderTextures[0], emissiveColour, ambientColour, diffuseColour, specularColour, renderMaterialsSlots, renderMaterials);
+                break;
+            case MaterialShadingType::k_custom:
+            default:
+                break;
+        }
+        
+        for(const auto& shaderPass : renderShaders)
+        {
+            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(shaderPass.first, renderTextures,
                                                                         isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                                         depthTestFunc,
                                                                         sourceBlendMode, destinationBlendMode,
                                                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
                                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
-            renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_transparent)] = renderMaterial.get();
+            renderMaterialsSlots[static_cast<u32>(shaderPass.second)] = renderMaterial.get();
             renderMaterials.push_back(std::move(renderMaterial));
         }
-        else
-        {
-            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures,
-                                                                        isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
-                                                                        depthTestFunc,
-                                                                        sourceBlendMode, destinationBlendMode,
-                                                                        stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                                                        cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
-            renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_base)] = renderMaterial.get();
-            renderMaterials.push_back(std::move(renderMaterial));
-            
-            if (m_shadowsSupported)
-            {
-                if (vertexFormat == VertexFormat::k_staticMesh)
-                {
-                    auto shadowMapMaterial = CreateShadowMap(m_staticShadowMap);
-                    renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = shadowMapMaterial.get();
-                    renderMaterials.push_back(std::move(shadowMapMaterial));
-                }
-                else if(vertexFormat == VertexFormat::k_animatedMesh)
-                {
-                    auto shadowMapMaterial = CreateShadowMap(m_animatedShadowMap);
-                    renderMaterialsSlots[static_cast<u32>(ForwardRenderPasses::k_shadowMap)] = shadowMapMaterial.get();
-                    renderMaterials.push_back(std::move(shadowMapMaterial));
-                }
-            }
-        }
+
 
         std::vector<RenderMaterialGroup::Collection> collections { RenderMaterialGroup::Collection(vertexFormat, renderMaterialsSlots) };
         

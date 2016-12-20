@@ -50,7 +50,7 @@ namespace ChilliSource
     MaterialCSPtr MaterialFactory::CreateUnlit(const std::string& uniqueId, const TextureCSPtr& texture, bool isTransparent, const Colour& colour) const noexcept
     {
         MaterialSPtr material(CreateCustom(uniqueId));
-        material->SetShadingType(Material::ShadingType::k_unlit);
+        material->SetShadingType(MaterialShadingType::k_unlit);
         material->AddTexture(texture);
         material->SetTransparencyEnabled(isTransparent);
         material->SetEmissive(colour);
@@ -63,7 +63,7 @@ namespace ChilliSource
                               const Colour& specularColour, f32 shininess) const noexcept
     {
         MaterialSPtr material(CreateCustom(uniqueId));
-        material->SetShadingType(Material::ShadingType::k_blinn);
+        material->SetShadingType(MaterialShadingType::k_blinn);
         material->AddTexture(texture);
         material->SetEmissive(emissiveColour);
         material->SetAmbient(ambientColour);
