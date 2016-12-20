@@ -376,8 +376,8 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour) noexcept
     {
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials;
-        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials;
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials {};
         std::vector<RenderMaterialUPtr> renderMaterials;
         
         CreateBlinnRenderMaterialGroupCollection(VertexFormat::k_staticMesh, renderTexture, emissiveColour, ambientColour, diffuseColour, specularColour, staticRenderMaterials, renderMaterials);
@@ -473,9 +473,11 @@ namespace ChilliSource
         switch(fallbackType)
         {
             case MaterialShadingType::k_unlit:
+                CS_ASSERT(renderTextures.size() > 0, "If custom shader material falling back on Unlit type a texture must be supplied");
                 CreateUnlitRenderMaterialGroupCollection(vertexFormat, renderTextures[0], isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, renderMaterialsSlots, renderMaterials);
                 break;
             case MaterialShadingType::k_blinn:
+                CS_ASSERT(renderTextures.size() > 0, "If custom shader material falling back on Blinn type a texture must be supplied");
                  CreateBlinnRenderMaterialGroupCollection(vertexFormat, renderTextures[0], emissiveColour, ambientColour, diffuseColour, specularColour, renderMaterialsSlots, renderMaterials);
                 break;
             case MaterialShadingType::k_custom:
