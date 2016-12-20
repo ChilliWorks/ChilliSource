@@ -413,8 +413,6 @@ namespace ChilliSource
                 out_renderMaterials.push_back(std::move(animatedDirectionalShadowsRM));
             }
         }
-        
-
     }
     
     //------------------------------------------------------------------------------
