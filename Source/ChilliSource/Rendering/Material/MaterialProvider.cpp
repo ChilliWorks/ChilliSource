@@ -513,6 +513,8 @@ namespace ChilliSource
                         //Move on to the next variable
                         shaderVarEl =  XMLUtils::GetNextSiblingElement(shaderVarEl, "Var");
                     }
+                    
+                    shaderEl =  XMLUtils::GetNextSiblingElement(shaderEl, "Shader");
                 }
             }
         }
