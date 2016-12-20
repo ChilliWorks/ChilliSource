@@ -62,6 +62,11 @@ namespace ChilliSource
         RenderShaderVariables(const std::unordered_map<std::string, f32>& floatVars, const std::unordered_map<std::string, Vector2>& vec2Vars, const std::unordered_map<std::string, Vector3>& vec3Vars,
                               const std::unordered_map<std::string, Vector4>& vec4Vars, const std::unordered_map<std::string, Matrix4>& mat4Vars, const std::unordered_map<std::string, Colour>& colourVars) noexcept;
         
+        ///
+        /// Copy constructor
+        ///
+        RenderShaderVariables(const RenderShaderVariables& toCopy);
+        
         /// @return The variables of type: float.
         ///
         const std::unordered_map<std::string, f32>& GetFloatVariables() const noexcept { return m_floatVars; }

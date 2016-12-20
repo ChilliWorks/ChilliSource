@@ -33,5 +33,14 @@ namespace ChilliSource
         : m_floatVars(floatVars), m_vec2Vars(vec2Vars), m_vec3Vars(vec3Vars), m_vec4Vars(vec4Vars), m_mat4Vars(mat4Vars), m_colourVars(colourVars)
     {
     }
-        
+    
+    //------------------------------------------------------------------------------
+    RenderShaderVariables::RenderShaderVariables(const RenderShaderVariables& toCopy)
+    {
+        m_floatVars = toCopy.m_floatVars;
+        m_vec2Vars = toCopy.m_vec2Vars;
+        m_vec3Vars = toCopy.m_vec3Vars;
+        m_vec4Vars = toCopy.m_vec4Vars;
+        m_colourVars = toCopy.m_colourVars;
+    }
 }

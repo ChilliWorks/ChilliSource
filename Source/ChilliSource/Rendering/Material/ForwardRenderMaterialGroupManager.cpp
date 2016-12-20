@@ -451,7 +451,7 @@ namespace ChilliSource
                                                                         depthTestFunc,
                                                                         sourceBlendMode, destinationBlendMode,
                                                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                                                        cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+                                                                        cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, RenderShaderVariablesUPtr(new RenderShaderVariables(*renderShaderVariables))));
             renderMaterialsSlots[static_cast<u32>(shaderPass.second)] = renderMaterial.get();
             renderMaterials.push_back(std::move(renderMaterial));
         }
