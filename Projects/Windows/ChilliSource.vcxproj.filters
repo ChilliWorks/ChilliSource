@@ -2843,5 +2843,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\TargetType.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialShadingType.h">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -639,6 +639,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\Material.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialShadingType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterial.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\RenderMaterialGroupManager.h" />
