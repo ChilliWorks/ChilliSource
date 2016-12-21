@@ -39,7 +39,9 @@
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
+#include <ChilliSource/Rendering/Texture/TextureType.h>
 
 namespace ChilliSource
 {
@@ -70,6 +72,7 @@ namespace ChilliSource
             TextureWrapMode m_wrapModeU;
             TextureWrapMode m_wrapModeV;
             RenderPasses m_pass;
+            TextureType m_textureType;
         };
         //----------------------------------------------------------------------------
         /// @author S Downie
@@ -282,6 +285,29 @@ namespace ChilliSource
             
             CS_LOG_FATAL("Invalid render pass: " + pass);
             return RenderPasses::k_base;
+        }
+        ///
+        /// @param type
+        ///     The texture type as a string.
+        ///
+        /// @return The texture type as an type.
+        ///
+        TextureType ConvertStringToTextureType(const std::string& type) noexcept
+        {
+            auto typeLower = type;
+            StringUtils::ToLowerCase(typeLower);
+            
+            if (typeLower == "texture2d")
+            {
+                return TextureType::k_texture2D;
+            }
+            else if (typeLower == "cubemap")
+            {
+                return TextureType::k_cubemap;
+            }
+            
+            CS_LOG_FATAL("Invalid texture type: " + type);
+            return TextureType::k_texture2D;
         }
         //----------------------------------------------------------------------------
         /// Parse the vertex format from the given string name. If the name doesn't
@@ -537,11 +563,12 @@ namespace ChilliSource
                 {
                     MaterialProvider::TextureDesc desc;
                     desc.m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(textureEl, "location", "Package"));
-                    desc.m_filePath = XMLUtils::GetAttributeValue<std::string>(textureEl, "image-name", "");
+                    desc.m_filePath = XMLUtils::GetAttributeValue<std::string>(textureEl, "file-name", "");
                     desc.m_shouldMipMap = XMLUtils::GetAttributeValue<bool>(textureEl, "mipmapped", false);
                     desc.m_filterMode = ConvertStringToFilterMode(XMLUtils::GetAttributeValue<std::string>(textureEl, "filter-mode", "Bilinear"));
                     desc.m_wrapModeU = ConvertStringToWrapMode(XMLUtils::GetAttributeValue<std::string>(textureEl, "wrap-mode-u", "Clamp"));
                     desc.m_wrapModeV = ConvertStringToWrapMode(XMLUtils::GetAttributeValue<std::string>(textureEl, "wrap-mode-v", "Clamp"));
+                    desc.m_type = ConvertStringToTextureType(XMLUtils::GetAttributeValue<std::string>(textureEl, "type", "Texture2D"));
                     out_textureFiles.push_back(desc);
                     
                     textureEl =  XMLUtils::GetNextSiblingElement(textureEl, "Texture");
@@ -604,39 +631,73 @@ namespace ChilliSource
                 }
                 case ResourceType::k_texture:
                 {
-                    auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV));
-                    resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [=](const TextureCSPtr& in_texture)
+                    switch(in_descs[in_loadIndex].m_textureType)
                     {
-                        if(in_texture->GetLoadState() == Resource::LoadState::k_loaded)
+                        case TextureType::k_texture2D:
                         {
-                            out_material->AddTexture(in_texture);
+                            auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV));
                             
-                            u32 newLoadIndex = in_loadIndex + 1;
-                            
-                            if(newLoadIndex < in_descs.size())
-                            {
-                                LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
-                            }
-                            else
-                            {
-                                out_material->SetLoadState(Resource::LoadState::k_loaded);
-                                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                                {
-                                    in_delegate(out_material);
-                                });
-                                return;
-                            }
+                            resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [=](const TextureCSPtr& in_texture)
+                             {
+                                 if(in_texture->GetLoadState() == Resource::LoadState::k_loaded)
+                                 {
+                                     out_material->AddTexture(in_texture);
+                                     
+                                     u32 newLoadIndex = in_loadIndex + 1;
+                                     
+                                     if(newLoadIndex < in_descs.size())
+                                     {
+                                         LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
+                                     }
+                                     else
+                                     {
+                                         out_material->SetLoadState(Resource::LoadState::k_loaded);
+                                         Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept { in_delegate(out_material); });
+                                         return;
+                                     }
+                                 }
+                                 else
+                                 {
+                                     out_material->SetLoadState(Resource::LoadState::k_failed);
+                                     Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept { in_delegate(out_material); });
+                                     return;
+                                 }
+                             });
+                            break;
                         }
-                        else
+                        case TextureType::k_cubemap:
                         {
-                            out_material->SetLoadState(Resource::LoadState::k_failed);
-                            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                            {
-                                in_delegate(out_material);
-                            });
-                            return;
+                            auto options(std::make_shared<CubemapResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV));
+                            
+                            resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [=](const CubemapCSPtr& cubemap)
+                             {
+                                 if(cubemap->GetLoadState() == Resource::LoadState::k_loaded)
+                                 {
+                                     out_material->AddCubemap(cubemap);
+                                     
+                                     u32 newLoadIndex = in_loadIndex + 1;
+                                     
+                                     if(newLoadIndex < in_descs.size())
+                                     {
+                                         LoadResourcesChained(newLoadIndex, in_descs, in_delegate, out_material);
+                                     }
+                                     else
+                                     {
+                                         out_material->SetLoadState(Resource::LoadState::k_loaded);
+                                         Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept { in_delegate(out_material); });
+                                         return;
+                                     }
+                                 }
+                                 else
+                                 {
+                                     out_material->SetLoadState(Resource::LoadState::k_failed);
+                                     Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept { in_delegate(out_material); });
+                                     return;
+                                 }
+                             });
+                            break;
                         }
-                    });
+                    }
                     break;
                 }
             }
@@ -705,14 +766,36 @@ namespace ChilliSource
         {
             if(textureFiles[i].m_filePath.empty() == false)
             {
-                auto options(std::make_shared<TextureResourceOptions>(textureFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV));
-                TextureCSPtr texture = resourcePool->LoadResource<Texture>(textureFiles[i].m_location, textureFiles[i].m_filePath, options);
-                if(texture == nullptr)
+                switch (textureFiles[i].m_type)
                 {
-                    out_resource->SetLoadState(Resource::LoadState::k_failed);
-                    return;
+                    case TextureType::k_texture2D:
+                    {
+                        auto options(std::make_shared<TextureResourceOptions>(textureFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV));
+                        
+                        TextureCSPtr texture = resourcePool->LoadResource<Texture>(textureFiles[i].m_location, textureFiles[i].m_filePath, options);
+                        if(texture == nullptr)
+                        {
+                            out_resource->SetLoadState(Resource::LoadState::k_failed);
+                            return;
+                        }
+                        material->AddTexture(texture);
+                        break;
+                    }
+                    case TextureType::k_cubemap:
+                    {
+                        auto options(std::make_shared<CubemapResourceOptions>(textureFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV));
+                        
+                        CubemapCSPtr cubemap = resourcePool->LoadResource<Cubemap>(textureFiles[i].m_location, textureFiles[i].m_filePath, options);
+                        if(cubemap == nullptr)
+                        {
+                            out_resource->SetLoadState(Resource::LoadState::k_failed);
+                            return;
+                        }
+                        material->AddCubemap(cubemap);
+                        break;
+                    }
                 }
-                material->AddTexture(texture);
+
             }
         }
         
@@ -769,6 +852,7 @@ namespace ChilliSource
             desc.m_filterMode = textureDesc.m_filterMode;
             desc.m_wrapModeU = textureDesc.m_wrapModeU;
             desc.m_wrapModeV = textureDesc.m_wrapModeV;
+            desc.m_textureType = textureDesc.m_type;
             desc.m_type = ResourceType::k_texture;
             resourceFiles.push_back(desc);
         }

@@ -47,8 +47,10 @@ namespace ChilliSource
         ///
         /// @param renderShader
         ///     The shader applied by this material.
-        /// @param renderTextures
+        /// @param renderTextures2D
         ///     The list of textures applied by this material.
+        /// @param renderTexturesCubemap
+        ///     The list of cubemaps applied by this material.
         /// @param isTransparencyEnabled
         ///     Whether or not transparency is enabled.
         /// @param isColourWriteEnabled
@@ -92,7 +94,7 @@ namespace ChilliSource
         /// @param renderShaderVariables
         ///     The container for all render shader variables. May be null if there are no shader variables.
         ///
-        RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
+        RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
                        bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                        TestFunc depthTestFunc,
                        BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -107,7 +109,11 @@ namespace ChilliSource
         
         /// @return The list of textures applied by this material.
         ///
-        const std::vector<const RenderTexture*>& GetRenderTextures() const noexcept { return m_renderTextures; }
+        const std::vector<const RenderTexture*>& GetRenderTextures2D() const noexcept { return m_renderTextures2D; }
+        
+        /// @return The list of cubemaps applied by this material.
+        ///
+        const std::vector<const RenderTexture*>& GetRenderTexturesCubemap() const noexcept { return m_renderTexturesCubemap; }
         
         /// @return Whether or not transparency is enabled.
         ///
@@ -208,7 +214,8 @@ namespace ChilliSource
         
     private:
         const RenderShader* m_renderShader;
-        std::vector<const RenderTexture*> m_renderTextures;
+        std::vector<const RenderTexture*> m_renderTextures2D;
+        std::vector<const RenderTexture*> m_renderTexturesCubemap;
         bool m_isTransparencyEnabled;
         bool m_isColourWriteEnabled;
         bool m_isDepthWriteEnabled;

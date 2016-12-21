@@ -50,6 +50,9 @@ namespace ChilliSource
     /// the rendering of objects and to alter their surface
     /// appearance via lighting, texture, shader, etc.
     ///
+    /// NOTE: Textures and cubemaps are different types with their own
+    /// data and methods
+    ///
     /// @author S Downie
     //----------------------------------------------------------
     class Material final : public Resource
@@ -84,7 +87,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------
-        void RemoveAllTextures();
+        void RemoveAllTextures() noexcept;
         //----------------------------------------------------------
         /// Add the texture to the end of the list. The index of the
         /// texture in the list corresponds to the texture handle in
@@ -96,11 +99,11 @@ namespace ChilliSource
         ///
         /// @author S Downie
         ///
-        /// @param Texture 
+        /// @param Texture
         //----------------------------------------------------------
-        void AddTexture(const TextureCSPtr& in_texture);
+        void AddTexture(const TextureCSPtr& in_texture) noexcept;
         //----------------------------------------------------------
-        /// Overwrite an exisiting added texture with the given
+        /// Overwrite an existing added texture with the given
         /// texture at the given index. If a texture does not
         /// already exist at that slot then it asserts
         ///
@@ -109,7 +112,7 @@ namespace ChilliSource
         /// @param Texture
         /// @param Index
         //----------------------------------------------------------
-        void SetTexture(const TextureCSPtr& in_texture, u32 in_texIndex = 0);
+        void SetTexture(const TextureCSPtr& in_texture, u32 in_texIndex = 0) noexcept;
         //----------------------------------------------------------
         /// Get Texture at the given index. Will assert
         /// if index is out of bounds.
@@ -120,73 +123,118 @@ namespace ChilliSource
         ///
         /// @return Texture or null
         //----------------------------------------------------------
-        const TextureCSPtr& GetTexture(u32 in_texIndex = 0) const;
+        const TextureCSPtr& GetTexture(u32 in_texIndex = 0) const noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Number of textures set on the material
         //----------------------------------------------------------
-        u32 GetNumTextures() const;
+        u32 GetNumTextures() const noexcept;;
+
+        ///
+        /// Remove all cubemaps from the material
+        ///
+        void RemoveAllCubemaps() noexcept;
+        
+        ///
+        /// Add the texture to the end of the list. The index of the
+        /// texture in the list corresponds to the cubemaps handle in the shader. e.g. u_cubemap[0-N]
+        ///
+        /// NOTE: Due to devices supporting different numbers of textures it is possible that cubemaps at the end will be ignored by the renderer.
+        /// NOTE: Although cubemaps and textures are different objects they share the same slot system on OpenGL for example you could
+        /// have 8 textures and 0 cubemaps or 5 textures and 3 cubemaps.
+        ///
+        /// @param cubemap
+        ///     Cubemap resource to add
+        ///
+        void AddCubemap(const CubemapCSPtr& cubemap) noexcept;
+        
+        ///
+        /// Overwrite an existing added cubemap with the given cubemap at the given index. If a cubemap does not
+        /// already exist at that slot then it asserts
+        ///
+        /// @param cubemap
+        ///     Cubemap resource to set
+        /// @param index
+        ///     Slot index to overwrite
+        ///
+        void SetCubemap(const CubemapCSPtr& cubemap, u32 index = 0) noexcept;
+        
+        ///
+        /// Get cubemap at the given index. Will assert if index is out of bounds.
+        ///
+        /// @param index
+        ///     Index to fetch from
+        ///
+        /// @return Cubemap at given index or null
+        ///
+        const CubemapCSPtr& GetCubemap(u32 index = 0) const noexcept;
+        
+        ///
+        /// @return Number of cubemaps set on the material
+        ///
+        u32 GetNumCubemaps() const noexcept;
+        
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Whether the object has transparency enabled 
         //----------------------------------------------------------
-        bool IsTransparencyEnabled() const;
+        bool IsTransparencyEnabled() const noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Whether transparency is enabled
         //----------------------------------------------------------
-        void SetTransparencyEnabled(bool in_enable);
+        void SetTransparencyEnabled(bool in_enable) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Whether the object has colour write enabled
         //----------------------------------------------------------
-        bool IsColourWriteEnabled() const;
+        bool IsColourWriteEnabled() const noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Whether colour write is enabled
         //----------------------------------------------------------
-        void SetColourWriteEnabled(bool in_enable);
+        void SetColourWriteEnabled(bool in_enable) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Whether the object has depth write enabled 
         //----------------------------------------------------------
-        bool IsDepthWriteEnabled() const;
+        bool IsDepthWriteEnabled() const noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Whether depth write is enabled
         //----------------------------------------------------------
-        void SetDepthWriteEnabled(bool in_enable);
+        void SetDepthWriteEnabled(bool in_enable) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Whether the object has depth test enabled 
         //----------------------------------------------------------
-        bool IsDepthTestEnabled() const;
+        bool IsDepthTestEnabled() const noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Whether depth test is enabled
         //----------------------------------------------------------
-        void SetDepthTestEnabled(bool in_enable);
+        void SetDepthTestEnabled(bool in_enable) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Whether the object has face culling enabled 
         //----------------------------------------------------------
-        bool IsFaceCullingEnabled() const;
+        bool IsFaceCullingEnabled() const noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @param Whether face culling is enabled
         //----------------------------------------------------------
-        void SetFaceCullingEnabled(bool in_enable);
+        void SetFaceCullingEnabled(bool in_enable) noexcept;
     
         /// @return Whether or not to perform stencil testing
         ///
@@ -214,19 +262,19 @@ namespace ChilliSource
         /// @param Source mode
         /// @param Destination mode
         //----------------------------------------------------------
-        void SetBlendModes(BlendMode in_source, BlendMode in_dest);
+        void SetBlendModes(BlendMode in_source, BlendMode in_dest) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Source mode of blending functions
         //----------------------------------------------------------
-        BlendMode GetSourceBlendMode() const;
+        BlendMode GetSourceBlendMode() const noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Dest BlendMode of blending functions
         //----------------------------------------------------------
-        BlendMode GetDestBlendMode() const;
+        BlendMode GetDestBlendMode() const noexcept;
         
         /// Tells the render system what action to take with the result of a stencil test
         ///
@@ -280,14 +328,14 @@ namespace ChilliSource
         /// @param The face of the polygon that should be culled
         /// if culling is enabled
         //----------------------------------------------------------
-        void SetCullFace(CullFace in_face);
+        void SetCullFace(CullFace in_face) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return The face of the polygon that should be culled
         /// if face culling is enabled
         //----------------------------------------------------------
-        CullFace GetCullFace() const;
+        CullFace GetCullFace() const noexcept;
         //----------------------------------------------------------
         /// The emissive colour is used to simulate the light emitted
         /// by the surface of an object (effectively its colour)
@@ -296,13 +344,13 @@ namespace ChilliSource
         ///
         /// @param Emissive colour used in ambient pass
         //----------------------------------------------------------
-        void SetEmissive(const Colour& in_emissive);
+        void SetEmissive(const Colour& in_emissive) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Emissive colour used in ambient pass
         //----------------------------------------------------------
-        const Colour& GetEmissive() const;
+        const Colour& GetEmissive() const noexcept;
         //----------------------------------------------------------
         /// The ambient colour is used to simulate the light absorbed
         /// by the object from light reflections in the scene.
@@ -311,13 +359,13 @@ namespace ChilliSource
         ///
         /// @param Ambient colour used in ambient pass
         //----------------------------------------------------------
-        void SetAmbient(const Colour& in_ambient);
+        void SetAmbient(const Colour& in_ambient) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Ambient colour used in ambient pass
         //----------------------------------------------------------
-        const Colour& GetAmbient() const;
+        const Colour& GetAmbient() const noexcept;
         //----------------------------------------------------------
         /// The diffuse colour is used to simulate the light absorbed
         /// by the object directly from the light source.
@@ -326,13 +374,13 @@ namespace ChilliSource
         ///
         /// @param Diffuse light colour used in subsequent light passes
         //----------------------------------------------------------
-        void SetDiffuse(const Colour& in_diffuse);
+        void SetDiffuse(const Colour& in_diffuse) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Diffuse light colour used in subsequent light passes
         //----------------------------------------------------------
-        const Colour& GetDiffuse() const;
+        const Colour& GetDiffuse() const noexcept;
         //----------------------------------------------------------
         /// The specular colour is used to simulate the light reflected
         /// back by the object creating a highlight.
@@ -341,13 +389,13 @@ namespace ChilliSource
         ///
         /// @param Specular light colour used in subsequent light passes
         //----------------------------------------------------------
-        void SetSpecular(const Colour& in_specular);
+        void SetSpecular(const Colour& in_specular) noexcept;
         //----------------------------------------------------------
         /// @author S Downie
         ///
         /// @return Specular light colour used in subsequent light passes
         //----------------------------------------------------------
-        const Colour& GetSpecular() const;
+        const Colour& GetSpecular() const noexcept;
         //-----------------------------------------------------------
         /// Sets the custom shaders vertex format and fallback type.
         /// Shaders are then added via AddCustomShaders
@@ -378,7 +426,7 @@ namespace ChilliSource
         /// @param Variable name
         /// @param Float value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, f32 in_value);
+        void SetShaderVar(const std::string& in_varName, f32 in_value) noexcept;
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -388,7 +436,7 @@ namespace ChilliSource
         /// @param Variable name
         /// @param Vec2 value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Vector2& in_value);
+        void SetShaderVar(const std::string& in_varName, const Vector2& in_value) noexcept;
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -398,7 +446,7 @@ namespace ChilliSource
         /// @param Variable name
         /// @param Vec3 value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Vector3& in_value);
+        void SetShaderVar(const std::string& in_varName, const Vector3& in_value) noexcept;
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -408,7 +456,7 @@ namespace ChilliSource
         /// @param Variable name
         /// @param Vec4 value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Vector4& in_value);
+        void SetShaderVar(const std::string& in_varName, const Vector4& in_value) noexcept;
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -418,7 +466,7 @@ namespace ChilliSource
         /// @param Variable name
         /// @param Mat4 value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Matrix4& in_value);
+        void SetShaderVar(const std::string& in_varName, const Matrix4& in_value) noexcept;
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -428,7 +476,7 @@ namespace ChilliSource
         /// @param Variable name
         /// @param Colour value
         //-----------------------------------------------------------
-        void SetShaderVar(const std::string& in_varName, const Colour& in_value);
+        void SetShaderVar(const std::string& in_varName, const Colour& in_value) noexcept;
         //-----------------------------------------------------------
         /// Generates the RenderMaterialGroup that describes this
         /// material. This generated RenderMaterialGroup is cached
@@ -504,6 +552,7 @@ namespace ChilliSource
         bool VerifyTexturesAreValid() const noexcept;
         
         std::vector<TextureCSPtr> m_textures;
+        std::vector<CubemapCSPtr> m_cubemaps;
         
         MaterialShadingType m_shadingType = MaterialShadingType::k_custom;
         

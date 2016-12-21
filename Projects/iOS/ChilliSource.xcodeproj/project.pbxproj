@@ -48,6 +48,14 @@
 		8158F7E41C89D2AD00B13109 /* WebView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5F81C89D2AD00B13109 /* WebView.mm */; };
 		8158F7E51C89D2AD00B13109 /* WebViewDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F5FA1C89D2AD00B13109 /* WebViewDelegate.mm */; };
 		8158F7F81C89D2AD00B13109 /* GLError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6321C89D2AD00B13109 /* GLError.cpp */; };
+		817255FD1E0A91FB00A65625 /* GLCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817255FB1E0A91FB00A65625 /* GLCubemap.cpp */; };
+		817256001E0A958500A65625 /* GLTextureUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817255FE1E0A958500A65625 /* GLTextureUtils.cpp */; };
+		817256071E0A9F2600A65625 /* LoadCubemapRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817256011E0A9F2600A65625 /* LoadCubemapRenderCommand.cpp */; };
+		817256081E0A9F2600A65625 /* RestoreCubemapRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817256031E0A9F2600A65625 /* RestoreCubemapRenderCommand.cpp */; };
+		817256091E0A9F2600A65625 /* UnloadCubemapRenderCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817256051E0A9F2600A65625 /* UnloadCubemapRenderCommand.cpp */; };
+		8172560D1E0ABE1500A65625 /* Cubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8172560B1E0ABE1500A65625 /* Cubemap.cpp */; };
+		817256101E0AC08100A65625 /* CubemapProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8172560E1E0AC08100A65625 /* CubemapProvider.cpp */; };
+		817256131E0AEF1F00A65625 /* CubemapResourceOptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817256111E0AEF1F00A65625 /* CubemapResourceOptions.cpp */; };
 		81729FA41D1BE681005B8CC9 /* GLMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA21D1BE681005B8CC9 /* GLMaterial.cpp */; };
 		81729FA81D1BE92B005B8CC9 /* GLCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA61D1BE92B005B8CC9 /* GLCamera.cpp */; };
 		81729FAB1D1BFF05005B8CC9 /* GLTextureUnitManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81729FA91D1BFF05005B8CC9 /* GLTextureUnitManager.cpp */; };
@@ -493,6 +501,23 @@
 		8158F6341C89D2AD00B13109 /* GLIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLIncludes.h; sourceTree = "<group>"; };
 		8158F63D1C89D2AD00B13109 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		817255FA1E084F3400A65625 /* MaterialShadingType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialShadingType.h; sourceTree = "<group>"; };
+		817255FB1E0A91FB00A65625 /* GLCubemap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemap.cpp; sourceTree = "<group>"; };
+		817255FC1E0A91FB00A65625 /* GLCubemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCubemap.h; sourceTree = "<group>"; };
+		817255FE1E0A958500A65625 /* GLTextureUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureUtils.cpp; sourceTree = "<group>"; };
+		817255FF1E0A958500A65625 /* GLTextureUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTextureUtils.h; sourceTree = "<group>"; };
+		817256011E0A9F2600A65625 /* LoadCubemapRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadCubemapRenderCommand.cpp; sourceTree = "<group>"; };
+		817256021E0A9F2600A65625 /* LoadCubemapRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadCubemapRenderCommand.h; sourceTree = "<group>"; };
+		817256031E0A9F2600A65625 /* RestoreCubemapRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RestoreCubemapRenderCommand.cpp; sourceTree = "<group>"; };
+		817256041E0A9F2600A65625 /* RestoreCubemapRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestoreCubemapRenderCommand.h; sourceTree = "<group>"; };
+		817256051E0A9F2600A65625 /* UnloadCubemapRenderCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnloadCubemapRenderCommand.cpp; sourceTree = "<group>"; };
+		817256061E0A9F2600A65625 /* UnloadCubemapRenderCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnloadCubemapRenderCommand.h; sourceTree = "<group>"; };
+		8172560A1E0ABBB000A65625 /* TextureType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureType.h; sourceTree = "<group>"; };
+		8172560B1E0ABE1500A65625 /* Cubemap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cubemap.cpp; sourceTree = "<group>"; };
+		8172560C1E0ABE1500A65625 /* Cubemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cubemap.h; sourceTree = "<group>"; };
+		8172560E1E0AC08100A65625 /* CubemapProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubemapProvider.cpp; sourceTree = "<group>"; };
+		8172560F1E0AC08100A65625 /* CubemapProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubemapProvider.h; sourceTree = "<group>"; };
+		817256111E0AEF1F00A65625 /* CubemapResourceOptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubemapResourceOptions.cpp; sourceTree = "<group>"; };
+		817256121E0AEF1F00A65625 /* CubemapResourceOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubemapResourceOptions.h; sourceTree = "<group>"; };
 		81729FA21D1BE681005B8CC9 /* GLMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLMaterial.cpp; sourceTree = "<group>"; };
 		81729FA31D1BE681005B8CC9 /* GLMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLMaterial.h; sourceTree = "<group>"; };
 		81729FA61D1BE92B005B8CC9 /* GLCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCamera.cpp; sourceTree = "<group>"; };
@@ -2812,8 +2837,6 @@
 		8184605D1D3503E8004B0C46 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
-				81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */,
-				81A616B31D357159007F7CC1 /* RestoreRenderTargetGroupCommand.h */,
 				8184605E1D3503E8004B0C46 /* ApplyAmbientLightRenderCommand.cpp */,
 				8184605F1D3503E8004B0C46 /* ApplyAmbientLightRenderCommand.h */,
 				818460601D3503E8004B0C46 /* ApplyCameraRenderCommand.cpp */,
@@ -2838,6 +2861,8 @@
 				818460711D3503E8004B0C46 /* BeginWithTargetGroupRenderCommand.h */,
 				818460721D3503E8004B0C46 /* EndRenderCommand.cpp */,
 				818460731D3503E8004B0C46 /* EndRenderCommand.h */,
+				817256011E0A9F2600A65625 /* LoadCubemapRenderCommand.cpp */,
+				817256021E0A9F2600A65625 /* LoadCubemapRenderCommand.h */,
 				818460741D3503E8004B0C46 /* LoadMaterialGroupRenderCommand.cpp */,
 				818460751D3503E8004B0C46 /* LoadMaterialGroupRenderCommand.h */,
 				818460761D3503E8004B0C46 /* LoadMeshRenderCommand.cpp */,
@@ -2850,10 +2875,16 @@
 				8184607D1D3503E8004B0C46 /* LoadTextureRenderCommand.h */,
 				8184607E1D3503E8004B0C46 /* RenderInstanceRenderCommand.cpp */,
 				8184607F1D3503E8004B0C46 /* RenderInstanceRenderCommand.h */,
+				817256031E0A9F2600A65625 /* RestoreCubemapRenderCommand.cpp */,
+				817256041E0A9F2600A65625 /* RestoreCubemapRenderCommand.h */,
 				818460801D3503E8004B0C46 /* RestoreMeshRenderCommand.cpp */,
 				818460811D3503E8004B0C46 /* RestoreMeshRenderCommand.h */,
+				81A616B21D357159007F7CC1 /* RestoreRenderTargetGroupCommand.cpp */,
+				81A616B31D357159007F7CC1 /* RestoreRenderTargetGroupCommand.h */,
 				818460821D3503E8004B0C46 /* RestoreTextureRenderCommand.cpp */,
 				818460831D3503E8004B0C46 /* RestoreTextureRenderCommand.h */,
+				817256051E0A9F2600A65625 /* UnloadCubemapRenderCommand.cpp */,
+				817256061E0A9F2600A65625 /* UnloadCubemapRenderCommand.h */,
 				818460841D3503E8004B0C46 /* UnloadMaterialGroupRenderCommand.cpp */,
 				818460851D3503E8004B0C46 /* UnloadMaterialGroupRenderCommand.h */,
 				818460861D3503E8004B0C46 /* UnloadMeshRenderCommand.cpp */,
@@ -2911,6 +2942,12 @@
 		818460AC1D3503E8004B0C46 /* Texture */ = {
 			isa = PBXGroup;
 			children = (
+				8172560B1E0ABE1500A65625 /* Cubemap.cpp */,
+				8172560C1E0ABE1500A65625 /* Cubemap.h */,
+				8172560E1E0AC08100A65625 /* CubemapProvider.cpp */,
+				8172560F1E0AC08100A65625 /* CubemapProvider.h */,
+				817256111E0AEF1F00A65625 /* CubemapResourceOptions.cpp */,
+				817256121E0AEF1F00A65625 /* CubemapResourceOptions.h */,
 				818460B31D3503E8004B0C46 /* RenderTexture.cpp */,
 				818460B41D3503E8004B0C46 /* RenderTexture.h */,
 				818460B51D3503E8004B0C46 /* RenderTextureManager.cpp */,
@@ -2928,6 +2965,7 @@
 				818460C11D3503E8004B0C46 /* TextureProvider.h */,
 				818460C21D3503E8004B0C46 /* TextureResourceOptions.cpp */,
 				818460C31D3503E8004B0C46 /* TextureResourceOptions.h */,
+				8172560A1E0ABBB000A65625 /* TextureType.h */,
 				818460C41D3503E8004B0C46 /* TextureWrapMode.h */,
 				818460C51D3503E8004B0C46 /* UVs.cpp */,
 				818460C61D3503E8004B0C46 /* UVs.h */,
@@ -3167,10 +3205,14 @@
 		81A5AF641D1190FB00307707 /* Texture */ = {
 			isa = PBXGroup;
 			children = (
+				817255FB1E0A91FB00A65625 /* GLCubemap.cpp */,
+				817255FC1E0A91FB00A65625 /* GLCubemap.h */,
 				81A5AF651D1190FB00307707 /* GLTexture.cpp */,
 				81A5AF661D1190FB00307707 /* GLTexture.h */,
 				81729FA91D1BFF05005B8CC9 /* GLTextureUnitManager.cpp */,
 				81729FAA1D1BFF05005B8CC9 /* GLTextureUnitManager.h */,
+				817255FE1E0A958500A65625 /* GLTextureUtils.cpp */,
+				817255FF1E0A958500A65625 /* GLTextureUtils.h */,
 			);
 			path = Texture;
 			sourceTree = "<group>";
@@ -3500,6 +3542,7 @@
 				813BA9DB1D37BE0600A3B091 /* RenderInfoFactory.cpp in Sources */,
 				818462161D3503E8004B0C46 /* SphereParticleEmitterDef.cpp in Sources */,
 				818462741D3503E8004B0C46 /* EditableTextUIComponent.cpp in Sources */,
+				817255FD1E0A91FB00A65625 /* GLCubemap.cpp in Sources */,
 				818461ED1D3503E8004B0C46 /* PrimitiveModelFactory.cpp in Sources */,
 				8158F7D71C89D2AD00B13109 /* HttpRequestSystem.mm in Sources */,
 				8184623B1D3503E8004B0C46 /* RenderTargetGroup.cpp in Sources */,
@@ -3535,6 +3578,7 @@
 				8184615E1D3503E8004B0C46 /* ParamDictionarySerialiser.cpp in Sources */,
 				27408C291D36DCB600A0B003 /* ScreenInfo.cpp in Sources */,
 				27408C091D366C7A00A0B003 /* SystemInfo.cpp in Sources */,
+				817256091E0A9F2600A65625 /* UnloadCubemapRenderCommand.cpp in Sources */,
 				8184627D1D350409004B0C46 /* GLSkinnedAnimation.cpp in Sources */,
 				818461FE1D3503E8004B0C46 /* ParticleAffector.cpp in Sources */,
 				818461BD1D3503E8004B0C46 /* CanvasRenderer.cpp in Sources */,
@@ -3616,6 +3660,7 @@
 				818462281D3503E8004B0C46 /* LoadTargetGroupRenderCommand.cpp in Sources */,
 				818461E81D3503E8004B0C46 /* CSModelProvider.cpp in Sources */,
 				818461BB1D3503E8004B0C46 /* CameraRenderPassGroup.cpp in Sources */,
+				817256081E0A9F2600A65625 /* RestoreCubemapRenderCommand.cpp in Sources */,
 				8184614D1D3503E8004B0C46 /* CkBank.cpp in Sources */,
 				8184615C1D3503E8004B0C46 /* Utils.cpp in Sources */,
 				818462791D3503E8004B0C46 /* VideoPlayer.cpp in Sources */,
@@ -3629,6 +3674,7 @@
 				818462001D3503E8004B0C46 /* ParticleAffectorDefFactory.cpp in Sources */,
 				818461541D3503E8004B0C46 /* ByteColour.cpp in Sources */,
 				8184620E1D3503E8004B0C46 /* ConeParticleEmitter.cpp in Sources */,
+				8172560D1E0ABE1500A65625 /* Cubemap.cpp in Sources */,
 				818462361D3503E8004B0C46 /* RenderShaderManager.cpp in Sources */,
 				818462721D3503E8004B0C46 /* SliderDirection.cpp in Sources */,
 				818463691D353765004B0C46 /* SmallMeshBatcher.cpp in Sources */,
@@ -3696,6 +3742,7 @@
 				818461CD1D3503E8004B0C46 /* RenderPassObjectSorter.cpp in Sources */,
 				8184622D1D3503E8004B0C46 /* UnloadMaterialGroupRenderCommand.cpp in Sources */,
 				8184626F1D3503E8004B0C46 /* ProgressBarDirection.cpp in Sources */,
+				817256101E0AC08100A65625 /* CubemapProvider.cpp in Sources */,
 				818462751D3503E8004B0C46 /* TextIcon.cpp in Sources */,
 				8158F7D51C89D2AD00B13109 /* HttpDelegate.mm in Sources */,
 				818461EB1D3503E8004B0C46 /* Model.cpp in Sources */,
@@ -3710,6 +3757,7 @@
 				818462141D3503E8004B0C46 /* PointParticleEmitterDef.cpp in Sources */,
 				8158F7E31C89D2AD00B13109 /* VideoPlayerTapListener.mm in Sources */,
 				818461FA1D3503E8004B0C46 /* AngularAccelerationParticleAffector.cpp in Sources */,
+				817256001E0A958500A65625 /* GLTextureUtils.cpp in Sources */,
 				818461AE1D3503E8004B0C46 /* KeyCode.cpp in Sources */,
 				8158F7C91C89D2AD00B13109 /* PNGImageProvider.cpp in Sources */,
 				818462341D3503E8004B0C46 /* RenderCommandList.cpp in Sources */,
@@ -3733,6 +3781,7 @@
 				8184625D1D3503E8004B0C46 /* NinePatchUIDrawable.cpp in Sources */,
 				818461A91D3503E8004B0C46 /* HoldGesture.cpp in Sources */,
 				818461971D3503E8004B0C46 /* UTF8StringUtils.cpp in Sources */,
+				817256071E0A9F2600A65625 /* LoadCubemapRenderCommand.cpp in Sources */,
 				8184619C1D3503E8004B0C46 /* TaskScheduler.cpp in Sources */,
 				818462051D3503E8004B0C46 /* ParticleDrawable.cpp in Sources */,
 				8184615B1D3503E8004B0C46 /* Screen.cpp in Sources */,
@@ -3790,6 +3839,7 @@
 				8184626C1D3503E8004B0C46 /* UILayoutDef.cpp in Sources */,
 				8184617C1D3503E8004B0C46 /* PVRImageProvider.cpp in Sources */,
 				818462761D3503E8004B0C46 /* TextUIComponent.cpp in Sources */,
+				817256131E0AEF1F00A65625 /* CubemapResourceOptions.cpp in Sources */,
 				8184627A1D3503E8004B0C46 /* WebView.cpp in Sources */,
 				818462571D3503E8004B0C46 /* WidgetParserUtils.cpp in Sources */,
 				818462731D3503E8004B0C46 /* SliderUIComponent.cpp in Sources */,

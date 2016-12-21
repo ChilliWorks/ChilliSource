@@ -49,7 +49,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLTextureUnitManager::Bind(const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept
+        void GLTextureUnitManager::Bind(GLenum target, const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept
         {
             for (u32 textureUnitIndex = 0; textureUnitIndex < u32(textures.size()); ++textureUnitIndex)
             {
@@ -63,7 +63,7 @@ namespace CSBackend
                     CS_ASSERT(!glTexture->IsDataInvalid(), "GLTextureUnitManager::Bind(): Failed to bind texture, its context is invalid!");
                     
                     glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
-                    glBindTexture(GL_TEXTURE_2D, glTexture->GetHandle());
+                    glBindTexture(target, glTexture->GetHandle());
                 }
             }
             
@@ -73,7 +73,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        GLuint GLTextureUnitManager::BindAdditional(const ChilliSource::RenderTexture* texture) noexcept
+        GLuint GLTextureUnitManager::BindAdditional(GLenum target, const ChilliSource::RenderTexture* texture) noexcept
         {
             GLuint textureIndex = GetNextAvailableUnit();
             
@@ -83,7 +83,7 @@ namespace CSBackend
             CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
             
             glActiveTexture(GL_TEXTURE0 + textureIndex);
-            glBindTexture(GL_TEXTURE_2D, glTexture->GetHandle());
+            glBindTexture(target, glTexture->GetHandle());
             glActiveTexture(GL_TEXTURE0);
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding an additional texture.");

@@ -22,7 +22,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
@@ -31,22 +31,22 @@
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(Texture);
+    CS_DEFINE_NAMEDTYPE(Cubemap);
 
     //------------------------------------------------------------------------------
-    TextureUPtr Texture::Create() noexcept
+    CubemapUPtr Cubemap::Create() noexcept
     {
-        return TextureUPtr(new Texture());
+        return CubemapUPtr(new Cubemap());
     }
     
     //------------------------------------------------------------------------------
-    bool Texture::IsA(InterfaceIDType interfaceId) const noexcept
+    bool Cubemap::IsA(InterfaceIDType interfaceId) const noexcept
     {
-        return (Texture::InterfaceID == interfaceId);
+        return (Cubemap::InterfaceID == interfaceId);
     }
 
     //------------------------------------------------------------------------------
-    void Texture::Build(DataUPtr textureData, u32 textureDataSize, const TextureDesc& textureDesc) noexcept
+    void Cubemap::Build(std::array<DataUPtr, 6> textureData, u32 dataSize, const TextureDesc& textureDesc) noexcept
     {
         DestroyRenderTexture();
         
@@ -55,12 +55,12 @@ namespace ChilliSource
         
         m_restoreTextureDataEnabled = textureDesc.IsRestoreTextureDataEnabled();
         
-        m_renderTexture = renderTextureManager->CreateTexture2D(std::move(textureData), textureDataSize, textureDesc.GetDimensions(), textureDesc.GetImageFormat(), textureDesc.GetImageCompression(),
-                                                                    textureDesc.GetFilterMode(), textureDesc.GetWrapModeS(), textureDesc.GetWrapModeT(), textureDesc.IsMipmappingEnabled(), m_restoreTextureDataEnabled);
+        m_renderTexture = renderTextureManager->CreateCubemap(std::move(textureData), dataSize, textureDesc.GetDimensions(), textureDesc.GetImageFormat(), textureDesc.GetImageCompression(),
+                                                              textureDesc.GetFilterMode(), textureDesc.GetWrapModeS(), textureDesc.GetWrapModeT(), textureDesc.IsMipmappingEnabled(), m_restoreTextureDataEnabled);
     }
 
     //------------------------------------------------------------------------------
-    const Integer2& Texture::GetDimensions() const noexcept
+    const Integer2& Cubemap::GetDimensions() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -69,7 +69,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    ImageFormat Texture::GetImageFormat() const noexcept
+    ImageFormat Cubemap::GetImageFormat() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -78,7 +78,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    ImageCompression Texture::GetImageCompression() const noexcept
+    ImageCompression Cubemap::GetImageCompression() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -87,7 +87,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    TextureFilterMode Texture::GetFilterMode() const noexcept
+    TextureFilterMode Cubemap::GetFilterMode() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -96,7 +96,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    TextureWrapMode Texture::GetWrapModeS() const noexcept
+    TextureWrapMode Cubemap::GetWrapModeS() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -105,7 +105,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    TextureWrapMode Texture::GetWrapModeT() const noexcept
+    TextureWrapMode Cubemap::GetWrapModeT() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -114,7 +114,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    bool Texture::IsMipmappingEnabled() const noexcept
+    bool Cubemap::IsMipmappingEnabled() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -123,7 +123,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    bool Texture::IsRestoreTextureDataEnabled() const noexcept
+    bool Cubemap::IsRestoreTextureDataEnabled() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -132,7 +132,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    const RenderTexture* Texture::GetRenderTexture() const noexcept
+    const RenderTexture* Cubemap::GetRenderTexture() const noexcept
     {
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
@@ -141,7 +141,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void Texture::DestroyRenderTexture() noexcept
+    void Cubemap::DestroyRenderTexture() noexcept
     {
         if (m_renderTexture)
         {
@@ -154,7 +154,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    Texture::~Texture() noexcept
+    Cubemap::~Cubemap() noexcept
     {
         DestroyRenderTexture();
     }

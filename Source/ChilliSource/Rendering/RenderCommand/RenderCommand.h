@@ -47,10 +47,12 @@ namespace ChilliSource
         enum class Type
         {
             k_loadTexture,
+            k_loadCubemap,
             k_loadShader,
             k_loadMaterialGroup,
             k_loadMesh,
             k_restoreTexture,
+            k_restoreCubemap,
             k_restoreMesh,
             k_restoreRenderTargetGroup,
             k_loadTargetGroup,
@@ -71,7 +73,8 @@ namespace ChilliSource
             k_unloadMesh,
             k_unloadMaterialGroup,
             k_unloadShader,
-            k_unloadTexture
+            k_unloadTexture,
+            k_unloadCubemap
         };
         
         /// @return The type of render command that this is.

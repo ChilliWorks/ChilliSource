@@ -73,6 +73,7 @@ namespace ChilliSource
             TextureWrapMode m_wrapModeU;
             TextureWrapMode m_wrapModeV;
             TextureFilterMode m_filterMode;
+            TextureType m_type;
         };
         //-------------------------------------------------------------------------
         /// @author S Downie

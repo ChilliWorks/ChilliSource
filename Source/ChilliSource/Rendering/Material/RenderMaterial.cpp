@@ -27,7 +27,7 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderMaterial::RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures,
+    RenderMaterial::RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
                                    bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                    TestFunc depthTestFunc,
                                    BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -35,7 +35,7 @@ namespace ChilliSource
                                    CullFace cullFace,
                                    const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
                                    RenderShaderVariablesUPtr renderShaderVariables) noexcept
-        :   m_renderShader(renderShader), m_renderTextures(renderTextures),
+        :   m_renderShader(renderShader), m_renderTextures2D(renderTextures2D), m_renderTexturesCubemap(renderTexturesCubemap),
             m_isTransparencyEnabled(isTransparencyEnabled), m_isColourWriteEnabled(isColourWriteEnabled), m_isDepthWriteEnabled(isDepthWriteEnabled), m_isDepthTestEnabled(isDepthTestEnabled), m_isFaceCullingEnabled(isFaceCullingEnabled), m_isStencilTestEnabled(isStencilTestEnabled),
             m_depthTestFunc(depthTestFunc),
             m_sourceBlendMode(sourceBlendMode), m_destinationBlendMode(destinationBlendMode),

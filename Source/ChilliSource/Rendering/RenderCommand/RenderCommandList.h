@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
+#include <array>
 #include <vector>
 
 namespace ChilliSource
@@ -69,6 +70,17 @@ namespace ChilliSource
         ///
         void AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept;
         
+        /// Creates and adds a new load cubemap command to the render command list.
+        ///
+        /// @param renderTexture
+        ///     The render texture that should be loaded.
+        /// @param textureData
+        ///     The data describing the texture for each face.
+        /// @param textureDataSize
+        ///     The size of the texture data in bytes.
+        ///
+        void AddLoadCubemapCommand(RenderTexture* renderTexture, std::array<std::unique_ptr<const u8[]>, 6> textureData, u32 textureDataSize) noexcept;
+        
         /// Creates and adds a new load material group command to the render command list.
         ///
         /// @param renderMaterialGroup
@@ -97,6 +109,13 @@ namespace ChilliSource
         ///     The render texture that should be restored.
         ///
         void AddRestoreTextureCommand(const RenderTexture* renderTexture) noexcept;
+        
+        /// Creates and adds a new restore cubemap command to the render command list.
+        ///
+        /// @param renderTexture
+        ///     The render texture that should be restored.
+        ///
+        void AddRestoreCubemapCommand(const RenderTexture* renderTexture) noexcept;
         
         /// Creates and adds a new restore mesh command to the render command list.
         ///
@@ -258,6 +277,13 @@ namespace ChilliSource
         ///     The render texture that should be unloaded.
         ///
         void AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept;
+        
+        /// Creates and adds a new unload cubemap command to the render command list.
+        ///
+        /// @param renderTexture
+        ///     The render texture that should be unloaded.
+        ///
+        void AddUnloadCubemapCommand(RenderTextureUPtr renderTexture) noexcept;
         
         /// Creates and adds a new unload shader command to the render command list.
         ///

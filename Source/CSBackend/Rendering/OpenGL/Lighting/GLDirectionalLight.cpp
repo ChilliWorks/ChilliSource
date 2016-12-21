@@ -55,7 +55,7 @@ namespace CSBackend
             
             if (m_shadowMapRenderTexture)
             {
-                auto texUnit = glTextureUnitManager->BindAdditional(m_shadowMapRenderTexture);
+                auto texUnit = glTextureUnitManager->BindAdditional(GL_TEXTURE_2D, m_shadowMapRenderTexture);
                 
                 glShader->SetUniform(k_uniformShadowMap, s32(texUnit), GLShader::FailurePolicy::k_silent);
                 glShader->SetUniform(k_uniformShadowTolerance, m_shadowTolerance, GLShader::FailurePolicy::k_silent);

@@ -22,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CSBACKEND_RENDERING_OPENGL_TEXTURE_GLTEXTURE_H_
-#define _CSBACKEND_RENDERING_OPENGL_TEXTURE_GLTEXTURE_H_
+#ifndef _CSBACKEND_RENDERING_OPENGL_TEXTURE_GLCUBEMAP_H_
+#define _CSBACKEND_RENDERING_OPENGL_TEXTURE_GLCUBEMAP_H_
 
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
@@ -33,28 +33,33 @@
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
+#include <array>
+
 namespace CSBackend
 {
     namespace OpenGL
     {
-        /// A container for all functionality pertaining to a single OpenGL texture, including
+        /// A container for all functionality pertaining to a single OpenGL cubemaps consisting of 6 textures, including
         /// loading, unloading and binding of textures.
         ///
         /// This is not thread-safe and should only be accessed from the render thread.
         ///
-        class GLTexture final
+        class GLCubemap final
         {
         public:
-            CS_DECLARE_NOCOPY(GLTexture);
+            CS_DECLARE_NOCOPY(GLCubemap);
             
-            /// Creates a new OpenGL texture with the given texture data and description.
+            /// Creates a new OpenGL cubemap with the given texture data and description.
+            /// NOTE: Only one description is given as all face textures must have the same settings
             ///
-            /// @param data
-            ///     The texture data.
+            /// @param textureData
+            ///     Texture data for each face
             /// @param dataSize
-            ///     The size of the texture data.
+            ///     Size of the data for any face (as face textures are all the same dimensions and format)
+            /// @param renderTexture
+            ///     Description of the settings for all cubemap faces
             ///
-            GLTexture(const u8* data, u32 dataSize, const ChilliSource::RenderTexture* renderTexture) noexcept;
+            GLCubemap(const std::array<std::unique_ptr<const u8[]>, 6>& textureData, u32 dataSize, const ChilliSource::RenderTexture* renderTexture) noexcept;
             
             /// @return The OpenGL texture handle.
             ///
@@ -63,12 +68,6 @@ namespace CSBackend
             /// @return The OpenGL texture handle.
             ///
             bool IsDataInvalid() const noexcept { return m_invalidData; }
-            
-            /// Called prior to the app suspending and losing context to update
-            /// the restorable copy of the image data. This is used primarily
-            /// or render textures which are changed after creation
-            ///
-            void UpdateRestorableBackup() noexcept;
             
             /// Called when we should restore any cached texture data.
             ///
@@ -82,19 +81,18 @@ namespace CSBackend
             ///
             void Invalidate() noexcept { m_invalidData = true; }
             
-            /// Destroys the OpenGL texture that this represents.
+            /// Destroys the OpenGL cubemap that this represents.
             ///
-            ~GLTexture() noexcept;
+            ~GLCubemap() noexcept;
             
         private:
             
             GLuint m_handle = 0;
             
             const ChilliSource::RenderTexture* m_renderTexture;
-            
-            std::unique_ptr<const u8[]> m_imageDataBackup = nullptr;
-            
             u32 m_imageDataSize = 0;
+            
+            std::array<std::unique_ptr<const u8[]>, 6> m_imageDataBackup;
             
             bool m_invalidData = false;
         };

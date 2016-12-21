@@ -28,14 +28,6 @@
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/TargetType.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMaterialGroupRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
-#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 
 namespace ChilliSource
@@ -114,6 +106,11 @@ namespace ChilliSource
                 preRenderCommandList->AddLoadTextureCommand(command.GetRenderTexture(), command.ClaimTextureData(), command.GetTextureDataSize());
             }
             
+            for(auto& command : m_pendingCubemapLoadCommands)
+            {
+                preRenderCommandList->AddLoadCubemapCommand(command.GetRenderTexture(), command.ClaimTextureData(), command.GetTextureDataSize());
+            }
+            
             for(auto& command : m_pendingMeshLoadCommands)
             {
                 preRenderCommandList->AddLoadMeshCommand(command.GetRenderMesh(), command.ClaimVertexData(), command.GetVertexDataSize(), command.ClaimIndexData(), command.GetIndexDataSize());
@@ -134,6 +131,11 @@ namespace ChilliSource
                 postRenderCommandList->AddUnloadTextureCommand(command.ClaimRenderTexture());
             }
             
+            for(auto& command : m_pendingCubemapUnloadCommands)
+            {
+                postRenderCommandList->AddUnloadCubemapCommand(command.ClaimRenderTexture());
+            }
+            
             for(auto& command : m_pendingMeshUnloadCommands)
             {
                 postRenderCommandList->AddUnloadMeshCommand(command.ClaimRenderMesh());
@@ -146,10 +148,12 @@ namespace ChilliSource
             
             m_pendingShaderLoadCommands.clear();
             m_pendingTextureLoadCommands.clear();
+            m_pendingCubemapLoadCommands.clear();
             m_pendingMeshLoadCommands.clear();
             m_pendingMaterialGroupLoadCommands.clear();
             m_pendingShaderUnloadCommands.clear();
             m_pendingTextureUnloadCommands.clear();
+            m_pendingCubemapUnloadCommands.clear();
             m_pendingMeshUnloadCommands.clear();
             m_pendingMaterialGroupUnloadCommands.clear();
         }
@@ -193,6 +197,12 @@ namespace ChilliSource
                 m_pendingTextureLoadCommands.push_back(std::move(*command));
                 break;
             }
+            case RenderCommand::Type::k_loadCubemap:
+            {
+                LoadCubemapRenderCommand* command = static_cast<LoadCubemapRenderCommand*>(renderCommand);
+                m_pendingCubemapLoadCommands.push_back(std::move(*command));
+                break;
+            }
             case RenderCommand::Type::k_loadMesh:
             {
                 LoadMeshRenderCommand* command = static_cast<LoadMeshRenderCommand*>(renderCommand);
@@ -215,6 +225,12 @@ namespace ChilliSource
             {
                 UnloadTextureRenderCommand* command = static_cast<UnloadTextureRenderCommand*>(renderCommand);
                 m_pendingTextureUnloadCommands.push_back(std::move(*command));
+                break;
+            }
+            case RenderCommand::Type::k_unloadCubemap:
+            {
+                UnloadCubemapRenderCommand* command = static_cast<UnloadCubemapRenderCommand*>(renderCommand);
+                m_pendingCubemapUnloadCommands.push_back(std::move(*command));
                 break;
             }
             case RenderCommand::Type::k_unloadMesh:

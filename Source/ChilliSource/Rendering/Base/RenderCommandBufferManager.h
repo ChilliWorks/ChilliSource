@@ -33,10 +33,12 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadCubemapRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadCubemapRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommandBuffer.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
@@ -163,11 +165,13 @@ namespace ChilliSource
         
         std::vector<LoadShaderRenderCommand> m_pendingShaderLoadCommands;
         std::vector<LoadTextureRenderCommand> m_pendingTextureLoadCommands;
+        std::vector<LoadCubemapRenderCommand> m_pendingCubemapLoadCommands;
         std::vector<LoadMeshRenderCommand> m_pendingMeshLoadCommands;
         std::vector<LoadMaterialGroupRenderCommand> m_pendingMaterialGroupLoadCommands;
         
         std::vector<UnloadShaderRenderCommand> m_pendingShaderUnloadCommands;
         std::vector<UnloadTextureRenderCommand> m_pendingTextureUnloadCommands;
+        std::vector<UnloadCubemapRenderCommand> m_pendingCubemapUnloadCommands;
         std::vector<UnloadMeshRenderCommand> m_pendingMeshUnloadCommands;
         std::vector<UnloadMaterialGroupRenderCommand> m_pendingMaterialGroupUnloadCommands;
         

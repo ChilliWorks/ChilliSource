@@ -30,6 +30,7 @@
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
 #include <mutex>
+#include <array>
 
 namespace ChilliSource
 {
@@ -88,7 +89,36 @@ namespace ChilliSource
         ///
         /// @return The new render texture instance.
         ///
-        const RenderTexture* CreateRenderTexture(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
+        const RenderTexture* CreateTexture2D(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
+                                             TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept;
+        
+        /// Creates a new render texture and queues a LoadCubemapRenderCommand for the next
+        /// Render Snapshot stage in the render pipeline.
+        ///
+        /// @param textureData
+        ///     The texture data buffer for all 6 faces.
+        /// @param textureDataSize
+        ///     The size of the texture data buffer.
+        /// @param dimensions
+        ///     The texture dimensions.
+        /// @param imageFormat
+        ///     The image format.
+        /// @param imageCompression
+        ///     The image compression type.
+        /// @param filterMode
+        ///     The texture filter mode.
+        /// @param wrapModeS
+        ///     The s-coordinate wrap mode.
+        /// @param wrapModeT
+        ///     The t-coordinate wrap mode.
+        /// @param isMipmapped
+        ///     Whether or not mipmaps are generated for the texture.
+        /// @param shouldBackupData
+        ///     If the texture data should be backed up in main memory for restoring it later.
+        ///
+        /// @return The new render texture instance.
+        ///
+        const RenderTexture* CreateCubemap(std::array<std::unique_ptr<const u8[]>, 6> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
                                            TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept;
         
         /// Removes the render texture from the manager and queues an UnloadTextureRenderCommand for
@@ -109,9 +139,19 @@ namespace ChilliSource
         /// A container for information relating to pending texture load commands, such as the
         /// texture data, data size and the related RenderTexture.
         ///
-        struct PendingLoadCommand final
+        struct PendingLoadCommand2D final
         {
             std::unique_ptr<const u8[]> m_textureData;
+            u32 m_textureDataSize = 0;
+            RenderTexture* m_renderTexture = nullptr;
+        };
+        
+        /// A container for information relating to pending cubemap load commands, such as the
+        /// texture data, data size and the related RenderTexture.
+        ///
+        struct PendingLoadCommandCubemap final
+        {
+            std::array<std::unique_ptr<const u8[]>, 6> m_textureData;
             u32 m_textureDataSize = 0;
             RenderTexture* m_renderTexture = nullptr;
         };
@@ -139,7 +179,8 @@ namespace ChilliSource
         
         std::mutex m_mutex;
         std::vector<RenderTextureUPtr> m_renderTextures; //TODO: This should be changed to an object pool.
-        std::vector<PendingLoadCommand> m_pendingLoadCommands;
+        std::vector<PendingLoadCommand2D> m_pendingLoadCommands2D;
+        std::vector<PendingLoadCommandCubemap> m_pendingLoadCommandsCubemap;
         std::vector<RenderTextureUPtr> m_pendingUnloadCommands;
     };
 }

@@ -55,19 +55,23 @@ namespace CSBackend
             /// Binds the given list of textures to texture units, in order. If the list is
             /// greater in size than the number of available texture units this will assert.
             ///
+            /// @param target
+            ///     Texture2D or Cubemap
             /// @param textures
             ///     The list of textures which should be bound.
             ///
-            void Bind(const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept;
+            void Bind(GLenum target, const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept;
             
             /// Binds an additional texture to the first free slot, returning the slot index.
             ///
+            /// @param target
+            ///     Texture2D or Cubemap
             /// @param texture
             ///     The additional texture which should be bound.
             ///
             /// @return The slot index of the additional texture.
             ///
-            GLuint BindAdditional(const ChilliSource::RenderTexture* texture) noexcept;
+            GLuint BindAdditional(GLenum target, const ChilliSource::RenderTexture* texture) noexcept;
             
             /// Clears all texture slots. This doesn't unbind them from the OpenGL context, it
             /// simply clears the cache to force them to be re-bound the next time Bind() is called

@@ -33,6 +33,7 @@
 #include <CSBackend/Rendering/OpenGL/Model/GLSkinnedAnimation.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 #include <CSBackend/Rendering/OpenGL/Target/GLTargetGroup.h>
+#include <CSBackend/Rendering/OpenGL/Texture/GLCubemap.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
 #include <ChilliSource/Rendering/Model/IndexFormat.h>
@@ -56,15 +57,18 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTargetGroupRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadCubemapRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreRenderTargetGroupCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreCubemapRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTargetGroupRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadCubemapRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -147,6 +151,9 @@ namespace CSBackend
                         case ChilliSource::RenderCommand::Type::k_loadTexture:
                             LoadTexture(static_cast<const ChilliSource::LoadTextureRenderCommand*>(renderCommand));
                             break;
+                        case ChilliSource::RenderCommand::Type::k_loadCubemap:
+                            LoadCubemap(static_cast<const ChilliSource::LoadCubemapRenderCommand*>(renderCommand));
+                            break;
                         case ChilliSource::RenderCommand::Type::k_loadMaterialGroup:
                             // Do nothing in OpenGL 2.0 / ES 2.0
                             break;
@@ -158,6 +165,9 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_restoreTexture:
                             RestoreTexture(static_cast<const ChilliSource::RestoreTextureRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_restoreCubemap:
+                            RestoreCubemap(static_cast<const ChilliSource::RestoreCubemapRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_restoreRenderTargetGroup:
                             RestoreRenderTargetGroup(static_cast<const ChilliSource::RestoreRenderTargetGroupCommand*>(renderCommand));
@@ -209,6 +219,9 @@ namespace CSBackend
                             break;
                         case ChilliSource::RenderCommand::Type::k_unloadTexture:
                             UnloadTexture(static_cast<const ChilliSource::UnloadTextureRenderCommand*>(renderCommand));
+                            break;
+                        case ChilliSource::RenderCommand::Type::k_unloadCubemap:
+                            UnloadCubemap(static_cast<const ChilliSource::UnloadCubemapRenderCommand*>(renderCommand));
                             break;
                         case ChilliSource::RenderCommand::Type::k_unloadMaterialGroup:
                             // Do nothing in OpenGL 2.0 / ES 2.0
@@ -281,6 +294,19 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
+        void RenderCommandProcessor::LoadCubemap(const ChilliSource::LoadCubemapRenderCommand* renderCommand) noexcept
+        {
+            ResetCache();
+            
+            auto renderTexture = renderCommand->GetRenderTexture();
+            
+            //TODO: Should be pooled.
+            auto glCubemap = new GLCubemap(renderCommand->GetTextureData(), renderCommand->GetTextureDataSize(), renderTexture);
+            
+            renderTexture->SetExtraData(glCubemap);
+        }
+        
+        //------------------------------------------------------------------------------
         void RenderCommandProcessor::LoadMesh(const ChilliSource::LoadMeshRenderCommand* renderCommand) noexcept
         {
             ResetCache();
@@ -298,6 +324,13 @@ namespace CSBackend
         {
             GLTexture* glTexture = static_cast<GLTexture*>(renderCommand->GetRenderTexture()->GetExtraData());
             glTexture->Restore();
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::RestoreCubemap(const ChilliSource::RestoreCubemapRenderCommand* renderCommand) noexcept
+        {
+            GLCubemap* glCubemap = static_cast<GLCubemap*>(renderCommand->GetRenderTexture()->GetExtraData());
+            glCubemap->Restore();
         }
         
         //------------------------------------------------------------------------------
@@ -451,7 +484,8 @@ namespace CSBackend
                     glShader->Bind();
                 }
                 
-                m_textureUnitManager->Bind(m_currentMaterial->GetRenderTextures());
+                m_textureUnitManager->Bind(GL_TEXTURE_2D, m_currentMaterial->GetRenderTextures2D());
+                m_textureUnitManager->Bind(GL_TEXTURE_CUBE_MAP, m_currentMaterial->GetRenderTexturesCubemap());
                 
                 m_currentCamera.Apply(glShader);
                 
@@ -636,6 +670,17 @@ namespace CSBackend
             auto glTexture = static_cast<GLTexture*>(renderTexture->GetExtraData());
             
             CS_SAFEDELETE(glTexture);
+        }
+        
+        //------------------------------------------------------------------------------
+        void RenderCommandProcessor::UnloadCubemap(const ChilliSource::UnloadCubemapRenderCommand* renderCommand) noexcept
+        {
+            ResetCache();
+            
+            auto renderTexture = renderCommand->GetRenderTexture();
+            auto glCubemap = static_cast<GLCubemap*>(renderTexture->GetExtraData());
+            
+            CS_SAFEDELETE(glCubemap);
         }
         
         //------------------------------------------------------------------------------

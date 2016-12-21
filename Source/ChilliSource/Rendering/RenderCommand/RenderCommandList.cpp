@@ -41,15 +41,18 @@
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/LoadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/LoadCubemapRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RenderInstanceRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreRenderTargetGroupCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/RestoreTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/RestoreCubemapRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMaterialGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadMeshRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadShaderRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTargetGroupRenderCommand.h>
 #include <ChilliSource/Rendering/RenderCommand/Commands/UnloadTextureRenderCommand.h>
+#include <ChilliSource/Rendering/RenderCommand/Commands/UnloadCubemapRenderCommand.h>
 
 namespace ChilliSource
 {
@@ -66,6 +69,15 @@ namespace ChilliSource
     void RenderCommandList::AddLoadTextureCommand(RenderTexture* renderTexture, std::unique_ptr<const u8[]> textureData, u32 textureDataSize) noexcept
     {
         RenderCommandUPtr renderCommand(new LoadTextureRenderCommand(renderTexture, std::move(textureData), textureDataSize));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddLoadCubemapCommand(RenderTexture* renderTexture, std::array<std::unique_ptr<const u8[]>, 6> textureData, u32 textureDataSize) noexcept
+    {
+        RenderCommandUPtr renderCommand(new LoadCubemapRenderCommand(renderTexture, std::move(textureData), textureDataSize));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
@@ -93,6 +105,15 @@ namespace ChilliSource
     void RenderCommandList::AddRestoreTextureCommand(const RenderTexture* renderTexture) noexcept
     {
         RenderCommandUPtr renderCommand(new RestoreTextureRenderCommand(renderTexture));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddRestoreCubemapCommand(const RenderTexture* renderTexture) noexcept
+    {
+        RenderCommandUPtr renderCommand(new RestoreCubemapRenderCommand(renderTexture));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));
@@ -272,6 +293,15 @@ namespace ChilliSource
     void RenderCommandList::AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept
     {
         RenderCommandUPtr renderCommand(new UnloadTextureRenderCommand(std::move(renderTexture)));
+        
+        m_orderedCommands.push_back(renderCommand.get());
+        m_renderCommands.push_back(std::move(renderCommand));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderCommandList::AddUnloadCubemapCommand(RenderTextureUPtr renderTexture) noexcept
+    {
+        RenderCommandUPtr renderCommand(new UnloadCubemapRenderCommand(std::move(renderTexture)));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));

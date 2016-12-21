@@ -92,11 +92,12 @@ namespace ChilliSource
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures { renderTexture };
+            std::vector<const RenderTexture*> renderCubemaps;
             auto diffuseColour = Colour::k_black;
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
@@ -114,6 +115,7 @@ namespace ChilliSource
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures;
+            std::vector<const RenderTexture*> renderCubemaps;
             auto isTransparencyEnabled = false;
             auto isColourWriteEnabled = false;
             auto isDepthWriteEnabled = true;
@@ -136,7 +138,7 @@ namespace ChilliSource
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
@@ -162,6 +164,7 @@ namespace ChilliSource
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures { renderTexture };
+            std::vector<const RenderTexture*> renderCubemaps;
             auto isTransparencyEnabled = false;
             auto isColourWriteEnabled = true;
             auto isDepthWriteEnabled = true;
@@ -182,7 +185,7 @@ namespace ChilliSource
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
@@ -208,6 +211,7 @@ namespace ChilliSource
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures { renderTexture };
+            std::vector<const RenderTexture*> renderCubemaps;
             auto isTransparencyEnabled = true;
             auto isColourWriteEnabled = true;
             auto isDepthWriteEnabled = false;
@@ -228,7 +232,7 @@ namespace ChilliSource
             auto ambientColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
@@ -416,7 +420,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures,
+    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
                                                                                                   bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                                                   TestFunc depthTestFunc,
                                                                                                   BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -432,12 +436,12 @@ namespace ChilliSource
         switch(fallbackType)
         {
             case MaterialShadingType::k_unlit:
-                CS_ASSERT(renderTextures.size() > 0, "If custom shader material falling back on Unlit type a texture must be supplied");
-                CreateUnlitRenderMaterialGroupCollection(vertexFormat, renderTextures[0], isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, renderMaterialsSlots, renderMaterials);
+                CS_ASSERT(renderTextures2D.size() > 0, "If custom shader material falling back on Unlit type a texture must be supplied");
+                CreateUnlitRenderMaterialGroupCollection(vertexFormat, renderTextures2D[0], isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, renderMaterialsSlots, renderMaterials);
                 break;
             case MaterialShadingType::k_blinn:
-                CS_ASSERT(renderTextures.size() > 0, "If custom shader material falling back on Blinn type a texture must be supplied");
-                 CreateBlinnRenderMaterialGroupCollection(vertexFormat, renderTextures[0], emissiveColour, ambientColour, diffuseColour, specularColour, renderMaterialsSlots, renderMaterials);
+                CS_ASSERT(renderTextures2D.size() > 0, "If custom shader material falling back on Blinn type a texture must be supplied");
+                 CreateBlinnRenderMaterialGroupCollection(vertexFormat, renderTextures2D[0], emissiveColour, ambientColour, diffuseColour, specularColour, renderMaterialsSlots, renderMaterials);
                 break;
             case MaterialShadingType::k_custom:
             default:
@@ -446,7 +450,7 @@ namespace ChilliSource
         
         for(const auto& shaderPass : renderShaders)
         {
-            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(shaderPass.first, renderTextures,
+            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(shaderPass.first, renderTextures2D, renderTexturesCubemap,
                                                                         isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                                         depthTestFunc,
                                                                         sourceBlendMode, destinationBlendMode,

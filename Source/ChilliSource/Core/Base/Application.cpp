@@ -78,6 +78,7 @@
 #include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
+#include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 
 #include <ChilliSource/UI/Base/UIComponentFactory.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
@@ -338,6 +339,7 @@ namespace ChilliSource
         CreateSystem<MaterialFactory>();
         CreateSystem<MaterialProvider>();
         CreateSystem<CSShaderProvider>();
+        CreateSystem<CubemapProvider>();
         CreateSystem<TextureAtlasProvider>();
         CreateSystem<TextureProvider>();
         CreateSystem<FontProvider>();

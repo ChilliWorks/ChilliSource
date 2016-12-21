@@ -38,6 +38,7 @@
 #include <ChilliSource/Rendering/Shader/RenderShaderVariables.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
 
 namespace ChilliSource
 {
@@ -80,14 +81,14 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::RemoveAllTextures()
+    void Material::RemoveAllTextures() noexcept
     {
         m_textures.clear();
         m_isCacheValid = false;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::AddTexture(const TextureCSPtr& in_texture)
+    void Material::AddTexture(const TextureCSPtr& in_texture) noexcept
     {
         CS_ASSERT(in_texture != nullptr, "Cannot add null texture to material");
         m_textures.push_back(in_texture);
@@ -96,7 +97,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetTexture(const TextureCSPtr& in_texture, u32 in_texIndex)
+    void Material::SetTexture(const TextureCSPtr& in_texture, u32 in_texIndex) noexcept
     {
         CS_ASSERT(in_texIndex < m_textures.size(), "Texture index out of bounds");
         
@@ -106,26 +107,66 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const TextureCSPtr& Material::GetTexture(u32 in_index) const
+    const TextureCSPtr& Material::GetTexture(u32 in_index) const noexcept
     {
         CS_ASSERT(in_index < m_textures.size(), "Texture index out of bounds");
         return m_textures[in_index];
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    u32 Material::GetNumTextures() const
+    u32 Material::GetNumTextures() const noexcept
     {
         return static_cast<u32>(m_textures.size());
     }
+    
+    //----------------------------------------------------------
+    void Material::RemoveAllCubemaps() noexcept
+    {
+        m_cubemaps.clear();
+        m_isCacheValid = false;
+    }
+    
+    //----------------------------------------------------------
+    void Material::AddCubemap(const CubemapCSPtr& cubemap) noexcept
+    {
+        CS_ASSERT(cubemap != nullptr, "Cannot add null cubemap to material");
+        m_cubemaps.push_back(cubemap);
+        
+        m_isCacheValid = false;
+    }
+    
+    //----------------------------------------------------------
+    void Material::SetCubemap(const CubemapCSPtr& cubemap, u32 index) noexcept
+    {
+        CS_ASSERT(index < m_cubemaps.size(), "Cubemap index out of bounds");
+        
+        m_cubemaps[index] = cubemap;
+        
+        m_isCacheValid = false;
+    }
+    
+    //----------------------------------------------------------
+    const CubemapCSPtr& Material::GetCubemap(u32 index) const noexcept
+    {
+        CS_ASSERT(index < m_cubemaps.size(), "Cubemap index out of bounds");
+        return m_cubemaps[index];
+    }
+    
+    //----------------------------------------------------------
+    u32 Material::GetNumCubemaps() const noexcept
+    {
+        return static_cast<u32>(m_cubemaps.size());
+    }
+    
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool Material::IsTransparencyEnabled() const
+    bool Material::IsTransparencyEnabled() const noexcept
     {
         return m_isAlphaBlendingEnabled;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetTransparencyEnabled(bool in_enable)
+    void Material::SetTransparencyEnabled(bool in_enable) noexcept
     {
         m_isCacheValid = m_isAlphaBlendingEnabled != in_enable;
         
@@ -134,13 +175,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool Material::IsColourWriteEnabled() const
+    bool Material::IsColourWriteEnabled() const noexcept
     {
         return m_isColWriteEnabled;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetColourWriteEnabled(bool in_enable)
+    void Material::SetColourWriteEnabled(bool in_enable) noexcept
     {
         m_isCacheValid = m_isColWriteEnabled != in_enable;
         
@@ -148,13 +189,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool Material::IsDepthWriteEnabled() const
+    bool Material::IsDepthWriteEnabled() const noexcept
     {
         return m_isDepthWriteEnabled;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetDepthWriteEnabled(bool in_enable)
+    void Material::SetDepthWriteEnabled(bool in_enable) noexcept
     {
         CS_ASSERT(m_isAlphaBlendingEnabled == false, "Cannot enable depth write on transparent object");
         
@@ -164,13 +205,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool Material::IsDepthTestEnabled() const
+    bool Material::IsDepthTestEnabled() const noexcept
     {
         return m_isDepthTestEnabled;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetDepthTestEnabled(bool in_enable)
+    void Material::SetDepthTestEnabled(bool in_enable) noexcept
     {
         m_isCacheValid = m_isDepthTestEnabled != in_enable;
         
@@ -178,13 +219,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    bool Material::IsFaceCullingEnabled() const
+    bool Material::IsFaceCullingEnabled() const noexcept
     {
         return m_isFaceCullingEnabled;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetFaceCullingEnabled(bool in_enable)
+    void Material::SetFaceCullingEnabled(bool in_enable) noexcept
     {
         m_isCacheValid = m_isFaceCullingEnabled != in_enable;
         
@@ -192,7 +233,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetBlendModes(BlendMode in_source, BlendMode in_dest)
+    void Material::SetBlendModes(BlendMode in_source, BlendMode in_dest) noexcept
     {
         m_srcBlendMode = in_source;
         m_dstBlendMode = in_dest;
@@ -201,13 +242,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    BlendMode Material::GetSourceBlendMode() const
+    BlendMode Material::GetSourceBlendMode() const noexcept
     {
         return m_srcBlendMode;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    BlendMode Material::GetDestBlendMode() const
+    BlendMode Material::GetDestBlendMode() const noexcept
     {
         return m_dstBlendMode;
     }
@@ -229,19 +270,19 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetCullFace(CullFace in_cullFace)
+    void Material::SetCullFace(CullFace in_cullFace) noexcept
     {
         m_cullFace = in_cullFace;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    CullFace Material::GetCullFace() const
+    CullFace Material::GetCullFace() const noexcept
     {
         return m_cullFace;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetEmissive(const Colour& in_emissive)
+    void Material::SetEmissive(const Colour& in_emissive) noexcept
     {
         m_emissive = in_emissive;
         
@@ -249,13 +290,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Colour& Material::GetEmissive() const
+    const Colour& Material::GetEmissive() const noexcept
     {
         return m_emissive;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetAmbient(const Colour& in_ambient)
+    void Material::SetAmbient(const Colour& in_ambient) noexcept
     {
         m_ambient = in_ambient;
         
@@ -263,13 +304,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Colour& Material::GetAmbient() const
+    const Colour& Material::GetAmbient() const noexcept
     {
         return m_ambient;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetDiffuse(const Colour& in_diffuse)
+    void Material::SetDiffuse(const Colour& in_diffuse) noexcept
     {
         m_diffuse = in_diffuse;
         
@@ -277,13 +318,13 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Colour& Material::GetDiffuse() const
+    const Colour& Material::GetDiffuse() const noexcept
     {
         return m_diffuse;
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    void Material::SetSpecular(const Colour& in_specular)
+    void Material::SetSpecular(const Colour& in_specular) noexcept
     {
         m_specular = in_specular;
         
@@ -291,7 +332,7 @@ namespace ChilliSource
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
-    const Colour& Material::GetSpecular() const
+    const Colour& Material::GetSpecular() const noexcept
     {
         return m_specular;
     }
@@ -315,7 +356,7 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, f32 in_value)
+    void Material::SetShaderVar(const std::string& in_varName, f32 in_value) noexcept
     {
         m_floatVars[in_varName] = in_value;
         
@@ -324,7 +365,7 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Vector2& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Vector2& in_value) noexcept
     {
         m_vec2Vars[in_varName] = in_value;
         
@@ -333,7 +374,7 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Vector3& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Vector3& in_value) noexcept
     {
         m_vec3Vars[in_varName] = in_value;
         
@@ -342,7 +383,7 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Vector4& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Vector4& in_value) noexcept
     {
         m_vec4Vars[in_varName] = in_value;
         
@@ -351,7 +392,7 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Matrix4& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Matrix4& in_value) noexcept
     {
         m_mat4Vars[in_varName] = in_value;
         
@@ -360,7 +401,7 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::SetShaderVar(const std::string& in_varName, const Colour& in_value)
+    void Material::SetShaderVar(const std::string& in_varName, const Colour& in_value) noexcept
     {
         m_colourVars[in_varName] = in_value;
         
@@ -381,6 +422,11 @@ namespace ChilliSource
             for(const auto& texture : m_textures)
             {
                 m_cachedRenderTextures.push_back(texture->GetRenderTexture());
+            }
+            
+            for(const auto& cubemap : m_cubemaps)
+            {
+                m_cachedRenderTextures.push_back(cubemap->GetRenderTexture());
             }
             
             m_isCacheValid = true;
@@ -411,6 +457,7 @@ namespace ChilliSource
     {
         CS_ASSERT(!m_renderMaterialGroup, "Render material group must be null.");
         CS_ASSERT(m_textures.size() == 1, "Unlit materials must have one texture.");
+        CS_ASSERT(m_cubemaps.size() == 0, "Unlit materials must have no cubemaps.");
         CS_ASSERT(m_customShaders.size() == 0, "Unlit materials cannot have custom shaders.");
         CS_ASSERT(m_floatVars.size() == 0, "Unlit materials cannot have custom shader variables.");
         CS_ASSERT(m_vec2Vars.size() == 0, "Unlit materials cannot have custom shader variables.");
@@ -433,6 +480,7 @@ namespace ChilliSource
     {
         CS_ASSERT(!m_renderMaterialGroup, "Render material group must be null.");
         CS_ASSERT(m_textures.size() == 1, "Blinn materials must have one texture.");
+        CS_ASSERT(m_cubemaps.size() == 0, "Blinn materials must have no cubemaps.");
         CS_ASSERT(!m_isAlphaBlendingEnabled, "Blinn materials must have transparency disabled.");
         CS_ASSERT(m_isDepthWriteEnabled, "Blinn materials must have depth write enabled.");
         CS_ASSERT(m_isColWriteEnabled, "Blinn materials must have colour write enabled.");
@@ -466,6 +514,14 @@ namespace ChilliSource
             renderTextures.push_back(texture->GetRenderTexture());
         }
         
+        std::vector<const RenderTexture*> renderCubemaps;
+        renderCubemaps.reserve(m_cubemaps.size());
+        for (const auto& cubemap : m_cubemaps)
+        {
+            CS_ASSERT(cubemap, "Cannot have a null cubemap in material");
+            renderCubemaps.push_back(cubemap->GetRenderTexture());
+        }
+        
         std::vector<std::pair<const RenderShader*, RenderPasses>> renderShaders;
         renderShaders.reserve(m_customShaders.size());
         for(const auto& shader : m_customShaders)
@@ -475,7 +531,7 @@ namespace ChilliSource
         
         RenderShaderVariablesUPtr renderShaderVariables(new RenderShaderVariables(m_floatVars, m_vec2Vars, m_vec3Vars, m_vec4Vars, m_mat4Vars, m_colourVars));
         
-        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateCustomRenderMaterialGroup(m_customShaderFallbackType, m_customShaderVertexFormat, renderShaders, renderTextures,
+        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateCustomRenderMaterialGroup(m_customShaderFallbackType, m_customShaderVertexFormat, renderShaders, renderTextures, renderCubemaps,
                                                                                               m_isAlphaBlendingEnabled, m_isColWriteEnabled, m_isDepthWriteEnabled, m_isDepthTestEnabled, m_isFaceCullingEnabled, m_isStencilTestEnabled,
                                                                                               m_depthTestFunc,
                                                                                               m_srcBlendMode, m_dstBlendMode,
@@ -505,10 +561,20 @@ namespace ChilliSource
         }
         else
         {
-            for(u32 i = 0; i < m_textures.size(); ++i)
+            u32 cacheIndex = 0;
+            for(u32 i = 0; i < m_textures.size(); ++i, ++cacheIndex)
             {
                 const auto& texture = m_textures[i];
-                if(texture->GetRenderTexture() != m_cachedRenderTextures[i])
+                if(texture->GetRenderTexture() != m_cachedRenderTextures[cacheIndex])
+                {
+                    return false;
+                }
+            }
+            
+            for(u32 i = 0; i < m_cubemaps.size(); ++i, ++cacheIndex)
+            {
+                const auto& cubemap = m_cubemaps[i];
+                if(cubemap->GetRenderTexture() != m_cachedRenderTextures[cacheIndex])
                 {
                     return false;
                 }

@@ -72,6 +72,7 @@ namespace CSBackend
         //----------------------------------------------------
         /// Texture
         //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(GLCubemap);
         CS_FORWARDDECLARE_CLASS(GLTexture);
         CS_FORWARDDECLARE_CLASS(GLTextureUnitManager);
     }

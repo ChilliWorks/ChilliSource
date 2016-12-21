@@ -194,9 +194,11 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(LoadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(LoadTextureRenderCommand);
+    CS_FORWARDDECLARE_CLASS(LoadCubemapRenderCommand);
     CS_FORWARDDECLARE_CLASS(RestoreMeshRenderCommand);
     CS_FORWARDDECLARE_CLASS(RestoreRenderTargetGroupCommand);
     CS_FORWARDDECLARE_CLASS(RestoreTextureRenderCommand);
+    CS_FORWARDDECLARE_CLASS(RestoreCubemapRenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommand);
     CS_FORWARDDECLARE_CLASS(RenderCommandBuffer);
     CS_FORWARDDECLARE_CLASS(RenderCommandBufferManager);
@@ -207,6 +209,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(UnloadShaderRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadTargetGroupRenderCommand);
     CS_FORWARDDECLARE_CLASS(UnloadTextureRenderCommand);
+    CS_FORWARDDECLARE_CLASS(UnloadCubemapRenderCommand);
     //------------------------------------------------------------
     /// Shader
     //------------------------------------------------------------
@@ -229,6 +232,8 @@ namespace ChilliSource
     //------------------------------------------------------------
     /// Texture
     //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(Cubemap);
+    CS_FORWARDDECLARE_CLASS(CubemapProvider);
     CS_FORWARDDECLARE_CLASS(RenderTexture);
     CS_FORWARDDECLARE_CLASS(RenderTextureManager);
     CS_FORWARDDECLARE_CLASS(Texture);
@@ -238,6 +243,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(TextureProvider);
     CS_FORWARDDECLARE_CLASS(UVs);
     enum class TextureFilterMode;
+    enum class TextureType;
     enum class TextureWrapMode;
 }
 

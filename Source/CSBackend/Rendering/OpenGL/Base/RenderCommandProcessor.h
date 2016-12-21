@@ -88,6 +88,13 @@ namespace CSBackend
             ///
             void LoadTexture(const ChilliSource::LoadTextureRenderCommand* renderCommand) noexcept;
             
+            /// Loads the cubemap described by the given load command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void LoadCubemap(const ChilliSource::LoadCubemapRenderCommand* renderCommand) noexcept;
+            
             /// Loads the mesh described by the given load command
             ///
             /// @param renderCommand
@@ -101,6 +108,13 @@ namespace CSBackend
             ///     The render command
             ///
             void RestoreTexture(const ChilliSource::RestoreTextureRenderCommand* renderCommand) noexcept;
+            
+            /// Restores the cubemap given by the command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void RestoreCubemap(const ChilliSource::RestoreCubemapRenderCommand* renderCommand) noexcept;
             
             /// Restores the mesh given by the command
             ///
@@ -236,6 +250,13 @@ namespace CSBackend
             ///     The render command
             ///
             void UnloadTexture(const ChilliSource::UnloadTextureRenderCommand* renderCommand) noexcept;
+            
+            /// Unloads the cubemap described by the given unload command
+            ///
+            /// @param renderCommand
+            ///     The render command
+            ///
+            void UnloadCubemap(const ChilliSource::UnloadCubemapRenderCommand* renderCommand) noexcept;
             
             /// Unloads the mesh described by the given unload command
             ///

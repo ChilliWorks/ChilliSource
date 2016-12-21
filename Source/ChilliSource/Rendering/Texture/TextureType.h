@@ -1,11 +1,7 @@
 //
-//  Texture.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,25 +22,22 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_TEXTURE_H_
-#define _CHILLISOURCE_RENDERING_TEXTURE_H_
+#ifndef _CHILLISOURCE_RENDERING_TEXTURE_TEXTURETYPE_H_
+#define _CHILLISOURCE_RENDERING_TEXTURE_TEXTURETYPE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/Texture/CubemapProvider.h>
-#include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
-#include <ChilliSource/Rendering/Texture/RenderTexture.h>
-#include <ChilliSource/Rendering/Texture/RenderTextureManager.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
-#include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
-#include <ChilliSource/Rendering/Texture/TextureDesc.h>
-#include <ChilliSource/Rendering/Texture/TextureFilterMode.h>
-#include <ChilliSource/Rendering/Texture/TextureProvider.h>
-#include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
-#include <ChilliSource/Rendering/Texture/TextureType.h>
-#include <ChilliSource/Rendering/Texture/TextureWrapMode.h>
-#include <ChilliSource/Rendering/Texture/UVs.h>
+
+namespace ChilliSource
+{
+    ///
+    /// * Texture2D: Standard 2D texture
+    /// * Cubemap: Created from 6 2D textures
+    ///
+    enum class TextureType
+    {
+        k_texture2D,
+        k_cubemap
+    };
+}
 
 #endif

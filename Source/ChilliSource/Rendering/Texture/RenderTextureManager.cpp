@@ -44,20 +44,39 @@ namespace ChilliSource
     }
         
     //------------------------------------------------------------------------------
-    const RenderTexture* RenderTextureManager::CreateRenderTexture(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
-                                             TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept
+    const RenderTexture* RenderTextureManager::CreateTexture2D(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
+                                                               TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept
     {
         RenderTextureUPtr renderTexture(new RenderTexture(dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped, shouldBackupData));
         auto rawRenderTexture = renderTexture.get();
         
-        PendingLoadCommand loadCommand;
+        PendingLoadCommand2D loadCommand;
         loadCommand.m_textureData = std::move(textureData);
         loadCommand.m_textureDataSize = textureDataSize;
         loadCommand.m_renderTexture = rawRenderTexture;
         
         std::unique_lock<std::mutex> lock(m_mutex);
         m_renderTextures.push_back(std::move(renderTexture));
-        m_pendingLoadCommands.push_back(std::move(loadCommand));
+        m_pendingLoadCommands2D.push_back(std::move(loadCommand));
+        
+        return rawRenderTexture;
+    }
+    
+    //------------------------------------------------------------------------------
+    const RenderTexture* RenderTextureManager::CreateCubemap(std::array<std::unique_ptr<const u8[]>, 6> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
+                                                             TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept
+    {
+        RenderTextureUPtr renderTexture(new RenderTexture(dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped, shouldBackupData));
+        auto rawRenderTexture = renderTexture.get();
+        
+        PendingLoadCommandCubemap loadCommand;
+        loadCommand.m_textureData = std::move(textureData);
+        loadCommand.m_textureDataSize = textureDataSize;
+        loadCommand.m_renderTexture = rawRenderTexture;
+        
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_renderTextures.push_back(std::move(renderTexture));
+        m_pendingLoadCommandsCubemap.push_back(std::move(loadCommand));
         
         return rawRenderTexture;
     }
@@ -92,11 +111,17 @@ namespace ChilliSource
             
             std::unique_lock<std::mutex> lock(m_mutex);
             
-            for (auto& loadCommand : m_pendingLoadCommands)
+            for (auto& loadCommand : m_pendingLoadCommands2D)
             {
                 preRenderCommandList->AddLoadTextureCommand(loadCommand.m_renderTexture, std::move(loadCommand.m_textureData), loadCommand.m_textureDataSize);
             }
-            m_pendingLoadCommands.clear();
+            m_pendingLoadCommands2D.clear();
+            
+            for (auto& loadCommand : m_pendingLoadCommandsCubemap)
+            {
+                preRenderCommandList->AddLoadCubemapCommand(loadCommand.m_renderTexture, std::move(loadCommand.m_textureData), loadCommand.m_textureDataSize);
+            }
+            m_pendingLoadCommandsCubemap.clear();
             
             for (auto& unloadCommand : m_pendingUnloadCommands)
             {
