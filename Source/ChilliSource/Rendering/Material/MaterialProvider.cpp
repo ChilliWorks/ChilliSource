@@ -69,7 +69,7 @@ namespace ChilliSource
             TextureFilterMode m_filterMode;
             TextureWrapMode m_wrapModeU;
             TextureWrapMode m_wrapModeV;
-            ForwardRenderPasses m_forwardPass;
+            RenderPasses m_pass;
         };
         //----------------------------------------------------------------------------
         /// @author S Downie
@@ -245,43 +245,43 @@ namespace ChilliSource
         }
 
         ///
-        /// @param forwardPass
-        ///     The forward pass as a string.
+        /// @param pass
+        ///     The render pass as a string.
         ///
-        /// @return The forward pass as an type.
+        /// @return The render pass as an type.
         ///
-        ForwardRenderPasses ConvertStringToForwardPass(const std::string& forwardPass) noexcept
+        RenderPasses ConvertStringToRenderPass(const std::string& pass) noexcept
         {
-            auto forwardPassLower = forwardPass;
-            StringUtils::ToLowerCase(forwardPassLower);
+            auto passLower = pass;
+            StringUtils::ToLowerCase(passLower);
             
-            if (forwardPassLower == "shadowmap")
+            if (passLower == "shadowmap")
             {
-                return ForwardRenderPasses::k_shadowMap;
+                return RenderPasses::k_shadowMap;
             }
-            else if (forwardPassLower == "base")
+            else if (passLower == "base")
             {
-                return ForwardRenderPasses::k_base;
+                return RenderPasses::k_base;
             }
-            else if (forwardPassLower == "directionallight")
+            else if (passLower == "directionallight")
             {
-                return ForwardRenderPasses::k_directionalLight;
+                return RenderPasses::k_directionalLight;
             }
-            else if (forwardPassLower == "directionallightshadows")
+            else if (passLower == "directionallightshadows")
             {
-                return ForwardRenderPasses::k_directionalLightShadows;
+                return RenderPasses::k_directionalLightShadows;
             }
-            else if (forwardPassLower == "pointlight")
+            else if (passLower == "pointlight")
             {
-                return ForwardRenderPasses::k_pointLight;
+                return RenderPasses::k_pointLight;
             }
-            else if (forwardPassLower == "transparent")
+            else if (passLower == "transparent")
             {
-                return ForwardRenderPasses::k_transparent;
+                return RenderPasses::k_transparent;
             }
             
-            CS_LOG_FATAL("Invalid forward pass: " + forwardPass);
-            return ForwardRenderPasses::k_base;
+            CS_LOG_FATAL("Invalid render pass: " + pass);
+            return RenderPasses::k_base;
         }
         //----------------------------------------------------------------------------
         /// Parse the vertex format from the given string name. If the name doesn't
@@ -474,7 +474,7 @@ namespace ChilliSource
                     MaterialProvider::ShaderDesc desc;
                     desc.m_location = ParseStorageLocation(XMLUtils::GetAttributeValue<std::string>(shaderEl, "location", "Package"));
                     desc.m_filePath = XMLUtils::GetAttributeValue<std::string>(shaderEl, "file-name", "");
-                    desc.m_forwardPass = ConvertStringToForwardPass(XMLUtils::GetAttributeValue<std::string>(shaderEl, "forward-pass", "Base"));
+                    desc.m_pass = ConvertStringToRenderPass(XMLUtils::GetAttributeValue<std::string>(shaderEl, "pass", "Base"));
                     out_shaderFiles.push_back(desc);
                     
                     // Get the shader variables
@@ -572,7 +572,7 @@ namespace ChilliSource
                     {
                         if(in_shader->GetLoadState() == Resource::LoadState::k_loaded)
                         {
-                            out_material->AddCustomForwardShader(in_shader, in_descs[in_loadIndex].m_forwardPass);
+                            out_material->AddCustomShader(in_shader, in_descs[in_loadIndex].m_pass);
                             
                             u32 newLoadIndex = in_loadIndex + 1;
                             
@@ -697,7 +697,7 @@ namespace ChilliSource
                     return;
                 }
                 
-                material->AddCustomForwardShader(shader, shaderFiles[i].m_forwardPass);
+                material->AddCustomShader(shader, shaderFiles[i].m_pass);
             }
         }
         
@@ -756,7 +756,7 @@ namespace ChilliSource
             desc.m_filePath = shaderDesc.m_filePath;
             desc.m_location = shaderDesc.m_location;
             desc.m_type = ResourceType::k_shader;
-            desc.m_forwardPass = shaderDesc.m_forwardPass;
+            desc.m_pass = shaderDesc.m_pass;
             resourceFiles.push_back(desc);
         }
         

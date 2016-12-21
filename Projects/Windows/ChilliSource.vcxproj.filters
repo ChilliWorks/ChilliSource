@@ -2501,9 +2501,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadMaterialGroupRenderCommand.h">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\TargetRenderPassGroup.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
@@ -2845,6 +2842,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialShadingType.h">
       <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPasses.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

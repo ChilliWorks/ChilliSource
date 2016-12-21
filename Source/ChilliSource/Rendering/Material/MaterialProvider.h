@@ -57,7 +57,7 @@ namespace ChilliSource
         {
             std::string m_filePath;
             StorageLocation m_location;
-            ForwardRenderPasses m_forwardPass;
+            RenderPasses m_pass;
         };
         //-------------------------------------------------------------------------
         /// Holds the description of a texture as required by the material

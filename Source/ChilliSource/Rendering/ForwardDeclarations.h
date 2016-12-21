@@ -61,9 +61,9 @@ namespace ChilliSource
     enum class CanvasDrawMode;
     enum class CullFace;
     enum class DepthTestComparison;
-    enum class ForwardRenderPasses;
     enum class HorizontalTextJustification;
     enum class RenderLayer;
+    enum class RenderPasses;
     enum class SizePolicy;
     enum class StencilOp;
     enum class SurfaceFormat;

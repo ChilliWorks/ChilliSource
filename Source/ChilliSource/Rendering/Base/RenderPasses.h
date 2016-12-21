@@ -22,14 +22,14 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_FORWARDRENDERPASSES_H_
-#define _CHILLISOURCE_RENDERING_BASE_FORWARDRENDERPASSES_H_
+#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERPASSES_H_
+#define _CHILLISOURCE_RENDERING_BASE_RENDERPASSES_H_
 
 #include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
-    /// An enum describing each of the passes in the multi-pass forward renderer. This consists of
+    /// An enum describing each of the passes in the multi-pass renderer. This consists of
     ///
     /// * The shadow map pass. This renders all shadow casting opaque objects in the scene to
     ///   acquire the shadow map used by each shadow casting light.
@@ -47,7 +47,7 @@ namespace ChilliSource
     ///   lighting. The depth buffer is not written to; the objects are first sorted to ensure no
     ///   artefacts occur.
     ///
-    enum class ForwardRenderPasses
+    enum class RenderPasses
     {
         k_shadowMap,
         k_base,

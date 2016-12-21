@@ -301,15 +301,15 @@ namespace ChilliSource
     {
         m_customShaderVertexFormat = vertexFormat;
         m_customShaderFallbackType = fallbackType;
-        m_customForwardShaders.clear();
+        m_customShaders.clear();
         
         m_isCacheValid = false;
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
-    void Material::AddCustomForwardShader(const ShaderCSPtr& shader, ForwardRenderPasses pass) noexcept
+    void Material::AddCustomShader(const ShaderCSPtr& shader, RenderPasses pass) noexcept
     {
-        m_customForwardShaders.push_back(std::make_pair(shader, pass));
+        m_customShaders.push_back(std::make_pair(shader, pass));
         
         m_isCacheValid = false;
     }
@@ -411,7 +411,7 @@ namespace ChilliSource
     {
         CS_ASSERT(!m_renderMaterialGroup, "Render material group must be null.");
         CS_ASSERT(m_textures.size() == 1, "Unlit materials must have one texture.");
-        CS_ASSERT(m_customForwardShaders.size() == 0, "Unlit materials cannot have custom shaders.");
+        CS_ASSERT(m_customShaders.size() == 0, "Unlit materials cannot have custom shaders.");
         CS_ASSERT(m_floatVars.size() == 0, "Unlit materials cannot have custom shader variables.");
         CS_ASSERT(m_vec2Vars.size() == 0, "Unlit materials cannot have custom shader variables.");
         CS_ASSERT(m_vec3Vars.size() == 0, "Unlit materials cannot have custom shader variables.");
@@ -439,7 +439,7 @@ namespace ChilliSource
         CS_ASSERT(m_isDepthTestEnabled, "Blinn materials must have depth test enabled.");
         CS_ASSERT(m_isFaceCullingEnabled, "Blinn materials must have face culling enabled.");
         CS_ASSERT(m_cullFace == CullFace::k_back, "Blinn materials must use back-face culling.");
-        CS_ASSERT(m_customForwardShaders.size() == 0, "Blinn materials cannot have custom shaders.");
+        CS_ASSERT(m_customShaders.size() == 0, "Blinn materials cannot have custom shaders.");
         CS_ASSERT(m_floatVars.size() == 0, "Blinn materials cannot have custom shader variables.");
         CS_ASSERT(m_vec2Vars.size() == 0, "Blinn materials cannot have custom shader variables.");
         CS_ASSERT(m_vec3Vars.size() == 0, "Blinn materials cannot have custom shader variables.");
@@ -455,7 +455,7 @@ namespace ChilliSource
     void Material::CreateCustomRenderMaterialGroup() const noexcept
     {
         CS_ASSERT(!m_renderMaterialGroup, "Render material group must be null.");
-        CS_ASSERT(m_customForwardShaders.size() > 0, "Custom material must have at least one custom shader.");
+        CS_ASSERT(m_customShaders.size() > 0, "Custom material must have at least one custom shader.");
         
         
         std::vector<const RenderTexture*> renderTextures;
@@ -466,9 +466,9 @@ namespace ChilliSource
             renderTextures.push_back(texture->GetRenderTexture());
         }
         
-        std::vector<std::pair<const RenderShader*, ForwardRenderPasses>> renderShaders;
-        renderShaders.reserve(m_customForwardShaders.size());
-        for(const auto& shader : m_customForwardShaders)
+        std::vector<std::pair<const RenderShader*, RenderPasses>> renderShaders;
+        renderShaders.reserve(m_customShaders.size());
+        for(const auto& shader : m_customShaders)
         {
             renderShaders.push_back(std::make_pair(shader.first->GetRenderShader(), shader.second));
         }

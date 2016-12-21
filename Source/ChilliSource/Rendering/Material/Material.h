@@ -37,7 +37,7 @@
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
-#include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
+#include <ChilliSource/Rendering/Base/RenderPasses.h>
 #include <ChilliSource/Rendering/Material/MaterialShadingType.h>
 
 #include <array>
@@ -366,9 +366,9 @@ namespace ChilliSource
         /// @author Ian Copland
         ///
         /// @param shader - The custom shader.
-        /// @param pass - The forward render pass that the shader is bound to
+        /// @param pass - The render pass that the shader is bound to
         //-----------------------------------------------------------
-        void AddCustomForwardShader(const ShaderCSPtr& shader, ForwardRenderPasses pass) noexcept;
+        void AddCustomShader(const ShaderCSPtr& shader, RenderPasses pass) noexcept;
         //-----------------------------------------------------------
         /// Set the value of the variable with the given name to the
         /// given value
@@ -533,7 +533,7 @@ namespace ChilliSource
         bool m_isFaceCullingEnabled = true;
         bool m_isStencilTestEnabled = false;
         
-        std::vector<std::pair<ShaderCSPtr, ForwardRenderPasses>> m_customForwardShaders;
+        std::vector<std::pair<ShaderCSPtr, RenderPasses>> m_customShaders;
         VertexFormat m_customShaderVertexFormat = VertexFormat::k_sprite;
         MaterialShadingType m_customShaderFallbackType;
         

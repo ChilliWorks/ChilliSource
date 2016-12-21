@@ -591,7 +591,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPassCompiler.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ForwardRenderPasses.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\FrameAllocatorQueue.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\IRenderCommandProcessor.h" />
@@ -607,6 +606,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderLayer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderObject.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPass.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPasses.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObject.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassObjectSorter.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderPassVisibilityChecker.h" />

@@ -178,7 +178,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        virtual const RenderMaterialGroup* CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, ForwardRenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures,
+        virtual const RenderMaterialGroup* CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures,
                                                                    bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                    TestFunc depthTestFunc,
                                                                    BlendMode sourceBlendMode, BlendMode destinationBlendMode,

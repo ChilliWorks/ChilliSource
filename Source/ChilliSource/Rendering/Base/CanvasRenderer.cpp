@@ -742,7 +742,7 @@ namespace ChilliSource
         {
             material->SetShadingType(MaterialShadingType::k_custom);
             material->PrepCustomShaders(VertexFormat::k_sprite, MaterialShadingType::k_custom);
-            material->AddCustomForwardShader(shader, ForwardRenderPasses::k_base);
+            material->AddCustomShader(shader, RenderPasses::k_base);
             material->SetTransparencyEnabled(true);
             material->SetDepthTestEnabled(false);
             material->SetStencilTestEnabled(true);
@@ -755,7 +755,7 @@ namespace ChilliSource
         {
             material->SetShadingType(MaterialShadingType::k_custom);
             material->PrepCustomShaders(VertexFormat::k_sprite, MaterialShadingType::k_custom);
-            material->AddCustomForwardShader(shader, ForwardRenderPasses::k_base);
+            material->AddCustomShader(shader, RenderPasses::k_base);
             material->SetTransparencyEnabled(true);
             material->SetDepthTestEnabled(false);
             material->SetColourWriteEnabled(false);

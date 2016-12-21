@@ -26,7 +26,7 @@
 
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
+#include <ChilliSource/Rendering/Base/RenderPasses.h>
 #include <ChilliSource/Rendering/Base/RenderFrame.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
@@ -180,7 +180,7 @@ namespace ChilliSource
             {
                 if (renderObject.ShouldCastShadows())
                 {
-                    auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_shadowMap));
+                    auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(RenderPasses::k_shadowMap));
                     
                     if (renderMaterial)
                     {
@@ -206,7 +206,7 @@ namespace ChilliSource
             
             for (const auto& renderObject : renderObjects)
             {
-                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_base));
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(RenderPasses::k_base));
                 
                 if (renderMaterial)
                 {
@@ -230,10 +230,10 @@ namespace ChilliSource
         ///
         std::vector<RenderPassObject> GetDirectionalLightRenderPassObjects(const std::vector<RenderObject>& renderObjects, const DirectionalRenderLight& directionalRenderLight) noexcept
         {
-            ForwardRenderPasses passType = ForwardRenderPasses::k_directionalLight;
+            RenderPasses passType = RenderPasses::k_directionalLight;
             if (directionalRenderLight.GetShadowMapTarget())
             {
-                passType = ForwardRenderPasses::k_directionalLightShadows;
+                passType = RenderPasses::k_directionalLightShadows;
             }
             
             std::vector<RenderPassObject> renderPassObjects;
@@ -270,7 +270,7 @@ namespace ChilliSource
             
             for (const auto& renderObject : renderObjects)
             {
-                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_pointLight));
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(RenderPasses::k_pointLight));
                 
                 if (renderMaterial && pointLightBoundingSphere.Contains(renderObject.GetBoundingSphere()))
                 {
@@ -295,7 +295,7 @@ namespace ChilliSource
             
             for (const auto& renderObject : renderObjects)
             {
-                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(ForwardRenderPasses::k_transparent));
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(RenderPasses::k_transparent));
                 
                 if (renderMaterial)
                 {

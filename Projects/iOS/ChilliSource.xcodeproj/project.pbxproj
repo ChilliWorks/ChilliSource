@@ -838,7 +838,7 @@
 		81845F821D3503E8004B0C46 /* CullFace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CullFace.h; sourceTree = "<group>"; };
 		81845F841D3503E8004B0C46 /* ForwardRenderPassCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ForwardRenderPassCompiler.cpp; sourceTree = "<group>"; };
 		81845F851D3503E8004B0C46 /* ForwardRenderPassCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardRenderPassCompiler.h; sourceTree = "<group>"; };
-		81845F861D3503E8004B0C46 /* ForwardRenderPasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardRenderPasses.h; sourceTree = "<group>"; };
+		81845F861D3503E8004B0C46 /* RenderPasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPasses.h; sourceTree = "<group>"; };
 		81845F871D3503E8004B0C46 /* FrameAllocatorQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameAllocatorQueue.cpp; sourceTree = "<group>"; };
 		81845F881D3503E8004B0C46 /* FrameAllocatorQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameAllocatorQueue.h; sourceTree = "<group>"; };
 		81845F891D3503E8004B0C46 /* HorizontalTextJustification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HorizontalTextJustification.cpp; sourceTree = "<group>"; };
@@ -2513,7 +2513,7 @@
 				81845F821D3503E8004B0C46 /* CullFace.h */,
 				81845F841D3503E8004B0C46 /* ForwardRenderPassCompiler.cpp */,
 				81845F851D3503E8004B0C46 /* ForwardRenderPassCompiler.h */,
-				81845F861D3503E8004B0C46 /* ForwardRenderPasses.h */,
+				81845F861D3503E8004B0C46 /* RenderPasses.h */,
 				81845F871D3503E8004B0C46 /* FrameAllocatorQueue.cpp */,
 				81845F881D3503E8004B0C46 /* FrameAllocatorQueue.h */,
 				81845F891D3503E8004B0C46 /* HorizontalTextJustification.cpp */,

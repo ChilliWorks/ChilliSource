@@ -40,7 +40,7 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/ForwardRenderPassCompiler.h>
-#include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
+#include <ChilliSource/Rendering/Base/RenderPasses.h>
 #include <ChilliSource/Rendering/Base/FrameAllocatorQueue.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>

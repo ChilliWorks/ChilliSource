@@ -25,7 +25,7 @@
 #include <ChilliSource/Rendering/Base/RenderPassVisibilityChecker.h>
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Rendering/Base/ForwardRenderPasses.h>
+#include <ChilliSource/Rendering/Base/RenderPasses.h>
 #include <ChilliSource/Rendering/Base/RenderFrame.h>
 #include <ChilliSource/Rendering/Base/RenderPass.h>
 #include <ChilliSource/Rendering/Base/RenderObject.h>
