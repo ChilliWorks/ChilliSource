@@ -45,6 +45,10 @@ namespace ChilliSource
         ///
         const Vector3& GetPosition() const noexcept { return m_position; };
         
+        /// @return The view matrix of the camera.
+        ///
+        const Matrix4& GetViewMatrix() const noexcept { return m_viewMatrix; };
+        
         /// @return The view projection matrix of the camera.
         ///
         const Matrix4& GetViewProjectionMatrix() const noexcept { return m_viewProjectionMatrix; };
@@ -56,12 +60,15 @@ namespace ChilliSource
         ///
         /// @param position
         ///     The world space position of the camera.
+        /// @param viewMatrix
+        ///     The view matrix (inverse transform) of the camera
         /// @param viewProjectionMatrix
         ///     The view projection matrix of the camera.
         ///
-        ApplyCameraRenderCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept;
+        ApplyCameraRenderCommand(const Vector3& position, const Matrix4& viewMatrix, const Matrix4& viewProjectionMatrix) noexcept;
         
         Vector3 m_position;
+        Matrix4 m_viewMatrix;
         Matrix4 m_viewProjectionMatrix;
     };
 }

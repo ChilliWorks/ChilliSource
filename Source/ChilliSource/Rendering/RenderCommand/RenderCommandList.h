@@ -142,10 +142,12 @@ namespace ChilliSource
         ///
         /// @param position
         ///     The world space position of the camera.
+        /// @param viewMatrix
+        ///     The view matrix (inverse transform) of the camera.
         /// @param viewProjectionMatrix
         ///     The view projection matrix of the camera.
         ///
-        void AddApplyCameraCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept;
+        void AddApplyCameraCommand(const Vector3& position, const Matrix4& viewMatrix, const Matrix4& viewProjectionMatrix) noexcept;
         
         /// Creates and adds a new apply ambient light command to the render command list.
         ///

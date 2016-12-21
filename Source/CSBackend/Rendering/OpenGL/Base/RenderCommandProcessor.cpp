@@ -80,6 +80,7 @@ namespace CSBackend
         {
             const std::string k_uniformWVPMat = "u_wvpMat";
             const std::string k_uniformWorldMat = "u_worldMat";
+            const std::string k_uniformViewMat = "u_viewMat";
             const std::string k_uniformNormalMat = "u_normalMat";
             
             /// Converts from a ChilliSource polygon type to a OpenGL polygon type.
@@ -401,7 +402,7 @@ namespace CSBackend
         {
             m_currentMaterial = nullptr;
             
-            m_currentCamera = GLCamera(renderCommand->GetPosition(), renderCommand->GetViewProjectionMatrix());
+            m_currentCamera = GLCamera(renderCommand->GetPosition(), renderCommand->GetViewMatrix(), renderCommand->GetViewProjectionMatrix());
         }
         
         //------------------------------------------------------------------------------
@@ -562,6 +563,7 @@ namespace CSBackend
             
             auto glShader = static_cast<GLShader*>(m_currentShader->GetExtraData());
             glShader->SetUniform(k_uniformWorldMat, renderCommand->GetWorldMatrix(), GLShader::FailurePolicy::k_silent);
+            glShader->SetUniform(k_uniformViewMat, m_currentCamera.GetViewMatrix(), GLShader::FailurePolicy::k_silent);
             glShader->SetUniform(k_uniformWVPMat, renderCommand->GetWorldMatrix() * m_currentCamera.GetViewProjectionMatrix(), GLShader::FailurePolicy::k_silent);
             glShader->SetUniform(k_uniformNormalMat, ChilliSource::Matrix4::Transpose(ChilliSource::Matrix4::Inverse(renderCommand->GetWorldMatrix())), GLShader::FailurePolicy::k_silent);
             

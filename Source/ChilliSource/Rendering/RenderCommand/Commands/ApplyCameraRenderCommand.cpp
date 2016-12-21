@@ -27,8 +27,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    ApplyCameraRenderCommand::ApplyCameraRenderCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept
-        : RenderCommand(Type::k_applyCamera), m_position(position), m_viewProjectionMatrix(viewProjectionMatrix)
+    ApplyCameraRenderCommand::ApplyCameraRenderCommand(const Vector3& position, const Matrix4& viewMatrix, const Matrix4& viewProjectionMatrix) noexcept
+        : RenderCommand(Type::k_applyCamera), m_position(position), m_viewMatrix(viewMatrix), m_viewProjectionMatrix(viewProjectionMatrix)
     {
     }
 }

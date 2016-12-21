@@ -49,14 +49,20 @@ namespace CSBackend
             ///
             /// @param position
             ///     The world space position of the camera.
+            /// @param viewMatrix
+            ///     The view matrix (inverse transform) of the camera
             /// @param viewProjectionMatrix
             ///     The view projection matrix of the camera.
             ///
-            GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept;
+            GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewMatrix, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept;
             
             /// @return The world space position of the camera.
             ///
             const ChilliSource::Vector3& GetPosition() const noexcept { return m_position; }
+            
+            /// @return The view matrix of the camera.
+            ///
+            const ChilliSource::Matrix4& GetViewMatrix() const noexcept { return m_viewMatrix; }
             
             /// @return The view projection matrix of the camera.
             ///
@@ -73,6 +79,7 @@ namespace CSBackend
             
         private:
             ChilliSource::Vector3 m_position;
+            ChilliSource::Matrix4 m_viewMatrix;
             ChilliSource::Matrix4 m_viewProjectionMatrix;
         };
     }

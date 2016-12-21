@@ -36,8 +36,8 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        GLCamera::GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept
-            : m_position(position), m_viewProjectionMatrix(viewProjectionMatrix)
+        GLCamera::GLCamera(const ChilliSource::Vector3& position, const ChilliSource::Matrix4& viewMatrix, const ChilliSource::Matrix4& viewProjectionMatrix) noexcept
+            : m_position(position), m_viewMatrix(viewMatrix), m_viewProjectionMatrix(viewProjectionMatrix)
         {
         }
         

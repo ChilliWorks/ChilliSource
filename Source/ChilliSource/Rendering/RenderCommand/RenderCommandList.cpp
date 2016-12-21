@@ -143,9 +143,9 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddApplyCameraCommand(const Vector3& position, const Matrix4& viewProjectionMatrix) noexcept
+    void RenderCommandList::AddApplyCameraCommand(const Vector3& position, const Matrix4& viewMatrix, const Matrix4& viewProjectionMatrix) noexcept
     {
-        RenderCommandUPtr renderCommand(new ApplyCameraRenderCommand(position, viewProjectionMatrix));
+        RenderCommandUPtr renderCommand(new ApplyCameraRenderCommand(position, viewMatrix, viewProjectionMatrix));
         
         m_orderedCommands.push_back(renderCommand.get());
         m_renderCommands.push_back(std::move(renderCommand));

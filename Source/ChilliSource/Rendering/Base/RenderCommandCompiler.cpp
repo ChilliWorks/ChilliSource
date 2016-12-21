@@ -355,7 +355,7 @@ namespace ChilliSource
                 if (ContainsRenderPassObject(cameraRenderPassGroup))
                 {
                     const auto& camera = cameraRenderPassGroup.GetCamera();
-                    renderCommandBuffer->GetRenderCommandList(currentList)->AddApplyCameraCommand(camera.GetWorldMatrix().GetTranslation(), camera.GetViewProjectionMatrix());
+                    renderCommandBuffer->GetRenderCommandList(currentList)->AddApplyCameraCommand(camera.GetWorldMatrix().GetTranslation(), Matrix4::Inverse(camera.GetWorldMatrix()), camera.GetViewProjectionMatrix());
                     
                     for (const auto& renderPass : cameraRenderPassGroup.GetRenderPasses())
                     {
