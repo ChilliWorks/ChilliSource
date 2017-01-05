@@ -121,7 +121,7 @@ namespace ChilliSource
             
             const auto& faces = root["Faces"];
             CS_ASSERT(faces.size() == 6, "Cubemap must have 6 images specified");
-            for(auto i=0; i<faces.size(); ++i)
+            for(auto i=0u; i<faces.size(); ++i)
             {
                 imagePaths[i] = faces[i].asString();
             }
