@@ -61,16 +61,8 @@ namespace ChilliSource
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(size);
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(colour);
-        
-        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
-        meshComponent->SetShadowCastingEnabled(true);
-        
-        auto entity = Entity::Create();
-        entity->SetName(ToString(m_entityCount++) + "-Plane");
-        entity->AddComponent(meshComponent);
-        return entity;
+        return CreatePlane(CreateStaticBlinnColourMaterial(colour), size);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -94,16 +86,8 @@ namespace ChilliSource
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(size);
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(colour);
-        
-        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
-        meshComponent->SetShadowCastingEnabled(true);
-        
-        auto entity = Entity::Create();
-        entity->SetName(ToString(m_entityCount++) + "-Box");
-        entity->AddComponent(meshComponent);
-        return entity;
+        return CreateBox(CreateStaticBlinnColourMaterial(colour), size);
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

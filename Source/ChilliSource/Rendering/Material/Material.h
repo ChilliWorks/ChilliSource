@@ -51,7 +51,7 @@ namespace ChilliSource
     /// appearance via lighting, texture, shader, etc.
     ///
     /// NOTE: Textures and cubemaps are different types with their own
-    /// data and methods
+    /// data and methods but both will use up texture units on OpenGL.
     ///
     /// @author S Downie
     //----------------------------------------------------------
