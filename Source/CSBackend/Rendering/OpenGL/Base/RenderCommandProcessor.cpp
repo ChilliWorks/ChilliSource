@@ -484,8 +484,8 @@ namespace CSBackend
                     glShader->Bind();
                 }
                 
-                m_textureUnitManager->Bind(GL_TEXTURE_2D, m_currentMaterial->GetRenderTextures2D());
-                m_textureUnitManager->Bind(GL_TEXTURE_CUBE_MAP, m_currentMaterial->GetRenderTexturesCubemap());
+                m_textureUnitManager->Bind(GL_TEXTURE_2D, m_currentMaterial->GetRenderTextures2D(), 0u);
+                m_textureUnitManager->Bind(GL_TEXTURE_CUBE_MAP, m_currentMaterial->GetRenderTexturesCubemap(), u32(m_currentMaterial->GetRenderTextures2D().size()));
                 
                 m_currentCamera.Apply(glShader);
                 

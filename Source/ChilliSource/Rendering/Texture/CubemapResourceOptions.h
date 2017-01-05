@@ -39,7 +39,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //-------------------------------------------------------
-    class CubemapResourceOptions final : public IResourceOptions<Texture>
+    class CubemapResourceOptions final : public IResourceOptions<Cubemap>
     {
     public:
         //-------------------------------------------------------

@@ -30,12 +30,12 @@
 namespace ChilliSource
 {
     ///
-    /// * Texture2D: Standard 2D texture
+    /// * Texture: Standard 2D texture
     /// * Cubemap: Created from 6 2D textures
     ///
     enum class TextureType
     {
-        k_texture2D,
+        k_texture,
         k_cubemap
     };
 }

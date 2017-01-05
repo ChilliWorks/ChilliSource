@@ -40,6 +40,7 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
+#include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
 #include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
 #include <ChilliSource/Rendering/Texture/TextureType.h>
 
@@ -297,9 +298,9 @@ namespace ChilliSource
             auto typeLower = type;
             StringUtils::ToLowerCase(typeLower);
             
-            if (typeLower == "texture2d")
+            if (typeLower == "texture")
             {
-                return TextureType::k_texture2D;
+                return TextureType::k_texture;
             }
             else if (typeLower == "cubemap")
             {
@@ -307,7 +308,7 @@ namespace ChilliSource
             }
             
             CS_LOG_FATAL("Invalid texture type: " + type);
-            return TextureType::k_texture2D;
+            return TextureType::k_texture;
         }
         //----------------------------------------------------------------------------
         /// Parse the vertex format from the given string name. If the name doesn't
@@ -568,7 +569,7 @@ namespace ChilliSource
                     desc.m_filterMode = ConvertStringToFilterMode(XMLUtils::GetAttributeValue<std::string>(textureEl, "filter-mode", "Bilinear"));
                     desc.m_wrapModeU = ConvertStringToWrapMode(XMLUtils::GetAttributeValue<std::string>(textureEl, "wrap-mode-u", "Clamp"));
                     desc.m_wrapModeV = ConvertStringToWrapMode(XMLUtils::GetAttributeValue<std::string>(textureEl, "wrap-mode-v", "Clamp"));
-                    desc.m_type = ConvertStringToTextureType(XMLUtils::GetAttributeValue<std::string>(textureEl, "type", "Texture2D"));
+                    desc.m_type = ConvertStringToTextureType(XMLUtils::GetAttributeValue<std::string>(textureEl, "type", "Texture"));
                     out_textureFiles.push_back(desc);
                     
                     textureEl =  XMLUtils::GetNextSiblingElement(textureEl, "Texture");
@@ -633,7 +634,7 @@ namespace ChilliSource
                 {
                     switch(in_descs[in_loadIndex].m_textureType)
                     {
-                        case TextureType::k_texture2D:
+                        case TextureType::k_texture:
                         {
                             auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV));
                             
@@ -768,7 +769,7 @@ namespace ChilliSource
             {
                 switch (textureFiles[i].m_type)
                 {
-                    case TextureType::k_texture2D:
+                    case TextureType::k_texture:
                     {
                         auto options(std::make_shared<TextureResourceOptions>(textureFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV));
                         

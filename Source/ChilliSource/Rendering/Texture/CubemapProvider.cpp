@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/TextureDesc.h>
-#include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
+#include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
 
 #include <json/json.h>
 
@@ -39,7 +39,7 @@ namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(CubemapProvider);
     
-    const IResourceOptionsBaseCSPtr CubemapProvider::s_defaultOptions(std::make_shared<TextureResourceOptions>());
+    const IResourceOptionsBaseCSPtr CubemapProvider::s_defaultOptions(std::make_shared<CubemapResourceOptions>());
     
     namespace
     {
@@ -76,7 +76,7 @@ namespace ChilliSource
     //----------------------------------------------------------------------------
     InterfaceIDType CubemapProvider::GetResourceType() const
     {
-        return Texture::InterfaceID;
+        return Cubemap::InterfaceID;
     }
     //----------------------------------------------------------------------------
     //----------------------------------------------------------------------------
@@ -188,7 +188,7 @@ namespace ChilliSource
         if(in_delegate == nullptr)
         {
             auto cubemap = static_cast<Cubemap*>(out_resource.get());
-            auto options = static_cast<const TextureResourceOptions*>(in_options.get());
+            auto options = static_cast<const CubemapResourceOptions*>(in_options.get());
             
             std::array<std::unique_ptr<const u8[]>, 6> textureData;
             for(auto i=0; i<images.size(); ++i)
@@ -210,7 +210,7 @@ namespace ChilliSource
             Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
              {
                  auto cubemap = static_cast<Cubemap*>(out_resource.get());
-                 auto options = static_cast<const TextureResourceOptions*>(in_options.get());
+                 auto options = static_cast<const CubemapResourceOptions*>(in_options.get());
                  
                  std::array<std::unique_ptr<const u8[]>, 6> textureData;
                  for(auto i=0; i<images.size(); ++i)

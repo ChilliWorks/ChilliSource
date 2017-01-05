@@ -59,8 +59,10 @@ namespace CSBackend
             ///     Texture2D or Cubemap
             /// @param textures
             ///     The list of textures which should be bound.
+            /// @param startingBindIdx
+            ///     The index to start binding from
             ///
-            void Bind(GLenum target, const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept;
+            void Bind(GLenum target, const std::vector<const ChilliSource::RenderTexture*>& textures, u32 startingBindIdx) noexcept;
             
             /// Binds an additional texture to the first free slot, returning the slot index.
             ///

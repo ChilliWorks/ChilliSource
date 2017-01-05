@@ -25,6 +25,7 @@
 #include <CSBackend/Rendering/OpenGL/Texture/GLTextureUnitManager.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
+#include <CSBackend/Rendering/OpenGL/Texture/GLCubemap.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
@@ -49,21 +50,39 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLTextureUnitManager::Bind(GLenum target, const std::vector<const ChilliSource::RenderTexture*>& textures) noexcept
+        void GLTextureUnitManager::Bind(GLenum target, const std::vector<const ChilliSource::RenderTexture*>& textures, u32 startingBindIdx) noexcept
         {
-            for (u32 textureUnitIndex = 0; textureUnitIndex < u32(textures.size()); ++textureUnitIndex)
+            for(auto i=0; i<textures.size(); ++i)
             {
-                if (m_boundTextures[textureUnitIndex] != textures[textureUnitIndex])
+                auto textureUnitIndex = startingBindIdx + i;
+                
+                if (m_boundTextures[textureUnitIndex] != textures[i])
                 {
-                    m_boundTextures[textureUnitIndex] = textures[textureUnitIndex];
-                    
-                    auto glTexture = static_cast<GLTexture*>(m_boundTextures[textureUnitIndex]->GetExtraData());
-
-                    CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
-                    CS_ASSERT(!glTexture->IsDataInvalid(), "GLTextureUnitManager::Bind(): Failed to bind texture, its context is invalid!");
+                    m_boundTextures[textureUnitIndex] = textures[i];
                     
                     glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
-                    glBindTexture(target, glTexture->GetHandle());
+                    
+                    switch(target)
+                    {
+                        case GL_TEXTURE_2D:
+                        {
+                            auto glTexture = static_cast<GLTexture*>(m_boundTextures[textureUnitIndex]->GetExtraData());
+                            
+                            CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
+                            CS_ASSERT(!glTexture->IsDataInvalid(), "GLTextureUnitManager::Bind(): Failed to bind texture, its context is invalid!");
+                            glBindTexture(target, glTexture->GetHandle());
+                            break;
+                        }
+                        case GL_TEXTURE_CUBE_MAP:
+                        {
+                            auto glCubemap = static_cast<GLCubemap*>(m_boundTextures[textureUnitIndex]->GetExtraData());
+                            
+                            CS_ASSERT(glCubemap, "Cannot bind a cubemap which hasn't been loaded.");
+                            CS_ASSERT(!glCubemap->IsDataInvalid(), "GLTextureUnitManager::Bind(): Failed to bind cubemap, its context is invalid!");
+                            glBindTexture(target, glCubemap->GetHandle());
+                            break;
+                        }
+                    }
                 }
             }
             
@@ -79,11 +98,26 @@ namespace CSBackend
             
             m_boundTextures.push_back(texture);
             
-            auto glTexture = static_cast<GLTexture*>(texture->GetExtraData());
-            CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
-            
             glActiveTexture(GL_TEXTURE0 + textureIndex);
-            glBindTexture(target, glTexture->GetHandle());
+            
+            switch(target)
+            {
+                case GL_TEXTURE_2D:
+                {
+                    auto glTexture = static_cast<GLTexture*>(texture->GetExtraData());
+                    CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
+                    glBindTexture(target, glTexture->GetHandle());
+                    break;
+                }
+                case GL_TEXTURE_CUBE_MAP:
+                {
+                    auto glCubemap = static_cast<GLCubemap*>(texture->GetExtraData());
+                    CS_ASSERT(glCubemap, "Cannot bind a cubemap which hasn't been loaded.");
+                    glBindTexture(target, glCubemap->GetHandle());
+                    break;
+                }
+            }
+        
             glActiveTexture(GL_TEXTURE0);
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding an additional texture.");
