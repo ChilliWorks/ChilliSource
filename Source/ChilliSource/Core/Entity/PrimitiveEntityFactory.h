@@ -54,42 +54,68 @@ namespace ChilliSource
     {
     public:
         CS_DECLARE_NAMEDTYPE(PrimitiveEntityFactory);
-        //------------------------------------------------------------------------------
+        
+        ///
         /// Allows querying of whether or not this system implements the interface
         /// described by the given interface Id. Typically this is not called directly
         /// as the templated equivalent IsA<Interface>() is preferred.
         ///
-        /// @author Ian Copland
-        ///
-        /// @param in_interfaceId - The interface Id.
+        /// @param interfaceId
+        ///     The interface Id.
         ///
         /// @return Whether or not the interface is implemented.
-        //------------------------------------------------------------------------------
-        bool IsA(InterfaceIDType in_interfaceId) const override;
-        //------------------------------------------------------------------------------
+        ///
+        bool IsA(InterfaceIDType interfaceId) const override;
+        
+        ///
         /// Creates a coloured plane of the given size. The plane will use a blinn
         /// shading material so there must be lights in the scene to see it.
         ///
-        /// @author Ian Copland
-        ///
-        /// @param in_colour - The colour of the plane.
-        /// @param in_size - [Optional] The size of the plane. Defaults to [10, 10].
+        /// @param colour
+        ///     The colour of the plane.
+        /// @param size
+        ///     [Optional] The size of the plane. Defaults to [10, 10].
         ///
         /// @return The new entity.
-        //------------------------------------------------------------------------------
-        EntityUPtr CreatePlane(const Colour& in_colour, const Vector2& in_size = Vector2(10.0f, 10.0f));
-        //------------------------------------------------------------------------------
+        ///
+        EntityUPtr CreatePlane(const Colour& colour, const Vector2& size = Vector2(10.0f, 10.0f));
+        
+        ///
+        /// Creates a plane of the given size with the given material
+        ///
+        /// @param material
+        ///     The material to apply.
+        /// @param size
+        ///     [Optional] The size of the plane. Defaults to [10, 10].
+        ///
+        /// @return The new entity.
+        ///
+        EntityUPtr CreatePlane(const MaterialCSPtr& material, const Vector2& size = Vector2(10.0f, 10.0f));
+        
+        ///
         /// Creates a coloured box of the given size. The box will use a blinn shading
         /// material so there must be lights in the scene to see it.
         ///
-        /// @author Ian Copland
-        ///
-        /// @param in_colour - The colour of the box.
-        /// @param in_size - [Optional] The size of the box. Defaults to [1, 1, 1].
+        /// @param colour
+        ///     The colour of the box.
+        /// @param size
+        ///     [Optional] The size of the box. Defaults to [1, 1, 1].
         ///
         /// @return The new entity.
-        //------------------------------------------------------------------------------
-        EntityUPtr CreateBox(const Colour& in_colour, const Vector3& in_size = Vector3(1.0f, 1.0f, 1.0f));
+        ///
+        EntityUPtr CreateBox(const Colour& colour, const Vector3& size = Vector3(1.0f, 1.0f, 1.0f));
+        
+        ///
+        /// Creates a box of the given size with the given material
+        ///
+        /// @param material
+        ///     The material to apply
+        /// @param size
+        ///     [Optional] The size of the box. Defaults to [1, 1, 1].
+        ///
+        /// @return The new entity.
+        ///
+        EntityUPtr CreateBox(const MaterialCSPtr& material, const Vector3& size = Vector3(1.0f, 1.0f, 1.0f));
         
     private:
         friend class Application;

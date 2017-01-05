@@ -57,12 +57,12 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    EntityUPtr PrimitiveEntityFactory::CreatePlane(const Colour& in_colour, const Vector2& in_size)
+    EntityUPtr PrimitiveEntityFactory::CreatePlane(const Colour& colour, const Vector2& size)
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(in_size);
-        MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
+        ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(size);
+        MaterialCSPtr material = CreateStaticBlinnColourMaterial(colour);
         
         StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
@@ -74,12 +74,44 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    EntityUPtr PrimitiveEntityFactory::CreateBox(const Colour& in_colour, const Vector3& in_size)
+    EntityUPtr PrimitiveEntityFactory::CreatePlane(const MaterialCSPtr& material, const Vector2& size)
     {
         CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
-        ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(in_size);
-        MaterialCSPtr material = CreateStaticBlinnColourMaterial(in_colour);
+        ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(size);
+        
+        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
+        meshComponent->SetShadowCastingEnabled(true);
+        
+        auto entity = Entity::Create();
+        entity->SetName(ToString(m_entityCount++) + "-Plane");
+        entity->AddComponent(meshComponent);
+        return entity;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    EntityUPtr PrimitiveEntityFactory::CreateBox(const Colour& colour, const Vector3& size)
+    {
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
+        
+        ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(size);
+        MaterialCSPtr material = CreateStaticBlinnColourMaterial(colour);
+        
+        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
+        meshComponent->SetShadowCastingEnabled(true);
+        
+        auto entity = Entity::Create();
+        entity->SetName(ToString(m_entityCount++) + "-Box");
+        entity->AddComponent(meshComponent);
+        return entity;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    EntityUPtr PrimitiveEntityFactory::CreateBox(const MaterialCSPtr& material, const Vector3& size)
+    {
+        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
+        
+        ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(size);
         
         StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
