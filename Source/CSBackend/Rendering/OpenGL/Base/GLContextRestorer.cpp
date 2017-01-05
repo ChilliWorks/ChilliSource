@@ -39,11 +39,13 @@
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Target/RenderTargetGroupManager.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 #include <CSBackend/Rendering/OpenGL/Target/GLTargetGroup.h>
+#include <CSBackend/Rendering/OpenGL/Texture/GLCubemap.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
 namespace CSBackend
@@ -88,6 +90,16 @@ namespace CSBackend
                     if(glTexture)
                     {
                         glTexture->Invalidate();
+                    }
+                }
+                
+                auto allCubemaps = resourcePool->GetAllResources<ChilliSource::Cubemap>();
+                for (const auto& cubemap : allCubemaps)
+                {
+                    GLCubemap* glCubemap = static_cast<GLCubemap*>(cubemap->GetRenderTexture()->GetExtraData());
+                    if(glCubemap)
+                    {
+                        glCubemap->Invalidate();
                     }
                 }
                 
@@ -137,6 +149,17 @@ namespace CSBackend
                     }
                 }
                 resourcePool->RefreshResources<ChilliSource::Texture>();
+                
+                auto allCubemaps = resourcePool->GetAllResources<ChilliSource::Cubemap>();
+                for (const auto& cubemap : allCubemaps)
+                {
+                    if (cubemap->GetStorageLocation() == ChilliSource::StorageLocation::k_none)
+                    {
+                        ChilliSource::RestoreCubemapRenderCommand command(cubemap->GetRenderTexture());
+                        m_pendingRestoreCubemapCommands.push_back(std::move(command));
+                    }
+                }
+                resourcePool->RefreshResources<ChilliSource::Cubemap>();
                 
                 auto allModels = resourcePool->GetAllResources<ChilliSource::Model>();
                 for (const auto& model : allModels)
@@ -193,6 +216,11 @@ namespace CSBackend
                     preRenderCommandList->AddRestoreTextureCommand(restoreTextureCommand.GetRenderTexture());
                 }
                 
+                for(auto& restoreCubemapCommand : m_pendingRestoreCubemapCommands)
+                {
+                    preRenderCommandList->AddRestoreCubemapCommand(restoreCubemapCommand.GetRenderTexture());
+                }
+                
                 for(auto& restoreRenderTargetGroupCommand : m_pendingRestoreRenderTargetGroupCommands)
                 {
                     preRenderCommandList->AddRestoreRenderTargetGroupCommand(restoreRenderTargetGroupCommand.GetTargetRenderGroup());
@@ -200,6 +228,7 @@ namespace CSBackend
                 
                 m_pendingRestoreMeshCommands.clear();
                 m_pendingRestoreTextureCommands.clear();
+                m_pendingRestoreCubemapCommands.clear();
                 m_pendingRestoreRenderTargetGroupCommands.clear();
             }
 #endif

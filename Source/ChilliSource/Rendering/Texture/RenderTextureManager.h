@@ -178,10 +178,12 @@ namespace ChilliSource
         void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         std::mutex m_mutex;
-        std::vector<RenderTextureUPtr> m_renderTextures; //TODO: This should be changed to an object pool.
+        std::vector<RenderTextureUPtr> m_renderTextures2D; //TODO: This should be changed to an object pool.
+        std::vector<RenderTextureUPtr> m_renderTexturesCubemap; //TODO: This should be changed to an object pool.
         std::vector<PendingLoadCommand2D> m_pendingLoadCommands2D;
         std::vector<PendingLoadCommandCubemap> m_pendingLoadCommandsCubemap;
-        std::vector<RenderTextureUPtr> m_pendingUnloadCommands;
+        std::vector<RenderTextureUPtr> m_pendingUnloadCommands2D;
+        std::vector<RenderTextureUPtr> m_pendingUnloadCommandsCubemap;
     };
 }
 

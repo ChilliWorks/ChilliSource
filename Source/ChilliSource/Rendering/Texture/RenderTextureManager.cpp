@@ -56,7 +56,7 @@ namespace ChilliSource
         loadCommand.m_renderTexture = rawRenderTexture;
         
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_renderTextures.push_back(std::move(renderTexture));
+        m_renderTextures2D.push_back(std::move(renderTexture));
         m_pendingLoadCommands2D.push_back(std::move(loadCommand));
         
         return rawRenderTexture;
@@ -75,7 +75,7 @@ namespace ChilliSource
         loadCommand.m_renderTexture = rawRenderTexture;
         
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_renderTextures.push_back(std::move(renderTexture));
+        m_renderTexturesCubemap.push_back(std::move(renderTexture));
         m_pendingLoadCommandsCubemap.push_back(std::move(loadCommand));
         
         return rawRenderTexture;
@@ -86,14 +86,26 @@ namespace ChilliSource
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         
-        for (auto it = m_renderTextures.begin(); it != m_renderTextures.end(); ++it)
+        for (auto it = m_renderTextures2D.begin(); it != m_renderTextures2D.end(); ++it)
         {
             if (it->get() == renderTexture)
             {
-                m_pendingUnloadCommands.push_back(std::move(*it));
+                m_pendingUnloadCommands2D.push_back(std::move(*it));
                 
-                it->swap(m_renderTextures.back());
-                m_renderTextures.pop_back();
+                it->swap(m_renderTextures2D.back());
+                m_renderTextures2D.pop_back();
+                return;
+            }
+        }
+        
+        for (auto it = m_renderTexturesCubemap.begin(); it != m_renderTexturesCubemap.end(); ++it)
+        {
+            if (it->get() == renderTexture)
+            {
+                m_pendingUnloadCommandsCubemap.push_back(std::move(*it));
+                
+                it->swap(m_renderTexturesCubemap.back());
+                m_renderTexturesCubemap.pop_back();
                 return;
             }
         }
@@ -123,17 +135,23 @@ namespace ChilliSource
             }
             m_pendingLoadCommandsCubemap.clear();
             
-            for (auto& unloadCommand : m_pendingUnloadCommands)
+            for (auto& unloadCommand : m_pendingUnloadCommands2D)
             {
                 postRenderCommandList->AddUnloadTextureCommand(std::move(unloadCommand));
             }
-            m_pendingUnloadCommands.clear();
+            m_pendingUnloadCommands2D.clear();
+            
+            for (auto& unloadCommand : m_pendingUnloadCommandsCubemap)
+            {
+                postRenderCommandList->AddUnloadCubemapCommand(std::move(unloadCommand));
+            }
+            m_pendingUnloadCommandsCubemap.clear();
         }
     }
     
     //------------------------------------------------------------------------------
     RenderTextureManager::~RenderTextureManager() noexcept
     {
-        CS_ASSERT(m_renderTextures.size() == 0, "Render textures have not been correctly released.");
+        CS_ASSERT(m_renderTextures2D.size() == 0 && m_renderTexturesCubemap.size() == 0, "Render textures have not been correctly released.");
     }
 }
