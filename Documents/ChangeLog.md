@@ -1,6 +1,16 @@
 ChilliSource Change Log
 =======================
 
+Version 2.1.0, 2017-01-06
+-------------------------
+* Added: Support for Cubemaps. Accessed in shaders as u_cubemap[N]. This required changes to the material file formats Texture element to specify a type "Texture" or "Cubemap" and renaming of "image-name" to "file-name".
+* Added: Support for stencil buffer (introducing new framebuffer format).
+* Added: Support for masking in UI using the stencil buffer (this replaces scissor regions).
+* Added: Render to texture support
+* Added: New logging macros for formatted logs CS_LOG_XXX_FMT.
+* Improved: Added convenience distance method to vector classes.
+* Other minor fixes.
+
 Version 2.0.1, 2016-07-21
 -------------------------
 * Hotfix for issue in GLDynamicMesh where indices were not being assigned correctly on construction
