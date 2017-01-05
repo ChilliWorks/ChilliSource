@@ -37,6 +37,7 @@
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
@@ -131,6 +132,54 @@ namespace ChilliSource
             
             CS_LOG_FATAL("Invalid BlendMode: " + in_blendMode);
             return BlendMode::k_one;
+        }
+        //----------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param String describing func
+        ///
+        /// @return Depth test func
+        //----------------------------------------------------------------------------
+        TestFunc ConvertStringToDepthFunc(const std::string& depthFunc)
+        {
+            std::string depthFuncLower = depthFunc;
+            StringUtils::ToLowerCase(depthFuncLower);
+            
+            if(depthFuncLower == "never")
+            {
+                return TestFunc::k_never;
+            }
+            else if(depthFuncLower == "less")
+            {
+                return TestFunc::k_less;
+            }
+            else if(depthFuncLower == "lequal")
+            {
+                return TestFunc::k_lessEqual;
+            }
+            else if(depthFuncLower == "greater")
+            {
+                return TestFunc::k_greater;
+            }
+            else if(depthFuncLower == "gequal")
+            {
+                return TestFunc::k_greaterEqual;
+            }
+            else if(depthFuncLower == "equal")
+            {
+                return TestFunc::k_equal;
+            }
+            else if(depthFuncLower == "notequal")
+            {
+                return TestFunc::k_notEqual;
+            }
+            else if(depthFuncLower == "always")
+            {
+                return TestFunc::k_always;
+            }
+            
+            CS_LOG_FATAL("Invalid DepthTestFunc: " + depthFunc);
+            return TestFunc::k_never;
         }
         //----------------------------------------------------------------------------
         /// @author S Downie
@@ -406,6 +455,23 @@ namespace ChilliSource
                 BlendMode dstFunc = ConvertStringToBlendMode(dstFuncString);
                 
                 out_material->SetBlendModes(srcFunc, dstFunc);
+            }
+        }
+        //----------------------------------------------------------------------------
+        /// Parse the depth test function from the XML element to the material
+        ///
+        /// @author S Downie
+        ///
+        /// @param Root element
+        /// @param [Out] Material to populate
+        //----------------------------------------------------------------------------
+        void ParseDepthTestFunction(XML::Node* in_rootElement, Material* out_material)
+        {
+            XML::Node* depthFuncEl = XMLUtils::GetFirstChildElement(in_rootElement, "DepthTestFunc");
+            if(depthFuncEl)
+            {
+                const std::string funcString = XMLUtils::GetAttributeValue<std::string>(depthFuncEl, "func", "lequal");
+                out_material->SetDepthTestFunc(ConvertStringToDepthFunc(funcString));
             }
         }
         //----------------------------------------------------------------------------
@@ -882,6 +948,7 @@ namespace ChilliSource
         ParseRenderStates(rootElement, out_material);
         ParseAlphaBlendFunction(rootElement, out_material);
         ParseCullFunction(rootElement, out_material);
+        ParseDepthTestFunction(rootElement, out_material);
         ParseSurface(rootElement, out_material);
         
         ParseShaders(rootElement, out_shaderFiles, out_material);
