@@ -493,7 +493,7 @@ namespace ChilliSource
                 CS_ASSERT(out_material->GetShadingType() == MaterialShadingType::k_custom, "Only custom materials can have shaders.");
                 
                 //Get the fallback shader type which will populate all the other passes
-                out_material->PrepCustomShaders(ParseVertexFormat(XMLUtils::GetAttributeValue<std::string>(shadersEl, "vertex-format", "StaticMesh")), ConvertStringToShadingType(XMLUtils::GetAttributeValue<std::string>(shadersEl, "fallback-type", "Unlit")));
+                out_material->PrepCustomShaders(ParseVertexFormat(XMLUtils::GetAttributeValue<std::string>(shadersEl, "vertex-format", "StaticMesh")), ConvertStringToShadingType(XMLUtils::GetAttributeValue<std::string>(shadersEl, "fallback-type", "Custom")));
                 
                 XML::Node* shaderEl = XMLUtils::GetFirstChildElement(shadersEl, "Shader");
                 while(shaderEl)
