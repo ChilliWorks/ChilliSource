@@ -72,6 +72,21 @@ namespace ChilliSource
         /// @return Clamped colour
         //-----------------------------------------------------------
         static Colour Clamp(const Colour& in_value, const Colour& in_min = k_transparent, const Colour& in_max = k_white);
+        
+        ///
+        /// Linearly interpolates between the colours a and b based on t (0-1)
+        ///
+        /// @param t
+        ///     Paramteric t value between 0 and 1. 0 = a, 1 = b
+        /// @param a
+        ///     Left hand value on the lerp
+        /// @param b
+        ///     Right hand value on the lerp
+        ///
+        /// @return Lerped colour
+        ///
+        static Colour Lerp(f32 t, const Colour& a, const Colour& b);
+        
         //-----------------------------------------------------------
         /// Constructor
         ///

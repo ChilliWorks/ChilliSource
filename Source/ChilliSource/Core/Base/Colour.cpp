@@ -62,6 +62,17 @@ namespace ChilliSource
     }
     //-----------------------------------------------------------
     //-----------------------------------------------------------
+    Colour Colour::Lerp(f32 t, const Colour& a, const Colour& b)
+    {
+        Colour result;
+        result.r = MathUtils::Lerp(t, a.r, b.r);
+        result.g = MathUtils::Lerp(t, a.g, b.g);
+        result.b = MathUtils::Lerp(t, a.b, b.b);
+        result.a = MathUtils::Lerp(t, a.a, b.a);
+        return result;
+    }
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
     Colour::Colour(f32 in_red, f32 in_green, f32 in_blue, f32 in_alpha)
     : r(in_red), g(in_green), b(in_blue), a(in_alpha)
     {
