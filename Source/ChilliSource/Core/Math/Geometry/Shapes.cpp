@@ -195,7 +195,7 @@ namespace ChilliSource
     {
         f32 maxScaleComponent = std::max(std::max(in_scale.x, in_scale.y), in_scale.z);
         
-        auto centre = in_translation + in_sphere.vOrigin;
+        auto centre = in_translation + in_sphere.vOrigin * maxScaleComponent;
         auto radius = maxScaleComponent * in_sphere.fRadius;
         
         return Sphere(centre, radius);

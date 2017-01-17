@@ -222,7 +222,7 @@ namespace ChilliSource
         
         ///Centre				   
         Vector3 vOrigin;
-        f32 fRadius;
+        f32 fRadius = 0.0f;
     };
     //================================================
     /// AABB
