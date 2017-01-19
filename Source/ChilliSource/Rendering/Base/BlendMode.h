@@ -44,6 +44,8 @@ namespace ChilliSource
         k_oneMinusSourceCol,
         k_sourceAlpha,
         k_oneMinusSourceAlpha,
+        k_destCol,
+        k_oneMinusDestCol,
         k_destAlpha,
         k_oneMinusDestAlpha
     };

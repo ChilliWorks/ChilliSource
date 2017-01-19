@@ -1,6 +1,11 @@
 ChilliSource Change Log
 =======================
 
+Version 2.1.1, 2017-01-19
+-------------------------
+
+* Added: Additional blend modes to materials for destCol and oneMinusDestCol
+
 Version 2.1.0, 2017-01-06
 -------------------------
 * Added: Support for Cubemaps. Accessed in shaders as u_cubemap[N]. This required changes to the material file formats Texture element to specify a type "Texture" or "Cubemap" and renaming of "image-name" to "file-name".

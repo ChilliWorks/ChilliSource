@@ -69,6 +69,10 @@ namespace CSBackend
                         return GL_SRC_ALPHA;
                     case ChilliSource::BlendMode::k_oneMinusSourceAlpha:
                         return GL_ONE_MINUS_SRC_ALPHA;
+                    case ChilliSource::BlendMode::k_destCol:
+                        return GL_DST_COLOR;
+                    case ChilliSource::BlendMode::k_oneMinusDestCol:
+                        return GL_ONE_MINUS_DST_COLOR;
                     case ChilliSource::BlendMode::k_destAlpha:
                         return GL_DST_ALPHA;
                     case ChilliSource::BlendMode::k_oneMinusDestAlpha:

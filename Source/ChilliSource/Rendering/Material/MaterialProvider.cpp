@@ -91,6 +91,8 @@ namespace ChilliSource
             constexpr char k_oneMinusSourceColour[] = "oneminussourcecolour";
             constexpr char k_sourceAlpha[] = "sourcealpha";
             constexpr char k_oneMinusSourceAlpha[] = "oneminussourcealpha";
+            constexpr char k_destColour[] = "destcolour";
+            constexpr char k_oneMinusDestColour[] = "oneminusdestcolour";
             constexpr char k_destAlpha[] = "destalpha";
             constexpr char k_oneMinusDestAlpha[] = "oneminusdestalpha";
             
@@ -120,6 +122,14 @@ namespace ChilliSource
             else if (blendModeLower == k_oneMinusSourceAlpha)
             {
                  return BlendMode::k_oneMinusSourceAlpha;
+            }
+            else if (blendModeLower == k_destColour)
+            {
+                return BlendMode::k_destCol;
+            }
+            else if (blendModeLower == k_oneMinusDestColour)
+            {
+                return BlendMode::k_oneMinusDestCol;
             }
             else if (blendModeLower == k_destAlpha)
             {
