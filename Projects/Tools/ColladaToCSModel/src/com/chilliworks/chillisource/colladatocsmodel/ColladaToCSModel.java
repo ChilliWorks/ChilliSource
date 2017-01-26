@@ -160,6 +160,8 @@ public final class ColladaToCSModel
 		Logging.logVerbose(" Vertex Declaration");
 		Logging.logVerbose("  Position: " + Boolean.toString(in_options.m_vertexHasPosition));
 		Logging.logVerbose("  Normal: " + Boolean.toString(in_options.m_vertexHasNormal));
+		Logging.logVerbose("  Tangent: " + Boolean.toString(in_options.m_vertexHasTangent));
+		Logging.logVerbose("  Bitangent: " + Boolean.toString(in_options.m_vertexHasBitangent));
 		Logging.logVerbose("  Texture Coordinates: " + Boolean.toString(in_options.m_vertexHasTexCoords));
 		Logging.logVerbose("  Colour: " + Boolean.toString(in_options.m_vertexHasColour));
 		Logging.logVerbose("  Weights: " + Boolean.toString(in_options.m_vertexHasWeights));

@@ -248,7 +248,7 @@ namespace CSBackend
                 glShader->SetUniform(k_uniformTexturePrefix + ChilliSource::ToString(i), samplerNumber);
             }
             
-            for (auto i = 0; i < renderMaterial->GetRenderTexturesCubemap().size(); ++i, samplerNumber)
+            for (auto i = 0; i < renderMaterial->GetRenderTexturesCubemap().size(); ++i, ++samplerNumber)
             {
                 glShader->SetUniform(k_uniformCubemapPrefix + ChilliSource::ToString(i), samplerNumber);
             }

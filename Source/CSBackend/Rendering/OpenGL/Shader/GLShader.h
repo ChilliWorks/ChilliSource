@@ -54,6 +54,8 @@ namespace CSBackend
             
             static const std::string k_attributePosition;
             static const std::string k_attributeNormal;
+            static const std::string k_attributeTangent;
+            static const std::string k_attributeBitangent;
             static const std::string k_attributeTexCoord;
             static const std::string k_attributeColour;
             static const std::string k_attributeWeights;

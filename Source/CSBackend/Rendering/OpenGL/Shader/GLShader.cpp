@@ -121,6 +121,8 @@ namespace CSBackend
         
         const std::string GLShader::k_attributePosition = "a_position";
         const std::string GLShader::k_attributeNormal = "a_normal";
+        const std::string GLShader::k_attributeTangent = "a_tangent";
+        const std::string GLShader::k_attributeBitangent = "a_bitangent";
         const std::string GLShader::k_attributeTexCoord = "a_texCoord";
         const std::string GLShader::k_attributeColour = "a_colour";
         const std::string GLShader::k_attributeWeights = "a_weights";
@@ -256,10 +258,12 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void GLShader::BuildAttributeHandleMap() noexcept
         {
-            static const std::array<std::string, 6> attribNames =
+            static const std::array<std::string, 8> attribNames =
             {{
                 k_attributePosition,
                 k_attributeNormal,
+                k_attributeTangent,
+                k_attributeBitangent,
                 k_attributeTexCoord,
                 k_attributeColour,
                 k_attributeWeights,

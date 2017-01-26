@@ -59,6 +59,8 @@ public final class Main
 	private static final char k_vertexElementPosition = 'p';
 	private static final char k_vertexElementTexCoord = 't';
 	private static final char k_vertexElementNormal = 'n';
+	private static final char k_vertexElementTangent = 'a';
+	private static final char k_vertexElementBitangent = 'b';
 	private static final char k_vertexElementColour = 'c';
 	private static final char k_vertexElementWeights = 'w';
 	private static final char k_vertexElementJoints = 'j';
@@ -191,6 +193,10 @@ public final class Main
 				inParams.m_vertexHasPosition = true;
 			if (instrVertexDecl.charAt(i) == k_vertexElementNormal)
 				inParams.m_vertexHasNormal = true;
+			if (instrVertexDecl.charAt(i) == k_vertexElementTangent)
+				inParams.m_vertexHasTangent = true;
+			if (instrVertexDecl.charAt(i) == k_vertexElementBitangent)
+				inParams.m_vertexHasBitangent = true;
 			if (instrVertexDecl.charAt(i) == k_vertexElementTexCoord)
 				inParams.m_vertexHasTexCoords = true;
 			if (instrVertexDecl.charAt(i) == k_vertexElementColour)
@@ -214,6 +220,8 @@ public final class Main
 		in_options.m_vertexHasPosition = true;
 		in_options.m_vertexHasTexCoords = true;
 		in_options.m_vertexHasNormal = true;
+		in_options.m_vertexHasTangent = true;
+		in_options.m_vertexHasBitangent = true;
 		in_options.m_vertexHasColour = false;
 		
 		if (in_options.m_animated == true)
@@ -251,6 +259,8 @@ public final class Main
 		Logging.logVerbose(" " + k_vertexElementPosition + ": A vertex will contain a position.");
 		Logging.logVerbose(" " + k_vertexElementTexCoord + ": A vertex will contain texture coordinates.");
 		Logging.logVerbose(" " + k_vertexElementNormal + ": A vertex will contain a normal.");
+		Logging.logVerbose(" " + k_vertexElementTangent + ": A vertex will contain a tangent to the normal.");
+		Logging.logVerbose(" " + k_vertexElementBitangent + ": A vertex will contain a bitangent to the tangent.");
 		Logging.logVerbose(" " + k_vertexElementColour + ": A vertex will contain a colour.");
 		Logging.logVerbose(" " + k_vertexElementWeights + ": A vertex will contain weights.");
 		Logging.logVerbose(" " + k_vertexElementJoints + ": A vertex will contain joint indices.");

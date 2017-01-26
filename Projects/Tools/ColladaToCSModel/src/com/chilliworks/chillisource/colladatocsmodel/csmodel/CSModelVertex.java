@@ -38,6 +38,8 @@ public class CSModelVertex
 {
 	public Vector3 mvPosition;
 	public Vector3 mvNormal;
+	public Vector3 mvTangent;
+	public Vector3 mvBitangent;
 	public Vector2 mvTextureCoordinate;
 	public Vector4 mvVertexColour;
 	public Vector4 mvWeights;
@@ -47,6 +49,8 @@ public class CSModelVertex
 	{
 		mvPosition = Vector3.ZERO;
 		mvNormal = Vector3.ZERO;
+		mvTangent = Vector3.ZERO;
+		mvBitangent = Vector3.ZERO;
 		mvTextureCoordinate = Vector2.ZERO;
 		mvVertexColour = Vector4.ZERO;
 		mvWeights = Vector4.ZERO;
@@ -65,7 +69,7 @@ public class CSModelVertex
 	    }
 	    
 	    CSModelVertex vertex = (CSModelVertex)inObj;
-	    if (mvPosition.equals(vertex.mvPosition) && mvNormal.equals(vertex.mvNormal) && mvTextureCoordinate.equals(vertex.mvTextureCoordinate) &&
+	    if (mvPosition.equals(vertex.mvPosition) && mvNormal.equals(vertex.mvNormal) && mvTangent.equals(vertex.mvTangent) && mvBitangent.equals(vertex.mvBitangent) && mvTextureCoordinate.equals(vertex.mvTextureCoordinate) &&
 			mvVertexColour.equals(vertex.mvVertexColour) && mvWeights.equals(vertex.mvWeights)&& mvJointIndices.equals(vertex.mvJointIndices))
 	    {
 	    	return true;
