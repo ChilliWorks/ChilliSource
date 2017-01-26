@@ -953,7 +953,7 @@ namespace ChilliSource
         CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
         
         auto length = m_parent->m_children.size();
-        for(std::size_t i = 1; i < length; ++i)
+        for(std::size_t i = length-1; i > 1; --i)
         {
             if(m_parent->m_children[i].get() == this)
             {
