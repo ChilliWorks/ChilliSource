@@ -89,6 +89,8 @@ public final class CSModelTransformer
 			{
 				vert.mvPosition = new Vector3(vert.mvPosition.getX(), -vert.mvPosition.getY(), vert.mvPosition.getZ());
 				vert.mvNormal = new Vector3(vert.mvNormal.getX(), -vert.mvNormal.getY(), vert.mvNormal.getZ());
+				vert.mvTangent = new Vector3(vert.mvTangent.getX(), -vert.mvTangent.getY(), vert.mvTangent.getZ());
+				vert.mvBitangent = new Vector3(vert.mvBitangent.getX(), -vert.mvBitangent.getY(), vert.mvBitangent.getZ());
 			}
 			
 			//Mirror inverse bind matrices
@@ -146,6 +148,8 @@ public final class CSModelTransformer
 			{
 				vert.mvPosition = new Vector3(vert.mvPosition.getX(), vert.mvPosition.getZ(), vert.mvPosition.getY());
 				vert.mvNormal = new Vector3(vert.mvNormal.getX(), vert.mvNormal.getZ(), vert.mvNormal.getY());
+				vert.mvTangent = new Vector3(vert.mvTangent.getX(), vert.mvTangent.getZ(), vert.mvTangent.getY());
+				vert.mvBitangent = new Vector3(vert.mvBitangent.getX(), vert.mvBitangent.getZ(), vert.mvBitangent.getY());
 			}
 			
 			//convert inverse bind matrices

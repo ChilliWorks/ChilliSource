@@ -1,6 +1,12 @@
 ChilliSource Change Log
 =======================
 
+Version 2.1.2, 2017-01-26
+-------------------------
+
+* Added: Tangents and Bitangents to CSModel format. Accessible in shader vertex declaration as a_tangent and a_bitangent. Model version is now 13. Please rebuild all csmodel files.
+* Fix: SendToBack in Widget not working properly.
+
 Version 2.1.1, 2017-01-19
 -------------------------
 

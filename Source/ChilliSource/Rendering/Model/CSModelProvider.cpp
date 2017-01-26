@@ -43,8 +43,8 @@ namespace ChilliSource
     {
         const std::string k_modelFileExtension("csmodel");
         
-        constexpr u32 k_minVersion = 12;
-        constexpr u32 k_maxVersion = 12;
+        constexpr u32 k_minVersion = 13;
+        constexpr u32 k_maxVersion = 13;
         constexpr u32 k_fileCheckValue = 6666;
         
         //---------------------------------------------
@@ -70,6 +70,8 @@ namespace ChilliSource
             k_none,
             k_position,
             k_normal,
+            k_tangent,
+            k_bitangent,
             k_texcoord,
             k_colour,
             k_weights,
@@ -183,6 +185,12 @@ namespace ChilliSource
                         break;
                     case VertexAttribute::k_normal:
                         elements.push_back(VertexFormat::ElementType::k_normal3);
+                        break;
+                    case VertexAttribute::k_tangent:
+                        elements.push_back(VertexFormat::ElementType::k_tangent3);
+                        break;
+                    case VertexAttribute::k_bitangent:
+                        elements.push_back(VertexFormat::ElementType::k_bitangent3);
                         break;
                     case VertexAttribute::k_texcoord:
                         elements.push_back(VertexFormat::ElementType::k_uv2);

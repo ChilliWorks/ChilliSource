@@ -42,16 +42,18 @@ public class CSModelOutputer
 	/// Constants
 	//-------------------------------------------------------------------
 	private static final int kdwEndiannessCheckValue = 6666;
-	private static final int kdwVersionNumber = 12;
+	private static final int kdwVersionNumber = 13;
 
 	private static final int kdwFeatureHasAnimationData = 1;
 	
 	private static final int kdwVertexPosition = 1;
 	private static final int kdwVertexNormal = 2;
-	private static final int kdwVertexTexCoord = 3;
-	private static final int kdwVertexColour = 4;
-	private static final int kdwVertexWeight = 5;
-	private static final int kdwVertexJointIndex = 6;
+	private static final int kdwVertexTangent = 3;
+	private static final int kdwVertexBitangent = 4;
+	private static final int kdwVertexTexCoord = 5;
+	private static final int kdwVertexColour = 6;
+	private static final int kdwVertexWeight = 7;
+	private static final int kdwVertexJointIndex = 8;
 	
 	private static final int kdwSkeletonNodeTypeStandard = 0;
 	private static final int kdwSkeletonNodeTypeJoint = 1;
@@ -173,6 +175,10 @@ public class CSModelOutputer
 			dwNumVertexElements++;
 		if (inConversionParams.m_vertexHasNormal == true)
 			dwNumVertexElements++;
+		if (inConversionParams.m_vertexHasTangent == true)
+			dwNumVertexElements++;
+		if (inConversionParams.m_vertexHasBitangent == true)
+			dwNumVertexElements++;
 		if (inConversionParams.m_vertexHasTexCoords == true)
 			dwNumVertexElements++;
 		if (inConversionParams.m_vertexHasColour == true) 
@@ -208,6 +214,10 @@ public class CSModelOutputer
 			mStream.writeByte((byte)kdwVertexPosition);
 		if (inConversionParams.m_vertexHasNormal == true)
 			mStream.writeByte((byte)kdwVertexNormal);
+		if (inConversionParams.m_vertexHasTangent == true)
+			mStream.writeByte((byte)kdwVertexTangent);
+		if (inConversionParams.m_vertexHasBitangent == true)
+			mStream.writeByte((byte)kdwVertexBitangent);
 		if (inConversionParams.m_vertexHasTexCoords == true) 
 			mStream.writeByte((byte)kdwVertexTexCoord);
 		if (inConversionParams.m_vertexHasColour == true) 
@@ -377,6 +387,22 @@ public class CSModelOutputer
 				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvNormal.getX());
 				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvNormal.getY());
 				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvNormal.getZ());
+			}
+			
+			//write the normal tangent data if its in the format
+			if (inConversionParams.m_vertexHasTangent == true)
+			{
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvTangent.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvTangent.getY());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvTangent.getZ());
+			}
+			
+			//write the normal bitangent data if its in the format
+			if (inConversionParams.m_vertexHasBitangent == true)
+			{
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvBitangent.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvBitangent.getY());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvBitangent.getZ());
 			}
 			
 			//write the tex coord data if its in the format

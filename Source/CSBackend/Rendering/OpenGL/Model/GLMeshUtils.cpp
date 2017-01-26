@@ -60,6 +60,10 @@ namespace CSBackend
                     return GL_FALSE;
                 case ChilliSource::VertexFormat::ElementType::k_normal3:
                     return GL_FALSE;
+                case ChilliSource::VertexFormat::ElementType::k_tangent3:
+                    return GL_FALSE;
+                case ChilliSource::VertexFormat::ElementType::k_bitangent3:
+                    return GL_FALSE;
                 case ChilliSource::VertexFormat::ElementType::k_uv2:
                     return GL_FALSE;
                 case ChilliSource::VertexFormat::ElementType::k_colour4:
@@ -87,6 +91,10 @@ namespace CSBackend
                     return "a_position";
                 case ChilliSource::VertexFormat::ElementType::k_normal3:
                     return "a_normal";
+                case ChilliSource::VertexFormat::ElementType::k_tangent3:
+                    return "a_tangent";
+                case ChilliSource::VertexFormat::ElementType::k_bitangent3:
+                    return "a_bitangent";
                 case ChilliSource::VertexFormat::ElementType::k_uv2:
                     return "a_texCoord";
                 case ChilliSource::VertexFormat::ElementType::k_colour4:

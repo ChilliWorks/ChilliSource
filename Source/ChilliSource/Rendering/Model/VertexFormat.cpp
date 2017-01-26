@@ -32,6 +32,8 @@ namespace ChilliSource
         {
             VertexFormat::ElementType::k_position4,
             VertexFormat::ElementType::k_normal3,
+            VertexFormat::ElementType::k_tangent3,
+            VertexFormat::ElementType::k_bitangent3,
             VertexFormat::ElementType::k_uv2
         };
         
@@ -39,6 +41,8 @@ namespace ChilliSource
         {
             VertexFormat::ElementType::k_position4,
             VertexFormat::ElementType::k_normal3,
+            VertexFormat::ElementType::k_tangent3,
+            VertexFormat::ElementType::k_bitangent3,
             VertexFormat::ElementType::k_uv2,
             VertexFormat::ElementType::k_weight4,
             VertexFormat::ElementType::k_jointIndex4
@@ -65,6 +69,10 @@ namespace ChilliSource
                 return DataType::k_float;
             case ElementType::k_normal3:
                 return DataType::k_float;
+            case ElementType::k_tangent3:
+                return DataType::k_float;
+            case ElementType::k_bitangent3:
+                return DataType::k_float;
             case ElementType::k_uv2:
                 return DataType::k_float;
             case ElementType::k_colour4:
@@ -87,6 +95,10 @@ namespace ChilliSource
             case ElementType::k_position4:
                 return 4;
             case ElementType::k_normal3:
+                return 3;
+            case ElementType::k_tangent3:
+                return 3;
+            case ElementType::k_bitangent3:
                 return 3;
             case ElementType::k_uv2:
                 return 2;
