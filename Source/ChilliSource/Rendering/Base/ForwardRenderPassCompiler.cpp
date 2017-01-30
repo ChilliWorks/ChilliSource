@@ -317,7 +317,7 @@ namespace ChilliSource
         ///
         /// @return The CameraRenderPassGroup
         ///
-        CameraRenderPassGroup CompleSceneCameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
+        CameraRenderPassGroup CompileSceneCameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
         {
             auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
             auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
@@ -431,7 +431,7 @@ namespace ChilliSource
             u32 sceneIndex = nextIndex++;
             tasks.push_back([=, &cameraRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
             {
-                cameraRenderPassGroups[sceneIndex] = CompleSceneCameraRenderPassGroup(innerTaskContext, renderFrame);
+                cameraRenderPassGroups[sceneIndex] = CompileSceneCameraRenderPassGroup(innerTaskContext, renderFrame);
             });
             
             // UI Camera group
