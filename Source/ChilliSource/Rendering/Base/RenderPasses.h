@@ -46,6 +46,9 @@ namespace ChilliSource
     /// * The transparent pass. This render all transparent objects in the scene with only ambient
     ///   lighting. The depth buffer is not written to; the objects are first sorted to ensure no
     ///   artefacts occur.
+    /// * The skybox pass. This renders any skyboxes after the rest of the scene has been rendered and relies
+    ///   on the material settings to ensure that the skybox appears beind the rest of the scene. The skybox
+    ///   is rendered using the camera orientation but does not take into account position.
     ///
     enum class RenderPasses
     {
@@ -54,7 +57,8 @@ namespace ChilliSource
         k_directionalLight,
         k_directionalLightShadows,
         k_pointLight,
-        k_transparent
+        k_transparent,
+        k_skybox
     };
 }
 

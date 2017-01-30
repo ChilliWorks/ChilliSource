@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2016 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,53 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERLAYER_H_
-#define _CHILLISOURCE_RENDERING_BASE_RENDERLAYER_H_
-
-#include <ChilliSource/ChilliSource.h>
-
-namespace ChilliSource
+GLSL
 {
-    /// An enum describing the different render layers. These are used to filter different
-    /// render objects into different groups.
-    ///
-    /// "Standard": The standard scene layer, rendered using the main camera.
-    ///
-    /// "UI": The UI layer, rendered using an orthographic camera with the same resolution as
-    /// the viewport.
-    ///
-    /// "Skybox": The Skybox layer, rendered using the main camera's projection matrix and orientation but not any translation transforms.
-    /// Rendered behind all other scene objects.
-    ///
-    enum class RenderLayer
-    {
-        k_standard,
-        k_ui,
-        k_skybox
-    };
-}
-
+	VertexShader
+	{
+#ifndef GL_ES
+        #define lowp
+        #define mediump
+        #define highp
 #endif
+
+        //attributes
+        attribute highp vec4 a_position;
+        attribute mediump vec2 a_texCoord;
+
+        //uniforms
+        uniform highp mat4 u_wvpMat;
+
+        //varyings
+        varying mediump vec3 v_texCoord;
+
+        void main()
+        {
+        	//By using'w' as 'z' we ensure that the skybox is always at the maximum depth
+            gl_Position = (u_wvpMat * a_position).xyww;
+            v_texCoord = normalize(a_position.xyz);
+        }
+	}
+
+	FragmentShader
+	{
+#ifndef GL_ES
+		#define lowp
+		#define mediump
+		#define highp
+#else
+		precision lowp float;
+#endif
+
+		//uniforms
+		uniform lowp samplerCube u_cubemap0;
+
+		//varyings
+		varying mediump vec3 v_texCoord;
+
+		void main()
+		{
+			gl_FragColor = textureCube(u_cubemap0, v_texCoord);
+		}
+	}
+}

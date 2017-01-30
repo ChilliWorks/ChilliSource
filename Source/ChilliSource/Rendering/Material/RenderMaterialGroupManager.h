@@ -102,6 +102,16 @@ namespace ChilliSource
                                                                   StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                                                                   CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept = 0;
         
+        /// Creates a new skybox RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
+        /// Render Snapshot stage in the render pipeline.
+        ///
+        /// @param renderCubmap
+        ///     The render cubemap.
+        ///
+        /// @return The new material group.
+        ///
+        virtual const RenderMaterialGroup* CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept = 0;
+        
         /// Creates a new blinn RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
         /// Render Snapshot stage in the render pipeline.
         ///

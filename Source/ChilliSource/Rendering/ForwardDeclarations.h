@@ -219,6 +219,10 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RenderShaderVariables);
     CS_FORWARDDECLARE_CLASS(Shader);
     //------------------------------------------------------------
+    /// Skybox
+    //------------------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(SkyboxComponent);
+    //------------------------------------------------------------
     /// Sprite
     //------------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(SpriteComponent);

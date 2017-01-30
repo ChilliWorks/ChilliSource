@@ -39,6 +39,7 @@ namespace ChilliSource
     {
         k_unlit,
         k_blinn,
+        k_skybox,
         k_custom
     };
 }

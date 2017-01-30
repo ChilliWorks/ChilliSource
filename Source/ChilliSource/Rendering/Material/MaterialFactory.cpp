@@ -27,6 +27,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
+#include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
@@ -54,6 +55,19 @@ namespace ChilliSource
         material->AddTexture(texture);
         material->SetTransparencyEnabled(isTransparent);
         material->SetEmissive(colour);
+        material->SetLoadState(Resource::LoadState::k_loaded);
+        return material;
+    }
+    
+    //------------------------------------------------------------------------------
+    MaterialCSPtr MaterialFactory::CreateSkybox(const std::string& uniqueId, const CubemapCSPtr& cubemap) const noexcept
+    {
+        MaterialSPtr material(CreateCustom(uniqueId));
+        material->SetShadingType(MaterialShadingType::k_skybox);
+        material->AddCubemap(cubemap);
+        material->SetTransparencyEnabled(false);
+        material->SetDepthWriteEnabled(false);
+        material->SetDepthTestFunc(TestFunc::k_lessEqual);
         material->SetLoadState(Resource::LoadState::k_loaded);
         return material;
     }

@@ -510,6 +510,14 @@ namespace ChilliSource
         /// @author S Downie
         //----------------------------------------------------------
         Material() noexcept;
+        
+        ///
+        /// Generates an skybox render material group using the
+        /// current material setting. If any of the settings are
+        /// not allowed in an skybox render material group then this
+        /// will assert.
+        ///
+        void CreateSkyboxRenderMaterialGroup() const noexcept;
         //----------------------------------------------------------
         /// Generates an unlit render material group using the
         /// current material setting. If any of the settings are

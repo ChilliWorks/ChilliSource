@@ -286,6 +286,7 @@ namespace ChilliSource
             constexpr char k_unlit[] = "unlit";
             constexpr char k_blinn[] = "blinn";
             constexpr char k_custom[] = "custom";
+            constexpr char k_skybox[] = "skybox";
             
             auto materialTypeLower = in_materialType;
             StringUtils::ToLowerCase(materialTypeLower);
@@ -301,6 +302,10 @@ namespace ChilliSource
             else if (materialTypeLower == k_custom)
             {
                 return MaterialShadingType::k_custom;
+            }
+            else if (materialTypeLower == k_skybox)
+            {
+                return MaterialShadingType::k_skybox;
             }
             
             CS_LOG_FATAL("Invalid material type: " + in_materialType);
@@ -341,6 +346,10 @@ namespace ChilliSource
             else if (passLower == "transparent")
             {
                 return RenderPasses::k_transparent;
+            }
+            else if (passLower == "skybox")
+            {
+                return RenderPasses::k_skybox;
             }
             
             CS_LOG_FATAL("Invalid render pass: " + pass);

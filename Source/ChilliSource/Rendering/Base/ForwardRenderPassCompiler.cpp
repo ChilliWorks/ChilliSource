@@ -218,6 +218,31 @@ namespace ChilliSource
         }
         
         /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
+        /// each RenderObject that has a Skybox pass defined.
+        ///
+        /// @param renderObjects
+        ///     A list of RenderObjects to parse
+        ///
+        /// @return A collection of RenderPassObjects, one for each RenderObject Skybox pass
+        ///
+        std::vector<RenderPassObject> GetSkyboxRenderPassObjects(const std::vector<RenderObject>& renderObjects) noexcept
+        {
+            std::vector<RenderPassObject> renderPassObjects;
+            
+            for (const auto& renderObject : renderObjects)
+            {
+                auto renderMaterial = renderObject.GetRenderMaterialGroup()->GetRenderMaterial(GetVertexFormat(renderObject), static_cast<u32>(RenderPasses::k_skybox));
+                
+                if (renderMaterial)
+                {
+                    renderPassObjects.push_back(ConvertToRenderPassObject(renderObject, renderMaterial));
+                }
+            }
+            
+            return renderPassObjects;
+        }
+        
+        /// Parses a list of RenderObjects and generates a list of RenderPassObjects for
         /// each RenderObject that has either a DirectionalLight or DirectionalLightShadows
         /// pass defined, depending on the type of directional light.
         ///
@@ -374,6 +399,38 @@ namespace ChilliSource
             return CameraRenderPassGroup(renderFrame.GetRenderCamera(), std::move(renderPasses));
         }
         
+        /// Gathers all Skybox render objects in the frame that are to be rendered to the default Render Target
+        /// and compiles them into RenderPasses. These render passes are then compiled into a
+        /// CameraRenderPassGroup which uses the Skybox camera.
+        ///
+        /// Skybox is rendered last to reduce overdraw and relies on its custom shader and render settings to
+        /// prevent it rendering on top of everythin
+        ///
+        /// @param taskContext
+        ///     Context to manage any spawned tasks
+        /// @param renderFrame
+        ///     Current frame data
+        ///
+        /// @return The generated CameraRenderPassGroup
+        ///
+        CameraRenderPassGroup CompileSkyboxCameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
+        {
+            //Use the main camera but ignore any scale or translation, as if the camera was at the origin
+            RenderCamera camera(Matrix4::CreateRotation(renderFrame.GetRenderCamera().GetOrientation()), renderFrame.GetRenderCamera().GetProjectionMatrix(), renderFrame.GetRenderCamera().GetOrientation());
+            
+            auto renderObjects = GetLayerRenderObjects(RenderLayer::k_skybox, renderFrame.GetRenderObjects());
+            auto renderPassObjects = GetSkyboxRenderPassObjects(renderObjects);
+            CS_ASSERT(renderObjects.size() == renderPassObjects.size(), "Invalid number of render pass objects in skybox pass. All render objects in the Skybox layer should have a skybox material.");
+            
+            std::vector<RenderPass> renderPasses;
+            if (renderPassObjects.size() > 0)
+            {
+                renderPasses.push_back(RenderPass(std::move(renderPassObjects)));
+            }
+            
+            return CameraRenderPassGroup(camera, std::move(renderPasses));
+        }
+
         /// Gathers all UI render objects in the frame that are to be rendered to the default Render Target
         /// and compiles them into RenderPasses. These render passes are then compiled into a
         /// CameraRenderPassGroup which uses the UI camera.
@@ -421,7 +478,7 @@ namespace ChilliSource
         ///
         TargetRenderPassGroup CompileMainTargetRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
         {
-            constexpr u32 k_numGroups = 2;
+            constexpr u32 k_numGroups = 3;
             
             std::vector<CameraRenderPassGroup> cameraRenderPassGroups(k_numGroups);
             std::vector<Task> tasks;
@@ -434,7 +491,15 @@ namespace ChilliSource
                 cameraRenderPassGroups[sceneIndex] = CompileSceneCameraRenderPassGroup(innerTaskContext, renderFrame);
             });
             
-            // UI Camera group
+            // Skybox camera group - Rendered after the other scene objects to reduce overdraw. The shader and material settings ensure
+            // that depth testing isn't an issue.
+            u32 skyboxIndex = nextIndex++;
+            tasks.push_back([=, &cameraRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
+            {
+                cameraRenderPassGroups[skyboxIndex] = CompileSkyboxCameraRenderPassGroup(innerTaskContext, renderFrame);
+            });
+            
+            // UI camera group
             u32 uiIndex = nextIndex++;
             tasks.push_back([=, &cameraRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
             {

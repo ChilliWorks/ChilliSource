@@ -85,6 +85,23 @@ namespace ChilliSource
         /// @return Ownership of new sprite component
         //---------------------------------------------------------------------------
         SpriteComponentUPtr CreateSpriteComponent(const Vector2& in_size, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_textureId, const MaterialCSPtr& in_material, SizePolicy in_sizePolicy);
+        
+        ///
+        /// Creates a skybox component with the given model and material. Skybox
+        /// is rendered last for overdraw reasons so the material should have the following settings:
+        ///
+        ///  DepthWrite: Disabled
+        ///  DepthFunc: Lequal
+        ///
+        /// @param model
+        ///     The model that should be rendered.
+        /// @param material
+        ///     The material that should be applied to the model.
+        ///
+        /// @return Ownership of new component
+        ///
+        SkyboxComponentUPtr CreateSkyboxComponent(const ModelCSPtr& model, const MaterialCSPtr& material);
+        
         //---------------------------------------------------------------------------
         /// Creates a static mesh component with the given material
         ///

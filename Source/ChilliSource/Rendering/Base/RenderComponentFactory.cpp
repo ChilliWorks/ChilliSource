@@ -42,6 +42,7 @@
 #include <ChilliSource/Rendering/Model/StaticModelComponent.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
+#include <ChilliSource/Rendering/Skybox/SkyboxComponent.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
@@ -96,6 +97,12 @@ namespace ChilliSource
     StaticModelComponentUPtr RenderComponentFactory::CreateStaticModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material)
     {
         return StaticModelComponentUPtr(new StaticModelComponent(in_model, in_material));
+    }
+    //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
+    SkyboxComponentUPtr RenderComponentFactory::CreateSkyboxComponent(const ModelCSPtr& model, const MaterialCSPtr& material)
+    {
+        return SkyboxComponentUPtr(new SkyboxComponent(model, material));
     }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------

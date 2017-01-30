@@ -145,6 +145,47 @@ namespace ChilliSource
                                                          cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
         }
         
+        /// Creates a new skybox pass RenderMaterial with the given info.
+        ///
+        /// @param renderCubemap
+        ///     The render cubemap.
+        ///
+        /// @return The new RenderMaterial.
+        ///
+        RenderMaterialUPtr CreateSkybox(const ShaderCSPtr& shader, const RenderTexture* renderCubemap) noexcept
+        {
+            auto renderShader = shader->GetRenderShader();
+            std::vector<const RenderTexture*> renderTextures;
+            std::vector<const RenderTexture*> renderCubemaps { renderCubemap };
+            auto isTransparencyEnabled = false;
+            auto isColourWriteEnabled = true;
+            auto isDepthWriteEnabled = false;
+            auto isDepthTestEnabled = true;
+            auto isFaceCullingEnabled = true;
+            auto isStencilTestEnabled = false;
+            auto depthTestFunc = TestFunc::k_lessEqual;
+            auto sourceBlendMode = BlendMode::k_one;
+            auto destinationBlendMode = BlendMode::k_oneMinusSourceAlpha;
+            auto stencilFailOp = StencilOp::k_keep;
+            auto stencilDepthFailOp = StencilOp::k_keep;
+            auto stencilPassOp = StencilOp::k_keep;
+            auto stencilTestFunc = TestFunc::k_always;
+            auto stencilRef = 1;
+            auto stencilMask = 0xff;
+            auto cullFace = CullFace::k_back;
+            auto ambientColour = Colour::k_black;
+            auto emissiveColour = Colour::k_black;
+            auto diffuseColour = Colour::k_black;
+            auto specularColour = Colour::k_black;
+            RenderShaderVariablesUPtr renderShaderVariables = nullptr;
+            
+            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+                                                         depthTestFunc,
+                                                         sourceBlendMode, destinationBlendMode,
+                                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+        }
+        
         /// Creates a new base pass blinn RenderMaterial with the given info.
         ///
         /// @param renderTexture
@@ -339,6 +380,40 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept
+    {
+        //TODO: Create RenderMaterials from pools.
+        
+        std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
+        std::vector<RenderMaterialUPtr> renderMaterials;
+        
+        CreateSkyboxRenderMaterialGroupCollection(VertexFormat::k_staticMesh, renderCubmap, staticRenderMaterials, renderMaterials);
+        
+        std::vector<RenderMaterialGroup::Collection> collections
+        {
+            RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticRenderMaterials),
+        };
+        
+        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), collections));
+        auto renderMaterialGroupRaw = renderMaterialGroup.get();
+        AddRenderMaterialGroup(std::move(renderMaterialGroup));
+        
+        return renderMaterialGroupRaw;
+    }
+    
+    //------------------------------------------------------------------------------
+    void ForwardRenderMaterialGroupManager::CreateSkyboxRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderCubemap,
+                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept
+    {
+        //TODO: Create RenderMaterials from pools.
+        CS_ASSERT(format == VertexFormat::k_staticMesh, "Skybox materials only work with static meshes");
+
+        auto staticRM = CreateSkybox(m_skybox, renderCubemap);
+        out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_skybox)] = staticRM.get();
+        out_renderMaterials.push_back(std::move(staticRM));
+    }
+    
+    //------------------------------------------------------------------------------
     const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour) noexcept
     {
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
@@ -443,6 +518,10 @@ namespace ChilliSource
                 CS_ASSERT(renderTextures2D.size() > 0, "If custom shader material falling back on Blinn type a texture must be supplied");
                 CreateBlinnRenderMaterialGroupCollection(vertexFormat, renderTextures2D[0], emissiveColour, ambientColour, diffuseColour, specularColour, renderMaterialsSlots, renderMaterials);
                 break;
+            case MaterialShadingType::k_skybox:
+                CS_ASSERT(renderTexturesCubemap.size() > 0, "If custom shader material falling back on Skybox type a cubemap must be supplied");
+                CreateSkyboxRenderMaterialGroupCollection(vertexFormat, renderTexturesCubemap[0], renderMaterialsSlots, renderMaterials);
+                break;
             case MaterialShadingType::k_custom:
             default:
                 //Don't create any fallback for missing passes
@@ -490,6 +569,8 @@ namespace ChilliSource
         m_animatedBlinnBase = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Animated-Blinn-Base.csshader");
         m_animatedBlinnDirectional = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Animated-Blinn-Directional.csshader");
         m_animatedBlinnPoint = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Animated-Blinn-Point.csshader");
+        
+        m_skybox = resourcePool->LoadResource<Shader>(StorageLocation::k_chilliSource, "Shaders/Skybox.csshader");
         
         if (m_shadowsSupported)
         {

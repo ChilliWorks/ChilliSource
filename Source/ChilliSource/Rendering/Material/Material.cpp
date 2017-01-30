@@ -443,6 +443,9 @@ namespace ChilliSource
                 case MaterialShadingType::k_custom:
                     CreateCustomRenderMaterialGroup();
                     break;
+                case MaterialShadingType::k_skybox:
+                    CreateSkyboxRenderMaterialGroup();
+                    break;
                 default:
                     CS_LOG_FATAL("Invalid shading type.");
                     
@@ -473,6 +476,24 @@ namespace ChilliSource
                                                                                              m_srcBlendMode, m_dstBlendMode,
                                                                                              m_stencilFailOp, m_stencilDepthFailOp, m_stencilPassOp, m_stencilTestFunc, m_stencilTestFuncRef, m_stencilTestFuncMask,
                                                                                              m_cullFace, m_emissive, m_ambient);
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    void Material::CreateSkyboxRenderMaterialGroup() const noexcept
+    {
+        CS_ASSERT(!m_renderMaterialGroup, "Render material group must be null.");
+        CS_ASSERT(m_textures.size() == 0, "Skybox materials must have no textures.");
+        CS_ASSERT(m_cubemaps.size() == 1, "Skybox materials must have 1 cubemap.");
+        CS_ASSERT(m_customShaders.size() == 0, "Skybox materials cannot have custom shaders.");
+        CS_ASSERT(m_floatVars.size() == 0, "Skybox materials cannot have custom shader variables.");
+        CS_ASSERT(m_vec2Vars.size() == 0, "Skybox materials cannot have custom shader variables.");
+        CS_ASSERT(m_vec3Vars.size() == 0, "Skybox materials cannot have custom shader variables.");
+        CS_ASSERT(m_vec4Vars.size() == 0, "Skybox materials cannot have custom shader variables.");
+        CS_ASSERT(m_mat4Vars.size() == 0, "Skybox materials cannot have custom shader variables.");
+        CS_ASSERT(m_colourVars.size() == 0, "Skybox materials cannot have custom shader variables.");
+        
+        auto renderCubemap = m_cubemaps[0]->GetRenderTexture();
+        m_renderMaterialGroup = m_renderMaterialGroupManager->CreateSkyboxRenderMaterialGroup(renderCubemap);
     }
     //----------------------------------------------------------
     //----------------------------------------------------------

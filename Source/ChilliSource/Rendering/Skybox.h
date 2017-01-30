@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2016 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,11 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_BASE_RENDERLAYER_H_
-#define _CHILLISOURCE_RENDERING_BASE_RENDERLAYER_H_
+
+#ifndef _CHILLISOURCE_RENDERING_SKYBOX_H_
+#define _CHILLISOURCE_RENDERING_SKYBOX_H_
 
 #include <ChilliSource/ChilliSource.h>
-
-namespace ChilliSource
-{
-    /// An enum describing the different render layers. These are used to filter different
-    /// render objects into different groups.
-    ///
-    /// "Standard": The standard scene layer, rendered using the main camera.
-    ///
-    /// "UI": The UI layer, rendered using an orthographic camera with the same resolution as
-    /// the viewport.
-    ///
-    /// "Skybox": The Skybox layer, rendered using the main camera's projection matrix and orientation but not any translation transforms.
-    /// Rendered behind all other scene objects.
-    ///
-    enum class RenderLayer
-    {
-        k_standard,
-        k_ui,
-        k_skybox
-    };
-}
+#include <ChilliSource/Rendering/Skybox/SkyboxComponent.h>
 
 #endif

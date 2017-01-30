@@ -103,6 +103,16 @@ namespace ChilliSource
                                                                   StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                                                                   CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept override;
         
+        /// Creates a new skybox RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
+        /// Render Snapshot stage in the render pipeline.
+        ///
+        /// @param renderCubmap
+        ///     The render cubemap.
+        ///
+        /// @return The new material group.
+        ///
+        const RenderMaterialGroup* CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept override;
+        
         /// Creates a new blinn RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
         /// Render Snapshot stage in the render pipeline.
         ///
@@ -215,12 +225,20 @@ namespace ChilliSource
         ///
         /// Helper methods that creates the render materials on behalf of the CreateXXXXGroup methods for the given vertex format
         ///
+        void CreateSkyboxRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderCubemap,
+                                                      std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept;
+        
+        ///
+        /// Helper methods that creates the render materials on behalf of the CreateXXXXGroup methods for the given vertex format
+        ///
         void CreateBlinnRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
                                                       std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept;
         
         bool m_shadowsSupported = false;
         
         ShaderCSPtr m_spriteUnlit;
+        
+        ShaderCSPtr m_skybox;
         
         ShaderCSPtr m_staticShadowMap;
         ShaderCSPtr m_staticUnlit;

@@ -68,6 +68,19 @@ namespace ChilliSource
         ///
         MaterialCSPtr CreateUnlit(const std::string& uniqueId, const TextureCSPtr& texture, bool isTransparent, const Colour& colour = Colour::k_white) const noexcept;
         
+        /// Creates a new material with skybox shaders that can be used with static models
+        /// in order to render a skybox behind all other objects in the scene and infinetely far away.
+        ///
+        /// @param uniqueId
+        ///     The unique Id that will be used to identify the material in the resource pool. Note
+        ///     that Id's which are prefixed with an underscore (_) are reserved from engine use.
+        /// @param cubemap
+        ///     The cubemap that the material will use.
+        ///
+        /// @return The newly created material.
+        ///
+        MaterialCSPtr CreateSkybox(const std::string& uniqueId, const CubemapCSPtr& cubemap) const noexcept;
+        
         /// Creates a new material with blinn shaders that can be used with static and animated meshes.
         ///
         /// @param uniqueId
