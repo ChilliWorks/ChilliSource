@@ -587,6 +587,8 @@ namespace ChilliSource
     {
         m_spriteUnlit.reset();
         
+        m_skybox.reset();
+        
         m_staticShadowMap.reset();
         m_staticUnlit.reset();
         m_staticBlinnBase.reset();
