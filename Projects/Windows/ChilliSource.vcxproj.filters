@@ -310,6 +310,9 @@
     <Filter Include="ChilliSource\Core\Memory">
       <UniqueIdentifier>{d6135d70-2135-4b7d-9b0c-58ad8fd39986}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Rendering\Skybox">
+      <UniqueIdentifier>{e7f2619c-3315-4d26-966e-a967895927c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -1361,6 +1364,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadCubemapRenderCommand.cpp">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Skybox\SkyboxComponent.cpp">
+      <Filter>ChilliSource\Rendering\Skybox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2890,6 +2896,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\RenderCommand\Commands\UnloadCubemapRenderCommand.h">
       <Filter>ChilliSource\Rendering\RenderCommand\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Skybox\SkyboxComponent.h">
+      <Filter>ChilliSource\Rendering\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Skybox.h">
+      <Filter>ChilliSource\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
