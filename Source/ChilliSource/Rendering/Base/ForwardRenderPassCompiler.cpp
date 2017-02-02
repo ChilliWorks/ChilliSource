@@ -127,10 +127,10 @@ namespace ChilliSource
         ///
         /// @return The number of passes.
         ///
-        u32 CalcNumScenePasses(const RenderFrame& renderFrame) noexcept
+        u32 CalcNumSceneOpaquePasses(const RenderFrame& renderFrame) noexcept
         {
-            // Base + Transparent
-            constexpr u32 k_reservedRenderPasses = 2;
+            // Base
+            constexpr u32 k_reservedRenderPasses = 1;
             
             u32 numDirectionalLightPasses = u32(renderFrame.GetDirectionalRenderLights().size());
             u32 numPointLightPasses = u32(renderFrame.GetPointRenderLights().size());
@@ -332,8 +332,8 @@ namespace ChilliSource
         }
         
         /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
-        /// and parse them into different RenderPasses for each light source plus the required Base and
-        /// Transparent passes. These passes are then compiled into a CameraRenderPassGroup.
+        /// and parse them into different RenderPasses for each light source plus the required Base pass but
+        /// not the transparent pass (as the skybox must be rendered in between). These passes are then compiled into a CameraRenderPassGroup.
         ///
         /// @param taskContext
         ///     Context to manage any spawned tasks
@@ -342,12 +342,12 @@ namespace ChilliSource
         ///
         /// @return The CameraRenderPassGroup
         ///
-        CameraRenderPassGroup CompileSceneCameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
+        CameraRenderPassGroup CompileOpaqueSceneCameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
         {
             auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
             auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
             
-            u32 numPasses = CalcNumScenePasses(renderFrame);
+            u32 numPasses = CalcNumSceneOpaquePasses(renderFrame);
             std::vector<RenderPass> renderPasses(numPasses);
             std::vector<Task> tasks;
             u32 nextPassIndex = 0;
@@ -385,13 +385,34 @@ namespace ChilliSource
                 });
             }
             
-            // Transparent pass
-            u32 transparentPassIndex = nextPassIndex++;
+            taskContext.ProcessChildTasks(tasks);
+            
+            return CameraRenderPassGroup(renderFrame.GetRenderCamera(), std::move(renderPasses));
+        }
+        
+        /// Gather all render objects in the frame that are to be renderered into the default RenderTarget
+        /// for the transpaent pass. These passes are then compiled into a CameraRenderPassGroup.
+        ///
+        /// @param taskContext
+        ///     Context to manage any spawned tasks
+        /// @param renderFrame
+        ///     Current frame data
+        ///
+        /// @return The CameraRenderPassGroup
+        ///
+        CameraRenderPassGroup CompileTransparentSceneCameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
+        {
+            auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
+            auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
+            
+            std::vector<RenderPass> renderPasses(1);
+            std::vector<Task> tasks;
+
             tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
             {
                 auto renderPassObjects = GetTransparentRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::TransparentSort(renderFrame.GetRenderCamera(), renderPassObjects);
-                renderPasses[transparentPassIndex] = RenderPass(renderFrame.GetAmbientRenderLight(), std::move(renderPassObjects));
+                renderPasses[0] = RenderPass(renderFrame.GetAmbientRenderLight(), std::move(renderPassObjects));
             });
             
             taskContext.ProcessChildTasks(tasks);
@@ -478,17 +499,17 @@ namespace ChilliSource
         ///
         TargetRenderPassGroup CompileMainTargetRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
         {
-            constexpr u32 k_numGroups = 3;
+            constexpr u32 k_numGroups = 4;
             
             std::vector<CameraRenderPassGroup> cameraRenderPassGroups(k_numGroups);
             std::vector<Task> tasks;
             u32 nextIndex = 0;
             
-            // Scene camera group
-            u32 sceneIndex = nextIndex++;
+            // Scene camera group - Opaque
+            u32 sceneIndexO = nextIndex++;
             tasks.push_back([=, &cameraRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
             {
-                cameraRenderPassGroups[sceneIndex] = CompileSceneCameraRenderPassGroup(innerTaskContext, renderFrame);
+                cameraRenderPassGroups[sceneIndexO] = CompileOpaqueSceneCameraRenderPassGroup(innerTaskContext, renderFrame);
             });
             
             // Skybox camera group - Rendered after the other scene objects to reduce overdraw. The shader and material settings ensure
@@ -497,6 +518,13 @@ namespace ChilliSource
             tasks.push_back([=, &cameraRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
             {
                 cameraRenderPassGroups[skyboxIndex] = CompileSkyboxCameraRenderPassGroup(innerTaskContext, renderFrame);
+            });
+            
+            // Scene camera group - Transparent
+            u32 sceneIndexT = nextIndex++;
+            tasks.push_back([=, &cameraRenderPassGroups, &renderFrame](const TaskContext& innerTaskContext)
+            {
+                cameraRenderPassGroups[sceneIndexT] = CompileTransparentSceneCameraRenderPassGroup(innerTaskContext, renderFrame);
             });
             
             // UI camera group
