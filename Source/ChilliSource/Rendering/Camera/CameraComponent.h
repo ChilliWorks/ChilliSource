@@ -89,7 +89,7 @@ namespace ChilliSource
         ///
         /// @return Projection matrix
         //------------------------------------------------------------------------------
-        const Matrix4& GetProjection();
+        const Matrix4& GetProjection() const;
         //------------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -175,14 +175,12 @@ namespace ChilliSource
         Frustum m_frustum;
         f32 m_nearClip;
         f32 m_farClip;
-        bool m_isProjCacheValid = false;
         bool m_isFrustumCacheValid = false;
         Screen* m_screen = nullptr;
-
-    private:
-        
         Matrix4 m_projMat;
         Matrix4 m_viewMat;
+
+    private:
         
         EventConnectionUPtr m_transformChangedConnection;
         EventConnectionUPtr m_resolutionChangedConnection;

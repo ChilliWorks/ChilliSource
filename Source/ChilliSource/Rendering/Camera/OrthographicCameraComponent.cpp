@@ -49,6 +49,8 @@ namespace ChilliSource
                 m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(MakeDelegate(this, &OrthographicCameraComponent::OnResolutionChanged));
                 break;
         }
+        
+        m_projMat = CalculateProjectionMatrix();
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
@@ -64,7 +66,7 @@ namespace ChilliSource
         m_currentViewportSize = in_size;
         m_referenceScreenSize = m_screen->GetResolution();
         
-        m_isProjCacheValid = false;
+        m_projMat = CalculateProjectionMatrix();
     }
     //------------------------------------------------------
     //------------------------------------------------------
@@ -87,8 +89,8 @@ namespace ChilliSource
             case ViewportResizePolicy::k_none:
                 break;
             case ViewportResizePolicy::k_scaleWithScreen:
-                m_isProjCacheValid = false;
                 m_currentViewportSize = m_viewportSize/m_referenceScreenSize * in_resolution;
+                m_projMat = CalculateProjectionMatrix();
                 break;
         }
     }

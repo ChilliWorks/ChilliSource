@@ -52,7 +52,7 @@ namespace ChilliSource
     {
         m_nearClip = in_near;
 
-        m_isProjCacheValid = false;
+        m_projMat = CalculateProjectionMatrix();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace ChilliSource
     {
         m_farClip = in_far;
         
-        m_isProjCacheValid = false;
+        m_projMat = CalculateProjectionMatrix();
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -114,14 +114,8 @@ namespace ChilliSource
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    const Matrix4& CameraComponent::GetProjection() 
+    const Matrix4& CameraComponent::GetProjection() const
     {
-        if(m_isProjCacheValid == false)
-        {
-            m_projMat = CalculateProjectionMatrix();
-            m_isProjCacheValid = true;
-        }
-
         return m_projMat;
     }
     //------------------------------------------------------------------------------
@@ -131,9 +125,10 @@ namespace ChilliSource
         if(GetEntity())
         {
             m_viewMat = Matrix4::Inverse(GetEntity()->GetTransform().GetWorldTransform());
+            return m_viewMat;
         }
 
-        return m_viewMat;
+        return Matrix4::k_identity;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

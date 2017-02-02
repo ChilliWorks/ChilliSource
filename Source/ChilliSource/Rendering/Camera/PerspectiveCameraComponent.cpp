@@ -48,6 +48,8 @@ namespace ChilliSource
                 m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(MakeDelegate(this, &PerspectiveCameraComponent::OnResolutionChanged));
                 break;
         }
+        
+        m_projMat = CalculateProjectionMatrix();
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
@@ -61,7 +63,7 @@ namespace ChilliSource
     {
         m_fov = in_fov;
         
-        m_isProjCacheValid = false;
+        m_projMat = CalculateProjectionMatrix();
     }
     //------------------------------------------------------
     //------------------------------------------------------
@@ -69,7 +71,7 @@ namespace ChilliSource
     {
         m_aspectRatio = in_aspectRatio;
         
-        m_isProjCacheValid = false;
+        m_projMat = CalculateProjectionMatrix();
     }
     //------------------------------------------------------
     //------------------------------------------------------
