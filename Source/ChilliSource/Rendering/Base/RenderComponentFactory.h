@@ -113,6 +113,19 @@ namespace ChilliSource
         /// @return Ownership of new mesh component
         //---------------------------------------------------------------------------
         StaticModelComponentUPtr CreateStaticModelComponent(const ModelCSPtr& in_model, const MaterialCSPtr& in_material);
+        
+        //---------------------------------------------------------------------------
+        /// Creates a static mesh component with the given materials
+        ///
+        /// @param model
+        ///     The model that should be rendered.
+        /// @param materials
+        ///     The materials that should be applied to the model (ordered to match the meshes)
+        ///
+        /// @return Ownership of new mesh component
+        //---------------------------------------------------------------------------
+        StaticModelComponentUPtr CreateStaticModelComponent(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials);
+        
         //---------------------------------------------------------------------------
         /// Creates an animated mesh component with the given material and animation.
         ///
