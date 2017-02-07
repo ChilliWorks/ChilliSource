@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\PinchGesture.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\RotationGesture.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Gyroscope\Gyroscope.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\Pointer.cpp" />
@@ -567,6 +568,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\PinchGesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\RotationGesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gyroscope\Gyroscope.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.h" />

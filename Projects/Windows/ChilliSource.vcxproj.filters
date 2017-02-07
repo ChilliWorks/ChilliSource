@@ -313,6 +313,9 @@
     <Filter Include="ChilliSource\Rendering\Skybox">
       <UniqueIdentifier>{e7f2619c-3315-4d26-966e-a967895927c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Input\Gyroscope">
+      <UniqueIdentifier>{9d7672e5-bc0b-4243-bab5-86dc856f73d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -1367,6 +1370,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Skybox\SkyboxComponent.cpp">
       <Filter>ChilliSource\Rendering\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Gyroscope\Gyroscope.cpp">
+      <Filter>ChilliSource\Input\Gyroscope</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2902,6 +2908,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Skybox.h">
       <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gyroscope\Gyroscope.h">
+      <Filter>ChilliSource\Input\Gyroscope</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
