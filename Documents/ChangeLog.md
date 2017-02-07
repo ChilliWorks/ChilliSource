@@ -6,6 +6,7 @@ Version 2.1.2, 2017-01-26
 
 * Added: Tangents and Bitangents to CSModel format. Accessible in shader vertex declaration as a_tangent and a_bitangent. Model version is now 13. Please rebuild all csmodel files.
 * Added: Skybox support via SkyboxComponent and new Skybox material type.
+* Added: Gyroscope support for iOS and Android using similar system to Accelerometer.
 * Fix: SendToBack in Widget not working properly.
 
 Version 2.1.1, 2017-01-19
