@@ -73,6 +73,8 @@ namespace CSBackend
 		CS_FORWARDDECLARE_CLASS(AccelerometerJavaInterface);
 		CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
 		CS_FORWARDDECLARE_CLASS(DeviceButtonJavaInterface);
+		CS_FORWARDDECLARE_CLASS(Gyroscope);
+		CS_FORWARDDECLARE_CLASS(GyroscopeJavaInterface);
 		CS_FORWARDDECLARE_CLASS(PointerSystem);
         CS_FORWARDDECLARE_CLASS(TextEntry);
 		CS_FORWARDDECLARE_CLASS(TextEntryJavaInterface);

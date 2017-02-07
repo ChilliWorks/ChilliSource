@@ -58,6 +58,10 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(RotationGesture);
     CS_FORWARDDECLARE_CLASS(TapGesture);
     //--------------------------------------------------
+    /// Gyroscope
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(Gyroscope);
+    //--------------------------------------------------
     /// Keyboard
     //--------------------------------------------------
     CS_FORWARDDECLARE_CLASS(Keyboard);
