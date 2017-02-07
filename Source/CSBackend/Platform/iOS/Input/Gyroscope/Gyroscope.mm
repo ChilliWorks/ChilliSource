@@ -84,15 +84,19 @@ namespace CSBackend
             if (m_isUpdating == false)
             {
                 m_isUpdating = true;
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-                {
-                    [m_motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMDeviceMotion *deviceMotionData, NSError *error)
-                    {
-                        OnDeviceMotionUpdated(deviceMotionData, error);
-                    }];
-                });
+                [m_motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical];
             }
         }
+        
+        //----------------------------------------------------
+        void Gyroscope::OnUpdate(f32 deltaSecs)
+        {
+            if(m_isUpdating == true)
+            {
+                OnDeviceMotionUpdated(m_motionManager.deviceMotion);
+            }
+        }
+        
         //----------------------------------------------------
         //----------------------------------------------------
         ChilliSource::Quaternion Gyroscope::GetOrientation() const
@@ -129,7 +133,7 @@ namespace CSBackend
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Gyroscope::OnDeviceMotionUpdated(CMDeviceMotion* deviceMotionData, NSError *error) noexcept
+        void Gyroscope::OnDeviceMotionUpdated(CMDeviceMotion* deviceMotionData) noexcept
         {
             ChilliSource::Quaternion newOrientation;
             newOrientation.x = deviceMotionData.attitude.quaternion.x;

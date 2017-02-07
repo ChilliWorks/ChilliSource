@@ -84,15 +84,19 @@ namespace CSBackend
             if (m_isUpdating == false)
             {
                 m_isUpdating = true;
-                ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-                {
-                    [m_motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMAccelerometerData *accelerometerData, NSError *error)
-                    {
-                        OnAccelerationUpdated(accelerometerData, error);
-                    }];
-                });
+                [m_motionManager startAccelerometerUpdates];
             }
         }
+        
+        //----------------------------------------------------
+        void Accelerometer::OnUpdate(f32 deltaSecs)
+        {
+            if(m_isUpdating == true)
+            {
+                OnAccelerationUpdated(m_motionManager.accelerometerData);
+            }
+        }
+        
         //----------------------------------------------------
         //----------------------------------------------------
         ChilliSource::Vector3 Accelerometer::GetAcceleration() const
@@ -129,7 +133,7 @@ namespace CSBackend
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Accelerometer::OnAccelerationUpdated(CMAccelerometerData* accelerometerData, NSError *error) noexcept
+        void Accelerometer::OnAccelerationUpdated(CMAccelerometerData* accelerometerData) noexcept
         {
             ChilliSource::Matrix4 orientationTransform;
             switch ([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation)
