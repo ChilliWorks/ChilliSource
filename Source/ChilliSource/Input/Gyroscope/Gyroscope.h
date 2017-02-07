@@ -68,12 +68,12 @@ namespace ChilliSource
         //----------------------------------------------------
         /// @author J Brown
         ///
-        /// @return whether or not the accelerometer is
+        /// @return whether or not the gyroscope is
         /// currently updating.
         //----------------------------------------------------
         virtual bool IsUpdating() const = 0;
         //----------------------------------------------------
-        /// Start listening for accelerometer changes.
+        /// Start listening for orientation changes.
         ///
         /// @author J Brown
         //----------------------------------------------------

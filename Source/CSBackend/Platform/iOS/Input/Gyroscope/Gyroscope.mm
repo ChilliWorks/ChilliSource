@@ -85,12 +85,12 @@ namespace CSBackend
             {
                 m_isUpdating = true;
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-                                                                                   {
-                                                                                       [m_motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMDeviceMotion *deviceMotionData, NSError *error)
-                                                                                        {
-                                                                                            OnDeviceMotionUpdated(deviceMotionData, error);
-                                                                                        }];
-                                                                                   });
+                {
+                    [m_motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMDeviceMotion *deviceMotionData, NSError *error)
+                    {
+                        OnDeviceMotionUpdated(deviceMotionData, error);
+                    }];
+                });
             }
         }
         //----------------------------------------------------
@@ -115,9 +115,9 @@ namespace CSBackend
             {
                 m_isUpdating = false;
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
-                                                                                   {
-                                                                                       [m_motionManager stopDeviceMotionUpdates];
-                                                                                   });
+                {
+                    [m_motionManager stopDeviceMotionUpdates];
+                });
             }
         }
         //----------------------------------------------------
@@ -125,7 +125,7 @@ namespace CSBackend
         void Gyroscope::OnInit()
         {
             m_motionManager = [[CMMotionManager alloc] init];
-            m_motionManager.accelerometerUpdateInterval = 1.0f / ChilliSource::Application::Get()->GetAppConfig()->GetPreferredFPS();
+            m_motionManager.gyroUpdateInterval = 1.0f / ChilliSource::Application::Get()->GetAppConfig()->GetPreferredFPS();
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -138,10 +138,10 @@ namespace CSBackend
             newOrientation.w = deviceMotionData.attitude.quaternion.w;
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
-                                                                               {
-                                                                                   m_orientation = newOrientation;
-                                                                                   m_orientationUpdatedEvent.NotifyConnections(m_orientation);
-                                                                               });
+            {
+                m_orientation = newOrientation;
+                m_orientationUpdatedEvent.NotifyConnections(m_orientation);
+            });
         }
         //----------------------------------------------------
         //----------------------------------------------------
