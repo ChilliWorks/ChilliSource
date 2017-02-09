@@ -31,8 +31,8 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    RenderMaterialGroup::RenderMaterialGroup(std::vector<RenderMaterialUPtr> renderMaterials, const std::vector<Collection>& collections) noexcept
-        : m_renderMaterials(std::move(renderMaterials)), m_collections(collections)
+    RenderMaterialGroup::RenderMaterialGroup(std::vector<RenderMaterialUPtr> renderMaterials, std::vector<Collection> collections) noexcept
+    : m_renderMaterials(std::move(renderMaterials)), m_collections(std::move(collections))
     {
         m_renderMaterialsRaw.reserve(m_renderMaterials.size());
         for (const auto& renderMaterial : m_renderMaterials)

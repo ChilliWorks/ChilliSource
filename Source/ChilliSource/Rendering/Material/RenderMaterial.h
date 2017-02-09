@@ -48,9 +48,9 @@ namespace ChilliSource
         /// @param renderShader
         ///     The shader applied by this material.
         /// @param renderTextures2D
-        ///     The list of textures applied by this material.
+        ///     The list of textures applied by this material. Should be moved in
         /// @param renderTexturesCubemap
-        ///     The list of cubemaps applied by this material.
+        ///     The list of cubemaps applied by this material. Should be moved in
         /// @param isTransparencyEnabled
         ///     Whether or not transparency is enabled.
         /// @param isColourWriteEnabled
@@ -94,7 +94,7 @@ namespace ChilliSource
         /// @param renderShaderVariables
         ///     The container for all render shader variables. May be null if there are no shader variables.
         ///
-        RenderMaterial(const RenderShader* renderShader, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
+        RenderMaterial(const RenderShader* renderShader, std::vector<const RenderTexture*> renderTextures2D, std::vector<const RenderTexture*> renderTexturesCubemap,
                        bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                        TestFunc depthTestFunc,
                        BlendMode sourceBlendMode, BlendMode destinationBlendMode,

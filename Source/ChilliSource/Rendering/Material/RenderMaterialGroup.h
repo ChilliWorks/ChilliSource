@@ -123,9 +123,9 @@ namespace ChilliSource
         /// @param renderMaterials
         ///     The list of all materials in the group.
         /// @param collections
-        ///     The list of material collections.
+        ///     The list of material collections. Should be moved
         ///
-        RenderMaterialGroup(std::vector<RenderMaterialUPtr> renderMaterials, const std::vector<Collection>& collections) noexcept;
+        RenderMaterialGroup(std::vector<RenderMaterialUPtr> renderMaterials, std::vector<Collection> collections) noexcept;
         
         std::vector<RenderMaterialUPtr> m_renderMaterials;
         std::vector<RenderMaterial*> m_renderMaterialsRaw;
