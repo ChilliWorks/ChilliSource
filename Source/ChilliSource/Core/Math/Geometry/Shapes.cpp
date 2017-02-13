@@ -26,7 +26,6 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 
@@ -191,12 +190,12 @@ namespace ChilliSource
     //================================================
     //-----------------------------------------------
     //-----------------------------------------------
-    Sphere Sphere::Transform(const Sphere& in_sphere, const Vector3& in_translation, const Vector3& in_scale) noexcept
+    Sphere Sphere::Transform(const Sphere& sphere, const Vector3& translation, const Quaternion& orientation, const Vector3& scale) noexcept
     {
-        f32 maxScaleComponent = std::max(std::max(in_scale.x, in_scale.y), in_scale.z);
+        f32 maxScaleComponent = std::max(std::max(scale.x, scale.y), scale.z);
         
-        auto centre = in_translation + in_sphere.vOrigin * maxScaleComponent;
-        auto radius = maxScaleComponent * in_sphere.fRadius;
+        auto centre = Vector3::Rotate(translation + sphere.vOrigin * maxScaleComponent, orientation);
+        auto radius = maxScaleComponent * sphere.fRadius;
         
         return Sphere(centre, radius);
     }
@@ -653,7 +652,7 @@ namespace ChilliSource
     //----------------------------------------------------------
     /// Calculate Clipping Planes
     ///
-    /// Build the 6 planes of the frustum based on the camera
+    /// Build the 6 world space planes of the frustum based on the camera
     /// view projection matrix
     ///
     /// @param View projection matrix

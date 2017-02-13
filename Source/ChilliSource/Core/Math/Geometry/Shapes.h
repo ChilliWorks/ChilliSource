@@ -177,9 +177,8 @@ namespace ChilliSource
     public:
         //-----------------------------------------------
         /// Transforms the given sphere by the given
-        /// translation and scale. This can be used to
-        /// transform the sphere from local to world
-        /// space as rotation has no effect.
+        /// translation, rotation and scale. This can be used to
+        /// transform the sphere from local to world.
         ///
         /// Note that the sphere remains spherical; the
         /// radius is scaled by the highest of the scale
@@ -187,14 +186,14 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         ///
-        /// @param in_sphere - The sphere to transform.
-        /// @param in_translation - The translation to
-        /// apply.
-        /// @param in_scale - The scale to apply.
+        /// @param sphere - The sphere to transform.
+        /// @param translation - The translation to apply.
+        /// @param orientation - The rotation to apply.
+        /// @param scale - The scale to apply (made uniform by taking the largest).
         ///
         /// @return The transformed sphere.
         //-----------------------------------------------
-        static Sphere Transform(const Sphere& in_sphere, const Vector3& in_translation, const Vector3& in_scale) noexcept;
+        static Sphere Transform(const Sphere& sphere, const Vector3& translation, const Quaternion& orientation, const Vector3& scale) noexcept;
         
         Sphere(){}
         Sphere(const Vector3 &invOrigin, const f32 infRadius);
@@ -539,7 +538,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Calculate Clipping Planes
         ///
-        /// Build the 6 planes of the frustum based on the camera
+        /// Build the 6 world space planes of the frustum based on the camera
         /// view projection matrix
         ///
         /// @param View projection matrix

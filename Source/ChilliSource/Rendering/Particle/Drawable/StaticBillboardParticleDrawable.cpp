@@ -212,7 +212,7 @@ namespace ChilliSource
                 
                 auto renderDynamicMesh = SpriteMeshBuilder::Build(frameAllocator, Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs,
                                                                   particle.m_colour, AlignmentAnchor::k_middleCentre);
-                auto worldBoundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldPosition, worldScale);
+                auto worldBoundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldPosition, worldOrientation, worldScale);
                 
                 renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderDynamicMesh.get(), worldMatrix, worldBoundingSphere, false, RenderLayer::k_standard));
                 renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
@@ -243,7 +243,7 @@ namespace ChilliSource
 
                 auto renderDynamicMesh = SpriteMeshBuilder::Build(frameAllocator, Vector3(billboardData.m_localCentre, 0.0f), billboardData.m_localSize, billboardData.m_uvs,
                                                                   particle.m_colour, AlignmentAnchor::k_middleCentre);
-                auto worldBoundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldPosition, worldScale);
+                auto worldBoundingSphere = Sphere::Transform(renderDynamicMesh->GetBoundingSphere(), worldPosition, worldOrientation, worldScale);
                 
                 renderSnapshot.AddRenderObject(RenderObject(renderMaterialGroup, renderDynamicMesh.get(), worldMatrix, worldBoundingSphere, false, RenderLayer::k_standard));
                 renderSnapshot.AddRenderDynamicMesh(std::move(renderDynamicMesh));
