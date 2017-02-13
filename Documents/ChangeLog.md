@@ -1,6 +1,11 @@
 ChilliSource Change Log
 =======================
 
+Version 2.1.3, 2017-
+-------------------------
+* Fix: Longstanding issue where "Shinniness" was reciprocated (i.e. 1/Shinniness) in Blinn shaders rather than just Shinniness. Note this will affect existing projects.
+* Fix: Crash in Collada to CSModel tool if the Collada file has no materials.
+
 Version 2.1.2, 2017-01-26
 -------------------------
 
