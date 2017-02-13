@@ -178,7 +178,7 @@ GLSL
 		    //calculate the specular colour
 		    float fNdotHV = max(dot(vNormal, vHalfVector), 0.0);
 		    float fLightSwitch = step(0.001, fNdotL);
-		    vec4 vSpecular = vec4(u_specular.xyz * pow(fNdotHV, 1.0/u_specular.a) * fLightSwitch, 1.0);
+		    vec4 vSpecular = vec4(u_specular.xyz * pow(fNdotHV, u_specular.a) * fLightSwitch, 1.0);
 		    
 		    //get the shadow factor
 		    float fMapDepth = texture2D(u_shadowMap, vvShadowPosition.xy).r;

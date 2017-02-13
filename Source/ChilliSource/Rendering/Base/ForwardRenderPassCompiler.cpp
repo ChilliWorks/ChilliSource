@@ -402,14 +402,14 @@ namespace ChilliSource
         ///
         CameraRenderPassGroup CompileTransparentSceneCameraRenderPassGroup(const TaskContext& taskContext, const RenderFrame& renderFrame) noexcept
         {
-            auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
-            auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
-            
             std::vector<RenderPass> renderPasses(1);
             std::vector<Task> tasks;
 
-            tasks.push_back([=, &renderPasses, &renderFrame, &visibleStandardRenderObjects](const TaskContext& innerTaskContext)
+            tasks.push_back([=, &renderPasses, &renderFrame](const TaskContext& innerTaskContext)
             {
+                auto standardRenderObjects = GetLayerRenderObjects(RenderLayer::k_standard, renderFrame.GetRenderObjects());
+                auto visibleStandardRenderObjects = RenderPassVisibilityChecker::CalculateVisibleObjects(taskContext, renderFrame.GetRenderCamera(), standardRenderObjects);
+                
                 auto renderPassObjects = GetTransparentRenderPassObjects(visibleStandardRenderObjects);
                 RenderPassObjectSorter::TransparentSort(renderFrame.GetRenderCamera(), renderPassObjects);
                 renderPasses[0] = RenderPass(renderFrame.GetAmbientRenderLight(), std::move(renderPassObjects));
