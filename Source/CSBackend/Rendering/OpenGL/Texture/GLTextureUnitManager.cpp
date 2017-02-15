@@ -28,6 +28,8 @@
 #include <CSBackend/Rendering/OpenGL/Texture/GLCubemap.h>
 #include <CSBackend/Rendering/OpenGL/Texture/GLTexture.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
 namespace CSBackend
@@ -37,11 +39,10 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLTextureUnitManager::GLTextureUnitManager() noexcept
         {
-            s32 numTextureUnits = 0;
-            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &numTextureUnits);
-            
+            u32 numTextureUnits = CS::Application::Get()->GetSystem<CS::RenderCapabilities>()->GetNumTextureUnits();
+ 
             m_boundTextures.reserve(numTextureUnits);
-            for (s32 i = 0; i < numTextureUnits; ++i)
+            for (u32 i = 0; i < numTextureUnits; ++i)
             {
                 m_boundTextures.push_back(nullptr);
             }

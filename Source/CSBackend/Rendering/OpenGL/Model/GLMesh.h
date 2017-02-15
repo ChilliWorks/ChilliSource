@@ -107,6 +107,7 @@ namespace CSBackend
             
             u32 m_indexDataSize = 0;
             u32 m_vertexDataSize = 0;
+            u32 m_maxVertexAttributes = 0;
             
             ChilliSource::RenderMesh* m_renderMesh = nullptr;
             

@@ -49,8 +49,10 @@ namespace ChilliSource
         ///         The maximum texture size available on this device.
         /// @param numTextureUnits
         ///         The number of texture units supported by this device.
+        /// @param maxVertexAttribs
+        ///         The max. number of vertex attributes supported by this device.
         ///
-        RenderInfo(bool  sShadowMapsSupported, bool  sDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits) noexcept;
+        RenderInfo(bool  sShadowMapsSupported, bool  sDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits, u32 maxVertexAttribs) noexcept;
        
         /// @return Whether or not shadow mapping is supported.
         ///
@@ -75,6 +77,10 @@ namespace ChilliSource
         /// @return The number of texture units supported by this device.
         ///
         u32 GetNumTextureUnits() const noexcept { return m_maxTextureUnits; }
+        
+        /// @return The max. number of vertex attributes supported by this device.
+        ///
+        u32 GetNumVertexAttributes() const noexcept { return m_maxVertexAttributes; }
 
     private:
         
@@ -85,6 +91,7 @@ namespace ChilliSource
         
         u32 m_maxTextureSize;
         u32 m_maxTextureUnits;
+        u32 m_maxVertexAttributes;
     };
 }
 

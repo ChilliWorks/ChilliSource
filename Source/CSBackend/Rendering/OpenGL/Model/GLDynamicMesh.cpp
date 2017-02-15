@@ -29,9 +29,11 @@
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
 
 #include <ChilliSource/Core/Base/ByteColour.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
 namespace CSBackend
 {
@@ -185,6 +187,9 @@ namespace CSBackend
             }
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating GLDynamicMesh.");
+            
+            auto renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
+            m_maxVertexAttributes = renderCapabilities->GetNumVertexAttributes();
         }
         
         //------------------------------------------------------------------------------
@@ -236,10 +241,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void GLDynamicMesh::ApplyVertexAttributes(GLShader* glShader) const noexcept
         {
-            //TODO: This should be pre-calculated.
-            GLint maxVertexAttributes = 0;
-            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
-            CS_ASSERT(u32(maxVertexAttributes) >= m_vertexFormat.GetNumElements(), "Too many vertex elements.");
+            CS_ASSERT(m_maxVertexAttributes >= m_vertexFormat.GetNumElements(), "Too many vertex elements.");
             
             for (u32 i = 0; i < m_vertexFormat.GetNumElements(); ++i)
             {
@@ -255,7 +257,7 @@ namespace CSBackend
                 glShader->SetAttribute(name, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
             }
             
-            for (s32 i = m_vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
+            for (u32 i = m_vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)
             {
                 glDisableVertexAttribArray(i);
             }

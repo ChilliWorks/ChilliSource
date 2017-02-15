@@ -155,6 +155,7 @@ namespace CSBackend
             
             u32 m_maxVertexDataSize;
             u32 m_maxIndexDataSize;
+            u32 m_maxVertexAttributes;
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
             
