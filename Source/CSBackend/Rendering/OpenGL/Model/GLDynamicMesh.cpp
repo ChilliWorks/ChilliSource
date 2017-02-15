@@ -168,22 +168,25 @@ namespace CSBackend
         GLDynamicMesh::GLDynamicMesh(u32 vertexDataSize, u32 indexDataSize) noexcept
            : m_allocator(k_allocatorSize), m_maxVertexDataSize(vertexDataSize), m_maxIndexDataSize(indexDataSize)
         {
-            glGenBuffers(1, &m_vertexBufferHandle);
-            CS_ASSERT(m_vertexBufferHandle != 0, "Invalid vertex buffer.");
-            
-            if(indexDataSize > 0)
+            for(u32 i=0; i<k_numBuffers; ++i)
             {
-                glGenBuffers(1, &m_indexBufferHandle);
-                CS_ASSERT(m_indexBufferHandle != 0, "Invalid index buffer.");
-            }
-            
-            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
-            glBufferData(GL_ARRAY_BUFFER, m_maxVertexDataSize, nullptr, GL_DYNAMIC_DRAW);
-            
-            if(indexDataSize > 0)
-            {
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_maxIndexDataSize, nullptr, GL_DYNAMIC_DRAW);
+                glGenBuffers(1, &m_vertexBufferHandles[i]);
+                CS_ASSERT(m_vertexBufferHandles[i] != 0, "Invalid vertex buffer.");
+                
+                if(indexDataSize > 0)
+                {
+                    glGenBuffers(1, &m_indexBufferHandles[i]);
+                    CS_ASSERT(m_indexBufferHandles[i] != 0, "Invalid index buffer.");
+                }
+                
+                glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandles[i]);
+                glBufferData(GL_ARRAY_BUFFER, m_maxVertexDataSize, nullptr, GL_DYNAMIC_DRAW);
+                
+                if(indexDataSize > 0)
+                {
+                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandles[i]);
+                    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_maxIndexDataSize, nullptr, GL_DYNAMIC_DRAW);
+                }
             }
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating GLDynamicMesh.");
@@ -201,12 +204,13 @@ namespace CSBackend
             m_indexFormat = indexFormat;
             m_numVertices = numVertices;
             m_numIndices = numIndices;
+        
             
-            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
+            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandles[m_currentBufferIndex]);
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, vertexData);
             
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
-            if (m_indexBufferHandle != 0)
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandles[m_currentBufferIndex]);
+            if (m_indexBufferHandles[m_currentBufferIndex] != 0)
             {
                 glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexDataSize, indexData);
             }
@@ -226,11 +230,11 @@ namespace CSBackend
             m_numVertices = numVertices;
             m_numIndices = numIndices;
             
-            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
+            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandles[m_currentBufferIndex]);
             ApplyBatchVertices(m_allocator, m_vertexFormat, numVertices, vertexDataSize, meshes);
 
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
-            if (m_indexBufferHandle != 0)
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandles[m_currentBufferIndex]);
+            if (m_indexBufferHandles[m_currentBufferIndex] != 0)
             {
                 ApplyBatchIndices(m_allocator, indexFormat, numIndices, indexDataSize, meshes);
             }
@@ -268,10 +272,13 @@ namespace CSBackend
         {
             if(!m_invalidData)
             {
-                glDeleteBuffers(1, &m_vertexBufferHandle);
-                if(m_indexBufferHandle != 0)
+                for(u32 i=0; i<k_numBuffers; ++i)
                 {
-                    glDeleteBuffers(1, &m_indexBufferHandle);
+                    glDeleteBuffers(1, &m_vertexBufferHandles[i]);
+                    if(m_indexBufferHandles[i] != 0)
+                    {
+                        glDeleteBuffers(1, &m_indexBufferHandles[i]);
+                    }
                 }
                 
                 CS_ASSERT_NOGLERROR("An OpenGL error occurred while deleting GLDynamicMesh.");

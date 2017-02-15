@@ -139,6 +139,12 @@ namespace CSBackend
             ///
             void Invalidate() noexcept { m_invalidData = true; }
             
+            ///
+            /// Dynamic buffers are multi buffered. This is called after submitting to the GPu
+            /// to allow the CPU to upload to the next buffer
+            ///
+            void SwitchBuffer() noexcept { m_currentBufferIndex = (m_currentBufferIndex + 1) % k_numBuffers; }
+            
             /// Destroys the OpenGL dynamic mesh that this represents.
             ///
             ~GLDynamicMesh() noexcept;
@@ -156,9 +162,12 @@ namespace CSBackend
             u32 m_maxVertexDataSize;
             u32 m_maxIndexDataSize;
             u32 m_maxVertexAttributes;
-            GLuint m_vertexBufferHandle = 0;
-            GLuint m_indexBufferHandle = 0;
             
+            static const u32 k_numBuffers = 3;
+            std::array<GLuint, k_numBuffers> m_vertexBufferHandles;
+            std::array<GLuint, k_numBuffers> m_indexBufferHandles;
+            u32 m_currentBufferIndex = 0;
+
             ChilliSource::PolygonType m_polygonType = ChilliSource::PolygonType::k_triangle;
             ChilliSource::VertexFormat m_vertexFormat = ChilliSource::VertexFormat::k_staticMesh;
             ChilliSource::IndexFormat m_indexFormat = ChilliSource::IndexFormat::k_short;
