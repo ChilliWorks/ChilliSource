@@ -47,6 +47,7 @@ namespace ChilliSource
     Scene::Scene(TargetGroupUPtr renderTarget) noexcept
     : m_renderTarget(std::move(renderTarget))
     {
+        m_clearColour = ChilliSource::Colour::k_black;
     }
     //-------------------------------------------------------
     //-------------------------------------------------------
