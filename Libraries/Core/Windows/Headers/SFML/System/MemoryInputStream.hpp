@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2017 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -116,7 +116,7 @@ private:
 
 
 ////////////////////////////////////////////////////////////
-/// \class MemoryeInputStream
+/// \class sf::MemoryInputStream
 /// \ingroup system
 ///
 /// This class is a specialization of InputStream that
@@ -132,17 +132,17 @@ private:
 ///
 /// SFML resource classes can usually be loaded directly from
 /// memory, so this class shouldn't be useful to you unless
-/// you create your own algorithms that operate on a InputStream.
+/// you create your own algorithms that operate on an InputStream.
 ///
 /// Usage example:
 /// \code
 /// void process(InputStream& stream);
 ///
-/// MemoryStream stream;
+/// MemoryInputStream stream;
 /// stream.open(thePtr, theSize);
 /// process(stream);
 /// \endcode
 ///
-/// InputStream, FileStream
+/// InputStream, FileInputStream
 ///
 ////////////////////////////////////////////////////////////

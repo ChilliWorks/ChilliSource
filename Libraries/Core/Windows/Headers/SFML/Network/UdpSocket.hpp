@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2017 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -30,12 +30,12 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Network/Export.hpp>
 #include <SFML/Network/Socket.hpp>
+#include <SFML/Network/IpAddress.hpp>
 #include <vector>
 
 
 namespace sf
 {
-class IpAddress;
 class Packet;
 
 ////////////////////////////////////////////////////////////
@@ -82,21 +82,24 @@ public:
     /// system to automatically pick an available port, and then
     /// call getLocalPort to retrieve the chosen port.
     ///
-    /// \param port Port to bind the socket to
+    /// \param port    Port to bind the socket to
+    /// \param address Address of the interface to bind to
     ///
     /// \return Status code
     ///
     /// \see unbind, getLocalPort
     ///
     ////////////////////////////////////////////////////////////
-    Status bind(unsigned short port);
+    Status bind(unsigned short port, const IpAddress& address = IpAddress::Any);
 
     ////////////////////////////////////////////////////////////
     /// \brief Unbind the socket from the local port to which it is bound
     ///
-    /// The port that the socket was previously using is immediately
-    /// available after this function is called. If the
-    /// socket is not bound to a port, this function has no effect.
+    /// The port that the socket was previously bound to is immediately
+    /// made available to the operating system after this function is called.
+    /// This means that a subsequent call to bind() will be able to re-bind
+    /// the port if no other process has done so in the mean time.
+    /// If the socket is not bound to a port, this function has no effect.
     ///
     /// \see bind
     ///
