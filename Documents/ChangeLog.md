@@ -6,6 +6,7 @@ Version 2.1.3, 2017-
 * Fix: Longstanding issue where "Shinniness" was reciprocated (i.e. 1/Shinniness) in Blinn shaders rather than just Shinniness. Note this will affect existing projects.
 * Fix: Crash in Collada to CSModel tool if the Collada file has no materials.
 * Fix: Issue with Sphere::Transform not considering orientation. This meant that mesh frustum culling was broken
+* Fix: Tweens which play more than once will now utilise the end-delay property every time the end of the tween is reached, instead of just once.
 * Fix: Default background colour is now black.
 
 Version 2.1.2, 2017-01-26
