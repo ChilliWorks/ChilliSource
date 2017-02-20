@@ -428,6 +428,9 @@ namespace ChilliSource
                 return GetValue();
             }
             m_currentStep++;
+            
+            // Reset end-delay
+            m_currentEndDelay = m_endDelay;
 
             if (m_isPingPong == true)
             {
