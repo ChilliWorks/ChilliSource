@@ -24,6 +24,7 @@
 #include <ChilliSource/Rendering/Material/ForwardRenderMaterialGroupManager.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Base/CullFace.h>
@@ -38,8 +39,12 @@ namespace ChilliSource
 {
     namespace
     {
+        constexpr u32 k_materialPoolSize = 150;
+        
         /// Creates a new unlit render material with the given settings.
         ///
+        /// @param renderMaterialPool
+        ///     Allocator from which to allocate
         /// @param shader
         ///     The shader that should be used.
         /// @param renderTexture
@@ -83,7 +88,7 @@ namespace ChilliSource
         ///
         /// @return The new RenderMaterial.
         ///
-        RenderMaterialUPtr CreateUnlit(const ShaderCSPtr& shader, const RenderTexture* renderTexture,
+        UniquePtr<RenderMaterial> CreateUnlit(IAllocator& renderMaterialPool, const ShaderCSPtr& shader, const RenderTexture* renderTexture,
                                        bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                        TestFunc depthTestFunc,
                                        BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -97,21 +102,23 @@ namespace ChilliSource
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return MakeUnique<RenderMaterial>(renderMaterialPool, renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables));
         }
         
         /// Creates a new shadow map RenderMaterial with the given shader.
         ///
+        /// @param renderMaterialPool
+        ///     Allocator from which to allocate
         /// @param shader
         ///     The shader that should be used.
         ///
         /// @return The new RenderMaterial.
         ///
-        RenderMaterialUPtr CreateShadowMap(const ShaderCSPtr& shader) noexcept
+        UniquePtr<RenderMaterial> CreateShadowMap(IAllocator& renderMaterialPool, const ShaderCSPtr& shader) noexcept
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures;
@@ -138,21 +145,23 @@ namespace ChilliSource
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return MakeUnique<RenderMaterial>(renderMaterialPool, renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables));
         }
         
         /// Creates a new skybox pass RenderMaterial with the given info.
         ///
+        /// @param renderMaterialPool
+        ///     Allocator from which to allocate
         /// @param renderCubemap
         ///     The render cubemap.
         ///
         /// @return The new RenderMaterial.
         ///
-        RenderMaterialUPtr CreateSkybox(const ShaderCSPtr& shader, const RenderTexture* renderCubemap) noexcept
+        UniquePtr<RenderMaterial> CreateSkybox(IAllocator& renderMaterialPool, const ShaderCSPtr& shader, const RenderTexture* renderCubemap) noexcept
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures;
@@ -179,15 +188,17 @@ namespace ChilliSource
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return MakeUnique<RenderMaterial>(renderMaterialPool, renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables));
         }
         
         /// Creates a new base pass blinn RenderMaterial with the given info.
         ///
+        /// @param renderMaterialPool
+        ///     Allocator from which to allocate
         /// @param renderTexture
         ///     The render texture.
         /// @param ambientColour
@@ -201,7 +212,7 @@ namespace ChilliSource
         ///
         /// @return The new RenderMaterial.
         ///
-        RenderMaterialUPtr CreateBlinnBase(const ShaderCSPtr& shader, const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour) noexcept
+        UniquePtr<RenderMaterial> CreateBlinnBase(IAllocator& renderMaterialPool, const ShaderCSPtr& shader, const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour) noexcept
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures { renderTexture };
@@ -226,15 +237,17 @@ namespace ChilliSource
             auto specularColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return MakeUnique<RenderMaterial>(renderMaterialPool, renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables));
         }
         
         /// Creates a new light pass (directional or point) blinn RenderMaterial with the given info.
         ///
+        /// @param renderMaterialPool
+        ///     Allocator from which to allocate
         /// @param renderTexture
         ///     The render texture.
         /// @param ambientColour
@@ -248,7 +261,7 @@ namespace ChilliSource
         ///
         /// @return The new RenderMaterial.
         ///
-        RenderMaterialUPtr CreateBlinnLight(const ShaderCSPtr& shader, const RenderTexture* renderTexture, const Colour& diffuseColour, const Colour& specularColour) noexcept
+        UniquePtr<RenderMaterial> CreateBlinnLight(IAllocator& renderMaterialPool, const ShaderCSPtr& shader, const RenderTexture* renderTexture, const Colour& diffuseColour, const Colour& specularColour) noexcept
         {
             auto renderShader = shader->GetRenderShader();
             std::vector<const RenderTexture*> renderTextures { renderTexture };
@@ -273,15 +286,22 @@ namespace ChilliSource
             auto ambientColour = Colour::k_black;
             RenderShaderVariablesUPtr renderShaderVariables = nullptr;
             
-            return RenderMaterialUPtr(new RenderMaterial(renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            return MakeUnique<RenderMaterial>(renderMaterialPool, renderShader, renderTextures, renderCubemaps, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                          depthTestFunc,
                                                          sourceBlendMode, destinationBlendMode,
                                                          stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables)));
+                                                         cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, std::move(renderShaderVariables));
         }
     }
     
     CS_DEFINE_NAMEDTYPE(ForwardRenderMaterialGroupManager);
+    
+    //------------------------------------------------------------------------------
+    ForwardRenderMaterialGroupManager::ForwardRenderMaterialGroupManager()
+    : m_renderMaterialPool(k_materialPoolSize, ObjectPoolAllocatorLimitPolicy::k_expand)
+    {
+        
+    }
     
     //------------------------------------------------------------------------------
     bool ForwardRenderMaterialGroupManager::IsA(InterfaceIDType interfaceId) const noexcept
@@ -302,7 +322,7 @@ namespace ChilliSource
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> spriteRenderMaterials {};
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials {};
-        std::vector<RenderMaterialUPtr> renderMaterials;
+        std::vector<UniquePtr<RenderMaterial>> renderMaterials;
         
         CreateUnlitRenderMaterialGroupCollection(VertexFormat::k_sprite, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, spriteRenderMaterials, renderMaterials);
         CreateUnlitRenderMaterialGroupCollection(VertexFormat::k_staticMesh, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled, depthTestFunc, sourceBlendMode, destinationBlendMode, stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask, cullFace, emissiveColour, ambientColour, staticRenderMaterials, renderMaterials);
@@ -329,13 +349,12 @@ namespace ChilliSource
                                                                                      BlendMode sourceBlendMode, BlendMode destinationBlendMode,
                                                                                      StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                                                                                      CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour,
-                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept
+                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<UniquePtr<RenderMaterial>>& out_renderMaterials) noexcept
     {
-        //TODO: Create RenderMaterials from pools.
-        
         if(format == VertexFormat::k_sprite)
         {
-            auto spriteRM = CreateUnlit(m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            auto spriteRM = CreateUnlit(m_renderMaterialPool,
+                                        m_spriteUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                         depthTestFunc,
                                         sourceBlendMode, destinationBlendMode,
                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
@@ -345,7 +364,8 @@ namespace ChilliSource
         }
         else if(format == VertexFormat::k_staticMesh)
         {
-            auto staticRM = CreateUnlit(m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            auto staticRM = CreateUnlit(m_renderMaterialPool,
+                                        m_staticUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                         depthTestFunc,
                                         sourceBlendMode, destinationBlendMode,
                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
@@ -355,14 +375,15 @@ namespace ChilliSource
 
             if (m_shadowsSupported && !isTransparencyEnabled)
             {
-                auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
+                auto staticShadowMapRM = CreateShadowMap(m_renderMaterialPool, m_staticShadowMap);
                 out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_shadowMap)] = staticShadowMapRM.get();
                 out_renderMaterials.push_back(std::move(staticShadowMapRM));
             }
         }
         else if(format == VertexFormat::k_animatedMesh)
         {
-            auto animatedRM = CreateUnlit(m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
+            auto animatedRM = CreateUnlit(m_renderMaterialPool,
+                                          m_animatedUnlit, renderTexture, isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                           depthTestFunc,
                                           sourceBlendMode, destinationBlendMode,
                                           stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
@@ -372,7 +393,7 @@ namespace ChilliSource
 
             if (m_shadowsSupported && !isTransparencyEnabled)
             {
-                auto animatedShadowMapRM = CreateShadowMap(m_animatedShadowMap);
+                auto animatedShadowMapRM = CreateShadowMap(m_renderMaterialPool, m_animatedShadowMap);
                 out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_shadowMap)] = animatedShadowMapRM.get();
                 out_renderMaterials.push_back(std::move(animatedShadowMapRM));
             }
@@ -385,7 +406,7 @@ namespace ChilliSource
         //TODO: Create RenderMaterials from pools.
         
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
-        std::vector<RenderMaterialUPtr> renderMaterials;
+        std::vector<UniquePtr<RenderMaterial>> renderMaterials;
         
         CreateSkyboxRenderMaterialGroupCollection(VertexFormat::k_staticMesh, renderCubmap, staticRenderMaterials, renderMaterials);
         
@@ -403,12 +424,11 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     void ForwardRenderMaterialGroupManager::CreateSkyboxRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderCubemap,
-                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept
+                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<UniquePtr<RenderMaterial>>& out_renderMaterials) noexcept
     {
-        //TODO: Create RenderMaterials from pools.
         CS_ASSERT(format == VertexFormat::k_staticMesh, "Skybox materials only work with static meshes");
 
-        auto staticRM = CreateSkybox(m_skybox, renderCubemap);
+        auto staticRM = CreateSkybox(m_renderMaterialPool, m_skybox, renderCubemap);
         out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_skybox)] = staticRM.get();
         out_renderMaterials.push_back(std::move(staticRM));
     }
@@ -418,7 +438,7 @@ namespace ChilliSource
     {
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials {};
-        std::vector<RenderMaterialUPtr> renderMaterials;
+        std::vector<UniquePtr<RenderMaterial>> renderMaterials;
         
         CreateBlinnRenderMaterialGroupCollection(VertexFormat::k_staticMesh, renderTexture, emissiveColour, ambientColour, diffuseColour, specularColour, staticRenderMaterials, renderMaterials);
         CreateBlinnRenderMaterialGroupCollection(VertexFormat::k_animatedMesh, renderTexture, emissiveColour, ambientColour, diffuseColour, specularColour, animatedRenderMaterials, renderMaterials);
@@ -438,56 +458,54 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     void ForwardRenderMaterialGroupManager::CreateBlinnRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
-                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept
+                                                                                     std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<UniquePtr<RenderMaterial>>& out_renderMaterials) noexcept
     {
-        //TODO: Create RenderMaterials from pools.
-        
         if(format == VertexFormat::k_staticMesh)
         {
-            auto staticBaseRM = CreateBlinnBase(m_staticBlinnBase, renderTexture, emissiveColour, ambientColour);
+            auto staticBaseRM = CreateBlinnBase(m_renderMaterialPool, m_staticBlinnBase, renderTexture, emissiveColour, ambientColour);
             out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_base)] = staticBaseRM.get();
             out_renderMaterials.push_back(std::move(staticBaseRM));
             
-            auto staticDirectionalRM = CreateBlinnLight(m_staticBlinnDirectional, renderTexture, diffuseColour, specularColour);
+            auto staticDirectionalRM = CreateBlinnLight(m_renderMaterialPool, m_staticBlinnDirectional, renderTexture, diffuseColour, specularColour);
             out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_directionalLight)] = staticDirectionalRM.get();
             out_renderMaterials.push_back(std::move(staticDirectionalRM));
             
-            auto staticPointRM = CreateBlinnLight(m_staticBlinnPoint, renderTexture, diffuseColour, specularColour);
+            auto staticPointRM = CreateBlinnLight(m_renderMaterialPool, m_staticBlinnPoint, renderTexture, diffuseColour, specularColour);
             out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_pointLight)] = staticPointRM.get();
             out_renderMaterials.push_back(std::move(staticPointRM));
             
             if (m_shadowsSupported)
             {
-                auto staticShadowMapRM = CreateShadowMap(m_staticShadowMap);
+                auto staticShadowMapRM = CreateShadowMap(m_renderMaterialPool, m_staticShadowMap);
                 out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_shadowMap)] = staticShadowMapRM.get();
                 out_renderMaterials.push_back(std::move(staticShadowMapRM));
                 
-                auto staticDirectionalShadowsRM = CreateBlinnLight(m_staticBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
+                auto staticDirectionalShadowsRM = CreateBlinnLight(m_renderMaterialPool, m_staticBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
                 out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_directionalLightShadows)] = staticDirectionalShadowsRM.get();
                 out_renderMaterials.push_back(std::move(staticDirectionalShadowsRM));
             }
         }
         else if(format == VertexFormat::k_animatedMesh)
         {
-            auto animatedBaseRM = CreateBlinnBase(m_animatedBlinnBase, renderTexture, emissiveColour, ambientColour);
+            auto animatedBaseRM = CreateBlinnBase(m_renderMaterialPool, m_animatedBlinnBase, renderTexture, emissiveColour, ambientColour);
             out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_base)] = animatedBaseRM.get();
             out_renderMaterials.push_back(std::move(animatedBaseRM));
             
-            auto animatedDirectionalRM = CreateBlinnLight(m_animatedBlinnDirectional, renderTexture, diffuseColour, specularColour);
+            auto animatedDirectionalRM = CreateBlinnLight(m_renderMaterialPool, m_animatedBlinnDirectional, renderTexture, diffuseColour, specularColour);
             out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_directionalLight)] = animatedDirectionalRM.get();
             out_renderMaterials.push_back(std::move(animatedDirectionalRM));
             
-            auto animatedPointRM = CreateBlinnLight(m_animatedBlinnPoint, renderTexture, diffuseColour, specularColour);
+            auto animatedPointRM = CreateBlinnLight(m_renderMaterialPool, m_animatedBlinnPoint, renderTexture, diffuseColour, specularColour);
             out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_pointLight)] = animatedPointRM.get();
             out_renderMaterials.push_back(std::move(animatedPointRM));
             
             if (m_shadowsSupported)
             {
-                auto animatedShadowMapRM = CreateShadowMap(m_animatedShadowMap);
+                auto animatedShadowMapRM = CreateShadowMap(m_renderMaterialPool, m_animatedShadowMap);
                 out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_shadowMap)] = animatedShadowMapRM.get();
                 out_renderMaterials.push_back(std::move(animatedShadowMapRM));
                 
-                auto animatedDirectionalShadowsRM = CreateBlinnLight(m_animatedBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
+                auto animatedDirectionalShadowsRM = CreateBlinnLight(m_renderMaterialPool, m_animatedBlinnDirectionalShadows, renderTexture, diffuseColour, specularColour);
                 out_renderMaterialSlots[static_cast<u32>(RenderPasses::k_directionalLightShadows)] = animatedDirectionalShadowsRM.get();
                 out_renderMaterials.push_back(std::move(animatedDirectionalShadowsRM));
             }
@@ -503,10 +521,8 @@ namespace ChilliSource
                                                                                                   CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
                                                                                                   RenderShaderVariablesUPtr renderShaderVariables) noexcept
     {
-        //TODO: Create RenderMaterials from pools.
-        
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> renderMaterialsSlots {};
-        std::vector<RenderMaterialUPtr> renderMaterials;
+        std::vector<UniquePtr<RenderMaterial>> renderMaterials;
         
         switch(fallbackType)
         {
@@ -530,12 +546,13 @@ namespace ChilliSource
         
         for(const auto& shaderPass : renderShaders)
         {
-            auto renderMaterial = RenderMaterialUPtr(new RenderMaterial(shaderPass.first, renderTextures2D, renderTexturesCubemap,
+            auto renderMaterial = MakeUnique<RenderMaterial>(m_renderMaterialPool, shaderPass.first, renderTextures2D, renderTexturesCubemap,
                                                                         isTransparencyEnabled, isColourWriteEnabled, isDepthWriteEnabled, isDepthTestEnabled, isFaceCullingEnabled, isStencilTestEnabled,
                                                                         depthTestFunc,
                                                                         sourceBlendMode, destinationBlendMode,
                                                                         stencilFailOp, stencilDepthFailOp, stencilPassOp, stencilTestFunc, stencilRef, stencilMask,
-                                                                        cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, RenderShaderVariablesUPtr(new RenderShaderVariables(*renderShaderVariables))));
+                                                                        cullFace, emissiveColour, ambientColour, diffuseColour, specularColour, RenderShaderVariablesUPtr(new RenderShaderVariables(*renderShaderVariables)));
+            
             renderMaterialsSlots[static_cast<u32>(shaderPass.second)] = renderMaterial.get();
             renderMaterials.push_back(std::move(renderMaterial));
         }

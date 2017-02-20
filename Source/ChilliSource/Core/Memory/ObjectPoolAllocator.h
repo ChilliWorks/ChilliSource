@@ -32,6 +32,12 @@
 
 namespace ChilliSource
 {
+    enum class ObjectPoolAllocatorLimitPolicy
+    {
+        k_fixed,
+        k_expand
+    };
+
     /// Allows allocation of objects of a fixed size from a pre allocated memory block.
     /// Instead of being deleted objects are returned to the pool.
     ///
@@ -46,12 +52,6 @@ namespace ChilliSource
     {
     public:
         
-        enum class LimitPolicy
-        {
-            k_fixed,
-            k_expand
-        };
-        
         /// Initialises the pool with the given number of objects. The buffer will be allocated
         /// from the free store.
         ///
@@ -60,7 +60,7 @@ namespace ChilliSource
         /// @param limitPolicy
         ///     How to handle the case where pool limit is reached
         /// 
-        ObjectPoolAllocator(u32 numObjects, LimitPolicy limitPolicy = LimitPolicy::k_fixed) noexcept;
+        ObjectPoolAllocator(u32 numObjects, ObjectPoolAllocatorLimitPolicy limitPolicy = ObjectPoolAllocatorLimitPolicy::k_fixed) noexcept;
         
         
         /// @return the maximum allocation size allowed by the allocator.
@@ -139,7 +139,7 @@ namespace ChilliSource
         ///
         void PopulateFreeStore() noexcept;
         
-        LimitPolicy m_limitPolicy;
+        ObjectPoolAllocatorLimitPolicy m_limitPolicy;
         u32 m_activeAllocationCount = 0;
         u32 m_capacityObjects;
 
@@ -152,7 +152,7 @@ namespace ChilliSource
     };
     
     //-----------------------------------------------------------------------------
-    template <typename T> ObjectPoolAllocator<T>::ObjectPoolAllocator(u32 numObjects, LimitPolicy limitPolicy) noexcept
+    template <typename T> ObjectPoolAllocator<T>::ObjectPoolAllocator(u32 numObjects, ObjectPoolAllocatorLimitPolicy limitPolicy) noexcept
     : m_limitPolicy(limitPolicy), m_capacityObjects(numObjects)
     {
         //Create the initial buffer page
@@ -173,10 +173,10 @@ namespace ChilliSource
         {
             switch(m_limitPolicy)
             {
-                case LimitPolicy::k_fixed:
+                case ObjectPoolAllocatorLimitPolicy::k_fixed:
                     CS_LOG_FATAL("ObjectPool out of memory. Allocate more upfront or change to an expansion policy");
                     return nullptr;
-                case LimitPolicy::k_expand:
+                case ObjectPoolAllocatorLimitPolicy::k_expand:
                     Expand();
                     break;
             }
