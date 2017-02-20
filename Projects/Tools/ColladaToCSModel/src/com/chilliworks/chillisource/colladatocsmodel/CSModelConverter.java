@@ -113,6 +113,9 @@ public class CSModelConverter
 	//-------------------------------------------------------------------
 	private void SetTexture(ColladaMaterial inMaterial, Collada inCollada, CSModelMesh outMesh)
 	{
+		if(inMaterial == null)
+			return;
+		
 		//get the image from the material
 		String effectName = inMaterial.mInstanceEffect.mstrUrl.substring(1);
 		ColladaEffect effect = inCollada.mLibraryEffects.get(effectName);
@@ -428,6 +431,9 @@ public class CSModelConverter
 	//-------------------------------------------------------------------
 	private void BuildMaterial(ColladaMaterial inMaterial, Collada inCollada, CSModelMesh inMesh)
 	{
+		if(inMaterial == null)
+			return;
+		
 		//get the effect for this geometry
 		String effectName = inMaterial.mInstanceEffect.mstrUrl.substring(1);
 		ColladaEffect effect = inCollada.mLibraryEffects.get(effectName);

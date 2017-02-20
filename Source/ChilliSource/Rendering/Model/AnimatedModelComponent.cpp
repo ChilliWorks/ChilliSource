@@ -641,7 +641,7 @@ namespace ChilliSource
             auto renderMesh = m_model->GetRenderMesh(index);
             
             const auto& transform = GetEntity()->GetTransform();
-            auto boundingSphere = Sphere::Transform(renderMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldScale());
+            auto boundingSphere = Sphere::Transform(renderMesh->GetBoundingSphere(), transform.GetWorldPosition(), transform.GetWorldOrientation(), transform.GetWorldScale());
             
             RenderSkinnedAnimationAUPtr renderSkinnedAnimation;
             if (m_activeAnimationGroup->IsPrepared() == true)

@@ -24,6 +24,8 @@
 
 #include <CSBackend/Rendering/OpenGL/Model/GLMesh.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
@@ -61,17 +63,16 @@ namespace CSBackend
                 memcpy(indexDataCopy, indexData, indexDataSize);
                 m_indexDataBackup = std::unique_ptr<const u8[]>(indexDataCopy);
             }
+            
+            auto renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
+            m_maxVertexAttributes = renderCapabilities->GetNumVertexAttributes();
+            CS_ASSERT(m_maxVertexAttributes >= m_renderMesh->GetVertexFormat().GetNumElements(), "Too many vertex elements.");
         }
         
         //------------------------------------------------------------------------------
         void GLMesh::Bind(GLShader* glShader) noexcept
         {
             auto vertexFormat = m_renderMesh->GetVertexFormat();
-            
-            //TODO: This should be pre-calculated.
-            GLint maxVertexAttributes = 0;
-            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
-            CS_ASSERT(u32(maxVertexAttributes) >= vertexFormat.GetNumElements(), "Too many vertex elements.");
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
@@ -92,7 +93,7 @@ namespace CSBackend
                 glShader->SetAttribute(name, numComponents, type, normalised, vertexFormat.GetSize(), offset);
             }
             
-            for (s32 i = vertexFormat.GetNumElements(); i < maxVertexAttributes; ++i)
+            for (s32 i = vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)
             {
                 glDisableVertexAttribArray(i);
             }

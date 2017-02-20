@@ -36,12 +36,13 @@ namespace ChilliSource
     RenderCapabilitiesUPtr RenderCapabilities::Create(const RenderInfo& renderInfo) noexcept
     {
         return RenderCapabilitiesUPtr(new RenderCapabilities(renderInfo.IsShadowMappingSupported(), renderInfo.IsDepthTextureSupported(), renderInfo.IsMapBufferSupported(),
-                                                             renderInfo.IsHighPrecisionFloatsSupported(), renderInfo.GetMaxTextureSize(), renderInfo.GetNumTextureUnits()));
+                                                             renderInfo.IsHighPrecisionFloatsSupported(), renderInfo.GetMaxTextureSize(), renderInfo.GetNumTextureUnits(), renderInfo.GetNumVertexAttributes()));
     }
     
     //-------------------------------------------------------
-    RenderCapabilities::RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits)
-    : m_isShadowMapsSupported(isShadowMapsSupported), m_isDepthTexturesSupported(isDepthTexturesSupported), m_isMapBuffersSupported(isMapBuffersSupported), m_isHighPrecisionFloatsSupported(isHighPrecisionFloatsSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits)
+    RenderCapabilities::RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits, u32 maxVertexAttribs)
+    : m_isShadowMapsSupported(isShadowMapsSupported), m_isDepthTexturesSupported(isDepthTexturesSupported), m_isMapBuffersSupported(isMapBuffersSupported),
+    m_isHighPrecisionFloatsSupported(isHighPrecisionFloatsSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits), m_maxVertexAttribs(maxVertexAttribs)
     {
     }
     
@@ -85,5 +86,11 @@ namespace ChilliSource
     u32 RenderCapabilities::GetNumTextureUnits() const noexcept
     {
         return m_maxTextureUnits;
+    }
+    
+    //-------------------------------------------------------
+    u32 RenderCapabilities::GetNumVertexAttributes() const noexcept
+    {
+        return m_maxVertexAttribs;
     }
 }

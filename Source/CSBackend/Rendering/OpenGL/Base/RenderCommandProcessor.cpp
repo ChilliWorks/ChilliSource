@@ -622,6 +622,8 @@ namespace CSBackend
                 {
                     glDrawArrays(ToGLPolygonType(m_glDynamicMesh->GetPolygonType()), 0, m_glDynamicMesh->GetNumVertices());
                 }
+                
+                m_glDynamicMesh->SwitchBuffer();
             }
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while rendering an instance.");

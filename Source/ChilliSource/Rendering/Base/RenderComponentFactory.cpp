@@ -98,6 +98,12 @@ namespace ChilliSource
     {
         return StaticModelComponentUPtr(new StaticModelComponent(in_model, in_material));
     }
+    
+    //---------------------------------------------------------------------------
+    StaticModelComponentUPtr RenderComponentFactory::CreateStaticModelComponent(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials)
+    {
+        return StaticModelComponentUPtr(new StaticModelComponent(model, materials));
+    }
     //---------------------------------------------------------------------------
     //---------------------------------------------------------------------------
     SkyboxComponentUPtr RenderComponentFactory::CreateSkyboxComponent(const ModelCSPtr& model, const MaterialCSPtr& material)

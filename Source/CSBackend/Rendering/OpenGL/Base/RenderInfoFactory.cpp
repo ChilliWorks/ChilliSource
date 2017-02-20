@@ -57,6 +57,7 @@ namespace CSBackend
             
             u32 maxTextureSize = 0;
             u32 maxTextureUnits = 0;
+            u32 maxVertexAttribs = 0;
             
 #ifdef CS_OPENGLVERSION_ES
             s32 fragmentHighRanges[2];
@@ -78,12 +79,13 @@ namespace CSBackend
             areDepthTexturesSupported = CheckForOpenGLExtension("GL_OES_depth_texture");
 #endif
             areShadowMapsSupported = (areDepthTexturesSupported && areHighPrecFragmentsSupported);
-            glGetIntegerv(GL_MAX_TEXTURE_SIZE, (s32*)&maxTextureSize);
-            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (s32*)&maxTextureUnits);
+            glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&maxTextureSize);
+            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (GLint*)&maxTextureUnits);
+            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, (GLint*)&maxVertexAttribs);
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while getting render capabilities.");
             
-            ChilliSource::RenderInfo renderInfo(areShadowMapsSupported, areDepthTexturesSupported, areMapBuffersSupported, areHighPrecFragmentsSupported, maxTextureSize, maxTextureUnits);
+            ChilliSource::RenderInfo renderInfo(areShadowMapsSupported, areDepthTexturesSupported, areMapBuffersSupported, areHighPrecFragmentsSupported, maxTextureSize, maxTextureUnits, maxVertexAttribs);
             
             return renderInfo;
         }
