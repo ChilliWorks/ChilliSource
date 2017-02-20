@@ -28,6 +28,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Memory/IAllocator.h>
 
+#include <vector>
+
 namespace ChilliSource
 {
     /// Allows allocation of objects of a fixed size from a pre allocated memory block.
@@ -68,7 +70,9 @@ namespace ChilliSource
         /// Should be used to allocate only a single object and will
         /// assert if the given size if not sizeof(T).
         ///
-        /// NOTE: Used via STL container allocation interface
+        /// If the limit is reached will obey the limit policy
+        ///
+        /// NOTE: Used via STL container allocation interface and is NOT constructed using placement new
         ///
         /// @param allocationSize
         ///     The size of the allocation must be sizeof(T)
@@ -88,7 +92,7 @@ namespace ChilliSource
         /// Returns the memory held by the object to the pool. It must have been allocated from
         /// this pool or will assert
         ///
-        /// NOTE: Used via STL container allocation interface
+        /// NOTE: Used via STL container allocation interface and is not destructed
         ///
         /// @param pointer
         ///     The pointer to deallocate.
@@ -127,11 +131,22 @@ namespace ChilliSource
         ///
         bool IsOnFreeStore(T* pointer) const noexcept;
         
+        /// Adds a new page buffer at a fraction of the size of the original
+        ///
+        void Expand() noexcept;
+        
+        /// Moves all objects to the free store
+        ///
+        void PopulateFreeStore() noexcept;
+        
         LimitPolicy m_limitPolicy;
         u32 m_activeAllocationCount = 0;
         u32 m_capacityObjects;
 
-        T* m_buffer;
+        //Buffers are paged to accomodate expansion without invalidating the existing pointers
+        //Fixed size only has a single buffer
+        std::vector<T*> m_buffers;
+        std::vector<u32> m_capacities;
         T** m_freeStore;
         T** m_freeStoreHead;
     };
@@ -140,7 +155,10 @@ namespace ChilliSource
     template <typename T> ObjectPoolAllocator<T>::ObjectPoolAllocator(u32 numObjects, LimitPolicy limitPolicy) noexcept
     : m_limitPolicy(limitPolicy), m_capacityObjects(numObjects)
     {
-        m_buffer = (T*)malloc(sizeof(T) * numObjects);
+        //Create the initial buffer page
+        m_buffers.push_back((T*)malloc(sizeof(T) * numObjects));
+        m_capacities.push_back(numObjects);
+        
         m_freeStore = (T**)malloc(sizeof(T*) * numObjects);
         
         Reset();
@@ -159,8 +177,7 @@ namespace ChilliSource
                     CS_LOG_FATAL("ObjectPool out of memory. Allocate more upfront or change to an expansion policy");
                     return nullptr;
                 case LimitPolicy::k_expand:
-                    //TODO:
-                    //Expand();
+                    Expand();
                     break;
             }
         }
@@ -205,16 +222,21 @@ namespace ChilliSource
         
         m_freeStoreHead = m_freeStore;
         
-        for(u32 i=0; i<m_capacityObjects; ++i)
-        {
-            m_freeStore[i] = m_buffer + i;
-        }
+        PopulateFreeStore();
     }
     
     //-----------------------------------------------------------------------------
     template <typename T> bool ObjectPoolAllocator<T>::IsOwnedByPool(T* pointer) const noexcept
     {
-        return pointer >= m_buffer && pointer < m_buffer + m_capacityObjects;
+        for(u32 i=0; i<m_buffers.size(); ++i)
+        {
+            if(pointer >= m_buffers[i] && pointer < m_buffers[i] + m_capacities[i])
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     //-----------------------------------------------------------------------------
@@ -230,12 +252,50 @@ namespace ChilliSource
     }
     
     //-----------------------------------------------------------------------------
+    template <typename T> void ObjectPoolAllocator<T>::Expand() noexcept
+    {
+        //We use a fraction of the total buffer size for the new buffer
+        u32 numObjects = m_capacityObjects/4;
+        T* buffer = (T*)malloc(sizeof(T) * numObjects);
+        m_buffers.push_back(buffer);
+        m_capacities.push_back(numObjects);
+        m_capacityObjects += numObjects;
+        
+        //Delete the old free store and rebuild with the new buffer appended
+        auto headOffset = m_freeStoreHead - m_freeStore;
+        delete [] m_freeStore;
+        
+        m_freeStore = (T**)malloc(sizeof(T*) * m_capacityObjects);
+        m_freeStoreHead = m_freeStore + headOffset;
+        
+        PopulateFreeStore();
+    }
+    
+    //-----------------------------------------------------------------------------
+    template <typename T> void ObjectPoolAllocator<T>::PopulateFreeStore() noexcept
+    {
+        u32 freeStoreIndex = 0;
+        
+        for(u32 i=0; i<m_buffers.size(); ++i)
+        {
+            for(int j=0; j<m_capacities[i]; ++j, ++freeStoreIndex)
+            {
+                m_freeStore[freeStoreIndex] = m_buffers[i] + j;
+            }
+        }
+    }
+    
+    //-----------------------------------------------------------------------------
     template <typename T> ObjectPoolAllocator<T>::~ObjectPoolAllocator() noexcept
     {
         Reset();
         
         delete[] m_freeStore;
-        delete[] m_buffer;
+        
+        for(u32 i=0; i<m_buffers.size(); ++i)
+        {
+            delete[] m_buffers[i];
+        }
     }
 }
 
