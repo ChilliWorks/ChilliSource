@@ -1,6 +1,6 @@
 /**
  * Main.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 26/10/2012
  * 
  * The MIT License (MIT)

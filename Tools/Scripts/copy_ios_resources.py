@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 #  copy_ios_resources.py
-#  Chilli Source
+#  ChilliSource
 #  Created by Scott Downie on 23/06/2014.
 #
 #  The MIT License (MIT)

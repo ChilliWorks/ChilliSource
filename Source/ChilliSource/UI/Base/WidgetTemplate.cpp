@@ -1,6 +1,6 @@
 //
 //  WidgetTemplate.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 30/07/2014.
 //
 //  The MIT License (MIT)

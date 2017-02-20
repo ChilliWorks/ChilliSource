@@ -1,6 +1,6 @@
 /**
  * AndroidManifestGenerator.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 20/06/2014.
  * 
  * The MIT License (MIT)
@@ -42,7 +42,7 @@ import com.chilliworks.chillisource.coreutils.Logging;
 
 /**
  * Generates the android manifest containing all the required settings
- * for building Chilli Source as well as the extra settings requested
+ * for building ChilliSource as well as the extra settings requested
  * by the user.
  * 
  * @author Ian Copland
@@ -50,7 +50,7 @@ import com.chilliworks.chillisource.coreutils.Logging;
 public final class AndroidManifestBuilder
 {
 	/**
-	 * Generates the android manifest from the Chilli Source template
+	 * Generates the android manifest from the ChilliSource template
 	 * and the applications CS manifest.
 	 * 
 	 * @author Ian Copland

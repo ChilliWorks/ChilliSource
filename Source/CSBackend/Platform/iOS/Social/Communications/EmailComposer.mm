@@ -1,6 +1,6 @@
 //
 //  EmailComposer.mm
-//  Chilli Source
+//  ChilliSource
 //  Created by Stuart McGaw on 09/06/2011.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  JavaSystem.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 23/04/2015.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  Skeleton.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 13/10/2011.
 //
 //  The MIT License (MIT)

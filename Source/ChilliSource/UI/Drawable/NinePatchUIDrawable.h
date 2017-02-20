@@ -1,6 +1,6 @@
 //
 //  NinePatchUIDrawable.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 24/07/2014.
 //
 //  The MIT License (MIT)

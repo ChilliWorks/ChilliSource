@@ -1,6 +1,6 @@
 /**
  * CSModelTransformer.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 15/01/2013.
  * 
  * The MIT License (MIT)
@@ -124,7 +124,7 @@ public final class CSModelTransformer
 	}
 	/**
 	 * Swaps y and z for all data in the model. This is needed to convert 
-	 * from 3DS Max space to chilli source space.
+	 * from 3DS Max space to ChilliSource space.
 	 * 
 	 * @author Ian Copland
 	 * 
@@ -164,7 +164,7 @@ public final class CSModelTransformer
 	}
 	/**
 	 * Inverts the y component of the texture coordinates. This is because 3DS Max 
-	 * uses the opposite coordinate system to what chilli source uses.
+	 * uses the opposite coordinate system to what ChilliSource uses.
 	 * 
 	 * @author Ian Copland
 	 * 

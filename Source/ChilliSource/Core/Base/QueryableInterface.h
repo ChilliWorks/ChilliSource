@@ -1,6 +1,6 @@
 //
 //  QueryableInterface.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Stuart McGaw on 27/09/2010.
 //
 //  The MIT License (MIT)

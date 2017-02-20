@@ -1,6 +1,6 @@
 //
 //  LocalNotificationJavaInterface.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Steven Hendrie on 13/12/2011.
 //
 //  The MIT License (MIT)

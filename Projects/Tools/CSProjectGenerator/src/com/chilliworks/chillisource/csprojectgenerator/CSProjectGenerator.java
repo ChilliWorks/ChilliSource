@@ -1,6 +1,6 @@
 /**
  * CSProjectGenerator.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 15/10/2014.
  * 
  * The MIT License (MIT)
@@ -46,7 +46,7 @@ import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.coreutils.ZipUtils;
 
 /**
- * A collection of methods for generating new Chilli Source projects.
+ * A collection of methods for generating new ChilliSource projects.
  * 
  * @author Ian Copland
  */
@@ -60,7 +60,7 @@ public final class CSProjectGenerator
 	private static final String k_tempDirectory = "_temp-csprojectgenerator/";
 	
 	/**
-	 * Generates a new Chilli Source project using the given options.
+	 * Generates a new ChilliSource project using the given options.
 	 * 
 	 * @author Ian Copland
 	 *
@@ -104,7 +104,7 @@ public final class CSProjectGenerator
 			throw new CSException("Output project directory '" + outputProjectDirectoryPathName + "' already exists!");
 		}
 		
-		//ensure the output path is not inside Chilli Source as this will break copying of files.
+		//ensure the output path is not inside ChilliSource as this will break copying of files.
 		try
 		{
 			String outputProjectDirectoryPathNameAbs = outputProjectDirectory.getCanonicalPath();
@@ -116,7 +116,7 @@ public final class CSProjectGenerator
 
 			if (outputProjectDirectoryPath.startsWith(csDirectoryPath) == true)
 			{
-				throw new CSException("Output project directory '" + outputProjectDirectoryPathName + "' cannot be located inside Chilli Source.");
+				throw new CSException("Output project directory '" + outputProjectDirectoryPathName + "' cannot be located inside ChilliSource.");
 			}
 		}
 		catch (Exception e)
@@ -363,7 +363,7 @@ public final class CSProjectGenerator
 		}
 	}
 	/**
-	 * Copies Chilli Source into the project directory.
+	 * Copies ChilliSource into the project directory.
 	 * 
 	 * @author Ian Copland
 	 * 
@@ -376,14 +376,14 @@ public final class CSProjectGenerator
 		String csSourcePath = StringUtils.standardiseDirectoryPath(getJarDirectoryPath(in_options) + k_csSourceDirectoryPath); 
 		String csDestinationPath = StringUtils.standardiseDirectoryPath(tempProjectDirectory + k_csDestinationDirectoryPath);
 		
-		Logging.logVerbose("Copying Chilli Source into the project.");
+		Logging.logVerbose("Copying ChilliSource into the project.");
 		
 		List<String> ignore = new ArrayList<>();
 		Collections.addAll(ignore, "bin", "obj");
 		if (FileUtils.copyDirectory(csSourcePath, csDestinationPath, ignore) == false)
 		{
 			cleanupTemp(in_options);
-			throw new CSException("Could not copy Chilli Source into project.");
+			throw new CSException("Could not copy ChilliSource into project.");
 		}
 		
 		//remove any remnants of the git project.

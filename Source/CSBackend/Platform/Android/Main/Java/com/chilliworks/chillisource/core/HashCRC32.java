@@ -1,6 +1,6 @@
 /**
  * HashCRC32.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 09/01/2014.
  * 
  * The MIT License (MIT)

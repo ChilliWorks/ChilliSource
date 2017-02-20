@@ -1,6 +1,6 @@
 //
 //  PVRImageProvider.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 08/05/2014.
 //
 //  The MIT License (MIT)

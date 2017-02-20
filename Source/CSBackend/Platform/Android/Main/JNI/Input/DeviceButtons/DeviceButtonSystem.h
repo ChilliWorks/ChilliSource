@@ -1,6 +1,6 @@
 //
 //  DeviceButtonSystem.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 16/05/2014.
 //
 //  The MIT License (MIT)

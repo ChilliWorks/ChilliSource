@@ -1,6 +1,6 @@
 //
 //  Logging.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 18/10/2010.
 //
 //  The MIT License (MIT)
@@ -38,9 +38,9 @@
 #include <cstdlib>
 extern "C"
 {
-#define CS_ANDROID_LOG_VERBOSE(...) __android_log_print(ANDROID_LOG_DEBUG, "Chilli Source", "%s", __VA_ARGS__)
-#define CS_ANDROID_LOG_WARNING(...) __android_log_print(ANDROID_LOG_WARN, "Chilli Source", "%s", __VA_ARGS__)
-#define CS_ANDROID_LOG_ERROR(...) __android_log_print(ANDROID_LOG_ERROR, "Chilli Source", "%s", __VA_ARGS__)
+#define CS_ANDROID_LOG_VERBOSE(...) __android_log_print(ANDROID_LOG_DEBUG, "ChilliSource", "%s", __VA_ARGS__)
+#define CS_ANDROID_LOG_WARNING(...) __android_log_print(ANDROID_LOG_WARN, "ChilliSource", "%s", __VA_ARGS__)
+#define CS_ANDROID_LOG_ERROR(...) __android_log_print(ANDROID_LOG_ERROR, "ChilliSource", "%s", __VA_ARGS__)
 }
 #endif
 
@@ -129,7 +129,7 @@ namespace ChilliSource
     {
 #if defined CS_LOGLEVEL_VERBOSE || defined CS_LOGLEVEL_WARNING || defined CS_LOGLEVEL_ERROR || defined CS_LOGLEVEL_FATAL
         LogMessage(LogLevel::k_error, "FATAL: " + in_message);
-        LogMessage(LogLevel::k_error, "Chilli Source is exiting...");
+        LogMessage(LogLevel::k_error, "ChilliSource is exiting...");
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -166,10 +166,10 @@ namespace ChilliSource
         }
 #elif defined (CS_TARGETPLATFORM_IOS)
         NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
-        NSLog(@"[Chilli Source] %@", message);
+        NSLog(@"[ChilliSource] %@", message);
         [message release];
 #elif defined (CS_TARGETPLATFORM_WINDOWS)
-        OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] " + in_message + "\n").c_str());
+        OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[ChilliSource] " + in_message + "\n").c_str());
 #endif
         
 #ifdef CS_ENABLE_LOGTOFILE
@@ -183,7 +183,7 @@ namespace ChilliSource
     void Logging::CreateLogFile()
     {
         FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::k_write);
-        stream->Write("Chilli Source Log");
+        stream->Write("ChilliSource Log");
     }
     //-----------------------------------------------
     //-----------------------------------------------
@@ -198,7 +198,7 @@ namespace ChilliSource
             if (m_isFirstLog == true)
             {
                 FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, FileMode::k_write);
-                stream->Write("Chilli Source Log");
+                stream->Write("ChilliSource Log");
                 stream->Write(m_logBuffer);
                 m_logBuffer.clear();
                 m_isFirstLog = false;

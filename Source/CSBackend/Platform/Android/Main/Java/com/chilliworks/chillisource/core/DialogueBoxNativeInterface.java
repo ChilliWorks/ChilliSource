@@ -1,6 +1,6 @@
 /**
  * DialogueBoxNativeInterface.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 06/03/2013.
  * 
  * The MIT License (MIT)

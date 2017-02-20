@@ -1,6 +1,6 @@
 //
 //  Main.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 28/03/2012.
 //
 //  The MIT License (MIT)

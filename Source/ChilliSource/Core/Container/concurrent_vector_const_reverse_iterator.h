@@ -1,6 +1,6 @@
 //
 //  concurrent_vector_const_reverse_iterator.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 19/09/2014.
 //
 //  The MIT License (MIT)

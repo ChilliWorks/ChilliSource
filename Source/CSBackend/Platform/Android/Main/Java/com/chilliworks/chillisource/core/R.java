@@ -1,6 +1,6 @@
 /**
  * R.java
- * Chilli Source
+ * ChilliSource
  * Created by Hugh McLaughlin on 04/07/2012.
  * 
  * The MIT License (MIT)

@@ -1,6 +1,6 @@
 /**
  * LocalNotificationStore.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 11/07/2014.
  * 
  * The MIT License (MIT)

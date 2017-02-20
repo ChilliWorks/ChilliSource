@@ -1,6 +1,6 @@
 //
 //  Gyroscope.mm
-//  Chilli Source
+//  ChilliSource
 //  Created by Jordan Brown on 19/01/2017
 //
 //  The MIT License (MIT)

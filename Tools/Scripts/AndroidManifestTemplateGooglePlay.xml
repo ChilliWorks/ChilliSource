@@ -49,7 +49,7 @@ THE SOFTWARE.
         <!-- provide access to the package name, prior to it being replaced by the applicationId -->
         <meta-data android:name="packageName" android:value="[[PACKAGE]]" />
 
-        <!-- Chilli Source main -->
+        <!-- ChilliSource main -->
         <activity android:name="com.chilliworks.chillisource.core.CSActivity"
             android:screenOrientation="[[ORIENTATION]]"
             android:label="@string/app_name"
@@ -63,14 +63,14 @@ THE SOFTWARE.
 
         </activity>
 
-        <!-- Chilli Source video player -->
+        <!-- ChilliSource video player -->
         <activity android:name="com.chilliworks.chillisource.video.VideoPlayerActivity" 
             android:screenOrientation="[[ORIENTATION]]" 
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboard|keyboardHidden|orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize" />
 
-        <!-- Chilli Source local notifications -->
+        <!-- ChilliSource local notifications -->
         <receiver android:exported="false" android:name="com.chilliworks.chillisource.core.LocalNotificationReceiver">
             <intent-filter>
                 <action android:name="com.chilliworks.chillisource.core.ALARM_NOTIFICATION_INTENT" />

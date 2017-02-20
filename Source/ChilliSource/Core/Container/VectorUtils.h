@@ -1,6 +1,6 @@
 //
 //  VectorUtils.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 01/12/2014.
 //
 //  The MIT License (MIT)

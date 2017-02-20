@@ -1,6 +1,6 @@
 //
 //  LocalNotifcationSystem.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 01/07/2011.
 //
 //  The MIT License (MIT)

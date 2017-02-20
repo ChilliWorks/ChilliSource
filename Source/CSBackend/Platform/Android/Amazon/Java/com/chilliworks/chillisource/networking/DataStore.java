@@ -1,6 +1,6 @@
 /**
  * DataStore.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 16/12/2013.
  * 
  * The MIT License (MIT)

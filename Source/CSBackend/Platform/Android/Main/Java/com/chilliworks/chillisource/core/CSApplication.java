@@ -1,6 +1,6 @@
 /**
  * CSApplication.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie on 12/03/2014.
  * 
  * The MIT License (MIT)
@@ -581,7 +581,7 @@ public class CSApplication
 	/**
 	 * @author S Downie
 	 *
-	 * @return Chilli source activity
+	 * @return ChilliSource activity
 	 */
 	public Activity getActivity()
 	{

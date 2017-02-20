@@ -1,6 +1,6 @@
 /**
  * CSActivity.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 14/08/2012.
  * 
  * The MIT License (MIT)
@@ -41,7 +41,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 /**
- * The main activity for Chilli Source apps.
+ * The main activity for ChilliSource apps.
  * This feeds Android lifecycle events to the application
  *
  * @author Ian Copland
@@ -269,7 +269,7 @@ public class CSActivity extends Activity
         }
     }
 	/**
-	 * Initialises the Chilli Source application and creates the OpenGL surface.
+	 * Initialises the ChilliSource application and creates the OpenGL surface.
 	 *
 	 * @author Ian Copland
 	 */

@@ -1,6 +1,6 @@
 /**
  * BoxedPointer.java
- * Chilli Source
+ * ChilliSource
  * Created by HMcLaughlin on 31/07/2015.
  *
  * The MIT License (MIT)

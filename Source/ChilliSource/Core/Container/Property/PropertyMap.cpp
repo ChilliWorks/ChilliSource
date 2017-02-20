@@ -1,6 +1,6 @@
 //
 //  PropertyMap.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 29/07/2014.
 //
 //  The MIT License (MIT)

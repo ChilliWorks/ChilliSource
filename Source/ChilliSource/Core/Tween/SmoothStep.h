@@ -1,6 +1,6 @@
 //
 //  SmoothStep.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 04/07/2014.
 //
 //  The MIT License (MIT)

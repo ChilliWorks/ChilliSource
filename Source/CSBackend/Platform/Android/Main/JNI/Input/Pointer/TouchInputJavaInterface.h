@@ -1,6 +1,6 @@
 //
 //  TouchInputJavaInterface.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 05/05/2011.
 //
 //  The MIT License (MIT)

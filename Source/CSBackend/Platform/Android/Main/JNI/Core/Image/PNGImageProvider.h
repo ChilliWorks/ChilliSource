@@ -1,6 +1,6 @@
 //
 //  PNGImageProvider.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 05/02/2011.
 //
 //  The MIT License (MIT)

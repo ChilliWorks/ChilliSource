@@ -1,6 +1,6 @@
 /**
  * Main.java
- * Chilli Source
+ * ChilliSource
  * Created by Robert Henning on 15/01/2013.
  * 
  * The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  Curves.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Stuart McGaw on 17/11/2010.
 //
 //  The MIT License (MIT)

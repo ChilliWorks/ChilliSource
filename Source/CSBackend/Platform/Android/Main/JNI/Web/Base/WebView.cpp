@@ -1,6 +1,6 @@
 //
 //  WebView.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Steven Hendrie on 10/12/12.
 //
 //  The MIT License (MIT)

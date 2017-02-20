@@ -1,6 +1,6 @@
 //
 //  PNGImageProvider.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 01/08/2011.
 //
 //  The MIT License (MIT)

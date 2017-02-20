@@ -1,6 +1,6 @@
 //
 //  StorageLocation.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 31/03/2014.
 //
 //  The MIT License (MIT)

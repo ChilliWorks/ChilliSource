@@ -1,6 +1,6 @@
 /**
  * IAPSystemNativeInterface.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie on 12/06/2013.
  * 
  * The MIT License (MIT)
@@ -604,7 +604,7 @@ public class GooglePlayIAPNativeInterface  extends com.chilliworks.chillisource.
 	/**
 	 * On Destroy
 	 * 
-	 * Called when the Chilli Source activity is destroyed.
+	 * Called when the ChilliSource activity is destroyed.
 	 *  
 	 * @author Scott Downie
 	 */
@@ -619,7 +619,7 @@ public class GooglePlayIAPNativeInterface  extends com.chilliworks.chillisource.
 	/**
 	 * On Activity Result
 	 * 
-	 * Called when the Chilli Source activity is "onActivityResult" is called.
+	 * Called when the ChilliSource activity is "onActivityResult" is called.
 	 *  
 	 * @author Scott Downie
 	 */

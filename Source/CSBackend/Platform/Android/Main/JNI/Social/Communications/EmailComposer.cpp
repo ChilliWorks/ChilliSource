@@ -1,6 +1,6 @@
 //
 //  EmailComposer.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Steven Hendrie on 20/01/2012.
 //
 //  The MIT License (MIT)

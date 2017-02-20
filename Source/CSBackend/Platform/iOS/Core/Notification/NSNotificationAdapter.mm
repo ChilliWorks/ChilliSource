@@ -1,6 +1,6 @@
 //
 //  NSNotificationAdapter.mm
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 01/02/2011.
 //
 //  The MIT License (MIT)

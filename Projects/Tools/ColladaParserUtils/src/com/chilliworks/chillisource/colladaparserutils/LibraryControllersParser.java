@@ -1,6 +1,6 @@
 /**
  * LibraryAnimationsParser.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 16/01/2013.
  * 
  * The MIT License (MIT)

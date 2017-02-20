@@ -1,6 +1,6 @@
 //
 //  HttpResponse.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 17/12/2014.
 //
 //  The MIT License (MIT)

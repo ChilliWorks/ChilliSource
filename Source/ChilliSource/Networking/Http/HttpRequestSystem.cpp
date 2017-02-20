@@ -1,6 +1,6 @@
 //
 //  HttpRequestSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 23/05/2011.
 //
 //  The MIT License (MIT)

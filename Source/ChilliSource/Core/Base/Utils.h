@@ -1,6 +1,6 @@
 //
 //  Utils.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 25/10/2010.
 //
 //  The MIT License (MIT)

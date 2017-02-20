@@ -1,6 +1,6 @@
 //
 //  GLError.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 21/05/2014.
 //
 //  The MIT License (MIT)

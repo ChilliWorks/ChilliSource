@@ -1,6 +1,6 @@
 //
 //  LocalNotificationSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 01/07/2011.
 //
 //  The MIT License (MIT)
@@ -51,7 +51,7 @@ namespace CSBackend
             /// @author Scott Downie
             ///
             /// @param Apple UILocalNotification
-            /// @param [Out] Chilli Source notification
+            /// @param [Out] ChilliSource notification
             //---------------------------------------------------------------
             ChilliSource::NotificationUPtr ConvertUILocalNotificationToNotification(UILocalNotification* in_uiLocal)
             {

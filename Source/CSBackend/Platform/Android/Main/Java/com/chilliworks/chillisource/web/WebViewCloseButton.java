@@ -1,6 +1,6 @@
 /**
  * WebViewCloseButton.java
- * Chilli Source
+ * ChilliSource
  * Created by Steven Hendrie on 16/12/2011.
  * 
  * The MIT License (MIT)

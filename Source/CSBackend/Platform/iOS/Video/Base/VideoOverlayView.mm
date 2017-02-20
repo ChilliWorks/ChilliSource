@@ -1,6 +1,6 @@
 //
 //  VideoOverlayView.mm
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 11/04/2014.
 //
 //  The MIT License (MIT)

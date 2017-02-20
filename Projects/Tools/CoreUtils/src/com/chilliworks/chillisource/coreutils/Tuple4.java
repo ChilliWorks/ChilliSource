@@ -1,6 +1,6 @@
 /**
  * Tuple4.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 23/10/2014.
  * 
  * The MIT License (MIT)

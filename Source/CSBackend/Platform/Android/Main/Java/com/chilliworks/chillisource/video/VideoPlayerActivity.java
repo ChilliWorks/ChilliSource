@@ -1,6 +1,6 @@
 /**
  * MediaPlayerActivity.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 15/08/2012.
  * 
  * The MIT License (MIT)

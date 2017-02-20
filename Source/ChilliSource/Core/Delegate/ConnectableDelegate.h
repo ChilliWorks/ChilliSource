@@ -1,6 +1,6 @@
 //
 //  ConnectableDelegate.h
-//  Chilli Source
+//  ChilliSource
 //  Created by S Downie on 08/05/2014.
 //
 //  The MIT License (MIT)

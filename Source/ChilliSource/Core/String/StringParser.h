@@ -1,6 +1,6 @@
 //
 //  StringParser.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 25/02/2014.
 //
 //  The MIT License (MIT)

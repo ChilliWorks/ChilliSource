@@ -1,6 +1,6 @@
 /**
  * CSModelOutputer.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 15/01/2013.
  * 
  * The MIT License (MIT)

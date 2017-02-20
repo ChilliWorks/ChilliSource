@@ -1,6 +1,6 @@
 //
 //  GooglePlayLicense.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 27/05/2015.
 //
 //  The MIT License (MIT)

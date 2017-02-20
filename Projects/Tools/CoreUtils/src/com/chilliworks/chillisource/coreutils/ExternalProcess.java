@@ -1,6 +1,6 @@
 /**
  * ExternalProcess.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 07/09/2012
  * 
  * The MIT License (MIT)

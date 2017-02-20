@@ -1,6 +1,6 @@
 //
 //  CSBinaryInputStream.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 28/10/2014.
 //
 //  The MIT License (MIT)
@@ -37,12 +37,12 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------------
-    /// A file input stream for reading files that use Chilli Source's
+    /// A file input stream for reading files that use ChilliSource's
     /// "Chunked" binary file format. The input stream wraps around a
     /// standard file stream and provides an easy and efficient API for
     /// loading files.
     ///
-    /// The Chilli Source "Chunked" file format has 3 sections. The header,
+    /// The ChilliSource "Chunked" file format has 3 sections. The header,
     /// the chunk table and the chunk data. The header contains basic file
     /// information such as version numbers and the chunk table size. The
     /// chunk table describes the location and size of all file chunks. The
@@ -52,14 +52,14 @@ namespace ChilliSource
     ///
     /// The file header is a fixed size and contains the following:
     ///
-    ///   [4 bytes] The 4 ASCII character Chilli Source file id: "CSCS".
+    ///   [4 bytes] The 4 ASCII character ChilliSource file id: "CSCS".
     ///
     ///   [4 bytes] Endianness check flag. This is an unsigned integer that
     ///   should always read 9999. It can be used to determine whether the
     ///   file is big or little endian.
     ///
     ///   [4 bytes] The CS file format Id. An unsigned integer describing which
-    ///   of the chilli source file format the file is. For example a CSFont
+    ///   of the ChilliSource file format the file is. For example a CSFont
     ///   file has an Id of 1.
     ///
     ///   [4 bytes] An unsigned integer describing the file format version

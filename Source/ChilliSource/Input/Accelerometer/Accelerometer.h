@@ -1,6 +1,6 @@
 //
 //  Accelerometer.h
-//  Chilli Source
+//  ChilliSource
 //  Created by S McGaw on 15/11/2010
 //
 //  The MIT License (MIT)

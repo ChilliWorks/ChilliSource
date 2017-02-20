@@ -1,6 +1,6 @@
 //
 //  CanvasMaterialPool.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 30/07/2015
 //
 //  The MIT License (MIT)

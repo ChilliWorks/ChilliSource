@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 #  copy_windows_resources.py
-#  Chilli Source
+#  ChilliSource
 #  Created by Scott Downie on 12/06/2014.
 #
 #  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  PinchGesture.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 22/09/2014.
 //
 //  The MIT License (MIT)

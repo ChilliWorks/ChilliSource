@@ -1,6 +1,6 @@
 //
 //  CSParticleProvider.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 04/11/2014.
 //
 //  The MIT License (MIT)

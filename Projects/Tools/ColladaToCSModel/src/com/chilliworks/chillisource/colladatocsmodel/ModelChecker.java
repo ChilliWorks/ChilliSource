@@ -1,6 +1,6 @@
 /**
  * ModelChecker.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 18/04/2013.
  * 
  * The MIT License (MIT)
@@ -39,14 +39,14 @@ public class ModelChecker
 	/// Check Model
 	///
 	/// Checks whether the model will be able to be
-	/// loaded into chilli source. This checks things like
+	/// loaded into ChilliSource. This checks things like
 	/// triangle count and number of mesh influencing joints.
 	///
 	/// @param The model.
 	//----------------------------------------------------
 	static public void CheckModel(CSModel inModel)
 	{
-		//Test that the model is not too big for chilli source to render.
+		//Test that the model is not too big for ChilliSource to render.
 		boolean bContainsLargeMesh = false;
 		for (CSModelMesh mesh : inModel.mMeshTable.values())
 		{
@@ -67,7 +67,7 @@ public class ModelChecker
 		}
 		if (bContainsLargeMesh == true)
 		{
-			Logging.logWarning("Mesh is too large! This model will require integer indices to render which chilli source currently does not support!");
+			Logging.logWarning("Mesh is too large! This model will require integer indices to render which ChilliSource currently does not support!");
 		}
 		
 		//test the amount of skeleton nodes

@@ -1,6 +1,6 @@
 //
 //  ContentManagementSystem.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 04/07/2011.
 //
 //  The MIT License (MIT)

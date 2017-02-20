@@ -1,6 +1,6 @@
 //
 //  Utils.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Andrew Glass on 09/08/2012.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  PngLoader.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 06/04/2011.
 //
 //  The MIT License (MIT)
@@ -38,7 +38,7 @@
 /// Read Png Data
 ///
 /// A replacement for the default libPng file reading function. This is needed so
-/// the c style file io functions can be replaced with Chilli source functions,
+/// the c style file io functions can be replaced with ChilliSource functions,
 /// enabling loading from the package.
 /// @param png_structp png_ptr - The currently open Png decorder
 /// @param png_bytep data - The output data.

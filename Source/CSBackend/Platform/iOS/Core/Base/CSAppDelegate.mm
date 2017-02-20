@@ -1,6 +1,6 @@
 //
 //  CSAppDelegate.mm
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 08/02/2011.
 //
 //  The MIT License (MIT)

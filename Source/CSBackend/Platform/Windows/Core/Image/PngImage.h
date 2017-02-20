@@ -1,6 +1,6 @@
 //
 //  PngLoader.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 06/04/2011.
 //
 //  The MIT License (MIT)

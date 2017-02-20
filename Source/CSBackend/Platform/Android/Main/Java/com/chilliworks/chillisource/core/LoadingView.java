@@ -1,6 +1,6 @@
 /**
  * LoadingView.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie on 09/09/2013.
  * 
  * The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  Accelerometer.mm
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 15/11/2010
 //
 //  The MIT License (MIT)

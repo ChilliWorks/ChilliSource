@@ -1,6 +1,6 @@
 //
 //  TextIcon.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Nicolas Tanda on 23/02/2015.
 //
 //  The MIT License (MIT)

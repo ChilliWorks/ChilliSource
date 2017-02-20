@@ -1,6 +1,6 @@
 #
 #  Android.mk
-#  Chilli Source
+#  ChilliSource
 #  Created by Ian Copland on 12/03/2015
 #
 #  The MIT License (MIT)

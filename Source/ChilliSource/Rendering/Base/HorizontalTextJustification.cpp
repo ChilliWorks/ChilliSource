@@ -1,6 +1,6 @@
 //
 //  HorizontalTextJustification.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 10/11/2014.
 //
 //  The MIT License (MIT)

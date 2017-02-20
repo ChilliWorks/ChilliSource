@@ -1,6 +1,6 @@
 /**
  * PurchasingObserver.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 10/12/2013.
  * 
  * The MIT License (MIT)

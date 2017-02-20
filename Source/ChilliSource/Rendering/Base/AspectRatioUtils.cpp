@@ -1,6 +1,6 @@
 //
 //  AspectRatioUtils.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by S Downie on 24/06/2014.
 //
 //  The MIT License (MIT)

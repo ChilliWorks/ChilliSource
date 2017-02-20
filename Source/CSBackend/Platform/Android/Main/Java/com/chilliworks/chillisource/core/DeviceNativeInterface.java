@@ -1,6 +1,6 @@
 /**
  * DeviceNativeInterface.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie on 24/09/2014.
  * 
  * The MIT License (MIT)

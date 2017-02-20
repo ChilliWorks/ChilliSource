@@ -1,6 +1,6 @@
 #
 #  android-proguard-rules.pro
-#  Chilli Source
+#  ChilliSource
 #  Created by Ian Copland on 24/03/2015.
 #
 #  The MIT License (MIT)

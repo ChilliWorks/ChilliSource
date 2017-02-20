@@ -1,6 +1,6 @@
 /**
  * TGAToMoImage.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie on 26/10/2012
  * 
  * The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  DialogueBoxSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 04/03/2014.
 //
 //  The MIT License (MIT)

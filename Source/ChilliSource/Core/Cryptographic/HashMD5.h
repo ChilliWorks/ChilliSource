@@ -1,6 +1,6 @@
 //
 //  HashMD5.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 06/07/2011.
 //
 //  The MIT License (MIT)

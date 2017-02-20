@@ -1,6 +1,6 @@
 //
 //  VideoPlayer.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 10/08/2012.
 //
 //  The MIT License (MIT)

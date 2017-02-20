@@ -1,6 +1,6 @@
 //
 //  WidgetParserUtils.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 25/07/2014.
 //
 //  The MIT License (MIT)

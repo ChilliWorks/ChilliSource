@@ -1,6 +1,6 @@
 //
 //  NSStringUtils.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 04/04/2014.
 //
 //  The MIT License (MIT)

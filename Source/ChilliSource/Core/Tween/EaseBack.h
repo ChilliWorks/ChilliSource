@@ -1,6 +1,6 @@
 //
 //  EaseBack.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 12/05/2014.
 //
 //  The MIT License (MIT)
