@@ -500,6 +500,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\LinearAllocator.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\MemoryUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\MemoryUtilsImpl.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\ObjectPoolAllocator.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\PagedLinearAllocator.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\SharedPtr.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\SharedPtrImpl.h" />
