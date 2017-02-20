@@ -29,6 +29,7 @@
 #include <ChilliSource/Core/Memory/IAllocator.h>
 #include <ChilliSource/Core/Memory/LinearAllocator.h>
 #include <ChilliSource/Core/Memory/MemoryUtils.h>
+#include <ChilliSource/Core/Memory/ObjectPoolAllocator.h>
 #include <ChilliSource/Core/Memory/PagedLinearAllocator.h>
 #include <ChilliSource/Core/Memory/SharedPtr.h>
 #include <ChilliSource/Core/Memory/UniquePtr.h>

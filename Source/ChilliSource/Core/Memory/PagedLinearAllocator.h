@@ -27,7 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Memory/LinearAllocator.h>
-#include <ChilliSource/Core/Memory//UniquePtr.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 
 #include <vector>
 
