@@ -64,17 +64,6 @@ namespace ChilliSource
         /// @return the maximum allocation size allowed by the allocator.
         ///
         std::size_t GetMaxAllocationSize() const noexcept override { return m_capacityObjects * sizeof(T); };
-
-        /// Allocates a new object from the pool (if the limit is reached will obey the limit policy)
-        ///
-        /// NOTE: Use this if you are using the pool directly and not via STL containers
-        ///
-        /// @param allocationSize
-        ///     The size of the allocation.
-        ///
-        /// @return The allocated object (equivalent to calling new T()).
-        ///
-        T* Allocate() noexcept;
         
         /// Should be used to allocate only a single object and will
         /// assert if the given size if not sizeof(T).
@@ -84,9 +73,17 @@ namespace ChilliSource
         /// @param allocationSize
         ///     The size of the allocation must be sizeof(T)
         ///
-        /// @return The allocated memory.
+        /// @return The allocated memory (not yet constructed).
         ///
         void* Allocate(std::size_t allocationSize) noexcept override;
+
+        /// Allocates a new object from the pool (if the limit is reached will obey the limit policy)
+        ///
+        /// NOTE: Use this if you are using the pool directly and not via STL containers
+        ///
+        /// @return The allocated object (equivalent to calling new T()).
+        ///
+        T* Allocate() noexcept;
         
         /// Returns the memory held by the object to the pool. It must have been allocated from
         /// this pool or will assert
@@ -99,10 +96,12 @@ namespace ChilliSource
         void Deallocate(void* pointer) noexcept override;
         
         /// Returns the memory held by the object to the pool. It must have been allocated from
-        /// this pool or will assert
+        /// this pool or will assert.
+        ///
+        /// NOTE: Use this if you are using the pool directly and not via STL containers
         ///
         /// @param pointer
-        ///     The pointer to deallocate.
+        ///     The pointer to deallocate and destruct
         ///
         void Deallocate(T* pointer) noexcept;
 
@@ -141,14 +140,17 @@ namespace ChilliSource
     template <typename T> ObjectPoolAllocator<T>::ObjectPoolAllocator(u32 numObjects, LimitPolicy limitPolicy) noexcept
     : m_limitPolicy(limitPolicy), m_capacityObjects(numObjects)
     {
-        m_buffer = new T[numObjects];
-        m_freeStore = new T*[numObjects];
-        m_freeStoreHead = m_freeStore;
+        m_buffer = (T*)malloc(sizeof(T) * numObjects);
+        m_freeStore = (T**)malloc(sizeof(T*) * numObjects);
+        
+        Reset();
     }
     
     //-----------------------------------------------------------------------------
-    template <typename T> T* ObjectPoolAllocator<T>::Allocate() noexcept
+    template <typename T> void* ObjectPoolAllocator<T>::Allocate(std::size_t allocationSize) noexcept
     {
+        CS_ASSERT(allocationSize == sizeof(T), "Pool can only allocate single objects of size T at a time");
+        
         if(m_activeAllocationCount == m_capacityObjects)
         {
             switch(m_limitPolicy)
@@ -163,34 +165,37 @@ namespace ChilliSource
             }
         }
         
-        T* free = m_freeStoreHead++;
+        T* free = *m_freeStoreHead;
+        m_freeStoreHead++;
         ++m_activeAllocationCount;
         return free;
     }
     
     //-----------------------------------------------------------------------------
-    template <typename T> void* ObjectPoolAllocator<T>::Allocate(std::size_t allocationSize) noexcept
+    template <typename T> T* ObjectPoolAllocator<T>::Allocate() noexcept
     {
-        CS_ASSERT(allocationSize == sizeof(T), "Pool can only allocate single objects of size T at a time");
-        return Allocate();
-    }
-    
-    //-----------------------------------------------------------------------------
-    template <typename T> void ObjectPoolAllocator<T>::Deallocate(T* pointer) noexcept
-    {
-        CS_ASSERT(IsOwnedByPool(pointer) == true, "Pointer you are trying to deallocate from pool is not managed by this pool");
-        CS_ASSERT(IsOnFreeStore(pointer) == false, "Pointer you are trying to deallocate from pool has not been allocated");
-        CS_ASSERT(m_activeAllocationCount > 0, "The pool has no active allocations.")
-        
-        --m_freeStoreHead;
-        --m_activeAllocationCount;
-        *m_freeStoreHead = pointer;
+        void* memory = Allocate(sizeof(T));
+        T* object = new (memory) T();
+        return object;
     }
     
     //-----------------------------------------------------------------------------
     template <typename T> void ObjectPoolAllocator<T>::Deallocate(void* pointer) noexcept
     {
-        Deallocate((T*)pointer);
+        CS_ASSERT(IsOwnedByPool((T*)pointer) == true, "Pointer you are trying to deallocate from pool is not managed by this pool");
+        CS_ASSERT(IsOnFreeStore((T*)pointer) == false, "Pointer you are trying to deallocate from pool has not been allocated");
+        CS_ASSERT(m_activeAllocationCount > 0, "The pool has no active allocations.")
+        
+        --m_freeStoreHead;
+        --m_activeAllocationCount;
+        *m_freeStoreHead = (T*)pointer;
+    }
+    
+    //-----------------------------------------------------------------------------
+    template <typename T> void ObjectPoolAllocator<T>::Deallocate(T* pointer) noexcept
+    {
+        pointer->~T();
+        Deallocate((void*)pointer);
     }
     
     //-----------------------------------------------------------------------------
@@ -199,6 +204,11 @@ namespace ChilliSource
         CS_ASSERT(m_activeAllocationCount == 0, "Cannot reset before all allocations have been deallocated.");
         
         m_freeStoreHead = m_freeStore;
+        
+        for(u32 i=0; i<m_capacityObjects; ++i)
+        {
+            m_freeStore[i] = m_buffer + i;
+        }
     }
     
     //-----------------------------------------------------------------------------
@@ -210,7 +220,7 @@ namespace ChilliSource
     //-----------------------------------------------------------------------------
     template <typename T> bool ObjectPoolAllocator<T>::IsOnFreeStore(T* pointer) const noexcept
     {
-        for(auto i=m_freeStore; i<m_freeStore+m_capacityObjects; ++i)
+        for(auto i=m_freeStoreHead; i<m_freeStore+m_capacityObjects; ++i)
         {
             if(*i == pointer)
                 return true;
@@ -227,5 +237,6 @@ namespace ChilliSource
         delete[] m_freeStore;
         delete[] m_buffer;
     }
+}
 
 #endif
