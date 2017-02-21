@@ -272,7 +272,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadMeshCommand(RenderMeshUPtr renderMesh) noexcept
+    void RenderCommandList::AddUnloadMeshCommand(UniquePtr<RenderMesh> renderMesh) noexcept
     {
         RenderCommandUPtr renderCommand(new UnloadMeshRenderCommand(std::move(renderMesh)));
         

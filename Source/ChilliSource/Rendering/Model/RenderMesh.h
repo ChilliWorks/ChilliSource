@@ -43,6 +43,31 @@ namespace ChilliSource
     public:
         CS_DECLARE_NOCOPY(RenderMesh);
         
+        /// Creates a new instance with the given mesh description data.
+        ///
+        /// SHOULD ONLY BE CREATED VIA RenderMeshManager
+        ///
+        /// @param polygonType
+        ///     The type of polygon the mesh uses.
+        /// @param vertexFormat
+        ///     The vertex format.
+        /// @param indexFormat
+        ///     The type of index.
+        /// @param numVertices
+        ///     The number of vertices in the mesh. The maximum number is determined by the type of index.
+        /// @param numIndices
+        ///     The number of indices in the mesh.
+        /// @param boundingSphere
+        ///     A local space sphere enclosing the mesh.
+        /// @param shouldBackupData
+        ///     If the mesh data should be backed up in main memory for restoring it later.
+        /// @param inverseBindPoseMatrices
+        ///     (Optional) The inverse bind pose matices for this mesh. Only applies to animated models.
+        ///     Should be moved.
+        ///
+        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+                   bool shouldBackupData, std::vector<Matrix4> inverseBindPoseMatrices = std::vector<Matrix4>()) noexcept;
+        
         /// @return The type of polygon the mesh uses.
         ///
         PolygonType GetPolygonType() const noexcept { return m_polygonType; }
@@ -89,30 +114,6 @@ namespace ChilliSource
         void SetExtraData(void* extraData) noexcept { m_extraData = extraData; }
         
     private:
-        friend class RenderMeshManager;
-        
-        /// Creates a new instance with the given mesh description data.
-        ///
-        /// @param polygonType
-        ///     The type of polygon the mesh uses.
-        /// @param vertexFormat
-        ///     The vertex format.
-        /// @param indexFormat
-        ///     The type of index.
-        /// @param numVertices
-        ///     The number of vertices in the mesh. The maximum number is determined by the type of index.
-        /// @param numIndices
-        ///     The number of indices in the mesh.
-        /// @param boundingSphere
-        ///     A local space sphere enclosing the mesh.
-        /// @param shouldBackupData
-        ///     If the mesh data should be backed up in main memory for restoring it later.
-        /// @param inverseBindPoseMatrices
-        ///     (Optional) The inverse bind pose matices for this mesh. Only applies to animated models.
-        ///     Should be moved.
-        ///
-        RenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
-                   bool shouldBackupData, std::vector<Matrix4> inverseBindPoseMatrices = std::vector<Matrix4>()) noexcept;
         
         PolygonType m_polygonType;
         VertexFormat m_vertexFormat;

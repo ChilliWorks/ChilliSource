@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_RENDERCOMMAND_RENDERCOMMANDLIST_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 
 #include <array>
@@ -262,7 +263,7 @@ namespace ChilliSource
         /// @param renderMesh
         ///     The render mesh that should be unloaded.
         ///
-        void AddUnloadMeshCommand(RenderMeshUPtr renderMesh) noexcept;
+        void AddUnloadMeshCommand(UniquePtr<RenderMesh> renderMesh) noexcept;
         
         /// Creates and adds a new unload material group command to the render command list.
         ///

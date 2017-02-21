@@ -26,6 +26,8 @@
 #define _CHILLISOURCE_RENDERING_SHADER_RENDERMESHMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/ObjectPoolAllocator.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
@@ -93,7 +95,7 @@ namespace ChilliSource
         ///
         /// @return The RenderMesh instance.
         ///
-        const RenderMesh* CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+        UniquePtr<RenderMesh> CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
                                            std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData,
                                            std::vector<Matrix4> inverseBindPoseMatrices = std::vector<Matrix4>()) noexcept;
         
@@ -104,9 +106,8 @@ namespace ChilliSource
         /// @param renderMesh
         ///     The RenderMesh which should be destroyed.
         ///
-        void DestroyRenderMesh(const RenderMesh* renderMesh) noexcept;
-        
-        ~RenderMeshManager() noexcept;
+        void DestroyRenderMesh(UniquePtr<RenderMesh> renderMesh) noexcept;
+
         
     private:
         friend class Application;
@@ -130,7 +131,7 @@ namespace ChilliSource
         ///
         static RenderMeshManagerUPtr Create() noexcept;
         
-        RenderMeshManager() = default;
+        RenderMeshManager();
         
         /// Called during the Render Snapshot stage of the render pipeline. All pending load and
         /// unload commands are added to the render snapshot.
@@ -145,9 +146,9 @@ namespace ChilliSource
         void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         std::mutex m_mutex;
-        std::vector<RenderMeshUPtr> m_renderMeshes; //TODO: This should be changed to an object pool.
+        ObjectPoolAllocator<RenderMesh> m_renderMeshPool;
         std::vector<PendingLoadCommand> m_pendingLoadCommands;
-        std::vector<RenderMeshUPtr> m_pendingUnloadCommands;
+        std::vector<UniquePtr<RenderMesh>> m_pendingUnloadCommands;
     };
 }
 

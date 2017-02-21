@@ -77,7 +77,7 @@ namespace ChilliSource
             
             auto renderMesh = renderMeshManager->CreateRenderMesh(poylgonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, std::move(vertexData), vertexDataSize, std::move(indexData), indexDataSize,
                                                                   modelDesc.ShouldBackupData(), std::move(inverseBindPoseMatrices));
-            m_renderMeshes.push_back(renderMesh);
+            m_renderMeshes.push_back(std::move(renderMesh));
         }
     }
     
@@ -152,16 +152,16 @@ namespace ChilliSource
         CS_ASSERT(m_renderMeshes.size() > 0, "Cannot access a model which has not been built.");
         CS_ASSERT(index < m_meshNames.size(), "Index is out of bounds.");
         
-        return m_renderMeshes[index];
+        return m_renderMeshes[index].get();
     }
     
     //------------------------------------------------------------------------------
     void Model::DestroyRenderMeshes() noexcept
     {
         auto renderMeshManager = Application::Get()->GetSystem<RenderMeshManager>();
-        for (const auto& renderMesh : m_renderMeshes)
+        for (auto& renderMesh : m_renderMeshes)
         {
-            renderMeshManager->DestroyRenderMesh(renderMesh);
+            renderMeshManager->DestroyRenderMesh(std::move(renderMesh));
         }
         m_renderMeshes.clear();
         m_meshNames.clear();
