@@ -28,6 +28,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Memory/IAllocator.h>
 
+#include <mutex>
 #include <vector>
 
 namespace ChilliSource
@@ -45,8 +46,7 @@ namespace ChilliSource
     /// * FIXED: Does not expand and will assert if out of memory (NOTE: Contiguous in memory)
     /// * EXPAND: Once the initial limit is reached the pool will expand (NOTE: Expanding pools are not guaranteed to be contiguous in memory as the buffers are paged on the inital size).
     ///
-    /// Note that this is not thread-safe and should not be accessed from multiple
-    /// threads at the same time.
+    /// Note that this is thread-safe
     ///
     template <typename T> class ObjectPoolAllocator final : public IAllocator
     {
@@ -148,6 +148,8 @@ namespace ChilliSource
         std::size_t m_activeAllocationCount = 0;
 		std::size_t m_capacityObjects;
 
+        std::mutex m_mutex;
+        
         //Buffers are paged to accomodate expansion without invalidating the existing pointers
         //Fixed size only has a single buffer
         std::vector<T*> m_buffers;
@@ -177,6 +179,9 @@ namespace ChilliSource
         CS_ASSERT(allocationSize % sizeof(T) == 0, "Allocations must be sizeof(T) aligned");
         
         std::size_t numToAllocate = allocationSize / sizeof(T);
+        
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
 		std::size_t remaining = m_capacityObjects - m_activeAllocationCount;
         
         if(remaining < numToAllocate)
@@ -209,6 +214,8 @@ namespace ChilliSource
     //-----------------------------------------------------------------------------
     template <typename T> void ObjectPoolAllocator<T>::Deallocate(void* pointer, std::size_t allocationSize) noexcept
     {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
         CS_ASSERT(allocationSize % sizeof(T) == 0, "Allocations must be sizeof(T) aligned");
         CS_ASSERT(IsOwnedByPool((T*)pointer) == true, "Pointer you are trying to deallocate from pool is not managed by this pool");
         CS_ASSERT(IsOnFreeStore((T*)pointer) == false, "Pointer you are trying to deallocate from pool has not been allocated");
@@ -231,6 +238,8 @@ namespace ChilliSource
     //-----------------------------------------------------------------------------
     template <typename T> void ObjectPoolAllocator<T>::Reset() noexcept
     {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        
         CS_ASSERT(m_activeAllocationCount == 0, "Cannot reset before all allocations have been deallocated.");
         
         m_freeStoreHead = m_freeStore;
