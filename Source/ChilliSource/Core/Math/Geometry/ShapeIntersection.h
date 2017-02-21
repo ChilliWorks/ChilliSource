@@ -96,6 +96,10 @@ namespace ChilliSource
         //----------------------------------------------------------------
         bool Intersects(const Rectangle& inRect, const Vector2& invPoint);
         //----------------------------------------------------------------
+        /// Ray vs Plane
+        //----------------------------------------------------------------
+        bool Intersects(const Ray& inRay, const Plane& inPlane, Vector3& outvIntersection);
+        //----------------------------------------------------------------
         /// Ray vs Slab
         //----------------------------------------------------------------
         bool RaySlabIntersect(f32 infStart, f32 infDir, f32 infMin, f32 infMax, f32& outfFirstT, f32& outfLastT);

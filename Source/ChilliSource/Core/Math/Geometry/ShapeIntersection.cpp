@@ -313,6 +313,37 @@ namespace ChilliSource
 
             return true;
         }
+        //----------------------------------------------------------------
+        /// Ray vs Plane
+        //----------------------------------------------------------------
+        bool Intersects(const Ray& inRay, const Plane& inPlane, Vector3& outvIntersection)
+        {
+            
+            f32 denom = Vector3::DotProduct(inPlane.mvNormal, inRay.vDirection);
+            
+            
+            if (fabsf(denom) < std::numeric_limits<f32>::epsilon())
+            {
+                // Parallel
+                return false;
+            }
+            else
+            {
+                f32 nom = Vector3::DotProduct(inPlane.mvNormal, inRay.vOrigin) + inPlane.mfD;
+                f32 t = -(nom/denom);
+                
+                if (t >= 0)
+                {
+                    outvIntersection = inRay.vOrigin + inRay.vDirection * t;
+                    
+                    return true;
+                }
+                else
+                    return false;
+            }
+            
+            return false;
+        }
     }
 }
 
