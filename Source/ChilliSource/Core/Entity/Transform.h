@@ -282,6 +282,35 @@ namespace ChilliSource
         /// @return Whether the transform cache has been invalidated 
         //----------------------------------------------------------------
         bool IsTransformValid() const;
+        
+        //----------------------------------------------------------------
+        /// Get Parent Transform
+        /// @return what it says on tin
+        //----------------------------------------------------------------
+        Transform* GetParentTransform() const;
+
+        //----------------------------------------------------------------
+        /// Get Tranform Changed Event
+        ///
+        /// Subscribe to this event for notifications of when this
+        /// transform is invalidated
+        ///
+        /// @return TransformChangedDelegate event
+        //----------------------------------------------------------------
+        IConnectableEvent<TransformChangedDelegate>& GetTransformChangedEvent();
+        
+        //----------------------------------------------------------------
+        /// Resets the transform back to identity and removes any
+        /// connections
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------
+        void Reset();
+        
+    private:
+        
+        friend class Entity;
+        
         //----------------------------------------------------------------
         /// Set Parent Transform
         ///
@@ -291,11 +320,7 @@ namespace ChilliSource
         /// @param Transform object
         //----------------------------------------------------------------
         void SetParentTransform(Transform* inpTransform);
-        //----------------------------------------------------------------
-        /// Get Parent Transform
-        /// @return what it says on tin
-        //----------------------------------------------------------------
-        Transform* GetParentTransform() const;
+        
         //----------------------------------------------------------------
         /// Add Child Transform
         ///
@@ -322,25 +347,6 @@ namespace ChilliSource
         /// no longer influence the childs transform
         //----------------------------------------------------------------
         void RemoveAllChildTransforms();
-        //----------------------------------------------------------------
-        /// Get Tranform Changed Event
-        ///
-        /// Subscribe to this event for notifications of when this
-        /// transform is invalidated
-        ///
-        /// @return TransformChangedDelegate event
-        //----------------------------------------------------------------
-        IConnectableEvent<TransformChangedDelegate>& GetTransformChangedEvent();
-        
-        //----------------------------------------------------------------
-        /// Resets the transform back to identity and removes any
-        /// connections
-        ///
-        /// @author S Downie
-        //----------------------------------------------------------------
-        void Reset();
-        
-    private:
         
         //----------------------------------------------------------------
         /// On Transform Changed 
