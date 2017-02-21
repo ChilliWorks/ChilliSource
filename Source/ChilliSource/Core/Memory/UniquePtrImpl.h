@@ -32,10 +32,10 @@ namespace ChilliSource
     {
         void* memory = allocator.Allocate(sizeof(TType));
         TType* object = new (memory) TType(std::forward<TConstructorArgs>(constructorArgs)...);
-        return UniquePtr<TType>(object, [&allocator](TType* object) noexcept -> void
+        return UniquePtr<TType>(object, [&allocator](const TType* object) noexcept -> void
         {
             object->~TType();
-            allocator.Deallocate(reinterpret_cast<void*>(object), sizeof(TType));
+            allocator.Deallocate((void*)(object), sizeof(TType));
         });
     }
 
@@ -51,7 +51,7 @@ namespace ChilliSource
             }
         }
 
-        return UniquePtr<TType[]>(array, [&allocator, size](TType* array) noexcept -> void
+        return UniquePtr<TType[]>(array, [&allocator, size](const TType* array) noexcept -> void
         {
             if (!std::is_fundamental<TType>::value)
             {
@@ -61,7 +61,7 @@ namespace ChilliSource
                 }
             }
 
-            allocator.Deallocate(reinterpret_cast<void*>(array), sizeof(TType) * size);
+            allocator.Deallocate((void*)(array), sizeof(TType) * size);
         });
     }
 }
