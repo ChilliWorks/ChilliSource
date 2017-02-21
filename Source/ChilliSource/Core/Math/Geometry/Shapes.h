@@ -520,8 +520,6 @@ namespace ChilliSource
         f32 DistanceFromPoint(const Vector3& invPoint) const;
         bool Intersects(const Ray& incRay) const;
 
-        bool GetIsRayIntersecting(const Ray& incRay, Vector3& outcIntersect) const;
-
         Vector3 mvNormal;
         f32 mfD;
     };

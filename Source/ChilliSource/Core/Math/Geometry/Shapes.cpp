@@ -609,41 +609,6 @@ namespace ChilliSource
         }
     }
     
-    //----------------------------------------------- 
-    /// GetIsRayIntersectiong
-    ///
-    /// Determines if specified ray is colliding with this plane 
-    /// if only one collision point on this plane then 
-    /// @param A value t along parametric ray
-    /// @return Point on ray
-    //-----------------------------------------------
-    bool Plane::GetIsRayIntersecting(const Ray& incRay, Vector3& outcIntersect) const
-    {
-        
-        f32 denom = Vector3::DotProduct(mvNormal, incRay.vDirection);
-                                         
-                                         
-        if (fabsf(denom) < std::numeric_limits<f32>::epsilon())
-        {
-            // Parallel
-            return false;
-        }
-        else
-        {
-            f32 nom = Vector3::DotProduct(mvNormal, incRay.vOrigin) + mfD;
-            f32 t = -(nom/denom);
-            
-            if (t >= 0)
-            {
-                outcIntersect = incRay.vOrigin + incRay.vDirection * t;
-                
-                return true;
-            }
-            else
-                return false;
-        }
-        
-    }
     //===============================================
     /// Frustum
     ///
