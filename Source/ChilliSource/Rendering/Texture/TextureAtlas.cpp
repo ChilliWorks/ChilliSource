@@ -1,6 +1,6 @@
 //
 //  TextureAtlas.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 22/10/2010.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  PlatformSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 24/02/2014.
 //
 //  The MIT License (MIT)

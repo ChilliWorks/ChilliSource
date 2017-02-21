@@ -1,6 +1,6 @@
 //
 //  RenderComponentFactory.h
-//  Chilli Source
+//  ChilliSource
 //  Created by S Downie on 29/09/2010.
 //
 //  The MIT License (MIT)

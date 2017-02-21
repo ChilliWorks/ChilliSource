@@ -1,6 +1,6 @@
 /**
  * WebViewNativeInterface.java
- * Chilli Source
+ * ChilliSource
  * Created by Steven Hendrie on 15/12/2011.
  * 
  * The MIT License (MIT)

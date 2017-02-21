@@ -1,6 +1,6 @@
 /**
  * InsecureHostnameVerifier.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 01/09/2011.
  * 
  * The MIT License (MIT)

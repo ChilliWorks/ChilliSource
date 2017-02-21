@@ -1,6 +1,6 @@
 /**
  * CSFontWriter.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 21/10/2014.
  * 
  * The MIT License (MIT)
@@ -235,7 +235,7 @@ public final class CSFontWriter
 		}
 	}
 	/**
-	 * Writes the Chilli Source standard file header to the given stream. This
+	 * Writes the ChilliSource standard file header to the given stream. This
 	 * contains information such as the file Id, version number and the file chunk
 	 * table.
 	 * 
@@ -249,7 +249,7 @@ public final class CSFontWriter
 	 */
 	private static void writeStandardHeader(DataOutputStream in_stream, Glyphs in_glyphs, PackedTexture in_packedBitmapFont) throws IOException
 	{
-		//write the chilli source Id
+		//write the ChilliSource Id
 		StringWriterUtils.writeUTF8String(in_stream, "CSCS");
 		
 		//write the endianness check flag

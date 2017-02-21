@@ -1,6 +1,6 @@
 //
 //  UIDrawable.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 18/04/2014.
 //
 //  The MIT License (MIT)

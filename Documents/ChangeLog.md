@@ -9,6 +9,7 @@ Version 2.1.3, 2017-
 * Fix: Issue with Sphere::Transform not considering orientation. This meant that mesh frustum culling was broken
 * Fix: Tweens which play more than once will now utilise the end-delay property every time the end of the tween is reached, instead of just once.
 * Fix: Default background colour is now black.
+* Updated: SFML is now version 2.4.2, on Windows.
 
 Version 2.1.2, 2017-01-26
 -------------------------

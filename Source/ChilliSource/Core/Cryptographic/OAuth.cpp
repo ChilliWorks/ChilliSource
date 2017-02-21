@@ -1,6 +1,6 @@
 //
 //  OAuth.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 08/04/2014.
 //
 //  The MIT License (MIT)

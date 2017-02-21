@@ -1,6 +1,6 @@
 //
 //  ScaleOverLifetimeParticleAffector.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 03/11/2014.
 //
 //  The MIT License (MIT)

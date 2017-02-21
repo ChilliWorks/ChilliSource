@@ -1,6 +1,6 @@
 //
 //  MaterialProvider.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 22/11/2010.
 //
 //  The MIT License (MIT)

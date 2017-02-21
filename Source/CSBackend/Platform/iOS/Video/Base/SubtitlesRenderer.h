@@ -1,6 +1,6 @@
 //
 //  SubtitlesRenderer.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 22/02/2013.
 //
 //  The MIT License (MIT)
@@ -109,7 +109,7 @@
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 ///
-/// Converts from a Chilli Source alignment anchor to NSText
+/// Converts from a ChilliSource alignment anchor to NSText
 /// alignment.
 ///
 /// @param The alignment achor.

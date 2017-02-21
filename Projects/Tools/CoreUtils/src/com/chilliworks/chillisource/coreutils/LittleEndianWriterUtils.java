@@ -1,6 +1,6 @@
 /**
  * LittleEndianWriterUtils.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 24/10/2014
  * 
  * The MIT License (MIT)

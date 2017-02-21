@@ -1,6 +1,6 @@
 //
 //  CSImageProvider.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 10/08/2012.
 //
 //  The MIT License (MIT)

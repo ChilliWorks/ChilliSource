@@ -1,6 +1,6 @@
 /**
  * Options.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 20/01/2015.
  * 
  * The MIT License (MIT)

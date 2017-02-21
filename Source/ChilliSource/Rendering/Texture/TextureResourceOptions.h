@@ -1,6 +1,6 @@
 //
 //  TextureResourceOptions.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 16/05/2014.
 //
 //  The MIT License (MIT)

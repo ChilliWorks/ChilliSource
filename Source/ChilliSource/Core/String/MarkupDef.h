@@ -1,6 +1,6 @@
 //
 //  MarkupDef.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Nicolas Tanda on 08/07/2015.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  MakeSharedArray.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 26/02/2014.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  CanvasRenderer.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 12/01/2011.
 //
 //  The MIT License (MIT)

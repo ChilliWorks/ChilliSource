@@ -1,6 +1,6 @@
 //
 //  Vector2.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 20/04/2014.
 //
 //  The MIT License (MIT)

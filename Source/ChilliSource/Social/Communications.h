@@ -1,6 +1,6 @@
 //
 //  Communications.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 07/07/2014.
 //
 //  The MIT License (MIT)

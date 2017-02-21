@@ -1,6 +1,6 @@
 //
 //  PerspectiveCameraComponent.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 23/06/2014.
 //
 //  The MIT License (MIT)

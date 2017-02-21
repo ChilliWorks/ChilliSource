@@ -1,6 +1,6 @@
 /**
  * LocalNotificationReceiver.java
- * Chilli Source
+ * ChilliSource
  * Created by Steven Hendrie on 24/10/2012.
  * 
  * The MIT License (MIT)

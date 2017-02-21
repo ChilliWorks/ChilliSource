@@ -1,6 +1,6 @@
 //
 //  ParticleEffect.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 06/10/2014.
 //
 //  The MIT License (MIT)

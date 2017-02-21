@@ -1,6 +1,6 @@
 //
 //  HttpRequestSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 23/05/2011.
 //
 //  The MIT License (MIT)
@@ -35,9 +35,24 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <Windows.h>
+
+// Have to wrap WinInet's include in a namespace, because MS violates ODR with WinInet and WinHTTP.
+namespace WinInet
+{
+#include <WinInet.h>
+}
+
+// A couple of undefs required too.
+#undef BOOLAPI
+#undef SECURITY_FLAG_IGNORE_CERT_DATE_INVALID
+#undef SECURITY_FLAG_IGNORE_CERT_CN_INVALID
+
 #include <winhttp.h>
 
+
+
 #pragma comment(lib, "winhttp")
+#pragma comment(lib, "wininet")
 
 namespace CSBackend
 {
@@ -236,9 +251,16 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------------------
 		void HttpRequestSystem::CheckReachability(const ReachabilityResultDelegate& in_reachabilityDelegate) const
 		{
-			//TODO: Implement this functionality
+			// Check internet connectivity/reachability, using WinINet.
+			DWORD inetState = 0;
+			BOOL hasConnection = WinInet::InternetGetConnectedState(&inetState, 0);
+
+			// True is returned when the device has an active connection to the internet, or a correctly-configured proxy connection.
+			// False is returned when the device has no connection to the internet, even if successfully connected to LAN.
+			// More information about the connection can be obtained from the 'inetState' flag.
+			 
             CS_ASSERT(in_reachabilityDelegate, "The reachability delegate should not be null.");
-			in_reachabilityDelegate(true);
+			in_reachabilityDelegate(hasConnection ? true : false); //ternary operator used here because BOOL is a typedef'd int & conversion has perf issues
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //
 //  GooglePlayIAPSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 14/06/2013.
 //
 //  The MIT License (MIT)

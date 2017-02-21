@@ -1,6 +1,6 @@
 /**
  * ImageContainer.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 30/10/2012
  * 
  * The MIT License (MIT)

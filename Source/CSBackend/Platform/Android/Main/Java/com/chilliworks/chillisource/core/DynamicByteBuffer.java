@@ -1,6 +1,6 @@
 /**
  * DynamicByteBuffer.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 01/01/2013
  * 
  * The MIT License (MIT)

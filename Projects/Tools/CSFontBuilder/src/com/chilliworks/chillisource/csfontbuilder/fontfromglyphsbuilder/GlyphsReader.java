@@ -1,6 +1,6 @@
 /**
  * GlyphsReader.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 21/10/2014.
  * 
  * The MIT License (MIT)

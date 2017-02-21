@@ -1,6 +1,6 @@
 //
 //  IDisconnectableEvent.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 27/02/2014.
 //
 //  The MIT License (MIT)

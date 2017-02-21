@@ -1,6 +1,6 @@
 //
 //  Screen.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 12/10/2010.
 //
 //  The MIT License (MIT)

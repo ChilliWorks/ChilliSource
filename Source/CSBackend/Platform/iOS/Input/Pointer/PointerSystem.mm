@@ -1,6 +1,6 @@
 //
 //  PointerSystem.mm
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 26/03/2014.
 //
 //  The MIT License (MIT)

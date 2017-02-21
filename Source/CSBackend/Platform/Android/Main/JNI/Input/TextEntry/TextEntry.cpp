@@ -1,6 +1,6 @@
 //
 //  TextEntry.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 08/07/2014.
 //
 //  The MIT License (MIT)

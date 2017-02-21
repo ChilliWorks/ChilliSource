@@ -1,6 +1,6 @@
 /**
  * SubtitlesView.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 25/02/2013.
  * 
  * The MIT License (MIT)

@@ -1,6 +1,6 @@
 /**
  * AtlasBuilderOptions.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 26/06/2014.
  * 
  * The MIT License (MIT)

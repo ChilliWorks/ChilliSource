@@ -1,6 +1,6 @@
 //
 //  RemoteNotificationSystem.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Robert Henning on 22/01/2014.
 //
 //  The MIT License (MIT)

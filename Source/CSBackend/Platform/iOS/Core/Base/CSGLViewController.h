@@ -1,6 +1,6 @@
 //
 //  CSGLViewController.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 09/05/2014.
 //
 //  The MIT License (MIT)

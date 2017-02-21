@@ -1,6 +1,6 @@
 //
 //  WindowsFileUtils.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 28/02/2014.
 //
 //  The MIT License (MIT)

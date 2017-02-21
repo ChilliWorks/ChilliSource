@@ -1,6 +1,6 @@
 //
 //  PNGImageProvider.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by S McGaw on 01/10/2010.
 //
 //  The MIT License (MIT)

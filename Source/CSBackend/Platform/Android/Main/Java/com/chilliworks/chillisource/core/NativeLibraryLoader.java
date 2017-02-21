@@ -1,6 +1,6 @@
 /**
  * NativeLibraryLoader.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie on 28/05/2015.
  *
  * The MIT License (MIT)

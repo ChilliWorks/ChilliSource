@@ -1,6 +1,6 @@
 //
 //  TapGesture.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 17/09/2014.
 //
 //  The MIT License (MIT)

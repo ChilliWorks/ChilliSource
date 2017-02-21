@@ -1,5 +1,5 @@
 //
-//  Chilli Source
+//  ChilliSource
 //
 //  The MIT License (MIT)
 //

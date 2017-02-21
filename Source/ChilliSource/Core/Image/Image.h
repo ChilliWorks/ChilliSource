@@ -1,6 +1,6 @@
 //
 //  Image.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 01/10/2010.
 //
 //  The MIT License (MIT)

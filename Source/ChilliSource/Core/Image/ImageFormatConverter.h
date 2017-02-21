@@ -1,6 +1,6 @@
 //
 //  ImageFormatConverter.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 10/04/2013.
 //
 //  The MIT License (MIT)

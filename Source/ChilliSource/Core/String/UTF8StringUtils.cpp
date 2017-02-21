@@ -1,6 +1,6 @@
 //
 //  UTF8StringUtils.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 26/05/2014.
 //
 //  The MIT License (MIT)

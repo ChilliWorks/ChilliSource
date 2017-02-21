@@ -1,6 +1,6 @@
 //
 //  SpriteComponent.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 29/09/2010.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  ForwardDeclarations.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Stuart McGaw on 07/06/2011.
 //
 //  The MIT License (MIT)

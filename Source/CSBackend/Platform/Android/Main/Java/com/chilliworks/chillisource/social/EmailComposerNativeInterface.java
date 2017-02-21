@@ -1,6 +1,6 @@
 /**
  * EmailComposerNativeInterface.java
- * Chilli Source
+ * ChilliSource
  * Created by Steven Hendrie on 14/08/2012.
  * 
  * The MIT License (MIT)

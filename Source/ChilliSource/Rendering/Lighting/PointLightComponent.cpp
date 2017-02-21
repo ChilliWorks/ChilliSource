@@ -1,6 +1,6 @@
 //
 //  PointLightComponent.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 31/01/2014.
 //
 //  The MIT License (MIT)

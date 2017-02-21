@@ -1,6 +1,6 @@
 //
 //  TextEntryJavaInterface.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 04/02/2014.
 //
 //  The MIT License (MIT)

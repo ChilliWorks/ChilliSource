@@ -1,6 +1,6 @@
 //
 //  SFMLWindow.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 11/03/2014.
 //
 //  The MIT License (MIT)
@@ -87,7 +87,7 @@ namespace CSBackend
 					Json::Reader jReader;
 					if (!jReader.parse(contents, root))
 					{
-						OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] Could not parse App.config: " + jReader.getFormattedErrorMessages() + "\n").c_str());
+						OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[ChilliSource] Could not parse App.config: " + jReader.getFormattedErrorMessages() + "\n").c_str());
 					}
 				}
 
@@ -150,7 +150,7 @@ namespace CSBackend
 				}
 				else
 				{
-					OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] Unknown multisample format : " + stringFormat + ".Options are None, 2x or 4x\n").c_str());
+					OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[ChilliSource] Unknown multisample format : " + stringFormat + ".Options are None, 2x or 4x\n").c_str());
 				}
 
 				return 0;
@@ -467,7 +467,7 @@ namespace CSBackend
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)
 			{
-				OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] Glew Error On Init : " + std::string((const char*)glewGetErrorString(glewError)) + "\n").c_str());
+				OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[ChilliSource] Glew Error On Init : " + std::string((const char*)glewGetErrorString(glewError)) + "\n").c_str());
 				exit(1);
 			}
 

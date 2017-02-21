@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------
 # Makefile
-# Chilli Source
+# ChilliSource
 #
 # Created by Ian Copland on 14/03/2012
 # Copyright 2012 Tag Games. All rights reserved.

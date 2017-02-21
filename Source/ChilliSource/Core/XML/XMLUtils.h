@@ -1,6 +1,6 @@
 //
 //  XMLUtils.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 10/06/2014
 //
 //  The MIT License (MIT)
@@ -40,9 +40,9 @@ namespace ChilliSource
 {
     //--------------------------------------------------------
     /// A collection of functions for working with xml
-    /// in a Chilli Source project. This provides convenience
+    /// in a ChilliSource project. This provides convenience
     /// functions as well as functions for working within the
-    /// Chilli Source file system.
+    /// ChilliSource file system.
     ///
     /// @author Ian Copland
     //--------------------------------------------------------

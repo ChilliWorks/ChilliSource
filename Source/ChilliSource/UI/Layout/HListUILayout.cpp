@@ -1,6 +1,6 @@
 //
 //  HListUILayout.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 23/04/2014.
 //
 //  The MIT License (MIT)

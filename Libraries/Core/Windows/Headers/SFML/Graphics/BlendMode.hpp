@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2017 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -68,8 +68,9 @@ struct SFML_GRAPHICS_API BlendMode
     ////////////////////////////////////////////////////////
     enum Equation
     {
-        Add,     ///< Pixel = Src * SrcFactor + Dst * DstFactor
-        Subtract ///< Pixel = Src * SrcFactor - Dst * DstFactor
+        Add,            ///< Pixel = Src * SrcFactor + Dst * DstFactor
+        Subtract,       ///< Pixel = Src * SrcFactor - Dst * DstFactor
+        ReverseSubtract ///< Pixel = Dst * DstFactor - Src * SrcFactor
     };
 
     ////////////////////////////////////////////////////////////
@@ -201,7 +202,7 @@ SFML_GRAPHICS_API extern const BlendMode BlendNone;     ///< Overwrite dest with
 /// \code
 /// sf::BlendMode alphaBlending          = sf::BlendAlpha;
 /// sf::BlendMode additiveBlending       = sf::BlendAdd;
-/// sf::BlendMode multiplicativeBlending = sf::BlendMultipy;
+/// sf::BlendMode multiplicativeBlending = sf::BlendMultiply;
 /// sf::BlendMode noBlending             = sf::BlendNone;
 /// \endcode
 ///

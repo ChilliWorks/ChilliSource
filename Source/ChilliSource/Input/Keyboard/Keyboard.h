@@ -1,6 +1,6 @@
 //
 //  Keyboard.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 09/07/2014
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 /**
  * CLogging.h
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 25/06/2014.
  * 
  * The MIT License (MIT)

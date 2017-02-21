@@ -1,6 +1,6 @@
 /**
  * CSWebView.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 16/09/2013.
  * 
  * The MIT License (MIT)
@@ -33,7 +33,7 @@ import android.view.KeyEvent;
 import android.view.ViewGroup;
 
 /**
- * The Chilli Source implementation of a Web View. This differs
+ * The ChilliSource implementation of a Web View. This differs
  * from a standard webview by allowing the back button to close
  * the webview.
  *

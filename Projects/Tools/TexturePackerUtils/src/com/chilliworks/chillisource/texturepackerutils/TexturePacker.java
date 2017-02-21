@@ -1,6 +1,6 @@
 /**
  *  TextureAtlasUtils.java
- *  Chilli Source
+ *  ChilliSource
  *  Created by Robert Henning on 17/06/2014.
  *
  *  The MIT License (MIT)

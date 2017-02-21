@@ -1,6 +1,6 @@
 //
 //  VolumeComponent.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 09/01/2012.
 //
 //  The MIT License (MIT)
