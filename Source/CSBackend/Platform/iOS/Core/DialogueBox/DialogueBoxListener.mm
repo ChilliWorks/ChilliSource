@@ -50,7 +50,8 @@
 {
     if (dialogueBoxSystem != nullptr)
     {
-        s64 tag = static_cast<s64>(alertView.tag);
+        //we know the Id is in the range of a u32 as we set it when the confirm dialogue was created meaning we can cast to that.
+        u32 tag = static_cast<u32>(alertView.tag);
         
         // NO = 0, YES = 1
         if(buttonIndex == 0)

@@ -98,7 +98,7 @@ namespace CSBackend
             /// @param ID
             /// @param Result
             //------------------------------------------------------
-            void OnSystemConfirmDialogResult(s64 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result);
+            void OnSystemConfirmDialogResult(u32 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result);
             //----------------------------------------------------
 			/// Destructor.
             ///
