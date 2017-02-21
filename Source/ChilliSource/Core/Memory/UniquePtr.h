@@ -33,7 +33,7 @@
 
 namespace ChilliSource
 {
-    template <typename TType> using UniquePtr = std::unique_ptr<TType, std::function<void(typename std::remove_all_extents<TType>::type*)>>;
+    template <typename TType> using UniquePtr = std::unique_ptr<TType, std::function<void(typename std::add_const<typename std::remove_all_extents<TType>::type>::type*)>>;
 
     /// Allocates a new unique pointer from the given Allocator with the given 
     /// constructor parameters. This follows the make_* convention set in the 
