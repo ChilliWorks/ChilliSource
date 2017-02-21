@@ -3,6 +3,7 @@ ChilliSource Change Log
 
 Version 2.1.3, 2017-
 -------------------------
+* Added: ObjectPoolAllocator that pre allocates objects of a specific type. Over the next few versions this will be incorporated into the renderer
 * Fix: Longstanding issue where "Shinniness" was reciprocated (i.e. 1/Shinniness) in Blinn shaders rather than just Shinniness. Note this will affect existing projects.
 * Fix: Crash in Collada to CSModel tool if the Collada file has no materials.
 * Fix: Issue with Sphere::Transform not considering orientation. This meant that mesh frustum culling was broken
