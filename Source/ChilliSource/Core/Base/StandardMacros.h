@@ -82,6 +82,16 @@
     using in_structName##CUPtr = std::unique_ptr<const in_structName>;  \
     using in_structName##CSPtr = std::shared_ptr<const in_structName>;  \
     using in_structName##CWPtr = std::weak_ptr<const in_structName>;
+
+#define CS_FORWARDDECLARE_TEMPLATECLASS(className, T)                                   \
+    template <typename T> class className;												\
+    template <typename T> using className##UPtr = std::unique_ptr<className<T>>;        \
+    template <typename T> using className##SPtr = std::shared_ptr<className<T>>;        \
+    template <typename T> using className##WPtr = std::weak_ptr<className<T>>;          \
+    template <typename T> using className##CUPtr = std::unique_ptr<const className<T>>; \
+    template <typename T> using className##CSPtr = std::shared_ptr<const className<T>>; \
+    template <typename T> using className##CWPtr = std::weak_ptr<const className<T>>;
+
 //------------------------------------------------------------
 /// A macro for declaring a class non copyable. This is acheived
 /// by deleting the default copy and assignment constructor.

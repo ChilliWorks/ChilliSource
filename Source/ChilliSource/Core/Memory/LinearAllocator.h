@@ -96,8 +96,10 @@ namespace ChilliSource
         ///
         /// @param pointer
         ///     The pointer to deallocate.
+        /// @param allocationSize
+        ///     Size of the initial allocation
         ///
-        void Deallocate(void* pointer) noexcept override;
+        void Deallocate(void* pointer, std::size_t allocationSize) noexcept override;
 
         /// Evaluates whether or not the given pointer was allocated from this linear
         /// allocator.

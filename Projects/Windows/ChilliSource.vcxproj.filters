@@ -2912,5 +2912,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gyroscope\Gyroscope.h">
       <Filter>ChilliSource\Input\Gyroscope</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Memory\ObjectPoolAllocator.h">
+      <Filter>ChilliSource\Core\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_MATERIAL_FORWARDRENDERMATERIALGROUPMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/ObjectPoolAllocator.h>
 #include <ChilliSource/Rendering/Material/RenderMaterialGroupManager.h>
 
 namespace ChilliSource
@@ -209,7 +210,7 @@ namespace ChilliSource
         ///
         void OnDestroy() noexcept override;
         
-        ForwardRenderMaterialGroupManager() = default;
+        ForwardRenderMaterialGroupManager();
         
         ///
         /// Helper methods that creates the render materials on behalf of the CreateXXXXGroup methods for the given vertex format
@@ -220,19 +221,22 @@ namespace ChilliSource
                                                       BlendMode sourceBlendMode, BlendMode destinationBlendMode,
                                                       StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                                                       CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour,
-                                                      std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept;
+                                                      std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<UniquePtr<RenderMaterial>>& out_renderMaterials) noexcept;
         
         ///
         /// Helper methods that creates the render materials on behalf of the CreateXXXXGroup methods for the given vertex format
         ///
         void CreateSkyboxRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderCubemap,
-                                                      std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept;
+                                                      std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<UniquePtr<RenderMaterial>>& out_renderMaterials) noexcept;
         
         ///
         /// Helper methods that creates the render materials on behalf of the CreateXXXXGroup methods for the given vertex format
         ///
         void CreateBlinnRenderMaterialGroupCollection(const VertexFormat& format, const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour,
-                                                      std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<RenderMaterialUPtr>& out_renderMaterials) noexcept;
+                                                      std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots>& out_renderMaterialSlots, std::vector<UniquePtr<RenderMaterial>>& out_renderMaterials) noexcept;
+        
+        
+        ObjectPoolAllocator<RenderMaterial> m_renderMaterialPool;
         
         bool m_shadowsSupported = false;
         

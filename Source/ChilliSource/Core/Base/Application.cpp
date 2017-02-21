@@ -329,7 +329,7 @@ namespace ChilliSource
         
         CreateSystem<RenderCommandBufferManager>();
         m_renderer = CreateSystem<Renderer>();
-        CreateSystem<RenderMaterialGroupManager>();
+        m_renderMaterialGroupManager = CreateSystem<RenderMaterialGroupManager>();
         CreateSystem<RenderMeshManager>();
         CreateSystem<RenderShaderManager>();
         CreateSystem<RenderTextureManager>();
@@ -548,7 +548,7 @@ namespace ChilliSource
         bool isFirstFrame = (m_frameIndex == 0);
         while((m_updateIntervalRemainder >= GetUpdateInterval()) || isFirstFrame)
         {
-            m_updateIntervalRemainder -=  GetUpdateInterval();
+            m_updateIntervalRemainder -= GetUpdateInterval();
             
             //update all of the application systems
             for (const AppSystemUPtr& system : m_systems)
@@ -641,6 +641,9 @@ namespace ChilliSource
         }
 
         m_resourcePool->Destroy();
+        
+        //Needs to be destroyed after the resource pool as materials rely on this system
+        m_renderMaterialGroupManager->Destroy();
         
         m_systems.clear();
         

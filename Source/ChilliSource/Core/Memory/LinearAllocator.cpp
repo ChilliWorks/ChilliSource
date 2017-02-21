@@ -68,7 +68,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    void LinearAllocator::Deallocate(void* pointer) noexcept
+    void LinearAllocator::Deallocate(void* pointer, std::size_t allocationSize) noexcept
     {
         CS_ASSERT(Contains(pointer), "Cannot deallocate a pointer that did not originate from this allocator.");
 
@@ -96,7 +96,7 @@ namespace ChilliSource
 
         if (m_parentAllocator)
         {
-            m_parentAllocator->Deallocate(m_buffer);
+            m_parentAllocator->Deallocate(m_buffer, m_bufferSize);
         }
         else
         {

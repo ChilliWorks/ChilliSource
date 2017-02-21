@@ -35,7 +35,7 @@ namespace ChilliSource
         return UniquePtr<TType>(object, [&allocator](TType* object) noexcept -> void
         {
             object->~TType();
-            allocator.Deallocate(reinterpret_cast<void*>(object));
+            allocator.Deallocate(reinterpret_cast<void*>(object), sizeof(TType));
         });
     }
 
@@ -61,7 +61,7 @@ namespace ChilliSource
                 }
             }
 
-            allocator.Deallocate(reinterpret_cast<void*>(array));
+            allocator.Deallocate(reinterpret_cast<void*>(array), sizeof(TType) * size);
         });
     }
 }

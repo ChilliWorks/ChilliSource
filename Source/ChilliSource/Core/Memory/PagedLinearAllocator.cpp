@@ -89,7 +89,7 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    void PagedLinearAllocator::Deallocate(void* pointer) noexcept
+    void PagedLinearAllocator::Deallocate(void* pointer, std::size_t allocationSize) noexcept
     {
         if (m_parentAllocator)
         {
@@ -97,7 +97,7 @@ namespace ChilliSource
             {
                 if (allocator->Contains(pointer))
                 {
-                    return allocator->Deallocate(pointer);
+                    return allocator->Deallocate(pointer, allocationSize);
                 }
             }
         }
@@ -107,7 +107,7 @@ namespace ChilliSource
             {
                 if (allocator->Contains(pointer))
                 {
-                    return allocator->Deallocate(pointer);
+                    return allocator->Deallocate(pointer, allocationSize);
                 }
             }
         }

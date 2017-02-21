@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_MATERIAL_RENDERMATERIALGROUP_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/Material/RenderMaterial.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 
@@ -125,9 +126,9 @@ namespace ChilliSource
         /// @param collections
         ///     The list of material collections. Should be moved
         ///
-        RenderMaterialGroup(std::vector<RenderMaterialUPtr> renderMaterials, std::vector<Collection> collections) noexcept;
+        RenderMaterialGroup(std::vector<UniquePtr<RenderMaterial>> renderMaterials, std::vector<Collection> collections) noexcept;
         
-        std::vector<RenderMaterialUPtr> m_renderMaterials;
+        std::vector<UniquePtr<RenderMaterial>> m_renderMaterials;
         std::vector<RenderMaterial*> m_renderMaterialsRaw;
         std::vector<Collection> m_collections;
     };
