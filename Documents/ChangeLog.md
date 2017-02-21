@@ -11,6 +11,7 @@ Version 2.1.3, 2017-
 * Fix: Default background colour is now black.
 * Updated: SFML is now version 2.4.2, on Windows.
 * Changed: Ray/Plane intersection test is no longer a member function of Plane, but now resides in ShapeIntersection along with the other intersection tests.
+* Changed: Where available the iOS dialogue system is backed by the newer UIAlertController rather than the deprecated UIAlertView
 
 Version 2.1.2, 2017-01-26
 -------------------------
