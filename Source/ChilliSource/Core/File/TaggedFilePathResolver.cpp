@@ -1,6 +1,6 @@
 //
 //  TaggedFilePathResolver.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 19/06/2014.
 //
 //  The MIT License (MIT)

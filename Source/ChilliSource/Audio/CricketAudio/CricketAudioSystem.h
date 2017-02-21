@@ -1,6 +1,6 @@
 //
 //  CricketAudioSystem.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 30/12/2014.
 //
 //  The MIT License (MIT)
@@ -45,7 +45,7 @@ namespace ChilliSource
     /// You will also need to add CkAudioPlayer during the State::AddSystems() life
     /// cycle event for any states in which you wish to use it.
     ///
-    /// Chilli Source has obtained special permission to include Cricket Audio as
+    /// ChilliSource has obtained special permission to include Cricket Audio as
     /// part of the engine. You are free to use Cricket Audio as part of Chilli
     /// Source within your app subject to the Cricket Audio free license
     /// (http://www.crickettechnology.com/free_license) as outline below:

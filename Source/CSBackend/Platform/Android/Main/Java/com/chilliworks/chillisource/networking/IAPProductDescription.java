@@ -1,6 +1,6 @@
 /**
  * IAPProductDescription.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 22/05/2013.
  * 
  * The MIT License (MIT)

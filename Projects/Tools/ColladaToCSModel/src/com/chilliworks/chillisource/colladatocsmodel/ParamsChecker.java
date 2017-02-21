@@ -1,6 +1,6 @@
 /**
  * ParamsChecker.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 18/04/2013.
  * 
  * The MIT License (MIT)

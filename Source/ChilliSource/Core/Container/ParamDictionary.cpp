@@ -1,6 +1,6 @@
 //
 //  ParamDictionary.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Stuart McGaw on 15/02/2011.
 //
 //  The MIT License (MIT)

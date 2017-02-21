@@ -1,6 +1,6 @@
 //
 //  VideoPlayer.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by S Downie on 12/05/2011.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  AccelerometerJavaInterface.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 10/06/2013.
 //
 //  The MIT License (MIT)

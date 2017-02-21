@@ -1,6 +1,6 @@
 //
 //  AlignmentAnchors.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 22/04/2011.
 //
 //  The MIT License (MIT)

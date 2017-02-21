@@ -1,6 +1,6 @@
 //
 //  SkinnedAnimationGroup.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 08/06/2012.
 //
 //  The MIT License (MIT)

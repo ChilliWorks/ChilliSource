@@ -1,6 +1,6 @@
 //
 //  Gyroscope.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Jordan Brown on 20/01/2017.
 //
 //  The MIT License (MIT)

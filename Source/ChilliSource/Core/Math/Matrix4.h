@@ -1,6 +1,6 @@
 //
 //  Matrix4.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 27/04/2014.
 //
 //  The MIT License (MIT)

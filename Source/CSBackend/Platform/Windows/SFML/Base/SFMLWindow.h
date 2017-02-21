@@ -1,6 +1,6 @@
 //
 //  SFMLWindow.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 11/03/2014.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  AppConfig.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 02/06/2014.
 //
 //  The MIT License (MIT)
@@ -43,7 +43,7 @@ namespace ChilliSource
     namespace
     {
         const std::string k_configFilePath = "App.config";
-        const std::string k_defaultDisplayableName = "Chilli Source App";
+        const std::string k_defaultDisplayableName = "ChilliSource App";
         const u32 k_defaultPreferredFPS = 30;
     }
     

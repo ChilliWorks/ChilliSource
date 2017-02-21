@@ -1,6 +1,6 @@
 //
 //  Canvas.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 21/04/2014.
 //
 //  The MIT License (MIT)

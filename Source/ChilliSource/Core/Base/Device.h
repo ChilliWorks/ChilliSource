@@ -1,6 +1,6 @@
 //
 //  Device.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 03/05/2011.
 //
 //  The MIT License (MIT)

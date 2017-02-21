@@ -1,6 +1,6 @@
 /**
  * AppConfig.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie on 23/09/2014.
  * 
  * The MIT License (MIT)

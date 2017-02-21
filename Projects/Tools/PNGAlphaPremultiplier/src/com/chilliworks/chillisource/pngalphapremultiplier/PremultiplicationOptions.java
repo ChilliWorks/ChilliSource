@@ -1,6 +1,6 @@
 /**
  * PremultiplicationOptions.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 30/01/2013.
  * 
  * The MIT License (MIT)

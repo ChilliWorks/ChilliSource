@@ -1,6 +1,6 @@
 //
 //  ParticleAffectorDefFactory.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 08/11/2014.
 //
 //  The MIT License (MIT)

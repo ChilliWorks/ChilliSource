@@ -1,6 +1,6 @@
 //
 //  ParamDictionarySerialiser.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 15/05/2014.
 //
 //  The MIT License (MIT)

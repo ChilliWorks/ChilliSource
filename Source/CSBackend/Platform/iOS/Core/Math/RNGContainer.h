@@ -1,6 +1,6 @@
 //
 //  RNGContainer.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 23/12/2014.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  AppDataStore.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Stuart McGaw on 24/05/2011.
 //
 //  The MIT License (MIT)

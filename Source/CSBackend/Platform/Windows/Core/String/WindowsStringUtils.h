@@ -1,6 +1,6 @@
 //
 //  WindowwsStringUtils.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 03/03/2011.
 //
 //  The MIT License (MIT)

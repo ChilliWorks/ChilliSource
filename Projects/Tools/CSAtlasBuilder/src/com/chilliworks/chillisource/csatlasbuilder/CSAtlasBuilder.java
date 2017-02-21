@@ -1,6 +1,6 @@
 /**
 *  CSAtlasBuilder.java
-*  Chilli Source
+*  ChilliSource
 *  Created by Robert Henning on 07/09/2006.
 *
 *  The MIT License (MIT)

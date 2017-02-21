@@ -1,6 +1,6 @@
 //
 //  Shapes.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 04/10/2010.
 //
 //  The MIT License (MIT)

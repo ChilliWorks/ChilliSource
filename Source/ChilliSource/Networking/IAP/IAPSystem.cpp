@@ -1,6 +1,6 @@
 //
 //  IAPSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 10/06/2013.
 //
 //  The MIT License (MIT)

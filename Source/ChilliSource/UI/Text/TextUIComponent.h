@@ -1,6 +1,6 @@
 //
 //  TextUIComponent.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 05/11/2014.
 //
 //  The MIT License (MIT)
@@ -50,7 +50,7 @@ namespace ChilliSource
     /// functionality. Text drawable contains the following properties:
     ///
     /// "Font": The description of the font resource that will be used to render
-    /// the text. This default to the default font built into chilli source.
+    /// the text. This default to the default font built into ChilliSource.
     ///
     /// "LocalisedText": The description of the localised text resource which
     /// will be used to generate the text.

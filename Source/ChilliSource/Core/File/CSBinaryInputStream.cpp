@@ -1,6 +1,6 @@
 //
 //  CSBinaryInputStream.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 28/10/2014.
 //
 //  The MIT License (MIT)
@@ -37,7 +37,7 @@ namespace ChilliSource
     namespace
     {
         //--------------------------------------------------------------
-        /// Reads the Chilli Source "Chunked" binary file header.
+        /// Reads the ChilliSource "Chunked" binary file header.
         ///
         /// @param Ian Copland
         ///
@@ -60,7 +60,7 @@ namespace ChilliSource
             //test file id.
             if (headerData[0] != 'C' || headerData[1] != 'S' || headerData[2] != 'C' || headerData[3] != 'S')
             {
-                CS_LOG_ERROR("Invalid Chilli Source file identifier in file: " + in_filePath);
+                CS_LOG_ERROR("Invalid ChilliSource file identifier in file: " + in_filePath);
                 return false;
             }
             

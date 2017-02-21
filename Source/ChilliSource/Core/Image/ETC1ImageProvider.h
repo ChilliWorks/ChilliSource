@@ -1,6 +1,6 @@
 //
 //  ETC1ImageProvider.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 09/11/2012.
 //
 //  The MIT License (MIT)

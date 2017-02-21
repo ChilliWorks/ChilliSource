@@ -1,6 +1,6 @@
 //
 //  PlatformSystem.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 24/11/2010.
 //
 //  The MIT License (MIT)

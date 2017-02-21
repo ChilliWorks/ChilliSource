@@ -1,6 +1,6 @@
 /**
  * FontFromGlyphsBuilder.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 09/10/2014.
  * 
  * The MIT License (MIT)

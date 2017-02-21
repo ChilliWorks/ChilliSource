@@ -1,6 +1,6 @@
 //
 //  VideoPlayerTapListener.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 16/08/2012.
 //
 //  The MIT License (MIT)

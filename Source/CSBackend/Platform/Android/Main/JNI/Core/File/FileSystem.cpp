@@ -1,6 +1,6 @@
 //
 //  FileSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 25/03/2011.
 //
 //  The MIT License (MIT)

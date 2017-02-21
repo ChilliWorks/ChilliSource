@@ -1,6 +1,6 @@
 //
 //  ProgressBarDirection.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 17/12/2014.
 //
 //  The MIT License (MIT)

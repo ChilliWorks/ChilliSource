@@ -1,6 +1,6 @@
 /**
  * TextEntryNativeInterface.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie 08/07/2014.
  * 
  * The MIT License (MIT)

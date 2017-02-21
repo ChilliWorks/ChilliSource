@@ -1,6 +1,6 @@
 /**
  *  PackerInfo.java
- *  Chilli Source
+ *  ChilliSource
  *  Created by Hugh McLaughlin on 21/08/2014.
  *
  *  The MIT License (MIT)

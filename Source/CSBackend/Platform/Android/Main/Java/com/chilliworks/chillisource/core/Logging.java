@@ -1,6 +1,6 @@
 /**
  * Logging.java
- * Chilli Source
+ * ChilliSource
  * Created by Scott Downie on 14/03/2014.
  * 
  * The MIT License (MIT)
@@ -46,7 +46,7 @@ public class Logging
 	 */
 	public static void logVerbose(String in_message)
 	{
-		Log.d("Chilli Source", in_message);
+		Log.d("ChilliSource", in_message);
 	}
 	/**
 	 * Log message to LogCat under the "warning" channel
@@ -57,7 +57,7 @@ public class Logging
 	 */
 	public static void logWarning(String in_message)
 	{
-		Log.w("Chilli Source", in_message);
+		Log.w("ChilliSource", in_message);
 	}
 	/**
 	 * Log message to LogCat under the "error" channel
@@ -68,7 +68,7 @@ public class Logging
 	 */
 	public static void logError(String in_message)
 	{
-		Log.e("Chilli Source", in_message);
+		Log.e("ChilliSource", in_message);
 	}
 	/**
 	 * Log message to LogCat under the "error" channel will also cause the application to assert
@@ -79,7 +79,7 @@ public class Logging
 	 */
 	public static void logFatal(String in_message)
 	{
-		Log.e("Chilli Source", in_message);
+		Log.e("ChilliSource", in_message);
 		assert false;
 	}
 }

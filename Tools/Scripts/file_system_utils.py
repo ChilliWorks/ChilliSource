@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 #  FileSystemUtils.py
-#  Chilli Source
+#  ChilliSource
 #  Created by Ian Copland on 20/08/2012.
 #
 #  The MIT License (MIT)

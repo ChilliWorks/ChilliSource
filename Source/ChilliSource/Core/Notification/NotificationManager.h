@@ -1,6 +1,6 @@
 //
 //  NotificationManager.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 10/03/2014.
 //
 //  The MIT License (MIT)

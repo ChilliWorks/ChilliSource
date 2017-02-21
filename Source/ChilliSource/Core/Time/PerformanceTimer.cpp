@@ -1,6 +1,6 @@
 //
 //  PerformanceTimer.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 04/09/2012.
 //
 //  The MIT License (MIT)

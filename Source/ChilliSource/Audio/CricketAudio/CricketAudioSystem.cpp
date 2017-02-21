@@ -1,6 +1,6 @@
 //
 //  CricketAudioSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 30/12/2014.
 //
 //  The MIT License (MIT)
@@ -87,10 +87,10 @@ namespace ChilliSource
         CS_LOG_VERBOSE("= Cricket Audio =");
         CS_LOG_VERBOSE("=================");
         CS_LOG_VERBOSE(" ");
-        CS_LOG_VERBOSE("Chilli Source has obtained special permission to include Cricket Audio as");
+        CS_LOG_VERBOSE("ChilliSource has obtained special permission to include Cricket Audio as");
         CS_LOG_VERBOSE("part of the engine. See the documentation on CricketAudioSystem for details ");
         CS_LOG_VERBOSE("on how to use Cricket Audio. You are free to use Cricket Audio as part of ");
-        CS_LOG_VERBOSE("Chilli Source within your app subject to the Cricket Audio free license");
+        CS_LOG_VERBOSE("ChilliSource within your app subject to the Cricket Audio free license");
         CS_LOG_VERBOSE("(http://www.crickettechnology.com/free_license) as outline below:");
         CS_LOG_VERBOSE(" ");
         CS_LOG_VERBOSE("Cricket Audio free license");

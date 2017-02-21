@@ -1,6 +1,6 @@
 //
 //  UIDrawableDef.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 21/11/2014.
 //
 //  The MIT License (MIT)

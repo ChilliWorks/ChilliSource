@@ -1,6 +1,6 @@
 //
 //  RotationGesture.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 23/09/2014.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------
 # Config.mk
-# Chilli Source
+# ChilliSource
 #
 # Created by Ian Copland on 15/03/2012
 # Copyright 2012 Tag Games. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  Screen.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 25/04/2014.
 //
 //  The MIT License (MIT)

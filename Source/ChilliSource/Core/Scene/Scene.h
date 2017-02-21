@@ -1,6 +1,6 @@
 //
 //  Scene.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 21/09/2010.
 //
 //  The MIT License (MIT)

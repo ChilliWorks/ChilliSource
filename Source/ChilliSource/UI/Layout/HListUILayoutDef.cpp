@@ -1,6 +1,6 @@
 //
 //  HListUILayoutDef.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 07/01/2015.
 //
 //  The MIT License (MIT)

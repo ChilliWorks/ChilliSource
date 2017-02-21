@@ -1,6 +1,6 @@
 //
 //  CSBinaryChunk.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 28/10/2014.
 //
 //  The MIT License (MIT)
@@ -34,7 +34,7 @@
 namespace ChilliSource
 {
     //----------------------------------------------------------------------
-    /// A single chunk within a Chilli Source binary "Chunked" file. The
+    /// A single chunk within a ChilliSource binary "Chunked" file. The
     /// contents of the chunk are loaded directly into memory on creation
     /// meaning each call to Read() avoids further disc reads.
     ///

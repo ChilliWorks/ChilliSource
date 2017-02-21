@@ -1,6 +1,6 @@
 //
 //  Transform.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 24/03/2011.
 //
 //  The MIT License (MIT)

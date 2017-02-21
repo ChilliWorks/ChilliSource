@@ -1,6 +1,6 @@
 //
 //  ContextRestorer.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 14/04/2014.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  LocalisedText.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 07/12/2010.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  RandomImpl.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 06/01/2015.
 //
 //  The MIT License (MIT)

@@ -10,7 +10,7 @@
  */
 
 /*
- Modified for use in the Chilli Source engine.
+ Modified for use in the ChilliSource engine.
  03/02/2012, Ian Copland: Added premultiplication of palettised pngs
  25/06/2014, Ian Copland: Minor tidy up changes.
  */

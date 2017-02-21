@@ -1,6 +1,6 @@
 //
 //  CricketAudio.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 30/12/2014.
 //
 //  The MIT License (MIT)

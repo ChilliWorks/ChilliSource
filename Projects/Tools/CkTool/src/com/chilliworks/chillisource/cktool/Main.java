@@ -1,6 +1,6 @@
 /**
  * Main.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 20/01/2015.
  * 
  * The MIT License (MIT)
@@ -304,8 +304,8 @@ public final class Main
 		Logging.logVerbose("CkTool is a simple cross-platform java wrapper around the Cricket Audio cktool. For further information see the Cricket");
 		Logging.logVerbose("Audio Documentation at: http://www.crickettechnology.com/");
 		Logging.logVerbose(" ");
-		Logging.logVerbose("Chilli Source has obtained special permission to include Cricket Audio as part of the engine. See the documentation on CricketAudioSystem for " +
-				"details on how to use Cricket Audio. You are free to use Cricket Audio as part of Chilli Source within your app subject to the Cricket Audio free license " +
+		Logging.logVerbose("ChilliSource has obtained special permission to include Cricket Audio as part of the engine. See the documentation on CricketAudioSystem for " +
+				"details on how to use Cricket Audio. You are free to use Cricket Audio as part of ChilliSource within your app subject to the Cricket Audio free license " +
 				"(http://www.crickettechnology.com/free_license) as outline below:");
 		Logging.logVerbose(" ");
 		Logging.logVerbose("Cricket Audio free license");

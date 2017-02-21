@@ -1,6 +1,6 @@
 //
 //  GLIncludes.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 14/01/2011.
 //
 //  The MIT License (MIT)

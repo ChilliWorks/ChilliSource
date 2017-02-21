@@ -1,6 +1,6 @@
 /**
  * HashCodeUtils.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 31/10/2014
  * 
  * The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  CSModelProvider.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 25/08/2011.
 //
 //  The MIT License (MIT)

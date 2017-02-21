@@ -1,6 +1,6 @@
 //
 //  AppConfig.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 02/06/2014.
 //
 //  The MIT License (MIT)

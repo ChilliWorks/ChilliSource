@@ -1,6 +1,6 @@
 //
 //  _JavaInterface.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 17/03/2011.
 //
 //  The MIT License (MIT)

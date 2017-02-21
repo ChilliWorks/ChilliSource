@@ -1,6 +1,6 @@
 //
 //  UVs.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 13/06/2014.
 //
 //  The MIT License (MIT)

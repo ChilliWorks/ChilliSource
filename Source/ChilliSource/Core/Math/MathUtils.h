@@ -1,6 +1,6 @@
 //
 //  MathUtils.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Stuart McGaw on 22/09/2010.
 //
 //  The MIT License (MIT)

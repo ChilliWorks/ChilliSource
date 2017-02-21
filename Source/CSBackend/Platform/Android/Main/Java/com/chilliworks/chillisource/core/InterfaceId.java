@@ -1,6 +1,6 @@
 /**
  * InterfaceId.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 09/08/2012.
  * 
  * The MIT License (MIT)

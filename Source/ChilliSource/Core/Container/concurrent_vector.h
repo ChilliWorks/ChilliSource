@@ -1,6 +1,6 @@
 //
 //  concurrent_vector.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 19/09/2015.
 //
 //  The MIT License (MIT)

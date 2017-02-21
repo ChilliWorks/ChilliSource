@@ -1,6 +1,6 @@
 //
 //  Subtitles.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland 21/02/2013.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  HoldGesture.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 19/09/2014.
 //
 //  The MIT License (MIT)

@@ -1,6 +1,6 @@
 //
 //  AppNotificationSystem.cpp
-//  Chilli Source
+//  ChilliSource
 //
 //  Created by Ian Copland on 10/03/2014.
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.

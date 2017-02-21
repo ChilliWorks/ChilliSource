@@ -1,6 +1,6 @@
 //
 //  StringUtils.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Stuart McGaw on 25/10/2010.
 //
 //  The MIT License (MIT)

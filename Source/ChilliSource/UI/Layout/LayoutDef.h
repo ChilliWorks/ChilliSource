@@ -1,6 +1,6 @@
 //
 //  UILayoutDef.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 08/05/2015.
 //
 //  The MIT License (MIT)

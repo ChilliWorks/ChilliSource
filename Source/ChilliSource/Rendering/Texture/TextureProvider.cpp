@@ -1,6 +1,6 @@
 //
 //  TextureProvider.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Scott Downie on 15/04/2014.
 //
 //  The MIT License (MIT)

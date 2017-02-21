@@ -1,6 +1,6 @@
 //
 //  NumericLimits.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 10/03/2015.
 //
 //  The MIT License (MIT)
