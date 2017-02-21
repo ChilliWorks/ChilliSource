@@ -93,7 +93,7 @@ namespace CSBackend
                 glShader->SetAttribute(name, numComponents, type, normalised, vertexFormat.GetSize(), offset);
             }
             
-            for (s32 i = vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)
+            for (u32 i = vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)
             {
                 glDisableVertexAttribArray(i);
             }

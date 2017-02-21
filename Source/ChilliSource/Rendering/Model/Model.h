@@ -27,6 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
@@ -141,7 +142,7 @@ namespace ChilliSource
         Model() = default;
 
         std::vector<std::string> m_meshNames;
-        std::vector<const RenderMesh*> m_renderMeshes;
+        std::vector<UniquePtr<RenderMesh>> m_renderMeshes;
         Skeleton m_skeleton;
         AABB m_aabb;
         Sphere m_boundingSphere;

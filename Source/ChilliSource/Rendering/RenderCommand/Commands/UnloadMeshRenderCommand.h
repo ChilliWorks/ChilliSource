@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMESHRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
@@ -50,7 +51,7 @@ namespace ChilliSource
         ///
         /// @return The render mesh that should be unloaded.
         ///
-        RenderMeshUPtr ClaimRenderMesh() noexcept;
+        UniquePtr<RenderMesh> ClaimRenderMesh() noexcept;
         
     private:
         friend class RenderCommandList;
@@ -60,9 +61,9 @@ namespace ChilliSource
         /// @param renderMesh
         ///     The render mesh that should be unloaded.
         ///
-        UnloadMeshRenderCommand(RenderMeshUPtr renderMesh) noexcept;
+        UnloadMeshRenderCommand(UniquePtr<RenderMesh> renderMesh) noexcept;
         
-        RenderMeshUPtr m_renderMesh;
+        UniquePtr<RenderMesh> m_renderMesh;
     };
 }
 

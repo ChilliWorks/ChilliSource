@@ -31,12 +31,24 @@
 
 namespace ChilliSource
 {
+    namespace
+    {
+        constexpr u32 k_meshPoolSize = 50;
+    }
+    
     CS_DEFINE_NAMEDTYPE(RenderMeshManager);
 
     //------------------------------------------------------------------------------
     RenderMeshManagerUPtr RenderMeshManager::Create() noexcept
     {
         return RenderMeshManagerUPtr(new RenderMeshManager());
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderMeshManager::RenderMeshManager()
+    : m_renderMeshPool(k_meshPoolSize, ObjectPoolAllocatorLimitPolicy::k_expand)
+    {
+        
     }
 
     //------------------------------------------------------------------------------
@@ -46,11 +58,11 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    const RenderMesh* RenderMeshManager::CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
+    UniquePtr<RenderMesh> RenderMeshManager::CreateRenderMesh(PolygonType polygonType, const VertexFormat& vertexFormat, IndexFormat indexFormat, u32 numVertices, u32 numIndices, const Sphere& boundingSphere,
                                                           std::unique_ptr<const u8[]> vertexData, u32 vertexDataSize, std::unique_ptr<const u8[]> indexData, u32 indexDataSize, bool shouldBackupData,
                                                           std::vector<Matrix4> inverseBindPoseMatrices) noexcept
     {
-        RenderMeshUPtr renderMesh(new RenderMesh(polygonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, shouldBackupData, std::move(inverseBindPoseMatrices)));
+        UniquePtr<RenderMesh> renderMesh = MakeUnique<RenderMesh>(m_renderMeshPool, polygonType, vertexFormat, indexFormat, numVertices, numIndices, boundingSphere, shouldBackupData, std::move(inverseBindPoseMatrices));
 
         auto rawRenderMesh = renderMesh.get();
         
@@ -62,30 +74,16 @@ namespace ChilliSource
         loadCommand.m_indexDataSize = indexDataSize;
         
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_renderMeshes.push_back(std::move(renderMesh));
         m_pendingLoadCommands.push_back(std::move(loadCommand));
         
-        return rawRenderMesh;
+        return std::move(renderMesh);
     }
 
     //------------------------------------------------------------------------------
-    void RenderMeshManager::DestroyRenderMesh(const RenderMesh* renderMesh) noexcept
+    void RenderMeshManager::DestroyRenderMesh(UniquePtr<RenderMesh> renderMesh) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        
-        for (auto it = m_renderMeshes.begin(); it != m_renderMeshes.end(); ++it)
-        {
-            if (it->get() == renderMesh)
-            {
-                m_pendingUnloadCommands.push_back(std::move(*it));
-                
-                it->swap(m_renderMeshes.back());
-                m_renderMeshes.pop_back();
-                return;
-            }
-        }
-        
-        CS_LOG_FATAL("RenderMesh does not exist.");
+        m_pendingUnloadCommands.push_back(std::move(renderMesh));
     }
 
     //------------------------------------------------------------------------------
@@ -110,11 +108,5 @@ namespace ChilliSource
             }
             m_pendingUnloadCommands.clear();
         }
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderMeshManager::~RenderMeshManager() noexcept
-    {
-        CS_ASSERT(m_renderMeshes.size() == 0, "Render meshes have not been correctly released.");
     }
 }
