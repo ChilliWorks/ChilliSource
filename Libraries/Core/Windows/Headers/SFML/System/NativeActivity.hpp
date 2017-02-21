@@ -22,27 +22,41 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_SYSTEM_EXPORT_HPP
-#define SFML_SYSTEM_EXPORT_HPP
+#ifndef SFML_NATIVEACTIVITY_HPP
+#define SFML_NATIVEACTIVITY_HPP
+
 
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Config.hpp>
+#include <SFML/System/Export.hpp>
 
 
-////////////////////////////////////////////////////////////
-// Define portable import / export macros
-////////////////////////////////////////////////////////////
-#if defined(SFML_SYSTEM_EXPORTS)
-
-    #define SFML_SYSTEM_API SFML_API_EXPORT
-
-#else
-
-    #define SFML_SYSTEM_API SFML_API_IMPORT
-
+#if !defined(SFML_SYSTEM_ANDROID)
+#error NativeActivity.hpp: This header is Android only.
 #endif
 
 
-#endif // SFML_SYSTEM_EXPORT_HPP
+struct ANativeActivity;
+
+namespace sf
+{
+////////////////////////////////////////////////////////////
+/// \ingroup system
+/// \brief Return a pointer to the Android native activity
+///
+/// You shouldn't have to use this function, unless you want
+/// to implement very specific details, that SFML doesn't
+/// support, or to use a workaround for a known issue.
+///
+/// \return Pointer to Android native activity structure
+///
+/// \sfplatform{Android,SFML/System/NativeActivity.hpp}
+///
+////////////////////////////////////////////////////////////
+SFML_SYSTEM_API ANativeActivity* getNativeActivity();
+
+} // namespace sf
+
+
+#endif // SFML_NATIVEACTIVITY_HPP

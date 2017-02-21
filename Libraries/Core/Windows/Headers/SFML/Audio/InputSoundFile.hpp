@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2017 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -62,7 +62,8 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Open a sound file from the disk for reading
     ///
-    /// The supported audio formats are: WAV, OGG/Vorbis, FLAC.
+    /// The supported audio formats are: WAV (PCM only), OGG/Vorbis, FLAC.
+    /// The supported sample sizes for FLAC and WAV are 8, 16, 24 and 32 bit.
     ///
     /// \param filename Path of the sound file to load
     ///
@@ -74,7 +75,8 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Open a sound file in memory for reading
     ///
-    /// The supported audio formats are: WAV, OGG/Vorbis, FLAC.
+    /// The supported audio formats are: WAV (PCM only), OGG/Vorbis, FLAC.
+    /// The supported sample sizes for FLAC and WAV are 8, 16, 24 and 32 bit.
     ///
     /// \param data        Pointer to the file data in memory
     /// \param sizeInBytes Size of the data to load, in bytes
@@ -87,7 +89,8 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Open a sound file from a custom stream for reading
     ///
-    /// The supported audio formats are: WAV, OGG/Vorbis, FLAC.
+    /// The supported audio formats are: WAV (PCM only), OGG/Vorbis, FLAC.
+    /// The supported sample sizes for FLAC and WAV are 8, 16, 24 and 32 bit.
     ///
     /// \param stream Source stream to read from
     ///
@@ -150,6 +153,9 @@ public:
     /// precision. If you need to jump to a given time, use the
     /// other overload.
     ///
+    /// The sample offset takes the channels into account.
+    /// Offsets can be calculated like this:
+    /// `sampleNumber * sampleRate * channelCount`
     /// If the given offset exceeds to total number of samples,
     /// this function jumps to the end of the sound file.
     ///
