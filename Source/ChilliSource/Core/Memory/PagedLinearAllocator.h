@@ -102,8 +102,10 @@ namespace ChilliSource
         ///
         /// @param pointer
         ///     The pointer to deallocate.
+        /// @param allocationSize
+        ///     Size of the initial allocation
         ///
-        void Deallocate(void* pointer) noexcept override;
+        void Deallocate(void* pointer, std::size_t allocationSize) noexcept override;
 
         /// Resets the buffer, allowing all previously allocated memory to be reused. Deallocate() must
         /// have been called for all allocated blocks prior to reset() being called.

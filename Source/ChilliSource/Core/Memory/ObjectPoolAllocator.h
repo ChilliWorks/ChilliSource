@@ -68,14 +68,14 @@ namespace ChilliSource
         std::size_t GetMaxAllocationSize() const noexcept override { return m_capacityObjects * sizeof(T); };
         
         /// Should be used to allocate only a single object and will
-        /// assert if the given size if not sizeof(T).
+        /// assert if the given size is not aligned with sizeof(T).
         ///
         /// If the limit is reached will obey the limit policy
         ///
         /// NOTE: Used via STL container allocation interface and is NOT constructed using placement new
         ///
         /// @param allocationSize
-        ///     The size of the allocation must be sizeof(T)
+        ///     The size of the allocation must aligned with sizeof(T)
         ///
         /// @return The allocated memory (not yet constructed).
         ///
@@ -96,8 +96,10 @@ namespace ChilliSource
         ///
         /// @param pointer
         ///     The pointer to deallocate.
+        /// @param allocationSize
+        ///     Initial allocation size
         ///
-        void Deallocate(void* pointer) noexcept override;
+        void Deallocate(void* pointer, std::size_t allocationSize) noexcept override;
         
         /// Returns the memory held by the object to the pool. It must have been allocated from
         /// this pool or will assert.
@@ -133,7 +135,10 @@ namespace ChilliSource
         
         /// Adds a new page buffer at a fraction of the size of the original
         ///
-        void Expand() noexcept;
+        /// @param minObjects
+        ///     Min number of objects in the new page
+        ///
+        void Expand(std::size_t minObjects) noexcept;
         
         /// Moves all objects to the free store
         ///
@@ -146,7 +151,7 @@ namespace ChilliSource
         //Buffers are paged to accomodate expansion without invalidating the existing pointers
         //Fixed size only has a single buffer
         std::vector<T*> m_buffers;
-        std::vector<u32> m_capacities;
+        std::vector<std::size_t> m_capacities;
         T** m_freeStore;
         T** m_freeStoreHead;
     };
@@ -155,6 +160,8 @@ namespace ChilliSource
     template <typename T> ObjectPoolAllocator<T>::ObjectPoolAllocator(u32 numObjects, ObjectPoolAllocatorLimitPolicy limitPolicy) noexcept
     : m_limitPolicy(limitPolicy), m_capacityObjects(numObjects)
     {
+        CS_ASSERT(numObjects > 0, "Cannot create a pool of size 0");
+        
         //Create the initial buffer page
         m_buffers.push_back((T*)malloc(sizeof(T) * numObjects));
         m_capacities.push_back(numObjects);
@@ -167,9 +174,12 @@ namespace ChilliSource
     //-----------------------------------------------------------------------------
     template <typename T> void* ObjectPoolAllocator<T>::Allocate(std::size_t allocationSize) noexcept
     {
-        CS_ASSERT(allocationSize == sizeof(T), "Pool can only allocate single objects of size T at a time");
+        CS_ASSERT(allocationSize % sizeof(T) == 0, "Allocations must be sizeof(T) aligned");
         
-        if(m_activeAllocationCount == m_capacityObjects)
+        std::size_t numToAllocate = allocationSize / sizeof(T);
+        s32 remaining = m_capacityObjects - m_activeAllocationCount;
+        
+        if(remaining < numToAllocate)
         {
             switch(m_limitPolicy)
             {
@@ -177,14 +187,14 @@ namespace ChilliSource
                     CS_LOG_FATAL("ObjectPool out of memory. Allocate more upfront or change to an expansion policy");
                     return nullptr;
                 case ObjectPoolAllocatorLimitPolicy::k_expand:
-                    Expand();
+                    Expand(numToAllocate - remaining);
                     break;
             }
         }
         
         T* free = *m_freeStoreHead;
-        m_freeStoreHead++;
-        ++m_activeAllocationCount;
+        m_freeStoreHead += numToAllocate;
+        m_activeAllocationCount += numToAllocate;
         return free;
     }
     
@@ -197,14 +207,17 @@ namespace ChilliSource
     }
     
     //-----------------------------------------------------------------------------
-    template <typename T> void ObjectPoolAllocator<T>::Deallocate(void* pointer) noexcept
+    template <typename T> void ObjectPoolAllocator<T>::Deallocate(void* pointer, std::size_t allocationSize) noexcept
     {
+        CS_ASSERT(allocationSize % sizeof(T) == 0, "Allocations must be sizeof(T) aligned");
         CS_ASSERT(IsOwnedByPool((T*)pointer) == true, "Pointer you are trying to deallocate from pool is not managed by this pool");
         CS_ASSERT(IsOnFreeStore((T*)pointer) == false, "Pointer you are trying to deallocate from pool has not been allocated");
         CS_ASSERT(m_activeAllocationCount > 0, "The pool has no active allocations.")
         
-        --m_freeStoreHead;
-        --m_activeAllocationCount;
+        auto numObjects = allocationSize / sizeof(T);
+        
+        m_freeStoreHead -= numObjects;
+        m_activeAllocationCount -= numObjects;
         *m_freeStoreHead = (T*)pointer;
     }
     
@@ -212,7 +225,7 @@ namespace ChilliSource
     template <typename T> void ObjectPoolAllocator<T>::Deallocate(T* pointer) noexcept
     {
         pointer->~T();
-        Deallocate((void*)pointer);
+        Deallocate((void*)pointer, sizeof(T));
     }
     
     //-----------------------------------------------------------------------------
@@ -252,10 +265,10 @@ namespace ChilliSource
     }
     
     //-----------------------------------------------------------------------------
-    template <typename T> void ObjectPoolAllocator<T>::Expand() noexcept
+    template <typename T> void ObjectPoolAllocator<T>::Expand(std::size_t minObjects) noexcept
     {
         //We use a fraction of the total buffer size for the new buffer
-        u32 numObjects = m_capacityObjects/4;
+        auto numObjects = std::max(minObjects, (std::size_t)m_capacityObjects/4);
         T* buffer = (T*)malloc(sizeof(T) * numObjects);
         m_buffers.push_back(buffer);
         m_capacities.push_back(numObjects);

@@ -63,8 +63,10 @@ namespace ChilliSource
         ///
         /// @param pointer
         ///     The pointer to deallocate.
+        /// @param allocationSize
+        ///     Size of the initial allocation
         ///
-        virtual void Deallocate(void* pointer) noexcept = 0;
+        virtual void Deallocate(void* pointer, std::size_t allocationSize) noexcept = 0;
 
         virtual ~IAllocator() noexcept { }
     };
