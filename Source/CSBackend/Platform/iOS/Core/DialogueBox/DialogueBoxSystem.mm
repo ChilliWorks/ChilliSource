@@ -43,12 +43,21 @@ namespace CSBackend
 {
 	namespace iOS
 	{
+        //TODO: Remove UIAlertView once we reach iOS 11 or 12
+        
         CS_DEFINE_NAMEDTYPE(DialogueBoxSystem);
         //----------------------------------------------------
         //----------------------------------------------------
         DialogueBoxSystem::DialogueBoxSystem()
         {
-            m_listener = [[DialogueBoxListener alloc] initWithDialogueBoxSystem:this];
+            if ([UIAlertController class] == nil)
+            {
+                m_listener = [[DialogueBoxListener alloc] initWithDialogueBoxSystem:this];
+            }
+            else
+            {
+                m_listener = nil;
+            }
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -69,13 +78,28 @@ namespace CSBackend
                 NSString* title = [NSStringUtils newNSStringWithUTF8String:in_title];
                 NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
                 NSString* confirm = [NSStringUtils newNSStringWithUTF8String:in_confirm];
-            
-                UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:confirm otherButtonTitles:nil];
-            
-                pConfirm.tag = in_id;
-                [pConfirm show];
-                [pConfirm release];
-            
+                
+                //UIAlertController was only introduced in iOS 8
+                if ([UIAlertController class])
+                {
+                    //Create a new alert with a confirm action
+                    UIAlertController* alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction* action)
+                    {
+                        OnSystemConfirmDialogResult(in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_confirm);
+                    }];
+                    [alertController addAction:confirmAction];
+                    
+                    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+                }
+                else
+                {
+                    UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:confirm otherButtonTitles:nil];
+                    pConfirm.tag = in_id;
+                    [pConfirm show];
+                    [pConfirm release];
+                }
+                
                 [title release];
                 [message release];
                 [confirm release];
@@ -95,12 +119,36 @@ namespace CSBackend
                 NSString* message = [NSStringUtils newNSStringWithUTF8String:in_message];
                 NSString* confirm = [NSStringUtils newNSStringWithUTF8String:in_confirm];
                 NSString* cancel = [NSStringUtils newNSStringWithUTF8String:in_cancel];
-            
-                UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
-            
-                pConfirm.tag = in_id;
-                [pConfirm show];
-                [pConfirm release];
+                
+                //UIAlertController was only introduced in iOS 8
+                if ([UIAlertController class])
+                {
+                    //Create a new alert with a confirm and cancel actions
+                    UIAlertController* alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction* action)
+                    {
+                        OnSystemConfirmDialogResult(in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_confirm);
+                    }];
+                    
+                    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleDefault handler:^(UIAlertAction* action)
+                    {
+                        OnSystemConfirmDialogResult(in_id, ChilliSource::DialogueBoxSystem::DialogueResult::k_cancel);
+                    }];
+                    
+                    //The order they are added is the order they appear
+                    [alertController addAction:cancelAction];
+                    [alertController addAction:confirmAction];
+                    
+                    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+                }
+                else
+                {
+                    UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:title message:message delegate:m_listener cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
+                    pConfirm.tag = in_id;
+                    [pConfirm show];
+                    [pConfirm release];
+                }
         
                 [title release];
                 [message release];
@@ -116,14 +164,13 @@ namespace CSBackend
         }
         //------------------------------------------------------
         //------------------------------------------------------
-        void DialogueBoxSystem::OnSystemConfirmDialogResult(s64 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result)
+        void DialogueBoxSystem::OnSystemConfirmDialogResult(u32 in_id, ChilliSource::DialogueBoxSystem::DialogueResult in_result)
         {
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
                 if(m_activeSysConfirmDelegate)
                 {
-                    //we know the Id is in the range of a u32 as we set it when the confirm dialogue was created meaning we can cast to that.
-                    u32 dialogueId = static_cast<u32>(in_id);
+                    u32 dialogueId = in_id;
                     
                     m_activeSysConfirmDelegate(dialogueId, in_result);
                     m_activeSysConfirmDelegate = nullptr;
@@ -134,7 +181,10 @@ namespace CSBackend
         //-----------------------------------------------------
         DialogueBoxSystem::~DialogueBoxSystem()
         {
-            [m_listener release];
+            if(m_listener)
+            {
+                [m_listener release];
+            }
         }
 	}
 }
