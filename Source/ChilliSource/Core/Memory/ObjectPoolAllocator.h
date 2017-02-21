@@ -60,7 +60,7 @@ namespace ChilliSource
         /// @param limitPolicy
         ///     How to handle the case where pool limit is reached
         /// 
-        ObjectPoolAllocator(u32 numObjects, ObjectPoolAllocatorLimitPolicy limitPolicy = ObjectPoolAllocatorLimitPolicy::k_fixed) noexcept;
+        ObjectPoolAllocator(std::size_t numObjects, ObjectPoolAllocatorLimitPolicy limitPolicy = ObjectPoolAllocatorLimitPolicy::k_fixed) noexcept;
         
         
         /// @return the maximum allocation size allowed by the allocator.
@@ -145,8 +145,8 @@ namespace ChilliSource
         void PopulateFreeStore() noexcept;
         
         ObjectPoolAllocatorLimitPolicy m_limitPolicy;
-        u32 m_activeAllocationCount = 0;
-        u32 m_capacityObjects;
+        std::size_t m_activeAllocationCount = 0;
+		std::size_t m_capacityObjects;
 
         //Buffers are paged to accomodate expansion without invalidating the existing pointers
         //Fixed size only has a single buffer
@@ -157,7 +157,7 @@ namespace ChilliSource
     };
     
     //-----------------------------------------------------------------------------
-    template <typename T> ObjectPoolAllocator<T>::ObjectPoolAllocator(u32 numObjects, ObjectPoolAllocatorLimitPolicy limitPolicy) noexcept
+    template <typename T> ObjectPoolAllocator<T>::ObjectPoolAllocator(std::size_t numObjects, ObjectPoolAllocatorLimitPolicy limitPolicy) noexcept
     : m_limitPolicy(limitPolicy), m_capacityObjects(numObjects)
     {
         CS_ASSERT(numObjects > 0, "Cannot create a pool of size 0");
@@ -177,7 +177,7 @@ namespace ChilliSource
         CS_ASSERT(allocationSize % sizeof(T) == 0, "Allocations must be sizeof(T) aligned");
         
         std::size_t numToAllocate = allocationSize / sizeof(T);
-        s32 remaining = m_capacityObjects - m_activeAllocationCount;
+		std::size_t remaining = m_capacityObjects - m_activeAllocationCount;
         
         if(remaining < numToAllocate)
         {
