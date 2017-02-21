@@ -10,6 +10,7 @@ Version 2.1.3, 2017-
 * Fix: Tweens which play more than once will now utilise the end-delay property every time the end of the tween is reached, instead of just once.
 * Fix: Default background colour is now black.
 * Updated: SFML is now version 2.4.2, on Windows.
+* Changed: Ray/Plane intersection test is no longer a member function of Plane, but now resides in ShapeIntersection along with the other intersection tests.
 
 Version 2.1.2, 2017-01-26
 -------------------------
