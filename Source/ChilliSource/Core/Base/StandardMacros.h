@@ -51,11 +51,10 @@
 //------------------------------------------------------------
 #ifdef CS_ENABLE_DEBUG
 #define CS_ASSERT(in_query, in_message) if((in_query) == 0){ChilliSource::Logging::Get()->LogFatal(in_message);}
-#define CS_RELEASE_ASSERT(in_query, in_message)
 #else
 #define CS_ASSERT(in_query, in_message)
-#define CS_RELEASE_ASSERT(in_query, in_message) if((in_query) == 0){ChilliSource::Logging::Get()->LogFatal(in_message);}
 #endif
+#define CS_RELEASE_ASSERT(in_query, in_message) if((in_query) == 0){ChilliSource::Logging::Get()->LogFatal(in_message);}
 //------------------------------------------------------------
 /// Casting macros
 //------------------------------------------------------------
