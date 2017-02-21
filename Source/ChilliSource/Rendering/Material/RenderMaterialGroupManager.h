@@ -241,6 +241,10 @@ namespace ChilliSource
         ///
         void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
+        /// Clears up any pending commands
+        ///
+        void Destroy();
+        
         std::mutex m_mutex;
         std::vector<RenderMaterialGroupUPtr> m_renderMaterialGroups;
         std::vector<RenderMaterialGroup*> m_pendingLoadCommands;

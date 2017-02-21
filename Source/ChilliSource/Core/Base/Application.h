@@ -452,6 +452,7 @@ namespace ChilliSource
         StateManager* m_stateManager = nullptr;
         TaskScheduler* m_taskScheduler = nullptr;
         Renderer* m_renderer = nullptr;
+        RenderMaterialGroupManager* m_renderMaterialGroupManager = nullptr;
         Screen* m_screen = nullptr;
         PlatformSystem* m_platformSystem = nullptr;
         FileSystem* m_fileSystem = nullptr;

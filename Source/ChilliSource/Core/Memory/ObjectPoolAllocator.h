@@ -276,7 +276,7 @@ namespace ChilliSource
         
         //Delete the old free store and rebuild with the new buffer appended
         auto headOffset = m_freeStoreHead - m_freeStore;
-        delete [] m_freeStore;
+        free(m_freeStore);
         
         m_freeStore = (T**)malloc(sizeof(T*) * m_capacityObjects);
         m_freeStoreHead = m_freeStore + headOffset;
@@ -303,11 +303,11 @@ namespace ChilliSource
     {
         Reset();
         
-        delete[] m_freeStore;
+        free(m_freeStore);
         
         for(u32 i=0; i<m_buffers.size(); ++i)
         {
-            delete[] m_buffers[i];
+            free(m_buffers[i]);
         }
     }
 }

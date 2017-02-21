@@ -94,6 +94,13 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    void RenderMaterialGroupManager::Destroy()
+    {
+        m_pendingLoadCommands.clear();
+        m_pendingUnloadCommands.clear();
+    }
+    
+    //------------------------------------------------------------------------------
     RenderMaterialGroupManager::~RenderMaterialGroupManager() noexcept
     {
         CS_ASSERT(m_renderMaterialGroups.size() == 0, "Render material groups have not been correctly released.");
