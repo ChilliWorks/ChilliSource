@@ -29,6 +29,11 @@
 
 namespace ChilliSource
 {
+    namespace
+    {
+        constexpr u32 k_texturePoolSize = 100;
+    }
+    
     CS_DEFINE_NAMEDTYPE(RenderTextureManager);
 
     //------------------------------------------------------------------------------
@@ -38,16 +43,23 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    RenderTextureManager::RenderTextureManager()
+    : m_renderTexturePool(k_texturePoolSize, ObjectPoolAllocatorLimitPolicy::k_expand)
+    {
+        
+    }
+    
+    //------------------------------------------------------------------------------
     bool RenderTextureManager::IsA(InterfaceIDType interfaceId) const noexcept
     {
         return (RenderTextureManager::InterfaceID == interfaceId);
     }
         
     //------------------------------------------------------------------------------
-    const RenderTexture* RenderTextureManager::CreateTexture2D(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
+    UniquePtr<RenderTexture> RenderTextureManager::CreateTexture2D(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
                                                                TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept
     {
-        RenderTextureUPtr renderTexture(new RenderTexture(dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped, shouldBackupData));
+        UniquePtr<RenderTexture> renderTexture(MakeUnique<RenderTexture>(m_renderTexturePool, dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped, shouldBackupData));
         auto rawRenderTexture = renderTexture.get();
         
         PendingLoadCommand2D loadCommand;
@@ -56,17 +68,16 @@ namespace ChilliSource
         loadCommand.m_renderTexture = rawRenderTexture;
         
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_renderTextures2D.push_back(std::move(renderTexture));
         m_pendingLoadCommands2D.push_back(std::move(loadCommand));
         
-        return rawRenderTexture;
+        return std::move(renderTexture);
     }
     
     //------------------------------------------------------------------------------
-    const RenderTexture* RenderTextureManager::CreateCubemap(std::array<std::unique_ptr<const u8[]>, 6> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
+    UniquePtr<RenderTexture> RenderTextureManager::CreateCubemap(std::array<std::unique_ptr<const u8[]>, 6> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
                                                              TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept
     {
-        RenderTextureUPtr renderTexture(new RenderTexture(dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped, shouldBackupData));
+        UniquePtr<RenderTexture> renderTexture(MakeUnique<RenderTexture>(m_renderTexturePool, dimensions, imageFormat, imageCompression, filterMode, wrapModeS, wrapModeT, isMipmapped, shouldBackupData));
         auto rawRenderTexture = renderTexture.get();
         
         PendingLoadCommandCubemap loadCommand;
@@ -75,42 +86,23 @@ namespace ChilliSource
         loadCommand.m_renderTexture = rawRenderTexture;
         
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_renderTexturesCubemap.push_back(std::move(renderTexture));
         m_pendingLoadCommandsCubemap.push_back(std::move(loadCommand));
         
-        return rawRenderTexture;
+        return std::move(renderTexture);
     }
     
     //------------------------------------------------------------------------------
-    void RenderTextureManager::DestroyRenderTexture(const RenderTexture* renderTexture) noexcept
+    void RenderTextureManager::DestroyRenderTexture2D(UniquePtr<RenderTexture> renderTexture) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        
-        for (auto it = m_renderTextures2D.begin(); it != m_renderTextures2D.end(); ++it)
-        {
-            if (it->get() == renderTexture)
-            {
-                m_pendingUnloadCommands2D.push_back(std::move(*it));
-                
-                it->swap(m_renderTextures2D.back());
-                m_renderTextures2D.pop_back();
-                return;
-            }
-        }
-        
-        for (auto it = m_renderTexturesCubemap.begin(); it != m_renderTexturesCubemap.end(); ++it)
-        {
-            if (it->get() == renderTexture)
-            {
-                m_pendingUnloadCommandsCubemap.push_back(std::move(*it));
-                
-                it->swap(m_renderTexturesCubemap.back());
-                m_renderTexturesCubemap.pop_back();
-                return;
-            }
-        }
-        
-        CS_LOG_FATAL("Render texture does not exist.");
+        m_pendingUnloadCommands2D.push_back(std::move(renderTexture));
+    }
+    
+    //------------------------------------------------------------------------------
+    void RenderTextureManager::DestroyRenderTextureCubemap(UniquePtr<RenderTexture> renderTexture) noexcept
+    {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_pendingUnloadCommandsCubemap.push_back(std::move(renderTexture));
     }
     
     //------------------------------------------------------------------------------
@@ -147,11 +139,5 @@ namespace ChilliSource
             }
             m_pendingUnloadCommandsCubemap.clear();
         }
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderTextureManager::~RenderTextureManager() noexcept
-    {
-        CS_ASSERT(m_renderTextures2D.size() == 0 && m_renderTexturesCubemap.size() == 0, "Render textures have not been correctly released.");
     }
 }
