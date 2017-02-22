@@ -1,4 +1,4 @@
-// Copyright 2011 Cricket Technology
+// Copyright 2016 Cricket Technology
 // www.crickettechnology.com
 /** @file */
 
@@ -6,6 +6,7 @@
 
 // software platform
 #undef CK_PLATFORM_IOS
+#undef CK_PLATFORM_TVOS
 #undef CK_PLATFORM_ANDROID
 #undef CK_PLATFORM_OSX
 #undef CK_PLATFORM_WIN
@@ -15,7 +16,11 @@
 #ifdef __APPLE__
 #  include <TargetConditionals.h>
 #  if TARGET_OS_IPHONE
-#    define CK_PLATFORM_IOS 1
+#    if TARGET_OS_IOS
+#      define CK_PLATFORM_IOS 1
+#    elif TARGET_OS_TV
+#      define CK_PLATFORM_TVOS 1
+#    endif
 #  else
 #    define CK_PLATFORM_OSX 1
 #  endif
@@ -35,6 +40,6 @@
 #  error "OS X 10.6 required!"
 #endif
 
-#if !CK_PLATFORM_IOS && !CK_PLATFORM_ANDROID && !CK_PLATFORM_OSX && !CK_PLATFORM_WIN && !CK_PLATFORM_WP8 && !CK_PLATFORM_LINUX
+#if !CK_PLATFORM_IOS && !CK_PLATFORM_ANDROID && !CK_PLATFORM_OSX && !CK_PLATFORM_WIN && !CK_PLATFORM_WP8 && !CK_PLATFORM_LINUX && !CK_PLATFORM_TVOS
 #  error "Unsupported platform!"
 #endif

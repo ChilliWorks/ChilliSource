@@ -512,6 +512,18 @@
 		8158F6341C89D2AD00B13109 /* GLIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLIncludes.h; sourceTree = "<group>"; };
 		8158F63D1C89D2AD00B13109 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		816D4B141E5B012300CA66A1 /* ObjectPoolAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectPoolAllocator.h; sourceTree = "<group>"; };
+		816D4B211E5DCDB300CA66A1 /* attenuationmode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = attenuationmode.h; sourceTree = "<group>"; };
+		816D4B221E5DCDB300CA66A1 /* bank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bank.h; sourceTree = "<group>"; };
+		816D4B231E5DCDB300CA66A1 /* ck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ck.h; sourceTree = "<group>"; };
+		816D4B241E5DCDB300CA66A1 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		816D4B251E5DCDB300CA66A1 /* effect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = effect.h; sourceTree = "<group>"; };
+		816D4B261E5DCDB300CA66A1 /* effectbus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = effectbus.h; sourceTree = "<group>"; };
+		816D4B271E5DCDB300CA66A1 /* effectparam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = effectparam.h; sourceTree = "<group>"; };
+		816D4B281E5DCDB300CA66A1 /* effecttype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = effecttype.h; sourceTree = "<group>"; };
+		816D4B291E5DCDB300CA66A1 /* mixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mixer.h; sourceTree = "<group>"; };
+		816D4B2A1E5DCDB300CA66A1 /* pathtype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pathtype.h; sourceTree = "<group>"; };
+		816D4B2B1E5DCDB300CA66A1 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+		816D4B2C1E5DCDB300CA66A1 /* sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sound.h; sourceTree = "<group>"; };
 		817255FA1E084F3400A65625 /* MaterialShadingType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialShadingType.h; sourceTree = "<group>"; };
 		817255FB1E0A91FB00A65625 /* GLCubemap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemap.cpp; sourceTree = "<group>"; };
 		817255FC1E0A91FB00A65625 /* GLCubemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCubemap.h; sourceTree = "<group>"; };
@@ -1814,6 +1826,25 @@
 				813BA9DA1D37BE0600A3B091 /* RenderInfoFactory.h */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		816D4B201E5DCDB300CA66A1 /* objc */ = {
+			isa = PBXGroup;
+			children = (
+				816D4B211E5DCDB300CA66A1 /* attenuationmode.h */,
+				816D4B221E5DCDB300CA66A1 /* bank.h */,
+				816D4B231E5DCDB300CA66A1 /* ck.h */,
+				816D4B241E5DCDB300CA66A1 /* config.h */,
+				816D4B251E5DCDB300CA66A1 /* effect.h */,
+				816D4B261E5DCDB300CA66A1 /* effectbus.h */,
+				816D4B271E5DCDB300CA66A1 /* effectparam.h */,
+				816D4B281E5DCDB300CA66A1 /* effecttype.h */,
+				816D4B291E5DCDB300CA66A1 /* mixer.h */,
+				816D4B2A1E5DCDB300CA66A1 /* pathtype.h */,
+				816D4B2B1E5DCDB300CA66A1 /* platform.h */,
+				816D4B2C1E5DCDB300CA66A1 /* sound.h */,
+			);
+			path = objc;
 			sourceTree = "<group>";
 		};
 		81729FA11D1BE681005B8CC9 /* Material */ = {
@@ -3455,6 +3486,7 @@
 				81C7FF5B1C89DD0600D306F9 /* effectprocessor.h */,
 				81C7FF5C1C89DD0600D306F9 /* effecttype.h */,
 				81C7FF5D1C89DD0600D306F9 /* mixer.h */,
+				816D4B201E5DCDB300CA66A1 /* objc */,
 				81C7FF5E1C89DD0600D306F9 /* pathtype.h */,
 				81C7FF5F1C89DD0600D306F9 /* platform.h */,
 				81C7FF601C89DD0600D306F9 /* sound.h */,

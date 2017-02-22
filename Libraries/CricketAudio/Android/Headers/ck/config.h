@@ -1,4 +1,4 @@
-// Copyright 2011 Cricket Technology
+// Copyright 2016 Cricket Technology
 // www.crickettechnology.com
 /** @file */
 /** @defgroup CkConfig CkConfig */
@@ -114,7 +114,7 @@ struct _CkConfig
     bool enableOggVorbis;
 #endif
 
-#if CK_PLATFORM_IOS
+#if CK_PLATFORM_IOS || CK_PLATFORM_TVOS
     /** If true, hardware-assisted decoding is enabled for decoding compressed streams
       when available.  See Apple's "Multimedia Programming Guide" for a list of codecs
       for which hardware support is available.  Note that streams that use the hardware
