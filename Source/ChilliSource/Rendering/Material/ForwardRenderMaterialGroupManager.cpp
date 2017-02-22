@@ -40,6 +40,7 @@ namespace ChilliSource
     namespace
     {
         constexpr u32 k_materialPoolSize = 150;
+        constexpr u32 k_groupPoolSize = 100;
         
         /// Creates a new unlit render material with the given settings.
         ///
@@ -298,7 +299,7 @@ namespace ChilliSource
     
     //------------------------------------------------------------------------------
     ForwardRenderMaterialGroupManager::ForwardRenderMaterialGroupManager()
-    : m_renderMaterialPool(k_materialPoolSize, ObjectPoolAllocatorLimitPolicy::k_expand)
+    : m_renderMaterialPool(k_materialPoolSize, ObjectPoolAllocatorLimitPolicy::k_expand), m_renderMaterialGroupPool(k_groupPoolSize, ObjectPoolAllocatorLimitPolicy::k_expand)
     {
         
     }
@@ -310,15 +311,13 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
+    UniquePtr<RenderMaterialGroup> ForwardRenderMaterialGroupManager::CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
                                                                                                  bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                                                  TestFunc depthTestFunc,
                                                                                                  BlendMode sourceBlendMode, BlendMode destinationBlendMode,
                                                                                                  StencilOp stencilFailOp, StencilOp stencilDepthFailOp, StencilOp stencilPassOp, TestFunc stencilTestFunc, s32 stencilRef, u32 stencilMask,
                                                                                                  CullFace cullFace, const Colour& emissiveColour, const Colour& ambientColour) noexcept
     {
-        //TODO: Create RenderMaterials from pools.
-        
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> spriteRenderMaterials {};
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials {};
@@ -335,11 +334,11 @@ namespace ChilliSource
             RenderMaterialGroup::Collection(VertexFormat::k_animatedMesh, animatedRenderMaterials)
         };
         
-        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), std::move(collections)));
+        auto renderMaterialGroup(MakeUnique<RenderMaterialGroup>(m_renderMaterialGroupPool, std::move(renderMaterials), std::move(collections)));
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
-        AddRenderMaterialGroup(std::move(renderMaterialGroup));
+        AddRenderMaterialGroup(renderMaterialGroupRaw);
         
-        return renderMaterialGroupRaw;
+        return std::move(renderMaterialGroup);
     }
     
     //------------------------------------------------------------------------------
@@ -401,10 +400,8 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept
+    UniquePtr<RenderMaterialGroup> ForwardRenderMaterialGroupManager::CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept
     {
-        //TODO: Create RenderMaterials from pools.
-        
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
         std::vector<UniquePtr<RenderMaterial>> renderMaterials;
         
@@ -415,11 +412,11 @@ namespace ChilliSource
             RenderMaterialGroup::Collection(VertexFormat::k_staticMesh, staticRenderMaterials),
         };
         
-        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), std::move(collections)));
+        auto renderMaterialGroup(MakeUnique<RenderMaterialGroup>(m_renderMaterialGroupPool, std::move(renderMaterials), std::move(collections)));
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
-        AddRenderMaterialGroup(std::move(renderMaterialGroup));
+        AddRenderMaterialGroup(renderMaterialGroupRaw);
         
-        return renderMaterialGroupRaw;
+        return std::move(renderMaterialGroup);
     }
     
     //------------------------------------------------------------------------------
@@ -434,7 +431,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour) noexcept
+    UniquePtr<RenderMaterialGroup> ForwardRenderMaterialGroupManager::CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour, const Colour& specularColour) noexcept
     {
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> staticRenderMaterials {};
         std::array<const RenderMaterial*, RenderMaterialGroup::k_numMaterialSlots> animatedRenderMaterials {};
@@ -449,11 +446,11 @@ namespace ChilliSource
             RenderMaterialGroup::Collection(VertexFormat::k_animatedMesh, animatedRenderMaterials)
         };
         
-        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), std::move(collections)));
+        auto renderMaterialGroup(MakeUnique<RenderMaterialGroup>(m_renderMaterialGroupPool, std::move(renderMaterials), std::move(collections)));
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
-        AddRenderMaterialGroup(std::move(renderMaterialGroup));
+        AddRenderMaterialGroup(renderMaterialGroupRaw);
         
-        return renderMaterialGroupRaw;
+        return std::move(renderMaterialGroup);
     }
     
     //------------------------------------------------------------------------------
@@ -513,7 +510,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    const RenderMaterialGroup* ForwardRenderMaterialGroupManager::CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
+    UniquePtr<RenderMaterialGroup> ForwardRenderMaterialGroupManager::CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
                                                                                                   bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                                                   TestFunc depthTestFunc,
                                                                                                   BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -560,11 +557,11 @@ namespace ChilliSource
 
         std::vector<RenderMaterialGroup::Collection> collections { RenderMaterialGroup::Collection(vertexFormat, renderMaterialsSlots) };
         
-        RenderMaterialGroupUPtr renderMaterialGroup(new RenderMaterialGroup(std::move(renderMaterials), std::move(collections)));
+        auto renderMaterialGroup(MakeUnique<RenderMaterialGroup>(m_renderMaterialGroupPool, std::move(renderMaterials), std::move(collections)));
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
-        AddRenderMaterialGroup(std::move(renderMaterialGroup));
+        AddRenderMaterialGroup(renderMaterialGroupRaw);
         
-        return renderMaterialGroupRaw;
+        return std::move(renderMaterialGroup);
     }
     
     //------------------------------------------------------------------------------

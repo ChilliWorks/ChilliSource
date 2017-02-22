@@ -27,12 +27,12 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    UnloadMaterialGroupRenderCommand::UnloadMaterialGroupRenderCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept
+    UnloadMaterialGroupRenderCommand::UnloadMaterialGroupRenderCommand(UniquePtr<RenderMaterialGroup> renderMaterialGroup) noexcept
         : RenderCommand(Type::k_unloadMaterialGroup), m_renderMaterialGroup(std::move(renderMaterialGroup))
     {
     }
     //------------------------------------------------------------------------------
-    RenderMaterialGroupUPtr UnloadMaterialGroupRenderCommand::ClaimRenderMaterialGroup() noexcept
+    UniquePtr<RenderMaterialGroup> UnloadMaterialGroupRenderCommand::ClaimRenderMaterialGroup() noexcept
     {
         CS_ASSERT(m_renderMaterialGroup, "Cannot claim nullptr data! Data may have already been claimed.");
         return std::move(m_renderMaterialGroup);

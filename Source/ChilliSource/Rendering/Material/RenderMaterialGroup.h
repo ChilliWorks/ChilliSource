@@ -89,6 +89,17 @@ namespace ChilliSource
             std::array<const RenderMaterial*, k_numMaterialSlots> m_renderMaterials;
         };
         
+        /// Creates a new instance with the given collections of RenderMaterials.
+        ///
+        /// SHOULD ONLY BE CREATED VIA RenderMaterialGroupManager
+        ///
+        /// @param renderMaterials
+        ///     The list of all materials in the group.
+        /// @param collections
+        ///     The list of material collections. Should be moved
+        ///
+        RenderMaterialGroup(std::vector<UniquePtr<RenderMaterial>> renderMaterials, std::vector<Collection> collections) noexcept;
+        
         /// Evaluates whether or not the given RenderMaterial is part of this group.
         ///
         /// @param renderMaterial
@@ -117,16 +128,6 @@ namespace ChilliSource
         const std::vector<RenderMaterial*>& GetRenderMaterials() noexcept { return m_renderMaterialsRaw; }
         
     private:
-        friend class ForwardRenderMaterialGroupManager;
-        
-        /// Creates a new instance with the given collections of RenderMaterials.
-        ///
-        /// @param renderMaterials
-        ///     The list of all materials in the group.
-        /// @param collections
-        ///     The list of material collections. Should be moved
-        ///
-        RenderMaterialGroup(std::vector<UniquePtr<RenderMaterial>> renderMaterials, std::vector<Collection> collections) noexcept;
         
         std::vector<UniquePtr<RenderMaterial>> m_renderMaterials;
         std::vector<RenderMaterial*> m_renderMaterialsRaw;

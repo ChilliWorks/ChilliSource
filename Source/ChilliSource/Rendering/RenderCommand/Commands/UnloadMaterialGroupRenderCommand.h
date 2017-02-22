@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADMATERIALGROUPRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
 
@@ -49,7 +50,7 @@ namespace ChilliSource
         ///
         /// @return The render material group that should be unloaded.
         ///
-        RenderMaterialGroupUPtr ClaimRenderMaterialGroup() noexcept;
+        UniquePtr<RenderMaterialGroup> ClaimRenderMaterialGroup() noexcept;
         
     private:
         friend class RenderCommandList;
@@ -59,9 +60,9 @@ namespace ChilliSource
         /// @param renderMaterialGroup
         ///     The render material group that should be unloaded.
         ///
-        UnloadMaterialGroupRenderCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept;
+        UnloadMaterialGroupRenderCommand(UniquePtr<RenderMaterialGroup> renderMaterialGroup) noexcept;
         
-        RenderMaterialGroupUPtr m_renderMaterialGroup;
+        UniquePtr<RenderMaterialGroup> m_renderMaterialGroup;
     };
 }
 

@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 #include <ChilliSource/Rendering/Base/RenderPasses.h>
@@ -606,7 +607,7 @@ namespace ChilliSource
         //TODO: When the material system is improved, remove the need to make this mutable.
         mutable bool m_isCacheValid = false;
         mutable bool m_isVariableCacheValid = true;
-        mutable const RenderMaterialGroup* m_renderMaterialGroup = nullptr;
+        mutable UniquePtr<RenderMaterialGroup> m_renderMaterialGroup;
         mutable std::vector<const RenderTexture*> m_cachedRenderTextures;
     };
 }
