@@ -51,6 +51,21 @@ namespace ChilliSource
         
         CS_DECLARE_NOCOPY(RenderTargetGroup);
         
+        /// Creates a new instance with the given colour and depth targets. At least one target
+        /// must be supplied or this will assert.
+        ///
+        /// SHOULD ONLY BE CREATED VIA RenderTargetGroupManager
+        ///
+        /// @param colourTarget
+        ///     The colour render target. Can be null if no colour target is needed.
+        /// @param depthTarget
+        ///     The depth render target. Can be null if no depth target is needed.
+        /// @param type
+        ///     Whether or not to use an internal depth buffer or stencil buffer.
+        ///     NOTE: Stencil requires depth and type must be colour only if explicit depth target is supplied
+        ///
+        RenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, RenderTargetGroupType type) noexcept;
+        
         /// @return The colour render target. Can be null if no colour target is needed.
         ///
         const RenderTexture* GetColourTarget() const noexcept { return m_colourTarget; }
@@ -87,20 +102,6 @@ namespace ChilliSource
         void SetExtraData(void* extraData) noexcept { m_extraData = extraData; }
         
     private:
-        friend class RenderTargetGroupManager;
-        
-        /// Creates a new instance with the given colour and depth targets. At least one target
-        /// must be supplied or this will assert.
-        ///
-        /// @param colourTarget
-        ///     The colour render target. Can be null if no colour target is needed.
-        /// @param depthTarget
-        ///     The depth render target. Can be null if no depth target is needed.
-        /// @param type
-        ///     Whether or not to use an internal depth buffer or stencil buffer.
-        ///     NOTE: Stencil requires depth and type must be colour only if explicit depth target is supplied
-        ///
-        RenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, RenderTargetGroupType type) noexcept;
         
         const RenderTexture* m_colourTarget;
         const RenderTexture* m_depthTarget;

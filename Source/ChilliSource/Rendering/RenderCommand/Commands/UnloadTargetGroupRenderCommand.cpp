@@ -27,7 +27,7 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    UnloadTargetGroupRenderCommand::UnloadTargetGroupRenderCommand(RenderTargetGroupUPtr renderTargetGroup) noexcept
+    UnloadTargetGroupRenderCommand::UnloadTargetGroupRenderCommand(UniquePtr<RenderTargetGroup> renderTargetGroup) noexcept
     : RenderCommand(Type::k_unloadTargetGroup), m_renderTargetGroup(std::move(renderTargetGroup))
     {
     }

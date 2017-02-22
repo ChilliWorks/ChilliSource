@@ -29,12 +29,24 @@
 
 namespace ChilliSource
 {
+    namespace
+    {
+        constexpr u32 k_groupPoolSize = 10;
+    }
+    
     CS_DEFINE_NAMEDTYPE(RenderTargetGroupManager);
 
     //------------------------------------------------------------------------------
     RenderTargetGroupManagerUPtr RenderTargetGroupManager::Create() noexcept
     {
         return RenderTargetGroupManagerUPtr(new RenderTargetGroupManager());
+    }
+    
+    //------------------------------------------------------------------------------
+    RenderTargetGroupManager::RenderTargetGroupManager()
+    : m_renderTargetGroupPool(k_groupPoolSize, ObjectPoolAllocatorLimitPolicy::k_expand)
+    {
+        
     }
 
     //------------------------------------------------------------------------------
@@ -44,83 +56,74 @@ namespace ChilliSource
     }
 
     //------------------------------------------------------------------------------
-    const RenderTargetGroup* RenderTargetGroupManager::CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget) noexcept
+    UniquePtr<RenderTargetGroup> RenderTargetGroupManager::CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget) noexcept
     {
         CS_ASSERT(colourTarget, "Must supply a colour target.");
         CS_ASSERT(depthTarget, "Must supply a depth target.");
         
-        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(colourTarget, depthTarget, RenderTargetGroupType::k_colour));
-        auto tenderTargetGroupRaw = tenderTargetGroup.get();
-        AddRenderTargetGroup(std::move(tenderTargetGroup));
+        UniquePtr<RenderTargetGroup> renderTargetGroup(MakeUnique<RenderTargetGroup>(m_renderTargetGroupPool, colourTarget, depthTarget, RenderTargetGroupType::k_colour));
+        auto renderTargetGroupRaw = renderTargetGroup.get();
         
-        return tenderTargetGroupRaw;
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_renderTargetGroups.push_back(renderTargetGroupRaw);
+        m_pendingLoadCommands.push_back(renderTargetGroupRaw);
+        
+        return std::move(renderTargetGroup);
     }
 
     //------------------------------------------------------------------------------
-    const RenderTargetGroup* RenderTargetGroupManager::CreateColourRenderTargetGroup(const RenderTexture* colourTarget, RenderTargetGroupType type) noexcept
+    UniquePtr<RenderTargetGroup> RenderTargetGroupManager::CreateColourRenderTargetGroup(const RenderTexture* colourTarget, RenderTargetGroupType type) noexcept
     {
         CS_ASSERT(colourTarget, "Must supply a colour target.");
         
-        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(colourTarget, nullptr, type));
-        auto tenderTargetGroupRaw = tenderTargetGroup.get();
-        AddRenderTargetGroup(std::move(tenderTargetGroup));
+        UniquePtr<RenderTargetGroup> renderTargetGroup(MakeUnique<RenderTargetGroup>(m_renderTargetGroupPool, colourTarget, nullptr, type));
+        auto renderTargetGroupRaw = renderTargetGroup.get();
         
-        return tenderTargetGroupRaw;
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_renderTargetGroups.push_back(renderTargetGroupRaw);
+        m_pendingLoadCommands.push_back(renderTargetGroupRaw);
+        
+        return std::move(renderTargetGroup);
     }
 
     //------------------------------------------------------------------------------
-    const RenderTargetGroup* RenderTargetGroupManager::CreateDepthRenderTargetGroup(const RenderTexture* depthTarget) noexcept
+    UniquePtr<RenderTargetGroup> RenderTargetGroupManager::CreateDepthRenderTargetGroup(const RenderTexture* depthTarget) noexcept
     {
         CS_ASSERT(depthTarget, "Must supply a depth target.");
         
-        RenderTargetGroupUPtr tenderTargetGroup(new RenderTargetGroup(nullptr, depthTarget, RenderTargetGroupType::k_colour));
-        auto tenderTargetGroupRaw = tenderTargetGroup.get();
-        AddRenderTargetGroup(std::move(tenderTargetGroup));
+        UniquePtr<RenderTargetGroup> renderTargetGroup(MakeUnique<RenderTargetGroup>(m_renderTargetGroupPool, nullptr, depthTarget, RenderTargetGroupType::k_colour));
+        auto renderTargetGroupRaw = renderTargetGroup.get();
         
-        return tenderTargetGroupRaw;
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_renderTargetGroups.push_back(renderTargetGroupRaw);
+        m_pendingLoadCommands.push_back(renderTargetGroupRaw);
+        
+        return std::move(renderTargetGroup);
     }
     
     //------------------------------------------------------------------------------
     std::vector<const RenderTargetGroup*> RenderTargetGroupManager::GetRenderTargetGroups() noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        
-        std::vector<const RenderTargetGroup*> renderTargetGroups;
-        for(const auto& targetGroup : m_renderTargetGroups)
-        {
-            renderTargetGroups.push_back(targetGroup.get());
-        }
-        
-        return renderTargetGroups;
+        return m_renderTargetGroups;
     }
     
     //------------------------------------------------------------------------------
-    void RenderTargetGroupManager::DestroyRenderTargetGroup(const RenderTargetGroup* renderTargetGroup) noexcept
+    void RenderTargetGroupManager::DestroyRenderTargetGroup(UniquePtr<RenderTargetGroup> renderTargetGroup) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         
         for (auto it = m_renderTargetGroups.begin(); it != m_renderTargetGroups.end(); ++it)
         {
-            if (it->get() == renderTargetGroup)
+            if (*it == renderTargetGroup.get())
             {
-                m_pendingUnloadCommands.push_back(std::move(*it));
-                
-                it->swap(m_renderTargetGroups.back());
+                std::swap(m_renderTargetGroups.back(), *it);
                 m_renderTargetGroups.pop_back();
-                return;
+                break;
             }
         }
         
-        CS_LOG_FATAL("RenderTargetGroup does not exist.");
-    }
-    
-    //------------------------------------------------------------------------------
-    void RenderTargetGroupManager::AddRenderTargetGroup(RenderTargetGroupUPtr renderTargetGroup) noexcept
-    {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        
-        m_pendingLoadCommands.push_back(renderTargetGroup.get());
-        m_renderTargetGroups.push_back(std::move(renderTargetGroup));
+        m_pendingUnloadCommands.push_back(std::move(renderTargetGroup));
     }
 
     //------------------------------------------------------------------------------
@@ -145,11 +148,5 @@ namespace ChilliSource
             }
             m_pendingUnloadCommands.clear();
         }
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderTargetGroupManager::~RenderTargetGroupManager() noexcept
-    {
-        CS_ASSERT(m_renderTargetGroups.size() == 0, "Render target groups have not been correctly released.");
     }
 }

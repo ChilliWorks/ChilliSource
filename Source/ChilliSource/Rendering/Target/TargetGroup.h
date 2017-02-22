@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_TARGET_TARGETGROUP_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 
 namespace ChilliSource
 {
@@ -101,7 +102,7 @@ namespace ChilliSource
         
     private:
         
-        const RenderTargetGroup* m_renderTargetGroup = nullptr;
+        UniquePtr<RenderTargetGroup> m_renderTargetGroup;
         
         TextureCSPtr m_cachedColourTargetTexture = nullptr;
         TextureCSPtr m_cachedDepthTargetTexture = nullptr;
