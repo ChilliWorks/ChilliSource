@@ -256,7 +256,7 @@ namespace ChilliSource
         /// @param renderTargetGroup
         ///     The render target group that should be unloaded.
         ///
-        void AddUnloadTargetGroupCommand(RenderTargetGroupUPtr renderTargetGroup) noexcept;
+        void AddUnloadTargetGroupCommand(UniquePtr<RenderTargetGroup> renderTargetGroup) noexcept;
         
         /// Creates and adds a new unload mesh command to the render command list.
         ///
@@ -270,28 +270,28 @@ namespace ChilliSource
         /// @param renderMaterialGroup
         ///     The render material group that should be unloaded.
         ///
-        void AddUnloadMaterialGroupCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept;
+        void AddUnloadMaterialGroupCommand(UniquePtr<RenderMaterialGroup> renderMaterialGroup) noexcept;
 
         /// Creates and adds a new unload texture command to the render command list.
         ///
         /// @param renderTexture
         ///     The render texture that should be unloaded.
         ///
-        void AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept;
+        void AddUnloadTextureCommand(UniquePtr<RenderTexture> renderTexture) noexcept;
         
         /// Creates and adds a new unload cubemap command to the render command list.
         ///
         /// @param renderTexture
         ///     The render texture that should be unloaded.
         ///
-        void AddUnloadCubemapCommand(RenderTextureUPtr renderTexture) noexcept;
+        void AddUnloadCubemapCommand(UniquePtr<RenderTexture> renderTexture) noexcept;
         
         /// Creates and adds a new unload shader command to the render command list.
         ///
         /// @param renderShader
         ///     The render shader that should be unloaded.
         ///
-        void AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept;
+        void AddUnloadShaderCommand(UniquePtr<RenderShader> renderShader) noexcept;
 
         /// @return The number of render commands in the list.
         ///

@@ -27,6 +27,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Core/Memory/ObjectPoolAllocator.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
 
 #include <mutex>
@@ -72,7 +74,7 @@ namespace ChilliSource
         ///
         /// @return The render shader instance.
         ///
-        const RenderShader* CreateRenderShader(const std::string& vertexShader, const std::string& fragmentShader) noexcept;
+        UniquePtr<RenderShader> CreateRenderShader(const std::string& vertexShader, const std::string& fragmentShader) noexcept;
         
         /// Removes the render shader from the manager and queues an UnloadShaderRenderCommand for
         /// the next Render Snapshot stage in the render pipeline. The render command is given
@@ -82,9 +84,7 @@ namespace ChilliSource
         /// @param renderShader
         ///     The render shader which should be destroyed.
         ///
-        void DestroyRenderShader(const RenderShader* renderShader) noexcept;
-        
-        ~RenderShaderManager() noexcept;
+        void DestroyRenderShader(UniquePtr<RenderShader> renderShader) noexcept;
         
     private:
         friend class Application;
@@ -106,7 +106,7 @@ namespace ChilliSource
         ///
         static RenderShaderManagerUPtr Create() noexcept;
         
-        RenderShaderManager() = default;
+        RenderShaderManager();
         
         /// Called during the Render Snapshot stage of the render pipeline. All pending load and
         /// unload commands are added to the render snapshot.
@@ -121,9 +121,9 @@ namespace ChilliSource
         void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         std::mutex m_mutex;
-        std::vector<RenderShaderUPtr> m_renderShaders; //TODO: This should be changed to an object pool.
+        ObjectPoolAllocator<RenderShader> m_renderShaderPool;
         std::vector<PendingLoadCommand> m_pendingLoadCommands;
-        std::vector<RenderShaderUPtr> m_pendingUnloadCommands;
+        std::vector<UniquePtr<RenderShader>> m_pendingUnloadCommands;
     };
 }
 

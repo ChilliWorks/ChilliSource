@@ -60,7 +60,7 @@ namespace ChilliSource
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access shader before it is loaded.");
         CS_ASSERT(m_renderShader, "Cannot access shader which has not been built.");
         
-        return m_renderShader;
+        return m_renderShader.get();
     }
     
     //------------------------------------------------------------------------------
@@ -71,8 +71,7 @@ namespace ChilliSource
             auto renderShaderManager = Application::Get()->GetSystem<RenderShaderManager>();
             CS_ASSERT(renderShaderManager, "RenderShaderManager must exist.");
             
-            renderShaderManager->DestroyRenderShader(m_renderShader);
-            m_renderShader = nullptr;
+            renderShaderManager->DestroyRenderShader(std::move(m_renderShader));
         }
     }
 
