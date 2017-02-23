@@ -31,6 +31,8 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void RenderPassObjectSorter::OpaqueSort(const RenderCamera& camera, std::vector<RenderPassObject>& renderPassObjects) noexcept
     {
+        //The tile base deferred renderer on all iOS hardware does not benefit from front to back sorting https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/Performance/Performance.html
+#ifndef CS_TARGETPLATFORM_IOS
         std::sort(renderPassObjects.begin(), renderPassObjects.end(), [&camera](const RenderPassObject& a, const RenderPassObject& b)
         {
             if (a.GetRenderMaterial() == b.GetRenderMaterial())
@@ -52,6 +54,7 @@ namespace ChilliSource
                 return (a.GetRenderMaterial() < b.GetRenderMaterial());
             }
         });
+#endif
     }
     
     //------------------------------------------------------------------------------
