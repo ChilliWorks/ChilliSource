@@ -29,6 +29,7 @@
 
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
+#include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/StencilOp.h>
 #include <ChilliSource/Rendering/Base/TestFunc.h>
 #include <ChilliSource/Rendering/Material/RenderMaterial.h>
@@ -149,6 +150,24 @@ namespace CSBackend
                 };
             }
             
+            /// Converts from a ChilliSource cull face to an OpenGL one
+            ///
+            /// @param cullFace
+            ///     The ChilliSource cull face
+            ///
+            /// @return The OpenGL cull face.
+            ///
+            GLenum ToGLCullFace(ChilliSource::CullFace cullFace)
+            {
+                switch(cullFace)
+                {
+                    case ChilliSource::CullFace::k_front:
+                        return GL_FRONT;
+                    case ChilliSource::CullFace::k_back:
+                        return GL_BACK;
+                }
+            }
+            
             /// Applies the given batch of custom shader variables to the given shader. If
             /// any of the variables do not exist in the shader, this will assert.
             ///
@@ -213,7 +232,7 @@ namespace CSBackend
             if (renderMaterial->IsFaceCullingEnabled())
             {
                 glEnable(GL_CULL_FACE);
-                glCullFace(GL_BACK);
+                glCullFace(ToGLCullFace(renderMaterial->GetCullFace()));
             }
             else
             {
