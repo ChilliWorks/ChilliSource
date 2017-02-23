@@ -3,13 +3,14 @@ ChilliSource Change Log
 
 Version 2.1.3, 2017-
 -------------------------
-* Added: Thread safe ObjectPoolAllocator that pre allocates objects of a specific type. Over the next few versions this will be incorporated into the renderer
+* Added: Thread safe ObjectPoolAllocator that pre allocates objects of a specific type. Now using this within the renderer to reduce allocations.
 * Fix: Longstanding issue where "Shinniness" was reciprocated (i.e. 1/Shinniness) in Blinn shaders rather than just Shinniness. Note this will affect existing projects.
 * Fix: Crash in Collada to CSModel tool if the Collada file has no materials.
 * Fix: Issue with Sphere::Transform not considering orientation. This meant that mesh frustum culling was broken
 * Fix: Tweens which play more than once will now utilise the end-delay property every time the end of the tween is reached, instead of just once.
 * Fix: Default background colour is now black.
 * Fix: CS::UniquePtr<T> could not be moved into CS::UniquePtr<const T>
+* Fix: Issue where cull face was ignored in material and always set to back
 * Updated: SFML is now version 2.4.2, on Windows.
 * Changed: Ray/Plane intersection test is no longer a member function of Plane, but now resides in ShapeIntersection along with the other intersection tests.
 * Changed: Where available the iOS dialogue system is backed by the newer UIAlertController rather than the deprecated UIAlertView
