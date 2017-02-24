@@ -71,7 +71,7 @@ namespace CSBackend
             @autoreleasepool
             {
                 CS_ASSERT(!IsPresented(), "Cannot present the email composer when it is already presented.");
-                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to present Email Composer outside of main thread.");
+                CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to present Email Composer outside of main thread.");
                 
                 m_isPresented = true;
                 

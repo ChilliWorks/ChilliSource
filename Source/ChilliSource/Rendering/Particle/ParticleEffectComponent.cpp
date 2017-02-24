@@ -222,7 +222,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     ParticleEffectCSPtr ParticleEffectComponent::GetParticleEffect() const
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
 
         return m_particleEffect;
     }
@@ -230,7 +230,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     ParticleEffectComponent::PlaybackType ParticleEffectComponent::GetPlaybackType() const
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the playback type of a particle effect on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the playback type of a particle effect on the main thread.");
 
         return m_playbackType;
     }
@@ -238,7 +238,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     bool ParticleEffectComponent::IsPlaying() const
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is playing on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is playing on the main thread.");
 
         return (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping);
     }
@@ -246,7 +246,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     bool ParticleEffectComponent::IsEmitting() const
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is emitting on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is emitting on the main thread.");
 
         return (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing);
     }
@@ -254,7 +254,7 @@ namespace ChilliSource
     //----------------------------------------------------------------
     const AABB& ParticleEffectComponent::GetAABB()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
 
         UpdateWorldBoundingShapes();
         return mBoundingBox;
@@ -263,7 +263,7 @@ namespace ChilliSource
     //----------------------------------------------------------------
     const OOBB& ParticleEffectComponent::GetOOBB()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
 
         UpdateWorldBoundingShapes();
         return mOBBoundingBox;
@@ -272,7 +272,7 @@ namespace ChilliSource
     //----------------------------------------------------------------
     const Sphere& ParticleEffectComponent::GetBoundingSphere()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
 
         UpdateWorldBoundingShapes();
         return mBoundingSphere;
@@ -281,7 +281,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     void ParticleEffectComponent::SetParticleEffect(const ParticleEffectCSPtr& in_particleEffect)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Particle Effect type must be set on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Particle Effect type must be set on the main thread.");
 
         m_particleEffect = in_particleEffect;
 
@@ -296,7 +296,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     void ParticleEffectComponent::SetPlaybackType(PlaybackType in_playbackType)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play back type must be set on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play back type must be set on the main thread.");
 
         m_playbackType = in_playbackType;
     }
@@ -304,7 +304,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     void ParticleEffectComponent::Play()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play must be called on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play must be called on the main thread.");
         CS_ASSERT((m_playbackState == PlaybackState::k_notPlaying || m_playbackState == PlaybackState::k_stopping), "Cannot play a particle effect when it is already playing.");
 
         if (m_playbackState == PlaybackState::k_notPlaying)
@@ -330,7 +330,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     void ParticleEffectComponent::Stop()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
         CS_ASSERT((m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_stopping), "Cannot stop a particle effect when it is already stopped.");
 
         if (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing)
@@ -344,7 +344,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     void ParticleEffectComponent::StopEmitting()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop Emitting must be called on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop Emitting must be called on the main thread.");
         CS_ASSERT((m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_starting), "Cannot stop a particle effect emitting when it is not emitting.");
 
         m_playbackTimer = m_particleEffect->GetDuration();
@@ -355,7 +355,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEvent()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Event on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Event on the main thread.");
 
         return m_finishedEvent;
     }
@@ -363,7 +363,7 @@ namespace ChilliSource
     //-------------------------------------------------------
     IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEmittingEvent()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Emitting Event on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Emitting Event on the main thread.");
 
         return m_finishedEmittingEvent;
     }

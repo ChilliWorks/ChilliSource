@@ -153,7 +153,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     TimeIntervalSecs Application::GetAppElapsedTime() const noexcept
     {
-        CS_ASSERT(m_taskScheduler->IsMainThread(), "Can only be called from the main thread.");
+        CS_RELEASE_ASSERT(m_taskScheduler->IsMainThread(), "Can only be called from the main thread.");
         
         return m_currentAppTime;
     }
@@ -388,7 +388,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::ProcessRenderSnapshotEvent() noexcept
     {
-        CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to render to target from background thread.");
+        CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to render to target from background thread.");
         
         auto activeState = m_stateManager->GetActiveState();
         CS_ASSERT(activeState, "Must have active state.");
@@ -414,7 +414,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void Application::RenderScene(Scene* scene, TargetGroup* target) noexcept
     {
-        CS_ASSERT(GetTaskScheduler()->IsMainThread(), "Tried to render scene from background thread.");
+        CS_RELEASE_ASSERT(GetTaskScheduler()->IsMainThread(), "Tried to render scene from background thread.");
         
         auto targetToUse = target == nullptr ? scene->GetRenderTarget() : target;
         auto clearColour = scene->GetClearColour();

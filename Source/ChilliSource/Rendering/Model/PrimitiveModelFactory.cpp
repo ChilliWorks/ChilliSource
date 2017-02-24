@@ -238,7 +238,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     ModelCSPtr PrimitiveModelFactory::CreatePlane(const Vector2& in_size, const Vector2& in_textureRepeat) const
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
         
         auto resourcePool = Application::Get()->GetResourcePool();
         auto meshName = "_PrimitivePlane(" + ToString(in_size) + ")";
@@ -261,7 +261,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     ModelCSPtr PrimitiveModelFactory::CreateBox(const Vector3& in_size, const Vector2& in_textureRepeat, bool in_flipNormals) const
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
         
         auto resourcePool = Application::Get()->GetResourcePool();
         auto meshName = "_PrimitiveBox(" + ToString(in_size) + "|" + ToString(in_textureRepeat) + "|" + ToString(in_flipNormals) + ")";
