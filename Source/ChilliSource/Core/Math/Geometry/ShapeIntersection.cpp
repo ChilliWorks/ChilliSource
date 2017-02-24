@@ -29,6 +29,7 @@
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <cstdlib>
 
 namespace ChilliSource
 {
@@ -318,7 +319,6 @@ namespace ChilliSource
         //----------------------------------------------------------------
         bool Intersects(const Ray& inRay, const Plane& inPlane, Vector3& outvIntersection)
         {
-            
             f32 denom = Vector3::DotProduct(inPlane.mvNormal, inRay.vDirection);
             
             

@@ -102,7 +102,7 @@ namespace CSBackend
         //--------------------------------------------------------------
         void VideoPlayer::Present(ChilliSource::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap, const ChilliSource::Colour& in_backgroundColour)
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present video on background thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present video on background thread.");
             
             auto previousState = m_currentState.exchange(State::k_loading);
             CS_ASSERT(previousState == State::k_inactive, "Cannot present video while a video is already playing.");
@@ -143,7 +143,7 @@ namespace CSBackend
         void VideoPlayer::PresentWithSubtitles(ChilliSource::StorageLocation in_storageLocation, const std::string& in_fileName, const ChilliSource::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                                      bool in_dismissWithTap, const ChilliSource::Colour& in_backgroundColour)
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present video on background thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present video on background thread.");
             m_subtitles = in_subtitles;
             Present(in_storageLocation, in_fileName, std::move(in_delegateConnection), in_dismissWithTap);
         }

@@ -412,7 +412,7 @@ namespace ChilliSource
     //-----------------------------------------------------------
     const RenderMaterialGroup* Material::GetRenderMaterialGroup() const noexcept
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Must be run in main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Must be run in main thread.");
         
         if (!m_isCacheValid || !m_isVariableCacheValid || !m_renderMaterialGroup || !VerifyTexturesAreValid())
         {
