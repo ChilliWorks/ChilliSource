@@ -12,6 +12,7 @@ Version 2.1.3, 2017-
 * Fix: CS::UniquePtr<T> could not be moved into CS::UniquePtr<const T>
 * Fix: Issue where cull face was ignored in material and always set to back
 * Updated: SFML is now version 2.4.2, on Windows.
+* Updated: Cricket is now version 1.6.3. This now means that bitcode can be enabled on iOS (and is now enabled by default in newly generated projects).
 * Changed: Ray/Plane intersection test is no longer a member function of Plane, but now resides in ShapeIntersection along with the other intersection tests.
 * Changed: Where available the iOS dialogue system is backed by the newer UIAlertController rather than the deprecated UIAlertView
 * Changed: SetParentTransform, AddChildTransform, RemoveChildTransform and RemoveAllChildTransforms in Transform are now private and cannot be accessed outside of Entity.
