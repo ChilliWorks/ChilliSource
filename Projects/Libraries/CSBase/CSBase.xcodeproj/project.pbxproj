@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		27B425981E60724300E17750 /* sha256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27B425961E605D1300E17750 /* sha256.cpp */; };
 		814B94B01CAD7425002831E4 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 814B94A61CAD7425002831E4 /* ioapi.c */; };
 		814B94B21CAD7425002831E4 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 814B94AA1CAD7425002831E4 /* mztools.c */; };
 		814B94B31CAD7425002831E4 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 814B94AC1CAD7425002831E4 /* unzip.c */; };
@@ -66,6 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		27B425961E605D1300E17750 /* sha256.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sha256.cpp; sourceTree = "<group>"; };
+		27B425971E605D1300E17750 /* sha256.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sha256.h; sourceTree = "<group>"; };
 		814B94A51CAD7425002831E4 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		814B94A61CAD7425002831E4 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
 		814B94A71CAD7425002831E4 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
@@ -148,6 +151,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27B425951E605D1300E17750 /* SHA256 */ = {
+			isa = PBXGroup;
+			children = (
+				27B425961E605D1300E17750 /* sha256.cpp */,
+				27B425971E605D1300E17750 /* sha256.h */,
+			);
+			path = SHA256;
+			sourceTree = "<group>";
+		};
 		814B94A41CAD7425002831E4 /* minizip */ = {
 			isa = PBXGroup;
 			children = (
@@ -210,6 +222,7 @@
 		81C7FDA21C89D79B00D306F9 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				27B425951E605D1300E17750 /* SHA256 */,
 				81C7FDA31C89D79B00D306F9 /* aes */,
 				81C7FDA61C89D79B00D306F9 /* base64 */,
 				81C7FDA91C89D79B00D306F9 /* json */,
@@ -410,6 +423,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27B425981E60724300E17750 /* sha256.cpp in Sources */,
 				81C7FDF01C89D79B00D306F9 /* json_reader.cpp in Sources */,
 				81C7FDED1C89D79B00D306F9 /* CSReachability.m in Sources */,
 				814B94B31CAD7425002831E4 /* unzip.c in Sources */,

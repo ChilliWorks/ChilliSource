@@ -45,6 +45,8 @@ namespace ChilliSource
         {
             const u32 k_sha1Length = 80;
             
+            CS_LOG_WARNING("SHA-1 is deprecated, and no longer secure. Please use SHA-2 (SHA-256) or better.");
+            
             CSHA1 hash;
             hash.Reset();
             hash.Update(reinterpret_cast<const u8*>(in_data), in_size);
