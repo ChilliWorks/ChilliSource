@@ -1,4 +1,4 @@
-// Copyright 2011 Cricket Technology
+// Copyright 2016 Cricket Technology
 // www.crickettechnology.com
 /** @file */
 /** @defgroup CkSound CkSound */

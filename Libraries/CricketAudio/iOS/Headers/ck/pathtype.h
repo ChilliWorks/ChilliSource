@@ -1,4 +1,4 @@
-// Copyright 2011 Cricket Technology
+// Copyright 2016 Cricket Technology
 // www.crickettechnology.com
 /** @file */
 /** @defgroup CkPathType CkPathType */
@@ -29,7 +29,7 @@ typedef enum
     kCkPathType_ExternalStorage,
 #endif
 
-#if CK_PLATFORM_IOS || CK_PLATFORM_OSX
+#if CK_PLATFORM_IOS || CK_PLATFORM_OSX || CK_PLATFORM_TVOS
     /** A path relative to the application's resource directory.
       On iOS, the resource directory is the application bundle, and is read-only.
       On OS X, the resource directory is the directory containing the executable.
@@ -49,13 +49,13 @@ typedef enum
     kCkPathType_InstallationDir,
 #endif
 
-#if CK_PLATFORM_IOS || CK_PLATFORM_OSX || CK_PLATFORM_WIN || CK_PLATFORM_LINUX 
+#if CK_PLATFORM_IOS || CK_PLATFORM_OSX || CK_PLATFORM_TVOS || CK_PLATFORM_WIN || CK_PLATFORM_LINUX
     /** A path relative to the directory used for temporary files.
      @par Only available on iOS, OS X, Windows, and Linux. */
     kCkPathType_Temp,
 #endif
 
-#if CK_PLATFORM_IOS || CK_PLATFORM_OSX || CK_PLATFORM_WIN || CK_PLATFORM_LINUX 
+#if CK_PLATFORM_IOS || CK_PLATFORM_OSX || CK_PLATFORM_WIN || CK_PLATFORM_LINUX
     /** A path relative to the application's documents directory.
       On iOS, this is the app's Documents directory.
       On OS X and Windows, this is the user's Documents directory.
@@ -74,7 +74,7 @@ typedef enum
     /** The default path type for reading files. */
 #if CK_PLATFORM_ANDROID
     kCkPathType_ReadDefault = kCkPathType_Asset,
-#elif CK_PLATFORM_IOS || CK_PLATFORM_OSX
+#elif CK_PLATFORM_IOS || CK_PLATFORM_OSX || CK_PLATFORM_TVOS
     kCkPathType_ReadDefault = kCkPathType_Resource,
 #elif CK_PLATFORM_WIN || CK_PLATFORM_LINUX
     kCkPathType_ReadDefault = kCkPathType_ExeDir,
@@ -85,8 +85,10 @@ typedef enum
     /** The default path type for writing files. */
 #if CK_PLATFORM_ANDROID
     kCkPathType_WriteDefault = kCkPathType_PrivateFiles,
-#elif CK_PLATFORM_IOS || CK_PLATFORM_OSX
+#elif CK_PLATFORM_IOS || CK_PLATFORM_OSX 
     kCkPathType_WriteDefault = kCkPathType_Documents,
+#elif CK_PLATFORM_TVOS
+    kCkPathType_WriteDefault = kCkPathType_Temp,
 #elif CK_PLATFORM_WIN || CK_PLATFORM_LINUX
     kCkPathType_WriteDefault = kCkPathType_ExeDir,
 #elif CK_PLATFORM_WP8
