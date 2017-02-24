@@ -27,12 +27,12 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    UnloadCubemapRenderCommand::UnloadCubemapRenderCommand(RenderTextureUPtr renderTexture) noexcept
+    UnloadCubemapRenderCommand::UnloadCubemapRenderCommand(UniquePtr<RenderTexture> renderTexture) noexcept
         : RenderCommand(Type::k_unloadCubemap), m_renderTexture(std::move(renderTexture))
     {
     }
     //------------------------------------------------------------------------------
-    RenderTextureUPtr UnloadCubemapRenderCommand::ClaimRenderTexture() noexcept
+    UniquePtr<RenderTexture> UnloadCubemapRenderCommand::ClaimRenderTexture() noexcept
     {
         CS_ASSERT(m_renderTexture, "Cannot claim nullptr data! Data may have already been claimed.");
         return std::move(m_renderTexture);

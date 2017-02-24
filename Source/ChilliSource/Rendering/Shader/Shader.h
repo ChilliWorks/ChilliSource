@@ -27,6 +27,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 
 namespace ChilliSource
 {
@@ -82,7 +83,7 @@ namespace ChilliSource
         
         Shader() = default;
         
-        const RenderShader* m_renderShader = nullptr;
+        UniquePtr<RenderShader> m_renderShader;
     };
 }
 

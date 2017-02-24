@@ -41,32 +41,17 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderMaterialGroupManager::DestroyRenderMaterialGroup(const RenderMaterialGroup* renderMaterial) noexcept
+    void RenderMaterialGroupManager::DestroyRenderMaterialGroup(UniquePtr<RenderMaterialGroup> renderMaterialGroup) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        
-        for (auto it = m_renderMaterialGroups.begin(); it != m_renderMaterialGroups.end(); ++it)
-        {
-            if (it->get() == renderMaterial)
-            {
-                m_pendingUnloadCommands.push_back(std::move(*it));
-                
-                it->swap(m_renderMaterialGroups.back());
-                m_renderMaterialGroups.pop_back();
-                return;
-            }
-        }
-        
-        CS_LOG_FATAL("RenderMaterialGroup does not exist.");
+        m_pendingUnloadCommands.push_back(std::move(renderMaterialGroup));
     }
     
     //------------------------------------------------------------------------------
-    void RenderMaterialGroupManager::AddRenderMaterialGroup(RenderMaterialGroupUPtr renderMaterialGroup) noexcept
+    void RenderMaterialGroupManager::AddRenderMaterialGroup(RenderMaterialGroup* renderMaterialGroup) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        
-        m_pendingLoadCommands.push_back(renderMaterialGroup.get());
-        m_renderMaterialGroups.push_back(std::move(renderMaterialGroup));
+        m_pendingLoadCommands.push_back(renderMaterialGroup);
     }
     
     //------------------------------------------------------------------------------
@@ -98,11 +83,5 @@ namespace ChilliSource
     {
         m_pendingLoadCommands.clear();
         m_pendingUnloadCommands.clear();
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderMaterialGroupManager::~RenderMaterialGroupManager() noexcept
-    {
-        CS_ASSERT(m_renderMaterialGroups.size() == 0, "Render material groups have not been correctly released.");
     }
 }

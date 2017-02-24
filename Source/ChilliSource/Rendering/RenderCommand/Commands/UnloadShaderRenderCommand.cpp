@@ -27,12 +27,12 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    UnloadShaderRenderCommand::UnloadShaderRenderCommand(RenderShaderUPtr renderShader) noexcept
+    UnloadShaderRenderCommand::UnloadShaderRenderCommand(UniquePtr<RenderShader> renderShader) noexcept
         : RenderCommand(Type::k_unloadShader), m_renderShader(std::move(renderShader))
     {
     }
     //------------------------------------------------------------------------------
-    RenderShaderUPtr UnloadShaderRenderCommand::ClaimRenderShader() noexcept
+    UniquePtr<RenderShader> UnloadShaderRenderCommand::ClaimRenderShader() noexcept
     {
         CS_ASSERT(m_renderShader, "Cannot claim nullptr data! Data may have already been claimed.");
         return std::move(m_renderShader);

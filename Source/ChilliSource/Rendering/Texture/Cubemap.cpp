@@ -137,7 +137,7 @@ namespace ChilliSource
         CS_ASSERT(GetLoadState() == LoadState::k_loaded, "Cannot access texture before it is loaded.");
         CS_ASSERT(m_renderTexture, "Cannot access texture which has not been built.");
         
-        return m_renderTexture;
+        return m_renderTexture.get();
     }
     
     //------------------------------------------------------------------------------
@@ -148,8 +148,7 @@ namespace ChilliSource
             auto renderTextureManager = Application::Get()->GetSystem<RenderTextureManager>();
             CS_ASSERT(renderTextureManager, "RenderTextureManager must exist.");
             
-            renderTextureManager->DestroyRenderTexture(m_renderTexture);
-            m_renderTexture = nullptr;
+            renderTextureManager->DestroyRenderTextureCubemap(std::move(m_renderTexture));
         }
     }
     

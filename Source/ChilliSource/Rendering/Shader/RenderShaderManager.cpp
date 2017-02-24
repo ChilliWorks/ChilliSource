@@ -29,6 +29,11 @@
 
 namespace ChilliSource
 {
+    namespace
+    {
+        constexpr u32 k_shaderPoolSize = 30;
+    }
+    
     CS_DEFINE_NAMEDTYPE(RenderShaderManager);
     
     //------------------------------------------------------------------------------
@@ -38,15 +43,22 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
+    RenderShaderManager::RenderShaderManager()
+    : m_renderShaderPool(k_shaderPoolSize, ObjectPoolAllocatorLimitPolicy::k_expand)
+    {
+        
+    }
+    
+    //------------------------------------------------------------------------------
     bool RenderShaderManager::IsA(InterfaceIDType interfaceId) const noexcept
     {
         return (RenderShaderManager::InterfaceID == interfaceId);
     }
     
     //------------------------------------------------------------------------------
-    const RenderShader* RenderShaderManager::CreateRenderShader(const std::string& vertexShader, const std::string& fragmentShader) noexcept
+    UniquePtr<RenderShader> RenderShaderManager::CreateRenderShader(const std::string& vertexShader, const std::string& fragmentShader) noexcept
     {
-        RenderShaderUPtr renderShader(new RenderShader());
+        UniquePtr<RenderShader> renderShader(MakeUnique<RenderShader>(m_renderShaderPool));
         auto rawRenderShader = renderShader.get();
         
         PendingLoadCommand loadCommand;
@@ -55,30 +67,16 @@ namespace ChilliSource
         loadCommand.m_renderShader = rawRenderShader;
         
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_renderShaders.push_back(std::move(renderShader));
         m_pendingLoadCommands.push_back(std::move(loadCommand));
         
-        return rawRenderShader;
+        return std::move(renderShader);
     }
     
     //------------------------------------------------------------------------------
-    void RenderShaderManager::DestroyRenderShader(const RenderShader* renderShader) noexcept
+    void RenderShaderManager::DestroyRenderShader(UniquePtr<RenderShader> renderShader) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        
-        for (auto it = m_renderShaders.begin(); it != m_renderShaders.end(); ++it)
-        {
-            if (it->get() == renderShader)
-            {
-                m_pendingUnloadCommands.push_back(std::move(*it));
-                
-                it->swap(m_renderShaders.back());
-                m_renderShaders.pop_back();
-                return;
-            }
-        }
-        
-        CS_LOG_FATAL("RenderShader does not exist.");
+        m_pendingUnloadCommands.push_back(std::move(renderShader));
     }
     
     //------------------------------------------------------------------------------
@@ -103,11 +101,5 @@ namespace ChilliSource
             }
             m_pendingUnloadCommands.clear();
         }
-    }
-    
-    //------------------------------------------------------------------------------
-    RenderShaderManager::~RenderShaderManager() noexcept
-    {
-        CS_ASSERT(m_renderShaders.size() == 0, "Render shaders have not correctly been released.");
     }
 }

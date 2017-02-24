@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADCUBEMAPRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
@@ -49,7 +50,7 @@ namespace ChilliSource
         ///
         /// @return The render texture that should be unloaded.
         ///
-        RenderTextureUPtr ClaimRenderTexture() noexcept;
+        UniquePtr<RenderTexture> ClaimRenderTexture() noexcept;
         
     private:
         friend class RenderCommandList;
@@ -59,9 +60,9 @@ namespace ChilliSource
         /// @param renderTexture
         ///     The render texture that should be unloaded.
         ///
-        UnloadCubemapRenderCommand(RenderTextureUPtr renderTexture) noexcept;
+        UnloadCubemapRenderCommand(UniquePtr<RenderTexture> renderTexture) noexcept;
         
-        RenderTextureUPtr m_renderTexture;
+        UniquePtr<RenderTexture> m_renderTexture;
     };
 }
 

@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_TEXTURE_TEXTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Resource/Resource.h>
@@ -123,7 +124,7 @@ namespace ChilliSource
         
         Texture() = default;
         
-        const RenderTexture* m_renderTexture = nullptr;
+        UniquePtr<RenderTexture> m_renderTexture;
         bool m_restoreTextureDataEnabled = false;
     };
 }

@@ -452,7 +452,7 @@ namespace ChilliSource
             }
         }
         
-        return m_renderMaterialGroup;
+        return m_renderMaterialGroup.get();
     }
     //----------------------------------------------------------
     //----------------------------------------------------------
@@ -568,8 +568,7 @@ namespace ChilliSource
             auto renderMaterialGroupManager = Application::Get()->GetSystem<RenderMaterialGroupManager>();
             CS_ASSERT(renderMaterialGroupManager, "RenderMaterialGroupManager is required.");
             
-            renderMaterialGroupManager->DestroyRenderMaterialGroup(m_renderMaterialGroup);
-            m_renderMaterialGroup = nullptr;
+            renderMaterialGroupManager->DestroyRenderMaterialGroup(std::move(m_renderMaterialGroup));
         }
     }
     //----------------------------------------------------------

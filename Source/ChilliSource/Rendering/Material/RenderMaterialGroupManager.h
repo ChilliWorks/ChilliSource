@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_MATERIAL_RENDERMATERIALGROUPMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Material/RenderMaterialGroup.h>
 
@@ -95,7 +96,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        virtual const RenderMaterialGroup* CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
+        virtual UniquePtr<RenderMaterialGroup> CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
                                                                   bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                   TestFunc depthTestFunc,
                                                                   BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -110,7 +111,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        virtual const RenderMaterialGroup* CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept = 0;
+        virtual UniquePtr<RenderMaterialGroup> CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept = 0;
         
         /// Creates a new blinn RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
         /// Render Snapshot stage in the render pipeline.
@@ -128,7 +129,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        virtual const RenderMaterialGroup* CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
+        virtual UniquePtr<RenderMaterialGroup> CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
                                                                           const Colour& specularColour) noexcept = 0;
         
         
@@ -190,7 +191,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        virtual const RenderMaterialGroup* CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
+        virtual UniquePtr<RenderMaterialGroup> CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
                                                                    bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                    TestFunc depthTestFunc,
                                                                    BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -205,9 +206,9 @@ namespace ChilliSource
         /// @param renderMaterialGroup
         ///     The RenderMaterialGroup which should be destroyed.
         ///
-        void DestroyRenderMaterialGroup(const RenderMaterialGroup* renderMaterial) noexcept;
+        void DestroyRenderMaterialGroup(UniquePtr<RenderMaterialGroup> renderMaterialGroup) noexcept;
         
-        virtual ~RenderMaterialGroupManager() noexcept;
+        virtual ~RenderMaterialGroupManager() noexcept {};
         
     protected:
         RenderMaterialGroupManager() = default;
@@ -217,7 +218,7 @@ namespace ChilliSource
         /// @param renderMaterialGroup
         ///     The new render material group to add.
         ///
-        void AddRenderMaterialGroup(RenderMaterialGroupUPtr renderMaterialGroup) noexcept;
+        void AddRenderMaterialGroup(RenderMaterialGroup* renderMaterialGroup) noexcept;
         
     private:
         friend class Application;
@@ -246,9 +247,8 @@ namespace ChilliSource
         void Destroy();
         
         std::mutex m_mutex;
-        std::vector<RenderMaterialGroupUPtr> m_renderMaterialGroups;
         std::vector<RenderMaterialGroup*> m_pendingLoadCommands;
-        std::vector<RenderMaterialGroupUPtr> m_pendingUnloadCommands;
+        std::vector<UniquePtr<RenderMaterialGroup>> m_pendingUnloadCommands;
     };
 }
 

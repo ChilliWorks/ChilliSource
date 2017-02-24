@@ -26,6 +26,8 @@
 #define _CHILLISOURCE_RENDERING_TARGET_RENDERTARGETGROUPMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/ObjectPoolAllocator.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
@@ -73,7 +75,7 @@ namespace ChilliSource
         ///
         /// @return The new render target group instance.
         ///
-        const RenderTargetGroup* CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget) noexcept;
+        UniquePtr<RenderTargetGroup> CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget) noexcept;
         
         /// Creates a new colour only RenderTargetGroup and queues a LoadTargetGroupRenderCommand for the next
         /// RenderSnapshot stage in the render pipeline.
@@ -85,7 +87,7 @@ namespace ChilliSource
         ///
         /// @return The new render target group instance.
         ///
-        const RenderTargetGroup* CreateColourRenderTargetGroup(const RenderTexture* colourTarget, RenderTargetGroupType type) noexcept;
+        UniquePtr<RenderTargetGroup> CreateColourRenderTargetGroup(const RenderTexture* colourTarget, RenderTargetGroupType type) noexcept;
         
         /// Creates a new depth only RenderTargetGroup and queues a LoadTargetGroupRenderCommand for the next
         /// RenderSnapshot stage in the render pipeline.
@@ -95,7 +97,7 @@ namespace ChilliSource
         ///
         /// @return The new render target group instance.
         ///
-        const RenderTargetGroup* CreateDepthRenderTargetGroup(const RenderTexture* depthTarget) noexcept;
+        UniquePtr<RenderTargetGroup> CreateDepthRenderTargetGroup(const RenderTexture* depthTarget) noexcept;
      
         /// @return A copy of the render target groups
         ///
@@ -109,9 +111,7 @@ namespace ChilliSource
         /// @param renderTargetGroup
         ///     The render target group which should be destroyed.
         ///
-        void DestroyRenderTargetGroup(const RenderTargetGroup* renderTargetGroup) noexcept;
-        
-        ~RenderTargetGroupManager() noexcept;
+        void DestroyRenderTargetGroup(UniquePtr<RenderTargetGroup> renderTargetGroup) noexcept;
         
     private:
         friend class Application;
@@ -123,14 +123,7 @@ namespace ChilliSource
         ///
         static RenderTargetGroupManagerUPtr Create() noexcept;
         
-        RenderTargetGroupManager() = default;
-        
-        /// Adds a new RenderTargetGroup to the manager and schedules the load target commands.
-        ///
-        /// @param renderTargetGroup
-        ///     The new render target group to add.
-        ///
-        void AddRenderTargetGroup(RenderTargetGroupUPtr renderTargetGroup) noexcept;
+        RenderTargetGroupManager();
         
         /// Called during the Render Snapshot stage of the render pipeline. All pending load and
         /// unload commands are added to the render snapshot.
@@ -145,9 +138,10 @@ namespace ChilliSource
         void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         std::mutex m_mutex;
-        std::vector<RenderTargetGroupUPtr> m_renderTargetGroups; //TODO: This should be changed to an object pool.
+        ObjectPoolAllocator<RenderTargetGroup> m_renderTargetGroupPool;
+        std::vector<const RenderTargetGroup*> m_renderTargetGroups;
         std::vector<RenderTargetGroup*> m_pendingLoadCommands;
-        std::vector<RenderTargetGroupUPtr> m_pendingUnloadCommands;
+        std::vector<UniquePtr<RenderTargetGroup>> m_pendingUnloadCommands;
     };
 }
 

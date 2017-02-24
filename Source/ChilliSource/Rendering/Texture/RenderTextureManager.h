@@ -26,6 +26,8 @@
 #define _CHILLISOURCE_RENDERING_TEXTURE_RENDERTEXTUREMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/ObjectPoolAllocator.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Texture/RenderTexture.h>
 
@@ -89,7 +91,7 @@ namespace ChilliSource
         ///
         /// @return The new render texture instance.
         ///
-        const RenderTexture* CreateTexture2D(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
+        UniquePtr<RenderTexture> CreateTexture2D(std::unique_ptr<const u8[]> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
                                              TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept;
         
         /// Creates a new render texture and queues a LoadCubemapRenderCommand for the next
@@ -118,7 +120,7 @@ namespace ChilliSource
         ///
         /// @return The new render texture instance.
         ///
-        const RenderTexture* CreateCubemap(std::array<std::unique_ptr<const u8[]>, 6> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
+        UniquePtr<RenderTexture> CreateCubemap(std::array<std::unique_ptr<const u8[]>, 6> textureData, u32 textureDataSize, const Integer2& dimensions, ImageFormat imageFormat, ImageCompression imageCompression,
                                            TextureFilterMode filterMode, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, bool isMipmapped, bool shouldBackupData) noexcept;
         
         /// Removes the render texture from the manager and queues an UnloadTextureRenderCommand for
@@ -129,9 +131,17 @@ namespace ChilliSource
         /// @param renderTexture
         ///     The render texture which should be destroyed.
         ///
-        void DestroyRenderTexture(const RenderTexture* renderTexture) noexcept;
+        void DestroyRenderTexture2D(UniquePtr<RenderTexture> renderTexture) noexcept;
         
-        ~RenderTextureManager() noexcept;
+        /// Removes the render texture from the manager and queues an UnloadTextureRenderCommand for
+        /// the next Render Snapshot stage in the render pipeline. The render command is given
+        /// ownership of the render texture, ensuring it won't be destroyed until it is no longer
+        /// used.
+        ///
+        /// @param renderTexture
+        ///     The render texture which should be destroyed.
+        ///
+        void DestroyRenderTextureCubemap(UniquePtr<RenderTexture> renderTexture) noexcept;
         
     private:
         friend class Application;
@@ -163,7 +173,7 @@ namespace ChilliSource
         ///
         static RenderTextureManagerUPtr Create() noexcept;
         
-        RenderTextureManager() = default;
+        RenderTextureManager();
         
         /// Called during the Render Snapshot stage of the render pipeline. All pending load and
         /// unload commands are added to the render snapshot.
@@ -178,12 +188,11 @@ namespace ChilliSource
         void OnRenderSnapshot(TargetType targetType, RenderSnapshot& renderSnapshot, IAllocator* frameAllocator) noexcept override;
         
         std::mutex m_mutex;
-        std::vector<RenderTextureUPtr> m_renderTextures2D; //TODO: This should be changed to an object pool.
-        std::vector<RenderTextureUPtr> m_renderTexturesCubemap; //TODO: This should be changed to an object pool.
+        ObjectPoolAllocator<RenderTexture> m_renderTexturePool;
         std::vector<PendingLoadCommand2D> m_pendingLoadCommands2D;
         std::vector<PendingLoadCommandCubemap> m_pendingLoadCommandsCubemap;
-        std::vector<RenderTextureUPtr> m_pendingUnloadCommands2D;
-        std::vector<RenderTextureUPtr> m_pendingUnloadCommandsCubemap;
+        std::vector<UniquePtr<RenderTexture>> m_pendingUnloadCommands2D;
+        std::vector<UniquePtr<RenderTexture>> m_pendingUnloadCommandsCubemap;
     };
 }
 

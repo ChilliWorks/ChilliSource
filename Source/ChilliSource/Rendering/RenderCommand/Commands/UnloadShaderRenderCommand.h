@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADSHADERRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/Shader/RenderShader.h>
 
@@ -49,7 +50,7 @@ namespace ChilliSource
         ///
         /// @return The render shader that should be unloaded.
         ///
-        RenderShaderUPtr ClaimRenderShader() noexcept;
+        UniquePtr<RenderShader> ClaimRenderShader() noexcept;
         
     private:
         friend class RenderCommandList;
@@ -59,9 +60,9 @@ namespace ChilliSource
         /// @param renderShader
         ///     The render shader that should be unloaded.
         ///
-        UnloadShaderRenderCommand(RenderShaderUPtr renderShader) noexcept;
+        UnloadShaderRenderCommand(UniquePtr<RenderShader> renderShader) noexcept;
         
-        RenderShaderUPtr m_renderShader;
+        UniquePtr<RenderShader> m_renderShader;
     };
 }
 

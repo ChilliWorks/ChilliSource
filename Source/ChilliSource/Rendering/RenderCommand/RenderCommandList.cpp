@@ -263,7 +263,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadTargetGroupCommand(RenderTargetGroupUPtr renderTargetGroup) noexcept
+    void RenderCommandList::AddUnloadTargetGroupCommand(UniquePtr<RenderTargetGroup> renderTargetGroup) noexcept
     {
         RenderCommandUPtr renderCommand(new UnloadTargetGroupRenderCommand(std::move(renderTargetGroup)));
         
@@ -281,7 +281,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadMaterialGroupCommand(RenderMaterialGroupUPtr renderMaterialGroup) noexcept
+    void RenderCommandList::AddUnloadMaterialGroupCommand(UniquePtr<RenderMaterialGroup> renderMaterialGroup) noexcept
     {
         RenderCommandUPtr renderCommand(new UnloadMaterialGroupRenderCommand(std::move(renderMaterialGroup)));
         
@@ -290,7 +290,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadTextureCommand(RenderTextureUPtr renderTexture) noexcept
+    void RenderCommandList::AddUnloadTextureCommand(UniquePtr<RenderTexture> renderTexture) noexcept
     {
         RenderCommandUPtr renderCommand(new UnloadTextureRenderCommand(std::move(renderTexture)));
         
@@ -299,7 +299,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadCubemapCommand(RenderTextureUPtr renderTexture) noexcept
+    void RenderCommandList::AddUnloadCubemapCommand(UniquePtr<RenderTexture> renderTexture) noexcept
     {
         RenderCommandUPtr renderCommand(new UnloadCubemapRenderCommand(std::move(renderTexture)));
         
@@ -308,7 +308,7 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void RenderCommandList::AddUnloadShaderCommand(RenderShaderUPtr renderShader) noexcept
+    void RenderCommandList::AddUnloadShaderCommand(UniquePtr<RenderShader> renderShader) noexcept
     {
         RenderCommandUPtr renderCommand(new UnloadShaderRenderCommand(std::move(renderShader)));
         

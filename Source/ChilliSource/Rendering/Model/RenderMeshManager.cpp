@@ -33,7 +33,7 @@ namespace ChilliSource
 {
     namespace
     {
-        constexpr u32 k_meshPoolSize = 50;
+        constexpr u32 k_meshPoolSize = 100;
     }
     
     CS_DEFINE_NAMEDTYPE(RenderMeshManager);

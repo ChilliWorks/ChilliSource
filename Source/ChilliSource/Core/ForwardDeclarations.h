@@ -59,7 +59,6 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(IPropertyType);
     CS_FORWARDDECLARE_CLASS(PropertyMap);
     template <typename TKey, typename TValue> class HashedArray;
-    template <typename TType> class ObjectPool;
     template <typename TType> class concurrent_blocking_queue;
     template <typename TType> class concurrent_vector;
     template <typename TType> class dynamic_array;

@@ -41,7 +41,7 @@ namespace ChilliSource
         /// @param type
         ///    Whether or not an internal, efficient, depth or stencil buffer should be used.
         ///
-        const RenderTargetGroup* CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, RenderTargetGroupType type)
+        UniquePtr<RenderTargetGroup> CreateRenderTargetGroup(const RenderTexture* colourTarget, const RenderTexture* depthTarget, RenderTargetGroupType type)
         {
             auto renderTargetGroupManager = Application::Get()->GetSystem<RenderTargetGroupManager>();
             if (colourTarget && depthTarget)
@@ -94,7 +94,7 @@ namespace ChilliSource
             m_renderTargetGroup = CreateRenderTargetGroup(m_cachedColourTargetRenderTexture, m_cachedDepthTargetRenderTexture, m_type);
         }
         
-        return m_renderTargetGroup;
+        return m_renderTargetGroup.get();
     }
     
     //------------------------------------------------------------------------------
@@ -105,8 +105,7 @@ namespace ChilliSource
             auto renderTargetGroupManager = Application::Get()->GetSystem<RenderTargetGroupManager>();
             CS_ASSERT(renderTargetGroupManager, "RenderTargetGroupManager is required.");
             
-            renderTargetGroupManager->DestroyRenderTargetGroup(m_renderTargetGroup);
-            m_renderTargetGroup = nullptr;
+            renderTargetGroupManager->DestroyRenderTargetGroup(std::move(m_renderTargetGroup));
         }
         
         if(m_cachedDepthTargetTexture)

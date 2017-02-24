@@ -26,6 +26,7 @@
 #define _CHILLISOURCE_RENDERING_RENDERCOMMAND_COMMANDS_UNLOADTARGETGROUPRENDERCOMMAND_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Memory/UniquePtr.h>
 #include <ChilliSource/Rendering/RenderCommand/RenderCommand.h>
 #include <ChilliSource/Rendering/Target/RenderTargetGroup.h>
 
@@ -52,9 +53,9 @@ namespace ChilliSource
         /// @param renderTargetGroup
         ///     The render target group that should be unloaded.
         ///
-        UnloadTargetGroupRenderCommand(RenderTargetGroupUPtr renderTargetGroup) noexcept;
+        UnloadTargetGroupRenderCommand(UniquePtr<RenderTargetGroup> renderTargetGroup) noexcept;
         
-        RenderTargetGroupUPtr m_renderTargetGroup;
+        UniquePtr<RenderTargetGroup> m_renderTargetGroup;
     };
 }
 

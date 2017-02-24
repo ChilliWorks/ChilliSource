@@ -97,7 +97,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        const RenderMaterialGroup* CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
+        UniquePtr<RenderMaterialGroup> CreateUnlitRenderMaterialGroup(const RenderTexture* renderTexture,
                                                                   bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                   TestFunc depthTestFunc,
                                                                   BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -112,7 +112,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        const RenderMaterialGroup* CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept override;
+        UniquePtr<RenderMaterialGroup> CreateSkyboxRenderMaterialGroup(const RenderTexture* renderCubmap) noexcept override;
         
         /// Creates a new blinn RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
         /// Render Snapshot stage in the render pipeline.
@@ -130,7 +130,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        const RenderMaterialGroup* CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
+        UniquePtr<RenderMaterialGroup> CreateBlinnRenderMaterialGroup(const RenderTexture* renderTexture, const Colour& emissiveColour, const Colour& ambientColour, const Colour& diffuseColour,
                                                                   const Colour& specularColour) noexcept override;
         
         /// Creates a new custom RenderMaterialGroup and queues a LoadMaterialGroupRenderCommand for the next
@@ -191,7 +191,7 @@ namespace ChilliSource
         ///
         /// @return The new material group.
         ///
-        const RenderMaterialGroup* CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
+        UniquePtr<RenderMaterialGroup> CreateCustomRenderMaterialGroup(MaterialShadingType fallbackType, const VertexFormat& vertexFormat, const std::vector<std::pair<const RenderShader*, RenderPasses>>& renderShaders, const std::vector<const RenderTexture*>& renderTextures2D, const std::vector<const RenderTexture*>& renderTexturesCubemap,
                                                                    bool isTransparencyEnabled, bool isColourWriteEnabled, bool isDepthWriteEnabled, bool isDepthTestEnabled, bool isFaceCullingEnabled, bool isStencilTestEnabled,
                                                                    TestFunc depthTestFunc,
                                                                    BlendMode sourceBlendMode, BlendMode destinationBlendMode,
@@ -237,6 +237,7 @@ namespace ChilliSource
         
         
         ObjectPoolAllocator<RenderMaterial> m_renderMaterialPool;
+        ObjectPoolAllocator<RenderMaterialGroup> m_renderMaterialGroupPool;
         
         bool m_shadowsSupported = false;
         
