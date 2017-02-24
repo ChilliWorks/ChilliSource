@@ -34,6 +34,9 @@
     <Filter Include="Source\SHA1">
       <UniqueIdentifier>{3cca65dd-355a-41a8-be6a-65324630b025}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\SHA256">
+      <UniqueIdentifier>{bf21d1dc-30e5-4757-9e51-7d10929a831b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlatformSource\Windows\zconf.h">
@@ -138,6 +141,9 @@
     <ClInclude Include="Source\minizip\zip.h">
       <Filter>Source\minizip</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SHA256\sha256.h">
+      <Filter>Source\SHA256</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\aes\aes.c">
@@ -223,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="Source\minizip\zip.c">
       <Filter>Source\minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SHA256\sha256.cpp">
+      <Filter>Source\SHA256</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

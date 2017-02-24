@@ -53,6 +53,7 @@
     <ClInclude Include="Source\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="Source\SHA1\HMAC_SHA1.h" />
     <ClInclude Include="Source\SHA1\SHA1.h" />
+    <ClInclude Include="Source\SHA256\sha256.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\aes\aes.c" />
@@ -83,6 +84,7 @@
     <ClCompile Include="Source\png\pngwutil.c" />
     <ClCompile Include="Source\SHA1\HMAC_SHA1.cpp" />
     <ClCompile Include="Source\SHA1\SHA1.cpp" />
+    <ClCompile Include="Source\SHA256\sha256.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\json\json_internalarray.inl" />
@@ -175,7 +177,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>python ..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
+      <Command>python ..\..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -192,7 +194,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>python ..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
+      <Command>python ..\..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -213,7 +215,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>python ..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
+      <Command>python ..\..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -234,7 +236,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>python ..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
+      <Command>python ..\..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
