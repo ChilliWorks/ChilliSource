@@ -405,6 +405,19 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         std::string GetFileChecksumSHA1(StorageLocation in_storageLocation, const std::string& in_filePath, const CSHA1::REPORT_TYPE in_reportType = CSHA1::REPORT_HEX_SHORT) const;
         //------------------------------------------------------------------------------
+        /// Calculate the SHA256 checksum of the file at the given directory
+        ///
+        /// This is thread-safe.
+        ///
+        /// @author J Brown
+        ///
+        /// @param in_storageLocation - Storage location
+        /// @param in_filePath - File path
+        ///
+        /// @return SHA256 checksum
+        //------------------------------------------------------------------------------
+        std::string GetFileChecksumSHA256(StorageLocation in_storageLocation, const std::string& in_filePath) const;
+        //------------------------------------------------------------------------------
         /// Calculate the MD5 checksum of the file at the given directory
         ///
         /// This is thread-safe.

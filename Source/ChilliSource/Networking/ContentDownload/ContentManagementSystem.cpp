@@ -211,7 +211,11 @@ namespace ChilliSource
             return m_checksumDelegate(in_location, in_filePath);
         }
         
+#ifdef CS_USE_SHA1_CHECKSUMS
         std::string checksum = Application::Get()->GetFileSystem()->GetFileChecksumSHA1(in_location, in_filePath);
+#else
+        std::string checksum = Application::Get()->GetFileSystem()->GetFileChecksumSHA256(in_location, in_filePath);
+#endif
         StringUtils::ToLowerCase(checksum);
         std::string base64Encoded = BaseEncoding::Base64Encode(checksum);
         StringUtils::ChopTrailingChars(base64Encoded, '=');

@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Base/ByteBuffer.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <ChilliSource/Core/Cryptographic/HashSHA256.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -173,6 +174,8 @@ namespace ChilliSource
     //--------------------------------------------------------------
     std::string FileSystem::GetFileChecksumSHA1(StorageLocation in_storageLocation, const std::string& in_filePath, const CSHA1::REPORT_TYPE in_reportType) const
     {
+        CS_LOG_WARNING("SHA-1 is deprecated and insecure. Please use SHA256.");
+        
         auto fileStream = CreateBinaryInputStream(in_storageLocation, in_filePath);
         CS_ASSERT(fileStream, "Could not open file: " + in_filePath);
 
@@ -213,6 +216,26 @@ namespace ChilliSource
         return std::string(cHash);
 #endif
 
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    std::string FileSystem::GetFileChecksumSHA256(StorageLocation in_storageLocation, const std::string& in_filePath) const
+    {
+        auto fileStream = CreateBinaryInputStream(in_storageLocation, in_filePath);
+        CS_ASSERT(fileStream, "Could not open file: " + in_filePath);
+        
+        u32 length = u32(fileStream->GetLength());
+        
+        if(length == 0)
+        {
+            return "";
+        }
+        
+        std::unique_ptr<u8[]> fileContents(new u8(length));
+        fileStream->Read(fileContents.get(), length);
+        
+
+        return HashSHA256::GenerateHexHashCode(reinterpret_cast<s8*>(fileContents.get()), length);
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
