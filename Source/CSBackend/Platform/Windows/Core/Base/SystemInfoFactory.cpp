@@ -108,7 +108,7 @@ namespace CSBackend
             ///
             std::string GetLocale() noexcept
             {
-                wchar_t localeName[LOCALE_NAME_MAX_LENGTH] = { 0 };
+                wchar_t localeName[LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)] = { 0 };
 
                 if (GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
                 {
