@@ -163,6 +163,7 @@ namespace ChilliSource
     
     //----------------------------------------------------------
     SpriteComponent::SpriteComponent(const MaterialCSPtr& material, const Vector2& size, SizePolicy sizePolicy)
+    : m_uvs(0.0f, 0.0f, 1.0f, 1.0f)
     {
         SetMaterial(material);
         SetSize(size);
@@ -171,6 +172,7 @@ namespace ChilliSource
     
     //----------------------------------------------------------
     SpriteComponent::SpriteComponent(const MaterialCSPtr& material, const TextureAtlasCSPtr& atlas, const std::string& atlasId, const Vector2& size, SizePolicy sizePolicy)
+    : m_uvs(0.0f, 0.0f, 1.0f, 1.0f)
     {
         SetMaterial(material);
         SetTextureAtlas(atlas);

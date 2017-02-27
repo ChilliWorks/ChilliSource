@@ -37,8 +37,8 @@ namespace ChilliSource
     CS_DEFINE_NAMEDTYPE(OrthographicCameraComponent);
     //----------------------------------------------------------
     //----------------------------------------------------------
-    OrthographicCameraComponent::OrthographicCameraComponent(const Vector2& in_viewportSize, ViewportResizePolicy in_resizePolicy, f32 in_nearClip, f32 in_farClip)
-    : CameraComponent(in_nearClip, in_farClip), m_viewportSize(in_viewportSize), m_currentViewportSize(in_viewportSize), m_resizePolicy(in_resizePolicy)
+    OrthographicCameraComponent::OrthographicCameraComponent(const Vector2& viewportSize, f32 nearClip, f32 farClip, ViewportResizePolicy resizePolicy)
+    : CameraComponent(nearClip, farClip), m_viewportSize(viewportSize), m_currentViewportSize(viewportSize), m_resizePolicy(resizePolicy)
     {
         switch(m_resizePolicy)
         {

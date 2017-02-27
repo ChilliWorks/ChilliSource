@@ -81,7 +81,8 @@ namespace ChilliSource
         ///
         SpriteComponent(const MaterialCSPtr& material, const Vector2& size, SizePolicy sizePolicy);
         
-        /// Creates a sprite with the given material and size
+        /// Creates a sprite with the given material and size that references
+        /// a sprite on the given texture atlas.
         ///
         /// @param material
         ///     Material the describes how the sprite should be rendered
