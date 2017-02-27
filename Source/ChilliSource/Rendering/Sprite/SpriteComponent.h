@@ -54,6 +54,7 @@ namespace ChilliSource
     public: 
         
         CS_DECLARE_NAMEDTYPE(SpriteComponent);
+        
         //----------------------------------------------------------------------------------------
         /// Delegate for size policy functions.
         ///
@@ -65,12 +66,36 @@ namespace ChilliSource
         /// @return New size with function applied
         //----------------------------------------------------------------------------------------
         using SizePolicyDelegate = std::function<Vector2(const Vector2&, const Vector2&)>;
-        //----------------------------------------------------------
-        /// Constructor
+
         ///
-        /// @author S Downie
-        //----------------------------------------------------------
         SpriteComponent();
+        
+        /// Creates a sprite with the given material and size
+        ///
+        /// @param material
+        ///     Material the describes how the sprite should be rendered
+        /// @param size
+        ///    Size of the sprite in world units
+        /// @param sizePolicy
+        ///     How the sprite should maintain its aspect ratio when resized
+        ///
+        SpriteComponent(const MaterialCSPtr& material, const Vector2& size, SizePolicy sizePolicy);
+        
+        /// Creates a sprite with the given material and size
+        ///
+        /// @param material
+        ///     Material the describes how the sprite should be rendered
+        /// @param atlas
+        ///     Resource that describes where all the sprites are on a texture
+        /// @param atlasId
+        ///     Which of the sprites on the texture should this component use
+        /// @param size
+        ///    Size of the sprite in world units
+        /// @param sizePolicy
+        ///     How the sprite should maintain its aspect ratio when resized
+        ///
+        SpriteComponent(const MaterialCSPtr& material, const TextureAtlasCSPtr& atlas, const std::string& atlasId, const Vector2& size, SizePolicy sizePolicy);
+        
         //----------------------------------------------------------
         /// @author S Downie
         ///

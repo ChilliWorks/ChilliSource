@@ -31,7 +31,6 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Model/Model.h>
 #include <ChilliSource/Rendering/Model/ModelDesc.h>
 

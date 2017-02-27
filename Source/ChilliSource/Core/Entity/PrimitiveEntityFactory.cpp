@@ -32,7 +32,6 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Model.h>
@@ -72,7 +71,7 @@ namespace ChilliSource
         
         ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(size);
         
-        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
+        StaticModelComponentSPtr meshComponent = std::make_shared<StaticModelComponent>(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
         
         auto entity = Entity::Create();
@@ -97,7 +96,7 @@ namespace ChilliSource
         
         ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(size);
         
-        StaticModelComponentSPtr meshComponent = m_renderComponentFactory->CreateStaticModelComponent(mesh, material);
+        StaticModelComponentSPtr meshComponent = std::make_shared<StaticModelComponent>(mesh, material);
         meshComponent->SetShadowCastingEnabled(true);
         
         auto entity = Entity::Create();
@@ -129,9 +128,6 @@ namespace ChilliSource
     {
         m_resourcePool = Application::Get()->GetResourcePool();
         
-        m_renderComponentFactory = Application::Get()->GetSystem<RenderComponentFactory>();
-        CS_ASSERT(m_renderComponentFactory, "PrimitiveEntityFactory could not find required app system: RenderComponentFactory");
-        
         m_primitiveModelFactory = Application::Get()->GetSystem<PrimitiveModelFactory>();
         CS_ASSERT(m_primitiveModelFactory, "PrimitiveEntityFactory could not find required app system: PrimitiveModelFactory");
         
@@ -145,7 +141,6 @@ namespace ChilliSource
     void PrimitiveEntityFactory::OnDestroy()
     {
         m_resourcePool = nullptr;
-        m_renderComponentFactory = nullptr;
         m_primitiveModelFactory = nullptr;
         m_entityCount = 0;
     }

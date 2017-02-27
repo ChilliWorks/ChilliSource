@@ -146,7 +146,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandBufferManager.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandCompiler.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.cpp" />
@@ -611,7 +610,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandBufferManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCommandCompiler.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrame.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderFrameCompiler.h" />

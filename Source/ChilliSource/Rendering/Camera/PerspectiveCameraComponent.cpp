@@ -37,8 +37,8 @@ namespace ChilliSource
     CS_DEFINE_NAMEDTYPE(PerspectiveCameraComponent);
     //----------------------------------------------------------
     //----------------------------------------------------------
-    PerspectiveCameraComponent::PerspectiveCameraComponent(f32 in_aspectRatio, f32 in_fov, ViewportResizePolicy in_resizePolicy, f32 in_nearClip, f32 in_farClip)
-    : CameraComponent(in_nearClip, in_farClip), m_aspectRatio(in_aspectRatio), m_fov(in_fov), m_resizePolicy(in_resizePolicy)
+    PerspectiveCameraComponent::PerspectiveCameraComponent(f32 aspectRatio, f32 fov, f32 nearClip, f32 farClip, ViewportResizePolicy resizePolicy)
+    : CameraComponent(nearClip, farClip), m_aspectRatio(aspectRatio), m_fov(fov), m_resizePolicy(resizePolicy)
     {
         switch(m_resizePolicy)
         {
