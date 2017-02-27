@@ -42,17 +42,12 @@ namespace ChilliSource
         //------------------------------------------------
         //------------------------------------------------
         std::string GenerateHexHashCode(const s8* in_data, u32 in_size)
-        {
-            
+        {         
             SHA256 hash;
             hash.reset();
             hash.add(reinterpret_cast<const u8*>(in_data), in_size);
  
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            return CSBackend::Windows::WindowsStringUtils::UTF16ToUTF8(hash.getHash());
-#else
             return hash.getHash();
-#endif
         }
     }
 }
