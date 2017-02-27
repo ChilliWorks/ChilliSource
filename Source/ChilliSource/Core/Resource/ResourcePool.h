@@ -348,7 +348,7 @@ namespace ChilliSource
     //-------------------------------------------------------------------------------------
     template <typename TResourceType> std::shared_ptr<TResourceType> ResourcePool::CreateResource(const std::string& in_uniqueId)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be created on the main thread");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be created on the main thread");
         
         Resource::ResourceId resourceId = GenerateResourceId(in_uniqueId);
         std::shared_ptr<TResourceType> resource(TResourceType::Create());
@@ -377,7 +377,7 @@ namespace ChilliSource
     //-------------------------------------------------------------------------------------
     template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::LoadResource(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsCSPtr<TResourceType>& in_options)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be loaded on the main thread - use LoadResourceAsync");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be loaded on the main thread - use LoadResourceAsync");
         CS_ASSERT(in_filePath.empty() == false, "Cannot load resource with no file path");
         
         std::unique_lock<std::mutex> lock(m_mutex);
@@ -451,7 +451,7 @@ namespace ChilliSource
     //-------------------------------------------------------------------------------------
     template <typename TResourceType> std::shared_ptr<const TResourceType> ResourcePool::RefreshResource(StorageLocation in_location, const std::string& in_filePath, const IResourceOptionsCSPtr<TResourceType>& in_options)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be refreshed on the main thread");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be refreshed on the main thread");
         CS_ASSERT(in_filePath.empty() == false, "Cannot refresh resource with no file path");
         
         std::unique_lock<std::mutex> lock(m_mutex);
@@ -510,7 +510,7 @@ namespace ChilliSource
     //-------------------------------------------------------------------------------------
     template <typename TResourceType> void ResourcePool::RefreshResources()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be refreshed on the main thread");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be refreshed on the main thread");
         
         std::unique_lock<std::mutex> lock(m_mutex);
         
@@ -626,7 +626,7 @@ namespace ChilliSource
     //-------------------------------------------------------------------------------------
     template <typename TResourceType> void ResourcePool::ReleaseUnused()
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
         
         std::unique_lock<std::mutex> lock(m_mutex);
         //Find the descriptor that handles this type of resource

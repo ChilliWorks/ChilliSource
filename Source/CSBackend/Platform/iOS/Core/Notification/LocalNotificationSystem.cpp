@@ -86,7 +86,7 @@ namespace CSBackend
         //---------------------------------------------------
         void LocalNotificationSystem::SetEnabled(bool in_enabled)
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to enable/disable notifications outside of main thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to enable/disable notifications outside of main thread.");
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
@@ -104,7 +104,7 @@ namespace CSBackend
         {
             @autoreleasepool
             {
-                CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to schedule notification outside of main thread.");
+                CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to schedule notification outside of main thread.");
                 
                 
                 ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
@@ -180,7 +180,7 @@ namespace CSBackend
         //--------------------------------------------------------
         void LocalNotificationSystem::GetScheduledNotifications(const GetScheduledNotificationsDelegate& in_delegate, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to retrieve scheduled notifications outside of main thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to retrieve scheduled notifications outside of main thread.");
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
@@ -228,7 +228,7 @@ namespace CSBackend
         //------------------------------------------------
         void LocalNotificationSystem::CancelByID(ChilliSource::Notification::ID in_id)
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel notification outside of main thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel notification outside of main thread.");
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
@@ -262,7 +262,7 @@ namespace CSBackend
         //------------------------------------------------
         void LocalNotificationSystem::CancelAll()
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel all notifications outside of main thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Attempted to cancel all notifications outside of main thread.");
             
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {

@@ -145,7 +145,7 @@ namespace ChilliSource
     //-------------------------------------------------------------------------------------
     void ResourcePool::Release(const Resource* in_resource)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be released on the main thread");
         CS_ASSERT(in_resource != nullptr, "Pool cannot release null resource");
         //Find the descriptor that handles this type of resource
         

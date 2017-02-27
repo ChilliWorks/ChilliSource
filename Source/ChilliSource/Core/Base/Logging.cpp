@@ -137,6 +137,8 @@ namespace ChilliSource
 #else
 #ifdef CS_ENABLE_DEBUG
         assert(false);
+#else
+        abort();
 #endif
 #endif
     }

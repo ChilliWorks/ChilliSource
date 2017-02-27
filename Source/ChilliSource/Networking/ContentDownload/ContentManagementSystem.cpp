@@ -231,7 +231,7 @@ namespace ChilliSource
     //-----------------------------------------------------------
     void ContentManagementSystem::CheckForUpdates(const ContentManagementSystem::CheckForUpdateDelegate& in_delegate)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
         
         //Clear any stale data from last update check
         ClearDownloadData();
@@ -245,7 +245,7 @@ namespace ChilliSource
     //-----------------------------------------------------------
     void ContentManagementSystem::DownloadUpdates(const ContentManagementSystem::CompleteDelegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
         
         CS_ASSERT(!m_downloadInProgress, "Cannot call DownloadUpdates while updates are being downloaded!");
 
@@ -313,7 +313,7 @@ namespace ChilliSource
     //-----------------------------------------------------------
     void ContentManagementSystem::InstallUpdates(const CompleteDelegate& inDelegate)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
         
         if(!m_packageDetails.empty() || !m_removePackageIds.empty())
         {

@@ -316,7 +316,7 @@ namespace CSBackend
         //---------------------------------------------------------------
         std::vector<IAPSystem::ExtraProductInfo> IAPSystem::GetExtraProductInfo() const
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
             
             ExtraProductInfo extraProductInfo;
             std::vector<ExtraProductInfo> extraProductsInfo;
