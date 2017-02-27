@@ -228,9 +228,9 @@ namespace ChilliSource
             {
                 priorityIndices[i] = ParseGroup(priorities[i].asString());
             }
+            
+            SetPriority(priorityIndices[0], priorityIndices[1], priorityIndices[2], priorityIndices[3]);
         }
-        
-        SetPriority(priorityIndices[0], priorityIndices[1], priorityIndices[2], priorityIndices[3]);
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
