@@ -177,7 +177,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>python ..\..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
+      <Command>python ..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -194,7 +194,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>python ..\..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
+      <Command>python ..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -215,7 +215,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>python ..\..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
+      <Command>python ..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -236,7 +236,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>python ..\..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
+      <Command>python ..\..\..\Tools\Scripts\extract_headers.py -i "$(ProjectDir)Source\\" -o "$(TargetDir)Headers\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
