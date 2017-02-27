@@ -31,10 +31,6 @@
 
 #include <SHA256/SHA256.h>
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
-#endif
-
 namespace ChilliSource
 {
     namespace HashSHA256
