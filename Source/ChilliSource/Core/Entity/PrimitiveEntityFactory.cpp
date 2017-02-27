@@ -59,7 +59,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     EntityUPtr PrimitiveEntityFactory::CreatePlane(const Colour& colour, const Vector2& size)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(colour);
         return CreatePlane(CreateStaticBlinnColourMaterial(colour), size);
@@ -68,7 +68,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     EntityUPtr PrimitiveEntityFactory::CreatePlane(const MaterialCSPtr& material, const Vector2& size)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
         ModelCSPtr mesh = m_primitiveModelFactory->CreatePlane(size);
         
@@ -84,7 +84,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     EntityUPtr PrimitiveEntityFactory::CreateBox(const Colour& colour, const Vector3& size)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
         MaterialCSPtr material = CreateStaticBlinnColourMaterial(colour);
         return CreateBox(CreateStaticBlinnColourMaterial(colour), size);
@@ -93,7 +93,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     EntityUPtr PrimitiveEntityFactory::CreateBox(const MaterialCSPtr& material, const Vector3& size)
     {
-        CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
+        CS_RELEASE_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Entities must be created on the main thread.");
         
         ModelCSPtr mesh = m_primitiveModelFactory->CreateBox(size);
         

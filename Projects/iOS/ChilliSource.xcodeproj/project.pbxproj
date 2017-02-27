@@ -4027,7 +4027,7 @@
 					"$(SRCROOT)/../../Libraries/CricketAudio/iOS/Headers",
 					"$(SRCROOT)/../../Source",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs",
 					"$(PROJECT_DIR)/../../Libraries/CricketAudio/iOS/Libs",
@@ -4080,7 +4080,7 @@
 					"$(SRCROOT)/../../Libraries/CricketAudio/iOS/Headers",
 					"$(SRCROOT)/../../Source",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs",
 					"$(PROJECT_DIR)/../../Libraries/CricketAudio/iOS/Libs",
@@ -4094,6 +4094,7 @@
 		8158F1F41C89D27300B13109 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4103,6 +4104,7 @@
 		8158F1F51C89D27300B13109 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

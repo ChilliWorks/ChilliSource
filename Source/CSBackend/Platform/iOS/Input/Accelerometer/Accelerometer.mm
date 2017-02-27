@@ -80,7 +80,7 @@ namespace CSBackend
         //----------------------------------------------------
         void Accelerometer::StartUpdating()
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to start accelerometer updating from background thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to start accelerometer updating from background thread.");
             if (m_isUpdating == false)
             {
                 m_isUpdating = true;
@@ -101,7 +101,7 @@ namespace CSBackend
         //----------------------------------------------------
         ChilliSource::Vector3 Accelerometer::GetAcceleration() const
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to get current acceleration from background thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to get current acceleration from background thread.");
             return m_acceleration;
         }
         //----------------------------------------------------
@@ -114,7 +114,7 @@ namespace CSBackend
         //----------------------------------------------------
         void Accelerometer::StopUpdating()
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to stop accelerometer updating from background thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to stop accelerometer updating from background thread.");
             if (m_isUpdating == true)
             {
                 m_isUpdating = false;

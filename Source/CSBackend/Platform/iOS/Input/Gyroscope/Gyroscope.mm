@@ -80,7 +80,7 @@ namespace CSBackend
         //----------------------------------------------------
         void Gyroscope::StartUpdating()
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to start gyroscope updating from background thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to start gyroscope updating from background thread.");
             if (m_isUpdating == false)
             {
                 m_isUpdating = true;
@@ -101,7 +101,7 @@ namespace CSBackend
         //----------------------------------------------------
         ChilliSource::Quaternion Gyroscope::GetOrientation() const
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to get current gyro orientation from background thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to get current gyro orientation from background thread.");
             return m_orientation;
         }
         //----------------------------------------------------
@@ -114,7 +114,7 @@ namespace CSBackend
         //----------------------------------------------------
         void Gyroscope::StopUpdating()
         {
-            CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to stop gyroscope updating from background thread.");
+            CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to stop gyroscope updating from background thread.");
             if (m_isUpdating == true)
             {
                 m_isUpdating = false;
