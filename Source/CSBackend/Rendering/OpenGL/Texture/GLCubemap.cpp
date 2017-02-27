@@ -122,7 +122,7 @@ namespace CSBackend
             
             if(k_shouldBackupMeshDataFromMemory && renderTexture->ShouldBackupData())
             {
-                for(auto i=0; i<textureData.size(); ++i)
+                for(std::size_t i=0; i<textureData.size(); ++i)
                 {
                     u8* imageDataCopy = new u8[dataSize];
                     memcpy(imageDataCopy, textureData[i].get(), dataSize);

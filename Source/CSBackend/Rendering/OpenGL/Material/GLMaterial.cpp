@@ -265,12 +265,12 @@ namespace CSBackend
             
             s32 samplerNumber = 0;
             
-            for (auto i = 0; i < renderMaterial->GetRenderTextures2D().size(); ++i, ++samplerNumber)
+            for (std::size_t i = 0; i < renderMaterial->GetRenderTextures2D().size(); ++i, ++samplerNumber)
             {
                 glShader->SetUniform(k_uniformTexturePrefix + ChilliSource::ToString(i), samplerNumber);
             }
             
-            for (auto i = 0; i < renderMaterial->GetRenderTexturesCubemap().size(); ++i, ++samplerNumber)
+            for (std::size_t i = 0; i < renderMaterial->GetRenderTexturesCubemap().size(); ++i, ++samplerNumber)
             {
                 glShader->SetUniform(k_uniformCubemapPrefix + ChilliSource::ToString(i), samplerNumber);
             }

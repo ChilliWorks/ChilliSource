@@ -53,7 +53,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void GLTextureUnitManager::Bind(GLenum target, const std::vector<const ChilliSource::RenderTexture*>& textures, u32 startingBindIdx) noexcept
         {
-            for(auto i=0; i<textures.size(); ++i)
+            for(std::size_t i=0; i<textures.size(); ++i)
             {
                 auto textureUnitIndex = startingBindIdx + i;
                 
