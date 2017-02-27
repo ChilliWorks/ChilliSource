@@ -49,6 +49,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashCRC32.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashMD5.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashSHA1.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashSHA256.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\OAuth.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\DialogueBox\DialogueBoxSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Component.cpp" />
@@ -431,6 +432,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashCRC32.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashMD5.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashSHA1.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashSHA256.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\OAuth.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\ConnectableDelegate.h" />
