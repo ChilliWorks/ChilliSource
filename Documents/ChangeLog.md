@@ -1,7 +1,7 @@
 ChilliSource Change Log
 =======================
 
-Version 2.1.3, 2017-
+Version 2.1.3, 2017-02-27
 -------------------------
 * Added: Thread safe ObjectPoolAllocator that pre allocates objects of a specific type. Now using this within the renderer to reduce allocations.
 * Fix: Longstanding issue where "Shinniness" was reciprocated (i.e. 1/Shinniness) in Blinn shaders rather than just Shinniness. Note this will affect existing projects.
@@ -16,6 +16,7 @@ Version 2.1.3, 2017-
 * Changed: Ray/Plane intersection test is no longer a member function of Plane, but now resides in ShapeIntersection along with the other intersection tests.
 * Changed: Where available the iOS dialogue system is backed by the newer UIAlertController rather than the deprecated UIAlertView
 * Changed: SetParentTransform, AddChildTransform, RemoveChildTransform and RemoveAllChildTransforms in Transform are now private and cannot be accessed outside of Entity.
+* Changed: iOS projects now have deployment target of iOS 8.0
 
 Version 2.1.2, 2017-01-26
 -------------------------
