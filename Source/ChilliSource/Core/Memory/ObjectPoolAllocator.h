@@ -300,7 +300,7 @@ namespace ChilliSource
         
         for(u32 i=0; i<m_buffers.size(); ++i)
         {
-            for(int j=0; j<m_capacities[i]; ++j, ++freeStoreIndex)
+            for(std::size_t j=0; j<m_capacities[i]; ++j, ++freeStoreIndex)
             {
                 m_freeStore[freeStoreIndex] = m_buffers[i] + j;
             }

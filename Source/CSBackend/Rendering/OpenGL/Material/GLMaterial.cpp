@@ -165,6 +165,9 @@ namespace CSBackend
                         return GL_FRONT;
                     case ChilliSource::CullFace::k_back:
                         return GL_BACK;
+					default:
+						CS_LOG_FATAL("Invalid cull face.");
+						return GL_BACK;
                 }
             }
             
