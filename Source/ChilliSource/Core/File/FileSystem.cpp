@@ -225,17 +225,34 @@ namespace ChilliSource
         CS_ASSERT(fileStream, "Could not open file: " + in_filePath);
         
         u32 length = u32(fileStream->GetLength());
+        SHA256 hash;
+        hash.reset();
+        
         
         if(length == 0)
         {
             return "";
         }
         
-        std::unique_ptr<u8[]> fileContents(new u8(length));
-        fileStream->Read(fileContents.get(), length);
+        u8 fileData[SHA256::BlockSize];
         
+        // Read chunks
+        while(length >= SHA256::BlockSize)
+        {
+            fileStream->Read(fileData, SHA256::BlockSize);
+            
+            hash.add(reinterpret_cast<const u8*>(fileData), SHA256::BlockSize);
+            length -= SHA256::BlockSize;
+        }
+        
+        // Last Chunk
+        if(length > 0)
+        {
+            fileStream->Read(fileData, length);
+            hash.add(reinterpret_cast<const u8*>(fileData), length);
+        }
 
-        return HashSHA256::GenerateHexHashCode(reinterpret_cast<s8*>(fileContents.get()), length);
+        return hash.getHash();
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------

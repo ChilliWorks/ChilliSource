@@ -16,7 +16,6 @@ Version 2.1.3, 2017-
 * Changed: Ray/Plane intersection test is no longer a member function of Plane, but now resides in ShapeIntersection along with the other intersection tests.
 * Changed: Where available the iOS dialogue system is backed by the newer UIAlertController rather than the deprecated UIAlertView
 * Changed: SetParentTransform, AddChildTransform, RemoveChildTransform and RemoveAllChildTransforms in Transform are now private and cannot be accessed outside of Entity.
-* Changed: Now using SHA-256 for checksums in ContentManagementSystem. SHA-1 can be enabled by defining CS_USE_SHA1_CHECKSUMS .
 
 Version 2.1.2, 2017-01-26
 -------------------------
