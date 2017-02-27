@@ -47,7 +47,6 @@
 #include <ChilliSource/Rendering/Base/IRenderPassCompiler.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderCommandCompiler.h>
-#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderFrame.h>
 #include <ChilliSource/Rendering/Base/RenderFrameCompiler.h>

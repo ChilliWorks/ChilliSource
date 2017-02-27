@@ -56,7 +56,6 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Base/RenderCommandBufferManager.h>
-#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderSnapshot.h>
 #include <ChilliSource/Rendering/Base/TargetType.h>
@@ -343,7 +342,6 @@ namespace ChilliSource
         CreateSystem<TextureAtlasProvider>();
         CreateSystem<TextureProvider>();
         CreateSystem<FontProvider>();
-        CreateSystem<RenderComponentFactory>();
         
         //Particles
         CreateSystem<CSParticleProvider>();

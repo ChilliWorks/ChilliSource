@@ -1,6 +1,10 @@
 ChilliSource Change Log
 =======================
 
+Version 2.2.0, 2017-
+-------------------------
+* Removed: Render component factory. Just use the constructors of the render components instead (to replicate CreatePerspectiveCamera pass screenWidth/screenHeight for aspect ratio)
+
 Version 2.1.3, 2017-02-27
 -------------------------
 * Added: Thread safe ObjectPoolAllocator that pre allocates objects of a specific type. Now using this within the renderer to reduce allocations.

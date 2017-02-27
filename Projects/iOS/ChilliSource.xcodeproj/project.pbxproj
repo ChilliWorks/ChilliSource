@@ -184,7 +184,6 @@
 		818461C21D3503E8004B0C46 /* RenderCapabilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81845F8E1D3503E8004B0C46 /* RenderCapabilities.cpp */; };
 		818461C31D3503E8004B0C46 /* RenderCommandBufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81845F901D3503E8004B0C46 /* RenderCommandBufferManager.cpp */; };
 		818461C41D3503E8004B0C46 /* RenderCommandCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81845F921D3503E8004B0C46 /* RenderCommandCompiler.cpp */; };
-		818461C51D3503E8004B0C46 /* RenderComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81845F941D3503E8004B0C46 /* RenderComponentFactory.cpp */; };
 		818461C61D3503E8004B0C46 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81845F961D3503E8004B0C46 /* Renderer.cpp */; };
 		818461C71D3503E8004B0C46 /* RenderFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81845F981D3503E8004B0C46 /* RenderFrame.cpp */; };
 		818461C81D3503E8004B0C46 /* RenderFrameCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81845F9A1D3503E8004B0C46 /* RenderFrameCompiler.cpp */; };
@@ -901,8 +900,6 @@
 		81845F911D3503E8004B0C46 /* RenderCommandBufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandBufferManager.h; sourceTree = "<group>"; };
 		81845F921D3503E8004B0C46 /* RenderCommandCompiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCommandCompiler.cpp; sourceTree = "<group>"; };
 		81845F931D3503E8004B0C46 /* RenderCommandCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderCommandCompiler.h; sourceTree = "<group>"; };
-		81845F941D3503E8004B0C46 /* RenderComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderComponentFactory.cpp; sourceTree = "<group>"; };
-		81845F951D3503E8004B0C46 /* RenderComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderComponentFactory.h; sourceTree = "<group>"; };
 		81845F961D3503E8004B0C46 /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		81845F971D3503E8004B0C46 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		81845F981D3503E8004B0C46 /* RenderFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderFrame.cpp; sourceTree = "<group>"; };
@@ -2628,8 +2625,6 @@
 				81845F911D3503E8004B0C46 /* RenderCommandBufferManager.h */,
 				81845F921D3503E8004B0C46 /* RenderCommandCompiler.cpp */,
 				81845F931D3503E8004B0C46 /* RenderCommandCompiler.h */,
-				81845F941D3503E8004B0C46 /* RenderComponentFactory.cpp */,
-				81845F951D3503E8004B0C46 /* RenderComponentFactory.h */,
 				81845F961D3503E8004B0C46 /* Renderer.cpp */,
 				81845F971D3503E8004B0C46 /* Renderer.h */,
 				81845F981D3503E8004B0C46 /* RenderFrame.cpp */,
@@ -3773,7 +3768,6 @@
 				8158F7D01C89D2AD00B13109 /* DeviceButtonSystem.mm in Sources */,
 				818461911D3503E8004B0C46 /* StateManager.cpp in Sources */,
 				818462781D3503E8004B0C46 /* Subtitles.cpp in Sources */,
-				818461C51D3503E8004B0C46 /* RenderComponentFactory.cpp in Sources */,
 				8158F7C11C89D2AD00B13109 /* CSAppDelegate.mm in Sources */,
 				818461A11D3503E8004B0C46 /* XML.cpp in Sources */,
 				818461701D3503E8004B0C46 /* BinaryInputStream.cpp in Sources */,

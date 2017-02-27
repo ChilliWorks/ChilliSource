@@ -43,18 +43,20 @@ namespace ChilliSource
     {
     public:
         CS_DECLARE_NAMEDTYPE(PerspectiveCameraComponent);
-        //----------------------------------------------------------
-        /// Constructor
+        
+        /// @param aspectRatio
+        ///     The aspect ratio of the camera viewport (usually screenWidth/screenHeight)
+        /// @param fov
+        ///     Full vertical field of view in radians
+        /// @param nearClip
+        ///     Distance to the near clip plane in view space
+        /// @param farClip
+        ///     Distance to the far clip plane in view space
+        /// @param resizePolicy
+        ///     How the viewport responds to the screen resizing (usually scaleWithScreen)
         ///
-        /// @author S Downie
-        ///
-        /// @param Aspect ratio
-        /// @param Full vertical field of view in radians
-        /// @param Resize policy
-        /// @param Near plane
-        /// @param Far plane
-        //----------------------------------------------------------
-        PerspectiveCameraComponent(f32 in_aspectRatio, f32 in_fov, ViewportResizePolicy in_resizePolicy, f32 in_nearClip, f32 in_farClip);
+        PerspectiveCameraComponent(f32 aspectRatio, f32 fov, f32 nearClip, f32 farClip, ViewportResizePolicy resizePolicy = ViewportResizePolicy::k_scaleWithScreen);
+        
         //----------------------------------------------------------
         /// Is A
         ///

@@ -153,13 +153,34 @@ namespace ChilliSource
     }
     
     CS_DEFINE_NAMEDTYPE(SpriteComponent);
-    //----------------------------------------------------------
+    
     //----------------------------------------------------------
     SpriteComponent::SpriteComponent()
     : m_uvs(0.0f, 0.0f, 1.0f, 1.0f)
     {
         m_sizePolicyDelegate = k_sizeDelegates[(u32)SizePolicy::k_none];
     }
+    
+    //----------------------------------------------------------
+    SpriteComponent::SpriteComponent(const MaterialCSPtr& material, const Vector2& size, SizePolicy sizePolicy)
+    : m_uvs(0.0f, 0.0f, 1.0f, 1.0f)
+    {
+        SetMaterial(material);
+        SetSize(size);
+        SetSizePolicy(sizePolicy);
+    }
+    
+    //----------------------------------------------------------
+    SpriteComponent::SpriteComponent(const MaterialCSPtr& material, const TextureAtlasCSPtr& atlas, const std::string& atlasId, const Vector2& size, SizePolicy sizePolicy)
+    : m_uvs(0.0f, 0.0f, 1.0f, 1.0f)
+    {
+        SetMaterial(material);
+        SetTextureAtlas(atlas);
+        SetTextureAtlasId(atlasId);
+        SetSize(size);
+        SetSizePolicy(sizePolicy);
+    }
+    
     //----------------------------------------------------------
     //----------------------------------------------------------
     bool SpriteComponent::IsA(InterfaceIDType in_interfaceId) const

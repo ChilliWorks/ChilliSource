@@ -44,17 +44,17 @@ namespace ChilliSource
     public:
 
         CS_DECLARE_NAMEDTYPE(OrthographicCameraComponent);
-        //----------------------------------------------------------
-        /// Constructor
+
+        /// @param viewportSize
+        ///     Size of the viewport
+        /// @param nearClip
+        ///     Distance to the near clip plane in view space
+        /// @param farClip
+        ///     Distance to the far clip plane in view space
+        /// @param resizePolicy
+        ///     Governs how the viewport size responds to changes to the screen size
         ///
-        /// @author S Downie
-        ///
-        /// @param Viewport size
-        /// @param Resize policy
-        /// @param Near plane
-        /// @param Far plane
-        //----------------------------------------------------------
-        OrthographicCameraComponent(const Vector2& in_viewportSize, ViewportResizePolicy in_resizePolicy, f32 in_nearClip, f32 in_farClip);
+        OrthographicCameraComponent(const Vector2& viewportSize, f32 nearClip, f32 farClip, ViewportResizePolicy resizePolicy = ViewportResizePolicy::k_scaleWithScreen);
         //----------------------------------------------------------
         /// @author S Downie
         ///

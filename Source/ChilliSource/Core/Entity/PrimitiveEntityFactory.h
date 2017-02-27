@@ -160,7 +160,6 @@ namespace ChilliSource
         void OnDestroy() override;
         
         ResourcePool* m_resourcePool = nullptr;
-        RenderComponentFactory* m_renderComponentFactory = nullptr;
         PrimitiveModelFactory* m_primitiveModelFactory = nullptr;
         MaterialFactory* m_materialFactory = nullptr;
         u64 m_entityCount = 0;

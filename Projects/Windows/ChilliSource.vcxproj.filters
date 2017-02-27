@@ -978,9 +978,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClCompile>
@@ -2442,9 +2439,6 @@
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h">
-      <Filter>ChilliSource\Rendering\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h">
       <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h">
