@@ -31,7 +31,6 @@
 #include <ChilliSource/Core/Base/ByteBuffer.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
-#include <ChilliSource/Core/Cryptographic/HashSHA256.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -225,14 +224,14 @@ namespace ChilliSource
         CS_ASSERT(fileStream, "Could not open file: " + in_filePath);
         
         u32 length = u32(fileStream->GetLength());
-        SHA256 hash;
-        hash.reset();
-        
-        
+
         if(length == 0)
         {
             return "";
         }
+        
+        SHA256 hash;
+        hash.reset();
         
         u8 fileData[SHA256::BlockSize];
         
