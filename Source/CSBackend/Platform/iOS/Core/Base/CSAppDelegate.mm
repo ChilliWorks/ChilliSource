@@ -292,10 +292,10 @@ CSAppDelegate* singletonInstance = nil;
 ///
 - (void)glkViewControllerUpdate:(GLKViewController*)controller
 {
-//    if (m_isActive == YES)
-//    {
-//        m_lifecycleManager->SystemUpdate();
-//    }
+    if (m_isActive == YES)
+    {
+        m_lifecycleManager->SystemUpdate();
+    }
 }
 
 
@@ -311,14 +311,6 @@ CSAppDelegate* singletonInstance = nil;
 {
     if (m_isActive == YES)
     {
-        //Sometimes iOS steals the context and doesn't return it.
-        if([EAGLContext currentContext] != view.context)
-        {
-            [EAGLContext setCurrentContext:view.context];
-        }
-        
-        m_lifecycleManager->SystemUpdate();
-        
         m_lifecycleManager->Render();
     }
 }
