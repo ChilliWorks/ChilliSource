@@ -4,6 +4,9 @@ ChilliSource Change Log
 Version 2.2.0, 2017-
 -------------------------
 * Removed: Render component factory. Just use the constructors of the render components instead (to replicate CreatePerspectiveCamera pass screenWidth/screenHeight for aspect ratio)
+* Deprecated: Support for SHA-1
+* Added: SHA-256 hashing support
+* Changed: ContentManagementSystem now uses SHA-256 unless compiler flag CS_USE_SHA1_CHECKSUMS is enabled for legacy applications.
 
 Version 2.1.3, 2017-02-27
 -------------------------
