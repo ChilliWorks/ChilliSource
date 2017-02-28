@@ -350,7 +350,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Calculate a checksum for the file. Will call the custom
         /// checksum delegate if provided. Otherwise, will perform an
-        /// SHA1 hash of the file and convert that to base 64 encoded
+        /// SHA256 hash of the file and convert that to base 64 encoded
         /// and then trim the trailing '='
         ///
         /// @author S Downie

@@ -31,7 +31,6 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
-#include <ChilliSource/Core/Cryptographic/HashSHA1.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
