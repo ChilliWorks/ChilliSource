@@ -81,11 +81,11 @@ namespace CSBackend
             void Reset() noexcept;
             
         private:
-            /// Finds the next free texture unit, asserting if they are all currently full.
+            /// Finds a free texture unit or if the texture is already bound then the unit it is bound to, asserting if they are all currently full.
             ///
-            /// @return The next free texture unit.
+            /// @return A free texture unit (or the unit of the given texture if already bound).
             ///
-            GLuint GetNextAvailableUnit() const noexcept;
+            GLint GetBoundOrAvailableUnit(const ChilliSource::RenderTexture* texture) const noexcept;
             
             std::vector<const ChilliSource::RenderTexture*> m_boundTextures;
         };

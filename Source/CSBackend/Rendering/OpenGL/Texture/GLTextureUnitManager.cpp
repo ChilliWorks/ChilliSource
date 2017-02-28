@@ -95,27 +95,30 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         GLuint GLTextureUnitManager::BindAdditional(GLenum target, const ChilliSource::RenderTexture* texture) noexcept
         {
-            GLuint textureIndex = GetNextAvailableUnit();
+            GLuint textureIndex = GetBoundOrAvailableUnit(texture);
             
-            m_boundTextures.push_back(texture);
-            
-            glActiveTexture(GL_TEXTURE0 + textureIndex);
-            
-            switch(target)
+            if (m_boundTextures[textureIndex] != texture)
             {
-                case GL_TEXTURE_2D:
+                m_boundTextures[textureIndex] = texture;
+                
+                glActiveTexture((GLenum)GL_TEXTURE0 + textureIndex);
+                
+                switch(target)
                 {
-                    auto glTexture = static_cast<GLTexture*>(texture->GetExtraData());
-                    CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
-                    glBindTexture(target, glTexture->GetHandle());
-                    break;
-                }
-                case GL_TEXTURE_CUBE_MAP:
-                {
-                    auto glCubemap = static_cast<GLCubemap*>(texture->GetExtraData());
-                    CS_ASSERT(glCubemap, "Cannot bind a cubemap which hasn't been loaded.");
-                    glBindTexture(target, glCubemap->GetHandle());
-                    break;
+                    case GL_TEXTURE_2D:
+                    {
+                        auto glTexture = static_cast<GLTexture*>(texture->GetExtraData());
+                        CS_ASSERT(glTexture, "Cannot bind a texture which hasn't been loaded.");
+                        glBindTexture(target, glTexture->GetHandle());
+                        break;
+                    }
+                    case GL_TEXTURE_CUBE_MAP:
+                    {
+                        auto glCubemap = static_cast<GLCubemap*>(texture->GetExtraData());
+                        CS_ASSERT(glCubemap, "Cannot bind a cubemap which hasn't been loaded.");
+                        glBindTexture(target, glCubemap->GetHandle());
+                        break;
+                    }
                 }
             }
         
@@ -136,22 +139,25 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        GLuint GLTextureUnitManager::GetNextAvailableUnit() const noexcept
+        GLint GLTextureUnitManager::GetBoundOrAvailableUnit(const ChilliSource::RenderTexture* texture) const noexcept
         {
-            u32 index = 0;
+            GLint freeIndex = -1;
             
-            for (const auto& texture : m_boundTextures)
+            for(u32 i=0; i<m_boundTextures.size(); ++i)
             {
-                if (!texture)
+                if(m_boundTextures[i] == texture)
                 {
-                    return index;
+                    return (GLint)i;
                 }
                 
-                 ++index;
+                if(m_boundTextures[i] == nullptr && freeIndex == -1)
+                {
+                    freeIndex = (GLint)i;
+                }
             }
             
-            CS_LOG_FATAL("No free texture units.");
-            return 0;
+            CS_ASSERT(freeIndex >= 0, "No free GL texture units");
+            return freeIndex;
         }
     }
 }
