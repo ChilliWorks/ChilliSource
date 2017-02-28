@@ -338,7 +338,7 @@ namespace ChilliSource
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
         AddRenderMaterialGroup(renderMaterialGroupRaw);
         
-        return std::move(renderMaterialGroup);
+        return renderMaterialGroup;
     }
     
     //------------------------------------------------------------------------------
@@ -416,7 +416,7 @@ namespace ChilliSource
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
         AddRenderMaterialGroup(renderMaterialGroupRaw);
         
-        return std::move(renderMaterialGroup);
+        return renderMaterialGroup;
     }
     
     //------------------------------------------------------------------------------
@@ -450,7 +450,7 @@ namespace ChilliSource
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
         AddRenderMaterialGroup(renderMaterialGroupRaw);
         
-        return std::move(renderMaterialGroup);
+        return renderMaterialGroup;
     }
     
     //------------------------------------------------------------------------------
@@ -561,7 +561,7 @@ namespace ChilliSource
         auto renderMaterialGroupRaw = renderMaterialGroup.get();
         AddRenderMaterialGroup(renderMaterialGroupRaw);
         
-        return std::move(renderMaterialGroup);
+        return renderMaterialGroup;
     }
     
     //------------------------------------------------------------------------------

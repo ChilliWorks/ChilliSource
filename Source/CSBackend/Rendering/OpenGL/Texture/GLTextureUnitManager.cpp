@@ -61,7 +61,7 @@ namespace CSBackend
                 {
                     m_boundTextures[textureUnitIndex] = textures[i];
                     
-                    glActiveTexture(GL_TEXTURE0 + textureUnitIndex);
+                    glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
                     
                     switch(target)
                     {

@@ -384,6 +384,6 @@ namespace ChilliSource
             taskContext.ProcessChildTasks(tasks);
         }
         
-        return std::move(renderCommandBuffer);
+        return renderCommandBuffer;
     }
 }

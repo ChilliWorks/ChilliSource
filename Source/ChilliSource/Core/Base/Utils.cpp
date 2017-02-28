@@ -63,7 +63,7 @@ namespace ChilliSource
             
             pFile->Write(instrFileOut);
             
-            return std::move(pFile);
+            return pFile;
         }
         
         bool ZlibCompressString(const std::string &instrUncompressed, std::string &outstrCompressed)

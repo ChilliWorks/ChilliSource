@@ -68,7 +68,7 @@ namespace CSBackend
                 s8* machine = new s8[size];
                 sysctlbyname("hw.machine", machine, &size, nullptr, 0);
                 std::string modelType(machine);
-                CS_SAFEDELETE(machine);
+                CS_SAFEDELETE_ARRAY(machine);
                 
                 std::string output;
                 bool record = false;

@@ -141,7 +141,7 @@ namespace ChilliSource
             u32 udwSize = 0;
             ImageFormat eFormat = ImageFormat::k_RGBA8888;
             bool bFoundFormat = GetFormatInfo(sHeader.m_imageFormat, sHeader.m_width, sHeader.m_height, eFormat, udwSize);
-            CS_ASSERT(bFoundFormat, "Invalid CSImage Format.");
+            CS_RELEASE_ASSERT(bFoundFormat, "Invalid CSImage Format.");
             
             u8* pubyBitmapData = nullptr;
             if(sHeader.m_compression != 0)

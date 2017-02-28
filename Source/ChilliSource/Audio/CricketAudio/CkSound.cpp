@@ -44,7 +44,6 @@ namespace ChilliSource
 {
     namespace
     {
-        const char k_className[] = "CkSound";
         const f32 k_secondsPerMillisecond = 1.0f / 1000.0f;
     }
     
@@ -65,14 +64,14 @@ namespace ChilliSource
     CkSound::CkSound(const CkBankCSPtr& in_audioBank, const std::string& in_audioName)
     : m_audioBank(in_audioBank)
     {
-        CS_ASSERT(m_audioBank != nullptr, "Cannot create " + std::string(k_className) + " with null audio bank.");
+        CS_ASSERT(m_audioBank != nullptr, "Cannot create CkSound with null audio bank.");
         CS_ASSERT(m_audioBank->GetLoadState() == Resource::LoadState::k_loaded, "Cannot create CkSound with an audio bank that hasn't been loaded: " + m_audioBank->GetName());
         
         m_sound = ::CkSound::newBankSound(m_audioBank->GetBank(), in_audioName.c_str());
-        CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because sound '" + in_audioName + "' doesn't exist in the bank '" + m_audioBank->GetName() + "'.");
+        CS_ASSERT(m_sound != nullptr, "Could not create CkSound because sound '" + in_audioName + "' doesn't exist in the bank '" + m_audioBank->GetName() + "'.");
         
         m_ckSystem = Application::Get()->GetSystem<CricketAudioSystem>();
-        CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CricketAudioSystem::TypeName);
+        CS_ASSERT(m_ckSystem != nullptr, "CkSound requires missing system: " + CricketAudioSystem::TypeName);
         
         m_ckSystem->Register(this);
     }
@@ -117,10 +116,10 @@ namespace ChilliSource
         }
 #endif
 
-        CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because audio stream '" + in_streamFilePath + "' doesn't exist.");
+        CS_ASSERT(m_sound != nullptr, "Could not create CkSound because audio stream '" + in_streamFilePath + "' doesn't exist.");
         
         m_ckSystem = Application::Get()->GetSystem<CricketAudioSystem>();
-        CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CricketAudioSystem::TypeName);
+        CS_ASSERT(m_ckSystem != nullptr, "CkSound requires missing system: " + CricketAudioSystem::TypeName);
         
         m_ckSystem->Register(this);
     }
@@ -176,7 +175,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void CkSound::Play(PlaybackMode in_playbackMode, const FinishedDelegate& in_finishedDelegate)
     {
-        CS_ASSERT(m_playbackState == PlaybackState::k_stopped, std::string(k_className) + " is already playing.");
+        CS_ASSERT(m_playbackState == PlaybackState::k_stopped, "CkSound is already playing.");
 
         m_playbackState = PlaybackState::k_playing;
         m_finishedDelegate = in_finishedDelegate;
@@ -200,7 +199,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void CkSound::Resume()
     {
-        CS_ASSERT(m_playbackState == PlaybackState::k_paused, std::string(k_className) + " cannot be resumed when it is not paused.");
+        CS_ASSERT(m_playbackState == PlaybackState::k_paused, "CkSound cannot be resumed when it is not paused.");
 
         m_playbackState = PlaybackState::k_playing;
         m_sound->setPaused(false);
@@ -209,7 +208,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void CkSound::Pause()
     {
-        CS_ASSERT(m_playbackState == PlaybackState::k_playing, std::string(k_className) + " can only be paused while playing.");
+        CS_ASSERT(m_playbackState == PlaybackState::k_playing, "CkSound can only be paused while playing.");
 
         m_playbackState = PlaybackState::k_paused;
         m_sound->setPaused(true);
@@ -218,7 +217,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void CkSound::Stop()
     {
-        CS_ASSERT(m_playbackState != PlaybackState::k_stopped, std::string(k_className) + " is already stopped.");
+        CS_ASSERT(m_playbackState != PlaybackState::k_stopped, "CkSound is already stopped.");
 
         if (m_sound->isPlaying() == true)
         {

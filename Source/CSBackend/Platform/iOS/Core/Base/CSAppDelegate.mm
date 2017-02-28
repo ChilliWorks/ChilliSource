@@ -288,6 +288,17 @@ CSAppDelegate* singletonInstance = nil;
 #pragma mark -
 #pragma mark GL Lifecycle
 
+/// Update the main game lopp
+///
+- (void)glkViewControllerUpdate:(GLKViewController*)controller
+{
+//    if (m_isActive == YES)
+//    {
+//        m_lifecycleManager->SystemUpdate();
+//    }
+}
+
+
 //-------------------------------------------------------------
 /// The main render loop for the application
 ///

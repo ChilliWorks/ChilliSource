@@ -34,8 +34,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void MarkupDef::AddKeyword(const std::string& in_name, bool in_nestable)
     {
-        bool hasKeyword = HasKeyword(in_name);
-        CS_ASSERT(hasKeyword == false, "The markup definition already has \"" + in_name + "\" as a keyword");
+        CS_ASSERT(HasKeyword(in_name) == false, "The markup definition already has \"" + in_name + "\" as a keyword");
         
         m_keywords[in_name] = in_nestable;
     }

@@ -155,7 +155,7 @@ namespace ChilliSource
             ApplyVertexUvs(reinterpret_cast<SpriteVertex*>(vertexData.get()), uvs);
             ApplyVertexColour(reinterpret_cast<SpriteVertex*>(vertexData.get()), colour);
             
-            return std::move(vertexData);
+            return vertexData;
         }
         
         /// Creates the index data. This data will be allocated from the given allocator.
@@ -168,7 +168,7 @@ namespace ChilliSource
             
             memcpy(indexData.get(), k_indices, k_indexDataSize);
             
-            return std::move(indexData);
+            return indexData;
         }
         
         /// Calculates the bounding sphere required for sprite with the given positional data.

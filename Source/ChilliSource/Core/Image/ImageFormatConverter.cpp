@@ -146,7 +146,7 @@ namespace ChilliSource
                 pixel24->m_b = pixel32->b;
             }
 
-            return std::move(outputBuffer);
+            return outputBuffer;
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -172,7 +172,7 @@ namespace ChilliSource
                     ((((*pixel32 >> 24) & 0xFF) >> 4) << 0); // A
             }
 
-            return std::move(outputBuffer);
+            return outputBuffer;
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -197,7 +197,7 @@ namespace ChilliSource
                     ((((*pixel32 >> 16) & 0xFF) >> 3) << 0);
             }
 
-            return std::move(outputBuffer);
+            return outputBuffer;
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -221,7 +221,7 @@ namespace ChilliSource
                     ((*pixel32 >> 16) & 0xFF00); // A
             }
 
-            return std::move(outputBuffer);
+            return outputBuffer;
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -244,7 +244,7 @@ namespace ChilliSource
                 *pixel8 = ((*pixel32)& 0xFF);
             }
 
-            return std::move(outputBuffer);
+            return outputBuffer;
         }
     }
 }

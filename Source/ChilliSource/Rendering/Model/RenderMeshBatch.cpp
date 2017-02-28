@@ -43,11 +43,9 @@ namespace ChilliSource
     {
         CS_ASSERT(m_meshes.size() > 0, "Cannot create a batch with zero size.");
         
-        bool batchHasIndices = (m_meshes[0].GetIndexDataSize() > 0);
         for (const auto& mesh : m_meshes)
         {
-            bool meshHasIndices = (mesh.GetIndexDataSize() > 0);
-            CS_ASSERT(meshHasIndices == batchHasIndices, "Either all meshes must have indices, or all meshes must have no indices.");
+            CS_ASSERT((mesh.GetIndexDataSize() > 0) == (m_meshes[0].GetIndexDataSize() > 0), "Either all meshes must have indices, or all meshes must have no indices.");
             
             m_numVertices += mesh.GetNumVertices();
             m_numIndices += mesh.GetNumIndices();

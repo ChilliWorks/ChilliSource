@@ -76,7 +76,7 @@ namespace ChilliSource
         std::unique_lock<std::mutex> lock(m_mutex);
         m_pendingLoadCommands.push_back(std::move(loadCommand));
         
-        return std::move(renderMesh);
+        return renderMesh;
     }
 
     //------------------------------------------------------------------------------

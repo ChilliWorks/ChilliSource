@@ -89,6 +89,7 @@ namespace CSBackend
             /// is only the case below iOS 8, and this is
             /// effectively a check for pre-iOS 8.
             //----------------------------------------------------
+#if DEBUG
             bool ShouldCalculateBasedOnOrientation()
             {
 #ifdef NSFoundationVersionNumber_iOS_7_1
@@ -97,6 +98,7 @@ namespace CSBackend
                 return true;
 #endif
             }
+#endif
         }
         
         CS_DEFINE_NAMEDTYPE(Screen);

@@ -44,11 +44,10 @@ namespace ChilliSource
         //-----------------------------------------------------------
         ByteColour ColourToByteColour(f32 in_red, f32 in_green, f32 in_blue, f32 in_alpha)
         {
-            const f32 tolerance = std::numeric_limits<f32>::epsilon();
-            CS_ASSERT(in_red >= -tolerance && in_red <= 1.0f + tolerance, "Colour must be in range 0.0 - 1.0");
-            CS_ASSERT(in_green >= -tolerance && in_green <= 1.0f + tolerance, "Colour must be in range 0.0 - 1.0");
-            CS_ASSERT(in_blue >= -tolerance && in_blue <= 1.0f + tolerance, "Colour must be in range 0.0 - 1.0");
-            CS_ASSERT(in_alpha >= -tolerance && in_alpha <= 1.0f + tolerance, "Colour must be in range 0.0 - 1.0");
+            CS_ASSERT(in_red >= -std::numeric_limits<f32>::epsilon() && in_red <= 1.0f + std::numeric_limits<f32>::epsilon(), "Colour must be in range 0.0 - 1.0");
+            CS_ASSERT(in_green >= -std::numeric_limits<f32>::epsilon() && in_green <= 1.0f + std::numeric_limits<f32>::epsilon(), "Colour must be in range 0.0 - 1.0");
+            CS_ASSERT(in_blue >= -std::numeric_limits<f32>::epsilon() && in_blue <= 1.0f + std::numeric_limits<f32>::epsilon(), "Colour must be in range 0.0 - 1.0");
+            CS_ASSERT(in_alpha >= -std::numeric_limits<f32>::epsilon() && in_alpha <= 1.0f + std::numeric_limits<f32>::epsilon(), "Colour must be in range 0.0 - 1.0");
             
             ByteColour result;
             

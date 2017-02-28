@@ -41,7 +41,7 @@ namespace ChilliSource
     void BinaryOutputStream::Write(const u8* data, u64 length) noexcept
     {
         CS_ASSERT(IsValid(), "Trying to use an invalid FileStream.");
-        m_fileStream.write(reinterpret_cast<const s8*>(data), length);
+        m_fileStream.write(reinterpret_cast<const s8*>(data), (std::streamsize)length);
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured writing to the stream.");
     }
     //------------------------------------------------------------------------------

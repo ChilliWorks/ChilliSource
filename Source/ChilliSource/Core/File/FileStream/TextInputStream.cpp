@@ -133,11 +133,11 @@ namespace ChilliSource
             return false;
         }
         
-        readChars.resize(length);
+        readChars.resize((std::string::size_type)length);
         
         //A string is guaranteed to be in contiguous memory in the c++11 standard, but not in c++03.
         //this allows the below overwrite to work
-        m_fileStream.read(&readChars[0], length);
+        m_fileStream.read(&readChars[0], (std::streamsize)length);
         
         //Shouldn't check fail here as the fail bit will be set on a read overrun, which we handle
         CS_ASSERT(!m_fileStream.bad(), "Unexpected error occured in filestream");

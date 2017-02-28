@@ -99,7 +99,7 @@ namespace ChilliSource
                 dwBytesRemaining -= k_aesBlockSize;
             }
             
-            return std::move(output);
+            return output;
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -129,7 +129,7 @@ namespace ChilliSource
                 dwBytesRemaining -= k_aesBlockSize;
             }
             
-            return std::move(output);
+            return output;
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -173,7 +173,7 @@ namespace ChilliSource
             }
             AES_encrypt(finalBlock.get(), writeData, &privateKey);
             
-            return std::move(output);
+            return output;
         }
         //---------------------------------------------------
         //---------------------------------------------------

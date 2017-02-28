@@ -49,6 +49,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not it exists.
         //-------------------------------------------------------
+#if DEBUG
         bool GestureExists(concurrent_vector<GestureSPtr>& in_gestureList, const Gesture* in_gesture)
         {
             in_gestureList.lock();
@@ -62,6 +63,7 @@ namespace ChilliSource
             in_gestureList.unlock();
             return false;
         }
+#endif
     }
     
     CS_DEFINE_NAMEDTYPE(GestureSystem);

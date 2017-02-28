@@ -70,7 +70,7 @@ namespace ChilliSource
         std::unique_lock<std::mutex> lock(m_mutex);
         m_pendingLoadCommands2D.push_back(std::move(loadCommand));
         
-        return std::move(renderTexture);
+        return renderTexture;
     }
     
     //------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ namespace ChilliSource
         std::unique_lock<std::mutex> lock(m_mutex);
         m_pendingLoadCommandsCubemap.push_back(std::move(loadCommand));
         
-        return std::move(renderTexture);
+        return renderTexture;
     }
     
     //------------------------------------------------------------------------------

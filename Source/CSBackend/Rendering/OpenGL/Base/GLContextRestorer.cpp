@@ -132,11 +132,13 @@ namespace CSBackend
             {
                 ChilliSource::ResourcePool* resourcePool = ChilliSource::Application::Get()->GetResourcePool();
                 
+#if DEBUG
                 auto allShaders = resourcePool->GetAllResources<ChilliSource::Shader>();
                 for (const auto& shader : allShaders)
                 {
                 	CS_ASSERT(shader->GetStorageLocation() != ChilliSource::StorageLocation::k_none, "Cannot restore Shader because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
                 }
+#endif
                 resourcePool->RefreshResources<ChilliSource::Shader>();
                 
                 auto allTextures = resourcePool->GetAllResources<ChilliSource::Texture>();

@@ -68,7 +68,7 @@ namespace ChilliSource
         m_renderTargetGroups.push_back(renderTargetGroupRaw);
         m_pendingLoadCommands.push_back(renderTargetGroupRaw);
         
-        return std::move(renderTargetGroup);
+        return renderTargetGroup;
     }
 
     //------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ namespace ChilliSource
         m_renderTargetGroups.push_back(renderTargetGroupRaw);
         m_pendingLoadCommands.push_back(renderTargetGroupRaw);
         
-        return std::move(renderTargetGroup);
+        return renderTargetGroup;
     }
 
     //------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ namespace ChilliSource
         m_renderTargetGroups.push_back(renderTargetGroupRaw);
         m_pendingLoadCommands.push_back(renderTargetGroupRaw);
         
-        return std::move(renderTargetGroup);
+        return renderTargetGroup;
     }
     
     //------------------------------------------------------------------------------

@@ -79,10 +79,12 @@ namespace ChilliSource
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         
+#if DEBUG
         for (IAllocator* queuedAllocators : m_queue)
         {
             CS_ASSERT(queuedAllocators != allocator, "Allocator is already in queue, cannot be pushed twice!");
         }
+#endif
         
         for (auto& pagedLinearAllocator : m_allocators)
         {

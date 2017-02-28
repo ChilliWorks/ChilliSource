@@ -275,7 +275,7 @@ namespace CSBackend
         {
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
             {
-                CS_ASSERT(ContainsProductId(m_productRegInfos, in_productId), "Products must be registered with the IAP system before purchasing");
+                CS_RELEASE_ASSERT(ContainsProductId(m_productRegInfos, in_productId), "Products must be registered with the IAP system before purchasing");
                 NSString* productID = [NSStringUtils newNSStringWithUTF8String:in_productId];
                 [m_storeKitSystem requestPurchaseWithProductID:productID andQuantity:1];
                 [productID release];

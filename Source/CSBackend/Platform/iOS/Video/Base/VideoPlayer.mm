@@ -105,7 +105,7 @@ namespace CSBackend
             CS_RELEASE_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot present video on background thread.");
             
             auto previousState = m_currentState.exchange(State::k_loading);
-            CS_ASSERT(previousState == State::k_inactive, "Cannot present video while a video is already playing.");
+            CS_RELEASE_ASSERT(previousState == State::k_inactive, "Cannot present video while a video is already playing.");
             
             m_completionDelegateConnection = std::move(in_delegateConnection);
             
@@ -184,7 +184,7 @@ namespace CSBackend
         void VideoPlayer::Prepare()
         {
             auto previousState = m_currentState.exchange(State::k_ready);
-            CS_ASSERT(previousState == State::k_loading, "Video player not presented, cannot prepare to play video.");
+            CS_RELEASE_ASSERT(previousState == State::k_loading, "Video player not presented, cannot prepare to play video.");
             
             [m_moviePlayerController setControlStyle:MPMovieControlStyleNone];
             [m_moviePlayerController setFullscreen:YES];
@@ -196,7 +196,7 @@ namespace CSBackend
         void VideoPlayer::Play()
         {
             auto previousState = m_currentState.exchange(State::k_playing);
-            CS_ASSERT(previousState == State::k_ready, "Video player not prepared to play video yet, cannot play.");
+            CS_RELEASE_ASSERT(previousState == State::k_ready, "Video player not prepared to play video yet, cannot play.");
             
             CreateVideoOverlay();
             [m_moviePlayerController play];
@@ -268,7 +268,7 @@ namespace CSBackend
         void VideoPlayer::OnPlaybackFinished()
         {
             auto previousState = m_currentState.exchange(State::k_inactive);
-            CS_ASSERT(previousState == State::k_playing, "Playback finished should only happen once per playing video.");
+            CS_RELEASE_ASSERT(previousState == State::k_playing, "Playback finished should only happen once per playing video.");
             
             DeleteVideoOverlay();
             

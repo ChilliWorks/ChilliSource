@@ -102,7 +102,7 @@ namespace ChilliSource
             return true;
         }
         
-        m_fileStream.read(reinterpret_cast<s8*>(buffer), maxValidLength);
+        m_fileStream.read(reinterpret_cast<s8*>(buffer), (std::streamsize)maxValidLength);
         
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured in filestream");
         
@@ -128,7 +128,7 @@ namespace ChilliSource
         }
         
         s8* data = new s8[maxValidLength];
-        m_fileStream.read(data, maxValidLength);
+        m_fileStream.read(data, (std::streamsize)maxValidLength);
         
         CS_ASSERT(!m_fileStream.fail(), "Unexpected error occured in filestream");
 
