@@ -33,7 +33,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not the given image format can be restored.
         ///
-#if DEBUG
+#if CS_ENABLE_DEBUG
         constexpr bool IsImageFormatRestorable(ImageFormat imageFormat) noexcept
         {
             return (imageFormat == ImageFormat::k_RGBA8888 || imageFormat == ImageFormat::k_RGB888 || imageFormat == ImageFormat::k_RGBA4444 || imageFormat == ImageFormat::k_RGB565);

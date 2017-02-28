@@ -85,7 +85,7 @@ namespace CSBackend
             /// Validates that the current frame buffer is complete. If it isn't, a fatal error
             /// will occur.
             ///
-#if DEBUG
+#if CS_ENABLE_DEBUG
             void ValidateFramebuffer() noexcept
             {
                 GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);

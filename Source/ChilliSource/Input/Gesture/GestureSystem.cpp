@@ -49,7 +49,7 @@ namespace ChilliSource
         ///
         /// @return Whether or not it exists.
         //-------------------------------------------------------
-#if DEBUG
+#if CS_ENABLE_DEBUG
         bool GestureExists(concurrent_vector<GestureSPtr>& in_gestureList, const Gesture* in_gesture)
         {
             in_gestureList.lock();

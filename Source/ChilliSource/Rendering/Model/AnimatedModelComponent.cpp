@@ -60,7 +60,7 @@ namespace ChilliSource
     AnimatedModelComponent::AnimatedModelComponent(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials, const SkinnedAnimationCSPtr& skinnedAnimation, PlaybackType playbackType) noexcept
         : m_model(model), m_materials(materials)
     {
-#if DEBUG
+#if CS_ENABLE_DEBUG
         CS_ASSERT(m_model, "Model cannot be null");
         CS_ASSERT(m_model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
         CS_ASSERT(m_materials.size() == m_model->GetNumMeshes(), "Model component must have the same number of materials as there are meshes in the model.");
@@ -230,7 +230,7 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void AnimatedModelComponent::SetModel(const ModelCSPtr& model, const std::vector<MaterialCSPtr>& materials) noexcept
     {
-#if DEBUG
+#if CS_ENABLE_DEBUG
         CS_ASSERT(model, "Cannot set null model.");
         CS_ASSERT(model->GetLoadState() == Resource::LoadState::k_loaded, "Cannot use a model that hasn't been loaded yet.");
         CS_ASSERT(materials.size() == model->GetNumMeshes(), "Model component must have the same number of materials as there are meshes in the model.");

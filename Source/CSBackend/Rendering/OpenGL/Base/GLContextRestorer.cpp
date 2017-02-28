@@ -132,7 +132,7 @@ namespace CSBackend
             {
                 ChilliSource::ResourcePool* resourcePool = ChilliSource::Application::Get()->GetResourcePool();
                 
-#if DEBUG
+#if CS_ENABLE_DEBUG
                 auto allShaders = resourcePool->GetAllResources<ChilliSource::Shader>();
                 for (const auto& shader : allShaders)
                 {
