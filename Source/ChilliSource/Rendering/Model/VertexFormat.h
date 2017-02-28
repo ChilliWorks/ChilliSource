@@ -81,12 +81,13 @@ namespace ChilliSource
         {
             k_position4,
             k_normal3,
+			k_tangent3,
+			k_bitangent3,
             k_uv2,
             k_colour4,
             k_weight4,
-            k_jointIndex4,
-            k_tangent3,
-            k_bitangent3
+            k_jointIndex4
+  
         };
         
         /// An enum describing the possible data types for each component in a vertex

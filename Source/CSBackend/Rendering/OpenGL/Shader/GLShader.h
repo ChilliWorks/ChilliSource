@@ -52,6 +52,7 @@ namespace CSBackend
         public:
             CS_DECLARE_NOCOPY(GLShader);
             
+			static const u8 k_numAttributes = 8;
             static const std::string k_attributePosition;
             static const std::string k_attributeNormal;
             static const std::string k_attributeTangent;
@@ -184,8 +185,8 @@ namespace CSBackend
             /// Sets the attribute with the given name and data information. If the attribute doesn't
             /// exist then it will be ignored.
             ///
-            /// @param name
-            ///     The name of the attribute.
+            /// @param index
+            ///     The index of the attribute.
             /// @param size
             ///     The size of the data.
             /// @param type
@@ -197,7 +198,7 @@ namespace CSBackend
             /// @param offset
             ///     The data offset
             ///
-            void SetAttribute(const std::string& name, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
+			void SetAttribute(int index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
             
             /// Called when graphics memory is lost, usually through the GLContext being destroyed
             /// on Android. Function will set a flag to handle safe destructing of this object, preventing
@@ -231,7 +232,7 @@ namespace CSBackend
             GLuint m_fragmentShaderId = 0;
             GLuint m_programId = 0;
             std::unordered_map<std::string, GLint> m_uniformHandles;
-            std::unordered_map<std::string, GLint> m_attributeHandles;
+			GLint m_attributeHandles[k_numAttributes];
             
             bool m_invalidData = false;
         };
