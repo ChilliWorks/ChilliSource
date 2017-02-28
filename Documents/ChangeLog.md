@@ -1,6 +1,10 @@
 ChilliSource Change Log
 =======================
 
+Version 2.1.4, 2017-02-28
+-------------------------
+* HotFix: With shadows turned on the bound texture list in the renderer was expanding each frame and causing memory leaks and performance slowdown
+
 Version 2.1.3, 2017-02-27
 -------------------------
 * Added: Thread safe ObjectPoolAllocator that pre allocates objects of a specific type. Now using this within the renderer to reduce allocations.

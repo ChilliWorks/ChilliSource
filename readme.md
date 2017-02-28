@@ -1,6 +1,6 @@
 ![alt link](Documents/Images/ChilliSourceLogo.png)
 
-ChilliSource v2.1.3
+ChilliSource v2.1.4
 ====================
 
 ChilliSource is an open source, cross-platform game engine designed by game developers for game developers. It is completely free to use, released under the MIT License.
