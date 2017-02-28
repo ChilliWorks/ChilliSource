@@ -3,7 +3,7 @@
 ChilliSource v2.2.0
 ====================
 
-ChilliSource is an open source, cross-platform game engine designed by game developers for game developers. It is completely free to use, released under the MIT License.
+ChilliSource is an open source, cross-platform game engine designed by game developers for game developers. It is completely free to use (now and forever), released under the MIT License.
 
 |               | iOS           | Android       | Windows
 | ------------- |:-------------:|:-------------:|:-------------:|
@@ -16,6 +16,17 @@ Links
 * [ChilliSource Samples Repository](https://github.com/ChilliWorks/CSSamples)
 * [ChilliSource Testing Repository](https://github.com/ChilliWorks/CSTest)
 * [ChilliSource Forum](http://forums.chilli-works.com/)
+
+Main Features
+---------------
+* **Tried and Tested** - *Has been used to build commercial games for large companies.*
+* **Cross-platform** - *Write once and deploy to multiple platforms: **iOS**, **Android** and **Windows PC**.*
+* **Modern C++** - *Take advantage of modern C++ features including lambdas, smart pointers, etc.*
+* **3D** - *Create games in 3D using skeletal animations, shaders, lighting and shadows.*
+* **2D** - *Create 2D games using sprites and atlases.*
+* **UI** - *Create dynamic UI that adapts to different devices using ChilliSource's widget library and support for adding custom widgets.*
+* **Audio** - *Play music and sound effects using the popular Cricket Audio library.*
+* **Expand** - *Hook into OS lifecycle events to add your own 3rd party libs.*
 
 Getting Started
 ---------------
