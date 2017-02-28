@@ -8,6 +8,10 @@ Version 2.2.0, 2017-
 * Added: SHA-256 hashing support
 * Changed: ContentManagementSystem now uses SHA-256 unless compiler flag CS_USE_SHA1_CHECKSUMS is enabled for legacy applications.
 
+Version 2.1.4, 2017-02-28
+-------------------------
+* HotFix: With shadows turned on the bound texture list in the renderer was expanding each frame and causing memory leaks and performance slowdown
+
 Version 2.1.3, 2017-02-27
 -------------------------
 * Added: Thread safe ObjectPoolAllocator that pre allocates objects of a specific type. Now using this within the renderer to reduce allocations.
