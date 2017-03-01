@@ -62,7 +62,13 @@ all: $(SOURCES) $(CS_STATIC_LIB)
 
 # Link objs into static lib.
 $(CS_STATIC_LIB): $(OBJECTS)
-	$(AR) $(LDFLAGS) $(OBJECTS) -o $@
+	$(AR) rcs $(OBJECTS) $@ $^
+
+# Create executable
+executable: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 # Create objects only.
 .cpp.o:
