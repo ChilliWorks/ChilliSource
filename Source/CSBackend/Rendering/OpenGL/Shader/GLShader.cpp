@@ -242,7 +242,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLShader::SetAttribute(int index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept
+        void GLShader::SetAttribute(u8 index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept
         {
 			GLint handle = m_attributeHandles[index]; 
             if(handle < 0)
@@ -259,6 +259,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void GLShader::BuildAttributeHandleMap() noexcept
         {
+			// This list must be kept in the same order as the ElementType enum in VertexFormat.h
             static const std::array<std::string, 8> attribNames =
             {{
                 k_attributePosition, 
@@ -271,7 +272,7 @@ namespace CSBackend
                 k_attributeJointIndices
             }};
             
-            for(int i = 0; i < attribNames.size(); ++i)
+            for(std::size_t i = 0; i < attribNames.size(); ++i)
             {
                 GLint handle = glGetAttribLocation(m_programId, attribNames[i].c_str());
                 

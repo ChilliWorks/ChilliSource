@@ -77,6 +77,8 @@ namespace ChilliSource
         /// The number suffix indicates the number of components in the element, i.e
         /// k_position4 represents a position vector with [ X, Y, Z, W ] components.
         ///
+		/// The order of this enum is important, as the elements are used as indices when
+		/// setting shader attributes. See GLShader.cpp.
         enum class ElementType
         {
             k_position4,

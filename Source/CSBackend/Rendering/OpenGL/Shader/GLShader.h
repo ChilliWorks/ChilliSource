@@ -198,7 +198,7 @@ namespace CSBackend
             /// @param offset
             ///     The data offset
             ///
-			void SetAttribute(int index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
+			void SetAttribute(u8 index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
             
             /// Called when graphics memory is lost, usually through the GLContext being destroyed
             /// on Android. Function will set a flag to handle safe destructing of this object, preventing
