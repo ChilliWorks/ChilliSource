@@ -38,12 +38,20 @@ CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS
 CC=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
 AR=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-ar
 
-# Compiler Flags & Includes
+# Compiler Flags
 CS_CXXFLAGS_TARGET=-DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE -DCS_TARGETPLATFORM_RPI 
-CFLAGS=-c -Wall -O3 -std=c++11 $(CS_CXXFLAGS_TARGET) -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/ChilliSource/Source
+
+# Includes
+CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
+
+# Additional Compiler Flags
+CFLAGS=-c -O3 -std=c++11 $(CS_CXXFLAGS_TARGET) $(CS_INCLUDES)
+
+# Library Directories
+CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs
 
 # Linker Flags
-LDFLAGS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm
+LDFLAGS= $(CS_LIBRARY_DIRS) -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm
 
 # All Source Files
 SOURCES=$(CS_SOURCEFILES_CHILLISOURCE) $(CS_SOURCEFILES_PLATFORM) $(CS_SOURCEFILES_RENDERING)
