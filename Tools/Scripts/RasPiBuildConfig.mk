@@ -47,11 +47,11 @@ CS_MODULENAME_CSBASE := CSBase-prebuilt
 CS_MODULENAME_APPLICATION := Application
 
 #debug or release specific build flags.
-ifeq ($(DEBUG),1)
+#ifeq ($(DEBUG),1)
 CS_CXXFLAGS_TARGET := -g -DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE
-else
-CS_CXXFLAGS_TARGET := -O3 -DNDEBUG -DCS_LOGLEVEL_WARNING
-endif
+#else
+#CS_CXXFLAGS_TARGET := -O3 -DNDEBUG -DCS_LOGLEVEL_WARNING
+#endif
 
 
 #setup warnings
