@@ -332,6 +332,10 @@ public class CSApplication
 					system.onBackground();
 				}
 			}
+
+			//Often suspend is triggered by Android before background. So we handle backgrounding here and
+			//prevent the regular backgrounding path from running.
+			m_backgroundLifecycleEventOccurred = false;
 		}
 		
 		//create the task to be run on the rendering thread
@@ -339,7 +343,6 @@ public class CSApplication
 		{
 			@Override public void run() 
 			{
-                //Often suspend is triggered by Android before background. We need to ensure it is not!
                 if(shouldBackground)
                 {
                     m_coreSystem.background();
