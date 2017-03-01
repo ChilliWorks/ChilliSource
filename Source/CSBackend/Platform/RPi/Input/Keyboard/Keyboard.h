@@ -1,11 +1,7 @@
 //
-//  Keyboard.h
-//  ChilliSource
-//  Created by Scott Downie on 09/07/2014
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,60 +22,45 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#ifndef _CSBACKEND_PLATFORM_WINDOWS_INPUT_KEYBOARD_KEYBOARD_H_
-#define _CSBACKEND_PLATFORM_WINDOWS_INPUT_KEYBOARD_KEYBOARD_H_
+#ifndef _CSBACKEND_PLATFORM_RPI_INPUT_KEYBOARD_KEYBOARD_H_
+#define _CSBACKEND_PLATFORM_RPI_INPUT_KEYBOARD_KEYBOARD_H_
 
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Keyboard/KeyCode.h>
-#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
-
-#include <array>
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
-        //---------------------------------------------------------------
-        /// A system for receiving input from the current keyboard
+        /// A system for receiving input from the current keyboard via X11
         ///
         /// The methods in this class are not thread-safe and must be
         /// accessed from the main thread.
         ///
-        /// @author S Downie
-        //---------------------------------------------------------------
 		class Keyboard final : public ChilliSource::Keyboard
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Keyboard);
-            
-			//----------------------------------------------------
+
 			/// Queries whether or not this system implements the
-			/// interface with the given ID.
+			/// interface with the given Id.
 			///
-			/// @author S Downie
+			/// @param interfaceId
+			///		The id of the interface that we need to check if this system implements
 			///
-			/// @param The interface Id.
+			/// @retrun TRUE if the system 'IsA' interface
 			///
-			/// @return Whether or not the interface is implemented.
-			//----------------------------------------------------
-			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
-            //-------------------------------------------------------
-            /// Check whether the key is currently down. This is
-            /// unbuffered so will only check the state of the key
-            /// at the moment in time when it is called
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key code
-            ///
-            /// @return Whether the key is down
-            //-------------------------------------------------------
-			bool IsKeyDown(ChilliSource::KeyCode in_code) const override;
-			//-------------------------------------------------------
-			/// Get the event that is triggered whenever a key is pressed.
+			bool IsA(ChilliSource::InterfaceIDType interfaceId) const override;
+			/// @param code
+			///		Code of the key to check if down
 			///
+			/// @return TRUE if the given key is currently down.
+			/// This is unbuffered so only checks the status of the key at the moment the function is called
+			///
+			bool IsKeyDown(ChilliSource::KeyCode code) const override;
+
 			/// This event is guaranteed and should be used for low
 			/// frequency events such as catching a confirm enter press.
 			/// The polling "IsDown" method should be used for realtime
@@ -88,71 +69,29 @@ namespace CSBackend
 			/// The event also returns the current state of the modifier
 			/// keys (Ctrl, Alt, Shift, etc.)
 			///
-			/// @author S Downie
-			///
 			/// @return Event to register for key presses
-			//-------------------------------------------------------
-			ChilliSource::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() override;
-			//-------------------------------------------------------
-			/// Get the event that is triggered whenever a key is released.
 			///
+			ChilliSource::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() override;
+
 			/// This event is guaranteed and should be used for low
 			/// frequency events. The polling "IsUp" method should be
 			/// used for realtime events.
 			///
-			/// @author S Downie
-			///
 			/// @return Event to register for key releases
-			//-------------------------------------------------------
+			///
 			ChilliSource::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent() override;
-            
+
         private:
-            
+
 			friend ChilliSource::KeyboardUPtr ChilliSource::Keyboard::Create();
-			//-------------------------------------------------------
-			/// Constructor
-			/// 
-			/// @author S Downie
-			//-------------------------------------------------------
+
+			///
 			Keyboard() = default;
-			//-------------------------------------------------------
-			/// Called when the system is initialised and registers
-			/// for SFML key events
-			///
-			/// @author S Downie
-			//-------------------------------------------------------
-			void OnInit() override;
-			//-------------------------------------------------------
-			/// Triggered by SFML when key is pressed
-			///
-			/// @param Key code
-			/// @param Key event
-			///
-			/// @author S Downie
-			//-------------------------------------------------------
-			void OnKeyPressed(sf::Keyboard::Key in_code, const sf::Event::KeyEvent& in_event);
-			//-------------------------------------------------------
-			/// Triggered by SFML when key is released
-			///
-			/// @param Key code
-			///
-			/// @author S Downie
-			//-------------------------------------------------------
-			void OnKeyReleased(sf::Keyboard::Key in_code);
-			//-------------------------------------------------------
-			/// Called when the system is destroyed and unsubscribes
-			/// from SFML key events
-			///
-			/// @author S Downie
-			//-------------------------------------------------------
-			void OnDestroy() override;
 
 		private:
 
 			ChilliSource::Event<KeyPressedDelegate> m_keyPressedEvent;
 			ChilliSource::Event<KeyReleasedDelegate> m_keyReleasedEvent;
-
-			std::array<bool, static_cast<u32>(ChilliSource::KeyCode::k_total)> m_keysDown;
 		};
 	}
 }
@@ -160,5 +99,3 @@ namespace CSBackend
 #endif
 
 #endif
-
-
