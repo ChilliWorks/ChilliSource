@@ -7,6 +7,7 @@ Version 2.2.0, 2017-
 * Deprecated: Support for SHA-1
 * Added: SHA-256 hashing support
 * Changed: ContentManagementSystem now uses SHA-256 unless compiler flag CS_USE_SHA1_CHECKSUMS is enabled for legacy applications.
+* Fixed: Issue with suspending on Android in debug mode sometimes causing an assert
 
 Version 2.1.4, 2017-02-28
 -------------------------
