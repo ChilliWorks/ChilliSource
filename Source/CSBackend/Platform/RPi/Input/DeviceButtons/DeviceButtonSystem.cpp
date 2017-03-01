@@ -1,7 +1,11 @@
 //
+//  DeviceButtonSystem.cpp
+//  ChilliSource
+//  Created by Ian Copland on 16/05/2014.
+//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2016 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +26,28 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
+#ifdef CS_TARGETPLATFORM_WINDOWS
 
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
-#   include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
-#endif
+#include <CSBackend/Platform/Windows/Input/DeviceButtons/DeviceButtonSystem.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
-    //------------------------------------------------------------------------------
-    IRenderCommandProcessorUPtr IRenderCommandProcessor::Create() noexcept
-    {
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
-        return IRenderCommandProcessorUPtr(new CSBackend::OpenGL::RenderCommandProcessor());
-#else
-        return nullptr;
-#endif
-    }
+	namespace Windows
+	{
+        CS_DEFINE_NAMEDTYPE(DeviceButtonSystem);
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool DeviceButtonSystem::IsA(ChilliSource::InterfaceIDType in_interfaceID) const
+        {
+            return (in_interfaceID == ChilliSource::DeviceButtonSystem::InterfaceID || in_interfaceID == DeviceButtonSystem::InterfaceID);
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        ChilliSource::IConnectableEvent<DeviceButtonSystem::TriggeredDelegate>& DeviceButtonSystem::GetTriggeredEvent()
+        {
+            return m_triggeredEvent;
+        }
+	}
 }
+
+#endif

@@ -152,6 +152,9 @@ namespace ChilliSource
     //-----------------------------------------------------
     void Logging::LogMessage(LogLevel in_logLevel, const std::string& in_message)
     {
+        
+        //TODO:RPI
+        
 #ifdef CS_TARGETPLATFORM_ANDROID
         switch (in_logLevel)
         {

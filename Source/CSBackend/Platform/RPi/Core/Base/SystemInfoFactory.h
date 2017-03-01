@@ -1,7 +1,6 @@
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2016 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +21,27 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
+#ifdef CS_TARGETPLATFORM_RPI
 
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
-#   include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
-#endif
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/SystemInfo.h>
+#include <CSBackend/Platform/RPi/ForwardDeclarations.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
-    //------------------------------------------------------------------------------
-    IRenderCommandProcessorUPtr IRenderCommandProcessor::Create() noexcept
+    namespace RPi
     {
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
-        return IRenderCommandProcessorUPtr(new CSBackend::OpenGL::RenderCommandProcessor());
-#else
-        return nullptr;
-#endif
+        /// A factory for creating new instances of SystemInfo. This will query the Broadcom
+        /// API to gather information about the device and display.
+        ///
+        namespace SystemInfoFactory
+        {
+            /// This function creates the new SystemInfo instance.
+            /// @return The new instance.
+            ///
+            ChilliSource::SystemInfoCUPtr CreateSystemInfo() noexcept;
+        }
     }
 }
+
+#endif

@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2016 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,20 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Base/IRenderCommandProcessor.h>
+#ifdef CS_TARGETPLATFORM_RPI
 
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
-#   include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
-#endif
-
-namespace ChilliSource
+/// Main entry point for Raspberry Pi application. Sets up the broadcom display
+///
+/// @param argc
+///		Number of arguments
+/// @param argv
+///		Argument list
+///
+/// @return Exit status
+///
+int main(int argc, const char** argv)
 {
-    //------------------------------------------------------------------------------
-    IRenderCommandProcessorUPtr IRenderCommandProcessor::Create() noexcept
-    {
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
-        return IRenderCommandProcessorUPtr(new CSBackend::OpenGL::RenderCommandProcessor());
-#else
-        return nullptr;
-#endif
-    }
+    return 0;
 }
+
+#endif

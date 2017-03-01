@@ -40,6 +40,10 @@
 #include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 #endif
 
+#ifdef CS_TARGET_PLATFORM_RPI
+#include <CSBackend/Platform/RPi/Core/Base/PlatformSystem.h>
+#endif
+
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(PlatformSystem);
@@ -53,6 +57,8 @@ namespace ChilliSource
         return PlatformSystemUPtr(new CSBackend::Android::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
         return PlatformSystemUPtr(new CSBackend::Windows::PlatformSystem());
+#elif defined CS_TARGETPLATFORM_RPI
+        return PlatformSystemUPtr(new CSBackend::RPi::PlatformSystem());
 #else
         return nullptr;
 #endif

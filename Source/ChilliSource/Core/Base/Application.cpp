@@ -88,7 +88,7 @@
 #include <chrono>
 #include <ctime>
 
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
 #   include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
 #endif
 
@@ -322,7 +322,7 @@ namespace ChilliSource
         CreateSystem<TextEntry>();
         
         //Rendering
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
         CreateSystem<CSBackend::OpenGL::GLContextRestorer>();
 #endif
         
