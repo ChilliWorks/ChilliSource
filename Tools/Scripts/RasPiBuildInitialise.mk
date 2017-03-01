@@ -1,8 +1,3 @@
-#
-#  RasPiBuildInitialise.mk
-#  ChilliSource
-#  Created by Jordan Brown on 01/03/2017.
-#
 #  The MIT License (MIT)
 #
 #  Copyright (c) 2017 Tag Games Limited
