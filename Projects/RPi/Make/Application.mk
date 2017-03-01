@@ -1,6 +1,6 @@
 #  The MIT License (MIT)
 #
-#  Copyright (c) 2017 Tag Games Limited
+#  Copyright (c) 2016 Tag Games Limited
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -21,20 +21,8 @@
 #  THE SOFTWARE.
 #
 
-#prepare the ChilliSource libraries
 CS_PROJECT_ROOT=../../../..
-include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/RasPiBuildConfig.mk
+include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/RasPiApplicationConfig.mk
 
-#gather all files in the engine that should be built
-CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'cpp,c,cc')
-CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/RaspberryPi/' '--extensions' 'cpp,c,cc')
-CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
-
-#build the ChilliSource static library
-include $(CLEAR_VARS)
-LOCAL_MODULE := ChilliSource
-LOCAL_CXXFLAGS := $(CS_CXXFLAGS)
-LOCAL_SRC_FILES := $(CS_SOURCEFILES_CHILLISOURCE) $(CS_SOURCEFILES_PLATFORM) $(CS_SOURCEFILES_RENDERING)
-LOCAL_C_INCLUDES := $(CS_C_INCLUDES)
-LOCAL_SHORT_COMMANDS := true
-include $(BUILD_STATIC_LIBRARY)
+APP_STL := $(CS_APP_STL)
+LOCAL_CPP_FEATURES += $(CS_LOCAL_CPP_FEATURES)

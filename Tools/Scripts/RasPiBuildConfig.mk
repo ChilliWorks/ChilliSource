@@ -53,7 +53,7 @@ CS_CXXFLAGS_TARGET := -g -DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE
 CS_WARNINGS := -Wfatal-errors -Wchar-subscripts -Wcomment -Wnonnull -Winit-self -Wmissing-braces -Wmissing-include-dirs -Wparentheses -Wsequence-point -Wreturn-type -Wswitch -Wunused-function -Wunused -Wuninitialized -Wno-reorder
 
 #setup build settings
-CS_CXXFLAGS := -fsigned-char -std=c++11 -pthread -fexceptions -frtti -DCS_TARGETPLATFORM_RPi $(CS_WARNINGS) $(CS_CXXFLAGS_TARGET)
-CS_STATIC_LIBRARIES := $(CS_MODULENAME_CSBASE) $(CS_MODULENAME_CK) $(CS_MODULENAME_CHILLISOURCE) cpufeatures
+CS_CXXFLAGS := -fsigned-char -std=c++11 -pthread -fexceptions -frtti -DCS_TARGETPLATFORM_RPI $(CS_WARNINGS) $(CS_CXXFLAGS_TARGET)
+CS_STATIC_LIBRARIES := $(CS_MODULENAME_CSBASE) $(CS_MODULENAME_CHILLISOURCE) cpufeatures
 CS_LDLIBS := -lz -llog -lGLESv2 -lvcos -lEGL -lbcom_host -lvchiq_arm
 CS_C_INCLUDES := $(CS_PROJECT_ROOT)/ChilliSource/Source/ $(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers/ 
