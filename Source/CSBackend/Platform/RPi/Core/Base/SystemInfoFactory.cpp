@@ -39,14 +39,33 @@ namespace CSBackend
 {
     namespace RPi
     {
+        namespace
+        {
+            // std::string can't be used as a constexpr because of its nontrivial destructor
+            constexpr char k_deviceModel[] = "TODO";
+            constexpr char k_deviceModelType[] = "TODO";
+            constexpr char k_deviceManufacturer[] = "TODO";
+            constexpr char k_deviceUdid[] = "TODO";
+            constexpr char k_locale[] = "TODO";
+            constexpr char k_language[] = "TODO";
+            constexpr char k_osVersion[] = "TODO";
+            constexpr int k_cpuCores = 1;
+        }
+
+
         //--------------------------------------------------------------------------------
         ChilliSource::SystemInfoCUPtr SystemInfoFactory::CreateSystemInfo() noexcept
         {
             // Create DeviceInfo.
-            ChilliSource::DeviceInfo deviceInfo(k_deviceModel, k_deviceModelType, k_deviceManufacturer, k_deviceUdid, GetLocale(), ParseLanguageFromLocale(GetLocale()), GetOSVersion(), GetNumberOfCPUCores());
+           // ChilliSource::DeviceInfo deviceInfo(k_deviceModel, k_deviceModelType, k_deviceManufacturer, k_deviceUdid, GetLocale(), ParseLanguageFromLocale(GetLocale()), GetOSVersion(), GetNumberOfCPUCores());
+           ChilliSource::DeviceInfo deviceInfo(k_deviceModel, k_deviceModelType, k_deviceManufacturer, k_deviceUdid, k_locale, k_language, k_osVersion, k_cpuCores);
 
             // Create ScreenInfo.
-            ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
+            //ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
+            std::vector<ChilliSource::Integer2> supportedResolutions;
+            supportedResolutions.push_back(ChilliSource::Integer2(640,480));
+
+            ChilliSource::ScreenInfo screenInfo(ChilliSource::Vector2(640,480), 1.0f, 1.0f, supportedResolutions);
 
 			//Create RenderInfo
 			ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();

@@ -26,9 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#include <CSBackend/Platform/Windows/Core/Image/PngImage.h>
+#include <CSBackend/Platform/RPi/Core/Image/PngImage.h>
 
 #include <png/png.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -55,7 +55,7 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
 		//----------------------------------------------------------------------------------
 		/// Constructor

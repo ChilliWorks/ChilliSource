@@ -26,21 +26,21 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#ifndef _CSBACKEND_PLATFORM_WINDOWS_INPUT_POINTER_POINTERSYSTEM_H_
-#define _CSBACKEND_PLATFORM_WINDOWS_INPUT_POINTER_POINTERSYSTEM_H_
+#ifndef _CSBACKEND_PLATFORM_RPI_INPUT_POINTER_POINTERSYSTEM_H_
+#define _CSBACKEND_PLATFORM_RPI_INPUT_POINTER_POINTERSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
-#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
+#include <CSBackend/Platform/RPi/ForwardDeclarations.h>
+//#include <CSBackend/Platform/RPi/SFML/Base/SFMLWindow.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 struct GLFWwindow;
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
 		//------------------------------------------------------------
 		/// The iOS backend for the pointer system. This provides
@@ -101,7 +101,7 @@ namespace CSBackend
 			/// @param Current position X
 			/// @param Current position Y
 			//----------------------------------------------
-			void OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos);
+			//void OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos);
 			//----------------------------------------------
 			/// Triggered by SFML when the mouse wheel is scrolled
 			///

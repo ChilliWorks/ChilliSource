@@ -26,17 +26,17 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#ifndef _CHILLISOURCE_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
-#define _CHILLISOURCE_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
+#ifndef _CHILLISOURCE_RPI_IMAGELOADING_PNGIMAGE_
+#define _CHILLISOURCE_RPI_IMAGELOADING_PNGIMAGE_
 
-#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/RPi/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
 		class PngImage
 		{

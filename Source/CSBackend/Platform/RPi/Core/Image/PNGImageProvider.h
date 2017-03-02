@@ -26,18 +26,18 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#ifndef _CSBACKEND_PLATFORM_WINDOWS_CORE_IMAGE_PNGIMAGEPROVIDER_H_
-#define _CSBACKEND_PLATFORM_WINDOWS_CORE_IMAGE_PNGIMAGEPROVIDER_H_
+#ifndef _CSBACKEND_PLATFORM_RPI_CORE_IMAGE_PNGIMAGEPROVIDER_H_
+#define _CSBACKEND_PLATFORM_RPI_CORE_IMAGE_PNGIMAGEPROVIDER_H_
 
-#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/RPi/ForwardDeclarations.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/PNGImageProvider.h>
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
 		//--------------------------------------------------------------
 		/// The windows backend for the PNG Image Provider. This loads

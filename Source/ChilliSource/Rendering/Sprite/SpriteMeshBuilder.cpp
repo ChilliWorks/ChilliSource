@@ -39,6 +39,8 @@
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
+#include <cstring>
+
 namespace ChilliSource
 {
     namespace

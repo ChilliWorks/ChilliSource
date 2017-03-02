@@ -26,11 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#include <CSBackend/Platform/Windows/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/RPi/Core/Image/PNGImageProvider.h>
 
-#include <CSBackend/Platform/Windows/Core/Image/PngImage.h>
+#include <CSBackend/Platform/RPi/Core/Image/PngImage.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
@@ -40,7 +40,7 @@
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
 		namespace
 		{

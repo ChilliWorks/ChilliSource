@@ -26,9 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#include <CSBackend/Platform/Windows/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/RPi/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
@@ -37,7 +37,7 @@
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
 		namespace
 		{
@@ -49,6 +49,7 @@ namespace CSBackend
 			/// @return The equivelent Press Type for the
 			/// button Id
 			//------------------------------------------------
+			/*
 			ChilliSource::Pointer::InputType ButtonIdToInputType(sf::Mouse::Button in_button)
 			{
 				switch (in_button)
@@ -63,7 +64,7 @@ namespace CSBackend
 					return ChilliSource::Pointer::InputType::k_none;
 				}
 
-			}
+			}*/
 		}
 		CS_DEFINE_NAMEDTYPE(PointerSystem);
 		//----------------------------------------------------
@@ -81,13 +82,13 @@ namespace CSBackend
 
             auto screenResolution = m_screen->GetResolution();
 
-            SFMLWindow::Get()->SetMouseDelegates(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
+            //SFMLWindow::Get()->SetMouseDelegates(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
 
             //create the mouse pointer
-            ChilliSource::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
-            ChilliSource::Vector2 mousePos((f32)mousePosi.x, screenResolution.y - (f32)mousePosi.y);
+            //ChilliSource::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
+            //ChilliSource::Vector2 mousePos((f32)mousePosi.x, screenResolution.y - (f32)mousePosi.y);
 
-            m_pointerId = AddPointerCreateEvent(mousePos);
+            m_pointerId = AddPointerCreateEvent(ChilliSource::Vector2(0,0));
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -96,7 +97,7 @@ namespace CSBackend
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to hide mouse cursor outside of main thread.");
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
             {
-                SFMLWindow::Get()->HideCursor();
+                //SFMLWindow::Get()->HideCursor();
             });
 		}
 		//----------------------------------------------------
@@ -106,12 +107,12 @@ namespace CSBackend
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to show mouse cursor outside of main thread.");
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
             {
-                SFMLWindow::Get()->ShowCursor();
+                //SFMLWindow::Get()->ShowCursor();
             });
 		}
 		//----------------------------------------------
 		//----------------------------------------------
-		void PointerSystem::OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos)
+		/*void PointerSystem::OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos)
 		{
             ChilliSource::Pointer::InputType type = ButtonIdToInputType(in_button);
             if (type == ChilliSource::Pointer::InputType::k_none)
@@ -128,7 +129,7 @@ namespace CSBackend
                 AddPointerUpEvent(m_pointerId, type);
                 break;
             }
-		}
+		}*/
 		//----------------------------------------------
 		//----------------------------------------------
 		void PointerSystem::OnMouseMoved(s32 in_xPos, s32 in_yPos)
@@ -149,7 +150,7 @@ namespace CSBackend
 		{
 			AddPointerRemoveEvent(m_pointerId);
 
-            SFMLWindow::Get()->RemoveMouseDelegates();
+           //SFMLWindow::Get()->RemoveMouseDelegates();
 
 			m_screen = nullptr;
 		}
