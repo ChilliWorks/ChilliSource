@@ -30,6 +30,7 @@
 
 #include <aes/aes.h>
 
+#include <cstring>
 #include <limits>
 
 namespace ChilliSource
