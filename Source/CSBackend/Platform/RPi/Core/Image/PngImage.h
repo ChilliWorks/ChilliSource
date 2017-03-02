@@ -1,8 +1,4 @@
 //
-//  PngLoader.h
-//  ChilliSource
-//  Created by Ian Copland on 06/04/2011.
-//
 //  The MIT License (MIT)
 //
 //  Copyright (c) 2011 Tag Games Limited
@@ -26,93 +22,88 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#ifndef _CHILLISOURCE_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
-#define _CHILLISOURCE_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
+#ifndef _CSBACKEND_PLATFORM_RPI_CORE_IMAGE_PNGIMAGE_H_
+#define _CSBACKEND_PLATFORM_RPI_CORE_IMAGE_PNGIMAGE_H_
 
-#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/RPi/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
-		class PngImage
+		/// Wrapper around libpng to load png images
+		///
+		class PngImage final
 		{
 		public:
-			//----------------------------------------------------------------------------------
-			/// Constructor
-			//----------------------------------------------------------------------------------
+
+			///
 			PngImage();
-			//----------------------------------------------------------------------------------
-			/// Constructor
-			//----------------------------------------------------------------------------------
-			PngImage(ChilliSource::StorageLocation ineLocation, const std::string& instrFilename);
-			//----------------------------------------------------------------------------------
-			/// Destructor
-			//----------------------------------------------------------------------------------
-			virtual ~PngImage();
-			//----------------------------------------------------------------------------------
-			/// Load PNG
+
+			/// Loads the image
 			///
-			/// Loads a png from a file within documents or the package.
-			/// @param Storgae location of the file
-			/// @param std::string instrFilename - the path to the file relative to either
-			///									   documents or the package.
-			//----------------------------------------------------------------------------------
-			void Load(ChilliSource::StorageLocation ineLocation, const std::string& instrFilename);
-			//----------------------------------------------------------------------------------
-			/// Release
+			///@param location
+			///		Location to load from
+			/// @param filePath
+			///		File path to load from
 			///
-			/// Releases the image data
-			/// @param bool inReleaseImageData - Whether or not to release the image data
-			//----------------------------------------------------------------------------------
-			void Release(bool inReleaseImageData = true);
-			//----------------------------------------------------------------------------------
-			/// Is Loaded
+			PngImage(ChilliSource::StorageLocation location, const std::string& filePath);
+
 			///
-			/// returns whether or not the image is loaded
-			//----------------------------------------------------------------------------------
-			bool IsLoaded();
-			//----------------------------------------------------------------------------------
-			/// Get Height
+			~PngImage();
+
+			/// Loads the image
 			///
-			/// returns the height of the image
-			//----------------------------------------------------------------------------------
-			s32 GetHeight();
-			//----------------------------------------------------------------------------------
-			/// Get Width
+			/// @param location
+			///		Location to load from
+			/// @param filePath
+			///		File path to load from
 			///
-			/// returns the width of the image
-			//----------------------------------------------------------------------------------
-			s32 GetWidth();
-			//----------------------------------------------------------------------------------
-			/// Get Image Data
+			void Load(ChilliSource::StorageLocation location, const std::string& filePath);
+
+			/// Destroy the image data. If the data has already been destroyed then pass
+			/// false to reset.
 			///
-			/// returns the image data.
-			//----------------------------------------------------------------------------------
-			u8 * GetImageData();
-			//----------------------------------------------------------------------------------
-			/// @author S Downie
+			/// @param releaseData
+			///		TRUE to destroy the data, FALSE to simply reset
 			///
-			/// @return Size of image data in bytes
-			//----------------------------------------------------------------------------------
+			void Release(bool releaseData = true);
+
+			/// @return TRUE if loaded
+			///
+			bool IsLoaded() const;
+
+			/// @return Height of the image in pixels
+			///
+			s32 GetHeight() const;
+
+			/// @return Width of the image in pixels
+			///
+			s32 GetWidth() const;
+
+			/// @return Image data
+			///
+			u8 * GetImageData() const;
+
+			/// @return Size of the image data in bytes
+			///
 			u32 GetDataSize() const;
-			//----------------------------------------------------------------------------------
-			/// @author S Downie
+
+			/// @retrun Format of the image
 			///
-			/// @return the image format
-			//----------------------------------------------------------------------------------
 			ChilliSource::ImageFormat GetImageFormat() const;
+
 		protected:
-			//----------------------------------------------------------------------------------
 			/// Load with lib png
+			/// @param stream
+			///		The stream lib png should use to read the data.
 			///
-			/// Loads the png data using lib png
-			/// @param FileStreamSPtr inStream - the stream lib png should use to read the data.
-			//----------------------------------------------------------------------------------
-			bool LoadWithLibPng(const ChilliSource::IBinaryInputStreamUPtr& inStream);
+			/// @return TRUE if successful
+			///
+			bool LoadWithLibPng(const ChilliSource::IBinaryInputStreamUPtr& stream);
 
 			bool mbIsLoaded;
 			s32 mdwHeight;

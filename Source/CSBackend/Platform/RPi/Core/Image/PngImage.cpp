@@ -1,11 +1,7 @@
 //
-//  PngLoader.cpp
-//  ChilliSource
-//  Created by Ian Copland on 06/04/2011.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +22,25 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#include <CSBackend/Platform/Windows/Core/Image/PngImage.h>
+#include <CSBackend/Platform/RPi/Core/Image/PngImage.h>
 
 #include <png/png.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 
-//----------------------------------------------------------------------------------
-/// Read Png Data
-///
 /// A replacement for the default libPng file reading function. This is needed so
 /// the c style file io functions can be replaced with ChilliSource functions,
 /// enabling loading from the package.
-/// @param png_structp png_ptr - The currently open Png decorder
-/// @param png_bytep data - The output data.
-/// @param png_size_t length - The length of the data.
-//----------------------------------------------------------------------------------
+///
+/// @param png_ptr
+///		The currently open Png decorder
+/// @param data
+//		 The output data.
+/// @param length
+///		The length of the data.
+///
 void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	if (png_ptr == nullptr)
@@ -55,11 +52,9 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
-		//----------------------------------------------------------------------------------
-		/// Constructor
-		//----------------------------------------------------------------------------------
+		//---------------------------------------------------------------------------------
 		PngImage::PngImage()
 		{
 			mbIsLoaded = false;
@@ -67,21 +62,19 @@ namespace CSBackend
 			mdwWidth = -1;
 			mpData = nullptr;
 		}
-		//----------------------------------------------------------------------------------
-		/// Constructor
-		//----------------------------------------------------------------------------------
-		PngImage::PngImage(ChilliSource::StorageLocation ineLocation, const std::string& instrFilename)
+
+		//---------------------------------------------------------------------------------
+		PngImage::PngImage(ChilliSource::StorageLocation location, const std::string& filePath)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = nullptr;
 
-			Load(ineLocation, instrFilename);
+			Load(location, filePath);
 		}
-		//----------------------------------------------------------------------------------
-		/// Destructor
-		//----------------------------------------------------------------------------------
+
+		//---------------------------------------------------------------------------------
 		PngImage::~PngImage()
 		{
 			if (mbIsLoaded == true)
@@ -89,18 +82,12 @@ namespace CSBackend
 				Release();
 			}
 		}
-		//----------------------------------------------------------------------------------
-		/// Load PNG
-		///
-		/// Loads a png from a file within documents or the package.
-		/// @param Storgae location of the file
-		/// @param std::string instrFilename - the path to the file relative to either
-		///									   documents or the package.
-		//----------------------------------------------------------------------------------
-		void PngImage::Load(ChilliSource::StorageLocation ineLocation, const std::string& instrFilename)
+
+		//---------------------------------------------------------------------------------
+		void PngImage::Load(ChilliSource::StorageLocation location, const std::string& filePath)
 		{
 			//create the file stream
-			auto stream = ChilliSource::Application::Get()->GetFileSystem()->CreateBinaryInputStream(ineLocation, instrFilename);
+			auto stream = ChilliSource::Application::Get()->GetFileSystem()->CreateBinaryInputStream(location, filePath);
 
 			//insure the stream is not broken
 			if (stream == nullptr)
@@ -114,79 +101,59 @@ namespace CSBackend
 				mbIsLoaded = true;
 			}
 		}
-		//----------------------------------------------------------------------------------
-		/// Release
-		///
-		/// Releases the image data
-		/// @param bool inReleaseImageData - Whether or not to release the image data
-		//----------------------------------------------------------------------------------
-		void PngImage::Release(bool inReleaseImageData)
+
+		//---------------------------------------------------------------------------------
+		void PngImage::Release(bool releaseData)
 		{
 			if (mbIsLoaded != false)
 			{
 				mbIsLoaded = false;
 				mdwHeight = -1;
 				mdwWidth = -1;
-				if (inReleaseImageData)
+				if (releaseData)
 					delete[] mpData;
 				mpData = (u8*)nullptr;
 			}
 		}
-		//----------------------------------------------------------------------------------
-		/// Is Loaded
-		///
-		/// returns whether or not the image is loaded
-		//----------------------------------------------------------------------------------
-		bool PngImage::IsLoaded()
+
+		//---------------------------------------------------------------------------------
+		bool PngImage::IsLoaded() const
 		{
 			return mbIsLoaded;
 		}
-		//----------------------------------------------------------------------------------
-		/// Get Height
-		///
-		/// returns the height of the image
-		//----------------------------------------------------------------------------------
-		s32 PngImage::GetHeight()
+
+		//---------------------------------------------------------------------------------
+		s32 PngImage::GetHeight() const
 		{
 			return mdwHeight;
 		}
-		//----------------------------------------------------------------------------------
-		/// Get Width
-		///
-		/// returns the width of the image
-		//----------------------------------------------------------------------------------
-		s32 PngImage::GetWidth()
+
+		//---------------------------------------------------------------------------------
+		s32 PngImage::GetWidth() const
 		{
 			return mdwWidth;
 		}
-		//----------------------------------------------------------------------------------
-		/// Get Image Data
-		///
-		/// returns the image data.
-		//----------------------------------------------------------------------------------
-		u8 * PngImage::GetImageData()
+
+		//---------------------------------------------------------------------------------
+		u8 * PngImage::GetImageData() const
 		{
 			return mpData;
 		}
-		//----------------------------------------------------------------------------------
-		//----------------------------------------------------------------------------------
+
+		//---------------------------------------------------------------------------------
 		u32 PngImage::GetDataSize() const
 		{
 			return m_dataSize;
 		}
-		//----------------------------------------------------------------------------------
-		//----------------------------------------------------------------------------------
+
+		//---------------------------------------------------------------------------------
 		ChilliSource::ImageFormat PngImage::GetImageFormat() const
 		{
 			return m_format;
 		}
-		//----------------------------------------------------------------------------------
-		/// Load with lib png
-		///
-		/// Loads the png data using lib png
-		/// @param FileStreamSPtr inStream - the steam lib png should use to read the data.
-		//----------------------------------------------------------------------------------
-		bool PngImage::LoadWithLibPng(const ChilliSource::IBinaryInputStreamUPtr& inStream)
+
+		//---------------------------------------------------------------------------------
+		bool PngImage::LoadWithLibPng(const ChilliSource::IBinaryInputStreamUPtr& stream)
 		{
 			//insure that it is indeed a png
 			const s32 dwHeaderSize = 8;
@@ -225,7 +192,7 @@ namespace CSBackend
 			}
 
 			//Setup the ReadPngData function for use within libPng
-			png_set_read_fn(pPng,(void*)inStream.get(), ReadPngData);
+			png_set_read_fn(pPng,(void*)stream.get(), ReadPngData);
 
 			//tell it that we've ready read 8 bytes of data
 			png_set_sig_bytes(pPng, dwHeaderSize);
