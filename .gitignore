@@ -27,6 +27,12 @@ Projects/Android/playapkexpansion/build
 Projects/Android/playlicensing/build
 
 ################################
+# Raspberry Pi Ignore Files
+################################
+csobj/
+appobj/
+
+################################
 # General Ignore Files
 ################################
 bin/
