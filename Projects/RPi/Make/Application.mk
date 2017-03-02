@@ -34,28 +34,29 @@ CS_APP_SOURCES := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--dire
 
 # Set up tools.
 CC=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
-AR=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-ar
+LD=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
 
 # Compiler Flags
 CS_CXXFLAGS_TARGET=-DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE -DCS_TARGETPLATFORM_RPI -DCS_OPENGLVERSION_ES
 
 # Includes
-CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/AppSource -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
+CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/AppSource -I$(CS_PROJECT_ROOT)/Libraries/Catch/include  -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
 
 # Additional Compiler Flags
 CFLAGS=-c -O3 -std=c++11 $(CS_CXXFLAGS_TARGET) $(CS_INCLUDES)
 
 # Library Directories
-CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs
+CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs -L$(LOCAL_PATH)
 
 # Linker Flags
-LDFLAGS= $(CS_LIBRARY_DIRS) -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm
+LDFLAGS= $(CS_LIBRARY_DIRS) -l:libgcc_s.so.1 -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm -lrt -lm -lc -lstdc++ -lChilliSource 
 
 # All Source Files
 SOURCES=$(CS_APP_SOURCES)
 
 # All Objects to be Generated - they take their names from the names of the cpp files that generated them.
 OBJECTS= $(SOURCES:%.cpp=%.o) $(SOURCES:%.c=%.o) $(SOURCES:%.cc=%.o)
+BUILTOBJECTS := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')
 
 # Name of static lib to link.
 CS_STATIC_LIB=libChilliSource.a
@@ -68,7 +69,7 @@ all: $(SOURCES) $(CS_APP_EXECUTABLE)
 
 # Link objs into static lib. Uses the .cpp.o: rule below.
 $(CS_APP_EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(CS_STATIC_LIB) $(OBJECTS) -o $@
+	$(LD) $(BUILTOBJECTS) $(LDFLAGS)  -o $@ 
 
 # Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
 # $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
