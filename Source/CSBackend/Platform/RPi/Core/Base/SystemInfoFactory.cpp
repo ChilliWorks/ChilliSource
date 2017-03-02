@@ -85,7 +85,8 @@ namespace CSBackend
             ChilliSource::DeviceInfo deviceInfo(k_deviceModel, machineType, k_deviceManufacturer, k_deviceUdid, globalLocale.name(), ParseLanguageFromLocale(globalLocale.name()), osVersion, get_nprocs());
 
             // Create ScreenInfo.
-            ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
+            //ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
+            ChilliSource::ScreenInfo screenInfo(ChilliSource::Vector2(100, 100), 1.0f, 1.0f, std::vector<ChilliSource::Integer2>{ChilliSource::Integer2(100, 100)});
 
 			//Create RenderInfo
 			ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();
