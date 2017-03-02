@@ -26,6 +26,10 @@
 
 #include <CSBackend/Platform/RPi/Input/Pointer/PointerSystem.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
+
 namespace CSBackend
 {
 	namespace RPi
