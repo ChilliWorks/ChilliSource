@@ -1,11 +1,7 @@
 //
-//  PNGImageProvider.cpp
-//  ChilliSource
-//  Created by Ian Copland on 05/02/2011.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -46,35 +42,39 @@ namespace CSBackend
 		{
 			const std::string k_pngExtension("png");
 
-			//-----------------------------------------------------------
+			///
 			/// Performs the heavy lifting for the 2 create methods
 			///
 			/// @author Ian Copland
 			///
-			/// @param The storage location.
-			/// @param The filepath.
-			/// @param Completion delegate
-			/// @param [Out] The output resource
-			//-----------------------------------------------------------
-			void CreatePNGImageFromFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filepath, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource)
+			/// @param storageLocation
+			///		The storage location.
+			/// @param filePath
+			///		The filepath.
+			/// @param delegate
+			///		Completion delegate
+			/// @param [Out] out_resource
+			///		The output resource
+			///
+			void CreatePNGImageFromFile(ChilliSource::StorageLocation storageLocation, const std::string& filepath, const ChilliSource::ResourceProvider::AsyncLoadDelegate& delegate, const ChilliSource::ResourceSPtr& out_resource)
 			{
 				ChilliSource::Image* imageResource = (ChilliSource::Image*)(out_resource.get());
 
 				//load the png image
 				PngImage image;
-				image.Load(in_storageLocation, in_filepath);
+				image.Load(storageLocation, filepath);
 
 				//check the image has loaded
 				if (image.IsLoaded() == false)
 				{
 					image.Release();
-					CS_LOG_ERROR("Failed to load image: " + in_filepath);
+					CS_LOG_ERROR("Failed to load image: " + filepath);
 					imageResource->SetLoadState(ChilliSource::Resource::LoadState::k_failed);
-					if (in_delegate != nullptr)
+					if (delegate != nullptr)
 					{
 						ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 						{
-							in_delegate(out_resource);
+							delegate(out_resource);
 						});
 					}
 					return;
@@ -92,48 +92,48 @@ namespace CSBackend
 				image.Release(false);
 
 				imageResource->SetLoadState(ChilliSource::Resource::LoadState::k_loaded);
-				if (in_delegate != nullptr)
+				if (delegate != nullptr)
 				{
 					ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext&)
 					{
-						in_delegate(out_resource);
+						delegate(out_resource);
 					});
 				}
 			}
 		}
 
 		CS_DEFINE_NAMEDTYPE(PNGImageProvider);
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		bool PNGImageProvider::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
+
+		//---------------------------------------------------------------------------------
+		bool PNGImageProvider::IsA(ChilliSource::InterfaceIDType interfaceId) const
 		{
-			return (in_interfaceId == ChilliSource::ResourceProvider::InterfaceID || in_interfaceId == ChilliSource::PNGImageProvider::InterfaceID || in_interfaceId == PNGImageProvider::InterfaceID);
+			return (interfaceId == ChilliSource::ResourceProvider::InterfaceID || interfaceId == ChilliSource::PNGImageProvider::InterfaceID || interfaceId == PNGImageProvider::InterfaceID);
 		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
+
+		//---------------------------------------------------------------------------------
 		ChilliSource::InterfaceIDType PNGImageProvider::GetResourceType() const
 		{
 			return ChilliSource::Image::InterfaceID;
 		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		bool PNGImageProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
+
+		//---------------------------------------------------------------------------------
+		bool PNGImageProvider::CanCreateResourceWithFileExtension(const std::string& extension) const
 		{
-			return (in_extension == k_pngExtension);
+			return (extension == k_pngExtension);
 		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void PNGImageProvider::CreateResourceFromFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filepath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceSPtr& out_resource)
+
+		//---------------------------------------------------------------------------------
+		void PNGImageProvider::CreateResourceFromFile(ChilliSource::StorageLocation storageLocation, const std::string& filepath, const ChilliSource::IResourceOptionsBaseCSPtr& options, const ChilliSource::ResourceSPtr& out_resource)
 		{
-			CreatePNGImageFromFile(in_storageLocation, in_filepath, nullptr, out_resource);
+			CreatePNGImageFromFile(storageLocation, filepath, nullptr, out_resource);
 		}
-		//----------------------------------------------------
-		//----------------------------------------------------
-		void PNGImageProvider::CreateResourceFromFileAsync(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource)
+
+		//---------------------------------------------------------------------------------
+		void PNGImageProvider::CreateResourceFromFileAsync(ChilliSource::StorageLocation storageLocation, const std::string& filePath, const ChilliSource::IResourceOptionsBaseCSPtr& options, const ChilliSource::ResourceProvider::AsyncLoadDelegate& delegate, const ChilliSource::ResourceSPtr& out_resource)
 		{
 			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_file, [=](const ChilliSource::TaskContext&)
 			{
-				CreatePNGImageFromFile(in_storageLocation, in_filePath, in_delegate, out_resource);
+				CreatePNGImageFromFile(storageLocation, filePath, delegate, out_resource);
 			});
 		}
 	}

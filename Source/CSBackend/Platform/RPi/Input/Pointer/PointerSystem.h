@@ -1,11 +1,7 @@
 //
-//  PointerSystem.h
-//  ChilliSource
-//  Created by Ian Copland on 27/03/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -33,112 +29,46 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/RPi/ForwardDeclarations.h>
-//#include <CSBackend/Platform/RPi/SFML/Base/SFMLWindow.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
-
-struct GLFWwindow;
 
 namespace CSBackend
 {
 	namespace RPi
 	{
-		//------------------------------------------------------------
-		/// The iOS backend for the pointer system. This provides
-		/// access to touch events.
+		/// Raspberry Pi mouse/pointer system. Access information on mouse state
+		/// and location from X11
 		///
-        /// The methods in this class are not thread-safe and must be
-        /// accessed from the main thread.
-        ///
-		/// @author Ian Copland
-		//------------------------------------------------------------
+		/// The methods in this class are not thread-safe and must be
+		/// accessed from the main thread.
+		///
 		class PointerSystem final : public ChilliSource::PointerSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(PointerSystem);
-			//----------------------------------------------------
+
 			/// Queries whether or not this system implements the
-			/// interface with the given ID.
+			/// interface with the given Id.
 			///
-			/// @author Ian Copland
+			/// @param interfaceId
+			///		The id of the interface that we need to check if this system implements
 			///
-			/// @param The interface Id.
+			/// @retrun TRUE if the system 'IsA' interface
 			///
-			/// @return Whether or not the interface is implemented.
-			//----------------------------------------------------
-			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
-			//----------------------------------------------------
-			/// Hide the window cursor
+			bool IsA(ChilliSource::InterfaceIDType interfaceId) const override;
+
+			/// Ask X11 to hide the mouse cursor
 			///
-			/// @author S Downie
-			//----------------------------------------------------
 			void HideCursor() override;
-			//----------------------------------------------------
-			/// Show the window cursor
+
+			/// Ask X11 to show the mouse cursor
 			///
-			/// @author S Downie
-			//----------------------------------------------------
 			void ShowCursor() override;
 
 		private:
 			friend class ChilliSource::PointerSystem;
-			//----------------------------------------------
-			/// Triggered by SFML when the cursor moves
-			///
-			/// @author S Downie
-			///
-			/// @param Current position X
-			/// @param Current position Y
-			//----------------------------------------------
-			void OnMouseMoved(s32 in_xPos, s32 in_yPos);
-			//----------------------------------------------
-			/// Triggered by SFML when a mouse button is
-			/// pressed
-			///
-			/// @author S Downie
-			///
-			/// @param Button ID
-			/// @param Button action (Press/Release)
-			/// @param Current position X
-			/// @param Current position Y
-			//----------------------------------------------
-			//void OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos);
-			//----------------------------------------------
-			/// Triggered by SFML when the mouse wheel is scrolled
-			///
-			/// @author S Downie
-			///
-			/// @param Number of ticks scrolled in the y-axis
-			//----------------------------------------------
-			void OnMouseWheeled(s32 in_delta);
-			//------------------------------------------------
-			/// Default constructor. Declared private to force
-			/// the use of the factory method.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------
-			PointerSystem() = default;
-			//------------------------------------------------
-			/// Initialisation method called at a time when
-			/// all App Systems have been created. System
-			/// initialisation occurs in the order they were
-			/// created.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------
-			void OnInit() override;
-			//------------------------------------------------
-			/// Called when the application is being destroyed.
-			/// This should be used to cleanup memory and
-			/// references to other systems. System destruction
-			/// occurs in the reverse order to which they
-			/// were created
-			///
-			/// @author Ian Copland
-			//------------------------------------------------
-			void OnDestroy() override;
 
-			ChilliSource::Screen* m_screen;
-			ChilliSource::Pointer::Id m_pointerId;
+			///
+			PointerSystem() = default;
 		};
 	}
 }

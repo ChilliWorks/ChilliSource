@@ -1,11 +1,6 @@
-//
-//  FileSystem.cpp
-//  ChilliSource
-//  Created by Ian Copland on 25/03/2011.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,243 +21,319 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#include <CSBackend/Platform/Windows/Core/File/FileSystem.h>
+#include <CSBackend/Platform/RPi/Core/File/FileSystem.h>
 
-#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <iostream>
-#include <shlobj.h>
-#include <stack>
-
-//This includes windows so needs to come last, else it might cause problems with other includes
-#include <CSBackend/Platform/Windows/Core/File/WindowsFileUtils.h>
-
-//Undefine the windows file system functions that share names with ours.
-#undef CopyFile
-#undef DeleteFile
-#undef CreateDirectory
+#include <cstdio>
+#include <dirent.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 namespace CSBackend
 {
-	namespace Windows 
+	namespace RPi
 	{
 		namespace
 		{
-			const std::string k_saveDataPath = "SaveData/";
-			const std::string k_cachePath = "Cache/";
-			const std::string k_dlcPath = "DLC/";
+			const char k_assetsPath[] = "assets/";
+			const char k_saveDataPath[] = "files/SaveData/";
+			const char k_dlcPath[] = "cache/DLC/";
+			const char k_cachePath[] = "cache/Cache/";
+			const char k_packagePath[] = "AppResources/";
+			const char k_chilliSourcePath[] = "CSResources/";
 
-			//--------------------------------------------------------------
-			/// @author Ian Copland
+			/// Creates a new directory at the given path
 			///
-			/// @param The file path.
+            /// @param directoryPath
+			///		The path to the directory to create
+            ///
+            /// @return Whether or not the creation succeeded.
 			///
-			/// @return Whether or not the given file path exists.
-			//--------------------------------------------------------------
-			bool DoesFileExist(const std::string& in_filePath)
+			bool CreateDirectory(const std::string& directoryPath)
 			{
-				std::wstring filePath = WindowsStringUtils::ConvertStandardPathToWindows(in_filePath);
-				DWORD attributes = GetFileAttributes(filePath.c_str());
-
-				return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
-			}
-			//--------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @param The directory path.
-			///
-			/// @return Whether or not the given directory path exists.
-			//--------------------------------------------------------------
-			bool DoesDirectoryExist(const std::string& in_directoryPath)
-			{
-				std::wstring directoryPath = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath);
-				DWORD attributes = GetFileAttributes(directoryPath.c_str());
-
-				return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
-			}
-			//--------------------------------------------------------------
-			/// Creates a new directory at the given path. This will not
-			/// create intermediate directories.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The directory path.
-			///
-			/// @return Whether or not the directory was created. Returns
-			/// false if the directory already existed.
-			//--------------------------------------------------------------
-			bool CreateDirectory(const std::string& in_directoryPath)
-			{
-				auto windowsDirectoryPath = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath);
-				return (WindowsFileUtils::WindowsCreateDirectory(windowsDirectoryPath.c_str(), NULL) == TRUE);
-			}
-			//--------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @param The directory path.
-			///
-			/// @return Whether or not the given directory path exists.
-			//--------------------------------------------------------------
-			bool DeleteDirectory(const std::string& in_directoryPath)
-			{
-				std::wstring directoryQuery = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath) + L"\\*";
-
-				WIN32_FIND_DATA fileData;
-				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(directoryQuery.c_str(), &fileData);
-				if (fileHandle == INVALID_HANDLE_VALUE)
+				s32 error = mkdir(directoryPath.c_str(), 0777);
+				if (error == -1)
 				{
-					return false;
-				}
-
-				do
-				{
-					if (wcscmp(fileData.cFileName, L".") != 0 && wcscmp(fileData.cFileName, L"..") != 0)
+					s32 errorType = errno;
+					if (errorType != EEXIST)
 					{
-						if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-						{
-							std::string directoryName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
-							
-							if (DeleteDirectory(ChilliSource::StringUtils::StandardiseDirectoryPath(in_directoryPath + directoryName)) == false)
-							{
-								return false;
-							}
-						}
-						else
-						{
-							std::string fileName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
-							std::string filePath = ChilliSource::StringUtils::StandardiseFilePath(in_directoryPath + fileName);
-							if (WindowsFileUtils::WindowsDeleteFile(WindowsStringUtils::ConvertStandardPathToWindows(filePath).c_str()) == FALSE)
-							{
-								return false;
-							}
-						}
+						return false;
 					}
-				} while (WindowsFileUtils::WindowsFindNextFile(fileHandle, &fileData) == TRUE);
+				}
 
-				bool success = (GetLastError() == ERROR_NO_MORE_FILES);
-				FindClose(fileHandle);
+				return true;
+			}
 
-				if (success == false)
+			/// Use the linux file system to copy the file from src to dest.
+			///
+			/// @param srcPath
+			///		Absolute path to copy from
+			/// @param dstPath
+			///		Absolute path to copy to
+			///
+			/// @return TRUE if success
+			///
+			bool CopyFile(const std::string& srcPath, const std::string& dstPath)
+			{
+				int read_fd;
+				int write_fd;
+				struct stat stat_buf;
+				off_t offset = 0;
+
+				//Open the input file and grab its size
+				read_fd = open (srcPath.c_str(), O_RDONLY);
+				fstat (read_fd, &stat_buf);
+
+				//Open the output file with the same permissions
+				write_fd = open (dstPath.c_str(), O_WRONLY | O_CREAT, stat_buf.st_mode);
+
+				//Send the bytes to the new file
+				ssize_t sentBytes = sendfile (write_fd, read_fd, &offset, stat_buf.st_size);
+
+				close (read_fd);
+				close (write_fd);
+
+				return sentBytes == stat_buf.st_size;
+			}
+
+			/// @param path
+			///		The file path to check
+			///
+			/// @return Whether or not the file at the given path exists.
+			///
+    		bool DoesFileExist(const std::string& path)
+    		{
+    			struct stat itemStat;
+    			if (stat(path.c_str(), &itemStat) == 0)
+    			{
+    				if (S_ISDIR(itemStat.st_mode) == false)
+    				{
+    					return true;
+    				}
+    			}
+
+    			return false;
+    		}
+
+			/// @param path
+			///		The directory path to check
+			///
+			/// @return Whether or not the directory at the given path exists.
+			///
+    		bool DoesDirectoryExist(const std::string& path)
+    		{
+    			struct stat itemStats;
+    			if (stat(path.c_str(), &itemStats) == 0)
+    			{
+    				if (S_ISDIR(itemStats.st_mode) == true)
+    				{
+    					return true;
+    				}
+    			}
+
+    			return false;
+    		}
+
+			/// Deletes a directory and all its contents.
+			///
+			/// @param dirPath
+			///		Path of directory to delete
+			///
+			/// @return Whether or not the directory was successfully deleted.
+			///
+			bool DeleteDirectory(const std::string& dirPath)
+			{
+				std::string directoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(dirPath);
+				if (DoesDirectoryExist(directoryPath) == false)
 				{
 					return false;
 				}
 
-				if (WindowsFileUtils::WindowsRemoveDirectory(WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath).c_str()) == FALSE)
+				DIR* directory = opendir(directoryPath.c_str());
+				if(directory == nullptr)
+				{
+					return false;
+				}
+
+				struct dirent* directoryItem;
+				while ((directoryItem = readdir(directory)) != nullptr)
+				{
+					std::string itemName = directoryItem->d_name;
+					if (itemName == "." || itemName == "..")
+					{
+						continue;
+					}
+
+					struct stat itemStats;
+					std::string itemPath = directoryPath + itemName + "\0";
+					if (stat(itemPath.c_str(), &itemStats) != 0)
+					{
+					    return false;
+					}
+
+                    if (S_ISDIR(itemStats.st_mode) == true)
+                    {
+                        if (DeleteDirectory(itemPath) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        unlink(itemPath.c_str());
+                    }
+				}
+				closedir(directory);
+
+				//remove the directory
+				if (rmdir(directoryPath.c_str()) != 0)
 				{
 					return false;
 				}
 
 				return true;
 			}
-			//--------------------------------------------------------------
-			/// Lists all files and sub-directories inside the given directory.
-			/// All paths will be relative to the given directory.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The directory.
-			/// @param Whether or not to recurse into sub directories.
-			/// @param [Out] The sub directories.
-			/// @param [Out] The files.
-			/// @param [Optional] The relative directory path. This is used
-			/// in recursion and shouldn't be set outside of this function.
-			/// @return Whether or not this succeeded.
-			//--------------------------------------------------------------
-			bool ListDirectoryContents(const std::string& in_directoryPath, bool in_recursive, std::vector<std::string>& out_directoryPaths, std::vector<std::string>& out_filePaths, 
-				const std::string& in_relativeDirectoryPath = "")
+
+            /// Builds a list of either file or directories paths in the directory at the
+            /// given path, optionally recursing into sub-directories. Whether or not this
+            /// searched for files or directories is denoted by the in_searchForDirectories
+            /// flag.
+    		///
+            /// @param out_directoryPaths
+			///		[Output] The output directory path list. This is not cleared prior to further informating being added, so care needs to be taken to ensure the list is empty prior to calling.
+            /// @param dirPath
+			///		The path to search for directories in.
+            /// @param searchForDirectories
+			///		Whether we are looking for directories or files.
+            /// @param recursive
+			///		Whether or not to recurse into sub-directories.
+            /// @param relativeParentDirectory
+			///		[Optional] The path to be prefixed to each path found in this directory. This is mostly used for recursion into sub-directories and shouldn't otherwise be set.
+            ///
+            /// @return Whether or not this was successful.
+            ///
+			bool GetPaths(std::vector<std::string>& out_directoryPaths, const std::string& dirPath, bool searchForDirectories, bool recursive, const std::string& relativeParentDirectory = "")
 			{
-				std::wstring directoryQuery = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath) + L"\\*";
+			    std::string directoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(dirPath);
+			    std::string relativeParentDirectory = ChilliSource::StringUtils::StandardiseDirectoryPath(relativeParentDirectory);
 
-				WIN32_FIND_DATA fileData;
-				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(directoryQuery.c_str(), &fileData);
-				if (fileHandle == INVALID_HANDLE_VALUE)
-				{
-					return false;
-				}
+                DIR* directory = opendir(directoryPath.c_str());
+                if(directory == nullptr)
+                {
+                    return false;
+                }
 
-				do
-				{
-					if (wcscmp(fileData.cFileName, L".") != 0 && wcscmp(fileData.cFileName, L"..") != 0)
-					{
-						if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-						{
-							std::string directoryName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
-							std::string relativeDirectoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(in_relativeDirectoryPath + directoryName);
-							out_directoryPaths.push_back(relativeDirectoryPath);
+                bool success = true;
+                struct dirent* item;
+                while ((item = readdir(directory)) != nullptr && success == true)
+                {
+                    std::string itemName(item->d_name);
+                    std::string fullItemPath = directoryPath + itemName;
 
-							if (in_recursive == true)
-							{
-								std::string absoluteDirectoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(in_directoryPath + directoryName);
-								if (ListDirectoryContents(absoluteDirectoryPath, true, out_directoryPaths, out_filePaths, relativeDirectoryPath) == false)
-								{
-									return false;
-								}
-							}
-						}
-						else
-						{
-							std::string fileName = WindowsStringUtils::UTF16ToUTF8(fileData.cFileName);
-							std::string relativeFilePath = ChilliSource::StringUtils::StandardiseFilePath(in_relativeDirectoryPath + fileName);
-							out_filePaths.push_back(relativeFilePath);
-						}
-					}
-				} 
-				while (WindowsFileUtils::WindowsFindNextFile(fileHandle, &fileData) == TRUE);
+                    if (itemName == "." || itemName == "..")
+                    {
+                        continue;
+                    }
 
-				bool success = (GetLastError() == ERROR_NO_MORE_FILES);
-				FindClose(fileHandle);
+                    struct stat dirStats;
+                    if (stat(fullItemPath.c_str(), &dirStats) != 0)
+                    {
+                        success = false;
+                        break;
+                    }
 
-				return success;
+                    if (S_ISDIR(dirStats.st_mode) == true)
+                    {
+                        std::string relativeItemPath = relativeParentDirectory + ChilliSource::StringUtils::StandardiseDirectoryPath(itemName);
+                        if (searchForDirectories == true)
+                        {
+                            out_directoryPaths.push_back(relativeItemPath);
+                        }
+
+                        if (recursive == true)
+                        {
+                            fullItemPath = ChilliSource::StringUtils::StandardiseDirectoryPath(fullItemPath);
+                            if (GetPaths(out_directoryPaths, fullItemPath, searchForDirectories, true, relativeItemPath) == false)
+                            {
+                                success = false;
+                                break;
+                            }
+                        }
+                    }
+                    else if (in_searchForDirectories == false)
+                    {
+                        std::string relativeItemPath = relativeParentDirectory + ChilliSource::StringUtils::StandardiseFilePath(itemName);
+                        out_directoryPaths.push_back(relativeItemPath);
+                    }
+                }
+
+                closedir(directory);
+
+                return success;
+			}
+
+			/// @return Working directory of the application
+			///
+			std::string GetWorkingDirectory()
+			{
+				char arg1[20];
+				char exepath[PATH_MAX + 1] = {0};
+
+				sprintf(arg1, "/proc/%d/exe", getpid());
+				readlink(arg1, exepath, 1024 );
+				return std::string(exepath);
 			}
 		}
+
 		CS_DEFINE_NAMEDTYPE(FileSystem);
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
+
+		//---------------------------------------------------------------------------------
 		FileSystem::FileSystem()
 		{
-			wchar_t pathChars[MAX_PATH];
-			GetModuleFileName(nullptr, pathChars, MAX_PATH);
-			std::string path = WindowsStringUtils::ConvertWindowsFilePathToStandard(std::wstring(pathChars));
+			std::string path = GetWorkingDirectory();
 			std::string::size_type pos = path.find_last_of("/");
-			std::string strWorkingDir = ChilliSource::StringUtils::StandardiseDirectoryPath(path.substr(0, pos));
+			std::string workingDir = ChilliSource::StringUtils::StandardiseDirectoryPath(path.substr(0, pos));
 
-			m_packagePath = strWorkingDir + "assets/";
-			m_documentsPath = strWorkingDir + "Documents/";
+			m_packagePath = workingDir + "assets/";
+			m_documentsPath = workingDir + "Documents/";
 
-			CSBackend::Windows::CreateDirectory(m_documentsPath);
-			CS_ASSERT(CSBackend::Windows::DoesDirectoryExist(m_documentsPath), "Could not create Documents directory.");
+			CreateDirectory(m_documentsPath);
+			CS_ASSERT(DoesDirectoryExist(m_documentsPath), "Could not create Documents directory.");
 
-			CSBackend::Windows::CreateDirectory(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_saveData));
-			CS_ASSERT(CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_saveData)), "Could not create SaveData storage location.");
+			CreateDirectory(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_saveData));
+			CS_ASSERT(DoesDirectoryExist(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_saveData)), "Could not create SaveData storage location.");
 
-			CSBackend::Windows::CreateDirectory(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_cache));
-			CS_ASSERT(CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_cache)), "Could not create Cache storage location.");
+			CreateDirectory(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_cache));
+			CS_ASSERT(DoesDirectoryExist(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_cache)), "Could not create Cache storage location.");
 
 			CSBackend::Windows::CreateDirectory(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC));
-			CS_ASSERT(CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC)), "Could not create DLC storage location.");
+			CS_ASSERT(DoesDirectoryExist(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC)), "Could not create DLC storage location.");
 		}
-		//----------------------------------------------------------
-		//----------------------------------------------------------
-		bool FileSystem::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::IsA(ChilliSource::InterfaceIDType interfaceId) const
 		{
-			return (ChilliSource::FileSystem::InterfaceID == in_interfaceId || FileSystem::InterfaceID == in_interfaceId);
+			return (ChilliSource::FileSystem::InterfaceID == interfaceId || FileSystem::InterfaceID == interfaceId);
 		}
-		//--------------------------------------------------------------
-        //--------------------------------------------------------------
-        ChilliSource::ITextInputStreamUPtr FileSystem::CreateTextInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+
+		//---------------------------------------------------------------------------------
+        ChilliSource::ITextInputStreamUPtr FileSystem::CreateTextInputStream(ChilliSource::StorageLocation storageLocation, const std::string& filePath) const
         {
         	std::string absFilePath = "";
-			if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
+			if (storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(filePath) == false)
 			{
-				absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + in_filePath;
+				absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + filePath;
 			}
 			else
 			{
-				absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+				absFilePath = GetAbsolutePathToStorageLocation(storageLocation) + filePath;
 			}
 
 			ChilliSource::ITextInputStreamUPtr output(new ChilliSource::TextInputStream(absFilePath));
@@ -272,21 +343,21 @@ namespace CSBackend
             }
             else
             {
-                return nullptr;
+                 return nullptr;
             }
         }
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		ChilliSource::IBinaryInputStreamUPtr FileSystem::CreateBinaryInputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+
+		//---------------------------------------------------------------------------------
+		ChilliSource::IBinaryInputStreamUPtr FileSystem::CreateBinaryInputStream(ChilliSource::StorageLocation storageLocation, const std::string& filePath) const
 		{
 			std::string absFilePath = "";
-			if (in_storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
+			if (storageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(filePath) == false)
 			{
-				absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + in_filePath;
+				absFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + filePath;
 			}
 			else
 			{
-				absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+				absFilePath = GetAbsolutePathToStorageLocation(storageLocation) + filePath;
 			}
 
 			ChilliSource::IBinaryInputStreamUPtr output(new ChilliSource::BinaryInputStream(absFilePath));
@@ -296,20 +367,20 @@ namespace CSBackend
 			}
 			else
 			{
-				return nullptr;
+			 	return nullptr;
 			}
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		ChilliSource::TextOutputStreamUPtr FileSystem::CreateTextOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileWriteMode in_fileMode) const
+
+		//---------------------------------------------------------------------------------
+		ChilliSource::TextOutputStreamUPtr FileSystem::CreateTextOutputStream(ChilliSource::StorageLocation storageLocation, const std::string& filePath, ChilliSource::FileWriteMode fileMode) const
 		{
-			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+			CS_ASSERT(IsStorageLocationWritable(storageLocation), "File System: Trying to write to read only storage location.");
 
-			if (IsStorageLocationWritable(in_storageLocation))
+			if (IsStorageLocationWritable(storageLocation))
 			{
-				std::string absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+				std::string absFilePath = GetAbsolutePathToStorageLocation(storageLocation) + filePath;
 
-				ChilliSource::TextOutputStreamUPtr output(new ChilliSource::TextOutputStream(absFilePath, in_fileMode));
+				ChilliSource::TextOutputStreamUPtr output(new ChilliSource::TextOutputStream(absFilePath, fileMode));
 				if (output->IsValid() == true)
 				{
 					return output;
@@ -318,17 +389,17 @@ namespace CSBackend
 
 			return nullptr;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		ChilliSource::BinaryOutputStreamUPtr FileSystem::CreateBinaryOutputStream(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, ChilliSource::FileWriteMode in_fileMode) const
+
+		//---------------------------------------------------------------------------------
+		ChilliSource::BinaryOutputStreamUPtr FileSystem::CreateBinaryOutputStream(ChilliSource::StorageLocation storageLocation, const std::string& filePath, ChilliSource::FileWriteMode fileMode) const
 		{
-			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+			CS_ASSERT(IsStorageLocationWritable(storageLocation), "File System: Trying to write to read only storage location.");
 
-			if (IsStorageLocationWritable(in_storageLocation))
+			if (IsStorageLocationWritable(storageLocation))
 			{
-				std::string absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+				std::string absFilePath = GetAbsolutePathToStorageLocation(storageLocation) + filePath;
 
-				ChilliSource::BinaryOutputStreamUPtr output(new ChilliSource::BinaryOutputStream(absFilePath, in_fileMode));
+				ChilliSource::BinaryOutputStreamUPtr output(new ChilliSource::BinaryOutputStream(absFilePath, fileMode));
 				if (output->IsValid() == true)
 				{
 					return output;
@@ -337,24 +408,24 @@ namespace CSBackend
 
 			return nullptr;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::CreateDirectoryPath(ChilliSource::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::CreateDirectoryPath(ChilliSource::StorageLocation storageLocation, const std::string& directoryPath) const
 		{
-			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+			CS_ASSERT(IsStorageLocationWritable(storageLocation), "File System: Trying to write to read only storage location.");
 
 			//get each level of the new directory separately and then iterate though each creating it if it does not already exist.
-			auto currentDirectoryPath = GetAbsolutePathToStorageLocation(in_storageLocation);
-			auto relativePathSections = ChilliSource::StringUtils::Split(ChilliSource::StringUtils::StandardiseDirectoryPath(in_directoryPath), "/");
+			auto currentDirectoryPath = GetAbsolutePathToStorageLocation(storageLocation);
+			auto relativePathSections = ChilliSource::StringUtils::Split(ChilliSource::StringUtils::StandardiseDirectoryPath(directoryPath), "/");
 
 			for (const auto& relativePathSection : relativePathSections)
 			{
 				currentDirectoryPath += ChilliSource::StringUtils::StandardiseDirectoryPath(relativePathSection);
-				if (!CSBackend::Windows::DoesDirectoryExist(currentDirectoryPath))
+				if (!DoesDirectoryExist(currentDirectoryPath))
 				{
-					if (!CSBackend::Windows::CreateDirectory(currentDirectoryPath))
+					if (!CreateDirectory(currentDirectoryPath))
 					{
-						CS_LOG_ERROR("File System: Failed to create directory '" + in_directoryPath + "'");
+						CS_LOG_ERROR("File System: Failed to create directory '" + directoryPath + "'");
 						return false;
 					}
 				}
@@ -362,76 +433,73 @@ namespace CSBackend
 
 			return true;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::CopyFile(ChilliSource::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath, 
-			ChilliSource::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::CopyFile(ChilliSource::StorageLocation sourceLocation, const std::string& srcFilePath, ChilliSource::StorageLocation destLocation, const std::string& destFilePath) const
 		{
-			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
-            
+			CS_ASSERT(IsStorageLocationWritable(destLocation), "File System: Trying to write to read only storage location.");
+
 			std::string sourceFilePath;
-			if (in_sourceStorageLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_sourceFilePath) == false)
+			if (sourceLocation == ChilliSource::StorageLocation::k_DLC && DoesFileExistInCachedDLC(srcFilePath) == false)
 			{
-				sourceFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + ChilliSource::StringUtils::StandardiseFilePath(in_sourceFilePath);
+				sourceFilePath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + ChilliSource::StringUtils::StandardiseFilePath(srcFilePath);
 			}
 			else
 			{
-				sourceFilePath = GetAbsolutePathToStorageLocation(in_sourceStorageLocation) + ChilliSource::StringUtils::StandardiseFilePath(in_sourceFilePath);
+				sourceFilePath = GetAbsolutePathToStorageLocation(sourceLocation) + ChilliSource::StringUtils::StandardiseFilePath(srcFilePath);
 			}
 
-			if (CSBackend::Windows::DoesFileExist(sourceFilePath) == false)
+			if (DoesFileExist(sourceFilePath) == false)
 			{
-				CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
+				CS_LOG_ERROR("File System: Trying to copy file '" + srcFilePath + "' but it does not exist.");
 				return false;
 			}
 
             //get the path to the file
 			std::string destinationFileName, destinationDirectoryPath;
-			ChilliSource::StringUtils::SplitFilename(in_destinationFilePath, destinationFileName, destinationDirectoryPath);
-            
+			ChilliSource::StringUtils::SplitFilename(destFilePath, destinationFileName, destinationDirectoryPath);
+
             //create the output directory
 			CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath);
-            
+
             //try and copy the files
-			std::wstring sourceWPath = WindowsStringUtils::ConvertStandardPathToWindows(sourceFilePath);
-			std::wstring destWPath = WindowsStringUtils::ConvertStandardPathToWindows(GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + in_destinationFilePath);
-			if (WindowsFileUtils::WindowsCopyFile(sourceWPath.c_str(), destWPath.c_str(), FALSE) == FALSE)
+			std::string destPath = GetAbsolutePathToStorageLocation(destLocation) + destFilePath;
+			if (CopyFile(sourceFilePath, destPath) == false)
 			{
-				CS_LOG_ERROR("File System: Failed to copy file '" + in_sourceFilePath + "'");
+				CS_LOG_ERROR("File System: Failed to copy file '" + srcFilePath + "'");
 				return false;
 			}
 
 			return true;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::CopyDirectory(ChilliSource::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath, 
-			ChilliSource::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const
-		{
-			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
 
-			if (DoesDirectoryExist(in_sourceStorageLocation, in_sourceDirectoryPath) == false)
+		//---------------------------------------------------------------------------------
+		bool FileSystem::CopyDirectory(ChilliSource::StorageLocation sourceLocation, const std::string& sourceDirPath, ChilliSource::StorageLocation destLocation, const std::string& destDirPath) const
+		{
+			CS_ASSERT(IsStorageLocationWritable(destLocation), "File System: Trying to write to read only storage location.");
+
+			if (DoesDirectoryExist(sourceLocation, sourceDirPath) == false)
 			{
-				CS_LOG_ERROR("File System: Trying to copy directory '" + in_sourceDirectoryPath + "' but it doesn't exist.");
+				CS_LOG_ERROR("File System: Trying to copy directory '" + sourceDirPath + "' but it doesn't exist.");
 				return false;
 			}
 
-			std::vector<std::string> filePaths = GetFilePaths(in_sourceStorageLocation, in_sourceDirectoryPath, true);
+			std::vector<std::string> filePaths = GetFilePaths(sourceLocation, sourceDirPath, true);
 
 			//if the source directory is empty, just create the equivelent directory in the destination
 			if (filePaths.size() == 0)
 			{
-				CreateDirectoryPath(in_destinationStorageLocation, in_destinationDirectoryPath);
+				CreateDirectoryPath(destLocation, destDirPath);
 			}
 			else
 			{
-				std::string sourceDirectoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(in_sourceDirectoryPath);
-				std::string destinationDirectoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(in_destinationDirectoryPath);
+				std::string sourceDirectoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(sourceDirPath);
+				std::string destinationDirectoryPath = ChilliSource::StringUtils::StandardiseDirectoryPath(destDirPath);
 				for (const std::string& filePath : filePaths)
 				{
-					if (CopyFile(in_sourceStorageLocation, sourceDirectoryPath + filePath, in_destinationStorageLocation, destinationDirectoryPath + filePath) == false)
+					if (CopyFile(sourceLocation, sourceDirectoryPath + filePath, destLocation, destinationDirectoryPath + filePath) == false)
 					{
-						CS_LOG_ERROR("File System: Failed to copy directory '" + in_sourceDirectoryPath + "'");
+						CS_LOG_ERROR("File System: Failed to copy directory '" + sourceDirPath + "'");
 						return false;
 					}
 				}
@@ -439,49 +507,45 @@ namespace CSBackend
 
 			return true;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::DeleteFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::DeleteFile(ChilliSource::StorageLocation storageLocation, const std::string& filePath) const
 		{
-			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
+			CS_ASSERT(IsStorageLocationWritable(storageLocation) == true, "Cannot delete file from read-only storage location.");
 
-			std::wstring filePath = WindowsStringUtils::ConvertStandardPathToWindows(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
-			if (WindowsFileUtils::WindowsDeleteFile(filePath.c_str()) == FALSE)
-			{
-				return false;
-			}
+            std::string filePath = GetAbsolutePathToStorageLocation(storageLocation) + ChilliSource::StringUtils::StandardiseFilePath(filePath);
+            s32 error = unlink(filePath.c_str());
+            if (error != 0)
+            {
+                return false;
+            }
 
-			return true;
+            return true;
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::DeleteDirectory(ChilliSource::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+		bool FileSystem::DeleteDirectory(ChilliSource::StorageLocation storageLocation, const std::string& directoryPath) const
 		{
-			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
+			CS_ASSERT(IsStorageLocationWritable(storageLocation), "Cannot delete directory from read-only storage location.");
 
-			std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
-			if (CSBackend::Windows::DeleteDirectory(directoryPath) == false)
-			{
-				return false;
-			}
+            std::string directoryPath = GetAbsolutePathToStorageLocation(storageLocation) + ChilliSource::StringUtils::StandardiseDirectoryPath(directoryPath);
+            return DeleteDirectory(directoryPath);
 
 			return true;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::vector<std::string> FileSystem::GetFilePaths(ChilliSource::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
+
+		//---------------------------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetFilePaths(ChilliSource::StorageLocation storageLocation, const std::string& directoryPath, bool recursive) const
 		{
-			std::vector<std::string> possibleDirectories = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
-            
+			std::vector<std::string> possibleDirectories = GetPossibleAbsoluteDirectoryPaths(storageLocation, directoryPath);
+
 			std::vector<std::string> output;
 			std::vector<std::string> filePaths;
-			std::vector<std::string> directoryPaths;
 			for (const std::string& possibleDirectory : possibleDirectories)
 			{
 				filePaths.clear();
-				directoryPaths.clear();
 
-				ListDirectoryContents(possibleDirectory, in_recursive, directoryPaths, filePaths);
+				GetPaths(filePaths, possibleDirectory, false, recursive);
 				output.insert(output.end(), filePaths.begin(), filePaths.end());
 			}
 
@@ -490,21 +554,19 @@ namespace CSBackend
 			output.resize(it - output.begin());
 			return output;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::vector<std::string> FileSystem::GetDirectoryPaths(ChilliSource::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
+
+		//---------------------------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetDirectoryPaths(ChilliSource::StorageLocation storageLocation, const std::string& directoryPath, bool recursive) const
 		{
-			std::vector<std::string> possibleDirectories = GetPossibleAbsoluteDirectoryPaths(in_storageLocation, in_directoryPath);
+			std::vector<std::string> possibleDirectories = GetPossibleAbsoluteDirectoryPaths(storageLocation, directoryPath);
 
 			std::vector<std::string> output;
-			std::vector<std::string> filePaths;
 			std::vector<std::string> directoryPaths;
 			for (const std::string& possibleDirectory : possibleDirectories)
 			{
-				filePaths.clear();
 				directoryPaths.clear();
 
-				ListDirectoryContents(possibleDirectory, in_recursive, directoryPaths, filePaths);
+				GetPaths(directoryPaths, possibleDirectory, true, recursive);
 				output.insert(output.end(), directoryPaths.begin(), directoryPaths.end());
 			}
 
@@ -513,115 +575,129 @@ namespace CSBackend
 			output.resize(it - output.begin());
 			return output;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExist(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::DoesFileExist(ChilliSource::StorageLocation storageLocation, const std::string& filePath) const
 		{
-			switch (in_storageLocation)
+			switch (storageLocation)
 			{
 				case ChilliSource::StorageLocation::k_DLC:
 				{
-					if (DoesItemExistInDLCCache(in_filePath, false) == true)
+					if (DoesItemExistInDLCCache(filePath, false) == true)
 					{
 						return true;
 					}
 
-					return DoesFileExist(ChilliSource::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+					return DoesFileExist(ChilliSource::StorageLocation::k_package, GetPackageDLCPath() + filePath);
 				}
 				default:
 				{
-					std::string path = ChilliSource::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
-					return CSBackend::Windows::DoesFileExist(path);
+					std::string path = ChilliSource::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(storageLocation) + filePath);
+					return DoesFileExist(path);
 				}
 			}
+
+			return true;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::DoesFileExistInCachedDLC(const std::string& filePath) const
 		{
-			return DoesItemExistInDLCCache(in_filePath, false);
+			return DoesFileExist(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC) + ChilliSource::StringUtils::StandardiseFilePath(filePath));
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::DoesFileExistInPackageDLC(const std::string& filePath) const
 		{
-			return DoesFileExist(ChilliSource::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+			return DoesFileExist(ChilliSource::StorageLocation::k_package, GetPackageDLCPath() + filePath);
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExist(ChilliSource::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::DoesDirectoryExist(ChilliSource::StorageLocation storageLocation, const std::string& directoryPath) const
 		{
-			switch (in_storageLocation)
+			switch (storageLocation)
 			{
 				case ChilliSource::StorageLocation::k_DLC:
 				{
-					if (DoesItemExistInDLCCache(in_directoryPath, true) == true)
+					if (DoesItemExistInDLCCache(directoryPath, true) == true)
 					{
 						return true;
 					}
 
-					return DoesDirectoryExist(ChilliSource::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+					return DoesDirectoryExist(ChilliSource::StorageLocation::k_package, GetPackageDLCPath() + directoryPath);
 				}
 				default:
 				{
-					std::string path = ChilliSource::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath);
-					return CSBackend::Windows::DoesDirectoryExist(path);
+					std::string path = ChilliSource::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(storageLocation) + directoryPath);
+					return DoesDirectoryExist(path);
 				}
 			}
+
+			return true;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::DoesDirectoryExistInCachedDLC(const std::string& directoryPath) const
 		{
-			return DoesItemExistInDLCCache(in_directoryPath, true);
+			return DoesDirectoryExist(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC) + ChilliSource::StringUtils::StandardiseFilePath(directoryPath));
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::DoesDirectoryExistInPackageDLC(const std::string& in_directoryPath) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::DoesDirectoryExistInPackageDLC(const std::string& directoryPath) const
 		{
-			return DoesDirectoryExist(ChilliSource::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+			return DoesDirectoryExist(ChilliSource::StorageLocation::k_package, GetPackageDLCPath() + directoryPath);
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::string FileSystem::GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation in_storageLocation) const
+
+		//---------------------------------------------------------------------------------
+		std::string FileSystem::GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation storageLocation) const
 		{
-			switch (in_storageLocation)
+			//get the storage location path
+			std::string storageLocationPath;
+			switch (storageLocation)
 			{
-			case ChilliSource::StorageLocation::k_package:
-				return m_packagePath + "AppResources/";
-			case ChilliSource::StorageLocation::k_chilliSource:
-				return m_packagePath + "CSResources/";
-			case ChilliSource::StorageLocation::k_saveData:
-				return m_documentsPath + k_saveDataPath;
-			case ChilliSource::StorageLocation::k_cache:
-				return m_documentsPath + k_cachePath;
-			case ChilliSource::StorageLocation::k_DLC:
-				return m_documentsPath + k_dlcPath;
-			case ChilliSource::StorageLocation::k_root:
-				return "";
-				break;
-			default:
-				CS_LOG_ERROR("Storage Location not available on this platform!");
-				return "";
+				case ChilliSource::StorageLocation::k_package:
+					storageLocationPath = k_packagePath;
+					break;
+				case ChilliSource::StorageLocation::k_chilliSource:
+					storageLocationPath = k_chilliSourcePath;
+					break;
+				case ChilliSource::StorageLocation::k_saveData:
+					storageLocationPath = m_storagePath + k_saveDataPath;
+					break;
+				case ChilliSource::StorageLocation::k_cache:
+					storageLocationPath = m_storagePath + k_cachePath;
+					break;
+				case ChilliSource::StorageLocation::k_DLC:
+					storageLocationPath = m_storagePath + k_dlcPath;
+					break;
+				case ChilliSource::StorageLocation::k_root:
+					storageLocationPath = "";
+					break;
+				default:
+					CS_LOG_FATAL("File System: Requested storage location that does not exist on this platform.");
+					break;
 			}
+
+			return storageLocationPath;
 		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		bool FileSystem::DoesItemExistInDLCCache(const std::string& in_path, bool in_isDirectory) const
+
+		//---------------------------------------------------------------------------------
+		bool FileSystem::DoesItemExistInDLCCache(const std::string& path, bool isDirectory) const
 		{
-			std::string path = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC) + in_path;
-			if (in_isDirectory == true)
+			std::string fileOrDirPath = GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC) + path;
+			if (isDirectory == true)
 			{
-				return CSBackend::Windows::DoesDirectoryExist(ChilliSource::StringUtils::StandardiseDirectoryPath(path));
+				return DoesDirectoryExist(ChilliSource::StringUtils::StandardiseDirectoryPath(fileOrDirPath));
 			}
 			else
 			{
-				return CSBackend::Windows::DoesFileExist(ChilliSource::StringUtils::StandardiseFilePath(path));
+				return DoesFileExist(ChilliSource::StringUtils::StandardiseFilePath(fileOrDirPath));
 			}
+			return true;
 		}
-		//------------------------------------------------------------
-		//------------------------------------------------------------
-		std::vector<std::string> FileSystem::GetPossibleAbsoluteDirectoryPaths(ChilliSource::StorageLocation in_storageLocation, const std::string& in_path) const
+
+		//---------------------------------------------------------------------------------
+		std::vector<std::string> FileSystem::GetPossibleAbsoluteDirectoryPaths(ChilliSource::StorageLocation storageLocation, const std::string& path) const
 		{
 			std::vector<std::string> output;
 
@@ -629,13 +705,13 @@ namespace CSBackend
 			{
 				case ChilliSource::StorageLocation::k_DLC:
 				{
-					output.push_back(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + in_path);
-					output.push_back(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC) + in_path);
+					output.push_back(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_package) + GetPackageDLCPath() + path);
+					output.push_back(GetAbsolutePathToStorageLocation(ChilliSource::StorageLocation::k_DLC) + path);
 					break;
 				}
 				default:
 				{
-					output.push_back(GetAbsolutePathToStorageLocation(in_storageLocation) + in_path);
+					output.push_back(GetAbsolutePathToStorageLocation(storageLocation) + path);
 					break;
 				}
 			}

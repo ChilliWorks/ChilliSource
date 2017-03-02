@@ -1,11 +1,7 @@
 //
-//  PNGImageProvider.h
-//  ChilliSource
-//  Created by Ian Copland on 05/02/2011.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -39,70 +35,66 @@ namespace CSBackend
 {
 	namespace RPi
 	{
-		//--------------------------------------------------------------
-		/// The windows backend for the PNG Image Provider. This loads
+		/// The Raspberry Pi backend for the PNG Image Provider. This loads
 		/// PNG images from file.
 		///
-		/// @author Ian Copland
-		//--------------------------------------------------------------
 		class PNGImageProvider final : public ChilliSource::PNGImageProvider
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(PNGImageProvider);
-			//----------------------------------------------------------
-			/// Is the object of the given interface type
+
+			/// Queries whether or not this system implements the
+			/// interface with the given Id.
 			///
-			/// @author Ian Copland
+			/// @param interfaceId
+			///		The id of the interface that we need to check if this system implements
 			///
-			/// @param Interface type to query
+			/// @retrun TRUE if the system 'IsA' interface
 			///
-			/// @return Whether the object is of given type
-			//----------------------------------------------------------
-			bool IsA(ChilliSource::InterfaceIDType in_interfaceId) const override;
-			//-------------------------------------------------------
-			/// @author Ian Copland
-			///
+			bool IsA(ChilliSource::InterfaceIDType iinterfaceId) const override;
+
 			/// @return The resource type this provider can load
-			//-------------------------------------------------------
+			///
 			ChilliSource::InterfaceIDType GetResourceType() const override;
-			//----------------------------------------------------------
-			/// Whether or not the provider can create resources from
-			/// files with the given extension.
+
+			/// @param extension
+			///		Extension to check that the system can load
 			///
-			/// @author Ian Copland
+			/// @return TRUE if the object can load a resource with given extension
 			///
-			/// @param Extension to compare against
-			///
-			/// @return Whether the object can load a resource with that
-			/// extension
-			//----------------------------------------------------------
-			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
-			//----------------------------------------------------------
+			bool CanCreateResourceWithFileExtension(const std::string& extension) const override;
+
 			/// Creates a new image resource from file. Check the
 			/// resource load state for success or failure
 			///
-			/// @author Ian Copland
+			/// @param location
+			///		The storage location to load from
+			/// @param filePath
+			///		File path to resource
+			/// @param options
+			///		Options to customise the creation
+			/// @param [Out] out_resource
+			///		Assigned when the resource creation is finished
 			///
-			/// @param The storage location to load from
-			/// @param File path to resource
-			/// @param Options to customise the creation
-			/// @param [Out] Resource
-			//-----------------------------------------------------------
-			void CreateResourceFromFile(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceSPtr& out_resource) override;
-			//----------------------------------------------------
-			/// Creates a new resource from file asynchronously.
-			/// Completion delegate is called when load is finished.
-			/// Check the resource load state for success or failure
+			void CreateResourceFromFile(ChilliSource::StorageLocation location, const std::string& filePath, const ChilliSource::IResourceOptionsBaseCSPtr& options, const ChilliSource::ResourceSPtr& out_resource) override;
+
+			/// Creates a new image resource from file asynchronously. Check the
+			/// resource load state for success or failure. Delgate is called when creation
+			/// is finished
 			///
-			/// @author Ian Copland
+			/// @param location
+			///		The storage location to load from
+			/// @param filePath
+			///		File path to resource
+			/// @param options
+			///		Options to customise the creation
+			/// @param delegate
+			///		Delegate called when finished
+			/// @param [Out] out_resource
+			///		Assigned when the resource creation is finished
 			///
-			/// @param The storage location.
-			/// @param The filepath.
-			/// @param Options to customise the creation
-			/// @param Completion delegate
-			/// @param [Out] The output resource.
-			//----------------------------------------------------
-			void CreateResourceFromFileAsync(ChilliSource::StorageLocation in_storageLocation, const std::string& in_filePath, const ChilliSource::IResourceOptionsBaseCSPtr& in_options, const ChilliSource::ResourceProvider::AsyncLoadDelegate& in_delegate, const ChilliSource::ResourceSPtr& out_resource) override;
+			void CreateResourceFromFileAsync(ChilliSource::StorageLocation location, const std::string& filePath, const ChilliSource::IResourceOptionsBaseCSPtr& options, const ChilliSource::ResourceProvider::AsyncLoadDelegate& delegate, const ChilliSource::ResourceSPtr& out_resource) override;
+			
 		private:
 			friend ChilliSource::PNGImageProviderUPtr ChilliSource::PNGImageProvider::Create();
 			//-----------------------------------------------------------

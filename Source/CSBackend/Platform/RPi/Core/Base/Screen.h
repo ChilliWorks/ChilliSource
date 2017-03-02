@@ -48,7 +48,7 @@ namespace CSBackend
             /// Queries whether or not this system implements the
 			/// interface with the given Id.
 			///
-			/// @param in_interfaceId
+			/// @param interfaceId
 			///		The id of the interface that we need to check if this system implements
 			///
 			/// @retrun TRUE if the system 'IsA' interface
