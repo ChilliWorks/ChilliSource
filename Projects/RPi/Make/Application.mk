@@ -64,7 +64,7 @@ CS_STATIC_LIB=libChilliSource.a
 CS_APP_EXECUTABLE=Application
 
 # Default make command.
-all: $(SOURCES) $(CS_ECS_APP_EXECUTABLEXECUTABLE)
+all: $(SOURCES) $(CS_APP_EXECUTABLE)
 
 # Link objs into static lib. Uses the .cpp.o: rule below.
 $(CS_APP_EXECUTABLE): $(OBJECTS)
