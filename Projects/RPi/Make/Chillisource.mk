@@ -56,8 +56,12 @@ LDFLAGS= $(CS_LIBRARY_DIRS) -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm
 # All Source Files
 SOURCES=$(CS_SOURCEFILES_CHILLISOURCE) $(CS_SOURCEFILES_PLATFORM) $(CS_SOURCEFILES_RENDERING)
 
+# .o File directory
+CS_OBJ_DIR = $(LOCAL_PATH)/csobj
+
 # All Objects to be Generated - they take their names from the names of the cpp files that generated them.
 OBJECTS= $(SOURCES:%.cpp=%.o) $(SOURCES:%.c=%.o) $(SOURCES:%.cc=%.o)
+BUILTOBJECTS=$(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_OBJ_DIR)/' '--extensions' 'o')
 
 # Name of static lib to generate.
 CS_STATIC_LIB=libChilliSource.a
@@ -67,26 +71,33 @@ all: $(SOURCES) $(CS_STATIC_LIB)
 
 # Link objs into static lib. Uses the .cpp.o: rule below.
 $(CS_STATIC_LIB): $(OBJECTS)
-	$(AR) rcs $(CS_STATIC_LIB) $(OBJECTS)
+	$(AR) rcs $(CS_STATIC_LIB) $(BUILTOBJECTS)
 
-# Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
-# $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
+# Create objects from all .cpp files in $(SOURCES).
+# $< refers to the first prerequisite, which is the current file in $(SOURCES). $@ refers to the target, which is $(OBJECTS).
+# It automatically puts them in CS_OBJ_DIR.
 .cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+	test -d $(CS_OBJ_DIR) || mkdir $(CS_OBJ_DIR)
+	$(CC) $(CFLAGS) $< -o $(CS_OBJ_DIR)/$(notdir $@)
 .c.o:
-	$(CC) $(CFLAGS) $< -o $@
+	test -d $(CS_OBJ_DIR) || mkdir $(CS_OBJ_DIR)
+	$(CC) $(CFLAGS) $< -o $(CS_OBJ_DIR)/$(notdir $@)
 .cc.o:
-	$(CC) $(CFLAGS) $< -o $@
+	test -d $(CS_OBJ_DIR) || mkdir $(CS_OBJ_DIR)
+	$(CC) $(CFLAGS) $< -o $(CS_OBJ_DIR)/$(notdir $@)
 
 .PHONY: clean
 
 clean:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'o')
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'o')
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'o')
-	rm $(CS_STATIC_LIB)
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'o')
+	rm -f $(CS_STATIC_LIB)
+
+cleantarget:
+	rm -f $(CS_STATIC_LIB)
 
 cleanobjects:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'o')
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'o')
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'o')

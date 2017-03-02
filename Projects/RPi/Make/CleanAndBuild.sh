@@ -1,4 +1,4 @@
-make -f Chillisource.mk
-make -f Chillisource.mk cleanobjects
-make -f Application.mk
-make -f Application.mk cleanobjects
+make -f Chillisource.mk clean
+make -f Chillisource.mk 
+make -f Application.mk clean
+make -f Application.mk 

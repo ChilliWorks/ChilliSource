@@ -54,9 +54,14 @@ LDFLAGS= $(CS_LIBRARY_DIRS) -lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -
 # All Source Files
 SOURCES=$(CS_APP_SOURCES)
 
+# .o File directory
+CS_APP_OBJ_DIR = $(LOCAL_PATH)/appobj
+
 # All Objects to be Generated - they take their names from the names of the cpp files that generated them.
+# NOTE: $(OBJECTS) should be built in such a way that it generates filenames with appobj/ prefixed, replacing
+# local paths. This way GCC will understand if it is partially built or not.
 OBJECTS= $(SOURCES:%.cpp=%.o) $(SOURCES:%.c=%.o) $(SOURCES:%.cc=%.o)
-BUILTOBJECTS := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')
+BUILTOBJECTS := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_APP_OBJ_DIR)/' '--extensions' 'o')
 
 # Name of static lib to link.
 CS_STATIC_LIB=libChilliSource.a
@@ -74,17 +79,23 @@ $(CS_APP_EXECUTABLE): $(OBJECTS)
 # Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
 # $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
 .cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+	test -d $(CS_APP_OBJ_DIR) || mkdir $(CS_APP_OBJ_DIR)
+	$(CC) $(CFLAGS) $< -o $(CS_APP_OBJ_DIR)/$(notdir $@)
 .c.o:
-	$(CC) $(CFLAGS) $< -o $@
+	test -d $(CS_APP_OBJ_DIR) || mkdir $(CS_APP_OBJ_DIR)
+	$(CC) $(CFLAGS) $< -o $(CS_APP_OBJ_DIR)/$(notdir $@)
 .cc.o:
-	$(CC) $(CFLAGS) $< -o $@
+	test -d $(CS_APP_OBJ_DIR) || mkdir $(CS_APP_OBJ_DIR)
+	$(CC) $(CFLAGS) $< -o $(CS_APP_OBJ_DIR)/$(notdir $@)
 
 .PHONY: clean
 
 clean:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')
-	rm $(CS_STATIC_LIB)
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')
+	rm -f $(CS_APP_EXECUTABLE)
+
+cleantarget:
+	rm -f $(CS_APP_EXECUTABLE)
 
 cleanobjects:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')

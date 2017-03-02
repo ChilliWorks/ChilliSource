@@ -80,4 +80,5 @@ $(CSBASE_STATIC_LIB): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(SOURCEDIR)/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(SOURCEDIR)/' '--extensions' 'o')
+	rm -f libCSBase.a
