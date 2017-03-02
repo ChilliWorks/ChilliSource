@@ -32,6 +32,9 @@
 #include <CSBackend/Platform/RPi/Core/Base/SystemInfoFactory.h>
 #include <CSBackend/Rendering/OpenGL/Base/RenderInfoFactory.h>
 
+#include <sys/sysinfo.h>
+#include <sys/utsname.h>
+
 #include <algorithm>
 #include <vector>
 
@@ -39,11 +42,47 @@ namespace CSBackend
 {
     namespace RPi
     {
+        namespace
+        {
+            const std::string k_deviceModel = "Raspberry Pi";
+            const std::string k_deviceManufacturer = "Raspberry Pi Foundation";
+            const std::string k_defaultLocale = "en_US";
+            const std::string k_deviceUdid = "FAKE ID";
+
+            /// Returns the language portion of a locale code.
+            ///
+            /// @param locale
+            ///     The local code to parse
+            ///
+            /// @return The language code.
+            ///
+            std::string ParseLanguageFromLocale(const std::string& locale) noexcept
+            {
+                std::vector<std::string> localeBrokenUp = ChilliSource::StringUtils::Split(locale, "_", 0);
+
+                if (localeBrokenUp.size() > 0)
+                {
+                    return localeBrokenUp[0];
+                }
+                else
+                {
+                    return k_defaultLocale;
+                }
+            }
+        }
+
         //--------------------------------------------------------------------------------
         ChilliSource::SystemInfoCUPtr SystemInfoFactory::CreateSystemInfo() noexcept
         {
+            utsname info;
+            uname(&info);
+
+            std::string osVersion(info.version);
+            std::string machineType(info.machine);
+            std::locale globalLocale; //Creating with the default constructor will set it to the global locale
+
             // Create DeviceInfo.
-            ChilliSource::DeviceInfo deviceInfo(k_deviceModel, k_deviceModelType, k_deviceManufacturer, k_deviceUdid, GetLocale(), ParseLanguageFromLocale(GetLocale()), GetOSVersion(), GetNumberOfCPUCores());
+            ChilliSource::DeviceInfo deviceInfo(k_deviceModel, machineType, k_deviceManufacturer, k_deviceUdid, globalLocale.name(), ParseLanguageFromLocale(globalLocale.name()), osVersion, get_nprocs());
 
             // Create ScreenInfo.
             ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
