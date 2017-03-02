@@ -49,7 +49,7 @@ CFLAGS=-c -O3 -std=c++11 $(CS_CXXFLAGS_TARGET) $(CS_INCLUDES)
 CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs -L$(LOCAL_PATH)
 
 # Linker Flags
-LDFLAGS= $(CS_LIBRARY_DIRS) -l:libgcc_s.so.1 -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm -lrt -lm -lc -lstdc++ -lChilliSource 
+LDFLAGS= $(CS_LIBRARY_DIRS) -lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm -lrt -lm -lc -lstdc++ -l:libgcc_s.so.1 
 
 # All Source Files
 SOURCES=$(CS_APP_SOURCES)
@@ -69,7 +69,7 @@ all: $(SOURCES) $(CS_APP_EXECUTABLE)
 
 # Link objs into static lib. Uses the .cpp.o: rule below.
 $(CS_APP_EXECUTABLE): $(OBJECTS)
-	$(LD) $(BUILTOBJECTS) $(LDFLAGS)  -o $@ 
+	$(LD) $(BUILTOBJECTS) $(LDFLAGS) -o $@ 
 
 # Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
 # $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
