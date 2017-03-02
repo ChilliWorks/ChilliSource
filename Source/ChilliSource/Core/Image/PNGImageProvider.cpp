@@ -40,7 +40,7 @@
 #include <CSBackend/Platform/Windows/Core/Image/PNGImageProvider.h>
 #endif
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 #include <CSBackend/Platform/RPi/Core/Image/PNGImageProvider.h>
 #endif
 

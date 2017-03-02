@@ -40,7 +40,7 @@
 #include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
 #endif
 
-#ifdef CS_TARGET_PLATFORM_RPI
+#ifdef CS_TARGETPLATFORM_RPI
 #include <CSBackend/Platform/RPi/Core/Base/PlatformSystem.h>
 #endif
 

@@ -158,7 +158,7 @@ namespace CSBackend
 			//insure that it is indeed a png
 			const s32 dwHeaderSize = 8;
 			u8 ubyHeader[dwHeaderSize];
-			inStream->Read(ubyHeader, dwHeaderSize);
+			stream->Read(ubyHeader, dwHeaderSize);
 
 			if (png_sig_cmp(ubyHeader, 0, dwHeaderSize) > 0)
 			{
