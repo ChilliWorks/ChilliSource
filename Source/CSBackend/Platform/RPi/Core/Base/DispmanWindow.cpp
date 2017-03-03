@@ -46,6 +46,7 @@ namespace CSBackend
 		//----------------------------------------------------------------------------------
 		void DispmanWindow::Run()
 		{
+
 			// Start interfacing with Raspberry Pi.
 			if(!m_bcmInitialised)
 			{ 
@@ -53,8 +54,7 @@ namespace CSBackend
 				m_bcmInitialised = true;
 			}
 
-			// Load appconfig
-			auto appConfig = ChilliSource::Application::Get()->GetAppConfig();
+
 
 			// TODO: Get attributes from Config 
 			static const EGLint attributeList[] =
@@ -127,12 +127,17 @@ namespace CSBackend
 			glViewport(0, 0, m_screenWidth, m_screenHeight);
 
 			// MAIN LOOP BEGINS HERE 
-
 			// Set up LifecycleManager
 			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
 			m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
+
+
+			// Load appconfig
+			auto appConfig = app->GetAppConfig();
+
 			m_lifecycleManager->Resume();
-			m_lifecycleManager->Foreground();
+			m_lifecycleManager->Foreground();		
+
 
 			m_isRunning = true;
 

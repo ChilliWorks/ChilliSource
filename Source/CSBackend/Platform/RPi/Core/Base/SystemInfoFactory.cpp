@@ -77,12 +77,12 @@ namespace CSBackend
             utsname info;
             uname(&info);
 
-            std::string osVersion(info.version);
-            std::string machineType(info.machine);
+            std::string osVersion("info.version");
+            std::string machineType("info.machine");
             std::locale globalLocale; //Creating with the default constructor will set it to the global locale
 
             // Create DeviceInfo.
-            ChilliSource::DeviceInfo deviceInfo(k_deviceModel, machineType, k_deviceManufacturer, k_deviceUdid, globalLocale.name(), ParseLanguageFromLocale(globalLocale.name()), osVersion, get_nprocs());
+            ChilliSource::DeviceInfo deviceInfo(k_deviceModel, machineType, k_deviceManufacturer, k_deviceUdid, "globalLocale.name()", "ParseLanguageFromLocale(globalLocale.name())", osVersion, 1);
 
             // Create ScreenInfo.
             //ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
