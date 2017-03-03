@@ -46,6 +46,10 @@
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #endif
 
+#ifdef CS_TARGETPLATFORM_RPI
+#include <CSBackend/Platform/RPi/Core/File/FileSystem.h>
+#endif
+
 #include <md5/md5.h>
 
 #include <algorithm>
