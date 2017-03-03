@@ -46,9 +46,9 @@ namespace CSBackend
 		namespace
 		{
 			const char k_assetsPath[] = "assets/";
-			const char k_saveDataPath[] = "files/SaveData/";
-			const char k_dlcPath[] = "cache/DLC/";
-			const char k_cachePath[] = "cache/Cache/";
+			const char k_saveDataPath[] = "SaveData/";
+			const char k_dlcPath[] = "DLC/";
+			const char k_cachePath[] = "Cache/";
 			const char k_packagePath[] = "AppResources/";
 			const char k_chilliSourcePath[] = "CSResources/";
 
