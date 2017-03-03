@@ -24,6 +24,8 @@
 
 #ifdef CS_TARGETPLATFORM_RPI
 
+#include <CSBackend/Platform/RPi/Core/Base/DispmanWindow.h>
+
 /// Main entry point for Raspberry Pi application. Sets up the broadcom display
 ///
 /// @param argc
@@ -35,6 +37,9 @@
 ///
 int main(int argc, const char** argv)
 {
+    CSBackend::RPi::DispmanWindow::Create();
+    CSBackend::RPi::DispmanWindow::Get()->Run();
+    CSBackend::RPi::DispmanWindow::Destroy();
     return 0;
 }
 
