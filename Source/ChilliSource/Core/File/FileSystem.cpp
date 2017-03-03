@@ -74,6 +74,9 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_WINDOWS
         return FileSystemUPtr(new CSBackend::Windows::FileSystem());
 #endif
+#ifdef CS_TARGETPLATFORM_RPI
+        return FileSystemUPtr(new CSBackend::RPi::FileSystem());
+#endif
         return nullptr;
     }
     //-------------------------------------------------------
