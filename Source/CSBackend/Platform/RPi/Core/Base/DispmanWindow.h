@@ -38,6 +38,8 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
+#include <vector>
+
 namespace CSBackend
 {
 	namespace RPi
@@ -56,7 +58,15 @@ namespace CSBackend
 
 			/// @return Current resolution of the dispman window
 			///
-			ChilliSource::Integer2 GetWindowSize() const { return m_windowSize; }
+			ChilliSource::Integer2 GetWindowSize() const noexcept { return m_windowSize; }
+
+			/// @return List of the resolutions supported by the Raspberry Pi's video drivers
+			///
+			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const noexcept;
+
+			//TODO: Events for when the window is resized post switch to X11.
+			//TODO: Handle setting of window mode - fullscreen/windowed, etc.
+			//TODO: Add event for window mode changing
 
             /// Destructor; makes sure that the BCM interface is
             /// properly un-set.

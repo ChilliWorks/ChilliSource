@@ -82,17 +82,13 @@ namespace CSBackend
             std::string machineType(info.machine);
             std::locale globalLocale; //Creating with the default constructor will set it to the global locale
 
-            // Create DeviceInfo.
             ChilliSource::DeviceInfo deviceInfo(k_deviceModel, machineType, k_deviceManufacturer, k_deviceUdid, globalLocale.name(), ParseLanguageFromLocale(globalLocale.name()), osVersion, get_nprocs());
 
-            // Create ScreenInfo.
             auto screenSize = DispmanWindow::Get()->GetWindowSize();
-            ChilliSource::ScreenInfo screenInfo(ChilliSource::Vector2((f32)screenSize.x, (f32)screenSize.y), 1.0f, 1.0f, std::vector<ChilliSource::Integer2>{screenSize});
+            ChilliSource::ScreenInfo screenInfo(ChilliSource::Vector2((f32)screenSize.x, (f32)screenSize.y), 1.0f, 1.0f, DispmanWindow::Get()->GetSupportedResolutions());
 
-			//Create RenderInfo
 			ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();
 
-            // Create SystemInfo.
             ChilliSource::SystemInfoUPtr systemInfo(new ChilliSource::SystemInfo(deviceInfo, screenInfo, renderInfo, ""));
 
             return std::move(systemInfo);

@@ -150,6 +150,13 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
+		std::vector<ChilliSource::Integer2> DispmanWindow::GetSupportedResolutions() const noexcept
+		{
+			//TODO: Find out if we can query the BCM or dispman for supported resolutions
+			return std::vector<ChilliSource::Integer2> { m_windowSize };
+		}
+
+		//-----------------------------------------------------------------------------------
 		void DispmanWindow::Quit() noexcept
 		{
 			m_lifecycleManager->Suspend();
