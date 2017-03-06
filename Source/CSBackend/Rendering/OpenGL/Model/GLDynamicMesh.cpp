@@ -252,13 +252,12 @@ namespace CSBackend
                 glEnableVertexAttribArray(i);
                 
                 auto elementType = m_vertexFormat.GetElement(i);
-                auto name = GLMeshUtils::GetAttributeName(elementType);
                 auto numComponents = ChilliSource::VertexFormat::GetNumComponents(elementType);
                 auto type = GLMeshUtils::GetGLType(ChilliSource::VertexFormat::GetDataType(elementType));
                 auto normalised = GLMeshUtils::IsNormalised(elementType);
                 auto offset = reinterpret_cast<const GLvoid*>(u64(m_vertexFormat.GetElementOffset(i)));
                 
-                glShader->SetAttribute(name, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
+                glShader->SetAttribute((u8)elementType, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
             }
             
             for (u32 i = m_vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)

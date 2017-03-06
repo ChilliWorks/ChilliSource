@@ -242,25 +242,27 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLShader::SetAttribute(const std::string& name, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept
+        void GLShader::SetAttribute(u8 index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept
         {
-            auto it = m_attributeHandles.find(name);
-            if(it == m_attributeHandles.end())
+			GLint handle = m_attributeHandles[index]; 
+            if(handle < 0)
             {
                 return;
             }
 
-            glVertexAttribPointer(it->second, size, type, isNormalised, stride, offset);
+            glVertexAttribPointer(handle, size, type, isNormalised, stride, offset);
 
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting attribute.");
         }
+
         
         //------------------------------------------------------------------------------
         void GLShader::BuildAttributeHandleMap() noexcept
         {
+			// This list must be kept in the same order as the ElementType enum in VertexFormat.h
             static const std::array<std::string, 8> attribNames =
             {{
-                k_attributePosition,
+                k_attributePosition, 
                 k_attributeNormal,
                 k_attributeTangent,
                 k_attributeBitangent,
@@ -270,14 +272,18 @@ namespace CSBackend
                 k_attributeJointIndices
             }};
             
-            for(const auto& name : attribNames)
+            for(std::size_t i = 0; i < attribNames.size(); ++i)
             {
-                GLint handle = glGetAttribLocation(m_programId, name.c_str());
+                GLint handle = glGetAttribLocation(m_programId, attribNames[i].c_str());
                 
                 if(handle >= 0)
                 {
-                    m_attributeHandles.insert(std::make_pair(name, handle));
+					m_attributeHandles[i] = handle;
                 }
+				else
+				{
+					m_attributeHandles[i] = -1;
+				}
             }
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while populating attribute handles.");
