@@ -31,80 +31,74 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/LifeCycleManager.h>
 #include <ChilliSource/Core/Base/Singleton.h>
-
+#include <ChilliSource/Core/Math/Vector2.h>
 
 #include <bcm_host.h>
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
-
 namespace CSBackend
 {
 	namespace RPi
 	{
-		//------------------------------------------------------------------------------
 		/// Class for interfacing with the Raspberry Pi's dispmanx library/video driver.
 		///
 		/// While some methods in this class are thread-safe, most should be called
 		/// on the system thread.
-		//------------------------------------------------------------------------------
+		///
 		class DispmanWindow final : public ChilliSource::Singleton<DispmanWindow>
 		{
 		public:
-			//-----------------------------------------------------------------------------------------
-			/// Create and run the application; this will update
-			/// and render the app. 
-			//-----------------------------------------------------------------------------------------
-			void Run();
+			/// Create and run the application; this will update and render the app.
+			///
+			void Run() noexcept;
 
-			//---------------------------------------------------
-            /// Destructor; makes sure that the BCM interface is 
+			/// @return Current resolution of the dispman window
+			///
+			ChilliSource::Integer2 GetWindowSize() const { return m_windowSize; }
+
+            /// Destructor; makes sure that the BCM interface is
             /// properly un-set.
             ///
-            /// @author Jordan Brown
-            //---------------------------------------------------
             ~DispmanWindow() noexcept;
 
-
 	    private:
-			//-----------------------------------------------------------------------------------------
-			/// Terminates the application.
-			//-----------------------------------------------------------------------------------------
-			void Quit();
+
+			/// Terminates the application loop gracefully.
+			///
+			void Quit() noexcept;
 
 		private:
-			/// Screen Width/Height
-			u32 m_screenWidth;
-			u32 m_screenHeight;
 
-			/// EGL Objects needed for dispmanx. 
+			ChilliSource::Integer2 m_windowSize;
+
+			/// EGL Objects needed for dispmanx.
 			EGLDisplay m_eglDisplay;
 			EGLConfig m_eglConfig;
 			EGLSurface m_eglSurface;
 			EGLContext m_eglContext;
 			EGLint m_eglConfigNum;
 
-			/// Videocom blitting rects 
+			/// Videocom blitting rects
 			VC_RECT_T m_dstRect;
 			VC_RECT_T m_srcRect;
 
-			/// Dispmanx handles 
+			/// Dispmanx handles
 			DISPMANX_ELEMENT_HANDLE_T m_displayManagerElement;
 			DISPMANX_DISPLAY_HANDLE_T m_displayManagerDisplay;
 			DISPMANX_UPDATE_HANDLE_T m_displayManagerUpdate;
 
-			/// Dispmanx window 
+			/// Dispmanx window
 			EGL_DISPMANX_WINDOW_T m_nativeWindow;
 
-			/// Program state stuff 
+			/// Program state stuff
 			bool m_bcmInitialised = false;
 			bool m_isRunning = false;
 			bool m_quitScheduled = false;
 
-			// CS Lifecycle Manager 
+			// CS Lifecycle Manager
 			ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
-
 		};
 	}
 

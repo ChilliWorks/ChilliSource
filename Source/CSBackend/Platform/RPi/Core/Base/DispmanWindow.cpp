@@ -44,19 +44,16 @@ namespace CSBackend
 	namespace RPi
 	{
 		//----------------------------------------------------------------------------------
-		void DispmanWindow::Run()
+		void DispmanWindow::Run() noexcept
 		{
-
 			// Start interfacing with Raspberry Pi.
 			if(!m_bcmInitialised)
-			{ 
+			{
 				bcm_host_init();
 				m_bcmInitialised = true;
 			}
 
-
-
-			// TODO: Get attributes from Config 
+			// TODO: Get attributes from Config
 			static const EGLint attributeList[] =
 			{
 				EGL_RED_SIZE, 8,
@@ -68,84 +65,80 @@ namespace CSBackend
 				EGL_NONE
 			};
 
-			// Set up OpenGL context version 
+			// Set up OpenGL context version
 			static const EGLint contextAttributeList[] =
 			{
 				EGL_CONTEXT_CLIENT_VERSION, 2,
 				EGL_NONE
 			};
 
-			// Get EGL display & initialize it 
+			// Get EGL display & initialize it
 			m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 			eglInitialize(m_eglDisplay, NULL, NULL);
 
-			// Set up config 
+			// Set up config
 			eglChooseConfig(m_eglDisplay, attributeList, &m_eglConfig, 1, &m_eglConfigNum);
 
-			// Bind to OpenGL ES 2.0 
+			// Bind to OpenGL ES 2.0
 			eglBindAPI(EGL_OPENGL_ES_API);
 
-			// Create context 
+			// Create context
 			m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, contextAttributeList);
 
 			// Get display size (TODO: from config/X windowing system?)
-			graphics_get_display_size(0, &m_screenWidth, &m_screenHeight);
+			u32 displayWidth, displayHeight;
+			graphics_get_display_size(0, &displayWidth, &displayHeight);
+			m_windowSize.x = (s32)displayWidth;
+			m_windowSize.y = (s32)displayHeight;
 
 			// Set up blit rects.
 			m_dstRect.x = 0;
 			m_dstRect.y = 0;
-			m_dstRect.width = m_screenWidth;
-			m_dstRect.height = m_screenHeight;
+			m_dstRect.width = m_windowSize.x;
+			m_dstRect.height = m_windowSize.y;
 
 			m_srcRect.x = 0;
 			m_srcRect.y = 0;
-			m_srcRect.width = m_screenWidth << 16;
-			m_srcRect.height = m_screenHeight << 16;
+			m_srcRect.width = m_windowSize.x << 16;
+			m_srcRect.height = m_windowSize.y << 16;
 
-			// Set up dispmanx 
+			// Set up dispmanx
 			m_displayManagerDisplay = vc_dispmanx_display_open(0);
 			m_displayManagerUpdate = vc_dispmanx_update_start(0);
 			m_displayManagerElement = vc_dispmanx_element_add(m_displayManagerUpdate, m_displayManagerDisplay, 0, &m_dstRect, 0, &m_srcRect, DISPMANX_PROTECTION_NONE, 0, 0, (DISPMANX_TRANSFORM_T)0);
 
 			// Set up native window. TODO: Attach to X? Size to X Window?
 			m_nativeWindow.element = m_displayManagerElement;
-			m_nativeWindow.width = m_screenWidth;
-			m_nativeWindow.height = m_screenHeight;
+			m_nativeWindow.width = m_windowSize.x;
+			m_nativeWindow.height = m_windowSize.y;
 
-			// Instruct VC chip to use this display manager to sync 
+			// Instruct VC chip to use this display manager to sync
 			vc_dispmanx_update_submit_sync(m_displayManagerUpdate);
 
-			// Set up EGL surface 
+			// Set up EGL surface
 			m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, &m_nativeWindow, NULL);
 
-			// Connect context to surface 
+			// Connect context to surface
 			eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext);
 
-			// Set background colour 
-			glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-			glViewport(0, 0, m_screenWidth, m_screenHeight);
-
-			// MAIN LOOP BEGINS HERE 
+			// MAIN LOOP BEGINS HERE
 			// Set up LifecycleManager
 			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
 			m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
-
 
 			// Load appconfig
 			auto appConfig = app->GetAppConfig();
 
 			m_lifecycleManager->Resume();
-			m_lifecycleManager->Foreground();		
-
+			m_lifecycleManager->Foreground();
 
 			m_isRunning = true;
 
 			while(m_isRunning == true)
 			{
-				// Get X Events 
+				// Get X Events
 
-				// Render & flip buffers 
+				// Render & flip buffers
 				m_lifecycleManager->Render();
 				eglSwapBuffers(m_eglDisplay, m_eglSurface);
 
@@ -154,13 +147,10 @@ namespace CSBackend
 					Quit();
 				}
 			}
-
-
-
 		}
 
 		//-----------------------------------------------------------------------------------
-		void DispmanWindow::Quit()
+		void DispmanWindow::Quit() noexcept
 		{
 			m_lifecycleManager->Suspend();
 			m_lifecycleManager.reset();

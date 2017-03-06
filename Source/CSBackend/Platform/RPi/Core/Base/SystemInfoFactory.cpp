@@ -30,6 +30,7 @@
 
 #include <CSBackend/Platform/RPi/Core/Base/Screen.h>
 #include <CSBackend/Platform/RPi/Core/Base/SystemInfoFactory.h>
+#include <CSBackend/Platform/RPi/Core/Base/DispmanWindow.h>
 #include <CSBackend/Rendering/OpenGL/Base/RenderInfoFactory.h>
 
 #include <sys/sysinfo.h>
@@ -85,8 +86,8 @@ namespace CSBackend
             ChilliSource::DeviceInfo deviceInfo(k_deviceModel, machineType, k_deviceManufacturer, k_deviceUdid, globalLocale.name(), ParseLanguageFromLocale(globalLocale.name()), osVersion, get_nprocs());
 
             // Create ScreenInfo.
-            //ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
-            ChilliSource::ScreenInfo screenInfo(ChilliSource::Vector2(1920, 1080), 1.0f, 1.0f, std::vector<ChilliSource::Integer2>{ChilliSource::Integer2(1920, 1080)});
+            auto screenSize = DispmanWindow::Get()->GetWindowSize();
+            ChilliSource::ScreenInfo screenInfo(ChilliSource::Vector2((f32)screenSize.x, (f32)screenSize.y), 1.0f, 1.0f, std::vector<ChilliSource::Integer2>{screenSize});
 
 			//Create RenderInfo
 			ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();
