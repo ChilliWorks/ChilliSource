@@ -540,7 +540,7 @@ namespace ChilliSource
                     if(builtCharacter.m_packedImageSize.y > 0.0f)
                     {
                         //No point rendering whitespaces
-                        out_builtText.m_characters.push_back(builtCharacter);
+                        out_builtText.m_characters.push_back(std::move(builtCharacter));
                     }
                 }
                 
