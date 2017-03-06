@@ -34,12 +34,6 @@
 #include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 
-#include <bcm_host.h>
-#include <GLES2/gl2.h>
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-#include <X11/xlib.h.h>
-
 namespace CSBackend
 {
 	namespace RPi
@@ -56,8 +50,12 @@ namespace CSBackend
 			if(m_xdisplay == nullptr)
 			{
 				printf("[ChilliSource] Failed to create X11 display. Exiting");
-				return 0;
+				return;
 			}
+
+			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), 0, 0, 200, 200, 0, 0, 0);
+			XMapWindow(m_xdisplay, m_xwindow);
+			XFlush(m_xdisplay);
 
 			// Start interfacing with Raspberry Pi.
 			if(!m_bcmInitialised)
@@ -190,6 +188,7 @@ namespace CSBackend
 
 			if(m_xdisplay)
 			{
+				XDestroyWindow(m_xdisplay, m_xwindow);
 				XCloseDisplay(m_xdisplay);
 			}
 		}

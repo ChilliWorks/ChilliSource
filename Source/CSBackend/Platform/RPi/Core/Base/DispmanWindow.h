@@ -37,10 +37,9 @@
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
+#include <X11/xlib.h>
 
 #include <vector>
-
-class Display;
 
 namespace CSBackend
 {
@@ -107,6 +106,7 @@ namespace CSBackend
 
 			/// X11
 			Display* m_xdisplay = nullptr;
+			Window m_xwindow;
 
 			/// Program state stuff
 			bool m_bcmInitialised = false;
