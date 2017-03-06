@@ -257,7 +257,7 @@ namespace CSBackend
                 auto normalised = GLMeshUtils::IsNormalised(elementType);
                 auto offset = reinterpret_cast<const GLvoid*>(u64(m_vertexFormat.GetElementOffset(i)));
                 
-                glShader->SetAttribute((int)elementType, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
+                glShader->SetAttribute((u8)elementType, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
             }
             
             for (u32 i = m_vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)
