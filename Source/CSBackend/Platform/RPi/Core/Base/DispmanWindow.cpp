@@ -38,6 +38,7 @@
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
+#include <X11/xlib.h.h>
 
 namespace CSBackend
 {
@@ -46,6 +47,18 @@ namespace CSBackend
 		//----------------------------------------------------------------------------------
 		void DispmanWindow::Run() noexcept
 		{
+			//The display setup we use mimics Minecraft on the Raspberry Pi. Essentially we use a dispman display
+			//to take advantage of hardware acceleration but we layer that on top of an X window which we use to listen
+			//for events and to allow the user to control the size of the dispman display.
+
+			//Create an XWindow which will act as a backing to our main display
+			m_xdisplay = XOpenDisplay(NULL);
+			if(m_xdisplay == nullptr)
+			{
+				printf("[ChilliSource] Failed to create X11 display. Exiting");
+				return 0;
+			}
+
 			// Start interfacing with Raspberry Pi.
 			if(!m_bcmInitialised)
 			{
@@ -173,6 +186,11 @@ namespace CSBackend
 			if(m_bcmInitialised)
 			{
 				bcm_host_deinit();
+			}
+
+			if(m_xdisplay)
+			{
+				XCloseDisplay(m_xdisplay);
 			}
 		}
 	}

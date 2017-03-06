@@ -40,6 +40,8 @@
 
 #include <vector>
 
+class Display;
+
 namespace CSBackend
 {
 	namespace RPi
@@ -102,6 +104,9 @@ namespace CSBackend
 
 			/// Dispmanx window
 			EGL_DISPMANX_WINDOW_T m_nativeWindow;
+
+			/// X11
+			Display* m_xdisplay = nullptr;
 
 			/// Program state stuff
 			bool m_bcmInitialised = false;
