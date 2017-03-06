@@ -857,11 +857,10 @@ namespace ChilliSource
         auto material = m_screenMaterialPool->GetMaterial(texture, m_clipMaskCount);
 
         Matrix4 matTransform = Convert2DTransformTo3D(transform);
-        Matrix4 matTransformedLocal;
 
         for (const auto& character : characters)
         {
-            matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
+            Matrix4 matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
             AddSpriteRenderObject(m_currentRenderSnapshot, m_currentFrameAllocator, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
         }
     }
