@@ -44,7 +44,7 @@ CS_CXXFLAGS_TARGET=-DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE -DCS_TARGETPL
 CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/AppSource -I$(CS_PROJECT_ROOT)/Libraries/Catch/include  -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
 
 # Additional Compiler Flags
-CFLAGS=-c -g -std=c++11 $(CS_CXXFLAGS_TARGET) $(CS_INCLUDES)
+CFLAGS=-c -g -std=c++11 -fsigned-char -pthread -fexceptions -frtti $(CS_CXXFLAGS_TARGET) $(CS_INCLUDES)
 
 # Library Directories
 CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs -L$(LOCAL_PATH)
