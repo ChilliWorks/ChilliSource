@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 
 #include <unordered_map>
-#include <vector>
+#include <array>
 
 namespace CSBackend
 {
@@ -232,7 +232,7 @@ namespace CSBackend
             GLuint m_fragmentShaderId = 0;
             GLuint m_programId = 0;
             std::unordered_map<std::string, GLint> m_uniformHandles;
-			GLint m_attributeHandles[k_numAttributes];
+            std::array<GLint, k_numAttributes> m_attributeHandles;
             
             bool m_invalidData = false;
         };
