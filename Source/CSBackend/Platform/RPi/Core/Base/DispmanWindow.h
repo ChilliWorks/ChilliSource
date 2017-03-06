@@ -67,6 +67,7 @@ namespace CSBackend
 			//TODO: Events for when the window is resized post switch to X11.
 			//TODO: Handle setting of window mode - fullscreen/windowed, etc.
 			//TODO: Add event for window mode changing
+			//TODO: Handle vsync and FPS setting
 
             /// Destructor; makes sure that the BCM interface is
             /// properly un-set.

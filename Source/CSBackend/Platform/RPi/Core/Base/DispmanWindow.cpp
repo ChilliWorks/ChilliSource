@@ -136,9 +136,11 @@ namespace CSBackend
 
 			while(m_isRunning == true)
 			{
+				//TODO: Handle backgrounding/foregrounding on window focus
 				// Get X Events
 
-				// Render & flip buffers
+				//Update, render and then flip display buffer
+				m_lifecycleManager->SystemUpdate();
 				m_lifecycleManager->Render();
 				eglSwapBuffers(m_eglDisplay, m_eglSurface);
 
