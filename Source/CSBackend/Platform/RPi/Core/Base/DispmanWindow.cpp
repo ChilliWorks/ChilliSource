@@ -52,9 +52,10 @@ namespace CSBackend
 				printf("[ChilliSource] Failed to create X11 display. Exiting");
 				return;
 			}
-
 			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), 0, 0, 200, 200, 0, 0, 0);
 			XMapWindow(m_xdisplay, m_xwindow);
+			//All the events we need to listen for
+			XSelectInput(m_xdisplay, m_xwindow, PointerMotionMask | ButtonMotionMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | FocusChangeMask);
 			XFlush(m_xdisplay);
 
 			// Start interfacing with Raspberry Pi.
