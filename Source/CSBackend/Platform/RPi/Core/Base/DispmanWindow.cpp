@@ -246,6 +246,7 @@ namespace CSBackend
 		{
 			m_windowSize = size;
 			XMoveResizeWindow(m_xdisplay, m_xwindow, m_windowPos.x, m_windowPos.y, (u32)m_windowSize.x, (u32)m_windowSize.y);
+			XFlush(m_xdisplay);
 			UpdateEGLWindow();
 		}
 
