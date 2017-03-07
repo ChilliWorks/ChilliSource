@@ -56,6 +56,14 @@ namespace CSBackend
 		{
 		public:
 
+			/// Window display modes
+			///
+			enum class DisplayMode
+			{
+				k_windowed,
+				k_fullscreen
+			};
+
 			/// List of the events that can occur on a mouse button
 			///
 			enum class MouseButtonEvent
@@ -63,6 +71,14 @@ namespace CSBackend
 				k_pressed,
 				k_released
 			};
+
+			/// @param The new window size.
+			///
+			using WindowResizeDelegate = std::function<void(const ChilliSource::Integer2&)>;
+
+			/// @param The new window mode.
+			///
+			using WindowDisplayModeDelegate = std::function<void(DisplayMode)>;
 
 			/// @param Mouse button that the action occurred on
 			/// @param The event type (Pressed/Released)
@@ -86,9 +102,32 @@ namespace CSBackend
 			///
 			ChilliSource::Integer2 GetWindowSize() const noexcept { return m_windowSize; }
 
+			/// @param size
+			///		Size to make window in pixels
+			///
+			void SetSize(const ChilliSource::Integer2& size) noexcept;
+
 			/// @return List of the resolutions supported by the Raspberry Pi's video drivers
 			///
 			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const noexcept;
+
+			/// Set the delegates that are called when the window changes (resized or mode)
+			/// This method will assert if a given delegate is null or if the delegate has already been set.
+			///
+			/// This method is thread-safe.
+			///
+			/// @param windowResizeDelegate
+			///		The delegate called when the window resizes
+			/// @param windowDisplayModeDelegate
+			///		Called when the window switches from fullscreen to windowed
+			///
+			void SetWindowDelegates(WindowResizeDelegate windowResizeDelegate, WindowDisplayModeDelegate windowDisplayModeDelegate) noexcept;
+
+			/// Remove the delegates that relate to window events.
+			///
+			/// This method is thread-safe.
+			///
+			void RemoveWindowDelegates() noexcept;
 
 			/// Set the delegates that are called on the various mouse events (button, moved, scrolled)
 			/// This method will assert if a given delegate is null or if the delegate has already been set.
@@ -135,22 +174,30 @@ namespace CSBackend
 			/// window is responsible for the size and position of the GL dispman window and for
 			/// receiving mouse and keyboard events
 			///
+			/// @param windowPos
+			///		X, Y position of the window to create
 			/// @param windowSize
 			///		Size of the window to create
 			///
-			void InitXWindow(const ChilliSource::Integer2& windowSize) noexcept;
+			void InitXWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept;
 
 			/// Initialise the dispman window and OpenGLES based on the previously created XWindow.
 			///
+			/// @param windowPos
+			///		X, Y position of the window to create (should be created at the same pos as the X window)
 			/// @param windowSize
 			///		Size of the window to create (should be created at the same size as the X window)
 			///
-			void InitEGLDispmanWindow(const ChilliSource::Integer2& windowSize) noexcept;
+			void InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept;
 
 			/// While loop responsible for updating, X server events, rendering and display buffer swaps. Can be
 			/// terminated by calling quit.
 			///
 			void RunLoop() noexcept;
+
+			/// Update the size and pos of the dispman EGL window
+			///
+			void UpdateEGLWindow() noexcept;
 
 			/// Terminates the application loop gracefully.
 			///
@@ -159,6 +206,7 @@ namespace CSBackend
 		private:
 
 			ChilliSource::Integer2 m_windowSize;
+			ChilliSource::Integer2 m_windowPos;
 
 			/// EGL Objects needed for dispmanx.
 			EGLDisplay m_eglDisplay;
@@ -167,14 +215,9 @@ namespace CSBackend
 			EGLContext m_eglContext;
 			EGLint m_eglConfigNum;
 
-			/// Videocom blitting rects
-			VC_RECT_T m_dstRect;
-			VC_RECT_T m_srcRect;
-
 			/// Dispmanx handles
 			DISPMANX_ELEMENT_HANDLE_T m_displayManagerElement;
 			DISPMANX_DISPLAY_HANDLE_T m_displayManagerDisplay;
-			DISPMANX_UPDATE_HANDLE_T m_displayManagerUpdate;
 
 			/// Dispmanx window
 			EGL_DISPMANX_WINDOW_T m_nativeWindow;
@@ -184,7 +227,6 @@ namespace CSBackend
 			Window m_xwindow;
 
 			/// Program state stuff
-			bool m_bcmInitialised = false;
 			bool m_isRunning = false;
 			bool m_isFocused = false;
 			bool m_quitScheduled = false;
@@ -194,6 +236,10 @@ namespace CSBackend
 			MouseButtonDelegate m_mouseButtonDelegate;
 			MouseMovedDelegate m_mouseMovedDelegate;
 			MouseWheelDelegate m_mouseWheelDelegate;
+
+			std::mutex m_windowMutex;
+			WindowResizeDelegate m_windowResizeDelegate;
+			WindowDisplayModeDelegate m_windowDisplayModeDelegate;
 
 			// CS Lifecycle Manager
 			ChilliSource::LifecycleManagerUPtr m_lifecycleManager;

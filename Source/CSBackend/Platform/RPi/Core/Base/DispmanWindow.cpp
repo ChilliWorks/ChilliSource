@@ -46,20 +46,18 @@ namespace CSBackend
 			//for events and to allow the user to control the size of the dispman display.
 
 			//Start interfacing with Raspberry Pi.
-			if(!m_bcmInitialised)
-			{
-				bcm_host_init();
-				m_bcmInitialised = true;
-			}
+			bcm_host_init();
 
 			//TODO: Get from app config
 			u32 displayWidth, displayHeight;
 			graphics_get_display_size(0, &displayWidth, &displayHeight);
-			m_windowSize.x = (s32)displayWidth;
-			m_windowSize.y = (s32)displayHeight;
+			m_windowSize.x = (s32)displayWidth >> 1;
+			m_windowSize.y = (s32)displayHeight >> 1;
+			m_windowPos.x = 0;
+			m_windowPos.y = 0;
 
-			InitXWindow(m_windowSize);
-			InitEGLDispmanWindow(m_windowSize);
+			InitXWindow(m_windowPos, m_windowSize);
+			InitEGLDispmanWindow(m_windowPos, m_windowSize);
 
 			//NOTE: We are creating ChilliSource here so no CS calls can be made prior to this including logging.
 			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
@@ -70,7 +68,7 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		void DispmanWindow::InitXWindow(const ChilliSource::Integer2& windowSize) noexcept
+		void DispmanWindow::InitXWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept
 		{
 			m_xdisplay = XOpenDisplay(NULL);
 			if(m_xdisplay == nullptr)
@@ -79,7 +77,7 @@ namespace CSBackend
 				return;
 			}
 
-			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), 0, 0, windowSize.x, windowSize.y, 0, 0, 0);
+			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), m_windowPos.x, m_windowPos.y, windowSize.x, windowSize.y, 0, 0, 0);
 			XMapWindow(m_xdisplay, m_xwindow);
 
 			//TODO: Set the window name.
@@ -91,7 +89,7 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		void DispmanWindow::InitEGLDispmanWindow(const ChilliSource::Integer2& windowSize) noexcept
+		void DispmanWindow::InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept
 		{
 			// TODO: Get attributes from Config
 			static const EGLint attributeList[] =
@@ -105,49 +103,38 @@ namespace CSBackend
 				EGL_NONE
 			};
 
-			// Set up OpenGL context version
+			// Set up OpenGL context version (OpenGLES 2.0)
 			static const EGLint contextAttributeList[] =
 			{
 				EGL_CONTEXT_CLIENT_VERSION, 2,
 				EGL_NONE
 			};
 
-			// Get EGL display & initialize it
+			// Setup the EGL display with the framebuffer config and the GL version
 			m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 			eglInitialize(m_eglDisplay, NULL, NULL);
-
-			// Set up config
 			eglChooseConfig(m_eglDisplay, attributeList, &m_eglConfig, 1, &m_eglConfigNum);
-
-			// Bind to OpenGL ES 2.0
 			eglBindAPI(EGL_OPENGL_ES_API);
-
-			// Create context
 			m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, contextAttributeList);
 
 			// Set up blit rects.
-			m_dstRect.x = 0;
-			m_dstRect.y = 0;
-			m_dstRect.width = windowSize.x;
-			m_dstRect.height = windowSize.y;
-
-			m_srcRect.x = 0;
-			m_srcRect.y = 0;
-			m_srcRect.width = windowSize.x << 16;
-			m_srcRect.height = windowSize.y << 16;
+			VC_RECT_T dstRect;
+			vc_dispmanx_rect_set(&dstRect, m_windowPos.x, m_windowPos.y, m_windowSize.x, m_windowSize.y);
+			VC_RECT_T srcRect;
+			vc_dispmanx_rect_set(&srcRect, m_windowPos.x, m_windowPos.y, m_windowSize.x << 16, m_windowSize.y << 16);
 
 			// Set up dispmanx
 			m_displayManagerDisplay = vc_dispmanx_display_open(0);
-			m_displayManagerUpdate = vc_dispmanx_update_start(0);
-			m_displayManagerElement = vc_dispmanx_element_add(m_displayManagerUpdate, m_displayManagerDisplay, 0, &m_dstRect, 0, &m_srcRect, DISPMANX_PROTECTION_NONE, 0, 0, (DISPMANX_TRANSFORM_T)0);
+			DISPMANX_UPDATE_HANDLE_T displayManagerUpdate = vc_dispmanx_update_start(0);
+			m_displayManagerElement = vc_dispmanx_element_add(displayManagerUpdate, m_displayManagerDisplay, 0, &dstRect, 0, &srcRect, DISPMANX_PROTECTION_NONE, 0, 0, DISPMANX_NO_ROTATE);
 
-			// Set up native window. TODO: Attach to X? Size to X Window?
+			// Set up native window.
 			m_nativeWindow.element = m_displayManagerElement;
 			m_nativeWindow.width = windowSize.x;
 			m_nativeWindow.height = windowSize.y;
 
 			// Instruct VC chip to use this display manager to sync
-			vc_dispmanx_update_submit_sync(m_displayManagerUpdate);
+			vc_dispmanx_update_submit_sync(displayManagerUpdate);
 
 			// Set up EGL surface and connect the context to it
 			m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, &m_nativeWindow, NULL);
@@ -170,14 +157,39 @@ namespace CSBackend
 					{
 						case FocusIn:
 						{
-							m_isFocused = true;
-							m_lifecycleManager->Foreground();
+							if(m_isFocused == false)
+							{
+								m_isFocused = true;
+								m_lifecycleManager->Foreground();
+							}
 							break;
 						}
 						case FocusOut:
 						{
-							m_isFocused = false;
-							m_lifecycleManager->Background();
+							if(m_isFocused == true)
+							{
+								m_isFocused = false;
+								m_lifecycleManager->Background();
+							}
+							break;
+						}
+						case ConfigureNotify:
+						{
+							bool resized = event.xconfigure.width != m_windowSize.x || event.xconfigure.height != m_windowSize.y;
+
+							m_windowSize.x = event.xconfigure.width;
+							m_windowSize.y = event.xconfigure.height;
+							m_windowPos.x = event.xconfigure.x;
+							m_windowPos.y = event.xconfigure.y;
+
+							//Update the EGL window to match the xwindow's new size or position
+							UpdateEGLWindow();
+
+							std::unique_lock<std::mutex> lock(m_windowMutex);
+							if (resized && m_windowResizeDelegate)
+							{
+								m_windowResizeDelegate(m_windowSize);
+							}
 							break;
 						}
 						case MotionNotify:
@@ -225,6 +237,51 @@ namespace CSBackend
 					Quit();
 				}
 			}
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::SetSize(const ChilliSource::Integer2& size) noexcept
+		{
+			m_windowSize = size;
+			XMoveResizeWindow(m_xdisplay, m_xwindow, m_windowPos.x, m_windowPos.y, (u32)m_windowSize.x, (u32)m_windowSize.y);
+			UpdateEGLWindow();
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::UpdateEGLWindow() noexcept
+		{
+			DISPMANX_UPDATE_HANDLE_T displayManagerUpdate = vc_dispmanx_update_start(0);
+			VC_RECT_T dstRect;
+			vc_dispmanx_rect_set(&dstRect, m_windowPos.x, m_windowPos.y, m_windowSize.x, m_windowSize.y);
+			VC_RECT_T srcRect;
+			vc_dispmanx_rect_set(&srcRect, m_windowPos.x, m_windowPos.y, m_windowSize.x << 16, m_windowSize.y << 16);
+			vc_dispmanx_element_change_attributes(displayManagerUpdate, m_displayManagerElement, 0, 0, 0, &dstRect, &srcRect, 0, DISPMANX_NO_ROTATE);
+
+			m_nativeWindow.width = m_windowSize.x;
+			m_nativeWindow.height = m_windowSize.y;
+
+			vc_dispmanx_update_submit_sync(displayManagerUpdate);
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::SetWindowDelegates(WindowResizeDelegate windowResizeDelegate, WindowDisplayModeDelegate windowDisplayModeDelegate) noexcept
+		{
+			CS_ASSERT(windowResizeDelegate, "Window resize delegate invalid.");
+			CS_ASSERT(windowDisplayModeDelegate, "Window display mode delegate invalid.");
+			CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate already set.");
+			CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate already set.");
+
+			std::unique_lock<std::mutex> lock(m_windowMutex);
+			m_windowResizeDelegate = std::move(windowResizeDelegate);
+			m_windowDisplayModeDelegate = std::move(windowDisplayModeDelegate);
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::RemoveWindowDelegates() noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_windowMutex);
+			m_windowResizeDelegate = nullptr;
+			m_windowDisplayModeDelegate = nullptr;
 		}
 
 		//-----------------------------------------------------------------------------------
@@ -289,20 +346,19 @@ namespace CSBackend
 		//-----------------------------------------------------------------------------------
 		DispmanWindow::~DispmanWindow()
 		{
+			CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate not removed.");
+			CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate not removed.");
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
 			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
 			CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate not removed.");
-
-			if(m_bcmInitialised)
-			{
-				bcm_host_deinit();
-			}
 
 			if(m_xdisplay)
 			{
 				XDestroyWindow(m_xdisplay, m_xwindow);
 				XCloseDisplay(m_xdisplay);
 			}
+
+			bcm_host_deinit();
 		}
 	}
 }

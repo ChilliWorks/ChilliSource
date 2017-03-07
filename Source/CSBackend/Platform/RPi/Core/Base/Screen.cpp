@@ -26,6 +26,10 @@
 
 #include <CSBackend/Platform/RPi/Core/Base/Screen.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+
 namespace CSBackend
 {
     namespace RPi
@@ -33,54 +37,101 @@ namespace CSBackend
         CS_DEFINE_NAMEDTYPE(Screen);
 
         //---------------------------------------------------------------------------------
-        Screen::Screen(const ChilliSource::ScreenInfo& screenInfo)
+        Screen::Screen(const ChilliSource::ScreenInfo& screenInfo) noexcept
             : m_screenInfo(screenInfo)
         {
             m_resolution.x = screenInfo.GetInitialResolution().x;
             m_resolution.y = screenInfo.GetInitialResolution().y;
+
+            DispmanWindow::Get()->SetWindowDelegates(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged), ChilliSource::MakeDelegate(this, &Screen::OnDisplayModeChanged));
         }
 
         //---------------------------------------------------------------------------------
-        bool Screen::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
+        bool Screen::IsA(ChilliSource::InterfaceIDType in_interfaceId) const noexcept
         {
             return (ChilliSource::Screen::InterfaceID == in_interfaceId || Screen::InterfaceID == in_interfaceId);
         }
 
         //---------------------------------------------------------------------------------
-        const ChilliSource::Vector2& Screen::GetResolution() const
+        const ChilliSource::Vector2& Screen::GetResolution() const noexcept
         {
             return m_resolution;
         }
 
         //---------------------------------------------------------------------------------
-        f32 Screen::GetDensityScale() const
+        f32 Screen::GetDensityScale() const noexcept
         {
             return m_screenInfo.GetDensityScale();
         }
 
         //---------------------------------------------------------------------------------
-        f32 Screen::GetInverseDensityScale() const
+        f32 Screen::GetInverseDensityScale() const noexcept
         {
             return m_screenInfo.GetInverseDensityScale();
         }
 
         //---------------------------------------------------------------------------------
-        ChilliSource::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
+        ChilliSource::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent() noexcept
         {
             return m_resolutionChangedEvent;
         }
 
         //---------------------------------------------------------------------------------
-		ChilliSource::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
+		ChilliSource::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent() noexcept
 		{
 			return m_displayModeChangedEvent;
 		}
 
         //---------------------------------------------------------------------------------
-		std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
+		std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const noexcept
 		{
             return m_screenInfo.GetSupportedResolutions();
 		}
+
+        //---------------------------------------------------------------------------------
+        void Screen::SetResolution(const ChilliSource::Integer2& size) noexcept
+        {
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                DispmanWindow::Get()->SetSize(size);
+                OnResolutionChanged(size);
+            });
+        }
+
+        //---------------------------------------------------------------------------------
+        void Screen::OnResolutionChanged(const ChilliSource::Integer2& resolution) noexcept
+        {
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                m_resolution.x = (f32)resolution.x;
+                m_resolution.y = (f32)resolution.y;
+
+                m_resolutionChangedEvent.NotifyConnections(m_resolution);
+            });
+        }
+
+        //---------------------------------------------------------------------------------
+        void Screen::OnDisplayModeChanged(DispmanWindow::DisplayMode mode) noexcept
+        {
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                switch (mode)
+                {
+                case DispmanWindow::DisplayMode::k_windowed:
+                    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_windowed);
+                    break;
+                case DispmanWindow::DisplayMode::k_fullscreen:
+                    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_fullscreen);
+                    break;
+                }
+            });
+        }
+
+        //---------------------------------------------------------------------------------
+        void Screen::OnDestroy() noexcept
+        {
+            DispmanWindow::Get()->RemoveWindowDelegates();
+        }
     }
 }
 

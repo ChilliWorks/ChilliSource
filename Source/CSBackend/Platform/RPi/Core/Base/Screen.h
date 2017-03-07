@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Base/ScreenInfo.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <CSBackend/Platform/RPi/ForwardDeclarations.h>
+#include <CSBackend/Platform/RPi/Core/Base/DispmanWindow.h>
 
 namespace CSBackend
 {
@@ -53,48 +54,48 @@ namespace CSBackend
 			///
 			/// @retrun TRUE if the system 'IsA' interface
 			///
-			bool IsA(ChilliSource::InterfaceIDType interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType interfaceId) const noexcept override;
 
 			/// @return Vector containing the width and height of screen
             /// space available to the application. For the RPi we always run
             /// in fullscreen mode so this will be the resolution of the display
             ///
-			const ChilliSource::Vector2& GetResolution() const override;
+			const ChilliSource::Vector2& GetResolution() const noexcept override;
 
             /// @return The density scale factor of the screen
             ///
-            f32 GetDensityScale() const override;
+            f32 GetDensityScale() const noexcept override;
 
             /// @return The reciprocal density scale factor of the screen
             ///
-            f32 GetInverseDensityScale() const override;
+            f32 GetInverseDensityScale() const noexcept override;
 
 			/// @return An event that is called when the screen resolution
             /// changes (as we don't run windowed this will only be if the display changes).
             ///
-            ChilliSource::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
+            ChilliSource::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() noexcept override;
 
             /// @return An event that is called when the screen display mode changes (we only run fullscreen on Pi so this won't change)
             ///
-			ChilliSource::IConnectableEvent<DisplayModeChangedDelegate>& GetDisplayModeChangedEvent() override;
+			ChilliSource::IConnectableEvent<DisplayModeChangedDelegate>& GetDisplayModeChangedEvent() noexcept override;
 
             /// This has no effect on the Raspberry Pi as we always run fullscreen
             ///
             /// @param size
             ///     Size to set the window to
             ///
-			void SetResolution(const ChilliSource::Integer2& size) override {}
+			void SetResolution(const ChilliSource::Integer2& size) noexcept override;
 
             /// This has no effect on the Raspberry Pi as we always run fullscreen
             ///
             /// @param mode
             ///     Display mode to use
             ///
-			void SetDisplayMode(DisplayMode in_mode) override {}
+			void SetDisplayMode(DisplayMode in_mode) noexcept override {}
 
 			/// @return A list of resolutions supported by the display
 			///
-			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const override;
+			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const noexcept override;
 
         private:
             friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create(const ChilliSource::ScreenInfo& screenInfo);
@@ -102,7 +103,21 @@ namespace CSBackend
             /// @param screenInfo
             ///     Holds the information about the display
             ///
-			Screen(const ChilliSource::ScreenInfo& screenInfo);
+			Screen(const ChilliSource::ScreenInfo& screenInfo) noexcept;
+
+            /// @param resolution
+            ///     New window size
+            ///
+            void OnResolutionChanged(const ChilliSource::Integer2& resolution) noexcept;
+
+            /// @param mode
+            ///     New window mode
+            ///
+            void OnDisplayModeChanged(DispmanWindow::DisplayMode mode) noexcept;
+
+            /// Stops listening for window events
+            ///
+            void OnDestroy() noexcept override;
 
             ChilliSource::Vector2 m_resolution;
             ChilliSource::ScreenInfo m_screenInfo;

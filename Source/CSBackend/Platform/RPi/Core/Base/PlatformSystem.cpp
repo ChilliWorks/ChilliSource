@@ -43,6 +43,7 @@ namespace CSBackend
 		//---------------------------------------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(ChilliSource::Application* application)
 		{
+			//No Raspberry Pi systems need created
 		}
 
 		//---------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ namespace CSBackend
 		{
 			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
 			{
-
+				//TODO: RPi
 			});
 		}
 
@@ -59,7 +60,7 @@ namespace CSBackend
 		{
 			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
 			{
-
+				//TODO: RPi
 			});
 		}
 
