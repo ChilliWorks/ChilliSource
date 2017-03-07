@@ -178,11 +178,20 @@ namespace CSBackend
 						case ConfigureNotify:
 						{
 							bool resized = event.xconfigure.width != m_windowSize.x || event.xconfigure.height != m_windowSize.y;
+							if(resized == true)
+							{
+								m_windowSize.x = event.xconfigure.width;
+								m_windowSize.y = event.xconfigure.height;
+							}
 
-							m_windowSize.x = event.xconfigure.width;
-							m_windowSize.y = event.xconfigure.height;
-							m_windowPos.x = event.xconfigure.x;
-							m_windowPos.y = event.xconfigure.y;
+							//When resizing the window we receive a real event and a synthetic event. The real event has wrong
+							//x, y coordinates so we must use the ones from the synthetic event. When moving the window we only
+							//get the synthetic event.
+							if(event.xconfigure.send_event == true)
+							{
+								m_windowPos.x = event.xconfigure.x;
+								m_windowPos.y = event.xconfigure.y;
+							}
 
 							//Update the EGL window to match the xwindow's new size or position
 							UpdateEGLWindow();
