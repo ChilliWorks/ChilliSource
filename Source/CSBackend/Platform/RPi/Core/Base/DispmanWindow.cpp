@@ -80,7 +80,9 @@ namespace CSBackend
 			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), m_windowPos.x, m_windowPos.y, windowSize.x, windowSize.y, 0, 0, 0);
 			XMapWindow(m_xdisplay, m_xwindow);
 
-			//TODO: Set the window name.
+			//TODO: Set the window name from config.
+			XStoreName(m_xdisplay, m_xwindow, "CSTest");
+			
 			//All the events we need to listen for
 			XSelectInput(m_xdisplay, m_xwindow, PointerMotionMask | ButtonMotionMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | FocusChangeMask | StructureNotifyMask);
 
