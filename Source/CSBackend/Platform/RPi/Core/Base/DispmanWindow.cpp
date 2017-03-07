@@ -45,26 +45,54 @@ namespace CSBackend
 			//to take advantage of hardware acceleration but we layer that on top of an X window which we use to listen
 			//for events and to allow the user to control the size of the dispman display.
 
-			//Create an XWindow which will act as a backing to our main display
-			m_xdisplay = XOpenDisplay(NULL);
-			if(m_xdisplay == nullptr)
-			{
-				printf("[ChilliSource] Failed to create X11 display. Exiting");
-				return;
-			}
-			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), 0, 0, 200, 200, 0, 0, 0);
-			XMapWindow(m_xdisplay, m_xwindow);
-			//All the events we need to listen for
-			XSelectInput(m_xdisplay, m_xwindow, PointerMotionMask | ButtonMotionMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | FocusChangeMask);
-			XFlush(m_xdisplay);
-
-			// Start interfacing with Raspberry Pi.
+			//Start interfacing with Raspberry Pi.
 			if(!m_bcmInitialised)
 			{
 				bcm_host_init();
 				m_bcmInitialised = true;
 			}
 
+			//TODO: Get from app config
+			u32 displayWidth, displayHeight;
+			graphics_get_display_size(0, &displayWidth, &displayHeight);
+			m_windowSize.x = (s32)displayWidth;
+			m_windowSize.y = (s32)displayHeight;
+
+			InitXWindow(m_windowSize);
+			InitEGLDispmanWindow(m_windowSize);
+
+			//NOTE: We are creating ChilliSource here so no CS calls can be made prior to this including logging.
+			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
+			m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
+			m_lifecycleManager->Resume();
+
+			RunLoop();
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::InitXWindow(const ChilliSource::Integer2& windowSize) noexcept
+		{
+			m_xdisplay = XOpenDisplay(NULL);
+			if(m_xdisplay == nullptr)
+			{
+				printf("[ChilliSource] Failed to create X11 display. Exiting");
+				return;
+			}
+
+			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), 0, 0, windowSize.x, windowSize.y, 0, 0, 0);
+			XMapWindow(m_xdisplay, m_xwindow);
+
+			//TODO: Set the window name.
+			//All the events we need to listen for
+			XSelectInput(m_xdisplay, m_xwindow, PointerMotionMask | ButtonMotionMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | FocusChangeMask | StructureNotifyMask);
+
+			//Sends all the commands to the X server.
+			XFlush(m_xdisplay);
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::InitEGLDispmanWindow(const ChilliSource::Integer2& windowSize) noexcept
+		{
 			// TODO: Get attributes from Config
 			static const EGLint attributeList[] =
 			{
@@ -97,22 +125,16 @@ namespace CSBackend
 			// Create context
 			m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, contextAttributeList);
 
-			// Get display size (TODO: from config/X windowing system?)
-			u32 displayWidth, displayHeight;
-			graphics_get_display_size(0, &displayWidth, &displayHeight);
-			m_windowSize.x = (s32)displayWidth;
-			m_windowSize.y = (s32)displayHeight;
-
 			// Set up blit rects.
 			m_dstRect.x = 0;
 			m_dstRect.y = 0;
-			m_dstRect.width = m_windowSize.x;
-			m_dstRect.height = m_windowSize.y;
+			m_dstRect.width = windowSize.x;
+			m_dstRect.height = windowSize.y;
 
 			m_srcRect.x = 0;
 			m_srcRect.y = 0;
-			m_srcRect.width = m_windowSize.x << 16;
-			m_srcRect.height = m_windowSize.y << 16;
+			m_srcRect.width = windowSize.x << 16;
+			m_srcRect.height = windowSize.y << 16;
 
 			// Set up dispmanx
 			m_displayManagerDisplay = vc_dispmanx_display_open(0);
@@ -121,35 +143,77 @@ namespace CSBackend
 
 			// Set up native window. TODO: Attach to X? Size to X Window?
 			m_nativeWindow.element = m_displayManagerElement;
-			m_nativeWindow.width = m_windowSize.x;
-			m_nativeWindow.height = m_windowSize.y;
+			m_nativeWindow.width = windowSize.x;
+			m_nativeWindow.height = windowSize.y;
 
 			// Instruct VC chip to use this display manager to sync
 			vc_dispmanx_update_submit_sync(m_displayManagerUpdate);
 
-			// Set up EGL surface
+			// Set up EGL surface and connect the context to it
 			m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, &m_nativeWindow, NULL);
-
-			// Connect context to surface
 			eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext);
+		}
 
-			// MAIN LOOP BEGINS HERE
-			// Set up LifecycleManager
-			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
-			m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
-
-			// Load appconfig
-			auto appConfig = app->GetAppConfig();
-
-			m_lifecycleManager->Resume();
-			m_lifecycleManager->Foreground();
-
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::RunLoop() noexcept
+		{
 			m_isRunning = true;
 
 			while(m_isRunning == true)
 			{
-				//TODO: Handle backgrounding/foregrounding on window focus
-				// Get X Events
+				while(XPending(m_xdisplay))
+				{
+					XEvent event;
+					XNextEvent(m_xdisplay, &event);
+
+					switch (event.type)
+					{
+						case FocusIn:
+						{
+							m_isFocused = true;
+							m_lifecycleManager->Foreground();
+							break;
+						}
+						case FocusOut:
+						{
+							m_isFocused = false;
+							m_lifecycleManager->Background();
+							break;
+						}
+						case MotionNotify:
+						{
+							std::unique_lock<std::mutex> lock(m_mouseMutex);
+							if (m_mouseMovedDelegate)
+							{
+								m_mouseMovedDelegate(event.xbutton.x, event.xbutton.y);
+							}
+							break;
+						}
+						case ButtonPress:
+						{
+							std::unique_lock<std::mutex> lock(m_mouseMutex);
+							if (m_mouseButtonDelegate)
+							{
+								m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_pressed);
+							}
+							break;
+						}
+						case ButtonRelease:
+						{
+							std::unique_lock<std::mutex> lock(m_mouseMutex);
+							if (m_mouseButtonDelegate)
+							{
+								m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_released);
+							}
+							break;
+						}
+						case DestroyNotify:
+						{
+							Quit();
+							return;
+						}
+					}
+				}
 
 				//Update, render and then flip display buffer
 				m_lifecycleManager->SystemUpdate();
@@ -164,6 +228,43 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
+		void DispmanWindow::SetMouseDelegates(MouseButtonDelegate mouseButtonDelegate, MouseMovedDelegate mouseMovedDelegate, MouseWheelDelegate mouseWheelDelegate) noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_mouseMutex);
+
+			CS_ASSERT(mouseButtonDelegate, "Mouse button event delegate invalid.");
+			CS_ASSERT(mouseMovedDelegate, "Mouse moved delegate invalid.");
+			CS_ASSERT(mouseWheelDelegate, "Mouse wheel scroll delegate invalid.");
+			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate already set.");
+			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate already set.");
+			CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate already set.");
+
+			m_mouseButtonDelegate = std::move(mouseButtonDelegate);
+			m_mouseMovedDelegate = std::move(mouseMovedDelegate);
+			m_mouseWheelDelegate = std::move(mouseWheelDelegate);
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::RemoveMouseDelegates() noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_mouseMutex);
+			m_mouseButtonDelegate = nullptr;
+			m_mouseMovedDelegate = nullptr;
+			m_mouseWheelDelegate = nullptr;
+		}
+
+		//-----------------------------------------------------------------------------------
+		ChilliSource::Integer2 DispmanWindow::GetMousePosition() const noexcept
+		{
+			Window root, child;
+			s32 rootX, rootY, winX, winY;
+			u32 buttonMask;
+			XQueryPointer(m_xdisplay, m_xwindow, &root, &child, &rootX, &rootY, &winX, &winY, &buttonMask);
+
+			return ChilliSource::Integer2(winX, winY);
+		}
+
+		//-----------------------------------------------------------------------------------
 		std::vector<ChilliSource::Integer2> DispmanWindow::GetSupportedResolutions() const noexcept
 		{
 			//TODO: Find out if we can query the BCM or dispman for supported resolutions
@@ -173,6 +274,12 @@ namespace CSBackend
 		//-----------------------------------------------------------------------------------
 		void DispmanWindow::Quit() noexcept
 		{
+			if (m_isFocused == true)
+			{
+				m_lifecycleManager->Background();
+				m_isFocused = false;
+			}
+
 			m_lifecycleManager->Suspend();
 			m_lifecycleManager.reset();
 
@@ -182,6 +289,10 @@ namespace CSBackend
 		//-----------------------------------------------------------------------------------
 		DispmanWindow::~DispmanWindow()
 		{
+			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
+			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
+			CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate not removed.");
+
 			if(m_bcmInitialised)
 			{
 				bcm_host_deinit();

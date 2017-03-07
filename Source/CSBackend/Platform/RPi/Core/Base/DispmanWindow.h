@@ -40,6 +40,8 @@
 #include <X11/xlib.h>
 
 #include <vector>
+#include <functional>
+#include <mutex>
 
 namespace CSBackend
 {
@@ -53,6 +55,29 @@ namespace CSBackend
 		class DispmanWindow final : public ChilliSource::Singleton<DispmanWindow>
 		{
 		public:
+
+			/// List of the events that can occur on a mouse button
+			///
+			enum class MouseButtonEvent
+			{
+				k_pressed,
+				k_released
+			};
+
+			/// @param Mouse button that the action occurred on
+			/// @param The event type (Pressed/Released)
+			///
+			using MouseButtonDelegate = std::function<void(u32, MouseButtonEvent)>;
+
+			/// @param Mouse position X (in window coords)
+			/// @param Mouse position Y (in window coords)
+			///
+			using MouseMovedDelegate = std::function<void(s32, s32)>;
+
+			/// @param The number of ticks the wheel has moved in the y-axis
+			///
+			using MouseWheelDelegate = std::function<void(s32)>;
+
 			/// Create and run the application; this will update and render the app.
 			///
 			void Run() noexcept;
@@ -65,6 +90,35 @@ namespace CSBackend
 			///
 			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const noexcept;
 
+			/// Set the delegates that are called on the various mouse events (button, moved, scrolled)
+			/// This method will assert if a given delegate is null or if the delegate has already been set.
+			///
+			/// This method is thread-safe.
+			///
+			/// @param mouseButtonDelegate
+			///		The delegate called when a mouse button event occurs.
+			/// @param mouseMovedDelegate
+			///		The delegate called when the mouse is moved.
+			/// @param mouseWheelDelegate
+			///		The delegate called when the mouse wheel is scrolled.
+			///
+			void SetMouseDelegates(MouseButtonDelegate mouseButtonDelegate, MouseMovedDelegate mouseMovedDelegate, MouseWheelDelegate mouseWheelDelegate) noexcept;
+
+			/// Remove the delegates that relate to mouse events.
+			///
+			/// This method is thread-safe.
+			///
+			void RemoveMouseDelegates() noexcept;
+
+			/// @return The current window position of the mouse
+			///
+			ChilliSource::Integer2 GetMousePosition() const noexcept;
+
+			/// Tell the main loop to shutdown and the windows to close gracefull at the
+			/// end of the next update
+			///
+			void ScheduleQuit() noexcept { m_quitScheduled = true; }
+
 			//TODO: Events for when the window is resized post switch to X11.
 			//TODO: Handle setting of window mode - fullscreen/windowed, etc.
 			//TODO: Add event for window mode changing
@@ -76,6 +130,27 @@ namespace CSBackend
             ~DispmanWindow() noexcept;
 
 	    private:
+
+			/// Initialise and display the X11 window and register for X events. The X11
+			/// window is responsible for the size and position of the GL dispman window and for
+			/// receiving mouse and keyboard events
+			///
+			/// @param windowSize
+			///		Size of the window to create
+			///
+			void InitXWindow(const ChilliSource::Integer2& windowSize) noexcept;
+
+			/// Initialise the dispman window and OpenGLES based on the previously created XWindow.
+			///
+			/// @param windowSize
+			///		Size of the window to create (should be created at the same size as the X window)
+			///
+			void InitEGLDispmanWindow(const ChilliSource::Integer2& windowSize) noexcept;
+
+			/// While loop responsible for updating, X server events, rendering and display buffer swaps. Can be
+			/// terminated by calling quit.
+			///
+			void RunLoop() noexcept;
 
 			/// Terminates the application loop gracefully.
 			///
@@ -111,13 +186,19 @@ namespace CSBackend
 			/// Program state stuff
 			bool m_bcmInitialised = false;
 			bool m_isRunning = false;
+			bool m_isFocused = false;
 			bool m_quitScheduled = false;
+
+			/// Event delegates
+			std::mutex m_mouseMutex;
+			MouseButtonDelegate m_mouseButtonDelegate;
+			MouseMovedDelegate m_mouseMovedDelegate;
+			MouseWheelDelegate m_mouseWheelDelegate;
 
 			// CS Lifecycle Manager
 			ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
 		};
 	}
-
 }
 
 #endif

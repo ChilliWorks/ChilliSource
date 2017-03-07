@@ -26,6 +26,7 @@
 #include <CSBackend/Platform/RPi/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <CSBackend/Platform/RPi/Core/Base/DispmanWindow.h>
 
 namespace CSBackend
 {
@@ -67,7 +68,7 @@ namespace CSBackend
 		{
 			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
 			{
-				
+				DispmanWindow::Get()->ScheduleQuit();
 			});
 		}
 	}

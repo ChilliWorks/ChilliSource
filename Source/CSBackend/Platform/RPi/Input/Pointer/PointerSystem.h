@@ -30,6 +30,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/RPi/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/RPi/Core/Base/DispmanWindow.h>
 
 namespace CSBackend
 {
@@ -54,21 +55,51 @@ namespace CSBackend
 			///
 			/// @retrun TRUE if the system 'IsA' interface
 			///
-			bool IsA(ChilliSource::InterfaceIDType interfaceId) const override;
+			bool IsA(ChilliSource::InterfaceIDType interfaceId) const noexcept override;
 
 			/// Ask X11 to hide the mouse cursor
 			///
-			void HideCursor() override;
+			void HideCursor() noexcept override;
 
 			/// Ask X11 to show the mouse cursor
 			///
-			void ShowCursor() override;
+			void ShowCursor() noexcept override;
 
 		private:
 			friend class ChilliSource::PointerSystem;
 
 			///
 			PointerSystem() = default;
+
+			/// Starts listening for mouse events
+			///
+			void OnInit() noexcept override;
+
+			/// @param xPos
+			///		Current position X in window coords
+			/// @param yPos
+			///		Current position Y in window coords
+			///
+			void OnMouseMoved(s32 xPos, s32 yPos) noexcept;
+
+			/// @param button
+			///		Button ID
+			/// @param event
+			///		Button action (Press/Release)
+			///
+			void OnMouseButtonEvent(u32 button, DispmanWindow::MouseButtonEvent event) noexcept;
+
+			/// @param delta
+			///		Number of ticks scrolled in the y-axis
+			///
+			void OnMouseWheeled(s32 delta) noexcept;
+
+			/// Stop listening for mouse events
+			///
+			void OnDestroy() noexcept override;
+
+			ChilliSource::Screen* m_screen;
+			ChilliSource::Pointer::Id m_pointerId;
 		};
 	}
 }

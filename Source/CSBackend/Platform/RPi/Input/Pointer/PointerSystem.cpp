@@ -34,16 +34,94 @@ namespace CSBackend
 {
 	namespace RPi
 	{
+		namespace
+		{
+			/// @param button
+			///		The X11 button ID.
+			///
+			/// @return The equivelent Press Type for the button Id
+			///
+			ChilliSource::Pointer::InputType ButtonIdToInputType(u32 button)
+			{
+				switch (button)
+				{
+				case 1:
+					return ChilliSource::Pointer::InputType::k_leftMouseButton;
+				// case sf::Mouse::Button::Middle:
+				// 	return ChilliSource::Pointer::InputType::k_middleMouseButton;
+				case 3:
+					return ChilliSource::Pointer::InputType::k_rightMouseButton;
+				default:
+					return ChilliSource::Pointer::InputType::k_none;
+				}
+
+				return ChilliSource::Pointer::InputType::k_none;
+			}
+		}
+
 		CS_DEFINE_NAMEDTYPE(PointerSystem);
 
 		//---------------------------------------------------------------------------------
-		bool PointerSystem::IsA(ChilliSource::InterfaceIDType interfaceId) const
+		bool PointerSystem::IsA(ChilliSource::InterfaceIDType interfaceId) const noexcept
 		{
 			return (ChilliSource::PointerSystem::InterfaceID == interfaceId || PointerSystem::InterfaceID == interfaceId);
 		}
 
 		//---------------------------------------------------------------------------------
-		void PointerSystem::HideCursor()
+		void PointerSystem::OnInit() noexcept
+		{
+			m_screen = ChilliSource::Application::Get()->GetSystem<ChilliSource::Screen>();
+			CS_ASSERT(m_screen != nullptr, "Cannot find system required by PointerSystem: Screen.");
+
+			auto screenResolution = m_screen->GetResolution();
+
+			//TODO:check for mouse and only create when one is found.
+
+			DispmanWindow::Get()->SetMouseDelegates(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
+
+			//create the mouse pointer
+			ChilliSource::Integer2 mousePosi = DispmanWindow::Get()->GetMousePosition();
+			ChilliSource::Vector2 mousePos((f32)mousePosi.x, screenResolution.y - (f32)mousePosi.y);
+
+			m_pointerId = AddPointerCreateEvent(mousePos);
+		}
+
+		//---------------------------------------------------------------------------------
+		void PointerSystem::OnMouseButtonEvent(u32 button, DispmanWindow::MouseButtonEvent event) noexcept
+		{
+			ChilliSource::Pointer::InputType type = ButtonIdToInputType(button);
+			if (type == ChilliSource::Pointer::InputType::k_none)
+			{
+				CS_LOG_WARNING_FMT("Unknown X11 mouse button: %d\n", button);
+				return;
+			}
+
+			switch (event)
+			{
+			case DispmanWindow::MouseButtonEvent::k_pressed:
+				AddPointerDownEvent(m_pointerId, type);
+				break;
+			case DispmanWindow::MouseButtonEvent::k_released:
+				AddPointerUpEvent(m_pointerId, type);
+				break;
+			}
+		}
+
+		//---------------------------------------------------------------------------------
+		void PointerSystem::OnMouseMoved(s32 xPos, s32 yPos) noexcept
+		{
+			ChilliSource::Vector2 touchLocation((f32)xPos, m_screen->GetResolution().y - (f32)yPos);
+			AddPointerMovedEvent(m_pointerId, touchLocation);
+		}
+
+		//---------------------------------------------------------------------------------
+		void PointerSystem::OnMouseWheeled(s32 delta) noexcept
+		{
+			AddPointerScrollEvent(m_pointerId, ChilliSource::Vector2(0.0f, (f32)delta));
+		}
+
+		//---------------------------------------------------------------------------------
+		void PointerSystem::HideCursor() noexcept
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to hide mouse cursor outside of main thread.");
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
@@ -53,13 +131,23 @@ namespace CSBackend
 		}
 
 		//---------------------------------------------------------------------------------
-		void PointerSystem::ShowCursor()
+		void PointerSystem::ShowCursor() noexcept
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to show mouse cursor outside of main thread.");
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
             {
 
             });
+		}
+
+		//---------------------------------------------------------------------------------
+		void PointerSystem::OnDestroy() noexcept
+		{
+			AddPointerRemoveEvent(m_pointerId);
+
+			DispmanWindow::Get()->RemoveMouseDelegates();
+
+			m_screen = nullptr;
 		}
 	}
 }
