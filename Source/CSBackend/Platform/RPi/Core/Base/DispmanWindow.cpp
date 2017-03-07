@@ -51,8 +51,8 @@ namespace CSBackend
 			//TODO: Get from app config
 			u32 displayWidth, displayHeight;
 			graphics_get_display_size(0, &displayWidth, &displayHeight);
-			m_windowSize.x = (s32)displayWidth >> 1;
-			m_windowSize.y = (s32)displayHeight >> 1;
+			m_windowSize.x = (s32)((f32)displayWidth * 0.8f);
+			m_windowSize.y = (s32)((f32)displayHeight * 0.8f);
 			m_windowPos.x = 0;
 			m_windowPos.y = 0;
 
@@ -77,12 +77,12 @@ namespace CSBackend
 				return;
 			}
 
-			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), m_windowPos.x, m_windowPos.y, windowSize.x, windowSize.y, 0, 0, 0);
+			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), windowPos.x, windowPos.y, windowSize.x, windowSize.y, 0, 0, 0);
 			XMapWindow(m_xdisplay, m_xwindow);
 
 			//TODO: Set the window name from config.
 			XStoreName(m_xdisplay, m_xwindow, "CSTest");
-			
+
 			//All the events we need to listen for
 			XSelectInput(m_xdisplay, m_xwindow, PointerMotionMask | ButtonMotionMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | FocusChangeMask | StructureNotifyMask);
 
@@ -121,9 +121,9 @@ namespace CSBackend
 
 			// Set up blit rects.
 			VC_RECT_T dstRect;
-			vc_dispmanx_rect_set(&dstRect, m_windowPos.x, m_windowPos.y, m_windowSize.x, m_windowSize.y);
+			vc_dispmanx_rect_set(&dstRect, windowPos.x, windowPos.y, windowSize.x, m_windowSize.y);
 			VC_RECT_T srcRect;
-			vc_dispmanx_rect_set(&srcRect, m_windowPos.x, m_windowPos.y, m_windowSize.x << 16, m_windowSize.y << 16);
+			vc_dispmanx_rect_set(&srcRect, windowPos.x, windowPos.y, windowSize.x << 16, m_windowSize.y << 16);
 
 			// Set up dispmanx
 			m_displayManagerDisplay = vc_dispmanx_display_open(0);
