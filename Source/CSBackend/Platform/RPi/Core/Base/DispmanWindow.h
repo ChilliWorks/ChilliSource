@@ -90,10 +90,6 @@ namespace CSBackend
 			///
 			using MouseMovedDelegate = std::function<void(s32, s32)>;
 
-			/// @param The number of ticks the wheel has moved in the y-axis
-			///
-			using MouseWheelDelegate = std::function<void(s32)>;
-
 			/// Create and run the application; this will update and render the app.
 			///
 			void Run() noexcept;
@@ -135,13 +131,11 @@ namespace CSBackend
 			/// This method is thread-safe.
 			///
 			/// @param mouseButtonDelegate
-			///		The delegate called when a mouse button event occurs.
+			///		The delegate called when a mouse button event occurs. In X11 the scroll wheel acts like a button getting pressed events for each tick
 			/// @param mouseMovedDelegate
 			///		The delegate called when the mouse is moved.
-			/// @param mouseWheelDelegate
-			///		The delegate called when the mouse wheel is scrolled.
 			///
-			void SetMouseDelegates(MouseButtonDelegate mouseButtonDelegate, MouseMovedDelegate mouseMovedDelegate, MouseWheelDelegate mouseWheelDelegate) noexcept;
+			void SetMouseDelegates(MouseButtonDelegate mouseButtonDelegate, MouseMovedDelegate mouseMovedDelegate) noexcept;
 
 			/// Remove the delegates that relate to mouse events.
 			///
@@ -158,7 +152,6 @@ namespace CSBackend
 			///
 			void ScheduleQuit() noexcept { m_quitScheduled = true; }
 
-			//TODO: Events for when the window is resized post switch to X11.
 			//TODO: Handle setting of window mode - fullscreen/windowed, etc.
 			//TODO: Add event for window mode changing
 			//TODO: Handle vsync and FPS setting
@@ -235,7 +228,6 @@ namespace CSBackend
 			std::mutex m_mouseMutex;
 			MouseButtonDelegate m_mouseButtonDelegate;
 			MouseMovedDelegate m_mouseMovedDelegate;
-			MouseWheelDelegate m_mouseWheelDelegate;
 
 			std::mutex m_windowMutex;
 			WindowResizeDelegate m_windowResizeDelegate;

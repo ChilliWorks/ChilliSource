@@ -47,8 +47,8 @@ namespace CSBackend
 				{
 				case 1:
 					return ChilliSource::Pointer::InputType::k_leftMouseButton;
-				// case sf::Mouse::Button::Middle:
-				// 	return ChilliSource::Pointer::InputType::k_middleMouseButton;
+				case 2:
+					return ChilliSource::Pointer::InputType::k_middleMouseButton;
 				case 3:
 					return ChilliSource::Pointer::InputType::k_rightMouseButton;
 				default:
@@ -77,7 +77,7 @@ namespace CSBackend
 
 			//TODO:check for mouse and only create when one is found.
 
-			DispmanWindow::Get()->SetMouseDelegates(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
+			DispmanWindow::Get()->SetMouseDelegates(ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent), ChilliSource::MakeDelegate(this, &PointerSystem::OnMouseMoved));
 
 			//create the mouse pointer
 			ChilliSource::Integer2 mousePosi = DispmanWindow::Get()->GetMousePosition();
@@ -89,6 +89,18 @@ namespace CSBackend
 		//---------------------------------------------------------------------------------
 		void PointerSystem::OnMouseButtonEvent(u32 button, DispmanWindow::MouseButtonEvent event) noexcept
 		{
+			//In X11 the scroll wheel acts like a button getting pressed events for each tick
+			switch(button)
+			{
+				case 4:
+					AddPointerScrollEvent(m_pointerId, ChilliSource::Vector2(0.0f, 1.0f));
+					return;
+				case 5:
+					AddPointerScrollEvent(m_pointerId, ChilliSource::Vector2(0.0f, -1.0f));
+					return;
+			}
+
+			//If the button isn't one the scroll buttons then we are into regular button logic
 			ChilliSource::Pointer::InputType type = ButtonIdToInputType(button);
 			if (type == ChilliSource::Pointer::InputType::k_none)
 			{
@@ -112,12 +124,6 @@ namespace CSBackend
 		{
 			ChilliSource::Vector2 touchLocation((f32)xPos, m_screen->GetResolution().y - (f32)yPos);
 			AddPointerMovedEvent(m_pointerId, touchLocation);
-		}
-
-		//---------------------------------------------------------------------------------
-		void PointerSystem::OnMouseWheeled(s32 delta) noexcept
-		{
-			AddPointerScrollEvent(m_pointerId, ChilliSource::Vector2(0.0f, (f32)delta));
 		}
 
 		//---------------------------------------------------------------------------------

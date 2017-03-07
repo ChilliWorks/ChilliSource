@@ -297,20 +297,17 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		void DispmanWindow::SetMouseDelegates(MouseButtonDelegate mouseButtonDelegate, MouseMovedDelegate mouseMovedDelegate, MouseWheelDelegate mouseWheelDelegate) noexcept
+		void DispmanWindow::SetMouseDelegates(MouseButtonDelegate mouseButtonDelegate, MouseMovedDelegate mouseMovedDelegate) noexcept
 		{
 			std::unique_lock<std::mutex> lock(m_mouseMutex);
 
 			CS_ASSERT(mouseButtonDelegate, "Mouse button event delegate invalid.");
 			CS_ASSERT(mouseMovedDelegate, "Mouse moved delegate invalid.");
-			CS_ASSERT(mouseWheelDelegate, "Mouse wheel scroll delegate invalid.");
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate already set.");
 			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate already set.");
-			CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate already set.");
 
 			m_mouseButtonDelegate = std::move(mouseButtonDelegate);
 			m_mouseMovedDelegate = std::move(mouseMovedDelegate);
-			m_mouseWheelDelegate = std::move(mouseWheelDelegate);
 		}
 
 		//-----------------------------------------------------------------------------------
@@ -319,7 +316,6 @@ namespace CSBackend
 			std::unique_lock<std::mutex> lock(m_mouseMutex);
 			m_mouseButtonDelegate = nullptr;
 			m_mouseMovedDelegate = nullptr;
-			m_mouseWheelDelegate = nullptr;
 		}
 
 		//-----------------------------------------------------------------------------------
@@ -362,7 +358,6 @@ namespace CSBackend
 			CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate not removed.");
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
 			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
-			CS_ASSERT(!m_mouseWheelDelegate, "Mouse wheel scroll delegate not removed.");
 
 			if(m_xdisplay)
 			{
