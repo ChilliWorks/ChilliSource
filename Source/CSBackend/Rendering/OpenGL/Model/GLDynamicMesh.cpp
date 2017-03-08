@@ -35,6 +35,12 @@
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
+#ifdef CS_OPENGLVERSION_ES
+#define GL_WRITE_ONLY GL_WRITE_ONLY_OES
+#define glMapBuffer glMapBufferOES
+#define glUnmapBuffer glUnmapBufferOES
+#endif
+
 namespace CSBackend
 {
     namespace OpenGL
@@ -46,6 +52,47 @@ namespace CSBackend
             /// Applies each of the sprite meshes' vertices to the combined mesh batch vertex buffer. The vertices
             /// are converted into world space before being added to the new buffer. The vertex data is applied to
             /// the currently bound vertex buffer.
+            ///
+            /// This version makes use of the map buffer extension which means the data can be copied straight to GL without an additional copy being made
+            ///
+            /// @param numVertices
+            ///     The total number of vertices in the batch.
+            /// @param vertexDataSize
+            ///     The total vertex data size of the batch.
+            /// @param meshes
+            ///     The meshes which should be added to the batch.
+            ///
+            void ApplySpriteBatchVerticesMapBuffer(u32 numVertices, u32 vertexDataSize, const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+            {
+                CS_ASSERT(numVertices * ChilliSource::VertexFormat::k_sprite.GetSize() == vertexDataSize, "Vertex data size and number of vertices is out of sync.");
+                CS_ASSERT(!meshes.empty(), "Batch must contain at least one mesh.");
+                
+                glBufferData(GL_ARRAY_BUFFER, vertexDataSize, nullptr, GL_DYNAMIC_DRAW);
+                auto combinedVertices = static_cast<ChilliSource::SpriteVertex*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+
+                u32 vertexOffset = 0;
+                for (const auto& mesh : meshes)
+                {
+                    auto meshVertices = reinterpret_cast<const ChilliSource::SpriteVertex*>(mesh.GetVertexData());
+                    
+                    for (u32 i = 0; i < mesh.GetNumVertices(); ++i)
+                    {
+                        combinedVertices[vertexOffset + i] = meshVertices[i];
+                        combinedVertices[vertexOffset + i].m_position *= mesh.GetWorldMatrix();
+                    }
+                    
+                    vertexOffset += mesh.GetNumVertices();
+                }
+                
+                glUnmapBuffer(GL_ARRAY_BUFFER);
+            }
+            
+            /// Applies each of the sprite meshes' vertices to the combined mesh batch vertex buffer. The vertices
+            /// are converted into world space before being added to the new buffer. The vertex data is applied to
+            /// the currently bound vertex buffer.
+            ///
+            /// This version is used when map buffer is unavailable and will copy the data to a temp buffer that is then
+            /// uploaded to GL
             ///
             /// @param allocator
             ///     The allocator which should be used to generate the temporary buffer. Note that the allocator
@@ -77,9 +124,9 @@ namespace CSBackend
                     
                     vertexOffset += mesh.GetNumVertices();
                 }
-                
-                glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, reinterpret_cast<const u8*>(combinedVertices.get()));
-                
+
+                glBufferData(GL_ARRAY_BUFFER, vertexDataSize, reinterpret_cast<const u8*>(combinedVertices.get()), GL_DYNAMIC_DRAW);
+
                 combinedVertices.reset();
                 allocator.Reset();
             }
@@ -99,15 +146,16 @@ namespace CSBackend
             ///     The total vertex data size of the batch.
             /// @param meshes
             ///     The meshes which should be added to the batch.
+            /// @param useMapBuffer
+            ///     If the hardware supports it we can use map buffer to eliminate a copy
             ///
             void ApplyBatchVertices(ChilliSource::LinearAllocator& allocator, const ChilliSource::VertexFormat& vertexFormat, u32 numVertices, u32 vertexDataSize,
-                               const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+                               const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes, bool useMapBuffer) noexcept
             {
                 //TODO: Add support for static mesh vertex formats
-                
                 if (vertexFormat == ChilliSource::VertexFormat::k_sprite)
                 {
-                    ApplySpriteBatchVertices(allocator, numVertices, vertexDataSize, meshes);
+                    useMapBuffer ? ApplySpriteBatchVerticesMapBuffer(numVertices, vertexDataSize, meshes) : ApplySpriteBatchVertices(allocator, numVertices, vertexDataSize, meshes);
                 }
                 else
                 {
@@ -119,7 +167,50 @@ namespace CSBackend
             /// updated to reflect the new position of the vertices in the combined vertex buffer. The index
             /// data is applied to the currently bound index buffer.
             ///
-            /// The temporary buffer is allocated from the given linear allocator.
+            /// This version makes use of the map buffer extension which means the data can be copied straight to GL without an additional copy being made
+            ///
+            /// @param indexFormat
+            ///     The format of the indices. Currently only short indices are supported.
+            /// @param numIndices
+            ///     The total number of indices in the batch.
+            /// @param indexDataSize
+            ///     The total index data size of the batch.
+            /// @param meshes
+            ///     The list of meshes which should be batched.
+            ///
+            void ApplyBatchIndicesMapBuffer(ChilliSource::IndexFormat indexFormat, u32 numIndices, u32 indexDataSize,
+                              const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+            {
+                CS_ASSERT(indexFormat == ChilliSource::IndexFormat::k_short, "Only short indices are supported at the moment.");
+                CS_ASSERT(numIndices * ChilliSource::GetIndexSize(indexFormat) == indexDataSize, "Index data size and number of indices is out of sync.");
+                CS_ASSERT(!meshes.empty(), "Batch must contain at least one mesh.");
+                
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataSize, nullptr, GL_DYNAMIC_DRAW);
+                auto combinedIndices = static_cast<u16*>(glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY));
+                
+                u32 vertexOffset = 0;
+                u32 indexOffset = 0;
+                for (const auto& mesh : meshes)
+                {
+                    auto meshIndices = reinterpret_cast<const u16*>(mesh.GetIndexData());
+                    
+                    for (u32 i = 0; i < mesh.GetNumIndices(); ++i)
+                    {
+                        combinedIndices[indexOffset + i] = vertexOffset + meshIndices[i];
+                    }
+                    
+                    vertexOffset += mesh.GetNumVertices();
+                    indexOffset += mesh.GetNumIndices();
+                }
+                
+                glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+            }
+            
+            /// Applies each of the meshes' indices to the combined mesh batch index buffer. The indices are
+            /// updated to reflect the new position of the vertices in the combined vertex buffer. The index
+            /// data is applied to the currently bound index buffer.
+            ///
+            /// Used when map buffer is unavailable. The temporary buffer is allocated from the given linear allocator.
             ///
             /// @param allocator
             ///     The allocator which should be used to generate the temporary buffer. Note that the allocator
@@ -134,7 +225,7 @@ namespace CSBackend
             ///     The list of meshes which should be batched.
             ///
             void ApplyBatchIndices(ChilliSource::LinearAllocator& allocator, ChilliSource::IndexFormat indexFormat, u32 numIndices, u32 indexDataSize,
-                              const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
+                                   const std::vector<ChilliSource::RenderMeshBatch::Mesh>& meshes) noexcept
             {
                 CS_ASSERT(indexFormat == ChilliSource::IndexFormat::k_short, "Only short indices are supported at the moment.");
                 CS_ASSERT(numIndices * ChilliSource::GetIndexSize(indexFormat) == indexDataSize, "Index data size and number of indices is out of sync.");
@@ -157,8 +248,8 @@ namespace CSBackend
                     indexOffset += mesh.GetNumIndices();
                 }
                 
-                glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexDataSize, reinterpret_cast<const u8*>(combinedIndices.get()));
-                
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataSize, reinterpret_cast<const u8*>(combinedIndices.get()), GL_DYNAMIC_DRAW);
+
                 combinedIndices.reset();
                 allocator.Reset();
             }
@@ -193,6 +284,7 @@ namespace CSBackend
             
             auto renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
             m_maxVertexAttributes = renderCapabilities->GetNumVertexAttributes();
+            m_useMapBuffer = renderCapabilities->IsMapBufferSupported();
         }
         
         //------------------------------------------------------------------------------
@@ -205,14 +297,13 @@ namespace CSBackend
             m_numVertices = numVertices;
             m_numIndices = numIndices;
         
-            
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandles[m_currentBufferIndex]);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, vertexData);
+            glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_DYNAMIC_DRAW);
             
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandles[m_currentBufferIndex]);
             if (m_indexBufferHandles[m_currentBufferIndex] != 0)
             {
-                glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexDataSize, indexData);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataSize, indexData, GL_DYNAMIC_DRAW);
             }
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding GLDynamicMesh.");
@@ -231,12 +322,12 @@ namespace CSBackend
             m_numIndices = numIndices;
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandles[m_currentBufferIndex]);
-            ApplyBatchVertices(m_allocator, m_vertexFormat, numVertices, vertexDataSize, meshes);
+            ApplyBatchVertices(m_allocator, m_vertexFormat, numVertices, vertexDataSize, meshes, m_useMapBuffer);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandles[m_currentBufferIndex]);
             if (m_indexBufferHandles[m_currentBufferIndex] != 0)
             {
-                ApplyBatchIndices(m_allocator, indexFormat, numIndices, indexDataSize, meshes);
+                m_useMapBuffer ? ApplyBatchIndicesMapBuffer(indexFormat, numIndices, indexDataSize, meshes) : ApplyBatchIndices(m_allocator, indexFormat, numIndices, indexDataSize, meshes);
             }
             
             ApplyVertexAttributes(glShader);
