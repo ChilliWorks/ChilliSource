@@ -368,6 +368,10 @@ namespace CSBackend
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
 			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
 
+			eglDestroyContext(m_eglDisplay, m_eglContext);
+			eglDestroySurface(m_eglDisplay, m_eglSurface);
+			eglTerminate(m_eglDisplay);
+
 			if(m_xdisplay)
 			{
 				XDestroyWindow(m_xdisplay, m_xwindow);
