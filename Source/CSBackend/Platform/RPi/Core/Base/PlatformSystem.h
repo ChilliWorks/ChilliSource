@@ -61,7 +61,8 @@ namespace CSBackend
 			///
 			void CreateDefaultSystems(ChilliSource::Application* application) override;
 
-            /// NOTE: This will be overridden if VSync is enabled
+            /// NOTE: The Raspberry Pi enforces VSync (like iOS) and therefore this just
+			/// sets the vsync interval (e.g 60 = every vblank, 30 = every second vblank)
 			///
 			///	@param fps
 			///		The maximum frames per second to clamp to.
@@ -69,13 +70,12 @@ namespace CSBackend
             ///
 			void SetPreferredFPS(u32 fps) override;
 
-			/// This will turn VSync on or off.
-			/// NOTE: This will override the preferred FPS
+			/// NOTE: Vsync cannot be disabled on RPi so this does nothing
 			///
 			/// @param enabled
 			///		TRUE to enable, FALSE to disable
 			///
-			void SetVSyncEnabled(bool enabled) override;
+			void SetVSyncEnabled(bool enabled) override {}
 
 			/// Stops the update loop causing the application
 			/// to terminate.

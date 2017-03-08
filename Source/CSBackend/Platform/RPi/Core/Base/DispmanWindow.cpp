@@ -34,18 +34,6 @@
 #include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 
-#include <thread>
-
-std::atomic<bool> g_shouldRender(true);
-
-/// Called from the VC vsync callback and flags that the main loop
-/// should now display
-///
-void VSyncCallback(DISPMANX_UPDATE_HANDLE_T update, void* args)
-{
-    g_shouldRender = true;
-}
-
 namespace CSBackend
 {
 	namespace RPi
@@ -76,28 +64,10 @@ namespace CSBackend
 			m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
 			m_lifecycleManager->Resume();
 
-			SetPreferredFPS(60);
-			SetVSyncEnabled(true);
-
 			m_isRunning = true;
 			while(m_isRunning == true)
 			{
-				if(m_isVSynced == false)
-				{
-					std::chrono::milliseconds currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
-					std::chrono::milliseconds elapsedTime = currentTime - m_previousTickTime;
-					if (elapsedTime < m_milliSecsPerTick)
-					{
-						std::this_thread::sleep_for(std::chrono::milliseconds(m_milliSecsPerTick - elapsedTime));
-					}
-					m_previousTickTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
-					Tick();
-				}
-				else if(g_shouldRender == true)
-				{
-					g_shouldRender = false;
-					Tick();
-				}
+				Tick();
 			}
 		}
 
@@ -273,6 +243,8 @@ namespace CSBackend
 			//Update, render and then flip display buffer
 			m_lifecycleManager->SystemUpdate();
 			m_lifecycleManager->Render();
+
+			//NOTE: This enforces the VSync based on eglSwapInterval
 			eglSwapBuffers(m_eglDisplay, m_eglSurface);
 
 			if(m_quitScheduled)
@@ -284,22 +256,7 @@ namespace CSBackend
 		//-----------------------------------------------------------------------------------
 		void DispmanWindow::SetPreferredFPS(u32 fps) noexcept
 		{
-			m_milliSecsPerTick = std::chrono::milliseconds((u32) (1000.0f/(float)fps));
-		}
-
-		//-----------------------------------------------------------------------------------
-		void DispmanWindow::SetVSyncEnabled(bool enabled) noexcept
-		{
-			if(m_isVSynced == true && enabled == false)
-			{
-				vc_dispmanx_vsync_callback(m_displayManagerDisplay, NULL, NULL);
-				m_isVSynced = false;
-			}
-			else if(m_isVSynced == false && enabled == true)
-			{
-				vc_dispmanx_vsync_callback(m_displayManagerDisplay, VSyncCallback, NULL);
-				m_isVSynced = true;
-			}
+			eglSwapInterval(m_eglDisplay, 60u/fps);
 		}
 
 		//-----------------------------------------------------------------------------------
@@ -401,9 +358,6 @@ namespace CSBackend
 			m_lifecycleManager.reset();
 
 			m_isRunning = false;
-
-			//Need to unsubscribe for vsync as it is not handled automatically if the app exits
-			SetVSyncEnabled(false);
 		}
 
 		//-----------------------------------------------------------------------------------

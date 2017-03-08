@@ -42,7 +42,6 @@
 #include <vector>
 #include <functional>
 #include <mutex>
-#include <chrono>
 
 namespace CSBackend
 {
@@ -95,15 +94,7 @@ namespace CSBackend
 			///
 			void Run() noexcept;
 
-			/// Set whether the update and rendering are tied to the Raspberry Pis VC display vsync.
-			/// If VSync is on any specified preferred framerate is overridden.
-			///
-			/// @param enabled
-			///		TRUE for vsync, FALSE for preferred FPS
-			///
-			void SetVSyncEnabled(bool enabled) noexcept;
-
-			/// NOTE: This will be overridden if VSync is enabled
+			/// Sets the vblank interval on OpenGL buffer swap
 			///
 			///	@param fps
 			///		The maximum frames per second to clamp to.
@@ -200,7 +191,7 @@ namespace CSBackend
 			///
 			void InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept;
 
-			/// Single update loop responsible for updating, X server events, rendering and display buffer swaps. The repeating main loop can be
+			/// Single system loop responsible for X server events, rendering and display buffer swaps. The repeating main loop can be
 			/// terminated by calling quit. This run loop can be optionally tied to vsync
 			///
 			void Tick() noexcept;
@@ -240,9 +231,6 @@ namespace CSBackend
 			bool m_isRunning = false;
 			bool m_isFocused = false;
 			bool m_quitScheduled = false;
-			bool m_isVSynced = false;
-			std::chrono::milliseconds m_milliSecsPerTick;
-			std::chrono::milliseconds m_previousTickTime;
 
 			/// Event delegates
 			std::mutex m_mouseMutex;

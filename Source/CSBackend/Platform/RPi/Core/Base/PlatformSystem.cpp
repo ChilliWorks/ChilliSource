@@ -56,15 +56,6 @@ namespace CSBackend
 		}
 
 		//---------------------------------------------------------------------------------
-		void PlatformSystem::SetVSyncEnabled(bool enabled)
-		{
-			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
-			{
-				DispmanWindow::Get()->SetVSyncEnabled(enabled);
-			});
-		}
-
-		//---------------------------------------------------------------------------------
 		void PlatformSystem::Quit()
 		{
 			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
