@@ -51,7 +51,7 @@ namespace CSBackend
 		{
 			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
 			{
-				//TODO: RPi
+				DispmanWindow::Get()->SetPreferredFPS(fps);
 			});
 		}
 
@@ -60,7 +60,7 @@ namespace CSBackend
 		{
 			ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& in_taskContext)
 			{
-				//TODO: RPi
+				DispmanWindow::Get()->SetVSyncEnabled(enabled);
 			});
 		}
 

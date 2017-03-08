@@ -34,6 +34,8 @@
 #include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 
+#include <thread>
+
 std::atomic<bool> g_shouldRender(true);
 
 /// Called from the VC vsync callback and flags that the main loop
@@ -74,9 +76,29 @@ namespace CSBackend
 			m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
 			m_lifecycleManager->Resume();
 
+			SetPreferredFPS(60);
 			SetVSyncEnabled(true);
 
-			RunLoop();
+			m_isRunning = true;
+			while(m_isRunning == true)
+			{
+				if(m_isVSynced == false)
+				{
+					std::chrono::milliseconds currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+					std::chrono::milliseconds elapsedTime = currentTime - m_previousTickTime;
+					if (elapsedTime < m_milliSecsPerTick)
+					{
+						std::this_thread::sleep_for(std::chrono::milliseconds(m_milliSecsPerTick - elapsedTime));
+					}
+					m_previousTickTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+					Tick();
+				}
+				else if(g_shouldRender == true)
+				{
+					g_shouldRender = false;
+					Tick();
+				}
+			}
 		}
 
 		//-----------------------------------------------------------------------------------
@@ -158,113 +180,111 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		void DispmanWindow::RunLoop() noexcept
+		void DispmanWindow::Tick() noexcept
 		{
-			m_isRunning = true;
-			while(m_isRunning == true)
+			while(XPending(m_xdisplay))
 			{
-				if(g_shouldRender == true)
+				XEvent event;
+				XNextEvent(m_xdisplay, &event);
+
+				switch (event.type)
 				{
-					g_shouldRender = false;
-					while(XPending(m_xdisplay))
+					case FocusIn:
 					{
-						XEvent event;
-						XNextEvent(m_xdisplay, &event);
-
-						switch (event.type)
+						if(m_isFocused == false)
 						{
-							case FocusIn:
-							{
-								if(m_isFocused == false)
-								{
-									m_isFocused = true;
-									m_lifecycleManager->Foreground();
-								}
-								break;
-							}
-							case FocusOut:
-							{
-								if(m_isFocused == true)
-								{
-									m_isFocused = false;
-									m_lifecycleManager->Background();
-								}
-								break;
-							}
-							case ConfigureNotify:
-							{
-								bool resized = event.xconfigure.width != m_windowSize.x || event.xconfigure.height != m_windowSize.y;
-								if(resized == true)
-								{
-									m_windowSize.x = event.xconfigure.width;
-									m_windowSize.y = event.xconfigure.height;
-								}
-
-								//When resizing the window we receive a real event and a synthetic event. The real event has wrong
-								//x, y coordinates so we must use the ones from the synthetic event. When moving the window we only
-								//get the synthetic event.
-								if(event.xconfigure.send_event == true)
-								{
-									m_windowPos.x = event.xconfigure.x;
-									m_windowPos.y = event.xconfigure.y;
-								}
-
-								//Update the EGL window to match the xwindow's new size or position
-								UpdateEGLWindow();
-
-								std::unique_lock<std::mutex> lock(m_windowMutex);
-								if (resized && m_windowResizeDelegate)
-								{
-									m_windowResizeDelegate(m_windowSize);
-								}
-								break;
-							}
-							case MotionNotify:
-							{
-								std::unique_lock<std::mutex> lock(m_mouseMutex);
-								if (m_mouseMovedDelegate)
-								{
-									m_mouseMovedDelegate(event.xbutton.x, event.xbutton.y);
-								}
-								break;
-							}
-							case ButtonPress:
-							{
-								std::unique_lock<std::mutex> lock(m_mouseMutex);
-								if (m_mouseButtonDelegate)
-								{
-									m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_pressed);
-								}
-								break;
-							}
-							case ButtonRelease:
-							{
-								std::unique_lock<std::mutex> lock(m_mouseMutex);
-								if (m_mouseButtonDelegate)
-								{
-									m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_released);
-								}
-								break;
-							}
-							case DestroyNotify:
-							{
-								Quit();
-								return;
-							}
+							m_isFocused = true;
+							m_lifecycleManager->Foreground();
 						}
+						break;
 					}
+					case FocusOut:
+					{
+						if(m_isFocused == true)
+						{
+							m_isFocused = false;
+							m_lifecycleManager->Background();
+						}
+						break;
+					}
+					case ConfigureNotify:
+					{
+						bool resized = event.xconfigure.width != m_windowSize.x || event.xconfigure.height != m_windowSize.y;
+						if(resized == true)
+						{
+							m_windowSize.x = event.xconfigure.width;
+							m_windowSize.y = event.xconfigure.height;
+						}
 
-					//Update, render and then flip display buffer
-					m_lifecycleManager->SystemUpdate();
-					m_lifecycleManager->Render();
-					eglSwapBuffers(m_eglDisplay, m_eglSurface);
+						//When resizing the window we receive a real event and a synthetic event. The real event has wrong
+						//x, y coordinates so we must use the ones from the synthetic event. When moving the window we only
+						//get the synthetic event.
+						if(event.xconfigure.send_event == true)
+						{
+							m_windowPos.x = event.xconfigure.x;
+							m_windowPos.y = event.xconfigure.y;
+						}
 
-					if(m_quitScheduled)
+						//Update the EGL window to match the xwindow's new size or position
+						UpdateEGLWindow();
+
+						std::unique_lock<std::mutex> lock(m_windowMutex);
+						if (resized && m_windowResizeDelegate)
+						{
+							m_windowResizeDelegate(m_windowSize);
+						}
+						break;
+					}
+					case MotionNotify:
+					{
+						std::unique_lock<std::mutex> lock(m_mouseMutex);
+						if (m_mouseMovedDelegate)
+						{
+							m_mouseMovedDelegate(event.xbutton.x, event.xbutton.y);
+						}
+						break;
+					}
+					case ButtonPress:
+					{
+						std::unique_lock<std::mutex> lock(m_mouseMutex);
+						if (m_mouseButtonDelegate)
+						{
+							m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_pressed);
+						}
+						break;
+					}
+					case ButtonRelease:
+					{
+						std::unique_lock<std::mutex> lock(m_mouseMutex);
+						if (m_mouseButtonDelegate)
+						{
+							m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_released);
+						}
+						break;
+					}
+					case DestroyNotify:
 					{
 						Quit();
+						return;
 					}
 				}
 			}
+
+			//Update, render and then flip display buffer
+			m_lifecycleManager->SystemUpdate();
+			m_lifecycleManager->Render();
+			eglSwapBuffers(m_eglDisplay, m_eglSurface);
+
+			if(m_quitScheduled)
+			{
+				Quit();
+			}
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::SetPreferredFPS(u32 fps) noexcept
+		{
+			m_milliSecsPerTick = std::chrono::milliseconds((u32) (1000.0f/(float)fps));
 		}
 
 		//-----------------------------------------------------------------------------------

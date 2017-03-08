@@ -42,6 +42,7 @@
 #include <vector>
 #include <functional>
 #include <mutex>
+#include <chrono>
 
 namespace CSBackend
 {
@@ -101,6 +102,14 @@ namespace CSBackend
 			///		TRUE for vsync, FALSE for preferred FPS
 			///
 			void SetVSyncEnabled(bool enabled) noexcept;
+
+			/// NOTE: This will be overridden if VSync is enabled
+			///
+			///	@param fps
+			///		The maximum frames per second to clamp to.
+			///		This should be in multiples of 15 to match the behaviour of other platforms (e.g. 15, 30, 60)
+            ///
+			void SetPreferredFPS(u32 fps) noexcept;
 
 			/// @return Current resolution of the dispman window
 			///
@@ -191,10 +200,10 @@ namespace CSBackend
 			///
 			void InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept;
 
-			/// While loop responsible for updating, X server events, rendering and display buffer swaps. Can be
-			/// terminated by calling quit.
+			/// Single update loop responsible for updating, X server events, rendering and display buffer swaps. The repeating main loop can be
+			/// terminated by calling quit. This run loop can be optionally tied to vsync
 			///
-			void RunLoop() noexcept;
+			void Tick() noexcept;
 
 			/// Update the size and pos of the dispman EGL window
 			///
@@ -232,6 +241,8 @@ namespace CSBackend
 			bool m_isFocused = false;
 			bool m_quitScheduled = false;
 			bool m_isVSynced = false;
+			std::chrono::milliseconds m_milliSecsPerTick;
+			std::chrono::milliseconds m_previousTickTime;
 
 			/// Event delegates
 			std::mutex m_mouseMutex;
