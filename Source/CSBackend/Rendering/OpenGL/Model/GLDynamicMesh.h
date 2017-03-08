@@ -163,6 +163,8 @@ namespace CSBackend
             u32 m_maxIndexDataSize;
             u32 m_maxVertexAttributes;
             
+            bool m_useMapBuffer = false;
+            
             static const u32 k_numBuffers = 3;
             std::array<GLuint, k_numBuffers> m_vertexBufferHandles;
             std::array<GLuint, k_numBuffers> m_indexBufferHandles;
