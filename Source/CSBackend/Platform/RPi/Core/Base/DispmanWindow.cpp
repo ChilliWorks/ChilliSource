@@ -34,6 +34,16 @@
 #include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 
+std::atomic<bool> g_shouldRender(true);
+
+/// Called from the VC vsync callback and flags that the main loop
+/// should now display
+///
+void VSyncCallback(DISPMANX_UPDATE_HANDLE_T update, void* args)
+{
+    g_shouldRender = true;
+}
+
 namespace CSBackend
 {
 	namespace RPi
@@ -63,6 +73,8 @@ namespace CSBackend
 			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
 			m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
 			m_lifecycleManager->Resume();
+
+			SetVSyncEnabled(true);
 
 			RunLoop();
 		}
@@ -96,12 +108,14 @@ namespace CSBackend
 			// TODO: Get attributes from Config
 			static const EGLint attributeList[] =
 			{
-				EGL_RED_SIZE, 8,
-				EGL_GREEN_SIZE, 8,
-				EGL_BLUE_SIZE, 8,
-				EGL_ALPHA_SIZE, 8,
-				EGL_DEPTH_SIZE, 16,
+				EGL_RED_SIZE, 5,
+				EGL_GREEN_SIZE, 6,
+				EGL_BLUE_SIZE, 5,
+				EGL_ALPHA_SIZE, 0,
+				EGL_DEPTH_SIZE, 24,
+				EGL_STENCIL_SIZE, 8,
 				EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+				EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
 				EGL_NONE
 			};
 
@@ -147,106 +161,124 @@ namespace CSBackend
 		void DispmanWindow::RunLoop() noexcept
 		{
 			m_isRunning = true;
-
 			while(m_isRunning == true)
 			{
-				while(XPending(m_xdisplay))
+				if(g_shouldRender == true)
 				{
-					XEvent event;
-					XNextEvent(m_xdisplay, &event);
-
-					switch (event.type)
+					g_shouldRender = false;
+					while(XPending(m_xdisplay))
 					{
-						case FocusIn:
-						{
-							if(m_isFocused == false)
-							{
-								m_isFocused = true;
-								m_lifecycleManager->Foreground();
-							}
-							break;
-						}
-						case FocusOut:
-						{
-							if(m_isFocused == true)
-							{
-								m_isFocused = false;
-								m_lifecycleManager->Background();
-							}
-							break;
-						}
-						case ConfigureNotify:
-						{
-							bool resized = event.xconfigure.width != m_windowSize.x || event.xconfigure.height != m_windowSize.y;
-							if(resized == true)
-							{
-								m_windowSize.x = event.xconfigure.width;
-								m_windowSize.y = event.xconfigure.height;
-							}
+						XEvent event;
+						XNextEvent(m_xdisplay, &event);
 
-							//When resizing the window we receive a real event and a synthetic event. The real event has wrong
-							//x, y coordinates so we must use the ones from the synthetic event. When moving the window we only
-							//get the synthetic event.
-							if(event.xconfigure.send_event == true)
+						switch (event.type)
+						{
+							case FocusIn:
 							{
-								m_windowPos.x = event.xconfigure.x;
-								m_windowPos.y = event.xconfigure.y;
+								if(m_isFocused == false)
+								{
+									m_isFocused = true;
+									m_lifecycleManager->Foreground();
+								}
+								break;
 							}
+							case FocusOut:
+							{
+								if(m_isFocused == true)
+								{
+									m_isFocused = false;
+									m_lifecycleManager->Background();
+								}
+								break;
+							}
+							case ConfigureNotify:
+							{
+								bool resized = event.xconfigure.width != m_windowSize.x || event.xconfigure.height != m_windowSize.y;
+								if(resized == true)
+								{
+									m_windowSize.x = event.xconfigure.width;
+									m_windowSize.y = event.xconfigure.height;
+								}
 
-							//Update the EGL window to match the xwindow's new size or position
-							UpdateEGLWindow();
+								//When resizing the window we receive a real event and a synthetic event. The real event has wrong
+								//x, y coordinates so we must use the ones from the synthetic event. When moving the window we only
+								//get the synthetic event.
+								if(event.xconfigure.send_event == true)
+								{
+									m_windowPos.x = event.xconfigure.x;
+									m_windowPos.y = event.xconfigure.y;
+								}
 
-							std::unique_lock<std::mutex> lock(m_windowMutex);
-							if (resized && m_windowResizeDelegate)
-							{
-								m_windowResizeDelegate(m_windowSize);
+								//Update the EGL window to match the xwindow's new size or position
+								UpdateEGLWindow();
+
+								std::unique_lock<std::mutex> lock(m_windowMutex);
+								if (resized && m_windowResizeDelegate)
+								{
+									m_windowResizeDelegate(m_windowSize);
+								}
+								break;
 							}
-							break;
-						}
-						case MotionNotify:
-						{
-							std::unique_lock<std::mutex> lock(m_mouseMutex);
-							if (m_mouseMovedDelegate)
+							case MotionNotify:
 							{
-								m_mouseMovedDelegate(event.xbutton.x, event.xbutton.y);
+								std::unique_lock<std::mutex> lock(m_mouseMutex);
+								if (m_mouseMovedDelegate)
+								{
+									m_mouseMovedDelegate(event.xbutton.x, event.xbutton.y);
+								}
+								break;
 							}
-							break;
-						}
-						case ButtonPress:
-						{
-							std::unique_lock<std::mutex> lock(m_mouseMutex);
-							if (m_mouseButtonDelegate)
+							case ButtonPress:
 							{
-								m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_pressed);
+								std::unique_lock<std::mutex> lock(m_mouseMutex);
+								if (m_mouseButtonDelegate)
+								{
+									m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_pressed);
+								}
+								break;
 							}
-							break;
-						}
-						case ButtonRelease:
-						{
-							std::unique_lock<std::mutex> lock(m_mouseMutex);
-							if (m_mouseButtonDelegate)
+							case ButtonRelease:
 							{
-								m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_released);
+								std::unique_lock<std::mutex> lock(m_mouseMutex);
+								if (m_mouseButtonDelegate)
+								{
+									m_mouseButtonDelegate(event.xbutton.button, MouseButtonEvent::k_released);
+								}
+								break;
 							}
-							break;
-						}
-						case DestroyNotify:
-						{
-							Quit();
-							return;
+							case DestroyNotify:
+							{
+								Quit();
+								return;
+							}
 						}
 					}
-				}
 
-				//Update, render and then flip display buffer
-				m_lifecycleManager->SystemUpdate();
-				m_lifecycleManager->Render();
-				eglSwapBuffers(m_eglDisplay, m_eglSurface);
+					//Update, render and then flip display buffer
+					m_lifecycleManager->SystemUpdate();
+					m_lifecycleManager->Render();
+					eglSwapBuffers(m_eglDisplay, m_eglSurface);
 
-				if(m_quitScheduled)
-				{
-					Quit();
+					if(m_quitScheduled)
+					{
+						Quit();
+					}
 				}
+			}
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::SetVSyncEnabled(bool enabled) noexcept
+		{
+			if(m_isVSynced == true && enabled == false)
+			{
+				vc_dispmanx_vsync_callback(m_displayManagerDisplay, NULL, NULL);
+				m_isVSynced = false;
+			}
+			else if(m_isVSynced == false && enabled == true)
+			{
+				vc_dispmanx_vsync_callback(m_displayManagerDisplay, VSyncCallback, NULL);
+				m_isVSynced = true;
 			}
 		}
 
@@ -349,6 +381,9 @@ namespace CSBackend
 			m_lifecycleManager.reset();
 
 			m_isRunning = false;
+
+			//Need to unsubscribe for vsync as it is not handled automatically if the app exits
+			SetVSyncEnabled(false);
 		}
 
 		//-----------------------------------------------------------------------------------

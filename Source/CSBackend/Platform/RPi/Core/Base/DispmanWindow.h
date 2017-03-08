@@ -94,6 +94,14 @@ namespace CSBackend
 			///
 			void Run() noexcept;
 
+			/// Set whether the update and rendering are tied to the Raspberry Pis VC display vsync.
+			/// If VSync is on any specified preferred framerate is overridden.
+			///
+			/// @param enabled
+			///		TRUE for vsync, FALSE for preferred FPS
+			///
+			void SetVSyncEnabled(bool enabled) noexcept;
+
 			/// @return Current resolution of the dispman window
 			///
 			ChilliSource::Integer2 GetWindowSize() const noexcept { return m_windowSize; }
@@ -223,6 +231,7 @@ namespace CSBackend
 			bool m_isRunning = false;
 			bool m_isFocused = false;
 			bool m_quitScheduled = false;
+			bool m_isVSynced = false;
 
 			/// Event delegates
 			std::mutex m_mouseMutex;
