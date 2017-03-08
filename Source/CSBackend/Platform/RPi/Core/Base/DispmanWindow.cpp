@@ -49,10 +49,9 @@ namespace CSBackend
 			bcm_host_init();
 
 			//TODO: Get from app config
-			u32 displayWidth, displayHeight;
-			graphics_get_display_size(0, &displayWidth, &displayHeight);
-			m_windowSize.x = (s32)((f32)displayWidth * 0.8f);
-			m_windowSize.y = (s32)((f32)displayHeight * 0.8f);
+			m_windowSize = GetSupportedResolutions()[0]
+			m_windowSize.x = (s32)((f32)m_windowSize.x * 0.8f);
+			m_windowSize.y = (s32)((f32)m_windowSize.y * 0.8f);
 			m_windowPos.x = 0;
 			m_windowPos.y = 0;
 
@@ -342,7 +341,9 @@ namespace CSBackend
 		std::vector<ChilliSource::Integer2> DispmanWindow::GetSupportedResolutions() const noexcept
 		{
 			//TODO: Find out if we can query the BCM or dispman for supported resolutions
-			return std::vector<ChilliSource::Integer2> { m_windowSize };
+			u32 width(0), height(0);
+			graphics_get_display_size(0, &width, &height);
+			return std::vector<ChilliSource::Integer2> { ChilliSource::Integer2((s32)width, (s32)height) };
 		}
 
 		//-----------------------------------------------------------------------------------
