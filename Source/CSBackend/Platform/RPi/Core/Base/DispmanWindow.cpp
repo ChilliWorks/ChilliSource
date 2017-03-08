@@ -49,7 +49,7 @@ namespace CSBackend
 			bcm_host_init();
 
 			//TODO: Get from app config
-			m_windowSize = GetSupportedResolutions()[0]
+			m_windowSize = GetSupportedResolutions()[0];
 			m_windowSize.x = (s32)((f32)m_windowSize.x * 0.8f);
 			m_windowSize.y = (s32)((f32)m_windowSize.y * 0.8f);
 			m_windowPos.x = 0;
