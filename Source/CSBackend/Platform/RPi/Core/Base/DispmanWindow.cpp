@@ -26,6 +26,7 @@
 
 #include <CSBackend/Platform/RPi/Core/Base/DispmanWindow.h>
 #include <CSBackend/Platform/RPi/Core/Base/SystemInfoFactory.h>
+#include <CSBackend/Platform/RPi/Core/Base/EGLConfigChooser.h>
 
 #include <ChilliSource/Core/Base/StandardMacros.h>
 #include <ChilliSource/Core/Base/AppConfig.h>
@@ -33,11 +34,195 @@
 #include <ChilliSource/Core/Base/LifecycleManager.h>
 #include <ChilliSource/Core/Base/SystemInfo.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
+#include <ChilliSource/Rendering/Base/SurfaceFormat.h>
+#include <ChilliSource/Core/String/StringParser.h>
+
+#include <json/json.h>
 
 namespace CSBackend
 {
 	namespace RPi
 	{
+		namespace
+		{
+			//------------------------------------------------------------------------
+			/// Reads the app.config file root into a Json object
+			///
+			/// @author: J Brown
+			//------------------------------------------------------------------------
+			Json::Value ReadAppConfig()
+			{
+				// Get current executable directory
+				char arg1[20];
+				char exepath[PATH_MAX + 1] = {0};
+
+				sprintf(arg1, "/proc/%d/exe", getpid());
+				readlink(arg1, exepath, 1024 );
+
+				std::string path = std::string(exepath);
+				std::string::size_type pos = path.find_last_of("/");
+				std::string workingDir = ChilliSource::StringUtils::StandardiseDirectoryPath(path.substr(0, pos));
+
+				//open the file
+				std::ifstream file(workingDir + "assets/AppResources/App.config");
+
+				Json::Value root;
+
+				if (file.good() == true)
+				{
+					std::string contents((std::istreambuf_iterator<s8>(file)), std::istreambuf_iterator<s8>());
+
+					//parse the json
+					Json::Reader jReader;
+					if (!jReader.parse(contents, root))
+					{
+						printf(std::string("[ChilliSource] Could not parse App.config: " + jReader.getFormattedErrorMessages() + "\n").c_str());
+					}
+				}
+
+				return root;
+			}
+
+			//-------------------------------------------------------------
+			/// Reads the surface format from the App.config file.
+			///
+			/// @author J Brown
+			///
+			/// @param App config Json root
+			///
+			/// @return The surface format.
+			//-------------------------------------------------------------
+			ChilliSource::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root)
+			{
+				const std::string k_defaultFormat = "rgb565_depth24";
+				std::string formatString = in_root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
+
+				const Json::Value& rpi = in_root["RPi"];
+				if (rpi.isNull() == false && rpi.isMember("PreferredSurfaceFormat"))
+				{
+					formatString = rpi["PreferredSurfaceFormat"].asString();
+				}
+
+				return ChilliSource::ParseSurfaceFormat(formatString);
+			}
+
+			//-------------------------------------------------------------
+			/// Reads the multisample format from the App.config file.
+			///
+			/// @author J Brown
+			///
+			/// @param App config Json root
+			///
+			/// @return Number times multisample 0x, 2x, 4x.
+			//-------------------------------------------------------------
+			u32 ReadMultisampleFormat(const Json::Value& in_root)
+			{
+				std::string stringFormat = in_root.get("Multisample", "None").asString();
+
+				const Json::Value& rpi = in_root["RPi"];
+				if (rpi.isNull() == false && rpi.isMember("Multisample"))
+				{
+					stringFormat = rpi["Multisample"].asString();
+				}
+
+				ChilliSource::StringUtils::ToLowerCase(stringFormat);
+
+				if (stringFormat == "none")
+				{
+					return 0;
+				}
+				else if (stringFormat == "2x")
+				{
+					return 2;
+				}
+				else if (stringFormat == "4x")
+				{
+					return 4;
+				}
+				else
+				{
+					printf(std::string("[ChilliSource] Unknown multisample format : " + stringFormat + ".Options are None, 2x or 4x\n").c_str());
+				}
+
+				return 0;
+			}
+
+			//-------------------------------------------------------------
+			/// Read the RGBA bit depth based on the surface format
+			///
+			/// @author S Downie
+			///
+			/// @param Surface format
+			///
+			/// @return Pixel bit depth
+			//-------------------------------------------------------------
+			u32 ReadRGBAPixelDepth(ChilliSource::SurfaceFormat in_format)
+			{
+				u32 depth = 32;
+
+				switch (in_format)
+				{
+				case ChilliSource::SurfaceFormat::k_rgb565_depth24:
+				case ChilliSource::SurfaceFormat::k_rgb565_depth32:
+				default:
+					depth = 16;
+					break;
+				case ChilliSource::SurfaceFormat::k_rgb888_depth24:
+				case ChilliSource::SurfaceFormat::k_rgb888_depth32:
+					depth = 32;
+					break;
+				}
+
+				return depth;
+			}
+
+			//-----------------------------------------------------------------
+			/// Creates an EGLConfigChooser appropriate for the current
+			/// AppConfig.
+			//-----------------------------------------------------------------
+			ChilliSource::RPi::EGLConfigChooser CreateConfigChooser(const Json::Value& appConfigRoot)
+			{
+				ChilliSource::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
+				u32 depth = ReadRGBAPixelDepth(surfaceFormat);
+
+				switch(surfaceFormat)
+				{
+					case ChilliSource::SurfaceFormat::k_rgb565_depth24:
+						return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 24, 0);
+						break;
+					case ChilliSource::SurfaceFormat::k_rgb565_depth32:
+						return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 32, 0);
+						break;
+					case ChilliSource::SurfaceFormat::k_rgb888_depth24:
+						return ChilliSource::RPi::EGLConfigChooser(8, 8, 8, 0, 16, 24, 0);
+						break;
+					case ChilliSource::SurfaceFormat::k_rgb888_depth32:
+						return ChilliSource::RPi::EGLConfigChooser(8, 8, 8, 0, 16, 32, 0);
+						break;
+					case ChilliSource::SurfaceFormat::k_rgb565_depth24_stencil8:
+						return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 24, 8);
+						break;
+					case ChilliSource::SurfaceFormat::k_rgb565_depth32_stencil8:
+						return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 32, 8);
+						break;
+					case ChilliSource::SurfaceFormat::k_rgb888_depth24_stencil8:
+						return ChilliSource::RPi::EGLConfigChooser(8, 8, 8, 0, 16, 24, 8);
+						break;
+					case ChilliSource::SurfaceFormat::k_rgb888_depth32_stencil8:
+						return ChilliSource::RPi::EGLConfigChooser(8, 8, 8, 0, 16, 32, 8);
+						break;
+				}
+
+				// Default to k_rgb565_depth24.
+				CS_LOG_WARNING("Couldn't get EGLConfig from App.config. Defaulting to RGB565_DEPTH24.");
+				return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 24, 0);
+
+
+
+			}
+		}
+
+
 		//----------------------------------------------------------------------------------
 		void DispmanWindow::Run() noexcept
 		{
@@ -96,20 +281,6 @@ namespace CSBackend
 		//-----------------------------------------------------------------------------------
 		void DispmanWindow::InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept
 		{
-			// TODO: Get attributes from Config
-			static const EGLint attributeList[] =
-			{
-				EGL_RED_SIZE, 5,
-				EGL_GREEN_SIZE, 6,
-				EGL_BLUE_SIZE, 5,
-				EGL_ALPHA_SIZE, 0,
-				EGL_DEPTH_SIZE, 24,
-				EGL_STENCIL_SIZE, 8,
-				EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-				EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-				EGL_NONE
-			};
-
 			// Set up OpenGL context version (OpenGLES 2.0)
 			static const EGLint contextAttributeList[] =
 			{
@@ -120,7 +291,12 @@ namespace CSBackend
 			// Setup the EGL display with the framebuffer config and the GL version
 			m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 			eglInitialize(m_eglDisplay, NULL, NULL);
-			eglChooseConfig(m_eglDisplay, attributeList, &m_eglConfig, 1, &m_eglConfigNum);
+
+			// Create ConfigChooser and choose an EGLConfig appropriately.
+			Json::Value appConfigRoot = ReadAppConfig();
+			ChilliSource::RPi::EGLConfigChooser eglConfigChooser = CreateConfigChooser(appConfigRoot);
+			m_eglConfig = eglConfigChooser.ChooseBestConfig(m_eglDisplay);
+
 			eglBindAPI(EGL_OPENGL_ES_API);
 			m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, contextAttributeList);
 
