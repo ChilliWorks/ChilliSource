@@ -50,9 +50,6 @@ CFLAGS=-c -g -std=c++11 -fsigned-char -pthread -fexceptions -frtti $(CS_CXXFLAGS
 # Library Directories
 CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs
 
-# Linker Flags
-LDFLAGS= $(CS_LIBRARY_DIRS) -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm
-
 # All Source Files
 SOURCES=$(CS_SOURCEFILES_CHILLISOURCE) $(CS_SOURCEFILES_PLATFORM) $(CS_SOURCEFILES_RENDERING)
 
