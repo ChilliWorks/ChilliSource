@@ -34,7 +34,7 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace RPi
     {
@@ -56,15 +56,16 @@ namespace ChilliSource
             /// @param The EGLDisplay to choose for.
             EGLConfig ChooseBestConfig(EGLDisplay eglDisplay);
 
-            /// Picks the best EGLConfig out of the supplied config list. This is normally used internally,
-            /// but does have some utility for public use.
+
+
+        private:
+            /// Picks the best EGLConfig out of the supplied config list.
             ///
             /// @param The EGLDisplay to choose for.
             /// @param The array of EGLConfig objects to sort through.
             /// @param The number of EGLConfig objects in that list.
             EGLConfig ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig eglConfigs[], EGLint numConfigs);
 
-        private:
             /// Finds a config attribute within a config, and returns its value.
             /// If the value isn't found, returns the defaultValue parameter.
             ///

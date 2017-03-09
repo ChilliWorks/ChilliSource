@@ -26,7 +26,7 @@
 
 #include <CSBackend/Platform/RPi/Core/Base/EGLConfigChooser.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
     namespace RPi
     {
@@ -73,8 +73,12 @@ namespace ChilliSource
             eglChooseConfig(eglDisplay, attributeList, availableConfigs, numAvailableConfigs, &numAvailableConfigs);
 
             // Use this list with the Choose-From-List function.
+            EGLConfig bestConfig = ChooseBestConfigFromList(eglDisplay, availableConfigs, numAvailableConfigs);
 
-            return ChooseBestConfigFromList(eglDisplay, availableConfigs, numAvailableConfigs);
+            // Clean up array.
+            delete[] availableConfigs;
+
+            return bestConfig;
         }
 
         //---------------------------------------------------------------------

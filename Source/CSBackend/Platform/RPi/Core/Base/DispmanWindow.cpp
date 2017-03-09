@@ -79,6 +79,10 @@ namespace CSBackend
 						printf(std::string("[ChilliSource] Could not parse App.config: " + jReader.getFormattedErrorMessages() + "\n").c_str());
 					}
 				}
+				else
+				{
+					printf(std::string("[ChilliSource] Error reading App.config. ").c_str());
+				}
 
 				return root;
 			}
@@ -147,75 +151,46 @@ namespace CSBackend
 				return 0;
 			}
 
-			//-------------------------------------------------------------
-			/// Read the RGBA bit depth based on the surface format
-			///
-			/// @author S Downie
-			///
-			/// @param Surface format
-			///
-			/// @return Pixel bit depth
-			//-------------------------------------------------------------
-			u32 ReadRGBAPixelDepth(ChilliSource::SurfaceFormat in_format)
-			{
-				u32 depth = 32;
-
-				switch (in_format)
-				{
-				case ChilliSource::SurfaceFormat::k_rgb565_depth24:
-				case ChilliSource::SurfaceFormat::k_rgb565_depth32:
-				default:
-					depth = 16;
-					break;
-				case ChilliSource::SurfaceFormat::k_rgb888_depth24:
-				case ChilliSource::SurfaceFormat::k_rgb888_depth32:
-					depth = 32;
-					break;
-				}
-
-				return depth;
-			}
 
 			//-----------------------------------------------------------------
 			/// Creates an EGLConfigChooser appropriate for the current
 			/// AppConfig.
 			//-----------------------------------------------------------------
-			ChilliSource::RPi::EGLConfigChooser CreateConfigChooser(const Json::Value& appConfigRoot)
+			EGLConfigChooser CreateConfigChooser(const Json::Value& appConfigRoot)
 			{
 				ChilliSource::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
-				u32 depth = ReadRGBAPixelDepth(surfaceFormat);
 
 				switch(surfaceFormat)
 				{
 					case ChilliSource::SurfaceFormat::k_rgb565_depth24:
-						return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 24, 0);
+						return EGLConfigChooser(5, 6, 5, 0, 16, 24, 0);
 						break;
 					case ChilliSource::SurfaceFormat::k_rgb565_depth32:
-						return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 32, 0);
+						return EGLConfigChooser(5, 6, 5, 0, 16, 32, 0);
 						break;
 					case ChilliSource::SurfaceFormat::k_rgb888_depth24:
-						return ChilliSource::RPi::EGLConfigChooser(8, 8, 8, 0, 16, 24, 0);
+						return EGLConfigChooser(8, 8, 8, 0, 16, 24, 0);
 						break;
 					case ChilliSource::SurfaceFormat::k_rgb888_depth32:
-						return ChilliSource::RPi::EGLConfigChooser(8, 8, 8, 0, 16, 32, 0);
+						return EGLConfigChooser(8, 8, 8, 0, 16, 32, 0);
 						break;
 					case ChilliSource::SurfaceFormat::k_rgb565_depth24_stencil8:
-						return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 24, 8);
+						return EGLConfigChooser(5, 6, 5, 0, 16, 24, 8);
 						break;
 					case ChilliSource::SurfaceFormat::k_rgb565_depth32_stencil8:
-						return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 32, 8);
+						return EGLConfigChooser(5, 6, 5, 0, 16, 32, 8);
 						break;
 					case ChilliSource::SurfaceFormat::k_rgb888_depth24_stencil8:
-						return ChilliSource::RPi::EGLConfigChooser(8, 8, 8, 0, 16, 24, 8);
+						return EGLConfigChooser(8, 8, 8, 0, 16, 24, 8);
 						break;
 					case ChilliSource::SurfaceFormat::k_rgb888_depth32_stencil8:
-						return ChilliSource::RPi::EGLConfigChooser(8, 8, 8, 0, 16, 32, 8);
+						return EGLConfigChooser(8, 8, 8, 0, 16, 32, 8);
 						break;
 				}
 
 				// Default to k_rgb565_depth24.
 				CS_LOG_WARNING("Couldn't get EGLConfig from App.config. Defaulting to RGB565_DEPTH24.");
-				return ChilliSource::RPi::EGLConfigChooser(5, 6, 5, 0, 16, 24, 0);
+				return EGLConfigChooser(5, 6, 5, 0, 16, 24, 0);
 
 
 
@@ -294,7 +269,7 @@ namespace CSBackend
 
 			// Create ConfigChooser and choose an EGLConfig appropriately.
 			Json::Value appConfigRoot = ReadAppConfig();
-			ChilliSource::RPi::EGLConfigChooser eglConfigChooser = CreateConfigChooser(appConfigRoot);
+			EGLConfigChooser eglConfigChooser = CreateConfigChooser(appConfigRoot);
 			m_eglConfig = eglConfigChooser.ChooseBestConfig(m_eglDisplay);
 
 			eglBindAPI(EGL_OPENGL_ES_API);
