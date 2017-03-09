@@ -288,9 +288,6 @@ namespace CSBackend
 				return ChilliSource::KeyCode::k_unknown;
 			}
 
-			printf("KeySym: %d, Idx: %d, CSKeyCode: %d\n", in_keysym, foundKey, k_csKeyCodesMap[(u32)foundKey]);
-
-
 			return k_csKeyCodesMap[(u32)foundKey];
 		}
 
