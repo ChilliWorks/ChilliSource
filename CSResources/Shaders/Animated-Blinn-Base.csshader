@@ -41,7 +41,7 @@ GLSL
 
 		//uniforms
 		uniform highp mat4 u_wvpMat;
-		uniform highp vec4 u_joints[32];
+		uniform highp vec4 u_joints[100];
 		uniform lowp vec4 u_emissive;
 		uniform lowp vec4 u_ambient;
 		uniform lowp vec4 u_lightCol;

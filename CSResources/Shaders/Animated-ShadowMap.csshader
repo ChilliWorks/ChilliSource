@@ -43,7 +43,7 @@ GLSL
 
 		//uniforms
 		uniform highp mat4 u_wvpMat;
-		uniform highp vec4 u_joints[32];
+		uniform highp vec4 u_joints[100];
 
 		//varyings
 		varying highp float v_depth;
