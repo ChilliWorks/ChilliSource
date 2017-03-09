@@ -192,8 +192,18 @@ namespace CSBackend
 				CS_LOG_WARNING("Couldn't get EGLConfig from App.config. Defaulting to RGB565_DEPTH24.");
 				return EGLConfigChooser(5, 6, 5, 0, 16, 24, 0);
 
+			}
 
+			//-----------------------------------------------------------------
+			/// Reads the desired window title from the AppConfig.
+			//-----------------------------------------------------------------
+			std::string ReadDesiredTitle(const Json::Value& appConfigRoot)
+			{
+				std::string titleString = "Application";
 
+				titleString = appConfigRoot.get("DisplayableName", titleString).asString();
+
+				return titleString;
 			}
 		}
 
@@ -244,7 +254,8 @@ namespace CSBackend
 			XMapWindow(m_xdisplay, m_xwindow);
 
 			//TODO: Set the window name from config.
-			XStoreName(m_xdisplay, m_xwindow, "CSTest");
+			Json::Value appConfigRoot = ReadAppConfig();
+			XStoreName(m_xdisplay, m_xwindow, ReadDesiredTitle(appConfigRoot).c_str());
 
 			//All the events we need to listen for
 			XSelectInput(m_xdisplay, m_xwindow, PointerMotionMask | ButtonMotionMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | FocusChangeMask | StructureNotifyMask);
