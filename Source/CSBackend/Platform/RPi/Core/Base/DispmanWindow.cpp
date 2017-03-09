@@ -236,7 +236,7 @@ namespace CSBackend
 						std::unique_lock<std::mutex> lock(m_keyMutex);
 						if(m_keyboardEventDelegate)
 						{
-							m_keyboardEventDelegate(XKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0), event.xkey.state, KeyboardEvent::k_pressed);
+							m_keyboardEventDelegate(XKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0), event.xkey.state, KeyboardEvent::k_pressed); 
 						}
 						break;
 					}
