@@ -391,9 +391,8 @@ namespace CSBackend
             [glView bindDrawable];
 #else
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
-#endif
-            
             glViewport(0, 0, renderCommand->GetResolution().x, renderCommand->GetResolution().y);
+#endif
             
             glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
             glDepthMask(GL_TRUE);
