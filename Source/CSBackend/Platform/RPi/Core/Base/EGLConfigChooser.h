@@ -38,7 +38,6 @@ namespace CSBackend
 {
     namespace RPi
     {
-
         /// This class is used to pick an EGLConfig that matches as close as
         /// possible with the specified attributes.
         ///
@@ -49,14 +48,12 @@ namespace CSBackend
             /// Constructs the ConfigChooser with the specified desired attributes.
             ///
             ///
-            EGLConfigChooser(u8 redSize, u8 greenSize, u8 blueSize, u8 alphaSize, u8 minDepthSize, u8 preferredDepthSize, u8 minStencilSize);
+            EGLConfigChooser(u8 redSize, u8 greenSize, u8 blueSize, u8 alphaSize, u8 minDepthSize, u8 preferredDepthSize, u8 minStencilSize) noexcept;
 
             /// Picks the best EGLConfig using the specified desired attributes.
             ///
             /// @param The EGLDisplay to choose for.
-            EGLConfig ChooseBestConfig(EGLDisplay eglDisplay);
-
-
+            EGLConfig ChooseBestConfig(EGLDisplay eglDisplay) noexcept;
 
         private:
             /// Picks the best EGLConfig out of the supplied config list.
@@ -64,7 +61,7 @@ namespace CSBackend
             /// @param The EGLDisplay to choose for.
             /// @param The array of EGLConfig objects to sort through.
             /// @param The number of EGLConfig objects in that list.
-            EGLConfig ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig eglConfigs[], EGLint numConfigs);
+            EGLConfig ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig eglConfigs[], EGLint numConfigs) noexcept;
 
             /// Finds a config attribute within a config, and returns its value.
             /// If the value isn't found, returns the defaultValue parameter.
@@ -74,7 +71,7 @@ namespace CSBackend
             /// @param The EGLint representing the attribute to check for.
             /// @param The default value of the attribute - returned if attribute isn't found in the config.
             ///
-            u8 FindConfigAttribute(EGLDisplay eglDisplay, EGLConfig eglConfig, EGLint attribute, u8 defaultValue);
+            u8 FindConfigAttribute(EGLDisplay eglDisplay, EGLConfig eglConfig, EGLint attribute, u8 defaultValue) noexcept;
 
             u8 m_redSize;
             u8 m_greenSize;
@@ -83,11 +80,7 @@ namespace CSBackend
             u8 m_minDepthSize;
             u8 m_preferredDepthSize;
             u8 m_minStencilSize;
-
-
         };
-
-
     }
 }
 

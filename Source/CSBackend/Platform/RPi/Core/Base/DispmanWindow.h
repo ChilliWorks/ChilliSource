@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/Base/Singleton.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
+#include <json/json.h>
+
 #include <bcm_host.h>
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
@@ -162,7 +164,6 @@ namespace CSBackend
 
 			//TODO: Handle setting of window mode - fullscreen/windowed, etc.
 			//TODO: Add event for window mode changing
-			//TODO: Handle vsync and FPS setting
 
             /// Destructor; makes sure that the BCM interface is
             /// properly un-set.
@@ -179,8 +180,10 @@ namespace CSBackend
 			///		X, Y position of the window to create
 			/// @param windowSize
 			///		Size of the window to create
+			/// @param appConfigRoot
+			///		Parsed JSON of the app config used to configure the window
 			///
-			void InitXWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept;
+			void InitXWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize, const Json::Value& appConfigRoot) noexcept;
 
 			/// Initialise the dispman window and OpenGLES based on the previously created XWindow.
 			///
@@ -188,8 +191,10 @@ namespace CSBackend
 			///		X, Y position of the window to create (should be created at the same pos as the X window)
 			/// @param windowSize
 			///		Size of the window to create (should be created at the same size as the X window)
+			/// @param appConfigRoot
+			///		Parsed JSON of the app config used to configure the window
 			///
-			void InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept;
+			void InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize, const Json::Value& appConfigRoot) noexcept;
 
 			/// Single system loop responsible for X server events, rendering and display buffer swaps. The repeating main loop can be
 			/// terminated by calling quit. This run loop can be optionally tied to vsync

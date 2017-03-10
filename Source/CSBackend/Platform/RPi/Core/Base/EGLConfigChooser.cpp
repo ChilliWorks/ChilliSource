@@ -31,7 +31,7 @@ namespace CSBackend
     namespace RPi
     {
         //---------------------------------------------------------------------
-        EGLConfigChooser::EGLConfigChooser(u8 redSize, u8 greenSize, u8 blueSize, u8 alphaSize, u8 minDepthSize, u8 preferredDepthSize, u8 minStencilSize)
+        EGLConfigChooser::EGLConfigChooser(u8 redSize, u8 greenSize, u8 blueSize, u8 alphaSize, u8 minDepthSize, u8 preferredDepthSize, u8 minStencilSize) noexcept
         {
             m_redSize = redSize;
             m_greenSize = greenSize;
@@ -43,7 +43,7 @@ namespace CSBackend
         }
 
         //---------------------------------------------------------------------
-        EGLConfig EGLConfigChooser::ChooseBestConfig(EGLDisplay eglDisplay)
+        EGLConfig EGLConfigChooser::ChooseBestConfig(EGLDisplay eglDisplay) noexcept
         {
             // Define the minimum-possible spec.
             static const EGLint attributeList[] =
@@ -82,7 +82,7 @@ namespace CSBackend
         }
 
         //---------------------------------------------------------------------
-        EGLConfig EGLConfigChooser::ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig eglConfigs[], EGLint numConfigs)
+        EGLConfig EGLConfigChooser::ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig eglConfigs[], EGLint numConfigs) noexcept
         {
             u8 depthSize = m_preferredDepthSize;
 
@@ -118,7 +118,7 @@ namespace CSBackend
         }
 
         //---------------------------------------------------------------------
-        u8 EGLConfigChooser::FindConfigAttribute(EGLDisplay eglDisplay, EGLConfig eglConfig, EGLint attribute, u8 defaultValue)
+        u8 EGLConfigChooser::FindConfigAttribute(EGLDisplay eglDisplay, EGLConfig eglConfig, EGLint attribute, u8 defaultValue) noexcept
         {
             EGLint* value = new EGLint[1];
             if(eglGetConfigAttrib(eglDisplay, eglConfig, attribute, value) == true)
@@ -128,8 +128,6 @@ namespace CSBackend
 
             return defaultValue;
         }
-
-
     }
 }
 

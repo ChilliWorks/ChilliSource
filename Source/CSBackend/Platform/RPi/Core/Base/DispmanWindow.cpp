@@ -37,8 +37,6 @@
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
-#include <json/json.h>
-
 namespace CSBackend
 {
 	namespace RPi
@@ -218,15 +216,15 @@ namespace CSBackend
 			//Start interfacing with Raspberry Pi.
 			bcm_host_init();
 
-			//TODO: Get from app config
 			m_windowSize = GetSupportedResolutions()[0];
 			m_windowSize.x = (s32)((f32)m_windowSize.x * 0.8f);
 			m_windowSize.y = (s32)((f32)m_windowSize.y * 0.8f);
 			m_windowPos.x = 0;
 			m_windowPos.y = 0;
 
-			InitXWindow(m_windowPos, m_windowSize);
-			InitEGLDispmanWindow(m_windowPos, m_windowSize);
+			Json::Value appConfigRoot = ReadAppConfig();
+			InitXWindow(m_windowPos, m_windowSize, appConfigRoot);
+			InitEGLDispmanWindow(m_windowPos, m_windowSize, appConfigRoot);
 
 			//NOTE: We are creating ChilliSource here so no CS calls can be made prior to this including logging.
 			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
@@ -241,7 +239,7 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		void DispmanWindow::InitXWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept
+		void DispmanWindow::InitXWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize, const Json::Value& appConfigRoot) noexcept
 		{
 			m_xdisplay = XOpenDisplay(NULL);
 			if(m_xdisplay == nullptr)
@@ -252,9 +250,6 @@ namespace CSBackend
 
 			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), windowPos.x, windowPos.y, windowSize.x, windowSize.y, 0, 0, 0);
 			XMapWindow(m_xdisplay, m_xwindow);
-
-			//TODO: Set the window name from config.
-			Json::Value appConfigRoot = ReadAppConfig();
 			XStoreName(m_xdisplay, m_xwindow, ReadDesiredTitle(appConfigRoot).c_str());
 
 			//All the events we need to listen for
@@ -265,7 +260,7 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		void DispmanWindow::InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize) noexcept
+		void DispmanWindow::InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize, const Json::Value& appConfigRoot) noexcept
 		{
 			// Set up OpenGL context version (OpenGLES 2.0)
 			static const EGLint contextAttributeList[] =
@@ -279,7 +274,6 @@ namespace CSBackend
 			eglInitialize(m_eglDisplay, NULL, NULL);
 
 			// Create ConfigChooser and choose an EGLConfig appropriately.
-			Json::Value appConfigRoot = ReadAppConfig();
 			EGLConfigChooser eglConfigChooser = CreateConfigChooser(appConfigRoot);
 			m_eglConfig = eglConfigChooser.ChooseBestConfig(m_eglDisplay);
 
