@@ -205,6 +205,7 @@ namespace CSBackend
 			ChilliSource::Integer2 m_windowSize;
 			ChilliSource::Integer2 m_windowSizePreFullscreen;
 			ChilliSource::Integer2 m_windowPos;
+			ChilliSource::Integer2 m_windowPosPreFullscreen;
 
 			/// EGL Objects needed for dispmanx.
 			EGLDisplay m_eglDisplay;
