@@ -32,9 +32,6 @@
 #include <ChilliSource/Input/Keyboard/KeyCode.h>
 #include <ChilliSource/Input/Keyboard/ModifierKeyCode.h>
 
-#include <X11/xlib.h>
-#include <X11/keysym.h>
-
 namespace CSBackend
 {
 	namespace RPi
@@ -378,10 +375,12 @@ namespace CSBackend
 					}
 				}
 			});
+		}
 
-
-
-
+		//---------------------------------------------------------------------------------
+		void Keyboard::OnDestroy() noexcept
+		{
+			DispmanWindow::Get()->RemoveKeyboardDelegates();
 		}
 	}
 }

@@ -100,6 +100,10 @@ namespace CSBackend
 			///
 			void OnKeyEvent(u32 keyCode, u32 keyState, DispmanWindow::KeyboardEvent keyEvent) noexcept;
 
+			/// Stop listening for keyboard events
+			///
+			void OnDestroy() noexcept override;
+
 
 		private:
 

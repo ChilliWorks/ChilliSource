@@ -236,7 +236,7 @@ namespace CSBackend
 						std::unique_lock<std::mutex> lock(m_keyMutex);
 						if(m_keyboardEventDelegate)
 						{
-							m_keyboardEventDelegate(XKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0), event.xkey.state, KeyboardEvent::k_pressed); 
+							m_keyboardEventDelegate(XKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0), event.xkey.state, KeyboardEvent::k_pressed);
 						}
 						break;
 					}
@@ -404,6 +404,7 @@ namespace CSBackend
 			CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate not removed.");
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
 			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
+			CS_ASSERT(!m_keyboardEventDelegate, "Keyboard event delegate not removed.");
 
 			eglDestroyContext(m_eglDisplay, m_eglContext);
 			eglDestroySurface(m_eglDisplay, m_eglSurface);
