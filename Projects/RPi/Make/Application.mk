@@ -51,14 +51,14 @@ CFLAGS=-c -g -std=c++11 -fsigned-char -pthread -fexceptions -frtti $(CS_CXXFLAGS
 CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs -L$(LOCAL_PATH)
 
 # Linker Flags
-LDFLAGS= $(CS_LIBRARY_DIRS) -lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm -lrt -lm -lc -lstdc++ -l:libgcc_s.so.1 -l:libX11.so.6.3.0 -l:libXau.so.6.0.0 -l:libXdmcp.so.6.0.0 -l:libxcb.so.1.1.0 -l:libxcb-xkb.so.1.0.0 -l:libxkbcommon.so.0.0.0 -l:libxkbcommon-x11.so.0.0.0
+LDFLAGS= $(CS_LIBRARY_DIRS) -lApplication -lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm -lrt -lm -lc -lstdc++ -l:libgcc_s.so.1 -l:libX11.so.6.3.0 -l:libXau.so.6.0.0 -l:libXdmcp.so.6.0.0 -l:libxcb.so.1.1.0 -l:libxcb-xkb.so.1.0.0 -l:libxkbcommon.so.0.0.0 -l:libxkbcommon-x11.so.0.0.0
 
 # All Source Files
 SOURCES=$(CS_APP_SOURCES)
 
 # All Objects to be Generated - they take their names from the names of the cpp files that generated them.
 CS_APP_OBJ_DIR = $(LOCAL_PATH)/appobj
-OBJECTS := $(patsubst $(CS_APP_SRC_ROOT)/%, $(CS_APP_OBJ_DIR)/%, $(SOURCES:.cpp=.o)) $(patsubst $(CS_APP_SRC_ROOT)/%, $(CS_APP_OBJ_DIR)/%, $(SOURCES:.c=.o)) $(patsubst $(CS_APP_SRC_ROOT)/%, $(CS_APP_OBJ_DIR)/%, $(SOURCES:.cc=.o))
+OBJECTS := $(patsubst $(CS_APP_SRC_ROOT)/%.cpp, $(CS_APP_OBJ_DIR)/%.o, $(filter %.cpp, $(SOURCES))) $(patsubst $(CS_APP_SRC_ROOT)/%.c, $(CS_APP_OBJ_DIR)/%.o,  $(filter %.c, $(SOURCES))) $(patsubst $(CS_APP_SRC_ROOT)/%.cc, $(CS_APP_OBJ_DIR)/%.o, $(filter %.cc, $(SOURCES)))
 
 # Name of static lib to link.
 CS_STATIC_LIB=libChilliSource.a
@@ -71,12 +71,14 @@ CS_APP_EXECUTABLE=Application
 all: $(SOURCES) $(CS_APP_EXECUTABLE)
 
 # Link objs into static lib. Uses the .cpp.o: rule below.
-$(CS_APP_EXECUTABLE): $(CS_APP_STATIC) $(OBJECTS)
+$(CS_APP_EXECUTABLE): $(CS_APP_STATIC)
+	@echo "Building CS_APP_EXECUTABLE"
 	$(LD) $(OBJECTS) $(LDFLAGS) -o $@
 
 # Archive all app objects together to be a static lib
-$(CS_APP_STATIC):
-	$(AR) rcs $(CS_APP_STATIC) $(BUILTOBJECTS)
+$(CS_APP_STATIC): $(OBJECTS)
+	@echo "Building CS_APP_STATIC"
+	$(AR) rcs $(CS_APP_STATIC) $(OBJECTS)
 
 # Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
 # $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
@@ -93,9 +95,9 @@ $(CS_APP_OBJ_DIR)/%.o: $(CS_APP_SRC_ROOT)/%.cc
 .PHONY: clean
 
 clean:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')
-	rm $(CS_APP_STATIC)
-	rm $(CS_APP_EXECUTABLE)
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_APP_OBJ_DIR)/' '--extensions' 'o')
+	rm -f $(CS_APP_STATIC)
+	rm -f $(CS_APP_EXECUTABLE)
 
 cleanobjects:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '(CS_APP_OBJ_DIR)/' '--extensions' 'o')

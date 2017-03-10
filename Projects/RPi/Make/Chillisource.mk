@@ -33,8 +33,8 @@ CS_SCRIPT_GETFILESWITHEXTENSIONS = $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts
 
 # Gather all files in the engine that should be built.
 CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/ChilliSource/' '--extensions' 'cpp,c,cc')
-CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'cpp,c,cc')
-CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/CSBackend/Platform/RPi/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
 
 # Set up tools.
 CC=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
@@ -57,7 +57,7 @@ SOURCES=$(CS_SOURCEFILES_CHILLISOURCE) $(CS_SOURCEFILES_PLATFORM) $(CS_SOURCEFIL
 
 # All Objects to be Generated - they take their names from the names of the cpp files that generated them.
 CS_OBJ_DIR = $(LOCAL_PATH)/csobj
-OBJECTS := $(patsubst $(CS_SRC_ROOT)/%, $(CS_OBJ_DIR)/%, $(SOURCES:.cpp=.o)) $(patsubst $(CS_SRC_ROOT)/%, $(CS_OBJ_DIR)/%, $(SOURCES:.c=.o)) $(patsubst $(CS_SRC_ROOT)/%, $(CS_OBJ_DIR)/%, $(SOURCES:.cc=.o))
+OBJECTS := $(patsubst $(CS_SRC_ROOT)/%.cpp, $(CS_OBJ_DIR)/%.o, $(filter %.cpp, $(SOURCES))) $(patsubst $(CS_SRC_ROOT)/%.cc, $(CS_OBJ_DIR)/%.o, $(filter %.cc, $(SOURCES))) $(patsubst $(CS_SRC_ROOT)/%.c, $(CS_OBJ_DIR)/%.o, $(filter %.c, $(SOURCES)))
 
 # Name of static lib to generate.
 CS_STATIC_LIB=libChilliSource.a
@@ -84,12 +84,8 @@ $(CS_OBJ_DIR)/%.o: $(CS_SRC_ROOT)/%.cc
 .PHONY: clean
 
 clean:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'o')
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'o')
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'o')
-	rm $(CS_STATIC_LIB)
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_OBJ_DIR)/' '--extensions' 'o')
+	rm -f $(CS_STATIC_LIB)
 
 cleanobjects:
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'o')
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'o')
-	rm $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_OBJ_DIR)/' '--extensions' 'o')
