@@ -28,6 +28,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/GLIncludes.h>
 
 #if defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_RPI
+
 extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT;
 extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOESEXT;
 extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT;
