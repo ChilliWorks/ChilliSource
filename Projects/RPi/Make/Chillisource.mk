@@ -25,14 +25,16 @@ LOCAL_PATH = .
 
 # Set up project root.
 CS_PROJECT_ROOT=../../../..
+CS_SRC_ROOT=$(CS_PROJECT_ROOT)/ChilliSource/Source
 
 # Set up scripts.
 CS_SCRIPT_GETFILESWITHEXTENSIONS = $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/get_file_paths_with_extensions.py
 
+
 # Gather all files in the engine that should be built.
-CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'cpp,c,cc')
-CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'cpp,c,cc')
-CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/ChilliSource/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/ChilliSource/Source/CSBackend/Platform/RPi/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/ChilliSource/Source/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
 
 # Set up tools.
 CC=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
@@ -45,7 +47,7 @@ CS_CXXFLAGS_TARGET=-DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE -DCS_TARGETPL
 CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
 
 # Additional Compiler Flags
-CFLAGS=-c -g -std=c++11 -fsigned-char -pthread -fexceptions -frtti $(CS_CXXFLAGS_TARGET) $(CS_INCLUDES) 
+CFLAGS=-c -g -std=c++11 -fsigned-char -pthread -fexceptions -frtti $(CS_CXXFLAGS_TARGET) $(CS_INCLUDES)
 
 # Library Directories
 CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs
@@ -54,7 +56,8 @@ CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS
 SOURCES=$(CS_SOURCEFILES_CHILLISOURCE) $(CS_SOURCEFILES_PLATFORM) $(CS_SOURCEFILES_RENDERING)
 
 # All Objects to be Generated - they take their names from the names of the cpp files that generated them.
-OBJECTS= $(SOURCES:%.cpp=%.o) $(SOURCES:%.c=%.o) $(SOURCES:%.cc=%.o)
+CS_OBJ_DIR = $(LOCAL_PATH)/csobj
+OBJECTS := $(patsubst $(CS_SRC_ROOT)/%, $(CS_OBJ_DIR)/%, $(SOURCES:.cpp=.o)) $(patsubst $(CS_SRC_ROOT)/%, $(CS_OBJ_DIR)/%, $(SOURCES:.c=.o)) $(patsubst $(CS_SRC_ROOT)/%, $(CS_OBJ_DIR)/%, $(SOURCES:.cc=.o))
 
 # Name of static lib to generate.
 CS_STATIC_LIB=libChilliSource.a
@@ -68,11 +71,14 @@ $(CS_STATIC_LIB): $(OBJECTS)
 
 # Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
 # $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
-.cpp.o:
+$(CS_OBJ_DIR)/%.o: $(CS_SRC_ROOT)/%.cpp
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
-.c.o:
+$(CS_OBJ_DIR)/%.o: $(CS_SRC_ROOT)/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
-.cc.o:
+$(CS_OBJ_DIR)/%.o: $(CS_SRC_ROOT)/%.cc
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
 
 .PHONY: clean

@@ -25,12 +25,13 @@ LOCAL_PATH = .
 
 # Set up project root.
 CS_PROJECT_ROOT=../../../..
+CS_APP_SRC_ROOT = $(CS_PROJECT_ROOT)/AppSource
 
 # Set up scripts.
 CS_SCRIPT_GETFILESWITHEXTENSIONS = $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/get_file_paths_with_extensions.py
 
 # Gather all files in the engine that should be built.
-CS_APP_SOURCES := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'cpp,c,cc')
+CS_APP_SOURCES := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_APP_SRC_ROOT)/' '--extensions' 'cpp,c,cc')
 
 # Set up tools.
 CC=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
@@ -56,8 +57,8 @@ LDFLAGS= $(CS_LIBRARY_DIRS) -lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -
 SOURCES=$(CS_APP_SOURCES)
 
 # All Objects to be Generated - they take their names from the names of the cpp files that generated them.
-OBJECTS= $(SOURCES:%.cpp=%.o) $(SOURCES:%.c=%.o) $(SOURCES:%.cc=%.o)
-BUILTOBJECTS := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/AppSource/' '--extensions' 'o')
+CS_APP_OBJ_DIR = $(LOCAL_PATH)/appobj
+OBJECTS := $(patsubst $(CS_APP_SRC_ROOT)/%, $(CS_APP_OBJ_DIR)/%, $(SOURCES:.cpp=.o)) $(patsubst $(CS_APP_SRC_ROOT)/%, $(CS_APP_OBJ_DIR)/%, $(SOURCES:.c=.o)) $(patsubst $(CS_APP_SRC_ROOT)/%, $(CS_APP_OBJ_DIR)/%, $(SOURCES:.cc=.o))
 
 # Name of static lib to link.
 CS_STATIC_LIB=libChilliSource.a
@@ -70,8 +71,8 @@ CS_APP_EXECUTABLE=Application
 all: $(SOURCES) $(CS_APP_EXECUTABLE)
 
 # Link objs into static lib. Uses the .cpp.o: rule below.
-$(CS_APP_EXECUTABLE): $(OBJECTS) $(CS_APP_STATIC)
-	$(LD) $(BUILTOBJECTS) $(LDFLAGS) -o $@
+$(CS_APP_EXECUTABLE): $(CS_APP_STATIC) $(OBJECTS)
+	$(LD) $(OBJECTS) $(LDFLAGS) -o $@
 
 # Archive all app objects together to be a static lib
 $(CS_APP_STATIC):
@@ -79,11 +80,14 @@ $(CS_APP_STATIC):
 
 # Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
 # $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
-.cpp.o:
+$(CS_APP_OBJ_DIR)/%.o: $(CS_APP_SRC_ROOT)/%.cpp
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
-.c.o:
+$(CS_APP_OBJ_DIR)/%.o: $(CS_APP_SRC_ROOT)/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
-.cc.o:
+$(CS_APP_OBJ_DIR)/%.o: $(CS_APP_SRC_ROOT)/%.cc
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $< -o $@
 
 .PHONY: clean
