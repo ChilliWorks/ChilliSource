@@ -25,6 +25,7 @@
 #include <CSBackend/Rendering/OpenGL/Base/RenderCommandProcessor.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLExtensions.h>
 #include <CSBackend/Rendering/OpenGL/Lighting/GLAmbientLight.h>
 #include <CSBackend/Rendering/OpenGL/Lighting/GLDirectionalLight.h>
 #include <CSBackend/Rendering/OpenGL/Lighting/GLPointLight.h>
@@ -261,6 +262,7 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void RenderCommandProcessor::Init() noexcept
         {
+            GLExtensions::InitExtensions();
             m_textureUnitManager = GLTextureUnitManagerUPtr(new GLTextureUnitManager());
             m_glDynamicMesh = GLDynamicMeshUPtr(new GLDynamicMesh(ChilliSource::RenderDynamicMesh::k_maxVertexDataSize, ChilliSource::RenderDynamicMesh::k_maxIndexDataSize));
             

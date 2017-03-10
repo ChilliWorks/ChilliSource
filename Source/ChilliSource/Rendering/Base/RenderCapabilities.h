@@ -78,6 +78,10 @@ namespace ChilliSource
         ///
         bool IsMapBufferSupported() const noexcept;
         
+        /// @return Whether or not vertex array objects are supported.
+        ///
+        bool IsVAOSupported() const noexcept;
+        
         /// @return Whether or not the fragment shader supports highp floats.
         ///
         bool IsHighPrecisionFloatsSupported() const noexcept;
@@ -102,6 +106,8 @@ namespace ChilliSource
         ///         Whether or not depth textures are supported.
         /// @param isMapBuffersSupported
         ///         Whether or not map buffer is supported.
+        /// @param isVAOSupported
+        ///     Whether vertex array objects are supported
         /// @param isHighPrecisionFloatsSupported
         ///         Whether or not the fragment shader supports highp floats.
         /// @param maxTextureSize
@@ -111,13 +117,14 @@ namespace ChilliSource
         /// @param maxVertexAttribs
         ///         The max. number of vertex attributes supported by this device.
         ///
-        RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits, u32 maxVertexAttribs);
+        RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isVAOSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits, u32 maxVertexAttribs);
         
     private:
         
         bool m_isShadowMapsSupported;
         bool m_isDepthTexturesSupported;
         bool m_isMapBuffersSupported;
+        bool m_isVAOSupported;
         bool m_isHighPrecisionFloatsSupported;
         
         u32 m_maxTextureSize;

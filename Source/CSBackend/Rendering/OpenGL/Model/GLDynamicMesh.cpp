@@ -24,6 +24,7 @@
 
 #include <CSBackend/Rendering/OpenGL/Model/GLDynamicMesh.h>
 
+#include <CSBackend/Rendering/OpenGL/Base/GLExtensions.h>
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMeshUtils.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
@@ -34,12 +35,6 @@
 #include <ChilliSource/Rendering/Model/RenderDynamicMesh.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
-
-#ifdef CS_OPENGLVERSION_ES
-#define GL_WRITE_ONLY GL_WRITE_ONLY_OES
-#define glMapBuffer glMapBufferOES
-#define glUnmapBuffer glUnmapBufferOES
-#endif
 
 namespace CSBackend
 {
@@ -285,6 +280,7 @@ namespace CSBackend
             auto renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
             m_maxVertexAttributes = renderCapabilities->GetNumVertexAttributes();
             m_useMapBuffer = renderCapabilities->IsMapBufferSupported();
+            m_areVAOsSupported = renderCapabilities->IsVAOSupported();
         }
         
         //------------------------------------------------------------------------------
@@ -297,6 +293,10 @@ namespace CSBackend
             m_numVertices = numVertices;
             m_numIndices = numIndices;
         
+            if(m_areVAOsSupported == true)
+            {
+                glBindVertexArray(0);
+            }
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandles[m_currentBufferIndex]);
             glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_DYNAMIC_DRAW);
             
@@ -321,6 +321,10 @@ namespace CSBackend
             m_numVertices = numVertices;
             m_numIndices = numIndices;
             
+            if(m_areVAOsSupported == true)
+            {
+                glBindVertexArray(0);
+            }
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandles[m_currentBufferIndex]);
             ApplyBatchVertices(m_allocator, m_vertexFormat, numVertices, vertexDataSize, meshes, m_useMapBuffer);
 

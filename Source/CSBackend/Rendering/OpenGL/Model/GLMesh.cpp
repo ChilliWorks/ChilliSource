@@ -28,9 +28,11 @@
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Model/RenderMesh.h>
 
+#include <CSBackend/Rendering/OpenGL/Base/GLExtensions.h>
 #include <CSBackend/Rendering/OpenGL/Base/GLError.h>
 #include <CSBackend/Rendering/OpenGL/Model/GLMeshUtils.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLShader.h>
+
 
 namespace CSBackend
 {
@@ -67,18 +69,47 @@ namespace CSBackend
             auto renderCapabilities = ChilliSource::Application::Get()->GetSystem<ChilliSource::RenderCapabilities>();
             m_maxVertexAttributes = renderCapabilities->GetNumVertexAttributes();
             CS_ASSERT(m_maxVertexAttributes >= m_renderMesh->GetVertexFormat().GetNumElements(), "Too many vertex elements.");
+            
+            m_areVAOsSupported = renderCapabilities->IsVAOSupported();
         }
         
         //------------------------------------------------------------------------------
         void GLMesh::Bind(GLShader* glShader) noexcept
         {
-            auto vertexFormat = m_renderMesh->GetVertexFormat();
+            if(m_areVAOsSupported == true)
+            {
+                //Check if we have been rendererd using this shader before and
+                //if so we have a VAO setup for this shader
+                GLuint vao = 0;
+                for(const auto& pair : m_vaoCache)
+                {
+                    if(pair.first == glShader)
+                    {
+                        vao = pair.second;
+                        break;
+                    }
+                }
+                
+                if(vao > 0)
+                {
+                    glBindVertexArray(vao);
+                    CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding GLMesh.");
+                    return;
+                }
+            
+                //Otherwise we need to create a VAO
+                GLuint vaoHandle = 0;
+                glGenVertexArrays(1, &vaoHandle);
+                glBindVertexArray(vaoHandle);
+                m_vaoCache.push_back(std::make_pair(glShader, vaoHandle));
+            }
             
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferHandle);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferHandle);
             
-            CS_ASSERT_NOGLERROR("An OpenGL error occurred while binding GLMesh.");
+            CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating VAO for GLMesh.");
             
+            auto vertexFormat = m_renderMesh->GetVertexFormat();
             for (u32 i = 0; i < vertexFormat.GetNumElements(); ++i)
             {
                 glEnableVertexAttribArray(i);
@@ -140,6 +171,10 @@ namespace CSBackend
         {
             if(!m_invalidData)
             {
+                for(auto& vao : m_vaoCache)
+                {
+                    glDeleteVertexArrays(1, &vao.second);
+                }
                 glDeleteBuffers(1, &m_vertexBufferHandle);
                 if(m_indexBufferHandle != 0)
                 {

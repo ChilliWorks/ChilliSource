@@ -464,6 +464,7 @@ namespace CSBackend
 			ChilliSource::Integer2 windowSize(s32(f32(sf::VideoMode::getDesktopMode().width) * 0.8f), s32(f32(sf::VideoMode::getDesktopMode().height) * 0.8f));
 			m_window.create(sf::VideoMode((u32)windowSize.x, (u32)windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
 
+			glewExperimental = GL_TRUE;
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)
 			{

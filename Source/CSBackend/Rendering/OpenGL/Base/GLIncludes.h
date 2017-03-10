@@ -36,23 +36,23 @@ typedef char GLchar;
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
-#include <OpenGLES/EAGL.h>
-#include <OpenGLES/EAGLDrawable.h>
+#   include <OpenGLES/ES2/gl.h>
+#   include <OpenGLES/ES2/glext.h>
+#   include <OpenGLES/EAGL.h>
+#   include <OpenGLES/EAGLDrawable.h>
 #elif defined CS_TARGETPLATFORM_WINDOWS
-#include <GL/glew.h>
-#include <SFML/OpenGL.hpp>
-#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
+#   include <GL/glew.h>
+#   include <SFML/OpenGL.hpp>
+#   include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 #else
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#   include <GLES2/gl2.h>
+#   include <GLES2/gl2ext.h>
 #endif
 
 #if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_RPI
-#define CS_OPENGLVERSION_ES
+#   define CS_OPENGLVERSION_ES
 #elif defined CS_TARGETPLATFORM_WINDOWS
-#define CS_OPENGLVERSION_STANDARD
+#   define CS_OPENGLVERSION_STANDARD
 #endif
 
 #endif
