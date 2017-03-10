@@ -52,6 +52,7 @@ namespace CSBackend
         {
             bool areHighPrecFragmentsSupported = true;
             bool areMapBuffersSupported = true;
+            bool areVAOsSupported = true;
             bool areDepthTexturesSupported = false;
             bool areShadowMapsSupported = false;
             
@@ -69,6 +70,7 @@ namespace CSBackend
 #ifdef CS_TARGETPLATFORM_ANDROID
             //Check for map buffer support
             areMapBuffersSupported = CheckForOpenGLExtension("GL_OES_mapbuffer");
+            areVAOsSupported = CheckForOpenGLExtension("GL_OES_vertex_array_object");
 #endif
             
 #endif
@@ -85,7 +87,7 @@ namespace CSBackend
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while getting render capabilities.");
             
-            ChilliSource::RenderInfo renderInfo(areShadowMapsSupported, areDepthTexturesSupported, areMapBuffersSupported, areHighPrecFragmentsSupported, maxTextureSize, maxTextureUnits, maxVertexAttribs);
+            ChilliSource::RenderInfo renderInfo(areShadowMapsSupported, areDepthTexturesSupported, areMapBuffersSupported, areVAOsSupported, areHighPrecFragmentsSupported, maxTextureSize, maxTextureUnits, maxVertexAttribs);
             
             return renderInfo;
         }

@@ -35,13 +35,13 @@ namespace ChilliSource
     //-------------------------------------------------------
     RenderCapabilitiesUPtr RenderCapabilities::Create(const RenderInfo& renderInfo) noexcept
     {
-        return RenderCapabilitiesUPtr(new RenderCapabilities(renderInfo.IsShadowMappingSupported(), renderInfo.IsDepthTextureSupported(), renderInfo.IsMapBufferSupported(),
+        return RenderCapabilitiesUPtr(new RenderCapabilities(renderInfo.IsShadowMappingSupported(), renderInfo.IsDepthTextureSupported(), renderInfo.IsMapBufferSupported(), renderInfo.IsVAOSupported(),
                                                              renderInfo.IsHighPrecisionFloatsSupported(), renderInfo.GetMaxTextureSize(), renderInfo.GetNumTextureUnits(), renderInfo.GetNumVertexAttributes()));
     }
     
     //-------------------------------------------------------
-    RenderCapabilities::RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits, u32 maxVertexAttribs)
-    : m_isShadowMapsSupported(isShadowMapsSupported), m_isDepthTexturesSupported(isDepthTexturesSupported), m_isMapBuffersSupported(isMapBuffersSupported),
+    RenderCapabilities::RenderCapabilities(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isVAOSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits, u32 maxVertexAttribs)
+    : m_isShadowMapsSupported(isShadowMapsSupported), m_isDepthTexturesSupported(isDepthTexturesSupported), m_isMapBuffersSupported(isMapBuffersSupported), m_isVAOSupported(isVAOSupported),
     m_isHighPrecisionFloatsSupported(isHighPrecisionFloatsSupported), m_maxTextureSize(maxTextureSize), m_maxTextureUnits(numTextureUnits), m_maxVertexAttribs(maxVertexAttribs)
     {
     }
@@ -68,6 +68,12 @@ namespace ChilliSource
     bool RenderCapabilities::IsMapBufferSupported() const noexcept
     {
         return m_isMapBuffersSupported;
+    }
+    
+    //-------------------------------------------------------
+    bool RenderCapabilities::IsVAOSupported() const noexcept
+    {
+        return m_isVAOSupported;
     }
     
     //-------------------------------------------------------

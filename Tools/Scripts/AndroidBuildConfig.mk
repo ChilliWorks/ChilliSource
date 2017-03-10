@@ -67,5 +67,5 @@ CS_WARNINGS := -Wfatal-errors -Wchar-subscripts -Wcomment -Wnonnull -Winit-self 
 #setup build settings
 CS_CXXFLAGS := -fsigned-char -std=c++11 -pthread -fexceptions -frtti -DCS_TARGETPLATFORM_ANDROID $(CS_WARNINGS) $(CS_CXXFLAGS_TARGET)
 CS_STATIC_LIBRARIES := $(CS_MODULENAME_CSBASE) $(CS_MODULENAME_CK) $(CS_MODULENAME_CHILLISOURCE) cpufeatures
-CS_LDLIBS := -lz -llog -lGLESv2
+CS_LDLIBS := -lz -llog -lGLESv2 -lEGL
 CS_C_INCLUDES := $(CS_PROJECT_ROOT)/ChilliSource/Source/ $(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/Android/Headers/ $(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/Android/Headers/

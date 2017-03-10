@@ -31,6 +31,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Model/VertexFormat.h>
 
+#include <vector>
+
 namespace CSBackend
 {
     namespace OpenGL
@@ -101,6 +103,7 @@ namespace CSBackend
             
             GLuint m_vertexBufferHandle = 0;
             GLuint m_indexBufferHandle = 0;
+            std::vector<std::pair<const GLShader*, GLuint>> m_vaoCache;
             
             std::unique_ptr<const u8[]> m_vertexDataBackup = nullptr;
             std::unique_ptr<const u8[]> m_indexDataBackup = nullptr;
@@ -108,6 +111,7 @@ namespace CSBackend
             u32 m_indexDataSize = 0;
             u32 m_vertexDataSize = 0;
             u32 m_maxVertexAttributes = 0;
+            bool m_areVAOsSupported;
             
             ChilliSource::RenderMesh* m_renderMesh = nullptr;
             

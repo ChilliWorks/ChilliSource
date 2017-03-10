@@ -1,7 +1,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2016 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,31 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/Base/RenderInfo.h>
+#include <CSBackend/Rendering/OpenGL/Base/GLExtensions.h>
 
-namespace ChilliSource
+#if defined CS_TARGETPLATFORM_ANDROID
+#   include <EGL/egl.h>
+
+PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT = 0;
+PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOESEXT = 0;
+PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT = 0;
+#endif
+
+namespace CSBackend
 {
-    RenderInfo::RenderInfo(bool isShadowMapsSupported, bool isDepthTexturesSupported, bool isMapBuffersSupported, bool isVAOSupported, bool isHighPrecisionFloatsSupported, u32 maxTextureSize, u32 numTextureUnits, u32 maxVertexAttribs) noexcept
-        :
-    m_isShadowMapsSupported(isShadowMapsSupported),
-    m_isDepthTexturesSupported(isDepthTexturesSupported),
-    m_isMapBuffersSupported(isMapBuffersSupported),
-    m_isVAOSupported(isVAOSupported),
-    m_isHighPrecisionFloatsSupported(isHighPrecisionFloatsSupported),
-    m_maxTextureSize(maxTextureSize),
-    m_maxTextureUnits(numTextureUnits),
-    m_maxVertexAttributes(maxVertexAttribs)
+    namespace OpenGL
     {
+        namespace GLExtensions
+        {
+            //-------------------------------------------------------
+            void InitExtensions()
+            {
+#if defined CS_TARGETPLATFORM_ANDROID
+                glGenVertexArraysOESEXT = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
+                glBindVertexArrayOESEXT = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
+                glDeleteVertexArraysOESEXT = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
+#endif
+            }
+        }
     }
 }
