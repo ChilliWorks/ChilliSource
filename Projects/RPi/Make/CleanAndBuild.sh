@@ -1,1 +1,1 @@
-./Clean.sh && ./Build.sh
+./Clean.sh && ./Build.sh $1

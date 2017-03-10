@@ -41,13 +41,14 @@ CC=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
 AR=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-ar
 
 # Compiler Flags
-CS_CXXFLAGS_TARGET=-DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE -DCS_TARGETPLATFORM_RPI
+CS_CXXFLAGS_TARGET_DEBUG = -g -DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE -DCS_TARGETPLATFORM_RPI $(CS_INCLUDES)
+CS_CXXFLAGS_TARGET_RELEASE = -O3 -DNDEBUG -DCS_LOGLEVEL_WARNING -DCS_TARGETPLATFORM_RPI $(CS_INCLUDES)
 
 # Includes
 CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
 
 # Additional Compiler Flags
-CFLAGS=-c -g -std=c++11 -fsigned-char -pthread -fexceptions -frtti $(CS_CXXFLAGS_TARGET) $(CS_INCLUDES)
+CFLAGS=-c -std=c++11 -fsigned-char -pthread -fexceptions -frtti
 
 # Library Directories
 CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs
@@ -63,7 +64,11 @@ OBJECTS := $(patsubst $(CS_SRC_ROOT)/%.cpp, $(CS_OBJ_DIR)/%.o, $(filter %.cpp, $
 CS_STATIC_LIB=libChilliSource.a
 
 # Default make command.
-all: $(SOURCES) $(CS_STATIC_LIB)
+all: release
+release: CFLAGS += $(CS_CXXFLAGS_TARGET_RELEASE)
+release: $(SOURCES) $(CS_STATIC_LIB)
+debug: CFLAGS += $(CS_CXXFLAGS_TARGET_DEBUG)
+debug: $(SOURCES) $(CS_STATIC_LIB)
 
 # Link objs into static lib. Uses the .cpp.o: rule below.
 $(CS_STATIC_LIB): $(OBJECTS)
