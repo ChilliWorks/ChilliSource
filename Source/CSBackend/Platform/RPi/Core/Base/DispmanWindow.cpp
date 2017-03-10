@@ -438,9 +438,28 @@ namespace CSBackend
 			case ChilliSource::Screen::DisplayMode::k_fullscreen:
 			{
 				m_windowSizePreFullscreen = m_windowSize;
-				m_windowSize = GetSupportedResolutions()[0];
-				Atom atoms[2] = { XInternAtom(m_xdisplay, "_NET_WM_STATE_FULLSCREEN", False), None };
-				XChangeProperty(m_xdisplay, m_xwindow, XInternAtom(m_xdisplay, "_NET_WM_STATE", False), XA_ATOM, 32, PropModeReplace,  (unsigned char*)atoms, 1);
+				m_windowPos = ChilliSource::Integer2::k_zero;
+				// Atom atoms[2] = { XInternAtom(m_xdisplay, "_NET_WM_STATE_FULLSCREEN", False), None };
+				// XChangeProperty(m_xdisplay, m_xwindow, XInternAtom(m_xdisplay, "_NET_WM_STATE", False), XA_ATOM, 32, PropModeReplace,  (unsigned char*)atoms, 1);
+				XEvent	x11_event;
+		Atom	x11_state_atom;
+		Atom	x11_fs_atom;
+
+		x11_state_atom	= XInternAtom( m_xdisplay, "_NET_WM_STATE", False );
+		x11_fs_atom		= XInternAtom( m_xdisplay, "_NET_WM_STATE_FULLSCREEN", False );
+
+		x11_event.xclient.type			= ClientMessage;
+		x11_event.xclient.serial		= 0;
+		x11_event.xclient.send_event	= True;
+		x11_event.xclient.window		= m_xwindow;
+		x11_event.xclient.message_type	= x11_state_atom;
+		x11_event.xclient.format		= 32;
+		x11_event.xclient.data.l[ 0 ]	= 1;
+		x11_event.xclient.data.l[ 1 ]	= x11_fs_atom;
+		x11_event.xclient.data.l[ 2 ]	= 0;
+
+		XSendEvent( m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &x11_event );
+				SetSize(GetSupportedResolutions()[0]);
 				break;
 			}
 			case ChilliSource::Screen::DisplayMode::k_windowed:
