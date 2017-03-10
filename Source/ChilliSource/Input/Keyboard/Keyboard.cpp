@@ -31,6 +31,9 @@
 #ifdef CS_TARGETPLATFORM_WINDOWS
 #include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
 #endif
+#ifdef CS_TARGETPLATFORM_RPI
+#include <CSBackend/Platform/RPi/Input/Keyboard/Keyboard.h>
+#endif
 
 namespace ChilliSource
 {
@@ -41,6 +44,8 @@ namespace ChilliSource
     {
 #if defined CS_TARGETPLATFORM_WINDOWS
         return KeyboardUPtr(new CSBackend::Windows::Keyboard());
+#elif defined CS_TARGETPLATFORM_RPI
+        return KeyboardUPtr(new CSBackend::RPi::Keyboard());
 #else
         return nullptr;
 #endif

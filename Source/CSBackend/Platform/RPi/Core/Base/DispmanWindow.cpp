@@ -387,6 +387,24 @@ namespace CSBackend
 						}
 						break;
 					}
+					case KeyPress:
+					{
+						std::unique_lock<std::mutex> lock(m_keyMutex);
+						if(m_keyboardEventDelegate)
+						{
+							m_keyboardEventDelegate(XKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0), event.xkey.state, KeyboardEvent::k_pressed);
+						}
+						break;
+					}
+					case KeyRelease:
+					{
+						std::unique_lock<std::mutex> lock(m_keyMutex);
+						if(m_keyboardEventDelegate)
+						{
+							m_keyboardEventDelegate(XKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0), event.xkey.state, KeyboardEvent::k_released);
+						}
+						break;
+					}
 					case DestroyNotify:
 					{
 						Quit();
@@ -494,6 +512,24 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
+		void DispmanWindow::SetKeyboardDelegates(KeyboardEventDelegate keyboardEventDelegate) noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_keyMutex);
+
+			CS_ASSERT(keyboardEventDelegate, "Keyboard event delegate invalid.");
+			CS_ASSERT(!m_keyboardEventDelegate, "Keyboard event delegate already set.");
+
+			m_keyboardEventDelegate = std::move(keyboardEventDelegate);
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::RemoveKeyboardDelegates() noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_keyMutex);
+			m_keyboardEventDelegate = nullptr;
+		}
+
+		//-----------------------------------------------------------------------------------
 		std::vector<ChilliSource::Integer2> DispmanWindow::GetSupportedResolutions() const noexcept
 		{
 			//TODO: Find out if we can query the BCM or dispman for supported resolutions
@@ -524,6 +560,7 @@ namespace CSBackend
 			CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate not removed.");
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
 			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
+			CS_ASSERT(!m_keyboardEventDelegate, "Keyboard event delegate not removed.");
 
 			eglDestroyContext(m_eglDisplay, m_eglContext);
 			eglDestroySurface(m_eglDisplay, m_eglSurface);
