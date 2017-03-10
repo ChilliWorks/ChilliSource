@@ -43,7 +43,7 @@ namespace CSBackend
             m_resolution.x = screenInfo.GetInitialResolution().x;
             m_resolution.y = screenInfo.GetInitialResolution().y;
 
-            DispmanWindow::Get()->SetWindowDelegates(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged), ChilliSource::MakeDelegate(this, &Screen::OnDisplayModeChanged));
+            DispmanWindow::Get()->SetWindowDelegates(ChilliSource::MakeDelegate(this, &Screen::OnResolutionChanged));
         }
 
         //---------------------------------------------------------------------------------
@@ -99,6 +99,16 @@ namespace CSBackend
         }
 
         //---------------------------------------------------------------------------------
+        void Screen::SetDisplayMode(DisplayMode mode) noexcept
+        {
+            ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
+            {
+                DispmanWindow::Get()->SetDisplayMode(mode);
+                OnDisplayModeChanged(mode);
+            });
+        }
+
+        //---------------------------------------------------------------------------------
         void Screen::OnResolutionChanged(const ChilliSource::Integer2& resolution) noexcept
         {
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
@@ -111,19 +121,11 @@ namespace CSBackend
         }
 
         //---------------------------------------------------------------------------------
-        void Screen::OnDisplayModeChanged(DispmanWindow::DisplayMode mode) noexcept
+        void Screen::OnDisplayModeChanged(DisplayMode mode) noexcept
         {
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
-                switch (mode)
-                {
-                case DispmanWindow::DisplayMode::k_windowed:
-                    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_windowed);
-                    break;
-                case DispmanWindow::DisplayMode::k_fullscreen:
-                    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_fullscreen);
-                    break;
-                }
+                m_displayModeChangedEvent.NotifyConnections(mode);
             });
         }
 

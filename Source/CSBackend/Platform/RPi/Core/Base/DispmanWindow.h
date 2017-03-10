@@ -31,6 +31,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/LifeCycleManager.h>
 #include <ChilliSource/Core/Base/Singleton.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
 #include <json/json.h>
@@ -58,14 +59,6 @@ namespace CSBackend
 		{
 		public:
 
-			/// Window display modes
-			///
-			enum class DisplayMode
-			{
-				k_windowed,
-				k_fullscreen
-			};
-
 			/// List of the events that can occur on a mouse button
 			///
 			enum class MouseButtonEvent
@@ -77,10 +70,6 @@ namespace CSBackend
 			/// @param The new window size.
 			///
 			using WindowResizeDelegate = std::function<void(const ChilliSource::Integer2&)>;
-
-			/// @param The new window mode.
-			///
-			using WindowDisplayModeDelegate = std::function<void(DisplayMode)>;
 
 			/// @param Mouse button that the action occurred on
 			/// @param The event type (Pressed/Released)
@@ -113,21 +102,26 @@ namespace CSBackend
 			///
 			void SetSize(const ChilliSource::Integer2& size) noexcept;
 
+			/// Use to toggle between fullscreen and window
+			///
+			/// @param mode
+			///		Windowed or fullscreen
+			///
+			void SetDisplayMode(ChilliSource::Screen::DisplayMode mode) noexcept;
+
 			/// @return List of the resolutions supported by the Raspberry Pi's video drivers
 			///
 			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const noexcept;
 
-			/// Set the delegates that are called when the window changes (resized or mode)
+			/// Set the delegates that are called when the window changes
 			/// This method will assert if a given delegate is null or if the delegate has already been set.
 			///
 			/// This method is thread-safe.
 			///
 			/// @param windowResizeDelegate
 			///		The delegate called when the window resizes
-			/// @param windowDisplayModeDelegate
-			///		Called when the window switches from fullscreen to windowed
 			///
-			void SetWindowDelegates(WindowResizeDelegate windowResizeDelegate, WindowDisplayModeDelegate windowDisplayModeDelegate) noexcept;
+			void SetWindowDelegates(WindowResizeDelegate windowResizeDelegate) noexcept;
 
 			/// Remove the delegates that relate to window events.
 			///
@@ -161,9 +155,6 @@ namespace CSBackend
 			/// end of the next update
 			///
 			void ScheduleQuit() noexcept { m_quitScheduled = true; }
-
-			//TODO: Handle setting of window mode - fullscreen/windowed, etc.
-			//TODO: Add event for window mode changing
 
             /// Destructor; makes sure that the BCM interface is
             /// properly un-set.
@@ -212,6 +203,7 @@ namespace CSBackend
 		private:
 
 			ChilliSource::Integer2 m_windowSize;
+			ChilliSource::Integer2 m_windowSizePreFullscreen;
 			ChilliSource::Integer2 m_windowPos;
 
 			/// EGL Objects needed for dispmanx.
@@ -236,6 +228,7 @@ namespace CSBackend
 			bool m_isRunning = false;
 			bool m_isFocused = false;
 			bool m_quitScheduled = false;
+			ChilliSource::Screen::DisplayMode m_displayMode = ChilliSource::Screen::DisplayMode::k_windowed;
 
 			/// Event delegates
 			std::mutex m_mouseMutex;
@@ -244,7 +237,6 @@ namespace CSBackend
 
 			std::mutex m_windowMutex;
 			WindowResizeDelegate m_windowResizeDelegate;
-			WindowDisplayModeDelegate m_windowDisplayModeDelegate;
 
 			// CS Lifecycle Manager
 			ChilliSource::LifecycleManagerUPtr m_lifecycleManager;

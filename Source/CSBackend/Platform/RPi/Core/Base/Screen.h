@@ -91,7 +91,7 @@ namespace CSBackend
             /// @param mode
             ///     Display mode to use
             ///
-			void SetDisplayMode(DisplayMode in_mode) noexcept override {}
+			void SetDisplayMode(DisplayMode mode) noexcept override;
 
 			/// @return A list of resolutions supported by the display
 			///
@@ -113,7 +113,7 @@ namespace CSBackend
             /// @param mode
             ///     New window mode
             ///
-            void OnDisplayModeChanged(DispmanWindow::DisplayMode mode) noexcept;
+            void OnDisplayModeChanged(DisplayMode mode) noexcept;
 
             /// Stops listening for window events
             ///

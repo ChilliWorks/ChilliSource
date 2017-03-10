@@ -37,6 +37,8 @@
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
+#include <X11/Xatom.h>
+
 namespace CSBackend
 {
 	namespace RPi
@@ -424,6 +426,30 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
+		void DispmanWindow::SetDisplayMode(ChilliSource::Screen::DisplayMode mode) noexcept
+		{
+			if (mode == m_displayMode)
+				return;
+
+			m_displayMode = mode;
+
+			switch (m_displayMode)
+			{
+			case ChilliSource::Screen::DisplayMode::k_fullscreen:
+			{
+				m_windowSizePreFullscreen = m_windowSize;
+				m_windowSize = GetSupportedResolutions()[0];
+				Atom atoms[2] = { XInternAtom(m_xdisplay, "_NET_WM_STATE_FULLSCREEN", False), None };
+				XChangeProperty(m_xdisplay, m_xwindow, XInternAtom(m_xdisplay, "_NET_WM_STATE", False), XA_ATOM, 32, PropModeReplace,  (unsigned char*)atoms, 1);
+				break;
+			}
+			case ChilliSource::Screen::DisplayMode::k_windowed:
+
+				break;
+			}
+		}
+
+		//-----------------------------------------------------------------------------------
 		void DispmanWindow::UpdateEGLWindow() noexcept
 		{
 			DISPMANX_UPDATE_HANDLE_T displayManagerUpdate = vc_dispmanx_update_start(0);
@@ -440,16 +466,13 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		void DispmanWindow::SetWindowDelegates(WindowResizeDelegate windowResizeDelegate, WindowDisplayModeDelegate windowDisplayModeDelegate) noexcept
+		void DispmanWindow::SetWindowDelegates(WindowResizeDelegate windowResizeDelegate) noexcept
 		{
 			CS_ASSERT(windowResizeDelegate, "Window resize delegate invalid.");
-			CS_ASSERT(windowDisplayModeDelegate, "Window display mode delegate invalid.");
 			CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate already set.");
-			CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate already set.");
 
 			std::unique_lock<std::mutex> lock(m_windowMutex);
 			m_windowResizeDelegate = std::move(windowResizeDelegate);
-			m_windowDisplayModeDelegate = std::move(windowDisplayModeDelegate);
 		}
 
 		//-----------------------------------------------------------------------------------
@@ -457,7 +480,6 @@ namespace CSBackend
 		{
 			std::unique_lock<std::mutex> lock(m_windowMutex);
 			m_windowResizeDelegate = nullptr;
-			m_windowDisplayModeDelegate = nullptr;
 		}
 
 		//-----------------------------------------------------------------------------------
@@ -521,7 +543,6 @@ namespace CSBackend
 		DispmanWindow::~DispmanWindow()
 		{
 			CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate not removed.");
-			CS_ASSERT(!m_windowDisplayModeDelegate, "Window display mode delegate not removed.");
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
 			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
 
