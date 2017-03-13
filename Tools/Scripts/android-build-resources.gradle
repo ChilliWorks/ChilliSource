@@ -105,7 +105,7 @@ def copyDirectory(String in_sourceDirectoryPath, String in_destDirectoryPath, St
  * @param in_directoryPath - The directory to copy the resource directories to.
  */
 def copyResourcesToDirectory(String in_directoryPath) {
-    def excludes = [ ".ios", ".windows", ".DS_Store", "Thumbs.db" ] as String[]
+    def excludes = [ ".ios", ".windows", ".rpi", ".DS_Store", "Thumbs.db" ] as String[]
     def includes = [ ".android" ] as String[]
 
     File directory = new File(in_directoryPath)
