@@ -38,6 +38,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <X11/Xatom.h>
+#include <X11/XKBlib.h>
 
 namespace CSBackend
 {
@@ -394,7 +395,7 @@ namespace CSBackend
 						std::unique_lock<std::mutex> lock(m_keyMutex);
 						if(m_keyboardEventDelegate)
 						{
-							m_keyboardEventDelegate(XKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0), event.xkey.state, KeyboardEvent::k_pressed);
+							m_keyboardEventDelegate(XkbKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0, 0), event.xkey.state, KeyboardEvent::k_pressed);
 						}
 						break;
 					}
@@ -403,7 +404,7 @@ namespace CSBackend
 						std::unique_lock<std::mutex> lock(m_keyMutex);
 						if(m_keyboardEventDelegate)
 						{
-							m_keyboardEventDelegate(XKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0), event.xkey.state, KeyboardEvent::k_released);
+							m_keyboardEventDelegate(XkbKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0, 0), event.xkey.state, KeyboardEvent::k_released);
 						}
 						break;
 					}
@@ -481,11 +482,11 @@ namespace CSBackend
 				case ChilliSource::Screen::DisplayMode::k_windowed:
 				{
 					m_windowPos = m_windowPosPreFullscreen;
-					
+
 					x11_event.xclient.data.l[0]	= 0;//_NET_WM_STATE_REMOVE;
 
-					XSendEvent(m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &x11_event);
 					SetSize(m_windowSizePreFullscreen);
+					XSendEvent(m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &x11_event);
 					break;
 				}
 			}
