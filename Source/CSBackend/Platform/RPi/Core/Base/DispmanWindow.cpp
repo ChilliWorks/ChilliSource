@@ -438,10 +438,13 @@ namespace CSBackend
 		//-----------------------------------------------------------------------------------
 		void DispmanWindow::SetSize(const ChilliSource::Integer2& size) noexcept
 		{
-			m_windowSize = size;
-			XMoveResizeWindow(m_xdisplay, m_xwindow, m_windowPos.x, m_windowPos.y, (u32)m_windowSize.x, (u32)m_windowSize.y);
-			XFlush(m_xdisplay);
-			UpdateEGLWindow();
+			XWindowChanges wc;
+			wc.x = m_windowPos.x;
+			wc.y = m_windowPos.y;
+			wc.width = size.x;
+			wc.height = size.y;
+			XConfigureWindow(m_xdisplay, m_xwindow, CWX|CWY|CWWidth|CWHeight, &wc);
+			XSync(m_xdisplay, False);
 		}
 
 		//-----------------------------------------------------------------------------------
@@ -452,18 +455,18 @@ namespace CSBackend
 
 			m_displayMode = mode;
 
-			XEvent x11_event;
+			XEvent fullscreenEvent;
 			Atom x11_state_atom	= XInternAtom(m_xdisplay, "_NET_WM_STATE", False);
 			Atom x11_fs_atom = XInternAtom(m_xdisplay, "_NET_WM_STATE_FULLSCREEN", False);
 
-			x11_event.xclient.type = ClientMessage;
-			x11_event.xclient.serial = 0;
-			x11_event.xclient.send_event = True;
-			x11_event.xclient.window = m_xwindow;
-			x11_event.xclient.message_type = x11_state_atom;
-			x11_event.xclient.format = 32;
-			x11_event.xclient.data.l[1]	= x11_fs_atom;
-			x11_event.xclient.data.l[2]	= 0;
+			fullscreenEvent.xclient.type = ClientMessage;
+			fullscreenEvent.xclient.serial = 0;
+			fullscreenEvent.xclient.send_event = True;
+			fullscreenEvent.xclient.window = m_xwindow;
+			fullscreenEvent.xclient.message_type = x11_state_atom;
+			fullscreenEvent.xclient.format = 32;
+			fullscreenEvent.xclient.data.l[1]	= x11_fs_atom;
+			fullscreenEvent.xclient.data.l[2]	= 0;
 
 			switch (m_displayMode)
 			{
@@ -471,22 +474,20 @@ namespace CSBackend
 				{
 					m_windowSizePreFullscreen = m_windowSize;
 					m_windowPosPreFullscreen = m_windowPos;
-					m_windowPos = ChilliSource::Integer2::k_zero;
 
-					x11_event.xclient.data.l[0]	= 1;//_NET_WM_STATE_ADD;
+					fullscreenEvent.xclient.data.l[0]	= 1;//_NET_WM_STATE_ADD;
 
-					XSendEvent(m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &x11_event);
-					SetSize(GetSupportedResolutions()[0]);
+					XSendEvent(m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &fullscreenEvent);
 					break;
 				}
 				case ChilliSource::Screen::DisplayMode::k_windowed:
 				{
 					m_windowPos = m_windowPosPreFullscreen;
 
-					x11_event.xclient.data.l[0]	= 0;//_NET_WM_STATE_REMOVE;
+					fullscreenEvent.xclient.data.l[0]	= 0;//_NET_WM_STATE_REMOVE;
 
+					XSendEvent(m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &fullscreenEvent);
 					SetSize(m_windowSizePreFullscreen);
-					XSendEvent(m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &x11_event);
 					break;
 				}
 			}
