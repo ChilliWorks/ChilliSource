@@ -41,6 +41,7 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <X11/xlib.h>
+#include <X11/keysym.h>
 
 #include <vector>
 #include <functional>
@@ -67,6 +68,14 @@ namespace CSBackend
 				k_released
 			};
 
+			/// List of the events that can occur on a keyboard event
+			///
+			enum class KeyboardEvent
+			{
+				k_pressed,
+				k_released
+			};
+
 			/// @param The new window size.
 			///
 			using WindowResizeDelegate = std::function<void(const ChilliSource::Integer2&)>;
@@ -80,6 +89,12 @@ namespace CSBackend
 			/// @param Mouse position Y (in window coords)
 			///
 			using MouseMovedDelegate = std::function<void(s32, s32)>;
+
+			/// @param X11 KeySym that the action occured on
+			/// @param X11 Key modifier mask
+			/// @param The event type (Pressed/Released)
+			///
+			using KeyboardEventDelegate = std::function<void(u32, u32, KeyboardEvent)>;
 
 			/// Create and run the application; this will update and render the app.
 			///
@@ -150,6 +165,22 @@ namespace CSBackend
 			/// @return The current window position of the mouse
 			///
 			ChilliSource::Integer2 GetMousePosition() const noexcept;
+
+			/// Set the delegates that are called on the various keyboard events (press/release)
+			/// This method will assert if a given delegate is null or if the delegate has already been set.
+			///
+			/// This method is thread-safe.
+			///
+			/// @param keyboardEventDelegate
+			///		The delegate called when a keyboard event occurs.
+			///
+			void SetKeyboardDelegates(KeyboardEventDelegate keyboardEventDelegate) noexcept;
+
+			/// Remove the delegates that relate to keyboard events.
+			///
+			/// This method is thread-safe.
+			///
+			void RemoveKeyboardDelegates() noexcept;
 
 			/// Tell the main loop to shutdown and the windows to close gracefull at the
 			/// end of the next update
@@ -238,6 +269,10 @@ namespace CSBackend
 
 			std::mutex m_windowMutex;
 			WindowResizeDelegate m_windowResizeDelegate;
+
+			std::mutex m_keyMutex;
+			KeyboardEventDelegate m_keyboardEventDelegate;
+
 
 			// CS Lifecycle Manager
 			ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
