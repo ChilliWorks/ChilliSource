@@ -21,11 +21,12 @@
 #  THE SOFTWARE.
 #-----------------------------------------------------------------------------------
 
+# NOTE: CS_PROJECT_ROOT should be setup prior to calling this
+CS_PROJECT_ROOT ?= ../..
+
 LOCAL_PATH = .
 
-# Set up project root.
-CS_PROJECT_ROOT=../../../..
-CS_APP_SRC_ROOT = $(CS_PROJECT_ROOT)/AppSource
+CS_SRC_ROOT=$(CS_PROJECT_ROOT)/ChilliSource/Source
 
 # Compiler Flags
 CS_CXXFLAGS_TARGET_DEBUG = -g -DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE -DCS_TARGETPLATFORM_RPI $(CS_INCLUDES)
@@ -38,11 +39,9 @@ CFLAGS=-c -std=c++11 -fsigned-char -pthread -fexceptions -frtti
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
 	BUILD_OUTPUT_PATH=$(CS_PROJECT_ROOT)/Projects/RPi/Build/debug
-	EXE_OUTPUT_PATH=$(CS_PROJECT_ROOT)/Projects/RPi/Output/debug
 	CFLAGS += $(CS_CXXFLAGS_TARGET_DEBUG)
 else
 	BUILD_OUTPUT_PATH=$(CS_PROJECT_ROOT)/Projects/RPi/Build/release
-	EXE_OUTPUT_PATH=$(CS_PROJECT_ROOT)/Projects/RPi/Output/release
 	CFLAGS += $(CS_CXXFLAGS_TARGET_RELEASE)
 endif
 
@@ -50,72 +49,57 @@ endif
 CS_SCRIPT_GETFILESWITHEXTENSIONS = $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/get_file_paths_with_extensions.py
 
 # Gather all files in the engine that should be built.
-CS_APP_SOURCES := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_APP_SRC_ROOT)/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/ChilliSource/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/CSBackend/Platform/RPi/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
 
 # Set up tools.
 CC=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
-LD=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
 AR=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-ar
 
 # Includes
-CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/AppSource -I$(CS_PROJECT_ROOT)/Libraries/Catch/include  -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
+CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
 
 # Library Directories
-CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs -L$(LOCAL_PATH) -L$(BUILD_OUTPUT_PATH)
-
-# Linker Flags
-LDFLAGS= $(CS_LIBRARY_DIRS) -lApplication -lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm -lrt -lm -lc -lstdc++ -l:libgcc_s.so.1 -l:libX11.so.6.3.0 -l:libXau.so.6.0.0 -l:libXdmcp.so.6.0.0 -l:libxcb.so.1.1.0 -l:libxcb-xkb.so.1.0.0 -l:libxkbcommon.so.0.0.0 -l:libxkbcommon-x11.so.0.0.0
+CS_LIBRARY_DIRS=-L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Libs -L$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Libs
 
 # All Source Files
-SOURCES=$(CS_APP_SOURCES)
+SOURCES=$(CS_SOURCEFILES_CHILLISOURCE) $(CS_SOURCEFILES_PLATFORM) $(CS_SOURCEFILES_RENDERING)
 
 # All Objects to be Generated - they take their names from the names of the cpp files that generated them.
-CS_APP_OBJ_DIR = $(BUILD_OUTPUT_PATH)/appobj
-OBJECTS := $(patsubst $(CS_APP_SRC_ROOT)/%.cpp, $(CS_APP_OBJ_DIR)/%.o, $(filter %.cpp, $(SOURCES))) $(patsubst $(CS_APP_SRC_ROOT)/%.c, $(CS_APP_OBJ_DIR)/%.o,  $(filter %.c, $(SOURCES))) $(patsubst $(CS_APP_SRC_ROOT)/%.cc, $(CS_APP_OBJ_DIR)/%.o, $(filter %.cc, $(SOURCES)))
+CS_OBJ_DIR = $(BUILD_OUTPUT_PATH)/csobj
+OBJECTS := $(patsubst $(CS_SRC_ROOT)/%.cpp, $(CS_OBJ_DIR)/%.o, $(filter %.cpp, $(SOURCES))) $(patsubst $(CS_SRC_ROOT)/%.cc, $(CS_OBJ_DIR)/%.o, $(filter %.cc, $(SOURCES))) $(patsubst $(CS_SRC_ROOT)/%.c, $(CS_OBJ_DIR)/%.o, $(filter %.c, $(SOURCES)))
 
-# Name of static lib to link.
-CS_STATIC_LIB=libChilliSource.a
-
-# Name of application to generate
-CS_APP_STATIC=$(BUILD_OUTPUT_PATH)/libApplication.a
-CS_APP_EXECUTABLE=$(EXE_OUTPUT_PATH)/Application
-
-# Default make command.
-all: $(SOURCES) $(CS_APP_EXECUTABLE)
-
-# Link objs into static lib. Uses the .cpp.o: rule below.
-$(CS_APP_EXECUTABLE): $(CS_APP_STATIC)
-	@echo "Building CS_APP_EXECUTABLE"
-	@mkdir -p $(EXE_OUTPUT_PATH)
-	$(LD) $(OBJECTS) $(LDFLAGS) -o $@
-
-# Archive all app objects together to be a static lib
-$(CS_APP_STATIC): $(OBJECTS)
-	@echo "Building CS_APP_STATIC"
-	$(AR) rcs $(CS_APP_STATIC) $(OBJECTS)
-
-# Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
-# $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
-$(CS_APP_OBJ_DIR)/%.o: $(CS_APP_SRC_ROOT)/%.cpp
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $< -o $@
-$(CS_APP_OBJ_DIR)/%.o: $(CS_APP_SRC_ROOT)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $< -o $@
-$(CS_APP_OBJ_DIR)/%.o: $(CS_APP_SRC_ROOT)/%.cc
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $< -o $@
+# Name of static lib to generate.
+CS_STATIC_LIB=$(BUILD_OUTPUT_PATH)/libChilliSource.a
 
 .PHONY: clean cleanobjects cleangenerated
 
+# Default make command.
+all: $(SOURCES) $(CS_STATIC_LIB)
+
+# Link objs into static lib. Uses the .cpp.o: rule below.
+$(CS_STATIC_LIB): $(OBJECTS)
+	$(AR) rcs $(CS_STATIC_LIB) $(OBJECTS)
+
+# Create objects. Using $(OBJECTS) as a rule is shorthand for running this on all cpp files in $(SOURCES).
+# $< refers to the first prerequisite, which is $(SOURCES). $@ refers to the target, which is $(OBJECTS)
+$(CS_OBJ_DIR)/%.o: $(CS_SRC_ROOT)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $< -o $@
+$(CS_OBJ_DIR)/%.o: $(CS_SRC_ROOT)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $< -o $@
+$(CS_OBJ_DIR)/%.o: $(CS_SRC_ROOT)/%.cc
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $< -o $@
+
 clean:
-	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_APP_OBJ_DIR)/' '--extensions' 'o')
-	rm -f $(CS_APP_STATIC)
-	rm -f $(CS_APP_EXECUTABLE)
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_OBJ_DIR)/' '--extensions' 'o')
+	rm -f $(CS_STATIC_LIB)
 
 cleanobjects:
-	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '(CS_APP_OBJ_DIR)/' '--extensions' 'o')
+	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_OBJ_DIR)/' '--extensions' 'o')
 
 cleangenerated:
-	rm -f $(CS_APP_STATIC)
-	rm -f $(CS_APP_EXECUTABLE)
+	rm -f $(CS_STATIC_LIB)
