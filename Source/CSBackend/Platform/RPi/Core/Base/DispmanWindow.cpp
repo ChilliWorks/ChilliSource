@@ -262,8 +262,13 @@ namespace CSBackend
 			XFlush(m_xdisplay);
 		}
 
-		//-----------------------------------------------------------------------------------
-		void DispmanWindow::InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize, const Json::Value& appConfigRoot) noexcept
+		//-----------------------------------------------------------------------------------------
+		//
+		// /!\ NOTE: The attribute below is used to instruct GCC not to optimize this function.
+		//           This is required as optimizing here prevents the OpenGL context initializing.
+		//
+		//-----------------------------------------------------------------------------------------
+		void __attribute__((optimize("O0"))) DispmanWindow::InitEGLDispmanWindow(const ChilliSource::Integer2& windowPos, const ChilliSource::Integer2& windowSize, const Json::Value& appConfigRoot) noexcept
 		{
 			// Set up OpenGL context version (OpenGLES 2.0)
 			static const EGLint contextAttributeList[] =
@@ -623,6 +628,5 @@ namespace CSBackend
 		}
 	}
 }
-
 
 #endif
