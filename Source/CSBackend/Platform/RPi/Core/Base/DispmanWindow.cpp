@@ -252,6 +252,11 @@ namespace CSBackend
 			}
 
 			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), windowPos.x, windowPos.y, windowSize.x, windowSize.y, 0, 0, 0);
+
+			//Capture the window close message
+			m_wmDeleteMessage = XInternAtom(m_xdisplay, "WM_DELETE_WINDOW", False);
+			XSetWMProtocols(m_xdisplay, m_xwindow, &m_wmDeleteMessage, 1);
+
 			XMapWindow(m_xdisplay, m_xwindow);
 			XStoreName(m_xdisplay, m_xwindow, ReadDesiredTitle(appConfigRoot).c_str());
 
@@ -413,10 +418,14 @@ namespace CSBackend
 						}
 						break;
 					}
-					case DestroyNotify:
+					case ClientMessage:
 					{
-						Quit();
-						return;
+            			if (event.xclient.data.l[0] == m_wmDeleteMessage)
+						{
+							Quit();
+							return;
+						}
+						break;
 					}
 				}
 			}

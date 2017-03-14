@@ -255,6 +255,7 @@ namespace CSBackend
 			/// X11
 			Display* m_xdisplay = nullptr;
 			Window m_xwindow;
+			Atom m_wmDeleteMessage;
 
 			/// Program state stuff
 			bool m_isRunning = false;
