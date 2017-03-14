@@ -132,9 +132,14 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void GLMesh::Restore() noexcept
         {
-            if(m_vertexDataBackup && m_invalidData)
+            if(m_invalidData == true)
             {
-                BuildMesh(m_vertexDataBackup.get(), m_vertexDataSize, m_indexDataBackup.get(), m_indexDataSize);
+                m_vaoCache.clear();
+                
+                if(m_vertexDataBackup)
+                {
+                    BuildMesh(m_vertexDataBackup.get(), m_vertexDataSize, m_indexDataBackup.get(), m_indexDataSize);
+                }
                 
                 m_invalidData = false;
             }
