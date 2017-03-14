@@ -1,7 +1,7 @@
 ChilliSource Change Log
 =======================
 
-Version 2.2.0, 2017-
+Version 2.2.0, 2017-03-14
 -------------------------
 * Removed: Render component factory. Just use the constructors of the render components instead (to replicate CreatePerspectiveCamera pass screenWidth/screenHeight for aspect ratio)
 * Deprecated: Support for SHA-1
