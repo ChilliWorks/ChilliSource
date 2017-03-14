@@ -1,6 +1,10 @@
 ChilliSource Change Log
 =======================
 
+Version 2.2.1, 2017-03-14
+-------------------------
+* HotFix: Fix for potential issue of the vertex attribute objects not being rebuilt when the context is lost on Android
+
 Version 2.2.0, 2017-03-14
 -------------------------
 * Removed: Render component factory. Just use the constructors of the render components instead (to replicate CreatePerspectiveCamera pass screenWidth/screenHeight for aspect ratio)
