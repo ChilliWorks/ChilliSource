@@ -355,7 +355,7 @@ namespace CSBackend
                 glShader->SetAttribute((u8)elementType, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
             }
             
-            for (u32 i = m_vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)
+            for (u32 i = m_vertexFormat.GetNumElements(); i < ChilliSource::VertexFormat::k_maxElements; ++i)
             {
                 glDisableVertexAttribArray(i);
             }
