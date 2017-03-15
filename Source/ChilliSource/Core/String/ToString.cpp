@@ -181,6 +181,31 @@ namespace ChilliSource
         stream << in_value.x << " " << in_value.y << " " << in_value.z << " " << in_value.w;
         return stream.str();
     }
+    
+    //---------------------------------------------------------
+    std::string ToString(const Integer2& value)
+    {
+        std::stringstream stream;
+        stream << value.x << " " << value.y;
+        return stream.str();
+    }
+    
+    //---------------------------------------------------------
+    std::string ToString(const Integer3& value)
+    {
+        std::stringstream stream;
+        stream << value.x << " " << value.y << " " << value.z;
+        return stream.str();
+    }
+    
+    //---------------------------------------------------------
+    std::string ToString(const Integer4& value)
+    {
+        std::stringstream stream;
+        stream << value.x << " " << value.y << " " << value.z << " " << value.w;
+        return stream.str();
+    }
+    
     //---------------------------------------------------------
     //---------------------------------------------------------
     std::string ToString(const Matrix4& in_value)

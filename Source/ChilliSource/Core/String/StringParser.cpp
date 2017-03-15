@@ -129,6 +129,25 @@ namespace ChilliSource
             return vRet;
         }
     }
+    
+    //------------------------------------------------------------
+    Integer2 ParseInteger2(const std::string& string)
+    {
+        u32 size = EnumerateItems(string);
+        CS_ASSERT((size == 2), "Invalid number of elements for Integer2.");
+        
+        if (size != 2)
+        {
+            return Integer2::k_zero;
+        }
+        else
+        {
+            Integer2 ret;
+            CS_SSCANF(string.c_str(), "%d %d", &ret.x, &ret.y);
+            return ret;
+        }
+    }
+    
     //------------------------------------------------------------
     //------------------------------------------------------------
     Vector3 ParseVector3(const std::string& in_string)
@@ -147,6 +166,25 @@ namespace ChilliSource
             return vRet;
         }
     }
+    
+    //------------------------------------------------------------
+    Integer3 ParseInteger3(const std::string& string)
+    {
+        u32 size = EnumerateItems(string);
+        CS_ASSERT((size == 3), "Invalid number of elements for Integer3.");
+        
+        if (size != 3)
+        {
+            return Integer3::k_zero;
+        }
+        else
+        {
+            Integer3 ret;
+            CS_SSCANF(string.c_str(), "%d %d %d", &ret.x, &ret.y, &ret.z);
+            return ret;
+        }
+    }
+    
     //------------------------------------------------------------
     //------------------------------------------------------------
     Vector4 ParseVector4(const std::string& in_string)
@@ -165,6 +203,25 @@ namespace ChilliSource
             return vRet;
         }
     }
+    
+    //------------------------------------------------------------
+    Integer4 ParseInteger4(const std::string& string)
+    {
+        u32 size = EnumerateItems(string);
+        CS_ASSERT((size == 4), "Invalid number of elements for Integer4.");
+        
+        if (size != 4)
+        {
+            return Integer4::k_zero;
+        }
+        else
+        {
+            Integer4 ret;
+            CS_SSCANF(string.c_str(), "%d %d %d %d", &ret.x, &ret.y, &ret.z, &ret.w);
+            return ret;
+        }
+    }
+    
     //------------------------------------------------------------
     //------------------------------------------------------------
     Matrix3 ParseMatrix3(const std::string& in_string)

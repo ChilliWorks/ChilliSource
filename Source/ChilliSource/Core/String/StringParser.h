@@ -143,6 +143,40 @@ namespace ChilliSource
     /// @return The vector value.
     //------------------------------------------------------------
     Vector4 ParseVector4(const std::string& in_string);
+    
+    /// Parse a string to a 2 component integer vector. The vector must be
+    /// in the format "x y", i.e s32 values, space delimited. Failure
+    /// to parse will result in a zero vector.
+    ///
+    /// @param string
+    ///     The string to parse
+    ///
+    /// @return The vector value.
+    ///
+    Integer2 ParseInteger2(const std::string& string);
+    
+    /// Parse a string to a 3 component integer vector. The vector must be
+    /// in the format "x y z", i.e s32 values, space delimited. Failure
+    /// to parse will result in a zero vector.
+    ///
+    /// @param string
+    ///     The string to parse
+    ///
+    /// @return The vector value.
+    ///
+    Integer3 ParseInteger3(const std::string& string);
+    
+    /// Parse a string to a 4 component integer vector. The vector must be
+    /// in the format "x y z w", i.e s32 values, space delimited. Failure
+    /// to parse will result in a zero vector.
+    ///
+    /// @param string
+    ///     The string to parse
+    ///
+    /// @return The vector value.
+    ///
+    Integer4 ParseInteger4(const std::string& string);
+    
     //------------------------------------------------------------
     /// Parse a string to a matrix. The matrix should be provided
     /// in row major format, space delimited. failure to parse will
