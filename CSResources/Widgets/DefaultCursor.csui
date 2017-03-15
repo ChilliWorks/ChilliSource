@@ -2,7 +2,7 @@
   "Type": "Image",
   "Name": "CSCursor",
   "InputEnabled": "false",
-  "AbsSize": "32 32",
+  "AbsSize": "16 16",
   "OriginAnchor": "TopLeft",
   "SizePolicy": "UseWidthMaintainingAspect",
   "Drawable": {
