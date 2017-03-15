@@ -184,6 +184,34 @@ namespace ChilliSource
     /// @return The value as a string.
     //---------------------------------------------------------
     std::string ToString(const Vector4& in_value);
+    
+    /// Converts a 2 component integer vector to a string.
+    ///
+    /// @param value
+    ///     The vector value.
+    ///
+    /// @return The value as a string.
+    ///
+    std::string ToString(const Integer2& value);
+    
+    /// Converts a 3 component integer vector to a string.
+    ///
+    /// @param value
+    ///     The vector value.
+    ///
+    /// @return The value as a string.
+    ///
+    std::string ToString(const Integer3& value);
+
+    /// Converts a 4 component integer vector to a string.
+    ///
+    /// @param value
+    ///     The vector value.
+    ///
+    /// @return The value as a string.
+    ///
+    std::string ToString(const Integer4& value);
+    
     //---------------------------------------------------------
     /// Converts a 4x4 matrix to a string.
     ///
