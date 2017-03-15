@@ -67,7 +67,7 @@ namespace ChilliSource
     void CursorSystem::OnInit() noexcept
     {
         auto appConfig = Application::Get()->GetAppConfig();
-        m_enabled = appConfig->IsNonSystemCursorShown();
+        m_enabled = appConfig->GetCursorType() == CursorType::k_nonSystem;
         
         WidgetFactory* widgetFactory = Application::Get()->GetWidgetFactory();
         

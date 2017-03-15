@@ -449,6 +449,7 @@
 		815175791E3F4E5C0024361A /* Skybox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skybox.h; sourceTree = "<group>"; };
 		8155F30A1E785B7700750A05 /* CursorSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CursorSystem.cpp; sourceTree = "<group>"; };
 		8155F30B1E785B7700750A05 /* CursorSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CursorSystem.h; sourceTree = "<group>"; };
+		8155F30D1E797B9300750A05 /* CursorType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CursorType.h; sourceTree = "<group>"; };
 		815612491D2E5D41000DD01B /* GLTargetGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTargetGroup.cpp; sourceTree = "<group>"; };
 		8156124A1D2E5D41000DD01B /* GLTargetGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTargetGroup.h; sourceTree = "<group>"; };
 		8158F1EA1C89D27300B13109 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2014,6 +2015,7 @@
 				81845E251D3503E8004B0C46 /* ColourUtils.cpp */,
 				81845E261D3503E8004B0C46 /* ColourUtils.h */,
 				81845E271D3503E8004B0C46 /* ConstMethodCast.h */,
+				8155F30D1E797B9300750A05 /* CursorType.h */,
 				81845E281D3503E8004B0C46 /* Device.cpp */,
 				81845E291D3503E8004B0C46 /* Device.h */,
 				27408C041D366C7A00A0B003 /* DeviceInfo.cpp */,
@@ -2027,6 +2029,8 @@
 				81845E301D3503E8004B0C46 /* PlatformSystem.cpp */,
 				81845E311D3503E8004B0C46 /* PlatformSystem.h */,
 				81845E321D3503E8004B0C46 /* QueryableInterface.h */,
+				813BA9D61D379F6D00A3B091 /* RenderInfo.cpp */,
+				813BA9D71D379F6D00A3B091 /* RenderInfo.h */,
 				81845E331D3503E8004B0C46 /* Screen.cpp */,
 				81845E341D3503E8004B0C46 /* Screen.h */,
 				27408C271D36DCB600A0B003 /* ScreenInfo.cpp */,
@@ -2035,8 +2039,6 @@
 				81845E361D3503E8004B0C46 /* StandardMacros.h */,
 				27408C061D366C7A00A0B003 /* SystemInfo.cpp */,
 				27408C071D366C7A00A0B003 /* SystemInfo.h */,
-				813BA9D61D379F6D00A3B091 /* RenderInfo.cpp */,
-				813BA9D71D379F6D00A3B091 /* RenderInfo.h */,
 				81845E371D3503E8004B0C46 /* Utils.cpp */,
 				81845E381D3503E8004B0C46 /* Utils.h */,
 			);

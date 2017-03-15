@@ -1,11 +1,7 @@
 //
-//  Base.h
-//  ChilliSource
-//  Created by Ian Copland on 07/07/2014.
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +22,19 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_CORE_BASE_H_
-#define _CHILLISOURCE_CORE_BASE_H_
+#ifndef _CHILLISOURCE_CORE_BASE_CURSORTYPE_H_
+#define _CHILLISOURCE_CORE_BASE_CURSORTYPE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/AppConfig.h>
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ByteBuffer.h>
-#include <ChilliSource/Core/Base/ByteColour.h>
-#include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Base/ColourUtils.h>
-#include <ChilliSource/Core/Base/CursorType.h>
-#include <ChilliSource/Core/Base/Device.h>
-#include <ChilliSource/Core/Base/LifecycleManager.h>
-#include <ChilliSource/Core/Base/Logging.h>
-#include <ChilliSource/Core/Base/MakeSharedArray.h>
-#include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Base/QueryableInterface.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Base/Singleton.h>
-#include <ChilliSource/Core/Base/StandardMacros.h>
-#include <ChilliSource/Core/Base/Utils.h>
+
+namespace ChilliSource
+{
+    enum class CursorType
+    {
+        k_none,         //No cursor
+        k_system,       //System hardware cursor if available
+        k_nonSystem     //Software cursor if available
+    };
+}
 
 #endif

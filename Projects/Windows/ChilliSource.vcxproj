@@ -392,6 +392,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Colour.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ConstMethodCast.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\CursorType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Device.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\GenericFactory.h" />

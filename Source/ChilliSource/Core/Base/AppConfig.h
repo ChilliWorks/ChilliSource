@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_CORE_BASE_APPCONFIG_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/CursorType.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
@@ -78,17 +79,11 @@ namespace ChilliSource
         //---------------------------------------------------------
         bool IsVSyncEnabled() const;
         
-        /// @return TRUE if the OS window manager cursor should be displayed.
-        ///
-        /// NOTE: This is only applicable for Windows backend
-        ///
-        bool IsSystemCursorShown() const noexcept { return m_isSystemCursorShown; }
-        
-        /// @return TRUE if ChilliSource should display it's own pointer cursor.
+        /// @return The cursor type that should be used by the application
         ///
         /// NOTE: This is only applicable for RPi or Windows backend
         ///
-        bool IsNonSystemCursorShown() const noexcept { return m_isNonSystemCursorShown; }
+        CursorType GetCursorType() const noexcept { return m_cursorType; }
         
         /// @return The location of the UI file that describes the default cursor
         ///
@@ -131,8 +126,8 @@ namespace ChilliSource
         u32 m_preferredFPS;
 
         bool m_isVSyncEnabled = false;
-        bool m_isSystemCursorShown = true;
-        bool m_isNonSystemCursorShown = false;
+        
+        CursorType m_cursorType = CursorType::k_system;
     };
 }
 

@@ -228,6 +228,21 @@ namespace ChilliSource
     /// @return The surface format.
     //------------------------------------------------------------
     SurfaceFormat ParseSurfaceFormat(const std::string& in_surfaceFormat);
+    
+    /// Converts a cursor type string to a strong type.
+    ///
+    /// - System
+    /// - NonSystem
+    /// - None
+    ///
+    /// NOTE: Case insensitive. Will assert if no conversion possible
+    ///
+    /// @param cursorType
+    ///     Cursor type as a string.
+    ///
+    /// @return String converted to cursor type
+    ///
+    CursorType ParseCursorType(const std::string& cursorType) noexcept;
 }
 
 #endif

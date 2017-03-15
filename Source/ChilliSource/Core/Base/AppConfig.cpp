@@ -95,8 +95,8 @@ namespace ChilliSource
             m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
             m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();
             m_isVSyncEnabled = root.get("VSync", false).asBool();
-            m_isSystemCursorShown = root.get("SystemCursor", true).asBool();
-            m_isNonSystemCursorShown = root.get("NonSystemCursor", false).asBool();
+            std::string cursorType = root.get("CursorType", "System").asString();
+            m_cursorType = ParseCursorType(cursorType);
             m_defaultCursorUIPath = root.get("DefaultCursorPath", "Widgets/DefaultCursor.csui").asString();
             std::string cursorLocation = root.get("DefaultCursorLocation", "ChilliSource").asString();
             m_defaultCursorUILocation = ParseStorageLocation(cursorLocation);
@@ -115,8 +115,7 @@ namespace ChilliSource
             const Json::Value& platformRoot = root[platform];
             if(platformRoot.isNull() == false)
             {
-                m_isSystemCursorShown = platformRoot.get("SystemCursor", m_isSystemCursorShown).asBool();
-                m_isNonSystemCursorShown = platformRoot.get("NonSystemCursor", m_isNonSystemCursorShown).asBool();
+                m_cursorType = ParseCursorType(platformRoot.get("CursorType", cursorType).asString());
                 m_isVSyncEnabled = platformRoot.get("VSync", m_isVSyncEnabled).asBool();
                 m_preferredFPS = platformRoot.get("PreferredFPS", m_preferredFPS).asUInt();
                 m_defaultCursorUIPath = platformRoot.get("DefaultCursorPath", m_defaultCursorUIPath).asString();

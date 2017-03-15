@@ -51,6 +51,7 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(ScreenInfo);
     CS_FORWARDDECLARE_CLASS(SystemInfo);
     CS_FORWARDDECLARE_CLASS(AppConfig);
+    enum class CursorType;
     //---------------------------------------------------------
     /// Container
     //---------------------------------------------------------

@@ -2927,5 +2927,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\CursorSystem.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\CursorType.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

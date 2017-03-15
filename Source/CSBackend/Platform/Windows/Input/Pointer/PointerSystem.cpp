@@ -90,7 +90,7 @@ namespace CSBackend
 
             m_pointerId = AddPointerCreateEvent(mousePos);
 
-			ChilliSource::Application::Get()->GetAppConfig()->IsSystemCursorShown() ? ShowSystemCursor() : HideSystemCursor();
+			ChilliSource::Application::Get()->GetAppConfig()->GetCursorType() == ChilliSource::CursorType::k_system ? ShowSystemCursor() : HideSystemCursor();
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
