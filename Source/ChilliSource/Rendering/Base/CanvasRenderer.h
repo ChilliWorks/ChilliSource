@@ -229,6 +229,7 @@ namespace ChilliSource
 
         ResourcePool* m_resourcePool;
         Screen* m_screen;
+        CursorSystem* m_cursorSystem;
     };
 }
 

@@ -294,7 +294,7 @@ namespace CSBackend
 				{
 					auto windowSize = GetWindowSize();
 					m_window.create(sf::VideoMode(windowSize.x, windowSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
-                    
+
                     std::unique_lock<std::mutex> lock(m_windowMutex);
                     if (m_windowDisplayModeDelegate)
                     {
@@ -310,7 +310,7 @@ namespace CSBackend
 		{
 			auto windowSize = GetWindowSize();
 			m_window.create(sf::VideoMode(windowSize.x, windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
-            
+
             std::unique_lock<std::mutex> lock(m_windowMutex);
             if (m_windowDisplayModeDelegate)
             {
@@ -394,7 +394,7 @@ namespace CSBackend
             std::unique_lock<std::mutex> lock(m_windowMutex);
             m_windowResizeDelegate = nullptr;
             m_windowDisplayModeDelegate = nullptr;
-        }        
+        }
         //------------------------------------------------
         //------------------------------------------------
         void SFMLWindow::RemoveMouseDelegates() noexcept
@@ -410,7 +410,7 @@ namespace CSBackend
         {
             std::unique_lock<std::mutex> lock(m_textEntryMutex);
             m_textEnteredDelegate = nullptr;
-        }        
+        }
         //------------------------------------------------
         //------------------------------------------------
         void SFMLWindow::RemoveKeyDelegates() noexcept
@@ -418,7 +418,7 @@ namespace CSBackend
             std::unique_lock<std::mutex> lock(m_keyMutex);
             m_keyPressedDelegate = nullptr;
             m_keyReleasedDelegate = nullptr;
-        }        
+        }
 		//------------------------------------------------
 		//------------------------------------------------
 		ChilliSource::Integer2 SFMLWindow::GetWindowSize() const
@@ -441,13 +441,13 @@ namespace CSBackend
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void SFMLWindow::HideCursor()
+		void SFMLWindow::HideSystemCursor()
 		{
 			m_window.setMouseCursorVisible(false);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void SFMLWindow::ShowCursor()
+		void SFMLWindow::ShowSystemCursor()
 		{
 			m_window.setMouseCursorVisible(true);
 		}
@@ -484,7 +484,7 @@ namespace CSBackend
 
 			auto appConfig = ChilliSource::Application::Get()->GetAppConfig();
 			m_preferredFPS = appConfig->GetPreferredFPS();
-			
+
 			if (appConfig->IsVSyncEnabled())
 			{
 				SetVSyncEnabled(true);
@@ -641,4 +641,3 @@ namespace CSBackend
 }
 
 #endif
-

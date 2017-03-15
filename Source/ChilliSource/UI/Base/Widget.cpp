@@ -1069,8 +1069,9 @@ namespace ChilliSource
         
         if(m_canvas == this)
         {
-            m_cachedFinalTransform = Matrix3::CreateTransform(m_localPosition.vAbsolute, Vector2::k_one, -m_localRotation);
-            m_cachedFinalPosition = m_localPosition.vAbsolute;
+            auto pos = m_localPosition.vAbsolute - GetLocalOriginCombinedPosition();
+            m_cachedFinalTransform = Matrix3::CreateTransform(pos, Vector2::k_one, -m_localRotation);
+            m_cachedFinalPosition = pos;
             
             m_isParentTransformCacheValid = true;
             m_isLocalTransformCacheValid = true;

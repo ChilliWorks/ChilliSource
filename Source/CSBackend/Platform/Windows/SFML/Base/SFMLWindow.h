@@ -201,13 +201,13 @@ namespace CSBackend
 			///
 			/// @author S Downie
 			//----------------------------------------------------
-			void HideCursor();
+			void HideSystemCursor();
 			//----------------------------------------------------
 			/// Show the window cursor
 			///
 			/// @author S Downie
 			//----------------------------------------------------
-			void ShowCursor();
+			void ShowSystemCursor();
 			//-------------------------------------------------
             /// Set the delegates that relate to window events.
             /// This method will assert if a given delegate is null
@@ -319,7 +319,7 @@ namespace CSBackend
 			//------------------------------------------------
 			ChilliSource::Integer2 GetMousePosition() const;
 			//-------------------------------------------------
-			/// Schedules a quit to occur at the end of the 
+			/// Schedules a quit to occur at the end of the
 			/// the current update.
 			///
 			/// @author HMcLaughlin
@@ -348,7 +348,7 @@ namespace CSBackend
 			//-------------------------------------------------
 			void SetWindowed();
 			//-------------------------------------------------
-			/// Stops the update loop causing the application 
+			/// Stops the update loop causing the application
 			/// to terminate.
 			///
 			/// @author S Downie

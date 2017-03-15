@@ -27,6 +27,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <CSBackend/Platform/RPi/Core/Base/DispmanWindow.h>
+#include <ChilliSource/UI/Base/CursorSystem.h>
 
 namespace CSBackend
 {
@@ -43,7 +44,7 @@ namespace CSBackend
 		//---------------------------------------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(ChilliSource::Application* application)
 		{
-			//No Raspberry Pi systems need created
+			application->CreateSystem<ChilliSource::CursorSystem>();
 		}
 
 		//---------------------------------------------------------------------------------

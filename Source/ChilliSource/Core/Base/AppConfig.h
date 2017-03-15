@@ -78,6 +78,26 @@ namespace ChilliSource
         //---------------------------------------------------------
         bool IsVSyncEnabled() const;
         
+        /// @return TRUE if the OS window manager cursor should be displayed.
+        ///
+        /// NOTE: This is only applicable for Windows backend
+        ///
+        bool IsSystemCursorShown() const noexcept { return m_isSystemCursorShown; }
+        
+        /// @return TRUE if ChilliSource should display it's own pointer cursor.
+        ///
+        /// NOTE: This is only applicable for RPi or Windows backend
+        ///
+        bool IsNonSystemCursorShown() const noexcept { return m_isNonSystemCursorShown; }
+        
+        /// @return The location of the UI file that describes the default cursor
+        ///
+        StorageLocation GetDefaultCursorUILocation() const noexcept { return m_defaultCursorUILocation; }
+        
+        /// @return The path to the UI file that describes the default cursor
+        ///
+        const std::string& GetDefaultCursorUIPath() const noexcept { return m_defaultCursorUIPath; }
+        
     private:
         friend class Application;
         //---------------------------------------------------------
@@ -104,9 +124,15 @@ namespace ChilliSource
         void Load();
         
         std::string m_displayableName;
+        
+        std::string m_defaultCursorUIPath;
+        StorageLocation m_defaultCursorUILocation;
+        
         u32 m_preferredFPS;
 
         bool m_isVSyncEnabled = false;
+        bool m_isSystemCursorShown = true;
+        bool m_isNonSystemCursorShown = false;
     };
 }
 

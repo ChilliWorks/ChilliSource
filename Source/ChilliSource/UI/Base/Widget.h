@@ -858,6 +858,7 @@ namespace ChilliSource
     private:
         friend class Canvas;
         friend class WidgetFactory;
+        friend class CursorSystem;
         //----------------------------------------------------------------------------------------
         /// Constructor that builds the widget from the given definition. The default properties
         /// of a widget are described in the class documentation.

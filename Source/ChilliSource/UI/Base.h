@@ -32,6 +32,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/UI/Base/Canvas.h>
+#include <ChilliSource/UI/Base/CursorSystem.h>
 #include <ChilliSource/UI/Base/UIComponent.h>
 #include <ChilliSource/UI/Base/UIComponentDesc.h>
 #include <ChilliSource/UI/Base/UIComponentFactory.h>

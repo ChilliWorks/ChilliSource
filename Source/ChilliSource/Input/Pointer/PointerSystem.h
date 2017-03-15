@@ -242,18 +242,23 @@ namespace ChilliSource
         /// @return The pointer up event.
         //------------------------------------------------------------------------------
         std::vector<Pointer> GetPointers() const;
+        
+        /// @return Number of attached pointers
+        ///
+        u32 GetNumPointers() const noexcept { return (u32)m_pointers.size(); }
+        
         //------------------------------------------------------------------------------
         /// Hide the pointer cursor if one exists
         ///
         /// @author S Downie
         //------------------------------------------------------------------------------
-        virtual void HideCursor() = 0;
+        virtual void HideSystemCursor() = 0;
         //------------------------------------------------------------------------------
         /// Show the pointer cursor if one exists
         ///
         /// @author S Downie
         //------------------------------------------------------------------------------
-        virtual void ShowCursor() = 0;
+        virtual void ShowSystemCursor() = 0;
         //------------------------------------------------------------------------------
         /// Process all input events that have been received from the OS.
         ///

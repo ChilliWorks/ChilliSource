@@ -57,13 +57,13 @@ namespace CSBackend
 			///
 			bool IsA(ChilliSource::InterfaceIDType interfaceId) const noexcept override;
 
-			/// Ask X11 to hide the mouse cursor
+			/// As X11 is behind the GL display our RPi implementation has no mouse cursor
 			///
-			void HideCursor() noexcept override;
+			void HideSystemCursor() noexcept override {}
 
-			/// Ask X11 to show the mouse cursor
+			/// As X11 is behind the GL display our RPi implementation has no mouse cursor
 			///
-			void ShowCursor() noexcept override;
+			void ShowSystemCursor() noexcept override {}
 
 		private:
 			friend class ChilliSource::PointerSystem;

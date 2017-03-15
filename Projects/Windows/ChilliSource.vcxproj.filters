@@ -1377,6 +1377,9 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLExtensions.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\CursorSystem.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2920,6 +2923,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLExtensions.h">
       <Filter>CSBackend\Rendering\OpenGL\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\CursorSystem.h">
+      <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

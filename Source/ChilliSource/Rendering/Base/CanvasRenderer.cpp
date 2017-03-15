@@ -47,6 +47,7 @@
 #include <ChilliSource/Rendering/Sprite/SpriteMeshBuilder.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Base/Canvas.h>
+#include <ChilliSource/UI/Base/CursorSystem.h>
 
 #include <algorithm>
 
@@ -678,6 +679,8 @@ namespace ChilliSource
 
         m_screen = Application::Get()->GetSystem<Screen>();
         CS_ASSERT(m_screen != nullptr, "Canvas renderer cannot find screen system");
+        
+        m_cursorSystem = Application::Get()->GetSystem<CursorSystem>();
 
         auto materialFactory = Application::Get()->GetSystem<MaterialFactory>();
         CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
@@ -881,6 +884,11 @@ namespace ChilliSource
             m_nextPriority = 0;
             
             activeUICanvas->Draw(this);
+            
+            if(m_cursorSystem != nullptr)
+            {
+                m_cursorSystem->Draw(this);
+            }
             
             m_currentRenderSnapshot = nullptr;
             

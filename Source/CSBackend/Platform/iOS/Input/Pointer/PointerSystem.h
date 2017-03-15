@@ -93,13 +93,13 @@ namespace CSBackend
             ///
             /// @author S Downie
             //----------------------------------------------------
-            void HideCursor() override {};
+            void HideSystemCursor() override {};
             //----------------------------------------------------
             /// iOS has no cursor so this does nothing
             ///
             /// @author S Downie
             //----------------------------------------------------
-            void ShowCursor() override {};
+            void ShowSystemCursor() override {};
         private:
             friend class ChilliSource::PointerSystem;
             
