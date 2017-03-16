@@ -39,7 +39,7 @@ namespace CSBackend
             m_alphaSize = alphaSize;
             m_minDepthSize = minDepthSize;
             m_preferredDepthSize = preferredDepthSize;
-            m_minStencilSize = m_minStencilSize;
+            m_minStencilSize = minStencilSize;
         }
 
         //---------------------------------------------------------------------
