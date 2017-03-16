@@ -51,7 +51,7 @@ namespace CSBackend
 			///
 			/// @author: J Brown
 			//------------------------------------------------------------------------
-			Json::Value ReadAppConfig()
+			inline Json::Value ReadAppConfig() noexcept
 			{
 				// Get current executable directory
 				char arg1[20];
@@ -97,7 +97,7 @@ namespace CSBackend
 			///
 			/// @return The surface format.
 			//-------------------------------------------------------------
-			ChilliSource::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root)
+			inline ChilliSource::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root) noexcept
 			{
 				const std::string k_defaultFormat = "rgb565_depth24";
 				std::string formatString = in_root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
@@ -120,7 +120,7 @@ namespace CSBackend
 			///
 			/// @return Number times multisample 0x, 2x, 4x.
 			//-------------------------------------------------------------
-			u32 ReadMultisampleFormat(const Json::Value& in_root)
+			inline u32 ReadMultisampleFormat(const Json::Value& in_root) noexcept
 			{
 				std::string stringFormat = in_root.get("Multisample", "None").asString();
 
@@ -157,7 +157,7 @@ namespace CSBackend
 			/// Creates an EGLConfigChooser appropriate for the current
 			/// AppConfig.
 			//-----------------------------------------------------------------
-			EGLConfigChooser CreateConfigChooser(const Json::Value& appConfigRoot)
+			inline EGLConfigChooser CreateConfigChooser(const Json::Value& appConfigRoot) noexcept
 			{
 				ChilliSource::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
 
@@ -198,13 +198,58 @@ namespace CSBackend
 			//-----------------------------------------------------------------
 			/// Reads the desired window title from the AppConfig.
 			//-----------------------------------------------------------------
-			std::string ReadDesiredTitle(const Json::Value& appConfigRoot)
+			inline std::string ReadDesiredTitle(const Json::Value& appConfigRoot) noexcept
 			{
 				std::string titleString = "Application";
 
 				titleString = appConfigRoot.get("DisplayableName", titleString).asString();
 
 				return titleString;
+			}
+
+			/// @param appConfigRoot
+			///		The app config JSON
+			/// @param fallbackResolution
+			///		Window res to fallback on if none are specified
+			///
+			/// @return Inital window resolution as read from the config
+			///
+			inline ChilliSource::Integer2 ReadInitialWindowSize(const Json::Value& appConfigRoot, const ChilliSource::Integer2& fallbackResolution) noexcept
+			{
+				ChilliSource::Integer2 res = fallbackResolution;
+				const Json::Value& resObj = appConfigRoot["WindowResolution"];
+				if(resObj.isNull() == false)
+				{
+					res = ChilliSource::ParseInteger2(resObj.asString());
+				}
+				const Json::Value& platformObj = appConfigRoot["RPi"];
+				if(platformObj.isNull() == false)
+				{
+					const Json::Value& resObjPlatform = platformObj["WindowResolution"];
+					if(resObjPlatform.isNull() == false)
+					{
+						res = ChilliSource::ParseInteger2(resObjPlatform.asString());
+					}
+				}
+
+				return res;
+			}
+
+			/// @param appConfigRoot
+			///		The app config JSON
+			///
+			/// @return Inital window mode as read from the config
+			///
+			inline ChilliSource::Screen::DisplayMode ReadInitialWindowMode(const Json::Value& appConfigRoot) noexcept
+			{
+				std::string mode = appConfigRoot.get("WindowDisplayMode", "windowed").asString();
+				const Json::Value& platformObj = appConfigRoot["RPi"];
+				if(platformObj.isNull() == false)
+				{
+					mode = platformObj.get("WindowDisplayMode", mode.c_str()).asString();
+				}
+
+				return ChilliSource::Screen::ParseDisplayMode(mode);
 			}
 		}
 
@@ -219,13 +264,15 @@ namespace CSBackend
 			//Start interfacing with Raspberry Pi.
 			bcm_host_init();
 
-			m_windowSize = GetSupportedResolutions()[0];
-			m_windowSize.x = (s32)((f32)m_windowSize.x * 0.8f);
-			m_windowSize.y = (s32)((f32)m_windowSize.y * 0.8f);
-			m_windowPos.x = 0;
-			m_windowPos.y = 0;
-
 			Json::Value appConfigRoot = ReadAppConfig();
+
+			auto displayMode = ReadInitialWindowMode(appConfigRoot);
+
+			m_desktopSize = GetSupportedFullscreenResolutions()[0] - (GetSupportedFullscreenResolutions()[0] / 6);
+			m_windowPos = ChilliSource::Integer2::k_zero;
+
+			m_windowSize = displayMode == ChilliSource::Screen::DisplayMode::k_windowed ? m_desktopSize : GetSupportedFullscreenResolutions()[0];
+
 			InitXWindow(m_windowPos, m_windowSize, appConfigRoot);
 			InitEGLDispmanWindow(m_windowPos, m_windowSize, appConfigRoot);
 
@@ -233,6 +280,9 @@ namespace CSBackend
 			ChilliSource::ApplicationUPtr app = ChilliSource::ApplicationUPtr(CreateApplication(SystemInfoFactory::CreateSystemInfo()));
 			m_lifecycleManager = ChilliSource::LifecycleManagerUPtr(new ChilliSource::LifecycleManager(app.get()));
 			m_lifecycleManager->Resume();
+
+			SetDisplayMode(displayMode);
+			SetSize(ReadInitialWindowSize(appConfigRoot, m_windowSize));
 
 			m_isRunning = true;
 			while(m_isRunning == true)
@@ -452,6 +502,15 @@ namespace CSBackend
 		//-----------------------------------------------------------------------------------
 		void DispmanWindow::SetSize(const ChilliSource::Integer2& size) noexcept
 		{
+			if(size == m_windowSize)
+				return;
+
+			if (m_displayMode == ChilliSource::Screen::DisplayMode::k_fullscreen)
+			{
+				CS_ASSERT(ChilliSource::VectorUtils::Contains(GetSupportedFullscreenResolutions(), size) == true, "Resolution not supported in fullscreen mode (SetSize).");
+			}
+
+			m_windowSize = size;
 			XWindowChanges wc;
 			wc.x = m_windowPos.x;
 			wc.y = m_windowPos.y;
@@ -479,17 +538,18 @@ namespace CSBackend
 			fullscreenEvent.xclient.window = m_xwindow;
 			fullscreenEvent.xclient.message_type = x11_state_atom;
 			fullscreenEvent.xclient.format = 32;
-			fullscreenEvent.xclient.data.l[1]	= x11_fs_atom;
-			fullscreenEvent.xclient.data.l[2]	= 0;
+			fullscreenEvent.xclient.data.l[1] = x11_fs_atom;
+			fullscreenEvent.xclient.data.l[2] = 0;
 
 			switch (m_displayMode)
 			{
 				case ChilliSource::Screen::DisplayMode::k_fullscreen:
 				{
-					m_windowSizePreFullscreen = m_windowSize;
+					CS_ASSERT(ChilliSource::VectorUtils::Contains(GetSupportedFullscreenResolutions(), m_windowSize) == true, "Current resolution not supported in fullscreen mode.");
+
 					m_windowPosPreFullscreen = m_windowPos;
 
-					fullscreenEvent.xclient.data.l[0]	= 1;//_NET_WM_STATE_ADD;
+					fullscreenEvent.xclient.data.l[0] = 1;//_NET_WM_STATE_ADD;
 
 					XSendEvent(m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &fullscreenEvent);
 					break;
@@ -498,10 +558,10 @@ namespace CSBackend
 				{
 					m_windowPos = m_windowPosPreFullscreen;
 
-					fullscreenEvent.xclient.data.l[0]	= 0;//_NET_WM_STATE_REMOVE;
+					fullscreenEvent.xclient.data.l[0] = 0;//_NET_WM_STATE_REMOVE;
 
 					XSendEvent(m_xdisplay, XDefaultRootWindow(m_xdisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, &fullscreenEvent);
-					SetSize(m_windowSizePreFullscreen);
+					SetSize(ChilliSource::Integer2::Min(m_windowSize, m_desktopSize));
 					break;
 				}
 			}
@@ -592,9 +652,8 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		std::vector<ChilliSource::Integer2> DispmanWindow::GetSupportedResolutions() const noexcept
+		std::vector<ChilliSource::Integer2> DispmanWindow::GetSupportedFullscreenResolutions() const noexcept
 		{
-			//TODO: Find out if we can query the BCM or dispman for supported resolutions
 			u32 width(0), height(0);
 			graphics_get_display_size(0, &width, &height);
 			return std::vector<ChilliSource::Integer2> { ChilliSource::Integer2((s32)width, (s32)height) };

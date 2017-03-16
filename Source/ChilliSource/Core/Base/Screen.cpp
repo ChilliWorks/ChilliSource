@@ -63,5 +63,30 @@ namespace ChilliSource
         return nullptr;
 #endif
     }
+    
+    /// Case insensitive. Will assert if no valid conversion
+    ///
+    /// @param displayMode
+    ///     Display mode as a string
+    ///
+    /// @return Display mode as a hard type
+    ///
+    Screen::DisplayMode Screen::ParseDisplayMode(const std::string& displayMode) noexcept
+    {
+        std::string lowerCase = displayMode;
+        StringUtils::ToLowerCase(lowerCase);
+        
+        if(lowerCase == "windowed")
+        {
+            return DisplayMode::k_windowed;
+        }
+        if(lowerCase == "fullscreen")
+        {
+            return DisplayMode::k_fullscreen;
+        }
+        
+        CS_LOG_FATAL("Cannot parse display mode: " + displayMode);
+        return DisplayMode::k_windowed;
+    }
 }
 

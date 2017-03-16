@@ -92,7 +92,7 @@ namespace CSBackend
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
                 SFMLWindow::Get()->SetSize(in_size);
-                OnResolutionChanged(in_size);               
+                OnResolutionChanged(in_size);
             });
 		}
 		//----------------------------------------------------------
@@ -101,22 +101,14 @@ namespace CSBackend
 		{
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& taskContext)
             {
-			    switch (in_mode)
-			    {
-			    case DisplayMode::k_windowed:
-				    SFMLWindow::Get()->SetDisplayMode(SFMLWindow::DisplayMode::k_windowed);
-				    break;
-			    case DisplayMode::k_fullscreen:
-				    SFMLWindow::Get()->SetDisplayMode(SFMLWindow::DisplayMode::k_fullscreen);
-				    break;
-			    }
+				SFMLWindow::Get()->SetDisplayMode(in_mode, SFMLWindow::Get()->GetWindowSize());
             });
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
+		std::vector<ChilliSource::Integer2> Screen::GetSupportedFullscreenResolutions() const
 		{
-            return m_screenInfo.GetSupportedResolutions();
+            return m_screenInfo.GetSupportedFullscreenResolutions();
 		}
         //-----------------------------------------------------------
         //------------------------------------------------------------
@@ -132,19 +124,11 @@ namespace CSBackend
         }
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		void Screen::OnDisplayModeChanged(SFMLWindow::DisplayMode in_mode)
+		void Screen::OnDisplayModeChanged(DisplayMode in_mode)
 		{
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
-			    switch (in_mode)
-			    {
-			    case SFMLWindow::DisplayMode::k_windowed:
-				    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_windowed);
-				    break;
-			    case SFMLWindow::DisplayMode::k_fullscreen:
-				    m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_fullscreen);
-				    break;
-			    }
+				m_displayModeChangedEvent.NotifyConnections(in_mode);
             });
 		}
 		//------------------------------------------------

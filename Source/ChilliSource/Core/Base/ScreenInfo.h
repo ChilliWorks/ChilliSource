@@ -65,7 +65,7 @@ namespace ChilliSource
 
         /// @return A list of resolutions supported by the display.
         ///
-        const std::vector<Integer2>& GetSupportedResolutions() const noexcept;
+        const std::vector<Integer2>& GetSupportedFullscreenResolutions() const noexcept;
 
     private:
         Vector2 m_initialResolution;

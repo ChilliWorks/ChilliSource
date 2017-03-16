@@ -160,9 +160,9 @@ namespace CSBackend
 
             /// @return A list of resolutions supported by the display
             ///
-            std::vector<ChilliSource::Integer2> GetSupportedResolutions() noexcept
+            std::vector<ChilliSource::Integer2> GetSupportedFullscreenResolutions() noexcept
             {
-                return SFMLWindow::Get()->GetSupportedResolutions();
+                return SFMLWindow::Get()->GetSupportedFullscreenResolutions();
             }
 
         }
@@ -174,7 +174,7 @@ namespace CSBackend
             ChilliSource::DeviceInfo deviceInfo(k_deviceModel, k_deviceModelType, k_deviceManufacturer, k_deviceUdid, GetLocale(), ParseLanguageFromLocale(GetLocale()), GetOSVersion(), GetNumberOfCPUCores());
 
             // Create ScreenInfo.
-            ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedResolutions());
+            ChilliSource::ScreenInfo screenInfo(GetScreenResolution(), 1.0f, 1.0f, GetSupportedFullscreenResolutions());
 
 			//Create RenderInfo
 			ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();

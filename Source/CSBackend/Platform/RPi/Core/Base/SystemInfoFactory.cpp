@@ -85,7 +85,7 @@ namespace CSBackend
             ChilliSource::DeviceInfo deviceInfo(k_deviceModel, machineType, k_deviceManufacturer, k_deviceUdid, globalLocale.name(), ParseLanguageFromLocale(globalLocale.name()), osVersion, get_nprocs());
 
             auto screenSize = DispmanWindow::Get()->GetWindowSize();
-            ChilliSource::ScreenInfo screenInfo(ChilliSource::Vector2((f32)screenSize.x, (f32)screenSize.y), 1.0f, 1.0f, DispmanWindow::Get()->GetSupportedResolutions());
+            ChilliSource::ScreenInfo screenInfo(ChilliSource::Vector2((f32)screenSize.x, (f32)screenSize.y), 1.0f, 1.0f, DispmanWindow::Get()->GetSupportedFullscreenResolutions());
 
 			ChilliSource::RenderInfo renderInfo = OpenGL::RenderInfoFactory::CreateRenderInfo();
 

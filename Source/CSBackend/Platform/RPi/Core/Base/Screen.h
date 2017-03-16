@@ -95,7 +95,7 @@ namespace CSBackend
 
 			/// @return A list of resolutions supported by the display
 			///
-			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const noexcept override;
+			std::vector<ChilliSource::Integer2> GetSupportedFullscreenResolutions() const noexcept override;
 
         private:
             friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create(const ChilliSource::ScreenInfo& screenInfo);

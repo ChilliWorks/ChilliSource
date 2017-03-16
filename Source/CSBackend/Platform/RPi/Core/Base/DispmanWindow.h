@@ -126,7 +126,7 @@ namespace CSBackend
 
 			/// @return List of the resolutions supported by the Raspberry Pi's video drivers
 			///
-			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const noexcept;
+			std::vector<ChilliSource::Integer2> GetSupportedFullscreenResolutions() const noexcept;
 
 			/// Set the delegates that are called when the window changes
 			/// This method will assert if a given delegate is null or if the delegate has already been set.
@@ -233,8 +233,8 @@ namespace CSBackend
 
 		private:
 
+			ChilliSource::Integer2 m_desktopSize;
 			ChilliSource::Integer2 m_windowSize;
-			ChilliSource::Integer2 m_windowSizePreFullscreen;
 			ChilliSource::Integer2 m_windowPos;
 			ChilliSource::Integer2 m_windowPosPreFullscreen;
 

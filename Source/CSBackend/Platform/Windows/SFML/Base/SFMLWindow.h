@@ -34,6 +34,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/LifeCycleManager.h>
 #include <ChilliSource/Core/Base/Singleton.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
@@ -58,16 +59,7 @@ namespace CSBackend
 		class SFMLWindow final : public ChilliSource::Singleton<SFMLWindow>
 		{
 		public:
-			//-----------------------------------------------------------
-			/// Window display modes
-			///
-			/// @author S Downie
-			//-----------------------------------------------------------
-			enum class DisplayMode
-			{
-				k_windowed,
-				k_fullscreen
-			};
+
 			//-----------------------------------------------------------
 			/// A delegate called when the window size changes.
 			///
@@ -83,7 +75,7 @@ namespace CSBackend
 			///
 			/// @param The new window mode.
 			//-----------------------------------------------------------
-			using WindowDisplayModeDelegate = std::function<void(DisplayMode)>;
+			using WindowDisplayModeDelegate = std::function<void(ChilliSource::Screen::DisplayMode)>;
 			//-----------------------------------------------------------
 			/// List of the events that can occur on a mouse button
 			///
@@ -188,14 +180,16 @@ namespace CSBackend
 			/// @author S Downie
 			///
 			/// @param Window mode
+			/// @param Window size
+			/// @param TRUE to force set even if the same as previous
 			//-------------------------------------------------
-			void SetDisplayMode(DisplayMode in_mode);
+			void SetDisplayMode(ChilliSource::Screen::DisplayMode in_mode, const ChilliSource::Integer2& size, bool force = false);
 			//----------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return A list of resolutions supported by the display
 			//----------------------------------------------------------
-			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const;
+			std::vector<ChilliSource::Integer2> GetSupportedFullscreenResolutions() const;
 			//----------------------------------------------------
 			/// Hide the window cursor
 			///
@@ -339,14 +333,18 @@ namespace CSBackend
 			/// Recreate the window in fullscreen state
 			///
 			/// @author S Downie
+			///
+			/// @param size of window
 			//-------------------------------------------------
-			void SetFullscreen();
+			void SetFullscreen(const ChilliSource::Integer2& size);
 			//-------------------------------------------------
 			/// Recreate the window in windowed state
 			///
 			/// @author S Downie
+			///
+			/// @param size of window
 			//-------------------------------------------------
-			void SetWindowed();
+			void SetWindowed(const ChilliSource::Integer2& size);
 			//-------------------------------------------------
 			/// Stops the update loop causing the application
 			/// to terminate.
@@ -379,12 +377,13 @@ namespace CSBackend
 
 			u32 m_preferredRGBADepth = 32;
 			u32 m_preferredFPS = 0;
+			ChilliSource::Integer2 m_desktopSize;
 
 			bool m_isRunning = true;
 			bool m_isFocused = true;
 			bool m_quitScheduled = false;
 
-			DisplayMode m_displayMode = DisplayMode::k_windowed;
+			ChilliSource::Screen::DisplayMode m_displayMode = ChilliSource::Screen::DisplayMode::k_windowed;
 
             ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
 		};

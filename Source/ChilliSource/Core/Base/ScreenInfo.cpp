@@ -50,7 +50,7 @@ namespace ChilliSource
     }
 
     //----------------------------------------------------------------
-    const std::vector<Integer2>& ScreenInfo::GetSupportedResolutions() const noexcept
+    const std::vector<Integer2>& ScreenInfo::GetSupportedFullscreenResolutions() const noexcept
     {
         return m_supportedResolutions;
     }
