@@ -39,7 +39,7 @@
 
 #include <mutex>
 #include <SHA1/SHA1.h>
-#include <SHA256/SHA256.h>
+#include <SHA256/sha256.h>
 
 namespace ChilliSource
 {
