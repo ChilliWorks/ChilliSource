@@ -29,7 +29,7 @@
 
 #include <CSBackend/Platform/RPi/ForwardDeclarations.h>
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/LifeCycleManager.h>
+#include <ChilliSource/Core/Base/LifecycleManager.h>
 #include <ChilliSource/Core/Base/Singleton.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/Vector2.h>
