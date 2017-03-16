@@ -82,7 +82,7 @@ namespace CSBackend
         }
 
         //---------------------------------------------------------------------
-        EGLConfig EGLConfigChooser::ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig eglConfigs[], EGLint numConfigs) noexcept
+        EGLConfig EGLConfigChooser::ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig* eglConfigs, EGLint numConfigs) noexcept
         {
             u8 depthSize = m_preferredDepthSize;
 

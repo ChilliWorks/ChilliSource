@@ -61,7 +61,7 @@ namespace CSBackend
             /// @param The EGLDisplay to choose for.
             /// @param The array of EGLConfig objects to sort through.
             /// @param The number of EGLConfig objects in that list.
-            EGLConfig ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig eglConfigs[], EGLint numConfigs) noexcept;
+            EGLConfig ChooseBestConfigFromList(EGLDisplay eglDisplay, EGLConfig* eglConfigs, EGLint numConfigs) noexcept;
 
             /// Finds a config attribute within a config, and returns its value.
             /// If the value isn't found, returns the defaultValue parameter.
