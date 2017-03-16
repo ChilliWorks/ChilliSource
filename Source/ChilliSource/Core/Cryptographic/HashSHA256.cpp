@@ -29,7 +29,7 @@
 
 #include <ChilliSource/Core/Cryptographic/HashSHA256.h>
 
-#include <SHA256/SHA256.h>
+#include <SHA256/sha256.h>
 
 namespace ChilliSource
 {
@@ -38,11 +38,11 @@ namespace ChilliSource
         //------------------------------------------------
         //------------------------------------------------
         std::string GenerateHexHashCode(const s8* in_data, u32 in_size)
-        {         
+        {
             SHA256 hash;
             hash.reset();
             hash.add(reinterpret_cast<const u8*>(in_data), in_size);
- 
+
             return hash.getHash();
         }
     }
