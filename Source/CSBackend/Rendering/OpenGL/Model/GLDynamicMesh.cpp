@@ -342,22 +342,27 @@ namespace CSBackend
         {
             CS_ASSERT(m_maxVertexAttributes >= m_vertexFormat.GetNumElements(), "Too many vertex elements.");
             
+            for (u32 i = 0; i < ChilliSource::VertexFormat::k_maxElements; ++i)
+            {
+                glDisableVertexAttribArray(i);
+            }
+            
             for (u32 i = 0; i < m_vertexFormat.GetNumElements(); ++i)
             {
+                auto elementType = m_vertexFormat.GetElement(i);
+                
+                GLint attribHandle = glShader->GetAttributeHandle((u32)elementType);
+                if(attribHandle < 0)
+                    continue;
+                
                 glEnableVertexAttribArray(i);
                 
-                auto elementType = m_vertexFormat.GetElement(i);
                 auto numComponents = ChilliSource::VertexFormat::GetNumComponents(elementType);
                 auto type = GLMeshUtils::GetGLType(ChilliSource::VertexFormat::GetDataType(elementType));
                 auto normalised = GLMeshUtils::IsNormalised(elementType);
                 auto offset = reinterpret_cast<const GLvoid*>(u64(m_vertexFormat.GetElementOffset(i)));
                 
-                glShader->SetAttribute((u8)elementType, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
-            }
-            
-            for (u32 i = m_vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)
-            {
-                glDisableVertexAttribArray(i);
+                glShader->SetAttribute((u32)elementType, numComponents, type, normalised, m_vertexFormat.GetSize(), offset);
             }
         }
         

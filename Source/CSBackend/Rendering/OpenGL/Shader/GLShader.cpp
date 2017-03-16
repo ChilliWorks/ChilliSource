@@ -242,7 +242,7 @@ namespace CSBackend
         }
         
         //------------------------------------------------------------------------------
-        void GLShader::SetAttribute(u8 index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept
+        void GLShader::SetAttribute(u32 index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept
         {
 			GLint handle = m_attributeHandles[index]; 
             if(handle < 0)

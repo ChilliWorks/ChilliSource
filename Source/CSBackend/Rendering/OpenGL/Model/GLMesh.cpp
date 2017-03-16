@@ -109,23 +109,28 @@ namespace CSBackend
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while creating VAO for GLMesh.");
             
+            for (u32 i = 0; i < ChilliSource::VertexFormat::k_maxElements; ++i)
+            {
+                glDisableVertexAttribArray(i);
+            }
+            
             auto vertexFormat = m_renderMesh->GetVertexFormat();
             for (u32 i = 0; i < vertexFormat.GetNumElements(); ++i)
             {
-                glEnableVertexAttribArray(i);
-                
                 auto elementType = vertexFormat.GetElement(i);
+                
+                GLint attribHandle = glShader->GetAttributeHandle((u32)elementType);
+                if(attribHandle < 0)
+                    continue;
+                
+                glEnableVertexAttribArray(attribHandle);
+                
                 auto numComponents = ChilliSource::VertexFormat::GetNumComponents(elementType);
                 auto type = GLMeshUtils::GetGLType(ChilliSource::VertexFormat::GetDataType(elementType));
                 auto normalised = GLMeshUtils::IsNormalised(elementType);
                 auto offset = reinterpret_cast<const GLvoid*>(u64(vertexFormat.GetElementOffset(i)));
                 
-                glShader->SetAttribute((u8)elementType, numComponents, type, normalised, vertexFormat.GetSize(), offset);
-            }
-            
-            for (u32 i = vertexFormat.GetNumElements(); i < m_maxVertexAttributes; ++i)
-            {
-                glDisableVertexAttribArray(i);
+                glShader->SetAttribute((u32)elementType, numComponents, type, normalised, vertexFormat.GetSize(), offset);
             }
         }
         
