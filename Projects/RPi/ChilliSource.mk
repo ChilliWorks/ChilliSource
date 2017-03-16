@@ -21,8 +21,12 @@
 #  THE SOFTWARE.
 #-----------------------------------------------------------------------------------
 
-# NOTE: CS_PROJECT_ROOT should be setup prior to calling this
+# NOTE:
+# CS_PROJECT_ROOT, CC and AR
+# should be setup prior to calling this
 CS_PROJECT_ROOT ?= ../..
+CC ?= g++
+AR ?= ar
 
 LOCAL_PATH = .
 
@@ -52,10 +56,6 @@ CS_SCRIPT_GETFILESWITHEXTENSIONS = $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts
 CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/ChilliSource/' '--extensions' 'cpp,c,cc')
 CS_SOURCEFILES_PLATFORM := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/CSBackend/Platform/RPi/' '--extensions' 'cpp,c,cc')
 CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_SRC_ROOT)/CSBackend/Rendering/OpenGL/' '--extensions' 'cpp,c,cc')
-
-# Set up tools.
-CC=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-g++
-AR=/Volumes/xtools/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-ar
 
 # Includes
 CS_INCLUDES=-I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/Core/RPi/Headers -I$(CS_PROJECT_ROOT)/ChilliSource/Source -I$(CS_PROJECT_ROOT)/ChilliSource/Libraries/CricketAudio/RPi/Headers
