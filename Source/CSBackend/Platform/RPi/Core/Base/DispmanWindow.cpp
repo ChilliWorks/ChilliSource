@@ -77,12 +77,12 @@ namespace CSBackend
 					Json::Reader jReader;
 					if (!jReader.parse(contents, root))
 					{
-						printf(std::string("[ChilliSource] Could not parse App.config: " + jReader.getFormattedErrorMessages() + "\n").c_str());
+						printf("[ChilliSource] Could not parse App.config: %s \n", jReader.getFormattedErrorMessages().c_str());
 					}
 				}
 				else
 				{
-					printf(std::string("[ChilliSource] Error reading App.config. ").c_str());
+					printf("[ChilliSource] Error reading App.config.");
 				}
 
 				return root;
@@ -146,7 +146,7 @@ namespace CSBackend
 				}
 				else
 				{
-					printf(std::string("[ChilliSource] Unknown multisample format : " + stringFormat + ".Options are None, 2x or 4x\n").c_str());
+					printf("[ChilliSource] Unknown multisample format : %s .Options are None, 2x or 4x\n", stringFormat.c_str());
 				}
 
 				return 0;
@@ -673,7 +673,7 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
-		DispmanWindow::~DispmanWindow()
+		DispmanWindow::~DispmanWindow() noexcept
 		{
 			CS_ASSERT(!m_windowResizeDelegate, "Window resize delegate not removed.");
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
