@@ -182,6 +182,13 @@ namespace CSBackend
             ///
             void SetUniform(const std::string& name, const ChilliSource::Vector4* values, u32 numValues, FailurePolicy failurePolicy = FailurePolicy::k_hard) noexcept;
             
+            /// @param index
+            ///     Index of the attribute as defined in vertex format
+            ///
+            /// @return Handle of attribute in shader. -1 if doesn't exist
+            ///
+            GLint GetAttributeHandle(u32 index) const noexcept { return m_attributeHandles[index]; }
+            
             /// Sets the attribute with the given name and data information. If the attribute doesn't
             /// exist then it will be ignored.
             ///
@@ -198,7 +205,7 @@ namespace CSBackend
             /// @param offset
             ///     The data offset
             ///
-			void SetAttribute(u8 index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
+			void SetAttribute(u32 index, GLint size, GLenum type, GLboolean isNormalised, GLsizei stride, const GLvoid* offset) noexcept;
             
             /// Called when graphics memory is lost, usually through the GLContext being destroyed
             /// on Android. Function will set a flag to handle safe destructing of this object, preventing
