@@ -40,7 +40,7 @@
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
-#include <X11/xlib.h>
+#include <X11/Xlib.h>
 #include <X11/keysym.h>
 
 #include <vector>
