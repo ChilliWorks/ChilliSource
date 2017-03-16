@@ -268,10 +268,9 @@ namespace CSBackend
 
 			auto displayMode = ReadInitialWindowMode(appConfigRoot);
 
-			m_desktopSize = GetSupportedFullscreenResolutions()[0] - (GetSupportedFullscreenResolutions()[0] / 6);
+			m_desktopSize = GetSupportedFullscreenResolutions()[0] - (GetSupportedFullscreenResolutions()[0] / 10);
+			m_windowSize = ReadInitialWindowSize(appConfigRoot, displayMode == ChilliSource::Screen::DisplayMode::k_windowed ? m_desktopSize : GetSupportedFullscreenResolutions()[0]);
 			m_windowPos = ChilliSource::Integer2::k_zero;
-
-			m_windowSize = displayMode == ChilliSource::Screen::DisplayMode::k_windowed ? m_desktopSize : GetSupportedFullscreenResolutions()[0];
 
 			InitXWindow(m_windowPos, m_windowSize, appConfigRoot);
 			InitEGLDispmanWindow(m_windowPos, m_windowSize, appConfigRoot);
@@ -282,7 +281,6 @@ namespace CSBackend
 			m_lifecycleManager->Resume();
 
 			SetDisplayMode(displayMode);
-			SetSize(ReadInitialWindowSize(appConfigRoot, m_windowSize));
 
 			m_isRunning = true;
 			while(m_isRunning == true)
