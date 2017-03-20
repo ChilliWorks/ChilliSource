@@ -1,6 +1,11 @@
 ChilliSource Change Log
 =======================
 
+Version
+-------------------------
+* Added: Parsing and ToString methods for Integer2, Integer3 and Integer4
+* Fixed: Some OpenGL analyser warnings caused by setting attributes when they don't exist in shaders
+
 Version 2.2.1, 2017-03-14
 -------------------------
 * HotFix: Fix for potential issue of the vertex attribute objects not being rebuilt when the context is lost on Android
