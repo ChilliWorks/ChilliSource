@@ -38,7 +38,7 @@ import fnmatch
 #----------------------------------------
 # Calculates the absolute path from a path
 # relative to this script file.
-# 
+#
 # @author I Copland
 #
 # @param The path relative to this source
@@ -46,7 +46,7 @@ import fnmatch
 # @return The absolute path.
 #----------------------------------------
 def get_path_from_here(path):
-    return os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), instrPath));
+    return os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), path));
 #----------------------------------------
 # Overwrite the given dst directory or create
 # it if it doesn't exist with the contents
@@ -73,7 +73,7 @@ def overwrite_directory(src_path, dst_path):
 # directory
 #
 # @author S Downie
-#----------------------------------------        
+#----------------------------------------
 def copy_directory(src_path, dst_path):
     if os.path.exists(dst_path) == False:
         os.makedirs(dst_path)
@@ -125,7 +125,7 @@ def has_extension(file_path, extension):
 #----------------------------------------
 # Returns a list of all file paths with
 # any of the given extensions in the
-# requested directory. 
+# requested directory.
 #
 # @author I Copland
 #
@@ -141,4 +141,3 @@ def get_file_paths_with_extensions(directory_path, extensions):
                 if has_extension(file_path, extension) == True:
                     output.append(os.path.join(curr_directory_path, file_path))
     return output
-
