@@ -92,11 +92,11 @@ $(CS_OBJ_DIR)/%.o: $(CS_SRC_ROOT)/%.cc
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_OBJ_DIR)/' '--extensions' 'o')
+	rm -rf $(CS_OBJ_DIR)
 	rm -f $(CS_STATIC_LIB)
 
 cleanobjects:
-	rm -f $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_OBJ_DIR)/' '--extensions' 'o')
+	rm -rf $(CS_OBJ_DIR)
 
 cleangenerated:
 	rm -f $(CS_STATIC_LIB)
