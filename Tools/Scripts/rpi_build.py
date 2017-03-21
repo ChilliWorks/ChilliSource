@@ -136,6 +136,10 @@ def _generate_ninja_file(app_name,
 # Generates the ninja "makefile", builds the application and copies
 # the assets to the output folder
 #
+# @param target_scheme
+# 	Used to apply compiler flags
+# @param num_jobs
+# 	Used to restrict the number of concurrent build jobs. If None then unrestricted
 # @param app_name
 # 	Name of the executable to generate
 # @param compiler_path
@@ -166,6 +170,7 @@ def _generate_ninja_file(app_name,
 #	path to temporary lib directory
 #
 def _build(target_scheme,
+	num_jobs,
 	app_name,
 	compiler_path, linker_path, archiver_path, 
 	additional_libs, additional_lib_paths, additional_include_paths,
@@ -193,7 +198,10 @@ def _build(target_scheme,
 	_generate_ninja_file(app_name, compiler_path, linker_path, archiver_path, compiler_flags, linker_flags, app_source_dirs, project_root, build_dir, output_dir, lib_cs_path, lib_app_path)
 
 	# Build the exe using ninja
-	subprocess.call(['ninja', '-f', os.path.join(build_dir, 'Application.ninja')])
+	if num_jobs == None:
+		subprocess.call(['ninja', '-f', os.path.join(build_dir, 'Application.ninja')])
+	else:
+		subprocess.call(['ninja', '-f', os.path.join(build_dir, 'Application.ninja'), '-j', num_jobs])
 	
 	# Copy the assets ready for packaging
 	copy_resources_script = os.path.normpath('{}/ChilliSource/Tools/Scripts/copy_rpi_resources.py'.format(project_root))
@@ -226,6 +234,8 @@ def _clean(build_dir, output_dir, lib_cs_path, lib_app_path):
 #
 # @param args 
 #	The list of arguments - Should have an additional argument "debug" or "release" optionally followed by "clean"
+# @param num_jobs
+# 	Used to restrict the number of concurrent build jobs. If None then unrestricted
 # @param app_name
 # 	Name of the executable to generate
 # @param compiler_path
@@ -252,6 +262,7 @@ def _clean(build_dir, output_dir, lib_cs_path, lib_app_path):
 # 	Location to output executable and required assets
 #
 def run(args,
+	num_jobs,
 	app_name,
 	compiler_path, linker_path, archiver_path, 
 	additional_libs, additional_lib_paths, additional_include_paths,
@@ -278,4 +289,4 @@ def run(args,
 		# Remove all libraries, exes and compiled files
 		_clean(build_dir, output_dir, lib_cs_path, lib_app_path)
 	else:
-		_build(target_scheme, app_name, compiler_path, linker_path, archiver_path, additional_libs, additional_lib_paths, additional_include_paths, additional_compiler_flags_map, app_source_dirs, project_root, build_dir, output_dir, lib_cs_path, lib_app_path)
+		_build(target_scheme, num_jobs, app_name, compiler_path, linker_path, archiver_path, additional_libs, additional_lib_paths, additional_include_paths, additional_compiler_flags_map, app_source_dirs, project_root, build_dir, output_dir, lib_cs_path, lib_app_path)

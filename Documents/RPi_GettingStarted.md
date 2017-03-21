@@ -88,9 +88,10 @@ You will also need to pull libraries from the Pi onto your compiling machine so 
 - libxkbcommon-x11.so.0.0.0
 - libxkbcommon.so.0.0.0
 
-NOTE: You can "sudo apt-get install locate" to help you find the libraries on the Pi. Once installed simply type "locate LibName".
-
-NOTE: If you are compiling on Windows using the downloaded Ninja binary you will need to add Ninja to the PATH environment variable.
+NOTES:
+- You can "sudo apt-get install locate" to help you find the libraries on the Pi. Once installed simply type "locate LibName".
+- If you are compiling on Windows using the downloaded Ninja binary you will need to add Ninja to the PATH environment variable.
+- The default build script limits the number of jobs that Ninja will do in parallel to two (if you don't restrict Ninja it will crash the Pi). If you are cross compiling then feel free to remove this restriction to improve build times.
 
 ## App Configuration
 
