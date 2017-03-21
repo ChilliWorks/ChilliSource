@@ -121,7 +121,8 @@ def delete_file(file_path):
 def has_extension(file_path, extension):
     lowercase_filepath = file_path.lower()
     lowercase_extension = extension.lower()
-    return lowercase_filepath.endswith(lowercase_extension)
+    ext = os.path.splitext(lowercase_filepath)[1]
+    return ext == ("."+lowercase_extension)
 #----------------------------------------
 # Returns a list of all file paths with
 # any of the given extensions in the

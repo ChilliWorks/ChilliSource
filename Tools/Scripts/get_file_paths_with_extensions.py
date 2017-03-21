@@ -66,7 +66,8 @@ def main(args):
         addition = addition.replace('\\', '/')
         output += addition
 
-    print(output)
+    # Write to stdout so that other programs can read the files
+    sys.stdout.write(output)
 
 if __name__ == "__main__":
     main(sys.argv)
