@@ -30,7 +30,7 @@ from file_system_utils import delete_directory
 COMPILER_FLAGS_DEFAULT = "-c -std=c++11 -fsigned-char -pthread -fexceptions -frtti -DCS_TARGETPLATFORM_RPI"
 COMPILER_FLAGS_TARGET_MAP = { "debug":"-g -DDEBUG -DCS_ENABLE_DEBUG",  	"release":"-O3 -DNDEBUG" }
 INCLUDE_PATHS = "-I{0}/ChilliSource/Libraries/Core/RPi/Headers -I{0}/ChilliSource/Source -I{0}/ChilliSource/Libraries/CricketAudio/RPi/Headers"
-LIBRARY_PATHS = "-L{0}/ChilliSource/Libraries/Core/RPi/Libs -L{0}/ChilliSource/Libraries/CricketAudio/RPi/Libs"
+LIBRARY_PATHS = "-L{0}/ChilliSource/Libraries/Core/RPi/Libs -L{0}/ChilliSource/Libraries/CricketAudio/RPi/Libs -L/opt/vc/lib"
 LIBRARIES = "-lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_arm -l:libX11.so.6.3.0 -l:libXau.so.6.0.0 -l:libXdmcp.so.6.0.0 -l:libxcb.so.1.1.0 -l:libxcb-xkb.so.1.0.0 -l:libxkbcommon.so.0.0.0 -l:libxkbcommon-x11.so.0.0.0"
 
 # Write build commands to the given ninja file for all source files that have the given extension in the given directories
