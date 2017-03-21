@@ -184,7 +184,7 @@ def _build(target_scheme,
 		print("Output directory already exists")
 
 	compiler_flags = COMPILER_FLAGS_DEFAULT + " " + COMPILER_FLAGS_TARGET_MAP[target_scheme] + " " + additional_compiler_flags_map[target_scheme] + " " + additional_include_paths + " " + INCLUDE_PATHS.format(project_root)
-	linker_flags = additional_lib_paths + " " + LIBRARY_PATHS.format(project_root) + " -L" + build_dir + " " + additional_libs + " " + LIBRARIES
+	linker_flags = additional_lib_paths + " " + LIBRARY_PATHS.format(project_root) + " -L" + build_dir + " " + additional_libs + " " + "-l{}".format(app_name) + " " + LIBRARIES
 
 	# Remove the old libraries and exes but not the compiled files
 	_clean(None, output_dir, lib_cs_path, lib_app_path)
