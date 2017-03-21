@@ -201,7 +201,7 @@ def _build(target_scheme,
 	if num_jobs == None:
 		subprocess.call(['ninja', '-f', os.path.join(build_dir, 'Application.ninja')])
 	else:
-		subprocess.call(['ninja', '-f', os.path.join(build_dir, 'Application.ninja'), '-j', num_jobs])
+		subprocess.call(['ninja', '-f', os.path.join(build_dir, 'Application.ninja'), '-j', str(num_jobs)])
 	
 	# Copy the assets ready for packaging
 	copy_resources_script = os.path.normpath('{}/ChilliSource/Tools/Scripts/copy_rpi_resources.py'.format(project_root))
