@@ -1,18 +1,18 @@
 # ChilliSource: Getting Started on Raspberry Pi
 
-Exciting news! You can now create games for the Raspberry Pi using ChilliSource. This tutorial will walk you through how to compile and deploy your game and some caveats to note when using ChilliSource for Pi development.
+Exciting news - you can now use ChilliSource to create both 2D and 3D games for the Raspberry Pi! ChilliSource brings the features of a professional game engine to a $30 computer the size of a credit card.
 
-Please let us know of any issues that you come across or any features you would like to see.
+This tutorial will walk you through how to build a ChilliSource game for Raspberry Pi and covers the caveats of Pi development. Please let us know if you encounter any issues or if there are any new features you would like to see.
 
 ## Known Issues
 
-It is worth noting that this is an experimental branch, due to this and the reduced ability of the Pi's GPU, there are some features of ChilliSource that cannot be used on the Pi. Some of the missing features will be added as part of the continued development of the Pi backend, others will only be added if and when they are supported by the 3rd party libraries we use or by the Pi hardware itself.
+This is an experimental branch and due to this, and the reduced ability of the Pi's GPU, there are some features of ChilliSource that cannot be used on the Pi. Some of the missing features will be added as part of the continued development of ChilliSource Pi, others will only be added if and when they are supported by the 3rd party libraries we use or by the Pi hardware itself.
 
 **Hardware and Version**
 
 We have tested on a Raspberry Pi 3 model B running Raspbian "Jessie". It may work on other Raspberry Pi models and OS versions but we have yet to test.
 
-**In Development**
+**Coming Soon**
 
 - HTTP System
 - Text Entry System
@@ -20,21 +20,22 @@ We have tested on a Raspberry Pi 3 model B running Raspbian "Jessie". It may wor
 
 **Waiting on Support**
 
-- Shadows: *The Pi GPU does not support the GL depth texture extension that we require for shadows.*
+- Shadows: *The Pi GPU does not support the GL depth texture extension that we require for shadows. So as with some Android devices shadows are disabled*
 
 - Cricket Audio: *Cricket currently have no library for Raspberry Pi (although they do have a Linux library). Feel free to make requests to them for RPi support. In the meantime you can always plug in a different audio library or use OpenAL*
 
 - System Dialogue Boxes: *Unlike on Windows the Pi display does not work in conjunction with the window manager and therefore always renders on top of the OS. Any displayed dialogue boxes would be obscured. We are waiting on better integration between the VideoCore window and X11.*
 
-- Video rendering: *This has not been looked into yet but the worry is that we will encounter the same issues as with dialogue boxes.*
+- Video rendering: *This has not been looked into yet but will probably encounter the same issues as with dialogue boxes.*
 
-- Web View: *This has not been looked into yet but the worry is that we will encounter the same issues as with dialogue boxes.*
+- Web View: *This has not been looked into yet but will probably encounter the same issues as with dialogue boxes.*
 
 ## Requirements
 
 - Raspberry Pi 3, Model B
 - [Raspbian "Jessie"](https://www.raspberrypi.org/downloads/raspbian/)
 - [Ninja build](https://ninja-build.org/)
+- Python 2.7+
 
 ## Pi Setup
 
@@ -48,17 +49,21 @@ The allocated memory can be changed in *Preferences > Raspberry Pi Configuration
 
 Ninja is a cross platform build system that we use to create ChilliSource applications. You can download binaries [here](https://ninja-build.org/) or alternatively install it through a package manager. On the Raspberry Pi Ninja can be installed by opening a terminal and typing: "sudo apt-get install ninja-build".
 
+NOTE: For the build script to work, Ninja must be added to the path so that typing "ninja" into a terminal executes Ninja.
+
 ### Compiler and Linker
 
 By default we use g++ to compile and link. This is usually preinstalled on your Raspberry Pi.
 
 ## Compiling
 
-The CSTest and CSPong sample projects come with a build script that you can use to compile your game (also the CSProjectGenerator will generate the build script for new projects). By default the build script is setup to build on the Raspberry Pi itself. Simply add *build.py* to */Projects/RPi/* and then navigate to that directory in terminal and type "python build.py debug" to start building (note, you can replace "debug" with "release"). This will generate an exe and required assets in an Output folder in the same directory.
+If you are creating a game from scratch using the project generator then you will already have the build scripts required for Raspberry Pi development. If you have an existing game that you want to build for the Pi then you can use the sample build script (*build.py*) from [CSTest](https://github.com/ChilliWorks/CSTest) or [CSPong](https://github.com/ChilliWorks/CSSamples).
+
+By default the build script is setup to build on the Raspberry Pi itself so make sure your project is on the Pi. Navigate to */Projects/RPi/* in terminal and type "python build.py debug" to start building (you can replace "debug" with "release" to build in release mode). The script will generate an exe and the required assets in an Output folder in the same directory.
 
 If you want to clean the build type "python build.py debug|release clean".
 
-By default the build process uses the built in g++ compiler and linker. If you want to change to another compiler (e.g. clang) change the paths at the top of *build.py*.
+By default the build process uses the built in g++ compiler and linker. If you want to change to another compiler (e.g. clang) or use a cross compiler (more on that later) change the paths at the top of *build.py* to point to the appropriate compiler, archiver and linker.
 
 NOTE: Make sure you have installed Ninja prior to running the build script.
 
@@ -66,12 +71,13 @@ NOTE: Make sure you have installed Ninja prior to running the build script.
 
 Compiling on the Pi can be tedious so it is probably worth setting up a cross compile toolchain that allows you to compile the exe on a different machine and simply copy the *Output* folder to the Pi.
 
-We recommend downloading prebuilt toolchains like the following:
+We recommend downloading one of the following prebuilt toolchains depending on your development platform:
 
-- [Windows](http://gnutoolchains.com/raspberry/tutorial/)
-- [Mac OS](http://www.jaredwolff.com/blog/cross-compiling-on-mac-osx-for-raspberry-pi/)
+- [Windows](http://sysprogs.com/files/gnutoolchains/raspberry/raspberry-gcc4.9.2-r4.exe)
+- [Mac OS](https://www.jaredwolff.com/toolchains/rpi-xtools-201402102110.dmg.zip)
+- [Linux](https://github.com/raspberrypi/tools)
 
-Once you have downloaded the toolchains simply change the CC, AR and LD variables at the top of *build.py* to point to the cross compiler/linker instead.
+Once you have downloaded the toolchains simply change the variables at the top of *build.py* to point to the cross compiler, archiver and linker instead.
 
 You will also need to pull libraries from the Pi onto your compiling machine so that the linker can link correctly (e.g. X11, GLES, etc). Libraries should be added into a folder called *CrossLibs* in the same directory as *build.py*. The following libraries are required to cross compile:
 
@@ -91,7 +97,7 @@ You will also need to pull libraries from the Pi onto your compiling machine so 
 NOTES:
 - You can "sudo apt-get install locate" to help you find the libraries on the Pi. Once installed simply type "locate LibName".
 - If you are compiling on Windows using the downloaded Ninja binary you will need to add Ninja to the PATH environment variable.
-- The default build script limits the number of jobs that Ninja will do in parallel to two (if you don't restrict Ninja it will crash the Pi). If you are cross compiling then feel free to remove this restriction to improve build times.
+- The default build script limits the number of jobs that Ninja will do in parallel to two (if you don't restrict Ninja it will crash the Pi). If you are cross compiling then feel free to remove this restriction (by setting NUM_JOBS=None in *build.py*) to speed up build times.
 
 ## App Configuration
 
@@ -104,21 +110,21 @@ You will need to edit your App.config JSON file to add the following to the main
 }
 ```
 
-The display mode instructs ChilliSource whether to start your game "Windowed" or whether to start it "Fullscreen".
+The display mode tells ChilliSource whether to start your game "Windowed" or whether to start it "Fullscreen".
 
-NOTE: If you start the game fullscreen make sure you have some way to call CS::Application::Get()->Quit() as the window will have no close button.
+NOTE: If you start the game fullscreen make sure you have some way of calling CS::Application::Get()->Quit() as the window will have no close button.
 
-The cursor type is required if you want to see a mouse cursor. Due to the way the hardware accelerated display window works it always renders on top of the OS and therefore obscures the system mouse cursor. Setting the cursor type to "NonSystem" will render a software cursor (NOTE: The cursor is just a widget and can be configured to suit your game). If you want to hide the cursor completely just set the cursor type to "None".
+The cursor type is required if you want to see a mouse cursor. The OpenGL ES display window always renders on top of the OS and therefore obscures the system mouse cursor. Setting the cursor type to "NonSystem" will render a software cursor (NOTE: The cursor is just a UI widget and can be configured to suit your game). If you want to hide the cursor completely just set the cursor type to "None".
 
 ## Running your Game
 
-If you want to see debug output from your application you should run it from terminal by navigating to the location of your app in terminal and then typing ./AppName to execute. If you wish to run your app without debug output simply double-click the icon.
+If you want to see debug output from your application you should run it from terminal by navigating to the location of your app in terminal and then typing "./AppName" to execute. If you wish to run your app without debug output simply double-click the icon.
 
 NOTE: If you cannot run the app due to "Permission denied" you may need to make it executable by typing "chmod +x AppName" into a terminal.
 
 ## Debugging
 
-If you build a debug build then it will contain debug symbols. You can debug the app on the Pi using gdb (provided you are using the g++/gcc compiler). For example if you want to grab the stack trace of a crash run the app in the following way:
+You can debug "debug" builds on the Pi using gdb (provided you are using the g++/gcc compiler). You will probably want to read up on how to use gdb from the terminal; for example if you want to grab the stack trace of a crash run the app in the following way:
 
 ```
 gdb ./AppName
@@ -133,3 +139,7 @@ bt
 ```
 
 This will display the call stack.
+
+## Next Steps
+
+There isn't much more to say other than have fun and let us know how you get on.
