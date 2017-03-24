@@ -12,7 +12,7 @@
     "Text": "all"
   },
   
-  "DefaultDefaultValues": {
+  "DefaultPropertyValues": {
     "Name": "Label"
   }
 }
