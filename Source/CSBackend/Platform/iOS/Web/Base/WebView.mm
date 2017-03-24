@@ -220,8 +220,8 @@ namespace CSBackend
                         DismissedDelegate delegate = m_dismissedDelegate;
                         m_dismissedDelegate = nullptr;
                         delegate();
+                        m_currentState = State::k_inactive;
                     }
-                    m_currentState = State::k_inactive;
                 });
             });
 		}
