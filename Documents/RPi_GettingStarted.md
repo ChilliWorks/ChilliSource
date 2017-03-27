@@ -79,23 +79,7 @@ We recommend downloading one of the following prebuilt toolchains depending on y
 
 Once you have downloaded the toolchains simply change the variables at the top of *build.py* to point to the cross compiler, archiver and linker instead.
 
-You will also need to pull libraries from the Pi onto your compiling machine so that the linker can link correctly (e.g. X11, GLES, etc). Libraries should be added into a folder called *CrossLibs* in the same directory as *build.py*. The following libraries are required to cross compile:
-
-- libbcm_host.so
-- libEGL.so
-- libGLESv2.so
-- libvchiq_arm.so
-- libvcos.so
-- libX11.so.6.3.0
-- libXau.so.6.0.0
-- libxcb-xkb.so.1.0.0
-- libxcb.so.1.1.0
-- libXdmcp.so.6.0.0
-- libxkbcommon-x11.so.0.0.0
-- libxkbcommon.so.0.0.0
-
 NOTES:
-- You can "sudo apt-get install locate" to help you find the libraries on the Pi. Once installed simply type "locate LibName".
 - If you are compiling on Windows using the downloaded Ninja binary you will need to add Ninja to the PATH environment variable.
 - The default build script limits the number of jobs that Ninja will do in parallel to two (if you don't restrict Ninja it will crash the Pi). If you are cross compiling then feel free to remove this restriction (by setting NUM_JOBS=None in *build.py*) to speed up build times.
 
