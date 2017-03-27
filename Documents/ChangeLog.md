@@ -1,10 +1,12 @@
 ChilliSource Change Log
 =======================
 
-Version
+Version 2.2.2, 2017-03-27
 -------------------------
 * Added: Parsing and ToString methods for Integer2, Integer3 and Integer4
 * Fixed: Some OpenGL analyser warnings caused by setting attributes when they don't exist in shaders
+* Fixed: Issues compiling under case-sensitive file system (i.e. Linux) caused by incorrectly cased includes.
+* Fixed: Typo in Label.csuidef which meant the default name "Label" was being ignored.
 
 Version 2.2.1, 2017-03-14
 -------------------------
