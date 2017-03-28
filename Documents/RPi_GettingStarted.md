@@ -83,6 +83,10 @@ NOTES:
 - If you are compiling on Windows using the downloaded Ninja binary you will need to add Ninja to the PATH environment variable.
 - The default build script limits the number of jobs that Ninja will do in parallel to two (if you don't restrict Ninja it will crash the Pi). If you are cross compiling then feel free to remove this restriction (by setting NUM_JOBS=None in *build.py*) to speed up build times.
 
+### Libraries
+
+At the moment all the libraries required for building to the Pi have been harvested from Raspbian itself. In the future these will be compiled as part of the toolchain.
+
 ## App Configuration
 
 You will need to edit your App.config JSON file to add the following to the main root:
