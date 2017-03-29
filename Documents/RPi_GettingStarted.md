@@ -14,7 +14,6 @@ We have tested on a Raspberry Pi 3 model B running Raspbian "Jessie". It may wor
 
 **Coming Soon**
 
-- HTTP System
 - Text Entry System
 - Framebuffer MSAA
 
