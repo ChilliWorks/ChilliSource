@@ -105,6 +105,7 @@ namespace CSBackend
 		{
 			//TODO: RPi: Add reachability check
             CS_ASSERT(delegate, "The reachability delegate should not be null.");
+			CS_LOG_WARNING("CheckReachability: Not implemented on Raspberry Pi");
 			delegate(true);
 		}
 
