@@ -106,12 +106,10 @@ namespace CSBackend
 			/// It will store the response state and then terminate once finished. The completion event
 			/// will be fired on the next update
 			///
-			/// @param curl
-			///		curl object that will be performing the actual http logic
 			/// @param destroyingMutex
 			///		Mutex that manages the critical section of the HTTP system being shutdown
 			///
-			void PerformRequest(CURL* curl, std::shared_ptr<std::mutex> destroyingMutex) noexcept;
+			void PerformRequest(std::shared_ptr<std::mutex> destroyingMutex) noexcept;
 
 			/// Called via curl with response data (partial or full). We then write
 			/// to our response buffer and flush if we exceed the max buffer size
@@ -160,6 +158,7 @@ namespace CSBackend
 			u64 m_expectedSize = 0;
 
 			std::stringstream m_streamBuffer;
+			CURL* m_curl;
 			curl_slist* m_curlHeaders = nullptr;
 
 			bool m_isPollingComplete = false;

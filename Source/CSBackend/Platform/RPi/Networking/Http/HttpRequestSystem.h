@@ -32,7 +32,6 @@
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #include <vector>
-#include <unordered_map>
 
 namespace CSBackend
 {
@@ -165,7 +164,6 @@ namespace CSBackend
 		private:
 
 			std::vector<HttpRequest*> m_requests;
-			std::unordered_map<HttpRequest*, CURL*> m_curls;
 		};
 	}
 }

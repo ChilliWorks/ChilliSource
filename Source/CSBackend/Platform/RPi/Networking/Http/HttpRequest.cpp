@@ -92,7 +92,7 @@ namespace CSBackend
 
 		//------------------------------------------------------------------
 		HttpRequest::HttpRequest(Type type, std::string url, std::string body, ChilliSource::ParamDictionary headers, u32 timeoutSecs, CURL* curl, u32 bufferFlushSize, Delegate delegate) noexcept
-		: m_url(std::move(url)), m_type(type), m_headers(std::move(headers)), m_body(std::move(body)), m_bufferFlushSize(bufferFlushSize), m_completionDelegate(std::move(delegate)), m_flushesPending(0)
+		: m_url(std::move(url)), m_type(type), m_headers(std::move(headers)), m_body(std::move(body)), m_bufferFlushSize(bufferFlushSize), m_completionDelegate(std::move(delegate)), m_flushesPending(0), m_curl(curl)
 		{
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
@@ -122,6 +122,7 @@ namespace CSBackend
 			if(type == Type::k_post)
 			{
 				curl_easy_setopt(curl, CURLOPT_POST, 1L);
+				curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, m_body.size());
 				curl_easy_setopt(curl, CURLOPT_POSTFIELDS, m_body.c_str());
 			}
 
@@ -129,7 +130,7 @@ namespace CSBackend
 			m_taskScheduler = ChilliSource::Application::Get()->GetTaskScheduler();
 			m_taskScheduler->ScheduleTask(ChilliSource::TaskType::k_large, [=](const ChilliSource::TaskContext&)
 			{
-				PerformRequest(curl, destroyingMutex);
+				PerformRequest(destroyingMutex);
 			});
 		}
 
@@ -149,33 +150,22 @@ namespace CSBackend
 		}
 
 		//------------------------------------------------------------------
-		void HttpRequest::PerformRequest(CURL* curl, std::shared_ptr<std::mutex> destroyingMutex) noexcept
+		void HttpRequest::PerformRequest(std::shared_ptr<std::mutex> destroyingMutex) noexcept
 		{
 			std::unique_lock<std::mutex> lock(*destroyingMutex);
 
 			if (s_isDestroying == true)
 				return;
 
-			//First perform the call with no body. This will download only the headers and we can use that to get the content length.
-			//Then perform the full request
 			lock.unlock();
 
-			curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
-			CURLcode curlResult = curl_easy_perform(curl);
+			//Blocking call. Will call into the write callback which is responsible for reading the response data into the output buffer.
+			CURLcode curlResult = curl_easy_perform(m_curl);
 
-			if(curlResult == CURLE_OK)
-			{
-				double contentLength = 0;
-				curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &contentLength);
-				m_expectedSize = (u32)contentLength;
-
-				long httpCode = 0;
-				curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &httpCode);
-				m_responseCode = (u32)httpCode;
-
-				curl_easy_setopt(curl, CURLOPT_NOBODY, 0L);
-				curlResult = curl_easy_perform(curl);
-			}
+			//Fetch the response code
+			long httpCode = 0;
+			curl_easy_getinfo (m_curl, CURLINFO_RESPONSE_CODE, &httpCode);
+			m_responseCode = (u32)httpCode;
 
 			if(m_curlHeaders != nullptr)
 			{
@@ -211,6 +201,14 @@ namespace CSBackend
 		//----------------------------------------------------------------------------------------
 		void HttpRequest::WriteResponseData(const char* data, std::size_t dataSize) noexcept
 		{
+			//Once we have some response data we are able to fetch the content length from the headers
+			if(m_expectedSize == 0)
+			{
+				double contentLength = 0;
+				curl_easy_getinfo(m_curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &contentLength);
+				m_expectedSize = (u32)contentLength;
+			}
+
 			m_streamBuffer.write(data, dataSize);
 			m_totalBytesRead += dataSize;
 			m_totalBytesReadThisBlock += dataSize;

@@ -84,7 +84,6 @@ namespace CSBackend
 			//and reuse it. If not then close the connection and open a new one
 			auto curl = curl_easy_init();
 			HttpRequest* httpRequest = new HttpRequest(type, url, body, headers, timeoutSecs, curl, GetMaxBufferSize(), delegate);
-			m_curls.emplace(httpRequest, curl);
 			m_requests.push_back(httpRequest);
 			return httpRequest;
 		}
@@ -123,9 +122,7 @@ namespace CSBackend
 				if((*it)->HasCompleted())
 				{
 					//...and remove the completed request
-					auto curlIt = m_curls.find(*it);
-					curl_easy_cleanup(curlIt->second);
-					m_curls.erase(curlIt);
+					curl_easy_cleanup((*it)->m_curl);
 					CS_SAFEDELETE(*it);
 					it = m_requests.erase(it);
 				}
@@ -145,16 +142,12 @@ namespace CSBackend
 
 			for (auto it = m_requests.begin(); it != m_requests.end(); ++it)
 			{
+				curl_easy_cleanup((*it)->m_curl);
 				CS_SAFEDELETE(*it);
 			}
 
 			m_requests.clear();
 			m_requests.shrink_to_fit();
-
-			for(auto& curl : m_curls)
-			{
-				curl_easy_cleanup(curl.second);
-			}
 
 			curl_global_cleanup();
 		}
