@@ -6,11 +6,11 @@ This tutorial will walk you through how to build a ChilliSource game for Raspber
 
 ## Known Issues
 
-This is an experimental branch and due to this, and the reduced ability of the Pi's GPU, there are some features of ChilliSource that cannot be used on the Pi. Some of the missing features will be added as part of the continued development of ChilliSource Pi, others will only be added if and when they are supported by the 3rd party libraries we use or by the Pi hardware itself.
+This is an experimental platform and due to this, and the reduced ability of the Pi's GPU, there are some features of ChilliSource that cannot be used on the Pi. Some of the missing features will be added as part of the continued development of ChilliSource Pi, others will only be added if and when they are supported by the 3rd party libraries we use or by the Pi hardware itself.
 
 **Hardware and Version**
 
-We have tested on a Raspberry Pi 3 model B running Raspbian "Jessie". It may work on other Raspberry Pi models and OS versions but we have yet to test.
+We have tested apps running on a Raspberry Pi 3 model B with Raspbian "Jessie" (we also have used libraries from "Jessie"). Apps may work on other Raspberry Pi models and OS versions but we have yet to test.
 
 **Coming Soon**
 
@@ -35,6 +35,7 @@ We have tested on a Raspberry Pi 3 model B running Raspbian "Jessie". It may wor
 - [Raspbian "Jessie"](https://www.raspberrypi.org/downloads/raspbian/)
 - [Ninja build](https://ninja-build.org/)
 - Python 2.7+
+- GNU g++
 
 ## Pi Setup
 
@@ -52,7 +53,7 @@ NOTE: For the build script to work, Ninja must be added to the path so that typi
 
 ### Compiler and Linker
 
-By default we use g++ to compile and link. This is usually preinstalled on your Raspberry Pi.
+By default we use g++ to compile and link. This is usually preinstalled on your Raspberry Pi (as is Python which is required by the build script).
 
 ## Compiling
 
@@ -84,7 +85,7 @@ NOTES:
 
 ### Libraries
 
-At the moment all the libraries required for building to the Pi have been harvested from Raspbian itself. In the future these will be compiled as part of the toolchain.
+At the moment all the libraries required for building to the Pi have been harvested from Raspbian "Jessie" itself. In the future these will be compiled from source as part of the toolchain allowing us to better support other Pi models.
 
 ## App Configuration
 
