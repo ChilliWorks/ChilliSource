@@ -102,7 +102,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------------------
 		void HttpRequestSystem::CheckReachability(const ReachabilityResultDelegate& delegate) const noexcept
 		{
-			//TODO: RPi: Add reachability check
+			//TODO: RPi: Add reachability check if possible
             CS_ASSERT(delegate, "The reachability delegate should not be null.");
 			CS_LOG_WARNING("CheckReachability: Not implemented on Raspberry Pi");
 			delegate(true);
