@@ -78,11 +78,12 @@ namespace CSBackend
 			///
 			curl_slist* CreateHeaders(const ChilliSource::ParamDictionary& headers) noexcept
 			{
-				curl_slist* chunk;
+				curl_slist* chunk = nullptr;
 
 				for(const auto& header : headers)
 				{
-					chunk = curl_slist_append(chunk, (header.first + ": " + header.second).c_str());
+					std::string formatted = header.first + ": " + header.second;
+					chunk = curl_slist_append(chunk, formatted.c_str());
 				}
 
 				return chunk;
