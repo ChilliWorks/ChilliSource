@@ -50,6 +50,11 @@ namespace CSBackend
 		CS_FORWARDDECLARE_CLASS(Keyboard);
 		CS_FORWARDDECLARE_CLASS(PointerSystem);
 		CS_FORWARDDECLARE_CLASS(TextEntry);
+		//------------------------------------------------------
+		/// Networking
+		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(HttpRequest);
+		CS_FORWARDDECLARE_CLASS(HttpRequestSystem);
 	}
 }
 
