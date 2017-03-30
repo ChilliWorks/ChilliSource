@@ -458,11 +458,14 @@ namespace CSBackend
 					}
 					case KeyPress:
 					{
-						std::unique_lock<std::mutex> lock(m_keyMutex);
+						std::unique_lock<std::mutex> keyLock(m_keyMutex);
 						if(m_keyboardEventDelegate)
 						{
 							m_keyboardEventDelegate(XkbKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0, 0), event.xkey.state, KeyboardEvent::k_pressed);
 						}
+						keyLock.unlock();
+
+						std::unique_lock<std::mutex> textLock(m_textMutex);
 						if(m_textEntryEventDelegate)
 						{
 							if(XFilterEvent(&event, m_xwindow) == false)
