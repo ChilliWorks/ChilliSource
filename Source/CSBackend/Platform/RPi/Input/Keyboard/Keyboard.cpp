@@ -257,6 +257,7 @@ namespace CSBackend
 		/// @param CS key code
 		///
 		/// @return X11 keysym
+		///
 		u32 CSKeyCodeToX11KeySym(ChilliSource::KeyCode in_code)
 		{
 			return k_x11keyCodesMap[(u32)in_code];
@@ -267,6 +268,7 @@ namespace CSBackend
 		/// @param X11 keysym
 		///
 		/// @return CS key code
+		///
 		ChilliSource::KeyCode X11KeySymToCSKeyCode(u32 in_keysym)
 		{
 			u32 foundKey = (u32)ChilliSource::KeyCode::k_total;

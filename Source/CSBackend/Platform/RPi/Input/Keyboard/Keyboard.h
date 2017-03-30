@@ -57,6 +57,7 @@ namespace CSBackend
 			/// @retrun TRUE if the system 'IsA' interface
 			///
 			bool IsA(ChilliSource::InterfaceIDType interfaceId) const override;
+			
 			/// @param code
 			///		Code of the key to check if down
 			///
