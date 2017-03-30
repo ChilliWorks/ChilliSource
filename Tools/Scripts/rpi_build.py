@@ -128,29 +128,22 @@ def _generate_ninja_file(app_name,
 		cs_source_dirs = [os.path.normpath('{}/ChilliSource/Source/ChilliSource'.format(project_root)), os.path.normpath('{}/ChilliSource/Source/CSBackend/Platform/RPi/'.format(project_root)), os.path.normpath('{}/ChilliSource/Source/CSBackend/Rendering/OpenGL/'.format(project_root))]
 		cs_output_files = _write_build_command(ninja_file, cs_source_dirs, 'c,cpp,cc', 'compile', 'dependencies', project_root, build_dir)
 		app_output_files = _write_build_command(ninja_file, app_source_dirs, 'c,cpp,cc', 'compile', 'dependencies', project_root, build_dir)
+		all_output_files = cs_output_files + app_output_files
 
 		# Create the response file to get around exceeding the command length on Windows.
 		joint_output_filepath = os.path.join(build_dir, 'jointoutputfiles.rsp')
 		joint_output_file = open(joint_output_filepath, 'w') 
+		joint_output_file.write(" ".join(all_output_files))
+		joint_output_file.close()
 
 		cs_output_filepath = os.path.join(build_dir, 'csoutputfiles.rsp')
-		cs_output_file = open(cs_output_filepath, 'w') 
+		cs_output_file = open(cs_output_filepath, 'w')
+		cs_output_file.write(" ".join(cs_output_files))
+		cs_output_file.close()
 
 		app_output_filepath = os.path.join(build_dir, 'appoutputfiles.rsp')
-		app_output_file = open(app_output_filepath, 'w') 
-
-		for o in cs_output_files:
-			o = o + " "
-			cs_output_file.write(o)
-			joint_output_file.write(o)
-
-		for o in app_output_files:
-			o = o + " "
-			app_output_file.write(o)
-			joint_output_file.write(o)
-
-		joint_output_file.close()
-		cs_output_file.close()
+		app_output_file = open(app_output_filepath, 'w')
+		app_output_file.write(" ".join(app_output_files))
 		app_output_file.close()
 
 		# Write the command to generate the static library for ChilliSource and the application
