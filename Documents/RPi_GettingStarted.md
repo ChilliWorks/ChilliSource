@@ -4,20 +4,21 @@ Exciting news - you can now use ChilliSource to create both 2D and 3D games for 
 
 This tutorial will walk you through how to build a ChilliSource game for Raspberry Pi and covers the caveats of Pi development. Please let us know if you encounter any issues or if there are any new features you would like to see.
 
-## Known Issues
-
-This is an experimental platform and due to this, and the reduced ability of the Pi's GPU, there are some features of ChilliSource that cannot be used on the Pi. Some of the missing features will be added as part of the continued development of ChilliSource Pi, others will only be added if and when they are supported by the 3rd party libraries we use or by the Pi hardware itself.
-
-**Hardware and Version**
-
 We have tested apps running on a Raspberry Pi 3 model B with Raspbian "Jessie" (we also have used libraries from "Jessie"). Apps may work on other Raspberry Pi models and OS versions but we have yet to test.
 
-**Coming Soon**
+## Requirements
 
-- Text Entry System
-- Framebuffer MSAA
+- Raspberry Pi 3, Model B
+- [Raspbian "Jessie"](https://www.raspberrypi.org/downloads/raspbian/)
+- [Ninja build](https://ninja-build.org/)
+- Python 2.7+
+- GNU g++
 
-**Waiting on Support**
+## Missing Features
+
+This is an experimental platform and due to this, and the Pi hardware/software, there are some features of ChilliSource that cannot be used on the Pi. Some of the missing features will be added as part of the continued development of ChilliSource Pi, others will only be added if and when they are supported by the 3rd party libraries we use or by the Pi hardware itself.
+
+- Framebuffer MSAA: In development.
 
 - Shadows: *The Pi GPU does not support the GL depth texture extension that we require for shadows. So as with some Android devices shadows are disabled*
 
@@ -28,14 +29,6 @@ We have tested apps running on a Raspberry Pi 3 model B with Raspbian "Jessie" (
 - Video rendering: *This has not been looked into yet but will probably encounter the same issues as with dialogue boxes.*
 
 - Web View: *This has not been looked into yet but will probably encounter the same issues as with dialogue boxes.*
-
-## Requirements
-
-- Raspberry Pi 3, Model B
-- [Raspbian "Jessie"](https://www.raspberrypi.org/downloads/raspbian/)
-- [Ninja build](https://ninja-build.org/)
-- Python 2.7+
-- GNU g++
 
 ## Pi Setup
 

@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Base/Singleton.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
 
 #include <json/json.h>
 
@@ -95,6 +96,10 @@ namespace CSBackend
 			/// @param The event type (Pressed/Released)
 			///
 			using KeyboardEventDelegate = std::function<void(u32, u32, KeyboardEvent)>;
+
+			/// @param Utf-8 character
+			///
+			using TextEntryEventDelegate = std::function<void(ChilliSource::UTF8Char)>;
 
 			/// Create and run the application; this will update and render the app.
 			///
@@ -182,6 +187,24 @@ namespace CSBackend
 			///
 			void RemoveKeyboardDelegates() noexcept;
 
+			/// Sets the delegate called on text entry. This differs from keyboard events in that the modifier keys
+			/// are applied and the key press is converted to a utf-8 character.
+			///
+			/// This method will assert if a given delegate is null or if the delegate has already been set.
+			///
+			/// This method is thread-safe.
+			///
+			/// @param textEntryEventDelegate
+			///		The delegate called when a text entry event occurs.
+			///
+			void SetTextEntryDelegates(TextEntryEventDelegate textEntryEventDelegate) noexcept;
+
+			/// Remove the delegates that relate to text entry events.
+			///
+			/// This method is thread-safe.
+			///
+			void RemoveTextEntryDelegates() noexcept;
+
 			/// Tell the main loop to shutdown and the windows to close gracefull at the
 			/// end of the next update
 			///
@@ -256,6 +279,8 @@ namespace CSBackend
 			Display* m_xdisplay = nullptr;
 			Window m_xwindow;
 			Atom m_wmDeleteMessage;
+			XIM m_xinputMethod;
+			XIC m_xinputContext;
 
 			/// Program state stuff
 			bool m_isRunning = false;
@@ -274,6 +299,8 @@ namespace CSBackend
 			std::mutex m_keyMutex;
 			KeyboardEventDelegate m_keyboardEventDelegate;
 
+			std::mutex m_textMutex;
+			TextEntryEventDelegate m_textEntryEventDelegate;
 
 			// CS Lifecycle Manager
 			ChilliSource::LifecycleManagerUPtr m_lifecycleManager;

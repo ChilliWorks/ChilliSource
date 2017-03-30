@@ -270,7 +270,7 @@ namespace CSBackend
 
 			auto displayMode = ReadInitialWindowMode(appConfigRoot);
 			ReadMultisampleFormat(appConfigRoot);
-			
+
 			m_desktopSize = GetSupportedFullscreenResolutions()[0] - (GetSupportedFullscreenResolutions()[0] / 10);
 			m_windowSize = ReadInitialWindowSize(appConfigRoot, displayMode == ChilliSource::Screen::DisplayMode::k_windowed ? m_desktopSize : GetSupportedFullscreenResolutions()[0]);
 			m_windowPos = ChilliSource::Integer2::k_zero;
@@ -303,6 +303,9 @@ namespace CSBackend
 			}
 
 			m_xwindow = XCreateSimpleWindow(m_xdisplay, XDefaultRootWindow(m_xdisplay), windowPos.x, windowPos.y, windowSize.x, windowSize.y, 0, 0, 0);
+
+			m_xinputMethod = XOpenIM(m_xdisplay, 0, 0, 0);
+			m_xinputContext = XCreateIC(m_xinputMethod, XNClientWindow, m_xwindow, XNFocusWindow, m_xwindow, XNInputStyle, XIMPreeditNothing | XIMStatusNothing, 0);
 
 			//Capture the window close message
 			m_wmDeleteMessage = XInternAtom(m_xdisplay, "WM_DELETE_WINDOW", False);
@@ -380,6 +383,7 @@ namespace CSBackend
 				{
 					case FocusIn:
 					{
+						XSetICFocus(m_xinputContext);
 						if(m_isFocused == false)
 						{
 							m_isFocused = true;
@@ -389,6 +393,7 @@ namespace CSBackend
 					}
 					case FocusOut:
 					{
+						XUnsetICFocus(m_xinputContext);
 						if(m_isFocused == true)
 						{
 							m_isFocused = false;
@@ -457,6 +462,20 @@ namespace CSBackend
 						if(m_keyboardEventDelegate)
 						{
 							m_keyboardEventDelegate(XkbKeycodeToKeysym(m_xdisplay, event.xkey.keycode, 0, 0), event.xkey.state, KeyboardEvent::k_pressed);
+						}
+						if(m_textEntryEventDelegate)
+						{
+							if(XFilterEvent(&event, m_xwindow) == false)
+							{
+								Status status;
+								u8 keyBuffer[4] = {0};
+								auto length = Xutf8LookupString(m_xinputContext, &event.xkey, (char*)keyBuffer, sizeof(keyBuffer), 0, &status);
+								if(length > 0)
+								{
+									ChilliSource::UTF8Char utf8Char = keyBuffer[0] | (keyBuffer[1] << 8) | (keyBuffer[2] << 16) | (keyBuffer[3] << 24);
+									m_textEntryEventDelegate((u32)keyBuffer[0]);
+								}
+							}
 						}
 						break;
 					}
@@ -653,6 +672,24 @@ namespace CSBackend
 		}
 
 		//-----------------------------------------------------------------------------------
+		void DispmanWindow::SetTextEntryDelegates(TextEntryEventDelegate textEntryEventDelegate) noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_textMutex);
+
+			CS_ASSERT(textEntryEventDelegate, "Text entry event delegate invalid.");
+			CS_ASSERT(!m_textEntryEventDelegate, "Text entry event delegate already set.");
+
+			m_textEntryEventDelegate = std::move(textEntryEventDelegate);
+		}
+
+		//-----------------------------------------------------------------------------------
+		void DispmanWindow::RemoveTextEntryDelegates() noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_textMutex);
+			m_textEntryEventDelegate = nullptr;
+		}
+
+		//-----------------------------------------------------------------------------------
 		std::vector<ChilliSource::Integer2> DispmanWindow::GetSupportedFullscreenResolutions() const noexcept
 		{
 			u32 width(0), height(0);
@@ -682,6 +719,7 @@ namespace CSBackend
 			CS_ASSERT(!m_mouseButtonDelegate, "Mouse button event delegate not removed.");
 			CS_ASSERT(!m_mouseMovedDelegate, "Mouse moved delegate not removed.");
 			CS_ASSERT(!m_keyboardEventDelegate, "Keyboard event delegate not removed.");
+			CS_ASSERT(!m_textEntryEventDelegate, "Text entry event delegate not removed");
 
 			eglDestroyContext(m_eglDisplay, m_eglContext);
 			eglDestroySurface(m_eglDisplay, m_eglSurface);
@@ -689,6 +727,8 @@ namespace CSBackend
 
 			if(m_xdisplay)
 			{
+				XDestroyIC(m_xinputContext);
+				XCloseIM(m_xinputMethod);
 				XDestroyWindow(m_xdisplay, m_xwindow);
 				XCloseDisplay(m_xdisplay);
 			}

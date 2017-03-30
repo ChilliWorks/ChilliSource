@@ -1,11 +1,7 @@
 //
-//  TextEntry.cpp
-//  ChilliSource
-//  Created by Scott Downie on 08/07/2014
-//
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2017 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,49 +22,52 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
+#ifdef CS_TARGETPLATFORM_RPI
 
-#include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
+#include <CSBackend/Platform/RPi/Input/TextEntry/TextEntry.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
+#include <CSBackend/Platform/RPi/Core/Base/DispmanWindow.h>
+
+#include <X11/keysym.h>
 
 namespace CSBackend
 {
-	namespace Windows
+	namespace RPi
 	{
 		CS_DEFINE_NAMEDTYPE(TextEntry);
 
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		bool TextEntry::IsA(ChilliSource::InterfaceIDType in_interfaceId) const
+		//----------------------------------------------------------------------------------
+		bool TextEntry::IsA(ChilliSource::InterfaceIDType interfaceId) const noexcept
 		{
-			return in_interfaceId == ChilliSource::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
+			return interfaceId == ChilliSource::TextEntry::InterfaceID || interfaceId == TextEntry::InterfaceID;
 		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void TextEntry::Activate(const std::string& in_text, ChilliSource::TextEntryType in_type, ChilliSource::TextEntryCapitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
+
+		//----------------------------------------------------------------------------------
+		void TextEntry::Activate(const std::string& text, ChilliSource::TextEntryType type, ChilliSource::TextEntryCapitalisation capitalisation, const TextBufferChangedDelegate& changeDelegate, const TextInputDeactivatedDelegate& deactivateDelegate) noexcept
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot activate system text entry outside of main thread.");
             CS_ASSERT(!m_active, "Cannot activate TextEntry system while already active.");
 
             m_active = true;
-			m_text = in_text;
-			m_textBufferChangedDelegate = in_changeDelegate;
-			m_textInputDeactivatedDelegate = in_deactivateDelegate;
-			SFMLWindow::Get()->SetTextEnteredDelegate(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
+			m_text = text;
+			m_textBufferChangedDelegate = changeDelegate;
+			m_textInputDeactivatedDelegate = deactivateDelegate;
+			DispmanWindow::Get()->SetTextEntryDelegates(ChilliSource::MakeDelegate(this, &TextEntry::OnTextEntered));
 		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-        void TextEntry::Deactivate()
+
+		//----------------------------------------------------------------------------------
+        void TextEntry::Deactivate() noexcept
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot deactivate system text entry outside of main thread.");
             CS_ASSERT(m_active, "Cannot deactivate TextEntry system when not active.");
 
+			DispmanWindow::Get()->RemoveTextEntryDelegates();
+
             m_active = false;
-            SFMLWindow::Get()->RemoveTextEnteredDelegate();
+
             if (m_textInputDeactivatedDelegate != nullptr)
             {
                 auto delegate = m_textInputDeactivatedDelegate;
@@ -76,40 +75,34 @@ namespace CSBackend
                 delegate();
             }
 		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool TextEntry::IsActive() const
-        {
-            return m_active;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const std::string& TextEntry::GetTextBuffer() const
+
+		//----------------------------------------------------------------------------------
+        const std::string& TextEntry::GetTextBuffer() const noexcept
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot get system text entry buffer outside of main thread.");
             return m_text;
         }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextBuffer(const std::string& in_text)
+
+		//----------------------------------------------------------------------------------
+        void TextEntry::SetTextBuffer(const std::string& text) noexcept
         {
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot set system text entry buffer outside of main thread.");
-            m_text = in_text;
+            m_text = text;
         }
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-        void TextEntry::OnTextEntered(ChilliSource::UTF8Char in_unicodeChar)
+
+		//----------------------------------------------------------------------------------
+        void TextEntry::OnTextEntered(ChilliSource::UTF8Char character) noexcept
         {
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_mainThread, [=](const ChilliSource::TaskContext& taskContext)
             {
                 std::unique_lock<std::mutex> lock(m_mutex);
-                const ChilliSource::UTF8Char k_backspace = 8;
 
                 std::string text;
 
-                if (in_unicodeChar != k_backspace)
+				const ChilliSource::UTF8Char k_backspace = 8;
+                if (character != k_backspace)
                 {
-                    text = ChilliSource::UTF8StringUtils::AppendCopy(in_unicodeChar, m_text);
+                    text = ChilliSource::UTF8StringUtils::AppendCopy(character, m_text);
                 }
                 else
                 {

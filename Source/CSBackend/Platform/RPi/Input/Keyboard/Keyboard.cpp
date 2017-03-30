@@ -332,10 +332,8 @@ namespace CSBackend
 			{
 				auto csKeyCode = X11KeySymToCSKeyCode(keyCode);
 
-
 				if(keyEvent == DispmanWindow::KeyboardEvent::k_pressed)
 				{
-
 					if (IsKeyDown(csKeyCode) == false)
 					{
 						m_keysDown[static_cast<u32>(csKeyCode)] = true;
@@ -360,19 +358,14 @@ namespace CSBackend
 							modifiers.push_back(ChilliSource::ModifierKeyCode::k_system);
 						}
 
-						m_keyPressedEvent.NotifyConnections(csKeyCode, modifiers);
+						m_keyPressedEvent.NotifyConnections(csKeyCode, std::move(modifiers));
 					}
-
 				}
-
-				else
+				else if (IsKeyDown(csKeyCode) == true)
 				{
-					if (IsKeyDown(csKeyCode) == true)
-					{
-						m_keysDown[static_cast<u32>(csKeyCode)] = false;
+					m_keysDown[static_cast<u32>(csKeyCode)] = false;
 
-						m_keyReleasedEvent.NotifyConnections(csKeyCode);
-					}
+					m_keyReleasedEvent.NotifyConnections(csKeyCode);
 				}
 			});
 		}
