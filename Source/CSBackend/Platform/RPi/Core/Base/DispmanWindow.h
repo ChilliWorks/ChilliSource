@@ -256,11 +256,6 @@ namespace CSBackend
 
 		private:
 
-			ChilliSource::Integer2 m_desktopSize;
-			ChilliSource::Integer2 m_windowSize;
-			ChilliSource::Integer2 m_windowPos;
-			ChilliSource::Integer2 m_windowPosPreFullscreen;
-
 			/// EGL Objects needed for dispmanx.
 			EGLDisplay m_eglDisplay;
 			EGLConfig m_eglConfig;
@@ -287,6 +282,10 @@ namespace CSBackend
 			bool m_isFocused = false;
 			bool m_quitScheduled = false;
 			ChilliSource::Screen::DisplayMode m_displayMode = ChilliSource::Screen::DisplayMode::k_windowed;
+			ChilliSource::Integer2 m_desktopSize;
+			ChilliSource::Integer2 m_windowSize;
+			ChilliSource::Integer2 m_windowPos;
+			ChilliSource::Integer2 m_windowPosPreFullscreen;
 
 			/// Event delegates
 			std::mutex m_mouseMutex;

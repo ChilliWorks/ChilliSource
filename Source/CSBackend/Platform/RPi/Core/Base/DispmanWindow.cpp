@@ -46,11 +46,10 @@ namespace CSBackend
 	{
 		namespace
 		{
-			//------------------------------------------------------------------------
 			/// Reads the app.config file root into a Json object
 			///
-			/// @author: J Brown
-			//------------------------------------------------------------------------
+			/// @return App config as json object
+			///
 			inline Json::Value ReadAppConfig() noexcept
 			{
 				// Get current executable directory
@@ -88,21 +87,19 @@ namespace CSBackend
 				return root;
 			}
 
-			//-------------------------------------------------------------
 			/// Reads the surface format from the App.config file.
 			///
-			/// @author J Brown
-			///
-			/// @param App config Json root
+			/// @param root
+			///		App config Json root
 			///
 			/// @return The surface format.
-			//-------------------------------------------------------------
-			inline ChilliSource::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root) noexcept
+			///
+			inline ChilliSource::SurfaceFormat ReadSurfaceFormat(const Json::Value& root) noexcept
 			{
 				const std::string k_defaultFormat = "rgb565_depth24";
-				std::string formatString = in_root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
+				std::string formatString = root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
 
-				const Json::Value& rpi = in_root["RPi"];
+				const Json::Value& rpi = root["RPi"];
 				if (rpi.isNull() == false && rpi.isMember("PreferredSurfaceFormat"))
 				{
 					formatString = rpi["PreferredSurfaceFormat"].asString();
@@ -111,20 +108,18 @@ namespace CSBackend
 				return ChilliSource::ParseSurfaceFormat(formatString);
 			}
 
-			//-------------------------------------------------------------
 			/// Reads the multisample format from the App.config file.
 			///
-			/// @author J Brown
-			///
-			/// @param App config Json root
+			/// @param root
+			///		App config Json root
 			///
 			/// @return Number times multisample 0x, 2x, 4x.
-			//-------------------------------------------------------------
-			inline u32 ReadMultisampleFormat(const Json::Value& in_root) noexcept
+			///
+			inline u32 ReadMultisampleFormat(const Json::Value& root) noexcept
 			{
-				std::string stringFormat = in_root.get("Multisample", "None").asString();
+				std::string stringFormat = root.get("Multisample", "None").asString();
 
-				const Json::Value& rpi = in_root["RPi"];
+				const Json::Value& rpi = root["RPi"];
 				if (rpi.isNull() == false && rpi.isMember("Multisample"))
 				{
 					stringFormat = rpi["Multisample"].asString();
@@ -155,10 +150,14 @@ namespace CSBackend
 			}
 
 
-			//-----------------------------------------------------------------
-			/// Creates an EGLConfigChooser appropriate for the current
-			/// AppConfig.
-			//-----------------------------------------------------------------
+			/// Creates an EGLConfigChooser that will select the closest EGL config that
+			/// matches the preferred configuration in the app.config
+			///
+			/// @param appConfigRoot
+			///		App config json root
+			///
+			/// @return Config chooser that when executed will pick the closest supported config
+			///
 			inline EGLConfigChooser CreateConfigChooser(const Json::Value& appConfigRoot) noexcept
 			{
 				ChilliSource::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
@@ -194,12 +193,15 @@ namespace CSBackend
 				// Default to k_rgb565_depth24.
 				CS_LOG_WARNING("Couldn't get EGLConfig from App.config. Defaulting to RGB565_DEPTH24.");
 				return EGLConfigChooser(5, 6, 5, 0, 16, 24, 0);
-
 			}
 
-			//-----------------------------------------------------------------
 			/// Reads the desired window title from the AppConfig.
-			//-----------------------------------------------------------------
+			///
+			/// @param appConfigRoot
+			///		App config json root
+			///
+			/// @return Window title
+			///
 			inline std::string ReadDesiredTitle(const Json::Value& appConfigRoot) noexcept
 			{
 				std::string titleString = "Application";
@@ -254,8 +256,7 @@ namespace CSBackend
 				return ChilliSource::Screen::ParseDisplayMode(mode);
 			}
 		}
-
-
+		
 		//----------------------------------------------------------------------------------
 		void DispmanWindow::Run() noexcept
 		{
