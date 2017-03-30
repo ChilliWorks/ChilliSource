@@ -134,10 +134,12 @@ namespace CSBackend
 
 				if (stringFormat == "none")
 				{
+					printf("[ChilliSource] WARNING: Multisampling is not yet supported on Raspberry Pi\n");
 					return 0;
 				}
 				else if (stringFormat == "2x")
 				{
+					printf("[ChilliSource] WARNING: Multisampling is not yet supported on Raspberry Pi\n");
 					return 2;
 				}
 				else if (stringFormat == "4x")
@@ -267,7 +269,8 @@ namespace CSBackend
 			Json::Value appConfigRoot = ReadAppConfig();
 
 			auto displayMode = ReadInitialWindowMode(appConfigRoot);
-
+			ReadMultisampleFormat(appConfigRoot);
+			
 			m_desktopSize = GetSupportedFullscreenResolutions()[0] - (GetSupportedFullscreenResolutions()[0] / 10);
 			m_windowSize = ReadInitialWindowSize(appConfigRoot, displayMode == ChilliSource::Screen::DisplayMode::k_windowed ? m_desktopSize : GetSupportedFullscreenResolutions()[0]);
 			m_windowPos = ChilliSource::Integer2::k_zero;
