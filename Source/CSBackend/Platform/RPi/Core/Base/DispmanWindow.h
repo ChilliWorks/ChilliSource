@@ -302,7 +302,6 @@ namespace CSBackend
 			std::mutex m_textMutex;
 			TextEntryEventDelegate m_textEntryEventDelegate;
 
-			// CS Lifecycle Manager
 			ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
 		};
 	}

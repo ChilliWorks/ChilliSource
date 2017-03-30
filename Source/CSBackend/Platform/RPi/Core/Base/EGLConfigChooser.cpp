@@ -31,7 +31,7 @@ namespace CSBackend
     namespace RPi
     {
         //---------------------------------------------------------------------
-        EGLConfigChooser::EGLConfigChooser(u8 redSize, u8 greenSize, u8 blueSize, u8 alphaSize, u8 minDepthSize, u8 preferredDepthSize, u8 minStencilSize) noexcept
+        EGLConfigChooser::EGLConfigChooser(EGLint redSize, EGLint greenSize, EGLint blueSize, EGLint alphaSize, EGLint minDepthSize, EGLint preferredDepthSize, EGLint minStencilSize) noexcept
         {
             m_redSize = redSize;
             m_greenSize = greenSize;
@@ -92,17 +92,17 @@ namespace CSBackend
             {
                 for(EGLint i = 0; i < numConfigs; i++)
                 {
-                    u8 currentDepthSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_DEPTH_SIZE, 0);
-                    u8 currentStencilSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_STENCIL_SIZE, 0);
+                    auto currentDepthSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_DEPTH_SIZE, 0);
+                    auto currentStencilSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_STENCIL_SIZE, 0);
 
                     // We need >= minimum stencil/depth size.
                     if(currentDepthSize >= depthSize && currentStencilSize >= m_minStencilSize)
                     {
                         // Need exact matches for colour depth.
-                        u8 redSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_RED_SIZE, 0);
-                        u8 greenSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_GREEN_SIZE, 0);
-                        u8 blueSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_BLUE_SIZE, 0);
-                        u8 alphaSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_ALPHA_SIZE, 0);
+                        auto redSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_RED_SIZE, 0);
+                        auto greenSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_GREEN_SIZE, 0);
+                        auto blueSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_BLUE_SIZE, 0);
+                        auto alphaSize = FindConfigAttribute(eglDisplay, eglConfigs[i], EGL_ALPHA_SIZE, 0);
 
                         if(redSize == m_redSize && greenSize == m_greenSize && blueSize == m_blueSize && alphaSize == m_alphaSize)
                         {
@@ -118,12 +118,12 @@ namespace CSBackend
         }
 
         //---------------------------------------------------------------------
-        u8 EGLConfigChooser::FindConfigAttribute(EGLDisplay eglDisplay, EGLConfig eglConfig, EGLint attribute, u8 defaultValue) noexcept
+        EGLint EGLConfigChooser::FindConfigAttribute(EGLDisplay eglDisplay, EGLConfig eglConfig, EGLint attribute, EGLint defaultValue) noexcept
         {
             EGLint* value = new EGLint[1];
             if(eglGetConfigAttrib(eglDisplay, eglConfig, attribute, value) == true)
             {
-                return (u8)value[0];
+                return value[0];
             }
 
             return defaultValue;

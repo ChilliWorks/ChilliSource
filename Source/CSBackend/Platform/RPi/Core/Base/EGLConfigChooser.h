@@ -48,7 +48,7 @@ namespace CSBackend
             /// Constructs the ConfigChooser with the specified desired attributes.
             ///
             ///
-            EGLConfigChooser(u8 redSize, u8 greenSize, u8 blueSize, u8 alphaSize, u8 minDepthSize, u8 preferredDepthSize, u8 minStencilSize) noexcept;
+            EGLConfigChooser(EGLint redSize, EGLint greenSize, EGLint blueSize, EGLint alphaSize, EGLint minDepthSize, EGLint preferredDepthSize, EGLint minStencilSize) noexcept;
 
             /// Picks the best EGLConfig using the specified desired attributes.
             ///
@@ -71,15 +71,15 @@ namespace CSBackend
             /// @param The EGLint representing the attribute to check for.
             /// @param The default value of the attribute - returned if attribute isn't found in the config.
             ///
-            u8 FindConfigAttribute(EGLDisplay eglDisplay, EGLConfig eglConfig, EGLint attribute, u8 defaultValue) noexcept;
+            EGLint FindConfigAttribute(EGLDisplay eglDisplay, EGLConfig eglConfig, EGLint attribute, EGLint defaultValue) noexcept;
 
-            u8 m_redSize;
-            u8 m_greenSize;
-            u8 m_blueSize;
-            u8 m_alphaSize;
-            u8 m_minDepthSize;
-            u8 m_preferredDepthSize;
-            u8 m_minStencilSize;
+            EGLint m_redSize;
+            EGLint m_greenSize;
+            EGLint m_blueSize;
+            EGLint m_alphaSize;
+            EGLint m_minDepthSize;
+            EGLint m_preferredDepthSize;
+            EGLint m_minStencilSize;
         };
     }
 }
