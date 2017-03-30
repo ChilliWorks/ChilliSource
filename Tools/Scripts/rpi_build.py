@@ -43,6 +43,8 @@ LIBRARIES = "-lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_ar
 # 	The list source file extension to look for in the format "a,b,c"
 # @param compile_rule
 # 	Name of the compile rule to compile this type of source file
+# @param dep_rule
+# 	Name of the rule to generate depencencies for this type of source file
 # @param project_root
 # 	Path to the root of the project
 # @param build_dir
@@ -50,7 +52,7 @@ LIBRARIES = "-lChilliSource -lCSBase -lvcos -lbcm_host -lGLESv2 -lEGL -lvchiq_ar
 # 
 # @return List of output file paths
 # 
-def _write_build_command(ninja_file, dirs, exts, compile_rule, project_root, build_dir):
+def _write_build_command(ninja_file, dirs, exts, compile_rule, dep_rule, project_root, build_dir):
 
 	get_files_script = os.path.normpath("{}/ChilliSource/Tools/Scripts/get_file_paths_with_extensions.py".format(project_root))
 	source_files = []
@@ -58,11 +60,17 @@ def _write_build_command(ninja_file, dirs, exts, compile_rule, project_root, bui
 		source_files += subprocess.check_output(['python', get_files_script, '--directory', d, '--extensions', exts], universal_newlines=True).split(" ")
 
 	source_files = list(filter(lambda x: len(x) > 0, source_files))
+	source_files = list(filter(lambda x: len(x) > 0, source_files))
+	# Convert the source files extensions from .c/cpp etc. to .o
 	output_files = map(lambda x: os.path.splitext(x)[0]+'.o', source_files)
-	output_files = list(map(lambda x: os.path.normpath(x).replace(project_root, build_dir, 1), output_files))
+	# Make the file paths relative to the build dir
+	output_files = map(lambda x: os.path.normpath(x).replace(project_root, build_dir, 1), output_files)
+	# Make sure we escape any backslashes
+	output_files = list(map(lambda x: x.replace('\\', '\\\\'), output_files))
 
 	for source_file, output_file in zip(source_files, output_files):
 		ninja_file.build(rule=compile_rule, inputs=source_file, outputs=output_file)
+		ninja_file.build(rule=dep_rule, inputs=source_file, outputs=output_file+".d")
 
 	return output_files
 
@@ -105,18 +113,21 @@ def _generate_ninja_file(app_name,
 		ninja_file.variable(key="builddir", value=build_dir)
 
 		# Write the compiler rule for c, cpp and cc
-		ninja_file.rule("compile", command="{} -MMD -MT $out -MF $out.d {} $in -o $out".format(compiler_path, compiler_flags), description="Compiling source: $in", depfile="$out.d", deps="gcc")
+		ninja_file.rule("compile", command="{} {} -o $out $in".format(compiler_path, compiler_flags), description="Compiling source: $in", depfile="$out.o.d", deps="gcc")
+
+		# Write the rule that generates the dependencies
+		ninja_file.rule("dependencies", command="{} {} -MM -MG -MF $out $in".format(compiler_path, compiler_flags), description="Generating dependency: $in")
 
 		# Write the rule to build the static library. Note we use the @file notation as on Windows the command is too long for CreateProcess
-		ninja_file.rule("ar", command="{} rcs $out @$in".format(archiver_path), description="Building static library: $out")
+		ninja_file.rule("archive", command="{} rcs $out @$in".format(archiver_path), description="Building static library: $out")
 
 		# Write the rule to link. Note we use the @file notation as on Windows the command is too long for CreateProcess
-		ninja_file.rule("ld", command="{} @$in {} -o $out".format(linker_path, linker_flags), description="Linking: $out")
+		ninja_file.rule("link", command="{} @$in {} -o $out".format(linker_path, linker_flags), description="Linking: $out")
 
 		# Write the compile command for all source files.
 		cs_source_dirs = [os.path.normpath('{}/ChilliSource/Source/ChilliSource'.format(project_root)), os.path.normpath('{}/ChilliSource/Source/CSBackend/Platform/RPi/'.format(project_root)), os.path.normpath('{}/ChilliSource/Source/CSBackend/Rendering/OpenGL/'.format(project_root))]
-		cs_output_files = _write_build_command(ninja_file, cs_source_dirs, 'c,cpp,cc', 'compile', project_root, build_dir)
-		app_output_files = _write_build_command(ninja_file, app_source_dirs, 'c,cpp,cc', 'compile', project_root, build_dir)
+		cs_output_files = _write_build_command(ninja_file, cs_source_dirs, 'c,cpp,cc', 'compile', 'dependencies', project_root, build_dir)
+		app_output_files = _write_build_command(ninja_file, app_source_dirs, 'c,cpp,cc', 'compile', 'dependencies', project_root, build_dir)
 
 		# Create the response file to get around exceeding the command length on Windows.
 		joint_output_filepath = os.path.join(build_dir, 'jointoutputfiles.rsp')
@@ -129,25 +140,25 @@ def _generate_ninja_file(app_name,
 		app_output_file = open(app_output_filepath, 'w') 
 
 		for o in cs_output_files:
-			escaped = o.replace('\\', '\\\\')
-			cs_output_file.write("{} ".format(escaped))
-			joint_output_file.write("{} ".format(escaped))
+			o = o + " "
+			cs_output_file.write(o)
+			joint_output_file.write(o)
 
 		for o in app_output_files:
-			escaped = o.replace('\\', '\\\\')
-			app_output_file.write("{} ".format(escaped))
-			joint_output_file.write("{} ".format(escaped))
+			o = o + " "
+			app_output_file.write(o)
+			joint_output_file.write(o)
 
 		joint_output_file.close()
 		cs_output_file.close()
 		app_output_file.close()
 
 		# Write the command to generate the static library for ChilliSource and the application
-		ninja_file.build(rule="ar", inputs=cs_output_filepath, outputs=lib_cs_path)
-		ninja_file.build(rule="ar", inputs=app_output_filepath, outputs=lib_app_path)
+		ninja_file.build(rule="archive", inputs=cs_output_filepath, outputs=lib_cs_path)
+		ninja_file.build(rule="archive", inputs=app_output_filepath, outputs=lib_app_path)
 
 		# Write the rule to link the libraries into the executable
-		ninja_file.build(rule="ld", inputs=joint_output_filepath, outputs=os.path.join(output_dir, app_name))
+		ninja_file.build(rule="link", inputs=joint_output_filepath, outputs=os.path.join(output_dir, app_name))
 
 # Generates the ninja "makefile", builds the application and copies
 # the assets to the output folder
