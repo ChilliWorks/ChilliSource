@@ -65,8 +65,8 @@ def _write_build_command(ninja_file, dirs, exts, compile_rule, dep_rule, project
 	output_files = map(lambda x: os.path.splitext(x)[0]+'.o', source_files)
 	# Make the file paths relative to the build dir
 	output_files = map(lambda x: os.path.normpath(x).replace(project_root, build_dir, 1), output_files)
-	# Make sure we escape any backslashes
-	output_files = list(map(lambda x: x.replace('\\', '\\\\'), output_files))
+	# Convert from windows separators to unix ones as Ninja has a bug where it doesn't escape windows properly
+	output_files = list(map(lambda x: x.replace('\\', '/'), output_files))
 
 	for source_file, output_file in zip(source_files, output_files):
 		ninja_file.build(rule=compile_rule, inputs=source_file, outputs=output_file)
@@ -118,11 +118,11 @@ def _generate_ninja_file(app_name,
 		# Write the rule that generates the dependencies
 		ninja_file.rule("dependencies", command="{} {} -MM -MG -MF $out $in".format(compiler_path, compiler_flags), description="Generating dependency: $in")
 
-		# Write the rule to build the static library. Note we use the @file notation as on Windows the command is too long for CreateProcess
-		ninja_file.rule("archive", command="{} rcs $out @$in".format(archiver_path), description="Building static library: $out")
+		# Write the rule to build the static library. Note we use response files as on Windows the command is too long for CreateProcess
+		ninja_file.rule("archive", command="{} rcs $out @$out.rsp".format(archiver_path), description="Building static library: $out", rspfile="$out.rsp", rspfile_content="$in")
 
-		# Write the rule to link. Note we use the @file notation as on Windows the command is too long for CreateProcess
-		ninja_file.rule("link", command="{} @$in {} -o $out".format(linker_path, linker_flags), description="Linking: $out")
+		# Write the rule to link. Note we use response files as on Windows the command is too long for CreateProcess
+		ninja_file.rule("link", command="{} @$out.rsp {} -o $out".format(linker_path, linker_flags), description="Linking: $out", rspfile="$out.rsp", rspfile_content="$in")
 
 		# Write the compile command for all source files.
 		cs_source_dirs = [os.path.normpath('{}/ChilliSource/Source/ChilliSource'.format(project_root)), os.path.normpath('{}/ChilliSource/Source/CSBackend/Platform/RPi/'.format(project_root)), os.path.normpath('{}/ChilliSource/Source/CSBackend/Rendering/OpenGL/'.format(project_root))]
@@ -130,28 +130,12 @@ def _generate_ninja_file(app_name,
 		app_output_files = _write_build_command(ninja_file, app_source_dirs, 'c,cpp,cc', 'compile', 'dependencies', project_root, build_dir)
 		all_output_files = cs_output_files + app_output_files
 
-		# Create the response file to get around exceeding the command length on Windows.
-		all_output_filepath = os.path.join(build_dir, 'alloutputfiles.rsp')
-		all_output_file = open(all_output_filepath, 'w') 
-		all_output_file.write(" ".join(all_output_files))
-		all_output_file.close()
-
-		cs_output_filepath = os.path.join(build_dir, 'csoutputfiles.rsp')
-		cs_output_file = open(cs_output_filepath, 'w')
-		cs_output_file.write(" ".join(cs_output_files))
-		cs_output_file.close()
-
-		app_output_filepath = os.path.join(build_dir, 'appoutputfiles.rsp')
-		app_output_file = open(app_output_filepath, 'w')
-		app_output_file.write(" ".join(app_output_files))
-		app_output_file.close()
-
 		# Write the command to generate the static library for ChilliSource and the application
-		ninja_file.build(rule="archive", inputs=cs_output_filepath, outputs=lib_cs_path)
-		ninja_file.build(rule="archive", inputs=app_output_filepath, outputs=lib_app_path)
+		ninja_file.build(rule="archive", inputs=cs_output_files, outputs=lib_cs_path)
+		ninja_file.build(rule="archive", inputs=app_output_files, outputs=lib_app_path)
 
 		# Write the rule to link the libraries into the executable
-		ninja_file.build(rule="link", inputs=all_output_filepath, outputs=os.path.join(output_dir, app_name))
+		ninja_file.build(rule="link", inputs=all_output_files, outputs=os.path.join(output_dir, app_name))
 
 # Generates the ninja "makefile", builds the application and copies
 # the assets to the output folder
