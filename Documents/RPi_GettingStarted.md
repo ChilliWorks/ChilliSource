@@ -111,7 +111,7 @@ catch throw
 run
 ```
 
-libCrypto will throw an exception (which is expected apparently) so you need to skip that:
+libCrypto will throw an exception (which is expected apparently) that will stop the debugger so you need to skip that:
 
 ```
 signal SIGILL
