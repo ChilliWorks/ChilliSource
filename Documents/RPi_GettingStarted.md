@@ -50,13 +50,11 @@ By default we use g++ to compile and link. This is usually preinstalled on your 
 
 ## Compiling
 
-If you are creating a game from scratch using the project generator then you will already have the build scripts required for Raspberry Pi development. If you have an existing game that you want to build for the Pi then you can use the sample build script (*build.py*) from [CSTest](https://github.com/ChilliWorks/CSTest) or [CSPong](https://github.com/ChilliWorks/CSSamples).
+The build process uses the built in g++ compiler and linker. If you are creating a game from scratch using the project generator then you will already have the build scripts required for Raspberry Pi development. If you have an existing game that you want to build for the Pi then you can use the sample build script (*build.py*) from [CSTest](https://github.com/ChilliWorks/CSTest) or [CSPong](https://github.com/ChilliWorks/CSSamples).
 
 By default the build script is setup to build on the Raspberry Pi itself so make sure your project is on the Pi. Navigate to */Projects/RPi/* in terminal and type "python build.py debug" to start building (you can replace "debug" with "release" to build in release mode). The script will generate an exe and the required assets in an Output folder in the same directory.
 
 If you want to clean the build type "python build.py debug|release clean".
-
-By default the build process uses the built in g++ compiler and linker. If you want to change to another compiler (e.g. clang) or use a cross compiler (more on that later) change the paths at the top of *build.py* to point to the appropriate compiler, archiver and linker.
 
 NOTE: Make sure you have installed Ninja prior to running the build script.
 

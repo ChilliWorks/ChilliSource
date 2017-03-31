@@ -131,10 +131,10 @@ def _generate_ninja_file(app_name,
 		all_output_files = cs_output_files + app_output_files
 
 		# Create the response file to get around exceeding the command length on Windows.
-		joint_output_filepath = os.path.join(build_dir, 'jointoutputfiles.rsp')
-		joint_output_file = open(joint_output_filepath, 'w') 
-		joint_output_file.write(" ".join(all_output_files))
-		joint_output_file.close()
+		all_output_filepath = os.path.join(build_dir, 'alloutputfiles.rsp')
+		all_output_file = open(all_output_filepath, 'w') 
+		all_output_file.write(" ".join(all_output_files))
+		all_output_file.close()
 
 		cs_output_filepath = os.path.join(build_dir, 'csoutputfiles.rsp')
 		cs_output_file = open(cs_output_filepath, 'w')
@@ -151,7 +151,7 @@ def _generate_ninja_file(app_name,
 		ninja_file.build(rule="archive", inputs=app_output_filepath, outputs=lib_app_path)
 
 		# Write the rule to link the libraries into the executable
-		ninja_file.build(rule="link", inputs=joint_output_filepath, outputs=os.path.join(output_dir, app_name))
+		ninja_file.build(rule="link", inputs=all_output_filepath, outputs=os.path.join(output_dir, app_name))
 
 # Generates the ninja "makefile", builds the application and copies
 # the assets to the output folder
