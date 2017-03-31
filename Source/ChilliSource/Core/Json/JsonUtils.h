@@ -55,7 +55,7 @@ namespace ChilliSource
         ///
         /// @return The new json object.
         //---------------------------------------------------------------
-        Json::Value ParseJson(const std::string& in_jsonString);
+        Json::Value ParseJson(const std::string& in_jsonString) noexcept;
         //---------------------------------------------------------------
         /// Creates a new Json object from the contents of the file
         /// at the given path. If the file cannot be read this will return
@@ -67,10 +67,24 @@ namespace ChilliSource
         ///
         /// @param The storage location of the file.
         /// @param The file path.
+        /// @param [OUT] Json object to populate with read data
         ///
-        /// @return The new json object.
+        /// @return TRUE if successful
         //---------------------------------------------------------------
-        bool ReadJson(StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue);
+        bool ReadJson(StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue) noexcept;
+        
+        /// Writes the given json object to a text file at the given location and path.
+        ///
+        /// @param storageLocation
+        ///     The location to write the file
+        /// @param filePath
+        ///     Path to the file relative to the location
+        /// @param jsonValue
+        ///     Json to output
+        ///
+        /// @return TRUE if successful
+        ///
+        bool WriteJson(StorageLocation storageLocation, const std::string& filePath, const Json::Value& jsonValue) noexcept;
     }
 }
 
