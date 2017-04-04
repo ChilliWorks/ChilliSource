@@ -599,9 +599,12 @@ namespace CSBackend
 					}
 				}
 
-                m_lifecycleManager->SystemUpdate();
-                m_lifecycleManager->Render();
-                m_window.display();
+				if (m_isFocused == true)
+				{
+                	m_lifecycleManager->SystemUpdate();
+                	m_lifecycleManager->Render();
+                	m_window.display();
+				}
 
 				if (m_quitScheduled)
 				{
