@@ -31,6 +31,8 @@
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Input/Gamepad/GamepadSystem.h>
 
+#include <SFML/Window/Joystick.hpp>
+
 #include <array>
 
 namespace CSBackend
@@ -96,8 +98,12 @@ namespace CSBackend
 			///
 			/// @param joystickIndex
 			///		Index of joystick
+			/// @param axisId
+			///		Identifier of the axis. SFML splits all axis into single floats
+			/// @param pos
+			///		Position of the axis along the line of the axis
 			///
-			void OnAxisMoved(u32 joystickIndex) noexcept;
+			void OnAxisMoved(u32 joystickIndex, sf::Joystick::Axis axisId, f32 pos) noexcept;
 
 			/// Stop listening for SFML events
 			///

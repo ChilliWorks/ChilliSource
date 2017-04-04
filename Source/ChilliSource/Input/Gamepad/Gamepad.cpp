@@ -27,22 +27,24 @@
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
-    Gamepad::Gamepad(Id uniqueId, u32 index) noexcept
-    : m_uniqueId(uniqueId), m_index(index)
+    Gamepad::Gamepad(Id uniqueId, u32 index, u32 numButtons, u32 numAxes, std::string name) noexcept
+    : m_uniqueId(uniqueId), m_index(index), m_name(std::move(name))
     {
-        m_buttonStates = {0.0f};
+        m_buttonStates.resize(numButtons, 0.0f);
+        m_axisStates.resize(numAxes, 0.0f);
     }
     
     //------------------------------------------------------------------------------
     f32 Gamepad::GetButtonPressure(u32 buttonIndex) const noexcept
     {
-        CS_ASSERT(buttonIndex < m_buttonStates.size(), "ButtonIndex > Max num of buttons (32)");
+        CS_ASSERT(buttonIndex < m_buttonStates.size(), "ButtonIndex > Max num of buttons");
         return m_buttonStates[buttonIndex];
     }
+    
     //------------------------------------------------------------------------------
-    Vector2 Gamepad::GetAxisPosition(u32 axisIndex) const noexcept
+    f32 Gamepad::GetAxisPosition(u32 axisIndex) const noexcept
     {
-        CS_ASSERT(axisIndex < m_axisStates.size(), "AxisIndex > Max num of axes (8)");
+        CS_ASSERT(axisIndex < m_axisStates.size(), "AxisIndex > Max num of axes");
         return m_axisStates[axisIndex];
     }
 }

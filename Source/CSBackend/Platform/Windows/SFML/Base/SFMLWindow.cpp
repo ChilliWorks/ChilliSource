@@ -728,7 +728,7 @@ namespace CSBackend
 							std::unique_lock<std::mutex> lock(m_joystickMutex);
 							if (m_joystickMovedDelegate)
 							{
-								m_joystickMovedDelegate(event.joystickMove.joystickId);
+								m_joystickMovedDelegate(event.joystickMove.joystickId, event.joystickMove.axis, event.joystickMove.position);
 							}
 							break;
 						}

@@ -34,8 +34,6 @@
 
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
-#include <SFML/Window/Joystick.hpp>
-
 namespace CSBackend
 {
 	namespace Windows
@@ -91,9 +89,9 @@ namespace CSBackend
 		}
 
 		//------------------------------------------------------------------------------
-		void GamepadSystem::OnAxisMoved(u32 joystickIndex) noexcept
+		void GamepadSystem::OnAxisMoved(u32 joystickIndex, sf::Joystick::Axis axisId, f32 pos) noexcept
 		{
-			//AddGamepadAxisPositionChanged();
+			AddAxisPositionChangedEvent(m_mapSFMLToCSIds[joystickIndex], (u32)axisId, pos * 0.01f);
 		}
 
 		//------------------------------------------------------------------------------

@@ -138,10 +138,10 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void GamepadSystem::AddAxisPositionChangedEvent(Gamepad::Id uniqueId, u32 axisIndex, Vector2 position) noexcept
+    void GamepadSystem::AddAxisPositionChangedEvent(Gamepad::Id uniqueId, u32 axisIndex, f32 position) noexcept
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_eventQueue.push(GamepadEventData(EventType::k_axisPosition, uniqueId, axisIndex, std::move(position), ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0));
+        m_eventQueue.push(GamepadEventData(EventType::k_axisPosition, uniqueId, axisIndex, position, ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0));
     }
     
     //------------------------------------------------------------------------------
@@ -193,7 +193,7 @@ namespace ChilliSource
             ++index;
         }
         
-        m_gamepads.push_back(Gamepad(event.m_uniqueId, index));
+        m_gamepads.push_back(Gamepad(event.m_uniqueId, index, 32, 8, ""));
         
         m_gamepadAddedEvent.NotifyConnections(m_gamepads.back(), event.m_timestamp);
     }
@@ -208,8 +208,8 @@ namespace ChilliSource
         
         if (gamepadIt != m_gamepads.end())
         {
-            gamepadIt->m_buttonStates[event.m_index] = event.m_value1f;
-            m_buttonPressureChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, event.m_index, event.m_value1f);
+            gamepadIt->m_buttonStates[event.m_index] = event.m_value;
+            m_buttonPressureChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, event.m_index, event.m_value);
         }
         else
         {
@@ -227,8 +227,8 @@ namespace ChilliSource
         
         if (gamepadIt != m_gamepads.end())
         {
-            gamepadIt->m_axisStates[event.m_index] = event.m_value2f;
-            m_axisPositionChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, event.m_index, event.m_value2f);
+            gamepadIt->m_axisStates[event.m_index] = event.m_value;
+            m_axisPositionChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, event.m_index, event.m_value);
         }
         else
         {

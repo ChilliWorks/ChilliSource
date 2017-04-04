@@ -26,9 +26,8 @@
 #define _CHILLISOURCE_INPUT_GAMEPAD_GAMEPAD_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Vector2.h>
 
-#include <array>
+#include <vector>
 
 namespace ChilliSource
 {
@@ -39,22 +38,24 @@ namespace ChilliSource
     /// provided by the gamepad as well as a unique id for the pad.
     ///
     /// All gamepad buttons are treated as analogue even if the hardware is digital (in that case the returned values
-    /// will just be 0.0 or 1.0)
+    /// will just be 0.0 or 1.0).
+    ///
+    /// Axis are defined individually e.g. an analogue stick has 2 separate axes x and y.
+    ///
+    /// Button and axis indices and the directions of axis are all controller and platform dependent
     ///
     /// The index describes the active index of the pad
     /// at the point it was created, so if there were already
     /// two active gamepads existing at creation, it will be
     /// have an index of 2.
     ///
-    /// NOTE: Restrictions on the backend mean we can only support up to 32 buttons and 8 axis inputs (e.g. analogue sticks).
+    /// NOTE: Restrictions on the backend mean we can only support up to 32 buttons and 8 axis inputs (e.g. 4 analogue sticks).
     ///
     class Gamepad final
     {
     public:
         
         static const u32 k_maxGamepads = 8;
-        static const u32 k_maxButtons = 32;
-        static const u32 k_maxAxis = 4;
 
         using Id = u64;
         
@@ -67,8 +68,14 @@ namespace ChilliSource
         ///     Unique id for the gamepad
         /// @param index
         ///     Index of the gamepad (describes the order it was created)
+        /// @param numButtons
+        ///     The number of buttons on the control pad
+        /// @param numAxes
+        ///     The number of analogue stick inputs on the control pad (some controllers count the d-pad as an axis)
+        /// @param name
+        ///     The identifying name of the control pad (as reported by the pad drivers).
         ///
-        Gamepad(Id uniqueId, u32 index) noexcept;
+        Gamepad(Id uniqueId, u32 index, u32 numButtons, u32 numAxes, std::string name) noexcept;
         
         /// @param buttonIndex
         ///     Index of the button to check
@@ -81,9 +88,9 @@ namespace ChilliSource
         /// @param axisIndex
         ///     Index of the axis (analogue stick) to check
         ///
-        /// @return Position of the axis with 0,0 at origin, up is positive y and right is positive x. Values are between -1 and 1.
+        /// @return Position of the axis with from 0 in the range -1 : 1.
         ///
-        Vector2 GetAxisPosition(u32 axisIndex) const noexcept;
+        f32 GetAxisPosition(u32 axisIndex) const noexcept;
 
         /// @return Unique id of the gamepad
         ///
@@ -92,7 +99,18 @@ namespace ChilliSource
         /// @return Index describing the order the gamepad was attached (can be used for P1, P2, etc)
         ///
         u32 GetIndex() const noexcept { return m_index; }
-
+        
+        /// @return Number of buttons supported by this pad
+        ///
+        u32 GetNumButtons() const noexcept { return (u32)m_buttonStates.size(); }
+        
+        /// @return Number of axis sticks supported by this pad
+        ///
+        u32 GetNumAxes() const noexcept { return (u32)m_axisStates.size(); }
+        
+        /// @return Name as reported by gamepad drivers
+        ///
+        const std::string& GetName() const noexcept { return m_name; }
         
     private:
         
@@ -100,9 +118,10 @@ namespace ChilliSource
         
         Id m_uniqueId;
         u32 m_index;
+        std::string m_name;
         
-        std::array<f32, k_maxButtons> m_buttonStates;
-        std::array<Vector2, k_maxAxis> m_axisStates;
+        std::vector<f32> m_buttonStates;
+        std::vector<f32> m_axisStates;
     };
 }
 

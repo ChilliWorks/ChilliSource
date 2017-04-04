@@ -79,7 +79,7 @@ namespace ChilliSource
         /// @param position
         ///     Updated position of the axis
         ///
-        using GamepadAxisPositionChangedDelegate = std::function<void(const Gamepad& gamepad, f64 timestamp, u32 axisIndex, const Vector2& position)>;
+        using GamepadAxisPositionChangedDelegate = std::function<void(const Gamepad& gamepad, f64 timestamp, u32 axisIndex, f32 position)>;
 
         /// Delegate signature to subscribe to events for whenever the OS detects that a new gamepad has been unattached
         ///
@@ -175,13 +175,13 @@ namespace ChilliSource
         /// This method is thread safe and can be called on any thread.
         ///
         /// @param uniqueId
-        ///     The unique Id of the gamepad on which an analogue stick has moved.
+        ///     The unique Id of the gamepad on which an axis (analogue stick) has moved.
         /// @param axisIndex
-        ///     Index of analogue stick on the gamepad thats moved
+        ///     Index of axis on the gamepad thats moved
         /// @param position
         ///     Updated position
         ///
-        void AddAxisPositionChangedEvent(Gamepad::Id uniqueId, u32 axisIndex, Vector2 position) noexcept;
+        void AddAxisPositionChangedEvent(Gamepad::Id uniqueId, u32 axisIndex, f32 position) noexcept;
         
         /// Called by the concrete system implementation to inject a remove event
         ///
@@ -214,16 +214,12 @@ namespace ChilliSource
         struct GamepadEventData
         {
             GamepadEventData(EventType type, Gamepad::Id uid, u32 index, f32 contextVal, f64 timestamp)
-            : m_type(type), m_uniqueId(uid), m_index(index), m_value1f(contextVal), m_timestamp(timestamp) {}
-            
-            GamepadEventData(EventType type, Gamepad::Id uid, u32 index, Vector2 contextVal, f64 timestamp)
-            : m_type(type), m_uniqueId(uid), m_index(index), m_value2f(std::move(contextVal)), m_timestamp(timestamp) {}
-            
+            : m_type(type), m_uniqueId(uid), m_index(index), m_value(contextVal), m_timestamp(timestamp) {}
+
             EventType m_type;
             Gamepad::Id m_uniqueId;
             u32 m_index;
-            f32 m_value1f;
-            Vector2 m_value2f;
+            f32 m_value;
             f64 m_timestamp;
         };
         

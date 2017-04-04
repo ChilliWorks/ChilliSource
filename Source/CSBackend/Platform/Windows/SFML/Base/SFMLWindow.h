@@ -158,8 +158,10 @@ namespace CSBackend
 			/// Delegate that receieves events when a button is pressed or released
 			///
 			/// @param Index of joystick
+			/// @param Id of axis
+			/// @param Position of axis
 			///
-			using JoystickMovedDelegate = std::function<void(u32)>;
+			using JoystickMovedDelegate = std::function<void(u32, sf::Joystick::Axis, f32)>;
 
 			//-------------------------------------------------
 			/// Create and begin running the SFML window which in turn
