@@ -29,6 +29,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Gamepad/Gamepad.h>
 #include <ChilliSource/Input/Gamepad/GamepadAxis.h>
+#include <ChilliSource/Input/Gamepad/GamepadMappings.h>
 #include <ChilliSource/Input/Gamepad/GamepadSystem.h>
 
 #endif

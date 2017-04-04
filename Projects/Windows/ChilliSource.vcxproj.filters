@@ -2960,5 +2960,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadAxis.h">
       <Filter>ChilliSource\Input\Gamepad</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadMappings.h">
+      <Filter>ChilliSource\Input\Gamepad</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
