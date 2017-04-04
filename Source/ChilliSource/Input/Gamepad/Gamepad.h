@@ -27,6 +27,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <ChilliSource/Input/Gamepad/GamepadAxis.h>
+
+#include <array>
 #include <vector>
 
 namespace ChilliSource
@@ -44,10 +47,8 @@ namespace ChilliSource
     ///
     /// Button and axis indices and the directions of axis are all controller and platform dependent
     ///
-    /// The index describes the active index of the pad
-    /// at the point it was created, so if there were already
-    /// two active gamepads existing at creation, it will be
-    /// have an index of 2.
+    /// The index describes the active index of the pad at the point it was created, so if there were already
+    /// two active gamepads existing at creation, it will be have an index of 2.
     ///
     /// NOTE: Restrictions on the backend mean we can only support up to 32 buttons and 8 axis inputs (e.g. 4 analogue sticks).
     ///
@@ -70,27 +71,27 @@ namespace ChilliSource
         ///     Index of the gamepad (describes the order it was created)
         /// @param numButtons
         ///     The number of buttons on the control pad
-        /// @param numAxes
-        ///     The number of analogue stick inputs on the control pad (some controllers count the d-pad as an axis)
+        /// @param supportedAxisFlags
+        ///     Bits flagged on for each supported axis
         /// @param name
         ///     The identifying name of the control pad (as reported by the pad drivers).
         ///
-        Gamepad(Id uniqueId, u32 index, u32 numButtons, u32 numAxes, std::string name) noexcept;
+        Gamepad(Id uniqueId, u32 index, u32 numButtons, u32 supportedAxisFlags, std::string name) noexcept;
         
         /// @param buttonIndex
         ///     Index of the button to check
         ///
         /// @return The pressure applied to the button with 1.0 being full
-        ///     and 0.0 being none. For digital buttons the results are always 0 or 1.
+        ///     and 0.0 being none. For digital buttons the results are always 0 or 1. Returns 0.0 if unsupported
         ///
         f32 GetButtonPressure(u32 buttonIndex) const noexcept;
         
         /// @param axisIndex
-        ///     Index of the axis (analogue stick) to check
+        ///     Id of the axis to check
         ///
-        /// @return Position of the axis with from 0 in the range -1 : 1.
+        /// @return Position of the axis with from 0 in the range -1 : 1. Returns 0.0 if unsupported
         ///
-        f32 GetAxisPosition(u32 axisIndex) const noexcept;
+        f32 GetAxisPosition(GamepadAxis axis) const noexcept;
 
         /// @return Unique id of the gamepad
         ///
@@ -104,9 +105,12 @@ namespace ChilliSource
         ///
         u32 GetNumButtons() const noexcept { return (u32)m_buttonStates.size(); }
         
-        /// @return Number of axis sticks supported by this pad
+        /// @param axis
+        ///     Axis to check for support
         ///
-        u32 GetNumAxes() const noexcept { return (u32)m_axisStates.size(); }
+        /// @return TRUE if gamepad supports the given axis
+        ///
+        bool IsAxisSupported(GamepadAxis axis) const noexcept { return (m_supportedAxisFlags & (1 << (u32)axis)) > 0; }
         
         /// @return Name as reported by gamepad drivers
         ///
@@ -118,10 +122,11 @@ namespace ChilliSource
         
         Id m_uniqueId;
         u32 m_index;
+        u32 m_supportedAxisFlags = 0;
         std::string m_name;
         
         std::vector<f32> m_buttonStates;
-        std::vector<f32> m_axisStates;
+        std::array<f32, (u32)GamepadAxis::k_total> m_axisStates;
     };
 }
 

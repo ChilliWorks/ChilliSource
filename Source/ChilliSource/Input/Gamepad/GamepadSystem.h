@@ -38,7 +38,7 @@ namespace ChilliSource
 {
     /// Provides access to any attached gamepads and has events to listen for changes to gamepad states
     ///
-    /// Limitations of backend mean that a max of 8 gamepads are supported with 32 buttons and 4 analogue sticks
+    /// Limitations of backend mean that a max of 8 gamepads are supported with 32 buttons and 8 axis inputs
     ///
     class GamepadSystem : public AppSystem
     {
@@ -74,12 +74,12 @@ namespace ChilliSource
         ///     The gamepad thats input changed
         /// @param timestamp
         ///     Time at which input changed
-        /// @param axisIndex
-        ///     Index of axis thats position changed
+        /// @param axis
+        ///     Axis thats position changed
         /// @param position
         ///     Updated position of the axis
         ///
-        using GamepadAxisPositionChangedDelegate = std::function<void(const Gamepad& gamepad, f64 timestamp, u32 axisIndex, f32 position)>;
+        using GamepadAxisPositionChangedDelegate = std::function<void(const Gamepad& gamepad, f64 timestamp, GamepadAxis axis, f32 position)>;
 
         /// Delegate signature to subscribe to events for whenever the OS detects that a new gamepad has been unattached
         ///
@@ -98,7 +98,7 @@ namespace ChilliSource
         ///
         IConnectableEvent<GamepadButtonPressureChangedDelegate>& GetButtonPressureChangedEvent() noexcept { return m_buttonPressureChangedEvent; }
 
-        /// @return Event triggered when the user moved the analogue stick on the gamepad
+        /// @return Event triggered when the user moved an axis input on the gamepad
         ///
         IConnectableEvent<GamepadAxisPositionChangedDelegate>& GetAxisPositionChangedEvent() noexcept { return m_axisPositionChangedEvent; }
 
@@ -153,9 +153,16 @@ namespace ChilliSource
         ///
         /// This method is thread safe and can be called on any thread.
         ///
+        /// @param name
+        ///     Device name of the controller
+        /// @param numButtons
+        ///     Number of buttons on the controller
+        /// @param supportedAxisFlags
+        ///     Flagged bits stating which axes are supported
+        ///
         /// @return The unique Id of the new gamepad.
         ///
-        Gamepad::Id AddGamepadCreateEvent() noexcept;
+        Gamepad::Id AddGamepadCreateEvent(std::string name, u32 numButtons, u32 supportedAxisFlags) noexcept;
         
         /// Called by the concrete system implementation to inject a pressure changed event
         ///
@@ -176,12 +183,12 @@ namespace ChilliSource
         ///
         /// @param uniqueId
         ///     The unique Id of the gamepad on which an axis (analogue stick) has moved.
-        /// @param axisIndex
-        ///     Index of axis on the gamepad thats moved
+        /// @param axis
+        ///     Axis on the gamepad thats moved
         /// @param position
         ///     Updated position
         ///
-        void AddAxisPositionChangedEvent(Gamepad::Id uniqueId, u32 axisIndex, f32 position) noexcept;
+        void AddAxisPositionChangedEvent(Gamepad::Id uniqueId, GamepadAxis axis, f32 position) noexcept;
         
         /// Called by the concrete system implementation to inject a remove event
         ///
@@ -205,7 +212,6 @@ namespace ChilliSource
         
         enum class EventType
         {
-            k_add,
             k_buttonPressure,
             k_axisPosition,
             k_remove
@@ -223,12 +229,24 @@ namespace ChilliSource
             f64 m_timestamp;
         };
         
+        struct GamepadCreateEventData
+        {
+            GamepadCreateEventData(Gamepad::Id uid, std::string name, u32 numButtons, u32 supportedAxisFlags, f64 timestamp)
+            : m_uniqueId(uid), m_name(std::move(name)), m_numButtons(numButtons), m_supportedAxisFlags(supportedAxisFlags), m_timestamp(timestamp) {}
+            
+            Gamepad::Id m_uniqueId;
+            std::string m_name;
+            u32 m_numButtons;
+            u32 m_supportedAxisFlags;
+            f64 m_timestamp;
+        };
+        
         /// Update the state and fire off the external events for the given event
         ///
         /// @param event
         ///     Data about the event
         ///
-        void ProcessCreateEvent(const GamepadEventData& event) noexcept;
+        void ProcessCreateEvent(const GamepadCreateEventData& event) noexcept;
         
         /// Update the state and fire off the external events for the given event
         ///
@@ -259,6 +277,7 @@ namespace ChilliSource
         std::mutex m_mutex;
         std::vector<Gamepad> m_gamepads;
         std::queue<GamepadEventData> m_eventQueue;
+        std::queue<GamepadCreateEventData> m_createEventQueue;
         Gamepad::Id m_nextUniqueId = 0;
     };
 }

@@ -52,6 +52,7 @@ namespace ChilliSource
     //--------------------------------------------------
     CS_FORWARDDECLARE_CLASS(Gamepad);
     CS_FORWARDDECLARE_CLASS(GamepadSystem);
+    enum class GamepadAxis;
     //--------------------------------------------------
     /// Gestures
     //--------------------------------------------------

@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Input/Gamepad/GamepadAxis.h>
 
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
@@ -67,7 +68,16 @@ namespace CSBackend
 		void GamepadSystem::OnJoystickConnected(u32 index) noexcept
 		{
 			CS_LOG_VERBOSE_FMT("Gamepad Connected: %s\n", sf::Joystick::getIdentification(index).name.toAnsiString().c_str());
-			m_mapSFMLToCSIds[index] = AddGamepadCreateEvent();
+
+			u32 supportedAxisFlags = 0;
+			for(u32 i=0; i<=(u32)sf::Joystick::Axis::PovY; ++i)
+			{
+				if(sf::Joystick::hasAxis(index, (sf::Joystick::Axis)i))
+				{
+					supportedAxisFlags |= (1 << i);
+				}
+			}
+			m_mapSFMLToCSIds[index] = AddGamepadCreateEvent(sf::Joystick::getIdentification(index).name.toAnsiString(), sf::Joystick::getButtonCount(index), 8);
 		}
 
 		//------------------------------------------------------------------------------
@@ -91,7 +101,7 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
 		void GamepadSystem::OnAxisMoved(u32 joystickIndex, sf::Joystick::Axis axisId, f32 pos) noexcept
 		{
-			AddAxisPositionChangedEvent(m_mapSFMLToCSIds[joystickIndex], (u32)axisId, pos * 0.01f);
+			AddAxisPositionChangedEvent(m_mapSFMLToCSIds[joystickIndex], (ChilliSource::GamepadAxis)axisId, pos * 0.01f);
 		}
 
 		//------------------------------------------------------------------------------

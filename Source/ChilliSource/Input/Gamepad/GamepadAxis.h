@@ -22,27 +22,27 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Input/Gamepad/Gamepad.h>
+#ifndef _CHILLISOURCE_INPUT_GAMEPAD_GAMEPADAXIS_H_
+#define _CHILLISOURCE_INPUT_GAMEPAD_GAMEPADAXIS_H_
 
 namespace ChilliSource
 {
-    //------------------------------------------------------------------------------
-    Gamepad::Gamepad(Id uniqueId, u32 index, u32 numButtons, u32 supportedAxisFlags, std::string name) noexcept
-    : m_uniqueId(uniqueId), m_index(index), m_supportedAxisFlags(supportedAxisFlags), m_name(std::move(name))
+    /// The axes supported by gamepads. Naming conventions are based on traditional joysticks and
+    /// are the conventions used by Windows and SFML.
+    ///
+    enum class GamepadAxis
     {
-        m_buttonStates.resize(numButtons, 0.0f);
-        m_axisStates = {{0.0f}};
-    }
-    
-    //------------------------------------------------------------------------------
-    f32 Gamepad::GetButtonPressure(u32 buttonIndex) const noexcept
-    {
-        return buttonIndex < m_buttonStates.size() ? m_buttonStates[buttonIndex] : 0.0f;
-    }
-    
-    //------------------------------------------------------------------------------
-    f32 Gamepad::GetAxisPosition(GamepadAxis axis) const noexcept
-    {
-        return m_axisStates[(u32)axis];
-    }
+        k_x,
+        k_y,
+        k_z,
+        k_r,
+        k_u,
+        k_v,
+        k_povX,
+        k_povY,
+        
+        k_total
+    };
 }
+
+#endif

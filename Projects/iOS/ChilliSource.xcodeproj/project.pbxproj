@@ -454,6 +454,7 @@
 		81559AAD1E925F4C00A1B107 /* GamepadSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadSystem.cpp; sourceTree = "<group>"; };
 		81559AAE1E925F4C00A1B107 /* GamepadSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GamepadSystem.h; sourceTree = "<group>"; };
 		81559AB11E925F5600A1B107 /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gamepad.h; sourceTree = "<group>"; };
+		81559ABA1E93BAFF00A1B107 /* GamepadAxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GamepadAxis.h; sourceTree = "<group>"; };
 		8155F30A1E785B7700750A05 /* CursorSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CursorSystem.cpp; sourceTree = "<group>"; };
 		8155F30B1E785B7700750A05 /* CursorSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CursorSystem.h; sourceTree = "<group>"; };
 		8155F30D1E797B9300750A05 /* CursorType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CursorType.h; sourceTree = "<group>"; };
@@ -1518,6 +1519,7 @@
 		81559AAA1E925F4C00A1B107 /* Gamepad */ = {
 			isa = PBXGroup;
 			children = (
+				81559ABA1E93BAFF00A1B107 /* GamepadAxis.h */,
 				81559AAB1E925F4C00A1B107 /* Gamepad.cpp */,
 				81559AAC1E925F4C00A1B107 /* Gamepad.h */,
 				81559AAD1E925F4C00A1B107 /* GamepadSystem.cpp */,

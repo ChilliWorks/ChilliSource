@@ -570,6 +570,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\Gamepad.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadAxis.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\DragGesture.h" />

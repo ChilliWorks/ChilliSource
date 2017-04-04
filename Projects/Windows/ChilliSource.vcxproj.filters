@@ -2957,5 +2957,8 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Gamepad\GamepadSystem.h">
       <Filter>CSBackend\Platform\Windows\Input\Gamepad</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadAxis.h">
+      <Filter>ChilliSource\Input\Gamepad</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
