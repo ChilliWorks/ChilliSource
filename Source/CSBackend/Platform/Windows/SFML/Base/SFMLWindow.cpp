@@ -439,6 +439,31 @@ namespace CSBackend
             m_keyPressedDelegate = in_keyPressedDelegate;
             m_keyReleasedDelegate = in_keyReleasedDelegate;
         }
+
+		//------------------------------------------------------------------------------
+		void SFMLWindow::SetJoystickDelegates(JoystickConnectionChangedDelegate connectedDelegate, JoystickConnectionChangedDelegate disconnectedDelegate,
+			JoystickButtonDelegate buttonPressedDelegate, JoystickButtonDelegate buttonReleasedDelegate, JoystickMovedDelegate movedDelegate) noexcept
+		{
+			CS_ASSERT(connectedDelegate, "Joystick connected delegate invalid.");
+			CS_ASSERT(disconnectedDelegate, "Joystick disconnected delegate invalid.");
+			CS_ASSERT(buttonPressedDelegate, "Joystick pressed delegate invalid.");
+			CS_ASSERT(buttonReleasedDelegate, "Joystick released delegate invalid.");
+			CS_ASSERT(movedDelegate, "Joystick moved delegate invalid.");
+
+			CS_ASSERT(!m_joystickConnectedDelegate, "Joystick connected already set.");
+			CS_ASSERT(!m_joystickDisconnectedDelegate, "Joystick disconnected already set.");
+			CS_ASSERT(!m_joystickButtonPressedDelegate, "Joystick pressed already set.");
+			CS_ASSERT(!m_joystickButtonReleasedDelegate, "Joystick released already set.");
+			CS_ASSERT(!m_joystickMovedDelegate, "Joystick moved already set.");
+
+			std::unique_lock<std::mutex> lock(m_joystickMutex);
+			m_joystickConnectedDelegate = std::move(connectedDelegate);
+			m_joystickDisconnectedDelegate = std::move(disconnectedDelegate);
+			m_joystickButtonPressedDelegate = std::move(buttonPressedDelegate);
+			m_joystickButtonReleasedDelegate = std::move(buttonReleasedDelegate);
+			m_joystickMovedDelegate = std::move(movedDelegate);
+		}
+
         //------------------------------------------------
         //------------------------------------------------
         void SFMLWindow::RemoveWindowDelegates() noexcept
@@ -471,6 +496,18 @@ namespace CSBackend
             m_keyPressedDelegate = nullptr;
             m_keyReleasedDelegate = nullptr;
         }
+
+		//------------------------------------------------------------------------------
+		void SFMLWindow::RemoveJoystickDelegates() noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_joystickMutex);
+			m_joystickConnectedDelegate = nullptr;
+			m_joystickDisconnectedDelegate = nullptr;
+			m_joystickButtonPressedDelegate = nullptr;
+			m_joystickButtonReleasedDelegate = nullptr;
+			m_joystickMovedDelegate = nullptr;
+		}
+
 		//------------------------------------------------
 		//------------------------------------------------
 		ChilliSource::Integer2 SFMLWindow::GetWindowSize() const
@@ -650,6 +687,51 @@ namespace CSBackend
                             }
 							break;
 						}
+						case sf::Event::JoystickConnected:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickConnectedDelegate)
+							{
+								m_joystickConnectedDelegate(event.joystickConnect.joystickId);
+							}
+							break;
+						}
+						case sf::Event::JoystickDisconnected:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickDisconnectedDelegate)
+							{
+								m_joystickDisconnectedDelegate(event.joystickConnect.joystickId);
+							}
+							break;
+						}
+						case sf::Event::JoystickButtonPressed:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickButtonPressedDelegate)
+							{
+								m_joystickButtonPressedDelegate(event.joystickButton.joystickId, event.joystickButton.button);
+							}
+							break;
+						}
+						case sf::Event::JoystickButtonReleased:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickButtonReleasedDelegate)
+							{
+								m_joystickButtonReleasedDelegate(event.joystickButton.joystickId, event.joystickButton.button);
+							}
+							break;
+						}
+						case sf::Event::JoystickMoved:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickMovedDelegate)
+							{
+								m_joystickMovedDelegate(event.joystickMove.joystickId);
+							}
+							break;
+						}
 					}
 				}
 
@@ -693,6 +775,11 @@ namespace CSBackend
             CS_ASSERT(!m_textEnteredDelegate, "Text entry delegate not removed.");
             CS_ASSERT(!m_keyPressedDelegate, "Key press delegate not removed.");
             CS_ASSERT(!m_keyReleasedDelegate, "Key release delegate not removed.");
+			CS_ASSERT(!m_joystickConnectedDelegate, "Joystick connected delegate not removed.");
+			CS_ASSERT(!m_joystickDisconnectedDelegate, "Joystick disconnected delegate not removed.");
+			CS_ASSERT(!m_joystickButtonPressedDelegate, "Joystick pressed delegate not removed.");
+			CS_ASSERT(!m_joystickButtonReleasedDelegate, "Joystick released delegate not removed.");
+			CS_ASSERT(!m_joystickMovedDelegate, "Joystick connected moved not removed.");
         }
 	}
 }

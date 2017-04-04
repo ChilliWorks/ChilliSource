@@ -316,6 +316,12 @@
     <Filter Include="ChilliSource\Input\Gyroscope">
       <UniqueIdentifier>{9d7672e5-bc0b-4243-bab5-86dc856f73d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Input\Gamepad">
+      <UniqueIdentifier>{54421406-d40e-4873-8694-f00c554cfc5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CSBackend\Platform\Windows\Input\Gamepad">
+      <UniqueIdentifier>{818fe1c6-2582-4849-a48c-b18fe3e877d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
@@ -1379,6 +1385,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\CursorSystem.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Gamepad\Gamepad.cpp">
+      <Filter>ChilliSource\Input\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadSystem.cpp">
+      <Filter>ChilliSource\Input\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\Gamepad\GamepadSystem.cpp">
+      <Filter>CSBackend\Platform\Windows\Input\Gamepad</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2929,6 +2944,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\CursorType.h">
       <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\Gamepad.h">
+      <Filter>ChilliSource\Input\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadSystem.h">
+      <Filter>ChilliSource\Input\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad.h">
+      <Filter>ChilliSource\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Gamepad\GamepadSystem.h">
+      <Filter>CSBackend\Platform\Windows\Input\Gamepad</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

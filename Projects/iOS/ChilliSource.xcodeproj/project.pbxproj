@@ -19,6 +19,8 @@
 		813BA9DB1D37BE0600A3B091 /* RenderInfoFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 813BA9D91D37BE0600A3B091 /* RenderInfoFactory.cpp */; };
 		814001A01E72D21F00388C2A /* GLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8140019F1E72D21F00388C2A /* GLExtensions.cpp */; };
 		8151757A1E3F4E5C0024361A /* SkyboxComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 815175771E3F4E5C0024361A /* SkyboxComponent.cpp */; };
+		81559AAF1E925F4C00A1B107 /* Gamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81559AAB1E925F4C00A1B107 /* Gamepad.cpp */; };
+		81559AB01E925F4C00A1B107 /* GamepadSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81559AAD1E925F4C00A1B107 /* GamepadSystem.cpp */; };
 		8155F30C1E785B7700750A05 /* CursorSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8155F30A1E785B7700750A05 /* CursorSystem.cpp */; };
 		8156124B1D2E5D41000DD01B /* GLTargetGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 815612491D2E5D41000DD01B /* GLTargetGroup.cpp */; };
 		8158F7C11C89D2AD00B13109 /* CSAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8158F59C1C89D2AD00B13109 /* CSAppDelegate.mm */; };
@@ -447,6 +449,11 @@
 		815175771E3F4E5C0024361A /* SkyboxComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkyboxComponent.cpp; sourceTree = "<group>"; };
 		815175781E3F4E5C0024361A /* SkyboxComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkyboxComponent.h; sourceTree = "<group>"; };
 		815175791E3F4E5C0024361A /* Skybox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skybox.h; sourceTree = "<group>"; };
+		81559AAB1E925F4C00A1B107 /* Gamepad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gamepad.cpp; sourceTree = "<group>"; };
+		81559AAC1E925F4C00A1B107 /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gamepad.h; sourceTree = "<group>"; };
+		81559AAD1E925F4C00A1B107 /* GamepadSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadSystem.cpp; sourceTree = "<group>"; };
+		81559AAE1E925F4C00A1B107 /* GamepadSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GamepadSystem.h; sourceTree = "<group>"; };
+		81559AB11E925F5600A1B107 /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gamepad.h; sourceTree = "<group>"; };
 		8155F30A1E785B7700750A05 /* CursorSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CursorSystem.cpp; sourceTree = "<group>"; };
 		8155F30B1E785B7700750A05 /* CursorSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CursorSystem.h; sourceTree = "<group>"; };
 		8155F30D1E797B9300750A05 /* CursorType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CursorType.h; sourceTree = "<group>"; };
@@ -1508,6 +1515,17 @@
 			path = Skybox;
 			sourceTree = "<group>";
 		};
+		81559AAA1E925F4C00A1B107 /* Gamepad */ = {
+			isa = PBXGroup;
+			children = (
+				81559AAB1E925F4C00A1B107 /* Gamepad.cpp */,
+				81559AAC1E925F4C00A1B107 /* Gamepad.h */,
+				81559AAD1E925F4C00A1B107 /* GamepadSystem.cpp */,
+				81559AAE1E925F4C00A1B107 /* GamepadSystem.h */,
+			);
+			path = Gamepad;
+			sourceTree = "<group>";
+		};
 		815612481D2E5D41000DD01B /* Target */ = {
 			isa = PBXGroup;
 			children = (
@@ -2430,7 +2448,6 @@
 		81845F2E1D3503E8004B0C46 /* Input */ = {
 			isa = PBXGroup;
 			children = (
-				2787EA661E30D38A00E83458 /* Gyroscope */,
 				81845F2F1D3503E8004B0C46 /* Accelerometer */,
 				81845F321D3503E8004B0C46 /* Accelerometer.h */,
 				81845F331D3503E8004B0C46 /* Base */,
@@ -2438,15 +2455,18 @@
 				81845F371D3503E8004B0C46 /* DeviceButtons */,
 				81845F3A1D3503E8004B0C46 /* DeviceButtons.h */,
 				81845F3B1D3503E8004B0C46 /* ForwardDeclarations.h */,
+				81559AAA1E925F4C00A1B107 /* Gamepad */,
+				81559AB11E925F5600A1B107 /* Gamepad.h */,
 				81845F3C1D3503E8004B0C46 /* Gesture */,
 				81845F4B1D3503E8004B0C46 /* Gesture.h */,
+				2787EA661E30D38A00E83458 /* Gyroscope */,
+				2787EA681E30D3B300E83458 /* Gyroscope.h */,
 				81845F4C1D3503E8004B0C46 /* Keyboard */,
 				81845F521D3503E8004B0C46 /* Keyboard.h */,
 				81845F531D3503E8004B0C46 /* Pointer */,
 				81845F581D3503E8004B0C46 /* Pointer.h */,
 				81845F591D3503E8004B0C46 /* TextEntry */,
 				81845F601D3503E8004B0C46 /* TextEntry.h */,
-				2787EA681E30D3B300E83458 /* Gyroscope.h */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -3697,6 +3717,7 @@
 				818461CA1D3503E8004B0C46 /* RenderObject.cpp in Sources */,
 				818462011D3503E8004B0C46 /* ScaleOverLifetimeParticleAffector.cpp in Sources */,
 				818462181D3503E8004B0C46 /* ParticleEffectComponent.cpp in Sources */,
+				81559AB01E925F4C00A1B107 /* GamepadSystem.cpp in Sources */,
 				818461671D3503E8004B0C46 /* DialogueBoxSystem.cpp in Sources */,
 				818461841D3503E8004B0C46 /* Random.cpp in Sources */,
 				818461A51D3503E8004B0C46 /* DeviceButtonSystem.cpp in Sources */,
@@ -3975,6 +3996,7 @@
 				818461C81D3503E8004B0C46 /* RenderFrameCompiler.cpp in Sources */,
 				818461F71D3503E8004B0C46 /* VertexFormat.cpp in Sources */,
 				818461BC1D3503E8004B0C46 /* CanvasMaterialPool.cpp in Sources */,
+				81559AAF1E925F4C00A1B107 /* Gamepad.cpp in Sources */,
 				818461F01D3503E8004B0C46 /* RenderMeshManager.cpp in Sources */,
 				818461791D3503E8004B0C46 /* Image.cpp in Sources */,
 				818461D41D3503E8004B0C46 /* OrthographicCameraComponent.cpp in Sources */,

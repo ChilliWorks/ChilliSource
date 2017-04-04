@@ -141,6 +141,26 @@ namespace CSBackend
 			/// @param Key code
 			//-------------------------------------------------------
 			using KeyReleasedDelegate = std::function<void(sf::Keyboard::Key)>;
+
+			/// Delegate that receieves events when a new joystick is attached or removed
+			///
+			/// @param Index of joystick
+			///
+			using JoystickConnectionChangedDelegate = std::function<void(u32)>;
+
+			/// Delegate that receieves events when a button is pressed or released
+			///
+			/// @param Index of joystick
+			/// @param Index of button
+			///
+			using JoystickButtonDelegate = std::function<void(u32, u32)>;
+
+			/// Delegate that receieves events when a button is pressed or released
+			///
+			/// @param Index of joystick
+			///
+			using JoystickMovedDelegate = std::function<void(u32)>;
+
 			//-------------------------------------------------
 			/// Create and begin running the SFML window which in turn
 			/// will update and render the app
@@ -262,6 +282,27 @@ namespace CSBackend
             /// called when a key is released.
             //-------------------------------------------------------
             void SetKeyDelegates(const KeyPressedDelegate& in_keyPressedDelegate, const KeyReleasedDelegate& in_keyReleasedDelegate) noexcept;
+
+			/// Set the delegates that relate to joystick events.
+			/// This method will assert if a given delegate is null
+			/// or if the delegate has already been set.
+			///
+			/// This method is thread-safe.
+			///
+			/// @param connectedDelegate
+			///		Called when a new joystick is attached
+			/// @param disconnectedDelegate
+			///		Called when an existing joystick is removed
+			/// @param buttonPressedDelegate
+			///		Called when a button is pressed on a joystick
+			/// @param buttonReleasedDelegate
+			///		Called when a button is released on a joystick
+			/// @param movedDelegate
+			///		Called when an analogue stick is moved
+			///
+			void SetJoystickDelegates(JoystickConnectionChangedDelegate connectedDelegate, JoystickConnectionChangedDelegate disconnectedDelegate,
+				JoystickButtonDelegate buttonPressedDelegate, JoystickButtonDelegate buttonReleasedDelegate, JoystickMovedDelegate movedDelegate) noexcept;
+
             //-------------------------------------------------------
             /// Remove the delegates that relate to window events.
             ///
@@ -294,6 +335,13 @@ namespace CSBackend
             /// @author Jordan Brown
             //-------------------------------------------------------
             void RemoveKeyDelegates() noexcept;
+
+			/// Removes the delegates related to joystick events
+			///
+			/// This method is thread-safe
+			///
+			void RemoveJoystickDelegates() noexcept;
+
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -365,11 +413,17 @@ namespace CSBackend
             TextEnteredDelegate m_textEnteredDelegate;
             KeyPressedDelegate m_keyPressedDelegate;
             KeyReleasedDelegate m_keyReleasedDelegate;
+			JoystickConnectionChangedDelegate m_joystickConnectedDelegate;
+			JoystickConnectionChangedDelegate m_joystickDisconnectedDelegate;
+			JoystickButtonDelegate m_joystickButtonPressedDelegate;
+			JoystickButtonDelegate m_joystickButtonReleasedDelegate;
+			JoystickMovedDelegate m_joystickMovedDelegate;
 
             std::mutex m_windowMutex;
             std::mutex m_mouseMutex;
             std::mutex m_textEntryMutex;
             std::mutex m_keyMutex;
+			std::mutex m_joystickMutex;
 
 			std::string m_title;
 

@@ -228,15 +228,16 @@ namespace ChilliSource
         std::unique_lock<std::mutex> lock(m_mutex);
         
         PointerEvent event;
+        auto uniqueId = m_nextUniqueId++;
         event.m_type = PointerEventType::k_add;
-        event.m_pointerUniqueId = m_nextUniqueId++;
+        event.m_pointerUniqueId = uniqueId;
         event.m_InputType = Pointer::InputType::k_none;
         event.m_position = in_position;
         event.m_timestamp = 0.0;
         
-        m_eventQueue.push(event);
+        m_eventQueue.push(std::move(event));
         
-        return event.m_pointerUniqueId;
+        return uniqueId;
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -251,7 +252,7 @@ namespace ChilliSource
         event.m_position = Vector2::k_zero;
         event.m_timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
         
-        m_eventQueue.push(event);
+        m_eventQueue.push(std::move(event));
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -266,7 +267,7 @@ namespace ChilliSource
         event.m_position = in_position;
         event.m_timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
         
-        m_eventQueue.push(event);
+        m_eventQueue.push(std::move(event));
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -281,7 +282,7 @@ namespace ChilliSource
         event.m_position = Vector2::k_zero;
         event.m_timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
         
-        m_eventQueue.push(event);
+        m_eventQueue.push(std::move(event));
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -296,7 +297,7 @@ namespace ChilliSource
         event.m_timestamp = ((f64)Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
         event.m_position = in_delta;
         
-        m_eventQueue.push(event);
+        m_eventQueue.push(std::move(event));
     }
     //------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
@@ -311,7 +312,7 @@ namespace ChilliSource
         event.m_position = Vector2::k_zero;
         event.m_timestamp = 0.0;
         
-        m_eventQueue.push(event);
+        m_eventQueue.push(std::move(event));
     }
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------

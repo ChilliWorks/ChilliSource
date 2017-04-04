@@ -49,6 +49,7 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
+#include <ChilliSource/Input/Gamepad/GamepadSystem.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
@@ -318,6 +319,7 @@ namespace ChilliSource
         //Input
         CreateSystem<Keyboard>();
         m_pointerSystem = CreateSystem<PointerSystem>();
+        m_gamepadSystem = CreateSystem<GamepadSystem>();
         CreateSystem<DeviceButtonSystem>();
         CreateSystem<TextEntry>();
         
@@ -537,10 +539,15 @@ namespace ChilliSource
         //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
         m_updateIntervalRemainder = std::min(m_updateIntervalRemainder + deltaTime, GetUpdateIntervalMax());
         
-        //process any queued input received by the pointer system.
+        //process any queued input received by the pointer system and gamepad system.
         if(m_pointerSystem != nullptr)
         {
             m_pointerSystem->ProcessQueuedInput();
+        }
+        
+        if(m_gamepadSystem != nullptr)
+        {
+            m_gamepadSystem->ProcessQueuedInput();
         }
         
         bool isFirstFrame = (m_frameIndex == 0);
