@@ -110,7 +110,7 @@ namespace ChilliSource
         ///
         /// @return TRUE if gamepad supports the given axis
         ///
-        bool IsAxisSupported(GamepadAxis axis) const noexcept { return ((m_supportedAxisFlags >> (u32)axis) & 1) > 0; }
+        bool IsAxisSupported(GamepadAxis axis) const noexcept { return ((m_supportedAxisFlags >> (u32)axis) & 1u) > 0u; }
         
         /// @return Name as reported by gamepad drivers
         ///

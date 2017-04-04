@@ -74,10 +74,10 @@ namespace CSBackend
 			{
 				if(sf::Joystick::hasAxis(index, (sf::Joystick::Axis)i))
 				{
-					supportedAxisFlags |= (1 << i);
+					supportedAxisFlags |= (1u << i);
 				}
 			}
-			m_mapSFMLToCSIds[index] = AddGamepadCreateEvent(sf::Joystick::getIdentification(index).name.toAnsiString(), sf::Joystick::getButtonCount(index), 8);
+			m_mapSFMLToCSIds[index] = AddGamepadCreateEvent(sf::Joystick::getIdentification(index).name.toAnsiString(), sf::Joystick::getButtonCount(index), supportedAxisFlags);
 		}
 
 		//------------------------------------------------------------------------------
