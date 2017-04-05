@@ -42,6 +42,69 @@ namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(GamepadSystem);
     
+    namespace
+    {
+        /// Performs pairing (i.e. generating a unique number from the 2 given numbers) using the Cantor method.
+        ///
+        /// NOTE: f(a,b) != f(b,a)
+        ///
+        /// @param a
+        ///     First number to pair
+        /// @param b
+        ///     Second number to pair
+        ///
+        /// @return Unique paired result
+        ///
+        u32 CantorPairing(u32 a, u32 b) noexcept
+        {
+            return ((a + b) * (a + b + 1)) / 2 + b;
+        }
+        
+        /// Attemtps to get the action id firstly from the named mappings and then the default mappings
+        ///
+        /// @param gamepadNameHash
+        ///     Unique id of the gamepad type
+        /// @param eventIndex
+        ///     Button or axis
+        /// @param namedMappings
+        ///     Priority mappings using the gamepad name and button/axis
+        /// @param defaultMappings
+        ///     Fallback mappings using the button/axis only
+        /// @param [OUT] actionId
+        ///     Set if the mapping exists
+        ///
+        /// @return TRUE if actionId is set
+        ///
+        bool TryGetActionId(u32 gamepadNameHash, u32 eventIndex, const std::vector<std::pair<u32, u32>>& namedMappings, const std::vector<std::pair<u32, u32>>& defaultMappings, u32& out_actionId) noexcept
+        {
+            //Check if this button is mapped for this gamepad type
+            u32 mappingId = CantorPairing(gamepadNameHash, eventIndex);
+            auto mappingIt = std::find_if(namedMappings.begin(), namedMappings.end(), [mappingId](const std::pair<u32, u32>& mapping)
+            {
+                return (mapping.first == mappingId);
+            });
+            
+            if(mappingIt != namedMappings.end())
+            {
+                out_actionId = mappingIt->second;
+                return true;
+            }
+            
+            auto defaultMappingIt = std::find_if(defaultMappings.begin(), defaultMappings.end(), [eventIndex](const std::pair<u32, u32>& mapping)
+            {
+                return (mapping.first == eventIndex);
+            });
+            
+            if(defaultMappingIt != defaultMappings.end())
+            {
+                out_actionId = defaultMappingIt->second;
+                return true;
+            }
+            
+            return false;
+        }
+    }
+    
     //------------------------------------------------------------------------------
     GamepadSystemUPtr GamepadSystem::Create() noexcept
     {
@@ -52,6 +115,88 @@ namespace ChilliSource
 #else
         return nullptr;
 #endif
+    }
+    
+    //------------------------------------------------------------------------------
+    void GamepadSystem::SetActionMapping(u32 actionId, const std::string& gamepadName, GamepadAxis axis) noexcept
+    {
+        u32 gamepadNameHash = HashCRC32::GenerateHashCode(gamepadName);
+        u32 mappingId = CantorPairing(gamepadNameHash, (u32)axis);
+        
+        auto mappingIt = std::find_if(m_axisMappings.begin(), m_axisMappings.end(), [mappingId](const std::pair<u32, u32>& mapping)
+        {
+            return (mapping.first == mappingId);
+        });
+        
+        if(mappingIt == m_axisMappings.end())
+        {
+            m_axisMappings.push_back(std::make_pair(mappingId, actionId));
+        }
+        else
+        {
+            mappingIt->second = actionId;
+        }
+    }
+    
+    //------------------------------------------------------------------------------
+    void GamepadSystem::SetActionMapping(u32 actionId, const std::string& gamepadName, u32 buttonIndex) noexcept
+    {
+        u32 gamepadNameHash = HashCRC32::GenerateHashCode(gamepadName);
+        u32 mappingId = CantorPairing(gamepadNameHash, buttonIndex);
+
+        auto mappingIt = std::find_if(m_buttonMappings.begin(), m_buttonMappings.end(), [mappingId](const std::pair<u32, u32>& mapping)
+        {
+            return (mapping.first == mappingId);
+        });
+        
+        if(mappingIt == m_buttonMappings.end())
+        {
+            m_buttonMappings.push_back(std::make_pair(mappingId, actionId));
+        }
+        else
+        {
+            mappingIt->second = actionId;
+        }
+    }
+    
+    //------------------------------------------------------------------------------
+    void GamepadSystem::SetDefaultActionMapping(u32 actionId, GamepadAxis axis) noexcept
+    {
+        u32 mappingId = (u32)axis;
+        
+        auto mappingIt = std::find_if(m_defaultAxisMappings.begin(), m_defaultAxisMappings.end(), [mappingId](const std::pair<u32, u32>& mapping)
+        {
+            return (mapping.first == mappingId);
+        });
+        
+        if(mappingIt == m_defaultAxisMappings.end())
+        {
+            m_defaultAxisMappings.push_back(std::make_pair(mappingId, actionId));
+        }
+        else
+        {
+            mappingIt->second = actionId;
+        }
+    }
+    
+    //------------------------------------------------------------------------------
+    void GamepadSystem::SetDefaultActionMapping(u32 actionId, u32 buttonIndex) noexcept
+    {
+        u32 mappingId = buttonIndex;
+        
+        auto mappingIt = std::find_if(m_defaultButtonMappings.begin(), m_defaultButtonMappings.end(), [mappingId](const std::pair<u32, u32>& mapping)
+        {
+            return (mapping.first == mappingId);
+        });
+        
+        if(mappingIt == m_defaultButtonMappings.end())
+        {
+            m_defaultButtonMappings.push_back(std::make_pair(mappingId, actionId));
+        }
+        else
+        {
+            mappingIt->second = actionId;
+        }
     }
 
     //------------------------------------------------------------------------------
@@ -220,6 +365,12 @@ namespace ChilliSource
         {
             gamepadIt->m_buttonStates[event.m_index] = event.m_value;
             m_buttonPressureChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, event.m_index, event.m_value);
+            
+            u32 actionId = 0;
+            if(TryGetActionId(gamepadIt->GetNameHash(), event.m_index, m_buttonMappings, m_defaultButtonMappings, actionId) == true)
+            {
+                m_mappedButtonPressureChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, actionId, event.m_value);
+            }
         }
         else
         {
@@ -239,6 +390,12 @@ namespace ChilliSource
         {
             gamepadIt->m_axisStates[event.m_index] = event.m_value;
             m_axisPositionChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, (GamepadAxis)event.m_index, event.m_value);
+            
+            u32 actionId = 0;
+            if(TryGetActionId(gamepadIt->GetNameHash(), event.m_index, m_axisMappings, m_defaultAxisMappings, actionId) == true)
+            {
+                m_mappedAxisPositionChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, actionId, event.m_value);
+            }
         }
         else
         {

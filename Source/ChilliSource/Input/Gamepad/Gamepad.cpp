@@ -24,6 +24,8 @@
 
 #include <ChilliSource/Input/Gamepad/Gamepad.h>
 
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+
 namespace ChilliSource
 {
     //------------------------------------------------------------------------------
@@ -32,6 +34,7 @@ namespace ChilliSource
     {
         m_buttonStates.resize(numButtons, 0.0f);
         m_axisStates = {{0.0f}};
+        m_nameHash = HashCRC32::GenerateHashCode(m_name);
     }
     
     //------------------------------------------------------------------------------

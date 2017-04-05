@@ -36,6 +36,8 @@ namespace ChilliSource
     {
         namespace XBox360
         {
+            const std::string k_name = "TODO:XBox";
+            
             const u32 k_a = 0;
             const u32 k_b = 1;
             const u32 k_x = 2;
@@ -58,6 +60,8 @@ namespace ChilliSource
         
         namespace PS3
         {
+            const std::string k_name = "TODO:PS3";
+            
             const u32 k_triangle = 0;
             const u32 k_circle = 1;
             const u32 k_cross = 2;
@@ -78,21 +82,6 @@ namespace ChilliSource
             const GamepadAxis k_rStickY = GamepadAxis::k_r;
             const GamepadAxis k_dpadX = GamepadAxis::k_povX;
             const GamepadAxis k_dpadY = GamepadAxis::k_povY;
-        }
-        
-        namespace GenericNES
-        {
-            const u32 k_x = 0;
-            const u32 k_a = 1;
-            const u32 k_b = 2;
-            const u32 k_y = 3;
-            const u32 k_l = 4;
-            const u32 k_r = 5;
-            const u32 k_select = 6;
-            const u32 k_start = 7;
-            
-            const GamepadAxis k_dpadX = GamepadAxis::k_x;
-            const GamepadAxis k_dpadY = GamepadAxis::k_y;
         }
     }
 }

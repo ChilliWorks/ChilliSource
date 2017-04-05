@@ -116,6 +116,10 @@ namespace ChilliSource
         ///
         const std::string& GetName() const noexcept { return m_name; }
         
+        /// @return CRC32 hash of the name as reported by gamepad drivers
+        ///
+        u32 GetNameHash() const noexcept { return m_nameHash; }
+        
     private:
         
         friend class GamepadSystem;
@@ -124,6 +128,7 @@ namespace ChilliSource
         u32 m_index;
         u32 m_supportedAxisFlags = 0;
         std::string m_name;
+        u32 m_nameHash;
         
         std::vector<f32> m_buttonStates;
         std::array<f32, (u32)GamepadAxis::k_total> m_axisStates;

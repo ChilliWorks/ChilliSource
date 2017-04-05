@@ -80,6 +80,32 @@ namespace ChilliSource
         ///     Updated position of the axis
         ///
         using GamepadAxisPositionChangedDelegate = std::function<void(const Gamepad& gamepad, f64 timestamp, GamepadAxis axis, f32 position)>;
+        
+        /// Delegate signature to subscribe to events for whenever the user presses or releases a button on the gamepad for a registered mapping.
+        ///
+        /// @param gamepad
+        ///     The gamepad thats input changed
+        /// @param timestamp
+        ///     Time at which input changed
+        /// @param actionId
+        ///     Id used when mapping was registered
+        /// @param pressure
+        ///     Updated pressure on the button
+        ///
+        using GamepadMappedButtonPressureChangedDelegate = std::function<void(const Gamepad& gamepad, f64 timestamp, u32 actionId, f32 pressure)>;
+        
+        /// Delegate signature to subscribe to events for whenever the user moves an axis on the gamepad for a registered mapping.
+        ///
+        /// @param gamepad
+        ///     The gamepad thats input changed
+        /// @param timestamp
+        ///     Time at which input changed
+        /// @param actionId
+        ///     Id used when mapping was registered
+        /// @param position
+        ///     Updated position of the axis
+        ///
+        using GamepadMappedAxisPositionChangedDelegate = std::function<void(const Gamepad& gamepad, f64 timestamp, u32 actionId, f32 position)>;
 
         /// Delegate signature to subscribe to events for whenever the OS detects that a new gamepad has been unattached
         ///
@@ -89,6 +115,74 @@ namespace ChilliSource
         ///     Time at which it was disconnected
         ///
         using GamepadRemovedDelegate = std::function<void(const Gamepad& gamepad, f64 timestamp)>;
+        
+        /// Registers/updates a mapping such that whenever the given axis on the given gamepad is moved
+        /// an event is fired with the given actionId.
+        ///
+        /// If mapping for gamepad/axis combo doesn't exist it is created
+        /// If mapping for gamepad/axis combo does exist it is overwritten
+        ///
+        /// For example:    MoveVertically => XBox360 => GamepadMapping::XBox360::k_dpadY
+        ///                 MoveVertically => XBox360 => GamepadMapping::XBox360::k_lStickY
+        ///                 MoveVertically => PS3 => GamepadMapping::PS3::k_dpadY
+        ///                 MoveVertically => PS3 => GamepadMapping::PS3::k_lStickY
+        ///
+        /// @param actionId
+        ///     Identifier that is passed into the axis moved event
+        /// @param gamepadName
+        ///     Name of the gamepad that this mapping applies to
+        /// @param axis
+        ///     Axis on the gamepad that triggers this action
+        ///
+        void SetActionMapping(u32 actionId, const std::string& gamepadName, GamepadAxis axis) noexcept;
+        
+        /// Registers/updates a mapping such that whenever the given button on the given gamepad is pressed or released
+        /// an event is fired with the given actionId.
+        ///
+        /// If mapping for gamepad/button combo doesn't exist it is created
+        /// If mapping for gamepad/button combo does exist it is overwritten
+        ///
+        /// For example:    Fire => XBox360 => GamepadMapping::XBox360::k_rBumper
+        ///                 Fire => PS3 => GamepadMapping::PS3::k_r2
+        ///
+        /// @param actionId
+        ///     Identifier that is passed into the button pressure event
+        /// @param gamepadName
+        ///     Name of the gamepad that this mapping applies to
+        /// @param buttonIndex
+        ///     Buttin on the gamepad that triggers this action
+        ///
+        void SetActionMapping(u32 actionId, const std::string& gamepadName, u32 buttonIndex) noexcept;
+        
+        /// Registers/updates a mapping such that whenever the given axis on a gamepad that is not explicity
+        /// registered is moved an event is fired with the given actionId.
+        ///
+        /// If mapping for axis doesn't exist it is created
+        /// If mapping for axis does exist it is overwritten
+        ///
+        /// For example: MoveVertically => GamepadAxis::k_y
+        ///
+        /// @param actionId
+        ///     Identifier that is passed into the axis moved event
+        /// @param axis
+        ///     Axis on the gamepad that triggers this action
+        ///
+        void SetDefaultActionMapping(u32 actionId, GamepadAxis axis) noexcept;
+        
+        /// Registers/updates a mapping such that whenever the given button on a gamepad not explcity registered
+        /// is pressed or released an event is fired with the given actionId.
+        ///
+        /// If mapping for button doesn't exist it is created
+        /// If mapping for button does exist it is overwritten
+        ///
+        /// For example: Fire => 0
+        ///
+        /// @param actionId
+        ///     Identifier that is passed into the button pressure event
+        /// @param buttonIndex
+        ///     Buttin on the gamepad that triggers this action
+        ///
+        void SetDefaultActionMapping(u32 actionId, u32 buttonIndex) noexcept;
         
         /// @return Event triggered when a new gamepad is connected
         ///
@@ -101,6 +195,14 @@ namespace ChilliSource
         /// @return Event triggered when the user moved an axis input on the gamepad
         ///
         IConnectableEvent<GamepadAxisPositionChangedDelegate>& GetAxisPositionChangedEvent() noexcept { return m_axisPositionChangedEvent; }
+        
+        /// @return Event triggered when the user presses or releases a button on the gamepad if the button was registered against as part of a mapping
+        ///
+        IConnectableEvent<GamepadMappedButtonPressureChangedDelegate>& GetMappedButtonPressureChangedEvent() noexcept { return m_mappedButtonPressureChangedEvent; }
+        
+        /// @return Event triggered when the user moved an axis input on the gamepad if the axis was registered against as part of a mapping
+        ///
+        IConnectableEvent<GamepadMappedAxisPositionChangedDelegate>& GetMappedAxisPositionChangedEvent() noexcept { return m_mappedAxisPositionChangedEvent; }
 
         /// @return Event triggered when a gamepad is disconnected
         ///
@@ -272,12 +374,18 @@ namespace ChilliSource
         Event<GamepadAddedDelegate> m_gamepadAddedEvent;
         Event<GamepadButtonPressureChangedDelegate> m_buttonPressureChangedEvent;
         Event<GamepadAxisPositionChangedDelegate> m_axisPositionChangedEvent;
+        Event<GamepadMappedButtonPressureChangedDelegate> m_mappedButtonPressureChangedEvent;
+        Event<GamepadMappedAxisPositionChangedDelegate> m_mappedAxisPositionChangedEvent;
         Event<GamepadRemovedDelegate> m_gamepadRemovedEvent;
         
         std::mutex m_mutex;
         std::vector<Gamepad> m_gamepads;
         std::queue<GamepadEventData> m_eventQueue;
         std::queue<GamepadCreateEventData> m_createEventQueue;
+        std::vector<std::pair<u32, u32>> m_axisMappings;
+        std::vector<std::pair<u32, u32>> m_buttonMappings;
+        std::vector<std::pair<u32, u32>> m_defaultAxisMappings;
+        std::vector<std::pair<u32, u32>> m_defaultButtonMappings;
         Gamepad::Id m_nextUniqueId = 0;
     };
 }
