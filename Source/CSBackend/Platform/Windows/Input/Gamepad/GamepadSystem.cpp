@@ -54,6 +54,7 @@ namespace CSBackend
 													ChilliSource::MakeDelegate(this, &GamepadSystem::OnButtonPressed), ChilliSource::MakeDelegate(this, &GamepadSystem::OnButtonReleased),
 													ChilliSource::MakeDelegate(this, &GamepadSystem::OnAxisMoved));
 
+			sf::Joystick::update();
 			//SFML doesn't notify us about already connected joysticks.
 			for(u32 i=0; i<ChilliSource::Gamepad::k_maxGamepads; ++i)
 			{
