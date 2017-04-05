@@ -1,6 +1,10 @@
 ChilliSource Change Log
 =======================
 
+Version 2.2.3,
+-------------------------
+* Fixed: Crash when minimising window on Windows caused by OpenGL continuing to render. Fix is to suspend the application when it loses focus (SFML has no minimise event).
+
 Version 2.2.2, 2017-03-27
 -------------------------
 * Added: Parsing and ToString methods for Integer2, Integer3 and Integer4
