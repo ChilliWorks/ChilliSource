@@ -26,10 +26,6 @@
 
 #include <CSBackend/Platform/Windows/Input/Gamepad/GamepadSystem.h>
 
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/AppConfig.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Input/Gamepad/GamepadAxis.h>
 
