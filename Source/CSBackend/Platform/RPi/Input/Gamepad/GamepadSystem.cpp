@@ -29,8 +29,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <libevdev/libevdev.h>
+#include <libudev.h>
 
 #include <array>
+#include <cstring>
 
 namespace CSBackend
 {
@@ -40,9 +42,37 @@ namespace CSBackend
 
 		namespace
 		{
-			const std::string k_inputFileDirectory = "/dev/input/by-path/";
 			const std::array<int, 8> k_axes = {{ABS_X, ABS_Y, ABS_THROTTLE, ABS_RUDDER, ABS_RX, ABS_RY, ABS_HAT0X, ABS_HAT0Y}}; //X, Y, Z, R, U, V, PovX, PovY
 			const u32 k_maxButtons = 32;
+
+			/// @param udevMonitor
+			///		Monitor to check
+			///
+			/// @return TRUE if there is a new monitoring event meaning a new device has been connected
+			///
+			bool HasUdevMonitorEvent(udev_monitor* udevMonitor)
+			{
+				// This will not fail since we make sure udevMonitor is valid
+				int monitorFd = udev_monitor_get_fd(udevMonitor);
+
+				fd_set descriptorSet;
+				FD_ZERO(&descriptorSet);
+				FD_SET(monitorFd, &descriptorSet);
+				timeval timeout = {0, 0};
+
+				return (select(monitorFd + 1, &descriptorSet, NULL, NULL, &timeout) > 0) && FD_ISSET(monitorFd, &descriptorSet);
+			}
+
+			/// @param device
+			///		Device to check
+			///
+			/// @return TRUE if device is a joystick
+			///
+			bool IsDeviceJoystick(udev_device* device)
+			{
+				const char* devnode = udev_device_get_devnode(device);
+				return devnode != nullptr && std::strstr(devnode, "event") != nullptr && udev_device_get_property_value(device, "ID_INPUT_JOYSTICK");
+			}
 		}
 
         //------------------------------------------------------------------------------
@@ -55,15 +85,27 @@ namespace CSBackend
 		void GamepadSystem::OnInit() noexcept
 		{
 			std::fill(std::begin(m_gamepadConnections), std::end(m_gamepadConnections), GamepadData());
+
+			m_udev = udev_new();
+			CS_RELEASE_ASSERT(m_udev != nullptr, "Cannot create udev");
+
+			m_udevMonitor = udev_monitor_new_from_netlink(m_udev, "udev");
+			CS_RELEASE_ASSERT(m_udevMonitor != nullptr, "Cannot create udev monitor");
+
+			auto result = udev_monitor_filter_add_match_subsystem_devtype(m_udevMonitor, "input", NULL);
+			CS_RELEASE_ASSERT(result >= 0, "Failed to add udev monitor filter");
+
+			//Check for already connected devices
+			CheckForExistingGamepadConnections();
+
+			//Start listening for new  device connections
+			udev_monitor_enable_receiving(m_udevMonitor);
 		}
 
 		//------------------------------------------------------------------------------
 		void GamepadSystem::OnUpdate(f32 timeSinceLastUpdate) noexcept
 		{
-			if(m_gamepadConnections[0].m_dev == nullptr)
-			{
-				CheckForNewGamepadConnections();
-			}
+			CheckForNewGamepadConnections();
 
 			for(u32 i=0; i<ChilliSource::Gamepad::k_maxGamepads; ++i)
 			{
@@ -95,6 +137,7 @@ namespace CSBackend
 					{
 						//We have lost connection to the device.
 						AddGamepadRemoveEvent(m_gamepadConnections[i].m_uid);
+						close(m_gamepadConnections[i].m_fileDescriptor);
 						m_gamepadConnections[i] = GamepadData();
 					}
 				}
@@ -103,8 +146,64 @@ namespace CSBackend
 		}
 
 		//------------------------------------------------------------------------------
+		void GamepadSystem::CheckForExistingGamepadConnections() noexcept
+		{
+			udev_enumerate* enumerator = udev_enumerate_new(m_udev);
+			CS_RELEASE_ASSERT(enumerator != nullptr, "Cannot create udev enumerator");
+			auto result = udev_enumerate_add_match_subsystem(enumerator, "input");
+			CS_RELEASE_ASSERT(result >= 0, "Failed to add filter to udev enumerator");
+			result = udev_enumerate_scan_devices(enumerator);
+			CS_RELEASE_ASSERT(result >= 0, "Failed to scan udev for devices");
+
+			udev_list_entry* devices = udev_enumerate_get_list_entry(enumerator);
+			udev_list_entry* deviceEntry;
+			udev_list_entry_foreach(deviceEntry, devices)
+			{
+				const char* sysPath = udev_list_entry_get_name(deviceEntry);
+				udev_device* device = udev_device_new_from_syspath(m_udev, sysPath);
+				if(device != nullptr)
+				{
+					TryAddGamepadDevice(device);
+					udev_device_unref(device);
+				}
+			}
+
+			udev_enumerate_unref(enumerator);
+		}
+
+		//------------------------------------------------------------------------------
 		void GamepadSystem::CheckForNewGamepadConnections() noexcept
 		{
+			//Check for new events
+			if(HasUdevMonitorEvent(m_udevMonitor) == false)
+				return;
+
+			//Check if the device causing the event is a gamepad
+			udev_device* device = udev_monitor_receive_device(m_udevMonitor);
+			if(device != nullptr)
+				return;
+
+			//Check to make sure it is a connected event
+			const char* action = udev_device_get_action(device);
+			if(std::strcmp(action, "add") != 0)
+			{
+				udev_device_unref(device);
+				return;
+			}
+
+			TryAddGamepadDevice(device);
+			udev_device_unref(device);
+		}
+
+		//------------------------------------------------------------------------------
+		bool GamepadSystem::TryAddGamepadDevice(udev_device* device) noexcept
+		{
+			if(IsDeviceJoystick(device) == false)
+			{
+				return false;
+			}
+
+			//Check if we can accomodate new gamepads
 			s32 freeIndex = -1;
 			for(s32 i=0; i<(s32)ChilliSource::Gamepad::k_maxGamepads; ++i)
 			{
@@ -118,15 +217,11 @@ namespace CSBackend
 			//Too many gamepads
 			if(freeIndex == -1)
 			{
-				return;
+				return false;
 			}
 
-			//Check the /dev/input/by-path directory for joypad event files. Each file
-			//corresponds to a gamepad.
-
-			//Check for new files that we haven't seen before
-			std::string filename = "platform-3f980000.usb-usb-0:1.2:1.0-event-joystick";
-			auto fileDescriptor = open((k_inputFileDirectory + filename).c_str(), O_RDONLY|O_NONBLOCK);
+			//Get the file that the kernel writes gamepad events to and hand it to evdev to poll
+			auto fileDescriptor = open(udev_device_get_devnode(device), O_RDONLY|O_NONBLOCK);
 
 			struct libevdev* dev = nullptr;
 			auto result = libevdev_new_from_fd(fileDescriptor, &dev);
@@ -137,7 +232,7 @@ namespace CSBackend
 				{
 					close(fileDescriptor);
 				}
-				return;
+				return false;
 			}
 
 			//Read the configuration of the device
@@ -166,6 +261,8 @@ namespace CSBackend
 			data.m_fileDescriptor = fileDescriptor;
 			data.m_dev = dev;
 			m_gamepadConnections[freeIndex] = std::move(data);
+
+			return true;
 		}
 
 		//------------------------------------------------------------------------------
@@ -230,6 +327,9 @@ namespace CSBackend
 				libevdev_free(gamepadData.m_dev);
 				close(gamepadData.m_fileDescriptor);
 			}
+
+			udev_monitor_unref(m_udevMonitor);
+			udev_unref(m_udev);
 		}
 	}
 }

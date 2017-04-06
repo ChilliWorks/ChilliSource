@@ -35,12 +35,17 @@
 
 struct libevdev;
 struct input_event;
+struct udev;
+struct udev_monitor;
+struct udev_device;
 
 namespace CSBackend
 {
 	namespace RPi
 	{
-		/// The Raspberry Pi backend for the gamepad system. TODO:
+		/// The Raspberry Pi backend for the gamepad system.
+		/// Uses libudev to check for new devices and libevdev to
+		/// query the input files for changes to buttons and axes
         ///
 		class GamepadSystem final : public ChilliSource::GamepadSystem
 		{
@@ -68,10 +73,25 @@ namespace CSBackend
 			///
 			void OnUpdate(f32 timeSinceLastUpdate) noexcept override;
 
-			/// On Linux gamepads are handled as files. We check for the addition of a new file to check whether a controller has been connected.
-			/// Connected controller files are added to the internal list and checked every update for input.
+			/// On Linux gamepads are handled as files. We check for existing joypad event files to grab the file descriptor
+			/// we then store this and use evdev to poll for state changes every update
+			///
+			void CheckForExistingGamepadConnections() noexcept;
+
+			/// On Linux gamepads are handled as files. We use udev to check for new devices and to grab the file descriptor
+			/// we then store this and use evdev to poll for state changes every update
 			///
 			void CheckForNewGamepadConnections() noexcept;
+
+			/// Attempt to add the given device (must not be nullptr) as a gamepad if it meets the gamepad
+			/// criteria.
+			///
+			/// @param device
+			///		Device to check and add if gamepad
+			///
+			/// @return TRUE if added
+			///
+			bool TryAddGamepadDevice(udev_device* device) noexcept;
 
 			/// Process the axis moved event forwarding it to the main CS application
 			///
@@ -106,6 +126,9 @@ namespace CSBackend
 			};
 
 			GamepadData m_gamepadConnections[ChilliSource::Gamepad::k_maxGamepads];
+
+			udev* m_udev;
+			udev_monitor* m_udevMonitor;
 		};
 	}
 }
