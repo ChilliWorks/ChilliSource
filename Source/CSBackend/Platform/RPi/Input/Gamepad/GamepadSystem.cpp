@@ -235,9 +235,11 @@ namespace CSBackend
 				return false;
 			}
 
-			//Read the configuration of the device
-			std::string deviceName = libevdev_get_name(dev);
+			//We get device name using this method so we match the SFML implementation on Windows
+			udev_device* deviceParent = udev_device_get_parent_with_subsystem_devtype(device, "usb", "usb_device");
+ 			std::string deviceName = udev_device_get_sysattr_value(deviceParent, "product");
 
+			//Num buttons
 			u32 numButtons = 0;
 			for(s32 i=BTN_TRIGGER; i<BTN_TRIGGER+k_maxButtons; ++i)
 			{
@@ -247,6 +249,7 @@ namespace CSBackend
 				}
 			}
 
+			//Supported axes
 			u32 supportedAxisFlags = 0;
 			for(std::size_t i=0; i<=k_axes.size(); ++i)
 			{
