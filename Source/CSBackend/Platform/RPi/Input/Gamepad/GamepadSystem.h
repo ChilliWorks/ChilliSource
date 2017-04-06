@@ -129,6 +129,7 @@ namespace CSBackend
 
 			udev* m_udev;
 			udev_monitor* m_udevMonitor;
+			int m_monitorFd = -1;
 		};
 	}
 }

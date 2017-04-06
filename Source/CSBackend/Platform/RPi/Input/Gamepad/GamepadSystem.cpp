@@ -45,16 +45,13 @@ namespace CSBackend
 			const std::array<int, 8> k_axes = {{ABS_X, ABS_Y, ABS_THROTTLE, ABS_RUDDER, ABS_RX, ABS_RY, ABS_HAT0X, ABS_HAT0Y}}; //X, Y, Z, R, U, V, PovX, PovY
 			const u32 k_maxButtons = 32;
 
-			/// @param udevMonitor
+			/// @param monitorFd
 			///		Monitor to check
 			///
 			/// @return TRUE if there is a new monitoring event meaning a new device has been connected
 			///
-			bool HasUdevMonitorEvent(udev_monitor* udevMonitor)
+			bool HasUdevMonitorEvent(int monitorFd)
 			{
-				// This will not fail since we make sure udevMonitor is valid
-				int monitorFd = udev_monitor_get_fd(udevMonitor);
-
 				fd_set descriptorSet;
 				FD_ZERO(&descriptorSet);
 				FD_SET(monitorFd, &descriptorSet);
@@ -95,11 +92,12 @@ namespace CSBackend
 			auto result = udev_monitor_filter_add_match_subsystem_devtype(m_udevMonitor, "input", NULL);
 			CS_RELEASE_ASSERT(result >= 0, "Failed to add udev monitor filter");
 
+			//Start listening for new  device connections - NOTE: Monitoring needs to be enabled before enumeration according to the manual
+			udev_monitor_enable_receiving(m_udevMonitor);
+			m_monitorFd = udev_monitor_get_fd(m_udevMonitor);
+
 			//Check for already connected devices
 			CheckForExistingGamepadConnections();
-
-			//Start listening for new  device connections
-			udev_monitor_enable_receiving(m_udevMonitor);
 		}
 
 		//------------------------------------------------------------------------------
@@ -120,7 +118,6 @@ namespace CSBackend
 
 					if(eventResult == LIBEVDEV_READ_STATUS_SUCCESS)
 					{
-						printf("Event: %s %s %d\n",libevdev_event_type_get_name(ev.type),libevdev_event_code_get_name(ev.type, ev.code),ev.value);
 						switch(ev.type)
 						{
 							case EV_ABS:
@@ -175,13 +172,15 @@ namespace CSBackend
 		void GamepadSystem::CheckForNewGamepadConnections() noexcept
 		{
 			//Check for new events
-			if(HasUdevMonitorEvent(m_udevMonitor) == false)
+			if(HasUdevMonitorEvent(m_monitorFd) == false)
 				return;
 
 			//Check if the device causing the event is a gamepad
 			udev_device* device = udev_monitor_receive_device(m_udevMonitor);
-			if(device != nullptr)
+			if(device == nullptr)
+			{
 				return;
+			}
 
 			//Check to make sure it is a connected event
 			const char* action = udev_device_get_action(device);
@@ -221,7 +220,8 @@ namespace CSBackend
 			}
 
 			//Get the file that the kernel writes gamepad events to and hand it to evdev to poll
-			auto fileDescriptor = open(udev_device_get_devnode(device), O_RDONLY|O_NONBLOCK);
+			const char* devNode = udev_device_get_devnode(device);
+			auto fileDescriptor = open(devNode, O_RDONLY|O_NONBLOCK);
 
 			struct libevdev* dev = nullptr;
 			auto result = libevdev_new_from_fd(fileDescriptor, &dev);
@@ -256,8 +256,10 @@ namespace CSBackend
 				}
 			}
 
+			CS_LOG_VERBOSE_FMT("Gamepad Connected: %s\n", deviceName.c_str());
+
 			GamepadData data;
-			data.m_uid = AddGamepadCreateEvent(deviceName, numButtons, supportedAxisFlags);
+			data.m_uid = AddGamepadCreateEvent(std::move(deviceName), numButtons, supportedAxisFlags);
 			data.m_fileDescriptor = fileDescriptor;
 			data.m_dev = dev;
 			m_gamepadConnections[freeIndex] = std::move(data);
