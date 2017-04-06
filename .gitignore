@@ -29,8 +29,8 @@ Projects/Android/playlicensing/build
 ################################
 # Raspberry Pi Ignore Files
 ################################
-csobj/
-appobj/
+Projects/RPi/Build
+Projects/RPi/Output
 
 ################################
 # General Ignore Files
