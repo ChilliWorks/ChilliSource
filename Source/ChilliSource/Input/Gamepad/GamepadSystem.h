@@ -38,7 +38,7 @@ namespace ChilliSource
 {
     /// Provides access to any attached gamepads and has events to listen for changes to gamepad states
     ///
-    /// Limitations of backend mean that a max of 8 gamepads are supported with 32 buttons and 8 axis inputs
+    /// Each platform has its own limitations in terms of number of buttons and axes
     ///
     class GamepadSystem : public AppSystem
     {
