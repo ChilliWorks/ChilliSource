@@ -133,8 +133,10 @@ namespace ChilliSource
         ///     Name of the gamepad that this mapping applies to
         /// @param axis
         ///     Axis on the gamepad that triggers this action
+        /// @param invert
+        ///     If TRUE flip the value returned by the axis (some controllers report +ve y as -1.0 some as 1.0
         ///
-        void SetActionMapping(u32 actionId, const std::string& gamepadName, GamepadAxis axis) noexcept;
+        void SetActionMapping(u32 actionId, const std::string& gamepadName, GamepadAxis axis, bool invert = false) noexcept;
         
         /// Registers/updates a mapping such that whenever the given button on the given gamepad is pressed or released
         /// an event is fired with the given actionId.
@@ -382,7 +384,7 @@ namespace ChilliSource
         std::vector<Gamepad> m_gamepads;
         std::queue<GamepadEventData> m_eventQueue;
         std::queue<GamepadCreateEventData> m_createEventQueue;
-        std::vector<std::pair<u32, u32>> m_axisMappings;
+        std::vector<std::tuple<u32, u32, f32>> m_axisMappings;
         std::vector<std::pair<u32, u32>> m_buttonMappings;
         std::vector<std::pair<u32, u32>> m_defaultAxisMappings;
         std::vector<std::pair<u32, u32>> m_defaultButtonMappings;

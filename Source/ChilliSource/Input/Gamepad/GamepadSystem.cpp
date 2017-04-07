@@ -103,6 +103,54 @@ namespace ChilliSource
             
             return false;
         }
+        
+        /// Attemtps to get the action id firstly from the named mappings and then the default mappings
+        ///
+        /// @param gamepadNameHash
+        ///     Unique id of the gamepad type
+        /// @param eventIndex
+        ///     Button or axis
+        /// @param namedMappings
+        ///     Priority mappings using the gamepad name and button/axis
+        /// @param defaultMappings
+        ///     Fallback mappings using the button/axis only
+        /// @param [OUT] out_actionId
+        ///     Set if the mapping exists
+        /// @param [OUT] out_scalar
+        ///     Set if mapping exists
+        ///
+        /// @return TRUE if out_actionId is set
+        ///
+        bool TryGetActionId(u32 gamepadNameHash, u32 eventIndex, const std::vector<std::tuple<u32, u32, f32>>& namedMappings, const std::vector<std::pair<u32, u32>>& defaultMappings, u32& out_actionId, f32& out_scalar) noexcept
+        {
+            //Check if this button is mapped for this gamepad type
+            u32 mappingId = CantorPairing(gamepadNameHash, eventIndex);
+            auto mappingIt = std::find_if(namedMappings.begin(), namedMappings.end(), [mappingId](const std::tuple<u32, u32, f32>& mapping)
+            {
+                return (std::get<0>(mapping) == mappingId);
+            });
+            
+            if(mappingIt != namedMappings.end())
+            {
+                out_actionId = std::get<1>(*mappingIt);
+                out_scalar = std::get<2>(*mappingIt);
+                return true;
+            }
+            
+            auto defaultMappingIt = std::find_if(defaultMappings.begin(), defaultMappings.end(), [eventIndex](const std::pair<u32, u32>& mapping)
+            {
+                return (mapping.first == eventIndex);
+            });
+            
+            if(defaultMappingIt != defaultMappings.end())
+            {
+                out_actionId = defaultMappingIt->second;
+                out_scalar = 1.0f;
+                return true;
+            }
+            
+            return false;
+        }
     }
     
     //------------------------------------------------------------------------------
@@ -118,23 +166,24 @@ namespace ChilliSource
     }
     
     //------------------------------------------------------------------------------
-    void GamepadSystem::SetActionMapping(u32 actionId, const std::string& gamepadName, GamepadAxis axis) noexcept
+    void GamepadSystem::SetActionMapping(u32 actionId, const std::string& gamepadName, GamepadAxis axis, bool invert) noexcept
     {
         u32 gamepadNameHash = HashCRC32::GenerateHashCode(gamepadName);
         u32 mappingId = CantorPairing(gamepadNameHash, (u32)axis);
         
-        auto mappingIt = std::find_if(m_axisMappings.begin(), m_axisMappings.end(), [mappingId](const std::pair<u32, u32>& mapping)
+        auto mappingIt = std::find_if(m_axisMappings.begin(), m_axisMappings.end(), [mappingId](const std::tuple<u32, u32, f32>& mapping)
         {
-            return (mapping.first == mappingId);
+            return std::get<0>(mapping) == mappingId;
         });
         
         if(mappingIt == m_axisMappings.end())
         {
-            m_axisMappings.push_back(std::make_pair(mappingId, actionId));
+            m_axisMappings.push_back(std::make_tuple(mappingId, actionId, invert == false ? 1.0f : -1.0f));
         }
         else
         {
-            mappingIt->second = actionId;
+            std::get<1>(*mappingIt) = actionId;
+            std::get<2>(*mappingIt) = invert == false ? 1.0f : -1.0f;
         }
     }
     
@@ -392,9 +441,10 @@ namespace ChilliSource
             m_axisPositionChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, (GamepadAxis)event.m_index, event.m_value);
             
             u32 actionId = 0;
-            if(TryGetActionId(gamepadIt->GetNameHash(), event.m_index, m_axisMappings, m_defaultAxisMappings, actionId) == true)
+            f32 scalar = 1.0f;
+            if(TryGetActionId(gamepadIt->GetNameHash(), event.m_index, m_axisMappings, m_defaultAxisMappings, actionId, scalar) == true)
             {
-                m_mappedAxisPositionChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, actionId, event.m_value);
+                m_mappedAxisPositionChangedEvent.NotifyConnections(*gamepadIt, event.m_timestamp, actionId, event.m_value * scalar);
             }
         }
         else
