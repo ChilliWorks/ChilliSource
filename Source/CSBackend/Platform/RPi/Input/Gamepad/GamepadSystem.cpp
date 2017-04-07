@@ -42,7 +42,8 @@ namespace CSBackend
 
 		namespace
 		{
-			const std::array<int, 8> k_axes = {{ABS_X, ABS_Y, ABS_THROTTLE, ABS_RUDDER, ABS_RX, ABS_RY, ABS_HAT0X, ABS_HAT0Y}}; //X, Y, Z, R, U, V, PovX, PovY
+			//Matches SFML on Windows
+			const std::array<int, 10> k_axes = {{ABS_X, ABS_Y, ABS_Z, ABS_THROTTLE, ABS_RZ, ABS_RUDDER, ABS_RX, ABS_RY, ABS_HAT0X, ABS_HAT0Y}};
 
 			/// @param monitorFd
 			///		Monitor to check
@@ -257,11 +258,43 @@ namespace CSBackend
 
 			//Supported axes
 			u32 supportedAxisFlags = 0;
-			for(std::size_t i=0; i<=k_axes.size(); ++i)
+			for(std::size_t i=0; i<k_axes.size(); ++i)
 			{
 				if(libevdev_has_event_code(dev, EV_ABS, k_axes[i]))
 				{
-					supportedAxisFlags |= (1u << i);
+					u32 axesIndex = 0;
+
+					switch(k_axes[i])
+					{
+						case ABS_X:
+							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_x);
+							break;
+						case ABS_Y:
+							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_y);
+							break;
+						case ABS_Z:
+							//Fallthrough
+						case ABS_THROTTLE:
+							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_z);
+							break;
+						case ABS_RZ:
+							//Fallthrough
+						case ABS_RUDDER:
+							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_r);
+							break;
+						case ABS_RX:
+							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_u);
+							break;
+						case ABS_RY:
+							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_v);
+							break;
+						case ABS_HAT0X:
+							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_povX);
+							break;
+						case ABS_HAT0Y:
+							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_povY);
+							break;
+					}
 				}
 			}
 
@@ -288,9 +321,13 @@ namespace CSBackend
 				case ABS_Y:
 					axis = (s32)ChilliSource::GamepadAxis::k_y;
 					break;
+				case ABS_Z:
+					//Fallthrough
 				case ABS_THROTTLE:
 					axis = (s32)ChilliSource::GamepadAxis::k_z;
 					break;
+				case ABS_RZ:
+					//Fallthrough
 				case ABS_RUDDER:
 					axis = (s32)ChilliSource::GamepadAxis::k_r;
 					break;

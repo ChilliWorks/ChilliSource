@@ -74,7 +74,7 @@ namespace ChilliSource
             const u32 k_start = 9;
             const u32 k_l3 = 10;
             const u32 k_r3 = 11;
-            //TODO: Stick clicks
+            const u32 k_ps = 0; //TODOD
             
             const GamepadAxis k_lStickX = GamepadAxis::k_x;
             const GamepadAxis k_lStickY = GamepadAxis::k_y;
@@ -82,6 +82,41 @@ namespace ChilliSource
             const GamepadAxis k_rStickY = GamepadAxis::k_r;
             const GamepadAxis k_dpadX = GamepadAxis::k_povX;
             const GamepadAxis k_dpadY = GamepadAxis::k_povY;
+        }
+        
+        namespace PS4
+        {
+            const std::string k_name = "Wireless Controller";
+            
+            const u32 k_square = 0;
+            const u32 k_cross = 1;
+            const u32 k_circle = 2;
+            const u32 k_triangle = 3;
+            const u32 k_l1 = 4;
+            const u32 k_r1 = 5;
+            const u32 k_l2 = 6;
+            const u32 k_r2 = 7;
+            const u32 k_share = 8;
+            const u32 k_options = 9;
+            const u32 k_l3 = 10;
+            const u32 k_r3 = 11;
+            const u32 k_ps = 12;
+            const u32 k_trackpad = 13;
+            
+            const GamepadAxis k_lStickX = GamepadAxis::k_x;
+            const GamepadAxis k_lStickY = GamepadAxis::k_y;
+            const GamepadAxis k_rStickX = GamepadAxis::k_z;
+            const GamepadAxis k_rStickY = GamepadAxis::k_r;
+            const GamepadAxis k_dpadX = GamepadAxis::k_povX;
+            const GamepadAxis k_dpadY = GamepadAxis::k_povY;
+            
+#ifndef CS_TARGETPLATFORM_RPI
+            const GamepadAxis k_l2Trigger = GamepadAxis::k_v;
+            const GamepadAxis k_r2Trigger = GamepadAxis::k_u;
+#else
+            const GamepadAxis k_l2Trigger = GamepadAxis::k_u;
+            const GamepadAxis k_r2Trigger = GamepadAxis::k_v;
+#endif
         }
     }
 }
