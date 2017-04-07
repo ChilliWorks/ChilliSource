@@ -125,6 +125,23 @@ bt
 
 This will display the call stack.
 
+## Gamepad/Controllers
+
+As part of the new Raspberry Pi backend we've also added support for gamepads/controllers to both Raspberry Pi and Windows. Checkout the CSRunner sample project for a more in-depth example but here's the main code required:
+
+```
+auto gamepadSystem = CS::Application::Get()->GetSystem<CS::GamepadSystem>();
+if(gamepadSystem != nullptr)
+{
+    gamepadSystem->SetDefaultActionMapping(k_moveGamepadAction, CS::GamepadAxis::k_y);
+    gamepadSystem->SetActionMapping(k_moveGamepadAction, CS::GamepadMappings::PS4::k_name, CS::GamepadMappings::PS4::k_dpadY, true);
+    gamepadSystem->SetActionMapping(k_moveGamepadAction, CS::GamepadMappings::PS4::k_name, CS::GamepadMappings::PS4::k_lStickY);
+
+    m_gamepadAxisEventConnection = gamepadSystem->GetMappedAxisPositionChangedEvent().OpenConnection([=](const CS::Gamepad& gamepad, f64 timestamp, u32 actionId, f32 position) { //AXIS MOVED });
+    m_gamepadButtonEventConnection = gamepadSystem->GetMappedButtonPressureChangedEvent().OpenConnection([=](const CS::Gamepad& gamepad, f64 timestamp, u32 actionId, f32 pressure) { //BUTTON PRESSURE CHANGED });
+}
+```
+
 ## Next Steps
 
 There isn't much more to say other than have fun and let us know how you get on.
