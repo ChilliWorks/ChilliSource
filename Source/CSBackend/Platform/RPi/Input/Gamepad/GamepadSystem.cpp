@@ -43,7 +43,6 @@ namespace CSBackend
 		namespace
 		{
 			const std::array<int, 8> k_axes = {{ABS_X, ABS_Y, ABS_THROTTLE, ABS_RUDDER, ABS_RX, ABS_RY, ABS_HAT0X, ABS_HAT0Y}}; //X, Y, Z, R, U, V, PovX, PovY
-			const u32 k_maxButtons = 32;
 
 			/// @param monitorFd
 			///		Monitor to check
@@ -124,7 +123,7 @@ namespace CSBackend
 								ProcessAxisEvent(ev, m_gamepadConnections[i].m_uid);
 								break;
 							case EV_KEY:
-								ProcessButtonEvent(ev, m_gamepadConnections[i].m_uid);
+								ProcessButtonEvent(ev, m_gamepadConnections[i].m_uid, m_gamepadConnections[i].m_buttonIndexMappings);
 								break;
 							default:
 								break;
@@ -235,17 +234,24 @@ namespace CSBackend
 				return false;
 			}
 
+			GamepadData data;
+
 			//We get device name using this method so we match the SFML implementation on Windows
 			udev_device* deviceParent = udev_device_get_parent_with_subsystem_devtype(device, "usb", "usb_device");
  			std::string deviceName = udev_device_get_sysattr_value(deviceParent, "product");
 
 			//Num buttons
 			u32 numButtons = 0;
-			for(s32 i=BTN_TRIGGER; i<BTN_TRIGGER+k_maxButtons; ++i)
+			for(u32 i=0; i<k_maxButtons; ++i)
 			{
-				if(libevdev_has_event_code(dev, EV_KEY, i))
+				if(libevdev_has_event_code(dev, EV_KEY, BTN_TRIGGER + i))
 				{
+					data.m_buttonIndexMappings[i] = numButtons;
 					++numButtons;
+				}
+				else
+				{
+					data.m_buttonIndexMappings[i] = -1;
 				}
 			}
 
@@ -261,7 +267,6 @@ namespace CSBackend
 
 			CS_LOG_VERBOSE_FMT("Gamepad Connected: %s\n", deviceName.c_str());
 
-			GamepadData data;
 			data.m_uid = AddGamepadCreateEvent(std::move(deviceName), numButtons, supportedAxisFlags);
 			data.m_fileDescriptor = fileDescriptor;
 			data.m_dev = dev;
@@ -312,12 +317,16 @@ namespace CSBackend
 		}
 
 		//------------------------------------------------------------------------------
-		void GamepadSystem::ProcessButtonEvent(const input_event& ev, ChilliSource::Gamepad::Id gamepadId) noexcept
+		void GamepadSystem::ProcessButtonEvent(const input_event& ev, ChilliSource::Gamepad::Id gamepadId, const std::array<s32, k_maxButtons>& buttonIndexMappings) noexcept
 		{
-			u32 buttonIndex = ev.code - BTN_TRIGGER;
-			if(buttonIndex < k_maxButtons)
+			s32 index = (s32)ev.code - (s32)BTN_TRIGGER;
+			if(index >= 0 && index < buttonIndexMappings.size())
 			{
-				AddButtonPressureChangedEvent(gamepadId, buttonIndex, (f32)ev.value);
+				s32 buttonIndex = buttonIndexMappings[index];
+				if(buttonIndex >= 0)
+				{
+					AddButtonPressureChangedEvent(gamepadId, (u32)buttonIndex, (f32)ev.value);
+				}
 			}
 		}
 

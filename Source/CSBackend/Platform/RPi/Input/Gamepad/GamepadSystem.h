@@ -31,7 +31,7 @@
 #include <CSBackend/Platform/RPi/ForwardDeclarations.h>
 #include <ChilliSource/Input/Gamepad/GamepadSystem.h>
 
-#include <vector>
+#include <array>
 
 struct libevdev;
 struct input_event;
@@ -58,6 +58,8 @@ namespace CSBackend
 
 		private:
 			friend class ChilliSource::GamepadSystem;
+
+			static const u32 k_maxButtons = 32;
 
             ///
 			GamepadSystem() = default;
@@ -108,8 +110,10 @@ namespace CSBackend
 			///		libevdev input event of type EV_KEY
 			/// @param gamepadId
 			///		Holds the uid of the gamepad, used for communicating with CS
+			/// @param buttonIndexMappings
+			///		Map of each button to a CS index
 			///
-			void ProcessButtonEvent(const input_event& ev, ChilliSource::Gamepad::Id gamepadId) noexcept;
+			void ProcessButtonEvent(const input_event& ev, ChilliSource::Gamepad::Id gamepadId, const std::array<s32, k_maxButtons>& buttonIndexMappings) noexcept;
 
 			/// Close any open file connections to input files
 			///
@@ -120,12 +124,13 @@ namespace CSBackend
 			///
 			struct GamepadData
 			{
+				std::array<s32, k_maxButtons> m_buttonIndexMappings;
 				ChilliSource::Gamepad::Id m_uid = 0;
 				libevdev* m_dev = nullptr;
 				int m_fileDescriptor = 0;
 			};
 
-			GamepadData m_gamepadConnections[ChilliSource::Gamepad::k_maxGamepads];
+			std::array<GamepadData, ChilliSource::Gamepad::k_maxGamepads> m_gamepadConnections;
 
 			udev* m_udev;
 			udev_monitor* m_udevMonitor;
