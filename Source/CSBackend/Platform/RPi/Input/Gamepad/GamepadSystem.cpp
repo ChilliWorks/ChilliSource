@@ -26,6 +26,8 @@
 
 #include <CSBackend/Platform/RPi/Input/Gamepad/GamepadSystem.h>
 
+#include <ChilliSource/Core/Math/MathUtils.h>
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <libevdev/libevdev.h>
@@ -121,10 +123,10 @@ namespace CSBackend
 						switch(ev.type)
 						{
 							case EV_ABS:
-								ProcessAxisEvent(ev, m_gamepadConnections[i].m_uid);
+								ProcessAxisEvent(ev, m_gamepadConnections[i]);
 								break;
 							case EV_KEY:
-								ProcessButtonEvent(ev, m_gamepadConnections[i].m_uid, m_gamepadConnections[i].m_buttonIndexMappings);
+								ProcessButtonEvent(ev, m_gamepadConnections[i]);
 								break;
 							default:
 								break;
@@ -267,33 +269,65 @@ namespace CSBackend
 					switch(k_axes[i])
 					{
 						case ABS_X:
+						{
+							data.m_axisMinValues[(u32)ChilliSource::GamepadAxis::k_x] = libevdev_get_abs_minimum(dev, k_axes[i]);
+							data.m_axisMaxValues[(u32)ChilliSource::GamepadAxis::k_x] = libevdev_get_abs_maximum(dev, k_axes[i]);
 							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_x);
 							break;
+						}
 						case ABS_Y:
+						{
+							data.m_axisMinValues[(u32)ChilliSource::GamepadAxis::k_y] = libevdev_get_abs_minimum(dev, k_axes[i]);
+							data.m_axisMaxValues[(u32)ChilliSource::GamepadAxis::k_y] = libevdev_get_abs_maximum(dev, k_axes[i]);
 							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_y);
 							break;
+						}
 						case ABS_Z:
 							//Fallthrough
 						case ABS_THROTTLE:
+						{
+							data.m_axisMinValues[(u32)ChilliSource::GamepadAxis::k_z] = libevdev_get_abs_minimum(dev, k_axes[i]);
+							data.m_axisMaxValues[(u32)ChilliSource::GamepadAxis::k_z] = libevdev_get_abs_maximum(dev, k_axes[i]);
 							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_z);
 							break;
+						}
 						case ABS_RZ:
 							//Fallthrough
 						case ABS_RUDDER:
+						{
+							data.m_axisMinValues[(u32)ChilliSource::GamepadAxis::k_r] = libevdev_get_abs_minimum(dev, k_axes[i]);
+							data.m_axisMaxValues[(u32)ChilliSource::GamepadAxis::k_r] = libevdev_get_abs_maximum(dev, k_axes[i]);
 							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_r);
 							break;
+						}
 						case ABS_RX:
+						{
+							data.m_axisMinValues[(u32)ChilliSource::GamepadAxis::k_u] = libevdev_get_abs_minimum(dev, k_axes[i]);
+							data.m_axisMaxValues[(u32)ChilliSource::GamepadAxis::k_u] = libevdev_get_abs_maximum(dev, k_axes[i]);
 							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_u);
 							break;
+						}
 						case ABS_RY:
+						{
+							data.m_axisMinValues[(u32)ChilliSource::GamepadAxis::k_v] = libevdev_get_abs_minimum(dev, k_axes[i]);
+							data.m_axisMaxValues[(u32)ChilliSource::GamepadAxis::k_v] = libevdev_get_abs_maximum(dev, k_axes[i]);
 							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_v);
 							break;
+						}
 						case ABS_HAT0X:
+						{
+							data.m_axisMinValues[(u32)ChilliSource::GamepadAxis::k_povX] = libevdev_get_abs_minimum(dev, k_axes[i]);
+							data.m_axisMaxValues[(u32)ChilliSource::GamepadAxis::k_povX] = libevdev_get_abs_maximum(dev, k_axes[i]);
 							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_povX);
 							break;
+						}
 						case ABS_HAT0Y:
+						{
+							data.m_axisMinValues[(u32)ChilliSource::GamepadAxis::k_povY] = libevdev_get_abs_minimum(dev, k_axes[i]);
+							data.m_axisMaxValues[(u32)ChilliSource::GamepadAxis::k_povY] = libevdev_get_abs_maximum(dev, k_axes[i]);
 							supportedAxisFlags |= (1u << (u32)ChilliSource::GamepadAxis::k_povY);
 							break;
+						}
 					}
 				}
 			}
@@ -309,9 +343,8 @@ namespace CSBackend
 		}
 
 		//------------------------------------------------------------------------------
-		void GamepadSystem::ProcessAxisEvent(const input_event& ev, ChilliSource::Gamepad::Id gamepadId) noexcept
+		void GamepadSystem::ProcessAxisEvent(const input_event& ev, const GamepadData& gamepadData) noexcept
 		{
-			//Values are reported between 0 : 255
 			s32 axis = -1;
 			switch(ev.code)
 			{
@@ -347,22 +380,22 @@ namespace CSBackend
 
 			if(axis >= 0)
 			{
-				f32 halfRange = (255.0f * 0.5f);
-				f32 normalised = ((f32)ev.value - halfRange)/halfRange;
-				AddAxisPositionChangedEvent(gamepadId, (ChilliSource::GamepadAxis)axis, normalised);
+				f32 normalised = ChilliSource::MathUtils::ConvertRange((f32)ev.value, gamepadData.m_axisMinValues[axis], gamepadData.m_axisMaxValues[axis], -1.0f, 1.0f);
+				CS_LOG_VERBOSE_FMT("%d %f\n", ev.value, normalised);
+				AddAxisPositionChangedEvent(gamepadData.m_uid, (ChilliSource::GamepadAxis)axis, normalised);
 			}
 		}
 
 		//------------------------------------------------------------------------------
-		void GamepadSystem::ProcessButtonEvent(const input_event& ev, ChilliSource::Gamepad::Id gamepadId, const std::array<s32, k_maxButtons>& buttonIndexMappings) noexcept
+		void GamepadSystem::ProcessButtonEvent(const input_event& ev, const GamepadData& gamepadData) noexcept
 		{
 			s32 index = (s32)ev.code - (s32)BTN_TRIGGER;
-			if(index >= 0 && index < buttonIndexMappings.size())
+			if(index >= 0 && index < gamepadData.m_buttonIndexMappings.size())
 			{
-				s32 buttonIndex = buttonIndexMappings[index];
+				s32 buttonIndex = gamepadData.m_buttonIndexMappings[index];
 				if(buttonIndex >= 0)
 				{
-					AddButtonPressureChangedEvent(gamepadId, (u32)buttonIndex, (f32)ev.value);
+					AddButtonPressureChangedEvent(gamepadData.m_uid, (u32)buttonIndex, (f32)ev.value);
 				}
 			}
 		}

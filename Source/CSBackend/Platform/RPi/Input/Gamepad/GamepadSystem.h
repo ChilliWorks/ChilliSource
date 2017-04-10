@@ -61,6 +61,19 @@ namespace CSBackend
 
 			static const u32 k_maxButtons = 32;
 
+			/// Clusters the unique id of the gamepad, with the file it is streaming from
+			/// and the event handler that is polling the file
+			///
+			struct GamepadData
+			{
+				std::array<s32, k_maxButtons> m_buttonIndexMappings;
+				std::array<f32, (u32)ChilliSource::GamepadAxis::k_total> m_axisMinValues;
+				std::array<f32, (u32)ChilliSource::GamepadAxis::k_total> m_axisMaxValues;
+				ChilliSource::Gamepad::Id m_uid = 0;
+				libevdev* m_dev = nullptr;
+				int m_fileDescriptor = 0;
+			};
+
             ///
 			GamepadSystem() = default;
 
@@ -99,36 +112,25 @@ namespace CSBackend
 			///
 			/// @param ev
 			///		libevdev input event of type EV_ABS
-			/// @param gamepadId
-			///		Holds the uid of the gamepad, used for communicating with CS
+			/// @param gamepadData
+			///		Holds the uid of the gamepad, used for communicating with CS and the max and min for axis conversion
+			/// @param device
+			///		Device that received the vent used to perform axis normalisation
 			///
-			void ProcessAxisEvent(const input_event& ev, ChilliSource::Gamepad::Id gamepadId) noexcept;
+			void ProcessAxisEvent(const input_event& ev, const GamepadData& gamepadData) noexcept;
 
 			/// Process the button pressure changed event forwarding it to the main CS application
 			///
 			/// @param ev
 			///		libevdev input event of type EV_KEY
-			/// @param gamepadId
-			///		Holds the uid of the gamepad, used for communicating with CS
-			/// @param buttonIndexMappings
-			///		Map of each button to a CS index
+			/// @param gamepadData
+			///		Holds the uid of the gamepad, used for communicating with CS and the button mapping to CS index
 			///
-			void ProcessButtonEvent(const input_event& ev, ChilliSource::Gamepad::Id gamepadId, const std::array<s32, k_maxButtons>& buttonIndexMappings) noexcept;
+			void ProcessButtonEvent(const input_event& ev, const GamepadData& gamepadData) noexcept;
 
 			/// Close any open file connections to input files
 			///
 			void OnDestroy() noexcept override;
-
-			/// Clusters the unique id of the gamepad, with the file it is streaming from
-			/// and the event handler that is polling the file
-			///
-			struct GamepadData
-			{
-				std::array<s32, k_maxButtons> m_buttonIndexMappings;
-				ChilliSource::Gamepad::Id m_uid = 0;
-				libevdev* m_dev = nullptr;
-				int m_fileDescriptor = 0;
-			};
 
 			std::array<GamepadData, ChilliSource::Gamepad::k_maxGamepads> m_gamepadConnections;
 
