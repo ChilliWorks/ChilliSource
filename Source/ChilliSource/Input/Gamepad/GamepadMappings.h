@@ -60,12 +60,25 @@ namespace ChilliSource
             const GamepadAxis k_dpadX = GamepadAxis::k_povX;
             const GamepadAxis k_dpadY = GamepadAxis::k_povY;
             
+            const bool k_lStickXShouldInvert = false;
+            const bool k_lStickYShouldInvert = false;
+            const bool k_rStickXShouldInvert = false;
+            const bool k_rStickYShouldInvert = false;
+            const bool k_dpadXShouldInvert = false;
+            const bool k_l2TriggerShouldInvert = false;
+            const bool k_r2TriggerShouldInvert = false;
+            
+            
 #ifndef CS_TARGETPLATFORM_RPI
             const GamepadAxis k_l2Trigger = GamepadAxis::k_v;
             const GamepadAxis k_r2Trigger = GamepadAxis::k_u;
+            
+            const bool k_dpadYShouldInvert = true;
 #else
             const GamepadAxis k_l2Trigger = GamepadAxis::k_u;
             const GamepadAxis k_r2Trigger = GamepadAxis::k_v;
+            
+            const bool k_dpadYShouldInvert = false;
 #endif
         }
     }
