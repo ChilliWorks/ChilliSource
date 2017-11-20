@@ -157,11 +157,11 @@ namespace CSBackend
                 transaction->m_transactionId = [NSStringUtils newUTF8StringWithNSString:in_skTransaction.transactionIdentifier];
                 if(hasReceipt)
                 {
-                    CS_ASSERT([in_skTransaction.transactionReceipt length] < static_cast<NSUInteger>(std::numeric_limits<u32>::max()), "Transaction receipt is too large, cannot exceed "
-                              + ChilliSource::ToString(std::numeric_limits<u32>::max()) + " bytes.");
-                    u32 length = static_cast<u32>([in_skTransaction.transactionReceipt length]);
+                    NSData* receiptData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
+                    CS_ASSERT([receiptData length] < static_cast<NSUInteger>(std::numeric_limits<u32>::max()), "Transaction receipt is too large, cannot exceed " + ChilliSource::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+                    u32 length = static_cast<u32>([receiptData length]);
                     
-                    transaction->m_receipt = ChilliSource::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], length);
+                    transaction->m_receipt = ChilliSource::BaseEncoding::Base64Encode((s8*)[receiptData bytes], length);
                 }
                 
                 m_transactionStatusDelegate(result, transaction);
