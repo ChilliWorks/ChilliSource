@@ -42,7 +42,7 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 /**
  * Holds functions to query information about the device.
@@ -146,7 +146,7 @@ public final class DeviceNativeInterface extends System
 		
 		//Google policy is that if the advertising id is available but the user has chosen not to
 		//enable it then we cannot track the user by falling back on these other methods.
-		int gpsAvailableResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(CSApplication.get().getAppContext());
+        int gpsAvailableResult = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(CSApplication.get().getAppContext());
 		
 		//If GPS is not potentially available i.e. Kindle etc then we can default to the older id types
 		//If GPS is potentially available but the user has chosen not to install/update then we cannot fallback on
