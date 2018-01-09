@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_CORE_BASE_APPCONFIG_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/CursorType.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
@@ -78,6 +79,20 @@ namespace ChilliSource
         //---------------------------------------------------------
         bool IsVSyncEnabled() const;
         
+        /// @return The cursor type that should be used by the application
+        ///
+        /// NOTE: This is only applicable for RPi or Windows backend
+        ///
+        CursorType GetCursorType() const noexcept { return m_cursorType; }
+        
+        /// @return The location of the UI file that describes the default cursor
+        ///
+        StorageLocation GetDefaultCursorUILocation() const noexcept { return m_defaultCursorUILocation; }
+        
+        /// @return The path to the UI file that describes the default cursor
+        ///
+        const std::string& GetDefaultCursorUIPath() const noexcept { return m_defaultCursorUIPath; }
+        
     private:
         friend class Application;
         //---------------------------------------------------------
@@ -104,9 +119,15 @@ namespace ChilliSource
         void Load();
         
         std::string m_displayableName;
+        
+        std::string m_defaultCursorUIPath;
+        StorageLocation m_defaultCursorUILocation;
+        
         u32 m_preferredFPS;
 
         bool m_isVSyncEnabled = false;
+        
+        CursorType m_cursorType = CursorType::k_system;
     };
 }
 

@@ -34,6 +34,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/LifeCycleManager.h>
 #include <ChilliSource/Core/Base/Singleton.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
@@ -58,16 +59,7 @@ namespace CSBackend
 		class SFMLWindow final : public ChilliSource::Singleton<SFMLWindow>
 		{
 		public:
-			//-----------------------------------------------------------
-			/// Window display modes
-			///
-			/// @author S Downie
-			//-----------------------------------------------------------
-			enum class DisplayMode
-			{
-				k_windowed,
-				k_fullscreen
-			};
+
 			//-----------------------------------------------------------
 			/// A delegate called when the window size changes.
 			///
@@ -83,7 +75,7 @@ namespace CSBackend
 			///
 			/// @param The new window mode.
 			//-----------------------------------------------------------
-			using WindowDisplayModeDelegate = std::function<void(DisplayMode)>;
+			using WindowDisplayModeDelegate = std::function<void(ChilliSource::Screen::DisplayMode)>;
 			//-----------------------------------------------------------
 			/// List of the events that can occur on a mouse button
 			///
@@ -149,6 +141,28 @@ namespace CSBackend
 			/// @param Key code
 			//-------------------------------------------------------
 			using KeyReleasedDelegate = std::function<void(sf::Keyboard::Key)>;
+
+			/// Delegate that receieves events when a new joystick is attached or removed
+			///
+			/// @param Index of joystick
+			///
+			using JoystickConnectionChangedDelegate = std::function<void(u32)>;
+
+			/// Delegate that receieves events when a button is pressed or released
+			///
+			/// @param Index of joystick
+			/// @param Index of button
+			///
+			using JoystickButtonDelegate = std::function<void(u32, u32)>;
+
+			/// Delegate that receieves events when a button is pressed or released
+			///
+			/// @param Index of joystick
+			/// @param Id of axis
+			/// @param Position of axis
+			///
+			using JoystickMovedDelegate = std::function<void(u32, sf::Joystick::Axis, f32)>;
+
 			//-------------------------------------------------
 			/// Create and begin running the SFML window which in turn
 			/// will update and render the app
@@ -188,26 +202,28 @@ namespace CSBackend
 			/// @author S Downie
 			///
 			/// @param Window mode
+			/// @param Window size
+			/// @param TRUE to force set even if the same as previous
 			//-------------------------------------------------
-			void SetDisplayMode(DisplayMode in_mode);
+			void SetDisplayMode(ChilliSource::Screen::DisplayMode in_mode, const ChilliSource::Integer2& size, bool force = false);
 			//----------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return A list of resolutions supported by the display
 			//----------------------------------------------------------
-			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const;
+			std::vector<ChilliSource::Integer2> GetSupportedFullscreenResolutions() const;
 			//----------------------------------------------------
 			/// Hide the window cursor
 			///
 			/// @author S Downie
 			//----------------------------------------------------
-			void HideCursor();
+			void HideSystemCursor();
 			//----------------------------------------------------
 			/// Show the window cursor
 			///
 			/// @author S Downie
 			//----------------------------------------------------
-			void ShowCursor();
+			void ShowSystemCursor();
 			//-------------------------------------------------
             /// Set the delegates that relate to window events.
             /// This method will assert if a given delegate is null
@@ -268,6 +284,27 @@ namespace CSBackend
             /// called when a key is released.
             //-------------------------------------------------------
             void SetKeyDelegates(const KeyPressedDelegate& in_keyPressedDelegate, const KeyReleasedDelegate& in_keyReleasedDelegate) noexcept;
+
+			/// Set the delegates that relate to joystick events.
+			/// This method will assert if a given delegate is null
+			/// or if the delegate has already been set.
+			///
+			/// This method is thread-safe.
+			///
+			/// @param connectedDelegate
+			///		Called when a new joystick is attached
+			/// @param disconnectedDelegate
+			///		Called when an existing joystick is removed
+			/// @param buttonPressedDelegate
+			///		Called when a button is pressed on a joystick
+			/// @param buttonReleasedDelegate
+			///		Called when a button is released on a joystick
+			/// @param movedDelegate
+			///		Called when an analogue stick is moved
+			///
+			void SetJoystickDelegates(JoystickConnectionChangedDelegate connectedDelegate, JoystickConnectionChangedDelegate disconnectedDelegate,
+				JoystickButtonDelegate buttonPressedDelegate, JoystickButtonDelegate buttonReleasedDelegate, JoystickMovedDelegate movedDelegate) noexcept;
+
             //-------------------------------------------------------
             /// Remove the delegates that relate to window events.
             ///
@@ -300,6 +337,13 @@ namespace CSBackend
             /// @author Jordan Brown
             //-------------------------------------------------------
             void RemoveKeyDelegates() noexcept;
+
+			/// Removes the delegates related to joystick events
+			///
+			/// This method is thread-safe
+			///
+			void RemoveJoystickDelegates() noexcept;
+
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -319,7 +363,7 @@ namespace CSBackend
 			//------------------------------------------------
 			ChilliSource::Integer2 GetMousePosition() const;
 			//-------------------------------------------------
-			/// Schedules a quit to occur at the end of the 
+			/// Schedules a quit to occur at the end of the
 			/// the current update.
 			///
 			/// @author HMcLaughlin
@@ -339,16 +383,20 @@ namespace CSBackend
 			/// Recreate the window in fullscreen state
 			///
 			/// @author S Downie
+			///
+			/// @param size of window
 			//-------------------------------------------------
-			void SetFullscreen();
+			void SetFullscreen(const ChilliSource::Integer2& size);
 			//-------------------------------------------------
 			/// Recreate the window in windowed state
 			///
 			/// @author S Downie
+			///
+			/// @param size of window
 			//-------------------------------------------------
-			void SetWindowed();
+			void SetWindowed(const ChilliSource::Integer2& size);
 			//-------------------------------------------------
-			/// Stops the update loop causing the application 
+			/// Stops the update loop causing the application
 			/// to terminate.
 			///
 			/// @author S Downie
@@ -367,11 +415,17 @@ namespace CSBackend
             TextEnteredDelegate m_textEnteredDelegate;
             KeyPressedDelegate m_keyPressedDelegate;
             KeyReleasedDelegate m_keyReleasedDelegate;
+			JoystickConnectionChangedDelegate m_joystickConnectedDelegate;
+			JoystickConnectionChangedDelegate m_joystickDisconnectedDelegate;
+			JoystickButtonDelegate m_joystickButtonPressedDelegate;
+			JoystickButtonDelegate m_joystickButtonReleasedDelegate;
+			JoystickMovedDelegate m_joystickMovedDelegate;
 
             std::mutex m_windowMutex;
             std::mutex m_mouseMutex;
             std::mutex m_textEntryMutex;
             std::mutex m_keyMutex;
+			std::mutex m_joystickMutex;
 
 			std::string m_title;
 
@@ -379,12 +433,13 @@ namespace CSBackend
 
 			u32 m_preferredRGBADepth = 32;
 			u32 m_preferredFPS = 0;
+			ChilliSource::Integer2 m_desktopSize;
 
 			bool m_isRunning = true;
 			bool m_isFocused = true;
 			bool m_quitScheduled = false;
 
-			DisplayMode m_displayMode = DisplayMode::k_windowed;
+			ChilliSource::Screen::DisplayMode m_displayMode = ChilliSource::Screen::DisplayMode::k_windowed;
 
             ChilliSource::LifecycleManagerUPtr m_lifecycleManager;
 		};

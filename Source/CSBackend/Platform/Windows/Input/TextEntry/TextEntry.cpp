@@ -127,7 +127,7 @@ namespace CSBackend
 
                 if (acceptText == true)
                 {
-                    m_text = text;
+                    m_text = std::move(text);
                 }
             });
         }

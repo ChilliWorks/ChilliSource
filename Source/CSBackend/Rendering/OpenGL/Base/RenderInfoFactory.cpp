@@ -73,6 +73,10 @@ namespace CSBackend
             areVAOsSupported = CheckForOpenGLExtension("GL_OES_vertex_array_object");
 #endif
             
+#ifdef CS_TARGETPLATFORM_RPI
+            areVAOsSupported = false;
+#endif
+            
 #endif
             
 #ifdef CS_OPENGLVERSION_STANDARD

@@ -122,7 +122,7 @@ namespace CSBackend
             ///
             /// @return A list of resolutions supported by the display
             //----------------------------------------------------------
-            std::vector<ChilliSource::Integer2> GetSupportedResolutions() const override;
+            std::vector<ChilliSource::Integer2> GetSupportedFullscreenResolutions() const override;
             //-----------------------------------------------------------
             /// Called when the screen resolution changes. This will update
             /// the screen resolution and notify listeners that the resolution

@@ -40,6 +40,10 @@
 #include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 #endif
 
+#ifdef CS_TARGETPLATFORM_RPI
+#include <CSBackend/Platform/RPi/Core/Base/Screen.h>
+#endif
+
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(Screen);
@@ -53,9 +57,36 @@ namespace ChilliSource
         return ScreenUPtr(new CSBackend::iOS::Screen(screenInfo));
 #elif defined CS_TARGETPLATFORM_WINDOWS
         return ScreenUPtr(new CSBackend::Windows::Screen(screenInfo));
+#elif defined CS_TARGETPLATFORM_RPI
+        return ScreenUPtr(new CSBackend::RPi::Screen(screenInfo));
 #else
         return nullptr;
 #endif
+    }
+    
+    /// Case insensitive. Will assert if no valid conversion
+    ///
+    /// @param displayMode
+    ///     Display mode as a string
+    ///
+    /// @return Display mode as a hard type
+    ///
+    Screen::DisplayMode Screen::ParseDisplayMode(const std::string& displayMode) noexcept
+    {
+        std::string lowerCase = displayMode;
+        StringUtils::ToLowerCase(lowerCase);
+        
+        if(lowerCase == "windowed")
+        {
+            return DisplayMode::k_windowed;
+        }
+        if(lowerCase == "fullscreen")
+        {
+            return DisplayMode::k_fullscreen;
+        }
+        
+        CS_LOG_FATAL("Cannot parse display mode: " + displayMode);
+        return DisplayMode::k_windowed;
     }
 }
 

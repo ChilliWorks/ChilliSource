@@ -47,6 +47,7 @@
 #include <ChilliSource/Rendering/Sprite/SpriteMeshBuilder.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Base/Canvas.h>
+#include <ChilliSource/UI/Base/CursorSystem.h>
 
 #include <algorithm>
 
@@ -678,6 +679,8 @@ namespace ChilliSource
 
         m_screen = Application::Get()->GetSystem<Screen>();
         CS_ASSERT(m_screen != nullptr, "Canvas renderer cannot find screen system");
+        
+        m_cursorSystem = Application::Get()->GetSystem<CursorSystem>();
 
         auto materialFactory = Application::Get()->GetSystem<MaterialFactory>();
         CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
@@ -857,11 +860,10 @@ namespace ChilliSource
         auto material = m_screenMaterialPool->GetMaterial(texture, m_clipMaskCount);
 
         Matrix4 matTransform = Convert2DTransformTo3D(transform);
-        Matrix4 matTransformedLocal;
 
         for (const auto& character : characters)
         {
-            matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
+            Matrix4 matTransformedLocal = Matrix4::CreateTranslation(Vector3(character.m_position, 0.0f)) * matTransform;
             AddSpriteRenderObject(m_currentRenderSnapshot, m_currentFrameAllocator, Vector3::k_zero, character.m_packedImageSize, character.m_UVs, colour, AlignmentAnchor::k_topLeft, matTransformedLocal, material, m_nextPriority++);
         }
     }
@@ -882,6 +884,11 @@ namespace ChilliSource
             m_nextPriority = 0;
             
             activeUICanvas->Draw(this);
+            
+            if(m_cursorSystem != nullptr)
+            {
+                m_cursorSystem->Draw(this);
+            }
             
             m_currentRenderSnapshot = nullptr;
             

@@ -24,7 +24,7 @@
 
 #include <CSBackend/Rendering/OpenGL/Base/GLExtensions.h>
 
-#if defined CS_TARGETPLATFORM_ANDROID
+#if defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_RPI
 #   include <EGL/egl.h>
 
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT = 0;
@@ -41,7 +41,7 @@ namespace CSBackend
             //-------------------------------------------------------
             void InitExtensions()
             {
-#if defined CS_TARGETPLATFORM_ANDROID
+#if defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_RPI
                 glGenVertexArraysOESEXT = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
                 glBindVertexArrayOESEXT = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
                 glDeleteVertexArraysOESEXT = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");

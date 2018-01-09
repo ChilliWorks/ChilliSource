@@ -49,7 +49,7 @@ typedef char GLchar;
 #   include <GLES2/gl2ext.h>
 #endif
 
-#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID
+#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_RPI
 #   define CS_OPENGLVERSION_ES
 #elif defined CS_TARGETPLATFORM_WINDOWS
 #   define CS_OPENGLVERSION_STANDARD

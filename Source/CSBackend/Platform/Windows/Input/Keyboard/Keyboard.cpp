@@ -44,7 +44,7 @@ namespace CSBackend
 
 		namespace
 		{
-			const sf::Keyboard::Key k_sfmlKeyCodesMap[(u32)ChilliSource::KeyCode::k_total] = 
+			const sf::Keyboard::Key k_sfmlKeyCodesMap[(u32)ChilliSource::KeyCode::k_total] =
 			{
 				sf::Keyboard::Unknown,
 				sf::Keyboard::A,
@@ -335,7 +335,7 @@ namespace CSBackend
                         modifiers.push_back(ChilliSource::ModifierKeyCode::k_system);
                     }
 
-                    m_keyPressedEvent.NotifyConnections(keyCode, modifiers);
+                    m_keyPressedEvent.NotifyConnections(keyCode, std::move(modifiers));
                 }
             });
 		}

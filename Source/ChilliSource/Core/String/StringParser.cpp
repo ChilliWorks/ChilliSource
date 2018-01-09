@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Core/String/StringParser.h>
 
+#include <ChilliSource/Core/Base/CursorType.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
@@ -389,5 +390,22 @@ namespace ChilliSource
         CS_ASSERT(false, "Invalid surface format.");
         CS_LOG_ERROR("String Parser: Invalid surface format.");
         return SurfaceFormat::k_rgb565_depth24;
+    }
+    
+    //----------------------------------------------------------------------
+    CursorType ParseCursorType(const std::string& cursorType) noexcept
+    {
+        std::string lowerCase = cursorType;
+        StringUtils::ToLowerCase(lowerCase);
+        
+        if(lowerCase == "system")
+            return CursorType::k_system;
+        if(lowerCase == "nonsystem")
+            return CursorType::k_nonSystem;
+        if(lowerCase == "none")
+            return CursorType::k_none;
+        
+        CS_LOG_ERROR("String Parser: Invalid cursor type: " + cursorType);
+        return CursorType::k_none;
     }
 }

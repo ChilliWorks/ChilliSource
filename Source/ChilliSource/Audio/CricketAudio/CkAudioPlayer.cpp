@@ -26,6 +26,9 @@
 //  THE SOFTWARE.
 //
 
+//NOTE: Cricket does not have RPi support
+#ifndef CS_TARGETPLATFORM_RPI
+
 #include <ChilliSource/Audio/CricketAudio/CkAudioPlayer.h>
 
 #include <ChilliSource/Audio/CricketAudio/CkSound.h>
@@ -208,3 +211,5 @@ namespace ChilliSource
         return *this;
     }
 }
+
+#endif

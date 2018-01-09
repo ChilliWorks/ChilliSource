@@ -39,6 +39,7 @@ namespace ChilliSource
     /// Base
     //---------------------------------------------------------
     CS_FORWARDDECLARE_CLASS(Canvas);
+    CS_FORWARDDECLARE_CLASS(CursorSystem);
     CS_FORWARDDECLARE_CLASS(UIComponent);
     CS_FORWARDDECLARE_CLASS(UIComponentDesc);
     CS_FORWARDDECLARE_CLASS(UIComponentFactory);

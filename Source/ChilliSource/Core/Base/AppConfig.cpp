@@ -95,9 +95,34 @@ namespace ChilliSource
             m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
             m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();
             m_isVSyncEnabled = root.get("VSync", false).asBool();
+            std::string cursorType = root.get("CursorType", "System").asString();
+            m_cursorType = ParseCursorType(cursorType);
+            m_defaultCursorUIPath = root.get("DefaultCursorPath", "Widgets/DefaultCursor.csui").asString();
+            std::string cursorLocation = root.get("DefaultCursorLocation", "ChilliSource").asString();
+            m_defaultCursorUILocation = ParseStorageLocation(cursorLocation);
+            
+#if defined CS_TARGETPLATFORM_IOS
+            std::string platform = "iOS";
+#elif defined CS_TARGETPLATFORM_ANDROID
+            std::string platform = "Android";
+#elif defined CS_TARGETPLATFORM_WINDOWS
+            std::string platform = "Windows";
+#elif defined CS_TARGETPLATFORM_RPI
+            std::string platform = "RPi";
+#endif
+            
+            //Configurations can be overloaded per platform
+            const Json::Value& platformRoot = root[platform];
+            if(platformRoot.isNull() == false)
+            {
+                m_cursorType = ParseCursorType(platformRoot.get("CursorType", cursorType).asString());
+                m_isVSyncEnabled = platformRoot.get("VSync", m_isVSyncEnabled).asBool();
+                m_preferredFPS = platformRoot.get("PreferredFPS", m_preferredFPS).asUInt();
+                m_defaultCursorUIPath = platformRoot.get("DefaultCursorPath", m_defaultCursorUIPath).asString();
+                m_defaultCursorUILocation = ParseStorageLocation(platformRoot.get("DefaultCursorLocation", cursorLocation.c_str()).asString());
+            }
             
             const Json::Value& fileTags = root["FileTags"];
-            
             if(fileTags.isNull() == false)
             {
                 Application::Get()->GetTaggedFilePathResolver()->SetFromJson(fileTags);

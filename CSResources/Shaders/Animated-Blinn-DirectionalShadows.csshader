@@ -48,7 +48,7 @@ GLSL
 		uniform highp mat4 u_wvpMat;
 		uniform highp mat4 u_worldMat;
 		uniform highp mat4 u_normalMat;
-		uniform highp vec4 u_joints[180];
+		uniform highp vec4 u_joints[100];
 		uniform highp vec3 u_cameraPos;
 		uniform highp mat4 u_lightMat;
 

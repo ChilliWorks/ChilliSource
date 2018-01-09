@@ -48,6 +48,12 @@ namespace ChilliSource
     //--------------------------------------------------
     CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
     //--------------------------------------------------
+    /// Gamepad
+    //--------------------------------------------------
+    CS_FORWARDDECLARE_CLASS(Gamepad);
+    CS_FORWARDDECLARE_CLASS(GamepadSystem);
+    enum class GamepadAxis;
+    //--------------------------------------------------
     /// Gestures
     //--------------------------------------------------
     CS_FORWARDDECLARE_CLASS(DragGesture);

@@ -61,6 +61,16 @@ namespace ChilliSource
             k_windowed,
             k_fullscreen
         };
+        
+        /// Case insensitive. Will assert if no valid conversion
+        ///
+        /// @param displayMode
+        ///     Display mode as a string
+        ///
+        /// @return Display mode as a hard type
+        ///
+        static DisplayMode ParseDisplayMode(const std::string& displayMode) noexcept;
+        
         //-----------------------------------------------------------
         /// A delegate called when the application screen resolution
         /// changes. This can happen when the window is resized in
@@ -147,7 +157,7 @@ namespace ChilliSource
         ///
         /// @return A list of resolutions supported by the display
         //----------------------------------------------------------
-        virtual std::vector<Integer2> GetSupportedResolutions() const = 0;
+        virtual std::vector<Integer2> GetSupportedFullscreenResolutions() const = 0;
         //-----------------------------------------------------------
         /// Destructor
         ///

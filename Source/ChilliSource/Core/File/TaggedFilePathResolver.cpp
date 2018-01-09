@@ -255,6 +255,8 @@ namespace ChilliSource
         m_activeTags[(u32)TagGroup::k_platform] = ".android";
 #elif defined CS_TARGETPLATFORM_WINDOWS
         m_activeTags[(u32)TagGroup::k_platform] = ".windows";
+#elif defined CS_TARGETPLATFORM_RPI
+        m_activeTags[(u32)TagGroup::k_platform] = ".rpi";
 #endif
         
         //---Resolution

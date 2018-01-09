@@ -125,7 +125,7 @@ namespace CSBackend
 			///
 			/// @return A list of resolutions supported by the display
 			//----------------------------------------------------------
-			std::vector<ChilliSource::Integer2> GetSupportedResolutions() const override;
+			std::vector<ChilliSource::Integer2> GetSupportedFullscreenResolutions() const override;
         private:
             friend ChilliSource::ScreenUPtr ChilliSource::Screen::Create(const ChilliSource::ScreenInfo& screenInfo);
             //-------------------------------------------------------
@@ -161,7 +161,7 @@ namespace CSBackend
 			///
 			/// @param Display mode
 			//----------------------------------------------------------
-			void OnDisplayModeChanged(SFMLWindow::DisplayMode in_mode);
+			void OnDisplayModeChanged(DisplayMode in_mode);
 			//------------------------------------------------
 			/// Called when the application is being destroyed.
 			/// This should be used to cleanup memory and

@@ -1,0 +1,13 @@
+{
+  "Type": "Image",
+  "Name": "CSCursor",
+  "InputEnabled": "false",
+  "AbsSize": "16 16",
+  "OriginAnchor": "TopLeft",
+  "SizePolicy": "UseWidthMaintainingAspect",
+  "Drawable": {
+    "TextureLocation": "ChilliSource",
+    "TexturePath": "Textures/DefaultCursor.png",
+    "Type": "Standard"
+  }
+}

@@ -26,6 +26,9 @@
 //  THE SOFTWARE.
 //
 
+//NOTE: Cricket does not have RPi support
+#ifndef CS_TARGETPLATFORM_RPI
+
 #ifndef _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKAUDIOBANK_H_
 #define _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKAUDIOBANK_H_
 
@@ -113,5 +116,7 @@ namespace ChilliSource
         std::unique_ptr<u8[]> m_bankBuffer;
     };
 }
+
+#endif
 
 #endif

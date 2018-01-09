@@ -40,6 +40,10 @@
 #include <CSBackend/Platform/Windows/Core/Image/PNGImageProvider.h>
 #endif
 
+#ifdef CS_TARGETPLATFORM_RPI
+#include <CSBackend/Platform/RPi/Core/Image/PNGImageProvider.h>
+#endif
+
 namespace ChilliSource
 {
     //-------------------------------------------------------
@@ -54,6 +58,9 @@ namespace ChilliSource
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
         return PNGImageProviderUPtr(new CSBackend::Windows::PNGImageProvider());
+#endif
+#ifdef CS_TARGETPLATFORM_RPI
+        return PNGImageProviderUPtr(new CSBackend::RPi::PNGImageProvider());
 #endif
     }
 }

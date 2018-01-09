@@ -65,7 +65,7 @@ namespace CSBackend
 			///
 			/// @return Json root
 			//-------------------------------------------------------------
-			Json::Value ReadAppConfig()
+			Json::Value ReadAppConfig() noexcept
 			{
 				//get the path to here
 				wchar_t pathChars[MAX_PATH];
@@ -102,7 +102,7 @@ namespace CSBackend
 			///
 			/// @return The surface format.
 			//-------------------------------------------------------------
-			ChilliSource::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root)
+			ChilliSource::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root) noexcept
 			{
 				const std::string k_defaultFormat = "rgb565_depth24";
 				std::string formatString = in_root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
@@ -124,7 +124,7 @@ namespace CSBackend
 			///
 			/// @return Number times multisample 0x, 2x, 4x.
 			//-------------------------------------------------------------
-			u32 ReadMultisampleFormat(const Json::Value& in_root)
+			u32 ReadMultisampleFormat(const Json::Value& in_root) noexcept
 			{
 				std::string stringFormat = in_root.get("Multisample", "None").asString();
 
@@ -166,7 +166,7 @@ namespace CSBackend
 			///
 			/// @return Context settings
 			//-------------------------------------------------------------
-			sf::ContextSettings CreateContextSettings(ChilliSource::SurfaceFormat in_format, u32 in_multiSampleFormat)
+			sf::ContextSettings CreateContextSettings(ChilliSource::SurfaceFormat in_format, u32 in_multiSampleFormat) noexcept
 			{
 				sf::ContextSettings glSettings;
 				glSettings.majorVersion = 2;
@@ -198,7 +198,7 @@ namespace CSBackend
 			///
 			/// @return Pixel bit depth
 			//-------------------------------------------------------------
-			u32 ReadRGBAPixelDepth(ChilliSource::SurfaceFormat in_format)
+			u32 ReadRGBAPixelDepth(ChilliSource::SurfaceFormat in_format) noexcept
 			{
 				u32 depth = 32;
 
@@ -216,6 +216,51 @@ namespace CSBackend
 				}
 
 				return depth;
+			}
+
+			/// @param appConfigRoot
+			///		The app config JSON
+			/// @param fallbackResolution
+			///		Window res to fallback on if none are specified
+			///
+			/// @return Inital window resolution as read from the config
+			///
+			ChilliSource::Integer2 ReadInitialWindowSize(const Json::Value& appConfigRoot, const ChilliSource::Integer2& fallbackResolution) noexcept
+			{
+				ChilliSource::Integer2 res = fallbackResolution;
+				const Json::Value& resObj = appConfigRoot["WindowResolution"];
+				if(resObj.isNull() == false)
+				{
+					res = ChilliSource::ParseInteger2(resObj.asString());
+				}
+				const Json::Value& platformObj = appConfigRoot["Windows"];
+				if(platformObj.isNull() == false)
+				{
+					const Json::Value& resObjPlatform = platformObj["WindowResolution"];
+					if(resObjPlatform.isNull() == false)
+					{
+						res = ChilliSource::ParseInteger2(resObjPlatform.asString());
+					}
+				}
+
+				return res;
+			}
+
+			/// @param appConfigRoot
+			///		The app config JSON
+			///
+			/// @return Inital window mode as read from the config
+			///
+			ChilliSource::Screen::DisplayMode ReadInitialWindowMode(const Json::Value& appConfigRoot) noexcept
+			{
+				std::string mode = appConfigRoot.get("WindowDisplayMode", "windowed").asString();
+				const Json::Value& platformObj = appConfigRoot["Windows"];
+				if(platformObj.isNull() == false)
+				{
+					mode = platformObj.get("WindowDisplayMode", mode.c_str()).asString();
+				}
+
+				return ChilliSource::Screen::ParseDisplayMode(mode);
 			}
 		}
 		//-------------------------------------------------
@@ -245,9 +290,12 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow::SetSize(const ChilliSource::Integer2& in_size)
 		{
-			if (m_displayMode == DisplayMode::k_fullscreen)
+			if(in_size == GetWindowSize())
+				return;
+
+			if (m_displayMode == ChilliSource::Screen::DisplayMode::k_fullscreen)
 			{
-				CS_ASSERT(ChilliSource::VectorUtils::Contains(GetSupportedResolutions(), in_size) == true, "Resolution not supported in fullscreen mode.");
+				CS_ASSERT(ChilliSource::VectorUtils::Contains(GetSupportedFullscreenResolutions(), in_size) == true, "Resolution not supported in fullscreen mode.");
 			}
 
 			//Clamp to the actual screen size
@@ -256,35 +304,35 @@ namespace CSBackend
 			//This will trigger an SFML resize event
 			m_window.setSize(sf::Vector2u(windowSize.x, windowSize.y));
 
-			if (m_displayMode == DisplayMode::k_fullscreen)
+			if (m_displayMode == ChilliSource::Screen::DisplayMode::k_fullscreen)
 			{
-				SetFullscreen();
+				SetFullscreen(windowSize);
 			}
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void SFMLWindow::SetDisplayMode(DisplayMode in_mode)
+		void SFMLWindow::SetDisplayMode(ChilliSource::Screen::DisplayMode in_mode, const ChilliSource::Integer2& size, bool force)
 		{
-			if (in_mode == m_displayMode)
+			if (in_mode == m_displayMode && force == false)
 				return;
 
 			m_displayMode = in_mode;
 
 			switch (m_displayMode)
 			{
-			case DisplayMode::k_fullscreen:
-				SetFullscreen();
+			case ChilliSource::Screen::DisplayMode::k_fullscreen:
+				SetFullscreen(size);
 				break;
-			case DisplayMode::k_windowed:
-				SetWindowed();
+			case ChilliSource::Screen::DisplayMode::k_windowed:
+				SetWindowed(ChilliSource::Integer2::Min(size, m_desktopSize));
 				break;
 			}
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void SFMLWindow::SetFullscreen()
+		void SFMLWindow::SetFullscreen(const ChilliSource::Integer2& size)
 		{
-			CS_ASSERT(ChilliSource::VectorUtils::Contains(GetSupportedResolutions(), GetWindowSize()) == true, "Resolution not supported in fullscreen mode.");
+			CS_ASSERT(ChilliSource::VectorUtils::Contains(GetSupportedFullscreenResolutions(), size) == true, "Resolution not supported in fullscreen mode.");
 
 			//Pick the best fit RGBA depth based on the supported depths
 			for (auto it = sf::VideoMode::getFullscreenModes().rbegin(); it != sf::VideoMode::getFullscreenModes().rend(); ++it)
@@ -292,13 +340,12 @@ namespace CSBackend
 				u32 bpp = it->bitsPerPixel;
 				if (bpp >= m_preferredRGBADepth)
 				{
-					auto windowSize = GetWindowSize();
-					m_window.create(sf::VideoMode(windowSize.x, windowSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
-                    
+					m_window.create(sf::VideoMode(size.x, size.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
+
                     std::unique_lock<std::mutex> lock(m_windowMutex);
                     if (m_windowDisplayModeDelegate)
                     {
-                        m_windowDisplayModeDelegate(DisplayMode::k_fullscreen);
+                        m_windowDisplayModeDelegate(ChilliSource::Screen::DisplayMode::k_fullscreen);
                     }
 					break;
 				}
@@ -306,20 +353,25 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void SFMLWindow::SetWindowed()
+		void SFMLWindow::SetWindowed(const ChilliSource::Integer2& size)
 		{
-			auto windowSize = GetWindowSize();
-			m_window.create(sf::VideoMode(windowSize.x, windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
-            
+			bool resized = m_window.isOpen() && GetWindowSize() != size;
+			m_window.create(sf::VideoMode((u32)size.x, (u32)size.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
+
             std::unique_lock<std::mutex> lock(m_windowMutex);
             if (m_windowDisplayModeDelegate)
             {
-                m_windowDisplayModeDelegate(DisplayMode::k_windowed);
+                m_windowDisplayModeDelegate(ChilliSource::Screen::DisplayMode::k_windowed);
             }
+
+			if (resized && m_windowResizeDelegate)
+			{
+				m_windowResizeDelegate(size);
+			}
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		std::vector<ChilliSource::Integer2> SFMLWindow::GetSupportedResolutions() const
+		std::vector<ChilliSource::Integer2> SFMLWindow::GetSupportedFullscreenResolutions() const
 		{
 			std::vector<ChilliSource::Integer2> result;
 			result.reserve(sf::VideoMode::getFullscreenModes().size());
@@ -387,6 +439,31 @@ namespace CSBackend
             m_keyPressedDelegate = in_keyPressedDelegate;
             m_keyReleasedDelegate = in_keyReleasedDelegate;
         }
+
+		//------------------------------------------------------------------------------
+		void SFMLWindow::SetJoystickDelegates(JoystickConnectionChangedDelegate connectedDelegate, JoystickConnectionChangedDelegate disconnectedDelegate,
+			JoystickButtonDelegate buttonPressedDelegate, JoystickButtonDelegate buttonReleasedDelegate, JoystickMovedDelegate movedDelegate) noexcept
+		{
+			CS_ASSERT(connectedDelegate, "Joystick connected delegate invalid.");
+			CS_ASSERT(disconnectedDelegate, "Joystick disconnected delegate invalid.");
+			CS_ASSERT(buttonPressedDelegate, "Joystick pressed delegate invalid.");
+			CS_ASSERT(buttonReleasedDelegate, "Joystick released delegate invalid.");
+			CS_ASSERT(movedDelegate, "Joystick moved delegate invalid.");
+
+			CS_ASSERT(!m_joystickConnectedDelegate, "Joystick connected already set.");
+			CS_ASSERT(!m_joystickDisconnectedDelegate, "Joystick disconnected already set.");
+			CS_ASSERT(!m_joystickButtonPressedDelegate, "Joystick pressed already set.");
+			CS_ASSERT(!m_joystickButtonReleasedDelegate, "Joystick released already set.");
+			CS_ASSERT(!m_joystickMovedDelegate, "Joystick moved already set.");
+
+			std::unique_lock<std::mutex> lock(m_joystickMutex);
+			m_joystickConnectedDelegate = std::move(connectedDelegate);
+			m_joystickDisconnectedDelegate = std::move(disconnectedDelegate);
+			m_joystickButtonPressedDelegate = std::move(buttonPressedDelegate);
+			m_joystickButtonReleasedDelegate = std::move(buttonReleasedDelegate);
+			m_joystickMovedDelegate = std::move(movedDelegate);
+		}
+
         //------------------------------------------------
         //------------------------------------------------
         void SFMLWindow::RemoveWindowDelegates() noexcept
@@ -394,7 +471,7 @@ namespace CSBackend
             std::unique_lock<std::mutex> lock(m_windowMutex);
             m_windowResizeDelegate = nullptr;
             m_windowDisplayModeDelegate = nullptr;
-        }        
+        }
         //------------------------------------------------
         //------------------------------------------------
         void SFMLWindow::RemoveMouseDelegates() noexcept
@@ -410,7 +487,7 @@ namespace CSBackend
         {
             std::unique_lock<std::mutex> lock(m_textEntryMutex);
             m_textEnteredDelegate = nullptr;
-        }        
+        }
         //------------------------------------------------
         //------------------------------------------------
         void SFMLWindow::RemoveKeyDelegates() noexcept
@@ -418,7 +495,19 @@ namespace CSBackend
             std::unique_lock<std::mutex> lock(m_keyMutex);
             m_keyPressedDelegate = nullptr;
             m_keyReleasedDelegate = nullptr;
-        }        
+        }
+
+		//------------------------------------------------------------------------------
+		void SFMLWindow::RemoveJoystickDelegates() noexcept
+		{
+			std::unique_lock<std::mutex> lock(m_joystickMutex);
+			m_joystickConnectedDelegate = nullptr;
+			m_joystickDisconnectedDelegate = nullptr;
+			m_joystickButtonPressedDelegate = nullptr;
+			m_joystickButtonReleasedDelegate = nullptr;
+			m_joystickMovedDelegate = nullptr;
+		}
+
 		//------------------------------------------------
 		//------------------------------------------------
 		ChilliSource::Integer2 SFMLWindow::GetWindowSize() const
@@ -441,13 +530,13 @@ namespace CSBackend
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void SFMLWindow::HideCursor()
+		void SFMLWindow::HideSystemCursor()
 		{
 			m_window.setMouseCursorVisible(false);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void SFMLWindow::ShowCursor()
+		void SFMLWindow::ShowSystemCursor()
 		{
 			m_window.setMouseCursorVisible(true);
 		}
@@ -461,8 +550,10 @@ namespace CSBackend
 			m_contextSettings = CreateContextSettings(surfaceFormat, msaaFormat);
 			m_preferredRGBADepth = ReadRGBAPixelDepth(surfaceFormat);
 
-			ChilliSource::Integer2 windowSize(s32(f32(sf::VideoMode::getDesktopMode().width) * 0.8f), s32(f32(sf::VideoMode::getDesktopMode().height) * 0.8f));
-			m_window.create(sf::VideoMode((u32)windowSize.x, (u32)windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
+			auto displayMode = ReadInitialWindowMode(appConfigRoot);
+			m_desktopSize = ChilliSource::Integer2((s32)sf::VideoMode::getDesktopMode().width, (s32)sf::VideoMode::getDesktopMode().height);
+			ChilliSource::Integer2 windowSize = ReadInitialWindowSize(appConfigRoot, displayMode == ChilliSource::Screen::DisplayMode::k_windowed ? m_desktopSize : GetSupportedFullscreenResolutions()[0]);
+			SetDisplayMode(displayMode, windowSize, true);
 
 			glewExperimental = GL_TRUE;
 			GLenum glewError = glewInit();
@@ -484,7 +575,7 @@ namespace CSBackend
 
 			auto appConfig = ChilliSource::Application::Get()->GetAppConfig();
 			m_preferredFPS = appConfig->GetPreferredFPS();
-			
+
 			if (appConfig->IsVSyncEnabled())
 			{
 				SetVSyncEnabled(true);
@@ -596,6 +687,51 @@ namespace CSBackend
                             }
 							break;
 						}
+						case sf::Event::JoystickConnected:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickConnectedDelegate)
+							{
+								m_joystickConnectedDelegate(event.joystickConnect.joystickId);
+							}
+							break;
+						}
+						case sf::Event::JoystickDisconnected:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickDisconnectedDelegate)
+							{
+								m_joystickDisconnectedDelegate(event.joystickConnect.joystickId);
+							}
+							break;
+						}
+						case sf::Event::JoystickButtonPressed:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickButtonPressedDelegate)
+							{
+								m_joystickButtonPressedDelegate(event.joystickButton.joystickId, event.joystickButton.button);
+							}
+							break;
+						}
+						case sf::Event::JoystickButtonReleased:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickButtonReleasedDelegate)
+							{
+								m_joystickButtonReleasedDelegate(event.joystickButton.joystickId, event.joystickButton.button);
+							}
+							break;
+						}
+						case sf::Event::JoystickMoved:
+						{
+							std::unique_lock<std::mutex> lock(m_joystickMutex);
+							if (m_joystickMovedDelegate)
+							{
+								m_joystickMovedDelegate(event.joystickMove.joystickId, event.joystickMove.axis, event.joystickMove.position);
+							}
+							break;
+						}
 					}
 				}
 
@@ -639,9 +775,13 @@ namespace CSBackend
             CS_ASSERT(!m_textEnteredDelegate, "Text entry delegate not removed.");
             CS_ASSERT(!m_keyPressedDelegate, "Key press delegate not removed.");
             CS_ASSERT(!m_keyReleasedDelegate, "Key release delegate not removed.");
+			CS_ASSERT(!m_joystickConnectedDelegate, "Joystick connected delegate not removed.");
+			CS_ASSERT(!m_joystickDisconnectedDelegate, "Joystick disconnected delegate not removed.");
+			CS_ASSERT(!m_joystickButtonPressedDelegate, "Joystick pressed delegate not removed.");
+			CS_ASSERT(!m_joystickButtonReleasedDelegate, "Joystick released delegate not removed.");
+			CS_ASSERT(!m_joystickMovedDelegate, "Joystick connected moved not removed.");
         }
 	}
 }
 
 #endif
-

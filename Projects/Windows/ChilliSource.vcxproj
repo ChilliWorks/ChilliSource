@@ -114,6 +114,8 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Accelerometer\Accelerometer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Base\InputFilter.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\DeviceButtons\DeviceButtonSystem.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Gamepad\Gamepad.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\DragGesture.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\Gesture.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\GestureSystem.cpp" />
@@ -289,6 +291,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\CursorSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\UIComponent.cpp" />
@@ -345,6 +348,7 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Image\PNGImageProvider.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\String\WindowsStringUtils.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\DeviceButtons\DeviceButtonSystem.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\Gamepad\GamepadSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\Keyboard\Keyboard.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\Pointer\PointerSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\TextEntry\TextEntry.cpp" />
@@ -391,6 +395,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Colour.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ConstMethodCast.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\CursorType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Device.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\DeviceInfo.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\GenericFactory.h" />
@@ -563,6 +568,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\DeviceButtons.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\DeviceButtons\DeviceButtonSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\ForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\Gamepad.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadAxis.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadMappings.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gamepad\GamepadSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\DragGesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\Gesture.h" />
@@ -789,6 +799,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Social\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\CursorSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\UIComponent.h" />
@@ -859,6 +870,7 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\String\WindowsStringUtils.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\DeviceButtons\DeviceButtonSystem.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Gamepad\GamepadSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Keyboard\Keyboard.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Pointer\PointerSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\TextEntry\TextEntry.h" />

@@ -40,6 +40,10 @@
 #include <CSBackend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
 #endif
 
+#ifdef CS_TARGETPLATFORM_RPI
+#include <CSBackend/Platform/RPi/Networking/Http/HttpRequestSystem.h>
+#endif
+
 namespace ChilliSource
 {
     CS_DEFINE_NAMEDTYPE(HttpRequestSystem);
@@ -56,6 +60,9 @@ namespace ChilliSource
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
         return HttpRequestSystemUPtr(new CSBackend::Windows::HttpRequestSystem());
+#endif
+#ifdef CS_TARGETPLATFORM_RPI
+        return HttpRequestSystemUPtr(new CSBackend::RPi::HttpRequestSystem());
 #endif
         return nullptr;
     }

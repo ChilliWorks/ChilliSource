@@ -95,9 +95,9 @@ namespace CSBackend
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
-        std::vector<ChilliSource::Integer2> Screen::GetSupportedResolutions() const
+        std::vector<ChilliSource::Integer2> Screen::GetSupportedFullscreenResolutions() const
         {
-            return m_screenInfo.GetSupportedResolutions();
+            return m_screenInfo.GetSupportedFullscreenResolutions();
         }
         //-----------------------------------------------------------
         //------------------------------------------------------------

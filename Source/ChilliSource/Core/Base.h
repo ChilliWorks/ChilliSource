@@ -37,6 +37,7 @@
 #include <ChilliSource/Core/Base/ByteColour.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Base/ColourUtils.h>
+#include <ChilliSource/Core/Base/CursorType.h>
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Base/LifecycleManager.h>
 #include <ChilliSource/Core/Base/Logging.h>

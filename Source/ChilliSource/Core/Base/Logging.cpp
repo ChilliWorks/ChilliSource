@@ -172,6 +172,8 @@ namespace ChilliSource
         [message release];
 #elif defined (CS_TARGETPLATFORM_WINDOWS)
         OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[ChilliSource] " + in_message + "\n").c_str());
+#elif defined (CS_TARGETPLATFORM_RPI)
+        std::cout << "[ChilliSource] " << in_message << std::endl;
 #endif
         
 #ifdef CS_ENABLE_LOGTOFILE

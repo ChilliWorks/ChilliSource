@@ -31,6 +31,7 @@
 #include <CSBackend/Platform/Windows/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/AppConfig.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
@@ -88,25 +89,27 @@ namespace CSBackend
             ChilliSource::Vector2 mousePos((f32)mousePosi.x, screenResolution.y - (f32)mousePosi.y);
 
             m_pointerId = AddPointerCreateEvent(mousePos);
+
+			ChilliSource::Application::Get()->GetAppConfig()->GetCursorType() == ChilliSource::CursorType::k_system ? ShowSystemCursor() : HideSystemCursor();
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void PointerSystem::HideCursor()
+		void PointerSystem::HideSystemCursor()
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to hide mouse cursor outside of main thread.");
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
             {
-                SFMLWindow::Get()->HideCursor();
+                SFMLWindow::Get()->HideSystemCursor();
             });
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
-		void PointerSystem::ShowCursor()
+		void PointerSystem::ShowSystemCursor()
 		{
             CS_ASSERT(ChilliSource::Application::Get()->GetTaskScheduler()->IsMainThread(), "Tried to show mouse cursor outside of main thread.");
             ChilliSource::Application::Get()->GetTaskScheduler()->ScheduleTask(ChilliSource::TaskType::k_system, [=](const ChilliSource::TaskContext& context)
             {
-                SFMLWindow::Get()->ShowCursor();
+                SFMLWindow::Get()->ShowSystemCursor();
             });
 		}
 		//----------------------------------------------

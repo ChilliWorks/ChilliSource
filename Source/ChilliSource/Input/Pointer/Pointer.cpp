@@ -40,6 +40,8 @@ namespace ChilliSource
         return Pointer::InputType::k_touch;
 #elif defined CS_TARGETPLATFORM_WINDOWS
         return Pointer::InputType::k_leftMouseButton;
+#elif defined CS_TARGETPLATFORM_RPI
+        return Pointer::InputType::k_leftMouseButton;
 #else
         return nullptr;
 #endif

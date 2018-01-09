@@ -34,7 +34,7 @@
 #   include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 #endif
 
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
     #include <CSBackend/Rendering/OpenGL/Base/GLContextRestorer.h>
 #endif
 
@@ -105,7 +105,7 @@ namespace ChilliSource
         m_application->GetSystem<RenderCommandBufferManager>()->OnSystemSuspend();
         m_application->GetSystem<Renderer>()->OnSystemSuspend();
         
-#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS)
+#if defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_WINDOWS) || defined(CS_TARGETPLATFORM_RPI)
         m_application->GetSystem<CSBackend::OpenGL::GLContextRestorer>()->OnSystemSuspend();
 #endif
     }

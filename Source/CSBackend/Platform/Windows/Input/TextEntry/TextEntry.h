@@ -47,8 +47,10 @@ namespace CSBackend
 	namespace Windows
 	{
         //----------------------------------------------------------------
-        /// The iOS backend to the text entry system. This provides access
-        /// to the iOS virtual keyboard functionality via a text buffer
+        /// The Windows backend to the text entry system. Using SFML
+		/// text entry events this class builds a buffer of input text.
+		///
+		/// NOTE: This class ignores the capitalisation policies.
         ///
         /// The methods in this class are not thread-safe and must be called
         /// from the main thread.
@@ -107,7 +109,7 @@ namespace CSBackend
 
 		private:
             friend ChilliSource::TextEntryUPtr ChilliSource::TextEntry::Create();
-        
+
             //-------------------------------------------------------
             /// Constructor. Declared private to force the use of the
             /// factory method.
@@ -125,7 +127,7 @@ namespace CSBackend
 			void OnTextEntered(ChilliSource::UTF8Char in_unicodeChar);
 
 		private:
-            
+
             TextBufferChangedDelegate m_textBufferChangedDelegate;
             TextInputDeactivatedDelegate m_textInputDeactivatedDelegate;
 

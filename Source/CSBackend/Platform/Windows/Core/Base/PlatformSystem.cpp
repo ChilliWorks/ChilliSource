@@ -32,17 +32,18 @@
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/UI/Base/CursorSystem.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-namespace CSBackend 
+namespace CSBackend
 {
 	namespace Windows
 	{
 		namespace
 		{
-			//This is global as LARGE_INTEGER is defined in windows.h. Including windows.h in 
+			//This is global as LARGE_INTEGER is defined in windows.h. Including windows.h in
 			//PlatformSystem.h will cause compiler errors in FileSystem.h
 			LARGE_INTEGER g_frequency;
 		}
@@ -50,7 +51,7 @@ namespace CSBackend
 		CS_DEFINE_NAMEDTYPE(PlatformSystem);
 		//-----------------------------------------
 		//-----------------------------------------
-		PlatformSystem::PlatformSystem() 
+		PlatformSystem::PlatformSystem()
 		{
 			QueryPerformanceFrequency(&g_frequency);
 		}
@@ -64,6 +65,7 @@ namespace CSBackend
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(ChilliSource::Application* in_application)
 		{
+			in_application->CreateSystem<ChilliSource::CursorSystem>();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------

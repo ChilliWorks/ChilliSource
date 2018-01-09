@@ -458,6 +458,7 @@ namespace ChilliSource
         FileSystem* m_fileSystem = nullptr;
         TaggedFilePathResolver* m_taggedPathResolver = nullptr;
         PointerSystem* m_pointerSystem = nullptr;
+        GamepadSystem* m_gamepadSystem = nullptr;
         AppConfig* m_appConfig = nullptr;
         WidgetFactory* m_widgetFactory = nullptr;
 
